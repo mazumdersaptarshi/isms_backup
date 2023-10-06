@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/categoryManagement/createCategory.dart';
+import 'package:isms/models/module.dart';
+import 'package:isms/moduleManagement/createModule.dart';
 import 'package:isms/screens/categoriesDisplayScreen.dart';
 import 'package:isms/utitlityFunctions/generateRandom.dart';
 import 'package:provider/provider.dart';
@@ -8,22 +10,26 @@ import 'package:isms/models/customCategory.dart';
 
 import '../main.dart';
 
-class CreateCategoryScreen extends StatelessWidget {
+class CreateModuleScreen extends StatelessWidget {
+  CreateModuleScreen({required this.parentCategory});
+  CustomCategory parentCategory;
   @override
   Widget build(BuildContext context) {
-    return CategoryCreationForm();
+    return CategoryModuleForm(parentCategory: parentCategory);
   }
 }
 
-class CategoryCreationForm extends StatefulWidget {
+class CategoryModuleForm extends StatefulWidget {
+  CategoryModuleForm({required this.parentCategory});
+  CustomCategory parentCategory;
   @override
-  _CategoryCreationFormState createState() => _CategoryCreationFormState();
+  _CategoryModuleFormState createState() => _CategoryModuleFormState();
 }
 
-class _CategoryCreationFormState extends State<CategoryCreationForm> {
+class _CategoryModuleFormState extends State<CategoryModuleForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
 
   @override
@@ -36,7 +42,7 @@ class _CategoryCreationFormState extends State<CategoryCreationForm> {
             Navigator.pop(context);
           },
         ),
-        title: Text('Create New Category'),
+        title: Text('Create New Module'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -45,7 +51,7 @@ class _CategoryCreationFormState extends State<CategoryCreationForm> {
           child: Column(
             children: <Widget>[
               TextFormField(
-                controller: _nameController,
+                controller: _titleController,
                 decoration: InputDecoration(labelText: 'Title'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -61,7 +67,7 @@ class _CategoryCreationFormState extends State<CategoryCreationForm> {
                 maxLines: 4,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter news content';
+                    return 'Please enter module content';
                   }
                   return null;
                 },
@@ -70,13 +76,14 @@ class _CategoryCreationFormState extends State<CategoryCreationForm> {
               ElevatedButton(
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    CustomCategory category = CustomCategory(
+                    Module module = Module(
                       id: generateRandomId(),
-                      name: _nameController.text,
+                      title: _titleController.text,
+                      contentDescription: _descriptionController.text,
                     );
-                    bool isCategoryCreated =
-                        await createCategory(category: category);
-                    if (isCategoryCreated) {
+                    bool isModuleCreated = await createModule(
+                        module: module, category: widget.parentCategory);
+                    if (isModuleCreated) {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -95,7 +102,7 @@ class _CategoryCreationFormState extends State<CategoryCreationForm> {
 
   @override
   void dispose() {
-    _nameController.dispose();
+    _titleController.dispose();
     _descriptionController.dispose();
     super.dispose();
   }
