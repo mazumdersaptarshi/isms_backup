@@ -1,21 +1,21 @@
 import 'module.dart';
 import 'exam.dart';
 
-class Category {
+class CustomCategory {
   String id;
   String name;
   List<Module>? modules;
   List<Exam>? exams;
 
-  Category({
+  CustomCategory({
     required this.id,
     required this.name,
     this.modules,
     this.exams,
   });
 
-  factory Category.fromMap(Map<String, dynamic> map) {
-    return Category(
+  factory CustomCategory.fromMap(Map<String, dynamic> map) {
+    return CustomCategory(
       id: map['id'],
       name: map['name'],
       modules: map['modules'],
@@ -28,7 +28,7 @@ class Category {
       'id': id,
       'name': name,
       'modules': modules,
-      'exam': exams,
+      'exams': exams,
     };
   }
 }
