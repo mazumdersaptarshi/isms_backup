@@ -12,14 +12,21 @@ import 'package:isms/models/course.dart';
 
 class SlidesCreationProvider with ChangeNotifier {
   List<Slide> slidesList = [];
+  int noOfForms = 1;
 
   addSlideToList(Slide slide) {
     slidesList.add(slide);
     notifyListeners();
   }
 
+  incrementFormNo() {
+    noOfForms += 1;
+    notifyListeners();
+  }
+
   clearSlidesList() {
     slidesList.clear();
+    noOfForms = 1;
     notifyListeners();
   }
 }
@@ -83,9 +90,7 @@ class _SlideFormContainerState extends State<SlideFormContainer> {
                     child: Container(
                         height: 500,
                         child: ListView.builder(
-                          itemCount: slidesCreationProvider.slidesList.isEmpty
-                              ? 1
-                              : slidesCreationProvider.slidesList.length + 1,
+                          itemCount: slidesCreationProvider.noOfForms,
                           itemBuilder: (context, index) {
                             return SlideForm(
                               slidesCreationProvider: slidesCreationProvider,
@@ -115,6 +120,7 @@ class _SlideFormContainerState extends State<SlideFormContainer> {
 class SlideForm extends StatefulWidget {
   SlideForm({super.key, required this.slidesCreationProvider});
   SlidesCreationProvider slidesCreationProvider;
+
   @override
   State<SlideForm> createState() => _SlideFormState();
 }
@@ -123,6 +129,13 @@ class _SlideFormState extends State<SlideForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  bool isSlideAdded = false;
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -161,12 +174,36 @@ class _SlideFormState extends State<SlideForm> {
                   content: _descriptionController.text,
                 );
                 setState(() {
-                  widget.slidesCreationProvider.addSlideToList(slide);
-                  print(widget.slidesCreationProvider.slidesList);
+                  if (isSlideAdded == false) {
+                    widget.slidesCreationProvider.addSlideToList(slide);
+                    isSlideAdded = true;
+                    print(widget.slidesCreationProvider.slidesList);
+                  }
                 });
               }
             },
             child: Text('Create slide'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              if (_formKey.currentState!.validate()) {
+                Slide slide = Slide(
+                  id: generateRandomId(),
+                  title: _titleController.text,
+                  content: _descriptionController.text,
+                );
+                setState(() {
+                  if (isSlideAdded == false) {
+                    widget.slidesCreationProvider.addSlideToList(slide);
+                    print(
+                        "${widget.slidesCreationProvider.slidesList},,, ${isSlideAdded}");
+                    isSlideAdded = true;
+                  }
+                  widget.slidesCreationProvider.incrementFormNo();
+                });
+              }
+            },
+            child: Text('Add new Slide'),
           ),
         ],
       ),
