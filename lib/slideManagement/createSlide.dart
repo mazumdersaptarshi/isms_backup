@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/models/slide.dart';
+import 'package:isms/screens/createSlideScreen.dart';
 
 Future<bool> createSlides(
     {required Module module,
@@ -28,6 +29,7 @@ Future<bool> createSlides(
           .collection('slides')
           .doc(slideMap['id'])
           .set(slideMap);
+      print("Created slide ${slideMap}");
     });
 
     if (module.slides == null) module.slides = [];

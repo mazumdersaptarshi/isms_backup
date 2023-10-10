@@ -50,8 +50,10 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                                CreateSlideScreen(parentModule: module)));
+                            builder: (context) => CreateSlideScreen(
+                                  parentModule: module,
+                                  parentCourse: widget.parentCourse,
+                                )));
                   },
                 ),
               );

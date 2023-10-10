@@ -5,6 +5,7 @@ import 'package:isms/models/module.dart';
 import 'package:isms/models/slide.dart';
 import 'package:isms/moduleManagement/createModule.dart';
 import 'package:isms/screens/coursesListScreen.dart';
+import 'package:isms/slideManagement/createSlide.dart';
 import 'package:isms/utitlityFunctions/generateRandom.dart';
 import 'package:provider/provider.dart';
 import 'package:isms/models/course.dart';
@@ -24,18 +25,23 @@ class SlidesCreationProvider with ChangeNotifier {
 }
 
 class CreateSlideScreen extends StatelessWidget {
-  CreateSlideScreen({required this.parentModule});
+  CreateSlideScreen({required this.parentModule, required this.parentCourse});
   Module parentModule;
+  Course parentCourse;
   @override
   Widget build(BuildContext context) {
-    return SlideFormContainer(parentModule: parentModule);
+    return SlideFormContainer(
+      parentModule: parentModule,
+      parentCourse: parentCourse,
+    );
   }
 }
 
 class SlideFormContainer extends StatefulWidget {
-  SlideFormContainer({required this.parentModule});
+  SlideFormContainer({required this.parentModule, required this.parentCourse});
 
   Module parentModule;
+  Course parentCourse;
   @override
   _SlideFormContainerState createState() => _SlideFormContainerState();
 }
@@ -71,18 +77,35 @@ class _SlideFormContainerState extends State<SlideFormContainer> {
             ),
             body: Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Container(
-                  height: 500,
-                  child: ListView.builder(
-                    itemCount: slidesCreationProvider.slidesList.isEmpty
-                        ? 1
-                        : slidesCreationProvider.slidesList.length + 1,
-                    itemBuilder: (context, index) {
-                      return SlideForm(
-                        slidesCreationProvider: slidesCreationProvider,
-                      );
-                    },
-                  )),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Container(
+                        height: 500,
+                        child: ListView.builder(
+                          itemCount: slidesCreationProvider.slidesList.isEmpty
+                              ? 1
+                              : slidesCreationProvider.slidesList.length + 1,
+                          itemBuilder: (context, index) {
+                            return SlideForm(
+                              slidesCreationProvider: slidesCreationProvider,
+                            );
+                          },
+                        )),
+                  ),
+                  FilledButton(
+                      onPressed: () async {
+                        await createSlides(
+                            module: widget.parentModule,
+                            course: widget.parentCourse,
+                            slides: slidesCreationProvider.slidesList);
+
+                        slidesCreationProvider.clearSlidesList();
+                        Navigator.pop(context);
+                      },
+                      child: Text("Finish creating slides"))
+                ],
+              ),
             ));
       },
     );
