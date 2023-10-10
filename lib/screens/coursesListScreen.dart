@@ -17,51 +17,48 @@ class CoursesDisplayScreen extends StatefulWidget {
 class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
   @override
   Widget build(BuildContext context) {
-    return Consumer<CoursesProvider>(
-      builder: (BuildContext context, CoursesProvider coursesProvider,
-          Widget? child) {
-        return Scaffold(
-          appBar: AppBar(),
-          body: Container(
-            child: ListView.builder(
-              itemCount: coursesProvider.allCourses.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(coursesProvider.allCourses[index].name),
-                  onTap: () async {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ModulesListScreen(
-                                parentCourse:
-                                    coursesProvider.allCourses[index])));
-                  },
-                  trailing: IconButton(
-                    icon: Icon(Icons.add),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CreateModuleScreen(
-                                  parentCourse:
-                                      coursesProvider.allCourses[index])));
-                    },
-                  ),
-                );
-              },
-            ),
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => CreateCourseScreen()));
-            },
-            child: Icon(Icons.add),
-          ),
-        );
-      },
+    CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
+    return Scaffold(
+      appBar: AppBar(),
+      body: Container(
+        child: ListView.builder(
+          itemCount: coursesProvider.allCourses.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              title: Text(coursesProvider.allCourses[index].name),
+              subtitle: FilledButton(
+                child: Text("Details"),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ModulesListScreen(
+                              parentCourse:
+                                  coursesProvider.allCourses[index])));
+                },
+              ),
+              trailing: IconButton(
+                icon: Icon(Icons.add),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => CreateModuleScreen(
+                              parentCourse:
+                                  coursesProvider.allCourses[index])));
+                },
+              ),
+            );
+          },
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => CreateCourseScreen()));
+        },
+        child: Icon(Icons.add),
+      ),
     );
   }
 }
