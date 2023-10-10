@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/categoryManagement/createCategory.dart';
-import 'package:isms/screens/categoriesDisplayScreen.dart';
+import 'package:isms/screens/categoriesListScreen.dart';
 import 'package:isms/utitlityFunctions/generateRandom.dart';
 import 'package:provider/provider.dart';
 import 'package:isms/models/customCategory.dart';
@@ -77,10 +77,7 @@ class _CategoryCreationFormState extends State<CategoryCreationForm> {
                     bool isCategoryCreated =
                         await createCategory(category: category);
                     if (isCategoryCreated) {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CategoriesDisplayScreen()));
+                      Navigator.pop(context);
                     }
                   }
                 },
