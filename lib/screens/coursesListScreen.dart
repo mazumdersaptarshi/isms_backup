@@ -1,41 +1,40 @@
 import 'package:flutter/material.dart';
-import 'package:isms/categoryManagement/categoryProvider.dart';
+import 'package:isms/courseManagement/coursesProvider.dart';
 import 'package:isms/moduleManagement/fetchModules.dart';
-import 'package:isms/screens/createCategoryScreen.dart';
+import 'package:isms/screens/createCourseScreen.dart';
 import 'package:isms/screens/createModuleScreen.dart';
 import 'package:isms/screens/modulesListScreen.dart';
 import 'package:isms/sharedWidgets/popupDialog.dart';
 import 'package:provider/provider.dart';
 
-class CategoriesDisplayScreen extends StatefulWidget {
-  CategoriesDisplayScreen({super.key});
+class CoursesDisplayScreen extends StatefulWidget {
+  CoursesDisplayScreen({super.key});
 
   @override
-  State<CategoriesDisplayScreen> createState() =>
-      _CategoriesDisplayScreenState();
+  State<CoursesDisplayScreen> createState() => _CoursesDisplayScreenState();
 }
 
-class _CategoriesDisplayScreenState extends State<CategoriesDisplayScreen> {
+class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
   @override
   Widget build(BuildContext context) {
-    return Consumer<CategoriesProvider>(
-      builder: (BuildContext context, CategoriesProvider categoriesProvider,
+    return Consumer<CoursesProvider>(
+      builder: (BuildContext context, CoursesProvider coursesProvider,
           Widget? child) {
         return Scaffold(
           appBar: AppBar(),
           body: Container(
             child: ListView.builder(
-              itemCount: categoriesProvider.allCategories.length,
+              itemCount: coursesProvider.allCourses.length,
               itemBuilder: (context, index) {
                 return ListTile(
-                  title: Text(categoriesProvider.allCategories[index].name),
+                  title: Text(coursesProvider.allCourses[index].name),
                   onTap: () async {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => ModulesListScreen(
-                                parentCategory:
-                                    categoriesProvider.allCategories[index])));
+                                parentCourse:
+                                    coursesProvider.allCourses[index])));
                   },
                   subtitle: IconButton(
                     icon: Icon(Icons.add),
@@ -44,8 +43,8 @@ class _CategoriesDisplayScreenState extends State<CategoriesDisplayScreen> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => CreateModuleScreen(
-                                  parentCategory: categoriesProvider
-                                      .allCategories[index])));
+                                  parentCourse:
+                                      coursesProvider.allCourses[index])));
                     },
                   ),
                 );
@@ -57,7 +56,7 @@ class _CategoriesDisplayScreenState extends State<CategoriesDisplayScreen> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => CreateCategoryScreen()));
+                      builder: (context) => CreateCourseScreen()));
             },
             child: Icon(Icons.add),
           ),

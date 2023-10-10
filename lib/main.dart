@@ -1,9 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:isms/categoryManagement/categoryProvider.dart';
-import 'package:isms/screens/categoriesListScreen.dart';
-import 'package:isms/screens/createCategoryScreen.dart';
+import 'package:isms/courseManagement/coursesProvider.dart';
+import 'package:isms/courseManagement/coursesProvider.dart';
+import 'package:isms/screens/coursesListScreen.dart';
+import 'package:isms/screens/createCourseScreen.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
@@ -27,10 +28,10 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: MultiProvider(providers: [
-        ChangeNotifierProvider<CategoriesProvider>(create: (context) {
-          return CategoriesProvider();
+        ChangeNotifierProvider<CoursesProvider>(create: (context) {
+          return CoursesProvider();
         }),
-      ], child: CategoriesDisplayScreen()),
+      ], child: CoursesDisplayScreen()),
     );
   }
 }

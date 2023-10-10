@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:isms/categoryManagement/categoryProvider.dart';
-import 'package:isms/models/customCategory.dart';
+import 'package:isms/courseManagement/coursesProvider.dart';
+import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/moduleManagement/fetchModules.dart';
-import 'package:isms/screens/createCategoryScreen.dart';
+import 'package:isms/screens/createCourseScreen.dart';
 import 'package:isms/screens/createModuleScreen.dart';
 import 'package:isms/sharedWidgets/popupDialog.dart';
 import 'package:provider/provider.dart';
 
 class ModulesListScreen extends StatefulWidget {
-  ModulesListScreen({super.key, required this.parentCategory});
-  CustomCategory parentCategory;
+  ModulesListScreen({super.key, required this.parentCourse});
+  Course parentCourse;
 
   @override
   State<ModulesListScreen> createState() => _ModulesListScreenState();
@@ -22,7 +22,7 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
   void initState() {
     super.initState();
     if (mounted) {
-      fetchModules(category: widget.parentCategory).then((value) {
+      fetchModules(course: widget.parentCourse).then((value) {
         setState(() {
           isModulesFetched = true;
         });
@@ -37,9 +37,9 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
         appBar: AppBar(),
         body: Container(
           child: ListView.builder(
-            itemCount: widget.parentCategory.modules?.length,
+            itemCount: widget.parentCourse.modules?.length,
             itemBuilder: (context, index) {
-              Module module = widget.parentCategory.modules![index];
+              Module module = widget.parentCourse.modules![index];
               return ListTile(
                 title: Text(module.title),
               );
@@ -51,8 +51,8 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => CreateModuleScreen(
-                        parentCategory: widget.parentCategory)));
+                    builder: (context) =>
+                        CreateModuleScreen(parentCourse: widget.parentCourse)));
           },
           child: Icon(Icons.add),
         ),

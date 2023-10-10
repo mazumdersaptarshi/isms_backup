@@ -1,26 +1,26 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:isms/categoryManagement/createCategory.dart';
-import 'package:isms/screens/categoriesListScreen.dart';
+import 'package:isms/courseManagement/createCourse.dart';
+import 'package:isms/screens/coursesListScreen.dart';
 import 'package:isms/utitlityFunctions/generateRandom.dart';
 import 'package:provider/provider.dart';
-import 'package:isms/models/customCategory.dart';
+import 'package:isms/models/course.dart';
 
 import '../main.dart';
 
-class CreateCategoryScreen extends StatelessWidget {
+class CreateCourseScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return CategoryCreationForm();
+    return CourseCreationForm();
   }
 }
 
-class CategoryCreationForm extends StatefulWidget {
+class CourseCreationForm extends StatefulWidget {
   @override
-  _CategoryCreationFormState createState() => _CategoryCreationFormState();
+  _CourseCreationFormState createState() => _CourseCreationFormState();
 }
 
-class _CategoryCreationFormState extends State<CategoryCreationForm> {
+class _CourseCreationFormState extends State<CourseCreationForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final TextEditingController _nameController = TextEditingController();
@@ -36,7 +36,7 @@ class _CategoryCreationFormState extends State<CategoryCreationForm> {
             Navigator.pop(context);
           },
         ),
-        title: Text('Create New Category'),
+        title: Text('Create New Course'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -70,13 +70,12 @@ class _CategoryCreationFormState extends State<CategoryCreationForm> {
               ElevatedButton(
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    CustomCategory category = CustomCategory(
+                    Course course = Course(
                       id: generateRandomId(),
                       name: _nameController.text,
                     );
-                    bool isCategoryCreated =
-                        await createCategory(category: category);
-                    if (isCategoryCreated) {
+                    bool isCourseCreated = await createCourse(course: course);
+                    if (isCourseCreated) {
                       Navigator.pop(context);
                     }
                   }

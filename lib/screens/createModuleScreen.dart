@@ -1,32 +1,32 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:isms/categoryManagement/createCategory.dart';
+import 'package:isms/courseManagement/createCourse.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/moduleManagement/createModule.dart';
-import 'package:isms/screens/categoriesListScreen.dart';
+import 'package:isms/screens/coursesListScreen.dart';
 import 'package:isms/utitlityFunctions/generateRandom.dart';
 import 'package:provider/provider.dart';
-import 'package:isms/models/customCategory.dart';
+import 'package:isms/models/course.dart';
 
 import '../main.dart';
 
 class CreateModuleScreen extends StatelessWidget {
-  CreateModuleScreen({required this.parentCategory});
-  CustomCategory parentCategory;
+  CreateModuleScreen({required this.parentCourse});
+  Course parentCourse;
   @override
   Widget build(BuildContext context) {
-    return CategoryModuleForm(parentCategory: parentCategory);
+    return CourseModuleForm(parentCourse: parentCourse);
   }
 }
 
-class CategoryModuleForm extends StatefulWidget {
-  CategoryModuleForm({required this.parentCategory});
-  CustomCategory parentCategory;
+class CourseModuleForm extends StatefulWidget {
+  CourseModuleForm({required this.parentCourse});
+  Course parentCourse;
   @override
-  _CategoryModuleFormState createState() => _CategoryModuleFormState();
+  _CourseModuleFormState createState() => _CourseModuleFormState();
 }
 
-class _CategoryModuleFormState extends State<CategoryModuleForm> {
+class _CourseModuleFormState extends State<CourseModuleForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final TextEditingController _titleController = TextEditingController();
@@ -82,7 +82,7 @@ class _CategoryModuleFormState extends State<CategoryModuleForm> {
                       contentDescription: _descriptionController.text,
                     );
                     bool isModuleCreated = await createModule(
-                        module: module, category: widget.parentCategory);
+                        module: module, course: widget.parentCourse);
                     if (isModuleCreated) {
                       Navigator.pop(context);
                     }
