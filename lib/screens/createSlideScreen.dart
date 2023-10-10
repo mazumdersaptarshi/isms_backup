@@ -88,8 +88,9 @@ class _SlideFormContainerState extends State<SlideFormContainer> {
                 children: [
                   Expanded(
                     child: Container(
-                        height: 500,
+                        height: MediaQuery.of(context).size.height,
                         child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
                           itemCount: slidesCreationProvider.noOfForms,
                           itemBuilder: (context, index) {
                             return SlideForm(
@@ -132,80 +133,94 @@ class _SlideFormState extends State<SlideForm> {
   bool isSlideAdded = false;
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: <Widget>[
-          TextFormField(
-            controller: _titleController,
-            decoration: InputDecoration(labelText: 'Title'),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter a title';
-              }
-              return null;
-            },
-          ),
-          SizedBox(height: 16),
-          TextFormField(
-            controller: _descriptionController,
-            decoration: InputDecoration(labelText: 'Content'),
-            maxLines: 4,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter slide content';
-              }
-              return null;
-            },
-          ),
-          SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: () async {
-              if (_formKey.currentState!.validate()) {
-                Slide slide = Slide(
-                  id: generateRandomId(),
-                  title: _titleController.text,
-                  content: _descriptionController.text,
-                );
-                setState(() {
-                  if (isSlideAdded == false) {
-                    widget.slidesCreationProvider.addSlideToList(slide);
-                    isSlideAdded = true;
-                    print(widget.slidesCreationProvider.slidesList);
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      width: MediaQuery.of(context).size.width - 50,
+      decoration: BoxDecoration(
+          color: Colors.blue.shade400,
+          borderRadius: BorderRadius.all(Radius.circular(20))),
+      child: Padding(
+        padding: EdgeInsets.all(10),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: <Widget>[
+              SizedBox(
+                height: 100,
+                child: TextFormField(
+                  controller: _titleController,
+                  decoration: InputDecoration(labelText: 'Title'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a title';
+                    }
+                    return null;
+                  },
+                ),
+              ),
+              SizedBox(height: 16),
+              Expanded(
+                child: TextFormField(
+                  controller: _descriptionController,
+                  decoration: InputDecoration(labelText: 'Content'),
+                  maxLines: 4,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter slide content';
+                    }
+                    return null;
+                  },
+                ),
+              ),
+              SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    Slide slide = Slide(
+                      id: generateRandomId(),
+                      title: _titleController.text,
+                      content: _descriptionController.text,
+                    );
+                    setState(() {
+                      if (isSlideAdded == false) {
+                        widget.slidesCreationProvider.addSlideToList(slide);
+                        isSlideAdded = true;
+                        print(widget.slidesCreationProvider.slidesList);
+                      }
+                    });
                   }
-                });
-              }
-            },
-            child: Text('Create slide'),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              if (_formKey.currentState!.validate()) {
-                Slide slide = Slide(
-                  id: generateRandomId(),
-                  title: _titleController.text,
-                  content: _descriptionController.text,
-                );
-                setState(() {
-                  if (isSlideAdded == false) {
-                    widget.slidesCreationProvider.addSlideToList(slide);
-                    print(
-                        "${widget.slidesCreationProvider.slidesList},,, ${isSlideAdded}");
-                    isSlideAdded = true;
+                },
+                child: Text('Create slide'),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    Slide slide = Slide(
+                      id: generateRandomId(),
+                      title: _titleController.text,
+                      content: _descriptionController.text,
+                    );
+                    setState(() {
+                      if (isSlideAdded == false) {
+                        widget.slidesCreationProvider.addSlideToList(slide);
+                        print(
+                            "${widget.slidesCreationProvider.slidesList},,, ${isSlideAdded}");
+                        isSlideAdded = true;
+                      }
+                      widget.slidesCreationProvider.incrementFormNo();
+                    });
                   }
-                  widget.slidesCreationProvider.incrementFormNo();
-                });
-              }
-            },
-            child: Text('Add new Slide'),
+                },
+                child: Text('Add new Slide'),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
