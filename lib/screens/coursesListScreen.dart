@@ -36,7 +36,7 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
                                 parentCourse:
                                     coursesProvider.allCourses[index])));
                   },
-                  subtitle: IconButton(
+                  trailing: IconButton(
                     icon: Icon(Icons.add),
                     onPressed: () {
                       Navigator.push(
