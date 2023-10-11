@@ -31,7 +31,7 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (mounted) {
+    if (mounted && isModulesFetched == false) {
       CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
       fetchModules(
               course: coursesProvider.allCourses[widget.courseIndex],
@@ -51,7 +51,7 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
       return Scaffold(
         appBar: AppBar(
           leading: IconButton(
-            icon: Icon(Icons.gamepad),
+            icon: Icon(Icons.arrow_back),
             onPressed: () {
               Navigator.pop(context);
               // Navigator.push(
