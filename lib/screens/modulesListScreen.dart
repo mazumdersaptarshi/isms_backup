@@ -7,7 +7,9 @@ import 'package:isms/moduleManagement/fetchModules.dart';
 import 'package:isms/screens/createCourseScreen.dart';
 import 'package:isms/screens/createModuleScreen.dart';
 import 'package:isms/screens/createSlideScreen.dart';
+import 'package:isms/screens/moduleDetailsScreen.dart';
 import 'package:isms/sharedWidgets/popupDialog.dart';
+import 'package:isms/sharedWidgets/moduleCardWidget.dart';
 import 'package:provider/provider.dart';
 
 class ModulesListScreen extends StatefulWidget {
@@ -42,20 +44,15 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
             itemCount: widget.parentCourse.modules?.length,
             itemBuilder: (context, index) {
               Module module = widget.parentCourse.modules![index];
-              return ListTile(
-                title: Text(module.title),
-                trailing: IconButton(
-                  icon: Icon(Icons.add),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => CreateSlideScreen(
-                                  parentModule: module,
-                                  parentCourse: widget.parentCourse,
-                                )));
-                  },
-                ),
+              return GestureDetector(
+                child: ModuleCardWidget(module: module),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ModuleDetails(
+                              course: widget.parentCourse, module: module)));
+                },
               );
             },
           ),
