@@ -16,6 +16,7 @@ Future fetchModules(
         .collection('courses')
         .doc(course.name)
         .collection('modules')
+        .orderBy("index")
         .get();
     course.modules = [];
     modulesListSnapshot.docs.forEach((element) {

@@ -13,6 +13,13 @@ Future<bool> createModule(
     required Module module}) async {
   try {
     Course course = coursesProvider.allCourses[courseIndex];
+    int index = 1;
+    try {
+      index = coursesProvider.allCourses[courseIndex].modules!.length + 1;
+    } catch (e) {
+      index = 1;
+    }
+    module.index = index;
     Map<String, dynamic> moduleMap = module.toMap();
 
     moduleMap['createdAt'] = DateTime.now();
