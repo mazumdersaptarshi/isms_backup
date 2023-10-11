@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:isms/courseManagement/coursesProvider.dart';
 import 'package:isms/courseManagement/createCourse.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/moduleManagement/createModule.dart';
@@ -11,17 +12,17 @@ import 'package:isms/models/course.dart';
 import '../main.dart';
 
 class CreateModuleScreen extends StatelessWidget {
-  CreateModuleScreen({required this.parentCourse});
-  Course parentCourse;
+  CreateModuleScreen({required this.courseIndex});
+  int courseIndex;
   @override
   Widget build(BuildContext context) {
-    return CourseModuleForm(parentCourse: parentCourse);
+    return CourseModuleForm(courseIndex: courseIndex);
   }
 }
 
 class CourseModuleForm extends StatefulWidget {
-  CourseModuleForm({required this.parentCourse});
-  Course parentCourse;
+  CourseModuleForm({required this.courseIndex});
+  int courseIndex;
   @override
   _CourseModuleFormState createState() => _CourseModuleFormState();
 }
@@ -34,6 +35,7 @@ class _CourseModuleFormState extends State<CourseModuleForm> {
 
   @override
   Widget build(BuildContext context) {
+    CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -82,7 +84,9 @@ class _CourseModuleFormState extends State<CourseModuleForm> {
                       contentDescription: _descriptionController.text,
                     );
                     bool isModuleCreated = await createModule(
-                        module: module, course: widget.parentCourse);
+                        courseIndex: widget.courseIndex,
+                        coursesProvider: coursesProvider,
+                        module: module);
                     if (isModuleCreated) {
                       Navigator.pop(context);
                     }

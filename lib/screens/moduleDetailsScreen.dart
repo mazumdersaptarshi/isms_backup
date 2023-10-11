@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:isms/courseManagement/coursesProvider.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
+import 'package:isms/screens/createModuleScreen.dart';
 import 'package:isms/screens/modulesListScreen.dart';
 import 'package:isms/slideManagement/fetchSlides.dart';
 import 'package:isms/screens/slidesDisplayScreen.dart';
@@ -102,7 +103,6 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                     ),
                   ),
                 ),
-              ElevatedButton(onPressed: () {}, child: Text("Add new module"))
             ],
           ),
         ),

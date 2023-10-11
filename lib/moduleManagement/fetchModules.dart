@@ -5,7 +5,9 @@ import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 
 Future fetchModules(
-    {required Course course, required CoursesProvider coursesProvider}) async {
+    {required int courseIndex,
+    required CoursesProvider coursesProvider}) async {
+  Course course = coursesProvider.allCourses[courseIndex];
   if (course.modules != null && course.modules!.isNotEmpty) {
     print("Modules for $course already fetched! See ${course.modules}");
     return;
@@ -23,7 +25,7 @@ Future fetchModules(
 
       course.modules?.add(m);
     });
-    coursesProvider.addModulesToCourse(course, course.modules!);
+    coursesProvider.addModulesToCourse(courseIndex, course.modules!);
     print("FCN Courses ${course.hashCode}, has modules: ${course.modules}");
   }
 }

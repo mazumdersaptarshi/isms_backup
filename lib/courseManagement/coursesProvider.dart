@@ -53,13 +53,16 @@ class CoursesProvider with ChangeNotifier {
     });
   }
 
-  addModulesToCourse(Course course, List<Module> modules) {
-    allCourses.forEach((element) {
-      if (element.id == course.id) {
-        element.modules = [];
-        element.modules?.addAll(modules);
-      }
-    });
+  addModulesToCourse(int courseIndex, List<Module> modules) {
+    // if (allCourses[courseIndex].modules == null)
+
+    try {
+      allCourses[courseIndex].modules?.addAll(modules);
+    } catch (e) {
+      allCourses[courseIndex].modules = [];
+      allCourses[courseIndex].modules?.addAll(modules);
+    }
+
     notifyListeners();
   }
 

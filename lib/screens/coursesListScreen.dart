@@ -23,9 +23,9 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
       body: Container(
         child: ListView.builder(
           itemCount: coursesProvider.allCourses.length,
-          itemBuilder: (context, index) {
+          itemBuilder: (context, courseIndex) {
             return ListTile(
-              leading: Text(coursesProvider.allCourses[index].name),
+              leading: Text(coursesProvider.allCourses[courseIndex].name),
               title: FilledButton(
                 child: Text("Details"),
                 onPressed: () {
@@ -33,7 +33,7 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => ModulesListScreen(
-                                courseIndex: index,
+                                courseIndex: courseIndex,
                               )));
                 },
               ),
@@ -44,11 +44,12 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => CreateModuleScreen(
-                              parentCourse:
-                                  coursesProvider.allCourses[index])));
+                                courseIndex: courseIndex,
+                              )));
                 },
               ),
-              subtitle: Text("${coursesProvider.allCourses[index].modules}"),
+              subtitle:
+                  Text("${coursesProvider.allCourses[courseIndex].modules}"),
             );
           },
         ),

@@ -34,7 +34,7 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
     if (mounted && isModulesFetched == false) {
       CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
       fetchModules(
-              course: coursesProvider.allCourses[widget.courseIndex],
+              courseIndex: widget.courseIndex,
               coursesProvider: Provider.of<CoursesProvider>(context))
           .then((value) {
         setState(() {
@@ -47,6 +47,7 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
   @override
   Widget build(BuildContext context) {
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
+    Course course = coursesProvider.allCourses[widget.courseIndex];
     if (isModulesFetched) {
       return Scaffold(
         appBar: AppBar(
@@ -61,14 +62,25 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
               // Navigator.pop(context);
             },
           ),
+          title: Text("${course.name}"),
+          actions: [
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => CreateModuleScreen(
+                              courseIndex: widget.courseIndex)));
+                },
+                child: Text("Add new module"))
+          ],
         ),
         body: Container(
           child: ListView.builder(
             itemCount:
                 coursesProvider.allCourses[widget.courseIndex].modules?.length,
             itemBuilder: (context, moduleIndex) {
-              Module module = coursesProvider
-                  .allCourses[widget.courseIndex].modules![moduleIndex];
+              Module module = course.modules![moduleIndex];
               return ModuleCardWidget(
                 courseIndex: widget.courseIndex,
                 coursesProvider: coursesProvider,
@@ -76,17 +88,6 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
               );
             },
           ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => CreateModuleScreen(
-                        parentCourse:
-                            coursesProvider.allCourses[widget.courseIndex])));
-          },
-          child: Icon(Icons.add),
         ),
       );
     } else {
