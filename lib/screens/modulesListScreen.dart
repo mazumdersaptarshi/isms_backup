@@ -12,6 +12,7 @@ import 'package:isms/screens/moduleDetailsScreen.dart';
 import 'package:isms/sharedWidgets/popupDialog.dart';
 import 'package:isms/sharedWidgets/moduleCardWidget.dart';
 import 'package:provider/provider.dart';
+import 'package:isms/utilityWidgets/modulesList/moduleListWidget.dart';
 
 class ModulesListScreen extends StatefulWidget {
   ModulesListScreen({super.key, required this.courseIndex});
@@ -48,6 +49,7 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
   Widget build(BuildContext context) {
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
     Course course = coursesProvider.allCourses[widget.courseIndex];
+
     if (isModulesFetched) {
       return Scaffold(
         appBar: AppBar(
@@ -55,11 +57,6 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
             icon: Icon(Icons.arrow_back),
             onPressed: () {
               Navigator.pop(context);
-              // Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //         builder: (context) => CoursesDisplayScreen()));
-              // Navigator.pop(context);
             },
           ),
           title: Text("${course.name}"),
@@ -75,19 +72,17 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
                 child: Text("Add new module"))
           ],
         ),
-        body: Container(
-          child: ListView.builder(
-            itemCount:
-                coursesProvider.allCourses[widget.courseIndex].modules?.length,
-            itemBuilder: (context, moduleIndex) {
-              Module module = course.modules![moduleIndex];
-              return ModuleCardWidget(
-                courseIndex: widget.courseIndex,
-                coursesProvider: coursesProvider,
-                moduleIndex: moduleIndex,
-              );
-            },
-          ),
+        body: ListView.builder(
+          itemCount:
+              coursesProvider.allCourses[widget.courseIndex].modules?.length,
+          itemBuilder: (BuildContext context, int moduleIndex) {
+            Module module = course.modules![moduleIndex];
+            return ModuleListWidget(
+              courseIndex: widget.courseIndex,
+              moduleIndex: moduleIndex,
+              isModuleCompleted: moduleIndex % 2 == 0,
+            );
+          },
         ),
       );
     } else {
@@ -102,3 +97,25 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
     }
   }
 }
+
+// class Old extends StatelessWidget {
+//   const Old({super.key});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       child: ListView.builder(
+//         itemCount:
+//         coursesProvider.allCourses[widget.courseIndex].modules?.length,
+//         itemBuilder: (context, moduleIndex) {
+//           Module module = course.modules![moduleIndex];
+//           return ModuleCardWidget(
+//             courseIndex: widget.courseIndex,
+//             coursesProvider: coursesProvider,
+//             moduleIndex: moduleIndex,
+//           );
+//         },
+//       ),
+//     );
+//   }
+// }

@@ -125,7 +125,7 @@ class _SlideFormState extends State<SlideForm> {
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       width: MediaQuery.of(context).size.width - 50,
       decoration: BoxDecoration(
-          color: Colors.blue.shade400,
+          color: Color.fromRGBO(190, 213, 207, 100),
           borderRadius: BorderRadius.all(Radius.circular(20))),
       child: Padding(
         padding: EdgeInsets.all(10),

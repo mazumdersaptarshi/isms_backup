@@ -27,7 +27,7 @@ Future fetchSlides(
     if (slidesListSnapshot.size == 0) return;
     slidesListSnapshot.docs.forEach((element) {
       Slide s = Slide.fromMap(element.data() as Map<String, dynamic>);
-      print(element.data());
+
       slides.add(s);
     });
     coursesProvider.addSlidesToModules(courseIndex, moduleIndex, slides);

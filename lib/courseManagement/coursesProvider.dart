@@ -31,8 +31,10 @@ class CoursesProvider with ChangeNotifier {
     coursesFetchStatus = CoursesFetchStatus.initiated;
     print("FETCHING COURSES STREAMMMM");
 
-    Stream<QuerySnapshot>? coursesStream =
-        FirebaseFirestore.instance.collection('courses').snapshots();
+    Stream<QuerySnapshot>? coursesStream = FirebaseFirestore.instance
+        .collection('courses')
+        .orderBy("createdAt")
+        .snapshots();
     coursesStream!.listen((snapshot) async {
       final List<Course> courses = [];
 
