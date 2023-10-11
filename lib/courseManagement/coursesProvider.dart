@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
+import 'package:isms/models/module.dart';
 
 enum CoursesFetchStatus { idle, initiated, fetched }
 
@@ -49,5 +50,15 @@ class CoursesProvider with ChangeNotifier {
 
       coursesFetchStatus = CoursesFetchStatus.initiated;
     });
+  }
+
+  addModulesToCourse(Course course, List<Module> modules) {
+    allCourses.forEach((element) {
+      if (element.id == course.id) {
+        element.modules = [];
+        element.modules?.addAll(modules);
+      }
+    });
+    notifyListeners();
   }
 }

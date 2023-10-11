@@ -9,27 +9,7 @@ import 'package:isms/slideManagement/createSlide.dart';
 import 'package:isms/utitlityFunctions/generateRandom.dart';
 import 'package:provider/provider.dart';
 import 'package:isms/models/course.dart';
-
-class SlidesCreationProvider with ChangeNotifier {
-  List<Slide> slidesList = [];
-  int noOfForms = 1;
-
-  addSlideToList(Slide slide) {
-    slidesList.add(slide);
-    notifyListeners();
-  }
-
-  incrementFormNo() {
-    noOfForms += 1;
-    notifyListeners();
-  }
-
-  clearSlidesList() {
-    slidesList.clear();
-    noOfForms = 1;
-    notifyListeners();
-  }
-}
+import 'package:isms/slideManagement/slidesCreationProvider.dart';
 
 class CreateSlideScreen extends StatelessWidget {
   CreateSlideScreen({required this.parentModule, required this.parentCourse});

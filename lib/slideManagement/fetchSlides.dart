@@ -23,7 +23,7 @@ Future fetchSlides({required Course course, required Module module}) async {
       // print("${m.title}, ${m.contentDescription}");
       if (module.slides == null) module.slides = [];
       module.slides?.add(s);
-      print("FCN Module with slides ${module.slides}, ${module.slides}");
     });
+    print("FCN Slides for ${module.slides}, slides: ${module.slides}");
   }
 }

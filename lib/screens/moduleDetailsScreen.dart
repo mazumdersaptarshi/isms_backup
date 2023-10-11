@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
+import 'package:isms/screens/modulesListScreen.dart';
 import 'package:isms/slideManagement/fetchSlides.dart';
 import 'package:isms/temp.dart';
 
@@ -33,7 +34,14 @@ class _ModuleDetailsState extends State<ModuleDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.cabin),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
       body: Container(
         child: Column(
           children: [
@@ -45,7 +53,7 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => SlidesPage(
+                          builder: (context) => SlidesDisplayScreen(
                                 slides: widget.module.slides!,
                               )));
                 },

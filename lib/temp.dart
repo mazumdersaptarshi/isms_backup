@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:isms/models/slide.dart';
 
-class SlidesPage extends StatefulWidget {
-  SlidesPage({super.key, required this.slides});
+class SlidesDisplayScreen extends StatefulWidget {
+  SlidesDisplayScreen({super.key, required this.slides});
   List<Slide> slides;
   @override
-  _SlidesPageState createState() => _SlidesPageState();
+  _SlidesDisplayScreenState createState() => _SlidesDisplayScreenState();
 }
 
-class _SlidesPageState extends State<SlidesPage> {
+class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
   List<Map<String, dynamic>> cardItems = [];
   int currentIndex = 0;
   final PageController _pageController = PageController(initialPage: 0);
@@ -62,10 +62,11 @@ class _SlidesPageState extends State<SlidesPage> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              height: 600, // Adjust the height as needed
+              height: 500, // Adjust the height as needed
               child: PageView(
                 controller: _pageController,
                 children: cardItems.map((item) {

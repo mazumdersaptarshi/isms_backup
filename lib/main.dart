@@ -6,6 +6,7 @@ import 'package:isms/courseManagement/coursesProvider.dart';
 import 'package:isms/screens/coursesListScreen.dart';
 import 'package:isms/screens/createCourseScreen.dart';
 import 'package:isms/screens/createSlideScreen.dart';
+import 'package:isms/slideManagement/slidesCreationProvider.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 

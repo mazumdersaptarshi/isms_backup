@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
+import 'package:isms/screens/moduleDetailsScreen.dart';
 
 class ModuleCardWidget extends StatelessWidget {
   final Module module;
-
-  ModuleCardWidget({required this.module});
+  final Course course;
+  ModuleCardWidget({required this.course, required this.module});
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +24,15 @@ class ModuleCardWidget extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blueGrey,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              ModuleDetails(course: course, module: module)));
+                },
                 child: Text(
-                  'Slides',
+                  'Details',
                   style: TextStyle(color: Colors.white),
                 ),
               ),

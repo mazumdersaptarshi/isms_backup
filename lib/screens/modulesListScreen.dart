@@ -4,6 +4,7 @@ import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/models/slide.dart';
 import 'package:isms/moduleManagement/fetchModules.dart';
+import 'package:isms/screens/coursesListScreen.dart';
 import 'package:isms/screens/createCourseScreen.dart';
 import 'package:isms/screens/createModuleScreen.dart';
 import 'package:isms/screens/createSlideScreen.dart';
@@ -13,8 +14,8 @@ import 'package:isms/sharedWidgets/moduleCardWidget.dart';
 import 'package:provider/provider.dart';
 
 class ModulesListScreen extends StatefulWidget {
-  ModulesListScreen({super.key, required this.parentCourse});
-  Course parentCourse;
+  ModulesListScreen({super.key, required this.courseIndex});
+  int courseIndex = 0;
 
   @override
   State<ModulesListScreen> createState() => _ModulesListScreenState();
@@ -25,8 +26,17 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     if (mounted) {
-      fetchModules(course: widget.parentCourse).then((value) {
+      CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
+      fetchModules(
+              course: coursesProvider.allCourses[widget.courseIndex],
+              coursesProvider: Provider.of<CoursesProvider>(context))
+          .then((value) {
         setState(() {
           isModulesFetched = true;
         });
@@ -36,23 +46,31 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
     if (isModulesFetched) {
       return Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.gamepad),
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CoursesDisplayScreen()));
+              // Navigator.pop(context);
+            },
+          ),
+        ),
         body: Container(
           child: ListView.builder(
-            itemCount: widget.parentCourse.modules?.length,
+            itemCount:
+                coursesProvider.allCourses[widget.courseIndex].modules?.length,
             itemBuilder: (context, index) {
-              Module module = widget.parentCourse.modules![index];
-              return GestureDetector(
-                child: ModuleCardWidget(module: module),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ModuleDetails(
-                              course: widget.parentCourse, module: module)));
-                },
+              Module module = coursesProvider
+                  .allCourses[widget.courseIndex].modules![index];
+              return ModuleCardWidget(
+                course: coursesProvider.allCourses[widget.courseIndex],
+                module: module,
               );
             },
           ),
@@ -62,8 +80,9 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>
-                        CreateModuleScreen(parentCourse: widget.parentCourse)));
+                    builder: (context) => CreateModuleScreen(
+                        parentCourse:
+                            coursesProvider.allCourses[widget.courseIndex])));
           },
           child: Icon(Icons.add),
         ),

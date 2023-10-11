@@ -25,16 +25,16 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
           itemCount: coursesProvider.allCourses.length,
           itemBuilder: (context, index) {
             return ListTile(
-              title: Text(coursesProvider.allCourses[index].name),
-              subtitle: FilledButton(
+              leading: Text(coursesProvider.allCourses[index].name),
+              title: FilledButton(
                 child: Text("Details"),
                 onPressed: () {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => ModulesListScreen(
-                              parentCourse:
-                                  coursesProvider.allCourses[index])));
+                                courseIndex: index,
+                              )));
                 },
               ),
               trailing: IconButton(
@@ -48,6 +48,7 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
                                   coursesProvider.allCourses[index])));
                 },
               ),
+              subtitle: Text("${coursesProvider.allCourses[index].modules}"),
             );
           },
         ),

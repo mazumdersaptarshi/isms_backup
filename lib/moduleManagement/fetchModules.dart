@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:isms/courseManagement/coursesProvider.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 
-Future fetchModules({required Course course}) async {
+Future fetchModules(
+    {required Course course, required CoursesProvider coursesProvider}) async {
   if (course.modules != null && course.modules!.isNotEmpty) {
     print("Modules for $course already fetched! See ${course.modules}");
     return;
@@ -20,7 +22,8 @@ Future fetchModules({required Course course}) async {
       // print("${m.title}, ${m.contentDescription}");
 
       course.modules?.add(m);
-      print("FCN Courses ${course.hashCode}, ${course.modules}");
     });
+    coursesProvider.addModulesToCourse(course, course.modules!);
+    print("FCN Courses ${course.hashCode}, has modules: ${course.modules}");
   }
 }
