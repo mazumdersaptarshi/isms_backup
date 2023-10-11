@@ -18,8 +18,17 @@ Future<bool> createSlides(
   Module module = course.modules![moduleIndex];
 
   List<Map<String, dynamic>> slidesMapList = [];
+  int startingIndex = 0;
+  try {
+    startingIndex = course.modules![moduleIndex].slides!.length;
+  } catch (e) {
+    startingIndex = 0;
+  }
+
   try {
     slides.forEach((slideItem) {
+      startingIndex++;
+      slideItem.index = startingIndex;
       Map<String, dynamic> slideMap = slideItem.toMap();
       slideMap['createdAt'] = DateTime.now();
       slidesMapList.add(slideMap);

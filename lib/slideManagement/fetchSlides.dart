@@ -21,6 +21,7 @@ Future fetchSlides(
         .collection('modules')
         .doc(module.title)
         .collection("slides")
+        .orderBy("index")
         .get();
     List<Slide> slides = [];
     if (slidesListSnapshot.size == 0) return;
