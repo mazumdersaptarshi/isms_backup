@@ -67,8 +67,13 @@ class CoursesProvider with ChangeNotifier {
   }
 
   addSlidesToModules(int courseIndex, int moduleIndex, List<Slide> slides) {
-    allCourses[courseIndex].modules![moduleIndex].slides = [];
-    allCourses[courseIndex].modules![moduleIndex].slides?.addAll(slides);
+    try {
+      allCourses[courseIndex].modules![moduleIndex].slides!.addAll(slides);
+    } catch (e) {
+      allCourses[courseIndex].modules![moduleIndex].slides = [];
+      allCourses[courseIndex].modules![moduleIndex].slides!.addAll(slides);
+    }
+
     notifyListeners();
   }
 }

@@ -3,15 +3,20 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:isms/courseManagement/coursesProvider.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/models/slide.dart';
 import 'package:isms/screens/createSlideScreen.dart';
 
 Future<bool> createSlides(
-    {required Module module,
-    required Course course,
+    {required int courseIndex,
+    required int moduleIndex,
+    required CoursesProvider coursesProvider,
     required List<Slide> slides}) async {
+  Course course = coursesProvider.allCourses[courseIndex];
+  Module module = course.modules![moduleIndex];
+
   List<Map<String, dynamic>> slidesMapList = [];
   try {
     slides.forEach((slideItem) {
@@ -32,9 +37,7 @@ Future<bool> createSlides(
       print("Created slide ${slideMap}");
     });
 
-    if (module.slides == null) module.slides = [];
-
-    module.slides?.addAll(slides);
+    coursesProvider.addSlidesToModules(courseIndex, moduleIndex, slides);
     print("Slides creation successful");
     return true;
   } catch (e) {

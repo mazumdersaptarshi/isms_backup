@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:isms/courseManagement/coursesProvider.dart';
 import 'package:isms/courseManagement/createCourse.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/models/slide.dart';
@@ -12,23 +13,23 @@ import 'package:isms/models/course.dart';
 import 'package:isms/slideManagement/slidesCreationProvider.dart';
 
 class CreateSlideScreen extends StatelessWidget {
-  CreateSlideScreen({required this.parentModule, required this.parentCourse});
-  Module parentModule;
-  Course parentCourse;
+  CreateSlideScreen({required this.courseIndex, required this.moduleIndex});
+  int courseIndex;
+  int moduleIndex;
   @override
   Widget build(BuildContext context) {
     return SlideFormContainer(
-      parentModule: parentModule,
-      parentCourse: parentCourse,
+      courseIndex: courseIndex,
+      moduleIndex: moduleIndex,
     );
   }
 }
 
 class SlideFormContainer extends StatefulWidget {
-  SlideFormContainer({required this.parentModule, required this.parentCourse});
+  SlideFormContainer({required this.courseIndex, required this.moduleIndex});
 
-  Module parentModule;
-  Course parentCourse;
+  int courseIndex;
+  int moduleIndex;
   @override
   _SlideFormContainerState createState() => _SlideFormContainerState();
 }
@@ -48,6 +49,7 @@ class _SlideFormContainerState extends State<SlideFormContainer> {
   // try GPT??
   @override
   Widget build(BuildContext context) {
+    CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
     return Consumer<SlidesCreationProvider>(
       builder: (BuildContext context,
           SlidesCreationProvider slidesCreationProvider, Widget? child) {
@@ -82,8 +84,9 @@ class _SlideFormContainerState extends State<SlideFormContainer> {
                   FilledButton(
                       onPressed: () async {
                         await createSlides(
-                            module: widget.parentModule,
-                            course: widget.parentCourse,
+                            courseIndex: widget.courseIndex,
+                            coursesProvider: coursesProvider,
+                            moduleIndex: widget.moduleIndex,
                             slides: slidesCreationProvider.slidesList);
 
                         slidesCreationProvider.clearSlidesList();

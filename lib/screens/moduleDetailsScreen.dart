@@ -3,6 +3,7 @@ import 'package:isms/courseManagement/coursesProvider.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/screens/createModuleScreen.dart';
+import 'package:isms/screens/createSlideScreen.dart';
 import 'package:isms/screens/modulesListScreen.dart';
 import 'package:isms/slideManagement/fetchSlides.dart';
 import 'package:isms/screens/slidesDisplayScreen.dart';
@@ -19,6 +20,7 @@ class ModuleDetails extends StatefulWidget {
 
 class _ModuleDetailsState extends State<ModuleDetails> {
   bool isSlidesFetched = false;
+  bool isSlidesListEmpty = false;
   @override
   void initState() {
     super.initState();
@@ -36,6 +38,12 @@ class _ModuleDetailsState extends State<ModuleDetails> {
           .then((value) {
         setState(() {
           {
+            Module module = coursesProvider
+                .allCourses[widget.courseIndex].modules![widget.moduleIndex];
+            print("MODULE.SLIDES: ${module.slides}");
+            if (module.slides == null || module.slides == []) {
+              isSlidesListEmpty = true;
+            }
             isSlidesFetched = true;
           }
         });
@@ -79,7 +87,18 @@ class _ModuleDetailsState extends State<ModuleDetails> {
               Expanded(
                 child: Text("${module.contentDescription}"),
               ),
-              if (isSlidesFetched)
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CreateSlideScreen(
+                                  courseIndex: widget.courseIndex,
+                                  moduleIndex: widget.moduleIndex,
+                                )));
+                  },
+                  child: Text("Add new slide")),
+              if (isSlidesFetched && isSlidesListEmpty == false)
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(
