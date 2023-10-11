@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:isms/courseManagement/coursesProvider.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/screens/modulesListScreen.dart';
 import 'package:isms/slideManagement/fetchSlides.dart';
 import 'package:isms/temp.dart';
+import 'package:provider/provider.dart';
 
 class ModuleDetails extends StatefulWidget {
-  ModuleDetails({super.key, required this.course, required this.module});
-  Course course;
-  Module module;
-
+  ModuleDetails(
+      {super.key, required this.courseIndex, required this.moduleIndex});
+  int courseIndex;
+  int moduleIndex;
   @override
   State<ModuleDetails> createState() => _ModuleDetailsState();
 }
@@ -19,11 +21,20 @@ class _ModuleDetailsState extends State<ModuleDetails> {
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     if (mounted) {
-      fetchSlides(course: widget.course, module: widget.module).then((value) {
+      CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
+      fetchSlides(
+              coursesProvider: coursesProvider,
+              courseIndex: widget.courseIndex,
+              moduleIndex: widget.moduleIndex)
+          .then((value) {
         setState(() {
-          if (widget.module.slides != null &&
-              widget.module.slides!.isNotEmpty) {
+          {
             isSlidesFetched = true;
           }
         });
@@ -33,6 +44,9 @@ class _ModuleDetailsState extends State<ModuleDetails> {
 
   @override
   Widget build(BuildContext context) {
+    CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
+    Module module = coursesProvider
+        .allCourses[widget.courseIndex].modules![widget.moduleIndex];
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -45,8 +59,8 @@ class _ModuleDetailsState extends State<ModuleDetails> {
       body: Container(
         child: Column(
           children: [
-            Text("${widget.module.title}"),
-            Text("${widget.module.contentDescription}"),
+            Text("${module.title}"),
+            Text("${module.contentDescription}"),
             if (isSlidesFetched)
               ElevatedButton(
                 onPressed: () {
@@ -54,7 +68,7 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => SlidesDisplayScreen(
-                                slides: widget.module.slides!,
+                                slides: module.slides!,
                               )));
                 },
                 child: Text("Study module"),

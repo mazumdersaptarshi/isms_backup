@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
+import 'package:isms/models/slide.dart';
 
 enum CoursesFetchStatus { idle, initiated, fetched }
 
@@ -59,6 +60,12 @@ class CoursesProvider with ChangeNotifier {
         element.modules?.addAll(modules);
       }
     });
+    notifyListeners();
+  }
+
+  addSlidesToModules(int courseIndex, int moduleIndex, List<Slide> slides) {
+    allCourses[courseIndex].modules![moduleIndex].slides = [];
+    allCourses[courseIndex].modules![moduleIndex].slides?.addAll(slides);
     notifyListeners();
   }
 }

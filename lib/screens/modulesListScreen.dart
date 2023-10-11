@@ -53,10 +53,11 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
           leading: IconButton(
             icon: Icon(Icons.gamepad),
             onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => CoursesDisplayScreen()));
+              Navigator.pop(context);
+              // Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //         builder: (context) => CoursesDisplayScreen()));
               // Navigator.pop(context);
             },
           ),
@@ -65,12 +66,13 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
           child: ListView.builder(
             itemCount:
                 coursesProvider.allCourses[widget.courseIndex].modules?.length,
-            itemBuilder: (context, index) {
+            itemBuilder: (context, moduleIndex) {
               Module module = coursesProvider
-                  .allCourses[widget.courseIndex].modules![index];
+                  .allCourses[widget.courseIndex].modules![moduleIndex];
               return ModuleCardWidget(
-                course: coursesProvider.allCourses[widget.courseIndex],
-                module: module,
+                courseIndex: widget.courseIndex,
+                coursesProvider: coursesProvider,
+                moduleIndex: moduleIndex,
               );
             },
           ),

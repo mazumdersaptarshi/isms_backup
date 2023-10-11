@@ -1,10 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:isms/courseManagement/coursesProvider.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/models/slide.dart';
 
-Future fetchSlides({required Course course, required Module module}) async {
+Future fetchSlides(
+    {required CoursesProvider coursesProvider,
+    required int courseIndex,
+    required int moduleIndex}) async {
+  Course course = coursesProvider.allCourses[courseIndex];
+  Module module = course.modules![moduleIndex];
   if (module.slides != null && module.slides!.isNotEmpty) {
     print("Slides for $module already fetched! See ${module.slides}");
     return;
@@ -16,14 +22,14 @@ Future fetchSlides({required Course course, required Module module}) async {
         .doc(module.title)
         .collection("slides")
         .get();
-    course.modules = [];
+    List<Slide> slides = [];
     slidesListSnapshot.docs.forEach((element) {
       // print(element.data());
       Slide s = Slide.fromMap(element.data() as Map<String, dynamic>);
-      // print("${m.title}, ${m.contentDescription}");
-      if (module.slides == null) module.slides = [];
-      module.slides?.add(s);
+
+      slides.add(s);
     });
+    coursesProvider.addSlidesToModules(courseIndex, moduleIndex, slides);
     print("FCN Slides for ${module.slides}, slides: ${module.slides}");
   }
 }

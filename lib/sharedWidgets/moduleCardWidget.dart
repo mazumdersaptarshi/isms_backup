@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:isms/courseManagement/coursesProvider.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/screens/moduleDetailsScreen.dart';
 
 class ModuleCardWidget extends StatelessWidget {
-  final Module module;
-  final Course course;
-  ModuleCardWidget({required this.course, required this.module});
+  final int moduleIndex;
+  final int courseIndex;
+  CoursesProvider coursesProvider;
+  ModuleCardWidget(
+      {required this.coursesProvider,
+      required this.courseIndex,
+      required this.moduleIndex});
 
   @override
   Widget build(BuildContext context) {
+    Module module =
+        coursesProvider.allCourses[courseIndex].modules![moduleIndex];
     return Card(
       margin: EdgeInsets.all(10),
       child: Column(
@@ -28,8 +35,10 @@ class ModuleCardWidget extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              ModuleDetails(course: course, module: module)));
+                          builder: (context) => ModuleDetails(
+                                courseIndex: courseIndex,
+                                moduleIndex: moduleIndex,
+                              )));
                 },
                 child: Text(
                   'Details',
