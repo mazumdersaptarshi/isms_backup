@@ -38,6 +38,14 @@ dependencies:
   cloud_firestore: ^4.9.3
   firebase_core: ^2.17.0
   provider: ^6.0.5
+  flutter_quill: ^7.4.9
+  flutter_keyboard_visibility: ^5.4.1
+  flutter_localization: ^0.1.14
+  html_editor_enhanced: ^2.5.1
+  flutter_inappwebview: ^5.8.0
+  html: ^0.15.4
+  firebase_storage: ^11.2.8
+  flutter_widget_from_html: ^0.10.6
 
 dev_dependencies:
   flutter_test:
