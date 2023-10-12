@@ -45,7 +45,7 @@ class _ModuleListWidgetState extends State<ModuleListWidget> {
           ),
           SizedBox(width: 10),
           Text(
-            module.title,
+            "#Module${module.index}",
             style: TextStyle(
               fontWeight: FontWeight.bold,
             ),

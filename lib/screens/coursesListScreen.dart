@@ -19,15 +19,26 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
   Widget build(BuildContext context) {
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text("All courses"),
+      ),
       body: Container(
         child: ListView.builder(
           itemCount: coursesProvider.allCourses.length,
           itemBuilder: (context, courseIndex) {
             return ListTile(
-              leading: Text(coursesProvider.allCourses[courseIndex].name),
-              title: FilledButton(
-                child: Text("Details"),
+              title: ListTile(
+                title: Text(coursesProvider.allCourses[courseIndex].name),
+              ),
+              trailing: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blueGrey,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10))),
+                child: Text(
+                  "Details",
+                  style: TextStyle(color: Colors.white),
+                ),
                 onPressed: () {
                   Navigator.push(
                       context,
@@ -37,19 +48,6 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
                               )));
                 },
               ),
-              trailing: IconButton(
-                icon: Icon(Icons.add),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => CreateModuleScreen(
-                                courseIndex: courseIndex,
-                              )));
-                },
-              ),
-              subtitle:
-                  Text("${coursesProvider.allCourses[courseIndex].modules}"),
             );
           },
         ),
