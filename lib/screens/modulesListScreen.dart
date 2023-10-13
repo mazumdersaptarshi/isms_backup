@@ -80,7 +80,7 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
             return ModuleListWidget(
               courseIndex: widget.courseIndex,
               moduleIndex: moduleIndex,
-              isModuleCompleted: moduleIndex % 2 == 0,
+              isModuleCompleted: true,
             );
           },
         ),
