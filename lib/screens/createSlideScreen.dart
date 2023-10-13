@@ -226,7 +226,7 @@ class _SlideFormState extends State<SlideForm> {
                             final imageUrl =
                                 await taskSnapshot.ref.getDownloadURL();
                             String imgTag =
-                                '<img class="myImg" src="$imageUrl"  style="object-fit: cover;" />';
+                                '<img class="myImg" src="$imageUrl"  style="object-fit: cover; width:100%" />';
 
                             String currentContent = await controller.getText();
 

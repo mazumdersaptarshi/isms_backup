@@ -9,7 +9,7 @@ Future fetchModules(
     required CoursesProvider coursesProvider}) async {
   Course course = coursesProvider.allCourses[courseIndex];
   if (course.modules != null && course.modules!.isNotEmpty) {
-    print("Modules for $course already fetched! See ${course.modules}");
+    // print("Modules for $course already fetched! See ${course.modules}");
     return;
   } else {
     QuerySnapshot modulesListSnapshot = await FirebaseFirestore.instance
