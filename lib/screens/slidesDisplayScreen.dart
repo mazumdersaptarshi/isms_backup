@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:isms/models/slide.dart';
+import 'package:isms/sharedWidgets/HtmlSlideDisplay.dart';
 
 class SlidesDisplayScreen extends StatefulWidget {
   SlidesDisplayScreen({super.key, required this.slides});
@@ -61,103 +62,107 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
         elevation: 0,
       ),
       body: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              height: 500, // Adjust the height as needed
-              child: PageView(
-                controller: _pageController,
-                children: cardItems.map((item) {
-                  return Card(
-                    margin: EdgeInsets.symmetric(horizontal: kIsWeb ? 60 : 15),
-                    child: Padding(
-                      padding: EdgeInsets.all(20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '${item['title']}:',
-                            style: TextStyle(
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.blueGrey),
+        child: Container(
+          decoration: BoxDecoration(
+              color: Colors.yellow.shade200,
+              borderRadius: BorderRadius.all(Radius.circular(20))),
+          margin: EdgeInsets.symmetric(horizontal: 10),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  height: 600,
+                  // Adjust the height as needed
+                  child: PageView(
+                    controller: _pageController,
+                    children: cardItems.map((item) {
+                      return SingleChildScrollView(
+                        child: Padding(
+                          padding: EdgeInsets.all(20),
+                          child: Container(
+                            height: 500,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '${item['title']}:',
+                                  style: TextStyle(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.blueGrey),
+                                ),
+                                SizedBox(height: 10),
+                                HTMLSlideDisplay(htmlString: item['text'])
+                              ],
+                            ),
                           ),
-                          SizedBox(height: 10),
-                          Text(
-                            '${item['text']}',
-                            style: TextStyle(fontSize: 18),
-                          ),
-                        ],
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+                if (isWeb) ...[
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        icon: Icon(
+                          Icons.arrow_left,
+                          size: 30,
+                        ),
+                        onPressed: () {
+                          if (currentIndex > 0) {
+                            _pageController.previousPage(
+                              duration: Duration(milliseconds: 300),
+                              curve: Curves.easeInOut,
+                            );
+                          }
+                        },
                       ),
-                    ),
-                  );
-                }).toList(),
-              ),
-            ),
-            const SizedBox(height: 20),
-            if (isWeb) ...[
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                    icon: Icon(
-                      Icons.arrow_left,
-                      size: 30,
-                    ),
-                    onPressed: () {
-                      if (currentIndex > 0) {
-                        _pageController.previousPage(
-                          duration: Duration(milliseconds: 300),
-                          curve: Curves.easeInOut,
-                        );
-                      }
-                    },
-                  ),
-                  SizedBox(
-                    width: 30,
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.arrow_right,
-                      size: 30,
-                    ),
-                    onPressed: () {
-                      if (currentIndex < cardItems.length - 1) {
-                        _pageController.nextPage(
-                          duration: Duration(milliseconds: 300),
-                          curve: Curves.easeInOut,
-                        );
-                      }
-                    },
+                      SizedBox(
+                        width: 30,
+                      ),
+                      IconButton(
+                        icon: Icon(
+                          Icons.arrow_right,
+                          size: 30,
+                        ),
+                        onPressed: () {
+                          if (currentIndex < cardItems.length - 1) {
+                            _pageController.nextPage(
+                              duration: Duration(milliseconds: 300),
+                              curve: Curves.easeInOut,
+                            );
+                          }
+                        },
+                      ),
+                    ],
                   ),
                 ],
-              ),
-            ],
-            const SizedBox(height: 20),
-            Visibility(
-              visible: currentIndex == cardItems.length - 1,
-              child: ElevatedButton(
-                onPressed: () {
-                  // Handle the "Finish" button action
-                  Navigator.pushNamed(context, '/');
-                  print('Finish button pressed');
-                },
-                child: Text('Finish'),
-              ),
+                Visibility(
+                  visible: currentIndex == cardItems.length - 1,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Handle the "Finish" button action
+                      Navigator.pushNamed(context, '/');
+                      print('Finish button pressed');
+                    },
+                    child: Text('Finish'),
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  alignment: Alignment.bottomRight,
+                  child: Text(
+                    'Slide ${currentIndex + 1} of ${cardItems.length}',
+                    style: TextStyle(fontSize: 15, color: Colors.blueGrey),
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 20),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              alignment: Alignment.bottomRight,
-              child: Text(
-                'Slide ${currentIndex + 1} of ${cardItems.length}',
-                style: TextStyle(fontSize: 15, color: Colors.blueGrey),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

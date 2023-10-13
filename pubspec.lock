@@ -41,6 +41,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.1.16"
+  auto_size_text:
+    dependency: transitive
+    description:
+      name: auto_size_text
+      sha256: "3f5261cd3fb5f2a9ab4e2fc3fba84fd9fcaac8821f20a1d4e71f557521b22599"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -326,6 +334,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.3"
+  flutter_deck:
+    dependency: "direct main"
+    description:
+      name: flutter_deck
+      sha256: ee0e1a6b6ad1a577d58cbdf2301633f0d3d710b850e38616f5f72594c99dff5e
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.6.0"
+  flutter_highlight:
+    dependency: transitive
+    description:
+      name: flutter_highlight
+      sha256: "7b96333867aa07e122e245c033b8ad622e4e3a42a1a2372cbb098a2541d8782c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.7.0"
   flutter_inappwebview:
     dependency: "direct main"
     description:
@@ -509,6 +533,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.9.0+2"
+  go_router:
+    dependency: transitive
+    description:
+      name: go_router
+      sha256: "2ccd74480706e0a70a0e0dfa9543dede41bc11d0fe3b146a6ad7b7686f6b4407"
+      url: "https://pub.dev"
+    source: hosted
+    version: "11.1.4"
   hashcodes:
     dependency: transitive
     description:
@@ -517,6 +549,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.0"
+  highlight:
+    dependency: transitive
+    description:
+      name: highlight
+      sha256: "5353a83ffe3e3eca7df0abfb72dcf3fa66cc56b953728e7113ad4ad88497cf21"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.7.0"
   html:
     dependency: "direct main"
     description:
@@ -629,6 +669,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
+  logging:
+    dependency: transitive
+    description:
+      name: logging
+      sha256: "623a88c9594aa774443aa3eb2d41807a48486b5613e67599fb4c41c0ad47c340"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.0"
   matcher:
     dependency: transitive
     description:
