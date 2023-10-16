@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:isms/courseManagement/coursesProvider.dart';
+import 'package:isms/examManagement/createExam.dart';
 import 'package:isms/models/enums.dart';
+import 'package:isms/models/newExam.dart';
 import 'package:isms/utilityWidgets/optionTile.dart';
 import 'package:isms/utilityWidgets/questionWidget.dart';
 import 'package:isms/utitlityFunctions/generateRandom.dart';
+import 'package:provider/provider.dart';
 
 List<Map<String, dynamic>> allQuestions = [];
 
 class ExamCreation extends StatefulWidget {
-  ExamCreation({Key? key}) : super(key: key);
+  ExamCreation({super.key, required this.courseIndex});
   int noOfQuestions = 1;
+  int courseIndex;
   @override
   ExamCreationState createState() => ExamCreationState();
 }
@@ -33,6 +38,7 @@ class ExamCreationState extends State<ExamCreation> {
 
   @override
   Widget build(BuildContext context) {
+    CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Create Exam'),
@@ -75,21 +81,30 @@ class ExamCreationState extends State<ExamCreation> {
                   },
                   child: const Text('Add a question'),
                 ),
-                buildSubmitButton(),
+                ElevatedButton(
+                  onPressed: () {
+                    print(allQuestions);
+                    print(
+                        "${coursesProvider.allCourses[widget.courseIndex].name},");
+
+                    NewExam newExam = NewExam(
+                        examID: generateRandomId(),
+                        passingMarks: int.parse(passingMarksController.text),
+                        title: titleController.text,
+                        questionAnswerSet: allQuestions);
+
+                    createExam(
+                        coursesProvider: coursesProvider,
+                        courseIndex: widget.courseIndex,
+                        exam: newExam);
+                  },
+                  child: const Text('Submit'),
+                ),
               ],
             ),
           ),
         ),
       ),
-    );
-  }
-
-  ElevatedButton buildSubmitButton() {
-    return ElevatedButton(
-      onPressed: () {
-        print(allQuestions);
-      },
-      child: const Text('Submit'),
     );
   }
 }

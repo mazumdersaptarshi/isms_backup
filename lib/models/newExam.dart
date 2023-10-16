@@ -1,12 +1,14 @@
 import 'package:isms/models/enums.dart';
 
 class NewExam {
+  int index;
   String examID;
   int passingMarks;
   String title;
-  List<QuestionAnswerSet> questionAnswerSet;
+  List<Map<String, dynamic>> questionAnswerSet;
 
   NewExam({
+    this.index = 0,
     required this.examID,
     required this.passingMarks,
     required this.title,
@@ -15,22 +17,21 @@ class NewExam {
 
   Map<String, dynamic> toMap() {
     return {
+      'index': index,
       'exam_ID': examID,
       'passing_marks': passingMarks,
       'title': title,
-      'question_answer_set':
-          questionAnswerSet.map((set) => set.toMap()).toList(),
+      'question_answer_set': questionAnswerSet,
     };
   }
 
   factory NewExam.fromMap(Map<String, dynamic> map) {
     return NewExam(
+      index: map['index'],
       examID: map['exam_ID'],
       passingMarks: map['passing_marks'],
       title: map['title'],
-      questionAnswerSet: (map['question_answer_set'] as List)
-          .map((set) => QuestionAnswerSet.fromMap(set as Map<String, dynamic>))
-          .toList(),
+      questionAnswerSet: map['question_answer_set'],
     );
   }
 }

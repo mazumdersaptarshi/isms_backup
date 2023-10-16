@@ -86,8 +86,12 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
             ),
             ElevatedButton(
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => ExamCreation()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ExamCreation(
+                                courseIndex: widget.courseIndex,
+                              )));
                 },
                 child: Text("Create exam"))
           ],

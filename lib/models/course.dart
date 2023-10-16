@@ -1,11 +1,12 @@
+import 'package:isms/models/newExam.dart';
+
 import 'module.dart';
-import 'exam.dart';
 
 class Course {
   String id;
   String name;
   List<Module>? modules;
-  List<Exam>? exams;
+  List<NewExam>? exams;
 
   Course({
     required this.id,

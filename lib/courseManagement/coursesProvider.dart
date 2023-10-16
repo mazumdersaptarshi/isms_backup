@@ -3,13 +3,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
+import 'package:isms/models/newExam.dart';
 import 'package:isms/models/slide.dart';
 
 enum CoursesFetchStatus { idle, initiated, fetched }
 
 class CoursesProvider with ChangeNotifier {
   List<Course> allCourses = [];
-
   bool isCoursesStreamFetched = false;
 
   CoursesFetchStatus coursesFetchStatus = CoursesFetchStatus.idle;
@@ -77,5 +77,35 @@ class CoursesProvider with ChangeNotifier {
     }
 
     notifyListeners();
+  }
+
+  addExamsToCourse(int courseIndex, List<NewExam> exams) {
+    try {
+      allCourses[courseIndex].exams?.addAll(exams);
+    } catch (e) {
+      allCourses[courseIndex].exams = [];
+      allCourses[courseIndex].exams?.addAll(exams);
+    }
+
+    notifyListeners();
+  }
+
+  Future<void> addHardcodedExam(
+      String courseId, Map<String, dynamic> examData) async {
+    // 1) Getting reference to the specific course document by using the provided courseId.
+    DocumentReference courseDocRef =
+        FirebaseFirestore.instance.collection('courses').doc(courseId);
+
+    // 2) Check if 'exams' subcollection exists, and if not, create it.
+    CollectionReference examsCollection = courseDocRef.collection('exams');
+
+    // Get all documents from the 'exams' subcollection to determine the next index.
+    QuerySnapshot examDocs = await examsCollection.get();
+    int nextExamIndex = examDocs.docs.length + 1;
+
+    // 3) Inside the new document, store all the required fields and values.
+    examsCollection.doc('exam_$nextExamIndex').set(examData);
+
+    notifyListeners(); // Notify listeners after adding the data.
   }
 }
