@@ -348,8 +348,7 @@ class _SlideFormState extends State<SlideForm> {
                             ),
                             TextButton(
                               style: TextButton.styleFrom(
-                                  backgroundColor:
-                                      Theme.of(context).colorScheme.secondary),
+                                  backgroundColor: Colors.green),
                               onPressed: () async {
                                 var txt = await controller.getText();
 
@@ -378,7 +377,7 @@ class _SlideFormState extends State<SlideForm> {
                                 }
                               },
                               child: Text(
-                                'Submit',
+                                'Save slide',
                                 style: TextStyle(color: Colors.white),
                               ),
                             ),
@@ -410,7 +409,7 @@ class _SlideFormState extends State<SlideForm> {
                         });
                       }
                     },
-                    child: Text('Create slide'),
+                    child: Text('Add empty slide'),
                   ),
                 ),
                 // Container(

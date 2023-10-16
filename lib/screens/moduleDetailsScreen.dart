@@ -54,8 +54,12 @@ class _ModuleDetailsState extends State<ModuleDetails> {
   @override
   Widget build(BuildContext context) {
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
-    Module module = coursesProvider
-        .allCourses[widget.courseIndex].modules![widget.moduleIndex];
+    Module? module;
+    try {
+      module = coursesProvider
+          .allCourses[widget.courseIndex].modules![widget.moduleIndex];
+    } catch (e) {}
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -64,68 +68,72 @@ class _ModuleDetailsState extends State<ModuleDetails> {
             Navigator.pop(context);
           },
         ),
-        title: Text("${module.title}"),
+        title: module != null ? Text("${module.title}") : Text("No modules"),
       ),
-      body: Container(
-        decoration: BoxDecoration(
-            color: const Color.fromRGBO(187, 210, 206, 100),
-            borderRadius: BorderRadius.circular(20)),
-        margin: EdgeInsets.all(10),
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                '${module.title}',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 10),
-              Expanded(
-                child: Text("${module.contentDescription}"),
-              ),
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => CreateSlideScreen(
-                                  courseIndex: widget.courseIndex,
-                                  moduleIndex: widget.moduleIndex,
-                                )));
-                  },
-                  child: Text("Add new slide")),
-              if (isSlidesFetched && isSlidesListEmpty == false)
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => SlidesDisplayScreen(
-                                  slides: module.slides!,
-                                )));
-                  },
-                  child: Text("Study module"),
-                )
-              else
-                Container(
-                  height: 100,
-                  child: Center(
-                    child: Column(
-                      children: [
-                        Text("Loading slides"),
-                        CircularProgressIndicator(),
-                      ],
+      body: module != null
+          ? Container(
+              decoration: BoxDecoration(
+                  color: const Color.fromRGBO(187, 210, 206, 100),
+                  borderRadius: BorderRadius.circular(20)),
+              margin: EdgeInsets.all(10),
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      '${module!.title}',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
+                    SizedBox(height: 10),
+                    Expanded(
+                      child: Text("${module!.contentDescription}"),
+                    ),
+                    ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CreateSlideScreen(
+                                        courseIndex: widget.courseIndex,
+                                        moduleIndex: widget.moduleIndex,
+                                      )));
+                        },
+                        child: Text("Add new slide")),
+                    if (isSlidesFetched && isSlidesListEmpty == false)
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SlidesDisplayScreen(
+                                        slides: module!.slides!,
+                                      )));
+                        },
+                        child: Text("Study module"),
+                      )
+                    else
+                      Container(
+                        height: 100,
+                        child: Center(
+                          child: Column(
+                            children: [
+                              Text("Loading slides"),
+                              CircularProgressIndicator(),
+                            ],
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
-            ],
-          ),
-        ),
-      ),
+              ),
+            )
+          : Container(
+              child: Text("No modules"),
+            ),
     );
   }
 }
