@@ -5,7 +5,7 @@ class NewExam {
   String examID;
   int passingMarks;
   String title;
-  List<Map<String, dynamic>> questionAnswerSet;
+  List questionAnswerSet;
 
   NewExam({
     this.index = 0,
