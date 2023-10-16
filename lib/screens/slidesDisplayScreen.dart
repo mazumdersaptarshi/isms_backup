@@ -77,25 +77,22 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
                   child: PageView(
                     controller: _pageController,
                     children: cardItems.map((item) {
-                      return SingleChildScrollView(
-                        child: Padding(
-                          padding: EdgeInsets.all(20),
-                          child: Container(
-                            height: 500,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '${item['title']}:',
-                                  style: TextStyle(
-                                      fontSize: 25,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.blueGrey),
-                                ),
-                                SizedBox(height: 10),
-                                HTMLSlideDisplay(htmlString: item['text'])
-                              ],
-                            ),
+                      return Padding(
+                        padding: EdgeInsets.all(20),
+                        child: Container(
+                          height: 500,
+                          child: ListView(
+                            children: [
+                              Text(
+                                '${item['title']}:',
+                                style: TextStyle(
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.blueGrey),
+                              ),
+                              SizedBox(height: 10),
+                              HTMLSlideDisplay(htmlString: item['text'])
+                            ],
                           ),
                         ),
                       );
