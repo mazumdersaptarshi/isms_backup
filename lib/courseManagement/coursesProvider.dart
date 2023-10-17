@@ -101,23 +101,4 @@ class CoursesProvider with ChangeNotifier {
 
     notifyListeners();
   }
-
-  Future<void> addHardcodedExam(
-      String courseId, Map<String, dynamic> examData) async {
-    // 1) Getting reference to the specific course document by using the provided courseId.
-    DocumentReference courseDocRef =
-        FirebaseFirestore.instance.collection('courses').doc(courseId);
-
-    // 2) Check if 'exams' subcollection exists, and if not, create it.
-    CollectionReference examsCollection = courseDocRef.collection('exams');
-
-    // Get all documents from the 'exams' subcollection to determine the next index.
-    QuerySnapshot examDocs = await examsCollection.get();
-    int nextExamIndex = examDocs.docs.length + 1;
-
-    // 3) Inside the new document, store all the required fields and values.
-    examsCollection.doc('exam_$nextExamIndex').set(examData);
-
-    notifyListeners(); // Notify listeners after adding the data.
-  }
 }

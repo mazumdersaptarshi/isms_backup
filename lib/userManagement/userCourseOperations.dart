@@ -7,6 +7,7 @@ setUserCourseStarted(
     {required CustomUserProvider customUserProvider,
     required Map<String, dynamic> courseDetails}) async {
   bool flag = false;
+
   if (customUserProvider.loggedInUser!.courses_started.isNotEmpty) {
     customUserProvider.loggedInUser!.courses_started.forEach((course) {
       try {
@@ -29,6 +30,26 @@ setUserCourseStarted(
         .collection("users")
         .doc(uid)
         .set(customUserProvider.loggedInUser!.toMap());
+
+    DocumentSnapshot courseSnapshot = await FirebaseFirestore.instance
+        .collection("adminconsole")
+        .doc("allcourses")
+        .collection("allCourseItems")
+        .doc(courseDetails["course_name"])
+        .get();
+
+    Map<String, dynamic> courseMap =
+        courseSnapshot.data() as Map<String, dynamic>;
+
+    courseMap["course_started"]
+        .add({"username": customUserProvider.loggedInUser!.username});
+
+    await FirebaseFirestore.instance
+        .collection("adminconsole")
+        .doc("allcourses")
+        .collection("allCourseItems")
+        .doc(courseDetails["course_name"])
+        .set(courseMap);
   }
 }
 
