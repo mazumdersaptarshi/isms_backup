@@ -7,6 +7,7 @@ import 'package:isms/models/newExam.dart';
 import 'package:isms/models/slide.dart';
 
 import 'package:isms/screens/examCreation.dart';
+import 'package:isms/screens/examScreen.dart';
 import 'package:provider/provider.dart';
 
 class ExamListScreen extends StatefulWidget {
@@ -78,7 +79,14 @@ class _ExamListScreenState extends State<ExamListScreen> {
                 return Row(
                   children: [
                     Text(exam.title),
-                    Text(exam.passingMarks.toString())
+                    ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ExamScreen()));
+                        },
+                        child: Text("Take exam"))
                   ],
                 );
               },

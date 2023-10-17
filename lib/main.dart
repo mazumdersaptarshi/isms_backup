@@ -6,6 +6,7 @@ import 'package:isms/courseManagement/coursesProvider.dart';
 import 'package:isms/screens/coursesListScreen.dart';
 import 'package:isms/screens/createCourseScreen.dart';
 import 'package:isms/screens/createSlideScreen.dart';
+import 'package:isms/screens/loginPage.dart';
 import 'package:isms/slideManagement/slidesCreationProvider.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: CoursesDisplayScreen(),
+        home: LoginPage(),
       ),
     );
   }
