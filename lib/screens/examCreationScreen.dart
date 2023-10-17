@@ -112,6 +112,7 @@ class ExamCreationState extends State<ExamCreation> {
                           courseIndex: widget.courseIndex,
                           moduleIndex: widget.moduleIndex!,
                           exam: newExam);
+                      allQuestions.clear();
                     }
                   },
                   child: const Text('Submit'),

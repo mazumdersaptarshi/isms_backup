@@ -1,21 +1,24 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/courseManagement/createCourse.dart';
-import 'package:isms/screens/coursesListScreen.dart';
-import 'package:isms/utitlityFunctions/generateRandom.dart';
-import 'package:provider/provider.dart';
+import 'package:isms/models/adminConsoleModels/coursesDetails.dart';
+import 'package:isms/models/adminConsoleModels/studentsCourseDetails.dart';
 import 'package:isms/models/course.dart';
+import 'package:isms/utitlityFunctions/generateRandom.dart';
 
-import '../main.dart';
+import '../courseManagement/createCourse.dart';
 
 class CreateCourseScreen extends StatelessWidget {
+  const CreateCourseScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return CourseCreationForm();
+    return const CourseCreationForm();
   }
 }
 
 class CourseCreationForm extends StatefulWidget {
+  const CourseCreationForm({super.key});
+
   @override
   _CourseCreationFormState createState() => _CourseCreationFormState();
 }
@@ -31,12 +34,12 @@ class _CourseCreationFormState extends State<CourseCreationForm> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
-        title: Text('Create New Course'),
+        title: const Text('Create New Course'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -46,7 +49,7 @@ class _CourseCreationFormState extends State<CourseCreationForm> {
             children: <Widget>[
               TextFormField(
                 controller: _nameController,
-                decoration: InputDecoration(labelText: 'Title'),
+                decoration: const InputDecoration(labelText: 'Title'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter a title';
@@ -54,10 +57,10 @@ class _CourseCreationFormState extends State<CourseCreationForm> {
                   return null;
                 },
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               TextFormField(
                 controller: _descriptionController,
-                decoration: InputDecoration(labelText: 'Content'),
+                decoration: const InputDecoration(labelText: 'Content'),
                 maxLines: 4,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -66,7 +69,7 @@ class _CourseCreationFormState extends State<CourseCreationForm> {
                   return null;
                 },
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
@@ -75,12 +78,22 @@ class _CourseCreationFormState extends State<CourseCreationForm> {
                       name: _nameController.text,
                     );
                     bool isCourseCreated = await createCourse(course: course);
+
+                    CoursesDetails coursesDetails = CoursesDetails(
+                      course_id: generateRandomId(),
+                      course_name: _nameController.text,
+                      number_of_modules: 0,
+                      number_of_exams: 0,
+                    );
+                    bool isCourseAdminConsoleCreated =
+                        await createCourseAdminConsole(
+                            coursesDetails: coursesDetails);
                     if (isCourseCreated) {
                       Navigator.pop(context);
                     }
                   }
                 },
-                child: Text('Submit'),
+                child: const Text('Submit'),
               ),
             ],
           ),

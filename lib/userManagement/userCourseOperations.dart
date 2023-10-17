@@ -38,18 +38,21 @@ setUserCourseStarted(
         .doc(courseDetails["course_name"])
         .get();
 
-    Map<String, dynamic> courseMap =
-        courseSnapshot.data() as Map<String, dynamic>;
+    if (courseSnapshot.exists) {
+      Map<String, dynamic> courseMap =
+          courseSnapshot.data() as Map<String, dynamic>;
 
-    courseMap["course_started"]
-        .add({"username": customUserProvider.loggedInUser!.username});
+      if (courseMap["course_started"] == null) courseMap["course_started"] = [];
+      courseMap["course_started"]
+          .add({"username": customUserProvider.loggedInUser!.username});
 
-    await FirebaseFirestore.instance
-        .collection("adminconsole")
-        .doc("allcourses")
-        .collection("allCourseItems")
-        .doc(courseDetails["course_name"])
-        .set(courseMap);
+      await FirebaseFirestore.instance
+          .collection("adminconsole")
+          .doc("allcourses")
+          .collection("allCourseItems")
+          .doc(courseDetails["course_name"])
+          .set(courseMap);
+    }
   }
 }
 
@@ -119,5 +122,29 @@ setUserCourseModuleCompleted(
         .collection("users")
         .doc(uid)
         .set(customUserProvider.loggedInUser!.toMap());
+
+    DocumentSnapshot courseSnapshot = await FirebaseFirestore.instance
+        .collection("adminconsole")
+        .doc("allcourses")
+        .collection("allCourseItems")
+        .doc(courseDetails["course_name"])
+        .get();
+
+    if (courseSnapshot.exists) {
+      Map<String, dynamic> courseMap =
+          courseSnapshot.data() as Map<String, dynamic>;
+
+      if (courseMap["course_completed"] == null)
+        courseMap["course_completed"] = [];
+      courseMap["course_completed"]
+          .add({"username": customUserProvider.loggedInUser!.username});
+
+      await FirebaseFirestore.instance
+          .collection("adminconsole")
+          .doc("allcourses")
+          .collection("allCourseItems")
+          .doc(courseDetails["course_name"])
+          .set(courseMap);
+    }
   }
 }

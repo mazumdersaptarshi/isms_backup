@@ -29,7 +29,6 @@ class CoursesDetails {
       'course_name': course_name,
       'number_of_modules': number_of_modules,
       'number_of_exams': number_of_exams,
-      'students': students?.map((student) => student.toMap()).toList(),
     };
   }
 
@@ -54,7 +53,6 @@ class CoursesDetails {
       number_of_modules: map['number_of_modules'] ?? 0,
       course_name: map['course_name'] ?? 'n/a',
       number_of_exams: map['number_of_exams'] ?? 0,
-      students: getEnrolledStudentsList(map),
     );
   }
 }
