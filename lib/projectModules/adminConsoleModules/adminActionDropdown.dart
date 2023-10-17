@@ -36,7 +36,8 @@ class _AdminActionDropdownState extends State<AdminActionDropdown> {
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
                   return ExpansionTile(
-                    title: Text('${index + 1}: ${snapshot.data![index]}'),
+                    title:
+                        Text('${index + 1}: ${snapshot.data![index].username}'),
                   );
                 },
               );
