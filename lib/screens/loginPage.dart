@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:isms/screens/checkLoggedInScreen.dart';
 import 'package:isms/screens/coursesListScreen.dart';
+import 'package:isms/screens/homePage.dart';
 import 'package:isms/userManagement/createUser.dart';
 import 'package:isms/models/customUser.dart';
 
@@ -99,7 +100,7 @@ class LoginPageState extends State<LoginPage> {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => CoursesDisplayScreen()),
+                MaterialPageRoute(builder: (context) => HomePage()),
               );
             });
           }
