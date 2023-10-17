@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/courseManagement/coursesProvider.dart';
 import 'package:isms/models/module.dart';
@@ -34,12 +35,7 @@ class _ModuleListWidgetState extends State<ModuleListWidget> {
               SizedBox(
                 width: 30,
                 height: 30,
-                child: widget.isModuleCompleted
-                    ? Icon(Icons.check_circle_rounded, color: Colors.green)
-                    : Icon(
-                        Icons.circle_outlined,
-                        color: Colors.orange,
-                      ),
+                child: Icon(CupertinoIcons.book),
               ),
             ],
           ),
