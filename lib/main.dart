@@ -8,6 +8,7 @@ import 'package:isms/screens/createCourseScreen.dart';
 import 'package:isms/screens/createSlideScreen.dart';
 import 'package:isms/screens/loginPage.dart';
 import 'package:isms/slideManagement/slidesCreationProvider.dart';
+import 'package:isms/userManagement/customUserProvider.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
@@ -26,6 +27,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider<CustomUserProvider>(create: (context) {
+          return CustomUserProvider();
+        }),
         ChangeNotifierProvider<CoursesProvider>(create: (context) {
           return CoursesProvider();
         }),

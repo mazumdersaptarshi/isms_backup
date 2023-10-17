@@ -1,0 +1,64 @@
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:isms/screens/coursesListScreen.dart';
+import 'package:isms/screens/loginPage.dart';
+import 'package:isms/userManagement/customUserProvider.dart';
+import 'package:provider/provider.dart';
+
+class CheckLoggedIn extends StatefulWidget {
+  CheckLoggedIn({super.key});
+
+  @override
+  State<CheckLoggedIn> createState() => _CheckLoggedInState();
+}
+
+class _CheckLoggedInState extends State<CheckLoggedIn> {
+  String? loggedInUser;
+  bool hasCheckedForChangedDependencies = false;
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() async {
+    super.didChangeDependencies();
+    if (!hasCheckedForChangedDependencies &&
+        FirebaseAuth.instance.currentUser != null) {
+      hasCheckedForChangedDependencies = true;
+      if (mounted) {
+        await setLoggedInUser(
+            customUserProvider: Provider.of<CustomUserProvider>(context));
+
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => CoursesDisplayScreen()));
+        });
+      }
+    }
+  }
+
+  setLoggedInUser({required CustomUserProvider customUserProvider}) async {
+    await customUserProvider.fetchUsers();
+    customUserProvider.users.forEach((element) {
+      print(element.username);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Scaffold(
+        body: Container(
+          child: const AlertDialog(
+            title: Text("Checking logged in user"),
+            content: SizedBox(
+                width: 30,
+                height: 30,
+                child: Center(child: CircularProgressIndicator())),
+          ),
+        ),
+      ),
+    );
+  }
+}

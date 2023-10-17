@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:isms/screens/checkLoggedInScreen.dart';
 import 'package:isms/screens/coursesListScreen.dart';
 import 'package:isms/userManagement/createUser.dart';
 import 'package:isms/models/customUser.dart';
@@ -119,7 +120,7 @@ class LoginPageState extends State<LoginPage> {
       await createUserIfNotExists(user);
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => CoursesDisplayScreen()),
+        MaterialPageRoute(builder: (context) => CheckLoggedIn()),
       );
     }
   }
@@ -184,7 +185,8 @@ class LoginPageState extends State<LoginPage> {
             username: user.displayName!,
             email: user.email!,
             role: 'user',
-            courses: [],
+            courses_started: [],
+            courses_completed: [],
           ));
     }
   }
