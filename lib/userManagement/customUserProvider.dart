@@ -99,4 +99,9 @@ class CustomUserProvider with ChangeNotifier {
       return null;
     }
   }
+
+  setUserCourseStarted(Map<String, dynamic> courseDetails) {
+    loggedInUser?.courses_started.add(courseDetails);
+    notifyListeners();
+  }
 }

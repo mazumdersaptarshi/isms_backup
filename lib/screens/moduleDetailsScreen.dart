@@ -7,6 +7,8 @@ import 'package:isms/screens/createSlideScreen.dart';
 import 'package:isms/screens/modulesListScreen.dart';
 import 'package:isms/slideManagement/fetchSlides.dart';
 import 'package:isms/screens/slidesDisplayScreen.dart';
+import 'package:isms/userManagement/customUserProvider.dart';
+import 'package:isms/userManagement/userCourseOperations.dart';
 import 'package:provider/provider.dart';
 
 class ModuleDetails extends StatefulWidget {
@@ -54,6 +56,8 @@ class _ModuleDetailsState extends State<ModuleDetails> {
   @override
   Widget build(BuildContext context) {
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
+    CustomUserProvider customUserProvider =
+        Provider.of<CustomUserProvider>(context);
     Module? module;
     try {
       module = coursesProvider
@@ -105,7 +109,13 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                         child: Text("Add new slide")),
                     if (isSlidesFetched && isSlidesListEmpty == false)
                       ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
+                          await setUserCourseStarted(
+                              customUserProvider: customUserProvider,
+                              courseDetails: {
+                                "courseID": coursesProvider
+                                    .allCourses[widget.courseIndex].id
+                              });
                           Navigator.push(
                               context,
                               MaterialPageRoute(

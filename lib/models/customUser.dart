@@ -29,7 +29,7 @@ class CustomUser {
     return CustomUser(
         username: map['username'],
         email: map['email'],
-        role: "",
+        role: map['role'] ?? "",
         courses_started: [],
         courses_completed: []);
   }

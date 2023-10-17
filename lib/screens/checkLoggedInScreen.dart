@@ -42,6 +42,8 @@ class _CheckLoggedInState extends State<CheckLoggedIn> {
     await customUserProvider.fetchUsers();
     customUserProvider.users.forEach((element) {
       print(element.username);
+      if (element.email == FirebaseAuth.instance.currentUser?.email)
+        customUserProvider.setLoggedInUser(element);
     });
   }
 
