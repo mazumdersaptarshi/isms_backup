@@ -7,7 +7,7 @@ import 'package:isms/models/newExam.dart';
 import 'package:isms/models/slide.dart';
 
 import 'package:isms/screens/examCreation.dart';
-import 'package:isms/screens/examScreen.dart';
+import 'package:isms/screens/takeExamScreen.dart';
 import 'package:provider/provider.dart';
 
 class ExamListScreen extends StatefulWidget {
@@ -86,6 +86,7 @@ class _ExamListScreenState extends State<ExamListScreen> {
                               MaterialPageRoute(
                                   builder: (context) => TakeExamScreen(
                                         exam: exam,
+                                        courseIndex: widget.courseIndex,
                                       )));
                         },
                         child: Text("Take exam"))

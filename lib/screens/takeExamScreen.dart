@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:isms/courseManagement/coursesProvider.dart';
 import 'package:isms/models/newExam.dart';
 import 'package:isms/models/question.dart';
+import 'package:isms/userManagement/customUserProvider.dart';
+import 'package:provider/provider.dart';
+
+import '../userManagement/userCourseOperations.dart';
 
 class TakeExamScreen extends StatefulWidget {
-  TakeExamScreen({required this.exam});
+  TakeExamScreen({required this.exam, required this.courseIndex});
 
+  int courseIndex;
   NewExam exam;
   @override
   _TakeExamScreenState createState() => _TakeExamScreenState();
@@ -86,6 +92,9 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
 
   @override
   Widget build(BuildContext context) {
+    CustomUserProvider customUserProvider =
+        Provider.of<CustomUserProvider>(context);
+    CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
     if (showScore) {
       int correctAnswers = 0;
       for (int i = 0; i < questions.length; i++) {
@@ -131,6 +140,16 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
                 Text(
                     'Congratulations! Your Score is: $correctAnswers/${questions.length}'),
                 SizedBox(height: 20),
+                ElevatedButton(
+                    onPressed: () {
+                      setUserCourseCompleted(
+                          customUserProvider: customUserProvider,
+                          courseDetails: {
+                            "courseID": coursesProvider
+                                .allCourses[widget.courseIndex].id
+                          });
+                    },
+                    child: Text("Mark course as Done")),
                 ElevatedButton(
                   onPressed: () => setState(() {
                     shuffleQuestions();

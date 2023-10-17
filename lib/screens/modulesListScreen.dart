@@ -92,6 +92,7 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
                       MaterialPageRoute(
                           builder: (context) => ExamCreation(
                                 courseIndex: widget.courseIndex,
+                                examtype: EXAMTYPE.courseExam,
                               )));
                 },
                 child: Text("Create exam")),

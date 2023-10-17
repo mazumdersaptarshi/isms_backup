@@ -10,10 +10,13 @@ import 'package:provider/provider.dart';
 
 List<Map<String, dynamic>> allQuestions = [];
 
+enum EXAMTYPE { courseExam, moduleExam }
+
 class ExamCreation extends StatefulWidget {
-  ExamCreation({super.key, required this.courseIndex});
+  ExamCreation({super.key, required this.courseIndex, required this.examtype});
   int noOfQuestions = 1;
   int courseIndex;
+  EXAMTYPE examtype;
   @override
   ExamCreationState createState() => ExamCreationState();
 }
