@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:isms/models/newExam.dart';
 import 'package:isms/models/question.dart';
 
-class ExamScreen extends StatefulWidget {
+class TakeExamScreen extends StatefulWidget {
+  TakeExamScreen({required this.exam});
+
+  NewExam exam;
   @override
-  _ExamScreenState createState() => _ExamScreenState();
+  _TakeExamScreenState createState() => _TakeExamScreenState();
 }
 
-class _ExamScreenState extends State<ExamScreen> {
+class _TakeExamScreenState extends State<TakeExamScreen> {
   List<NewQuestion> questions = [];
   int currentIndex = 0;
   List<Set<int>> selectedAnswers = [];
@@ -15,32 +19,48 @@ class _ExamScreenState extends State<ExamScreen> {
   @override
   void initState() {
     super.initState();
-    questions = loadQuestions();
+    loadQuestions();
     shuffleQuestions();
     selectedAnswers = List.generate(questions.length, (index) => <int>{});
+    print(widget.exam.questionAnswerSet);
   }
 
-  List<NewQuestion> loadQuestions() {
-    return [
-      NewQuestion('What is the capital of France?',
-          ['London', 'Berlin', 'Paris', 'Madrid'], [2], 1),
-      NewQuestion('Which planet is known as the Red Planet?',
-          ['Earth', 'Mars', 'Jupiter', 'Venus'], [1], 1),
-      NewQuestion(
-          'Who wrote "Romeo and Juliet"?',
-          [
-            'Charles Dickens',
-            'William Shakespeare',
-            'George Orwell',
-            'J.K. Rowling'
-          ],
-          [1],
-          1),
-      NewQuestion('Which of these is a prime number?', ['2', '15', '17', '19'],
-          [0, 2, 3], 3),
-      NewQuestion('What is the largest mammal?',
-          ['Elephant', 'Blue Whale', 'Giraffe', 'Kangaroo'], [1], 1),
-    ];
+  loadQuestions() {
+    widget.exam.questionAnswerSet.forEach((element) {
+      List<String> options = [];
+      List<int> correctAnswers = [];
+      int index = 0;
+      element['options'].forEach((option) {
+        options.add(option['option_value']);
+        if (option['option_bool'] == true) {
+          correctAnswers.add(index);
+        }
+        index++;
+      });
+      NewQuestion newQuestion = NewQuestion(element['questionName'], options,
+          correctAnswers, correctAnswers.length);
+      questions.add(newQuestion);
+    });
+    // return [
+    //   NewQuestion('What is the capital of France?',
+    //       ['London', 'Berlin', 'Paris', 'Madrid'], [2], 1),
+    //   NewQuestion('Which planet is known as the Red Planet?',
+    //       ['Earth', 'Mars', 'Jupiter', 'Venus'], [1], 1),
+    //   NewQuestion(
+    //       'Who wrote "Romeo and Juliet"?',
+    //       [
+    //         'Charles Dickens',
+    //         'William Shakespeare',
+    //         'George Orwell',
+    //         'J.K. Rowling'
+    //       ],
+    //       [1],
+    //       1),
+    //   NewQuestion('Which of these is a prime number?', ['2', '15', '17', '19'],
+    //       [0, 2, 3], 3),
+    //   NewQuestion('What is the largest mammal?',
+    //       ['Elephant', 'Blue Whale', 'Giraffe', 'Kangaroo'], [1], 1),
+    // ];
   }
 
   void shuffleQuestions() {

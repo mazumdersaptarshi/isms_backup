@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:isms/adminManagement/adminConsoleProvider.dart';
 import 'package:isms/courseManagement/coursesProvider.dart';
 import 'package:isms/courseManagement/coursesProvider.dart';
 import 'package:isms/screens/coursesListScreen.dart';
@@ -35,6 +36,9 @@ class MyApp extends StatelessWidget {
         }),
         ChangeNotifierProvider<SlidesCreationProvider>(create: (context) {
           return SlidesCreationProvider();
+        }),
+        ChangeNotifierProvider<AdminConsoleProvider>(create: (context) {
+          return AdminConsoleProvider();
         }),
       ],
       child: MaterialApp(

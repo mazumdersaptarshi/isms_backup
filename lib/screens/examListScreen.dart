@@ -84,7 +84,9 @@ class _ExamListScreenState extends State<ExamListScreen> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => ExamScreen()));
+                                  builder: (context) => TakeExamScreen(
+                                        exam: exam,
+                                      )));
                         },
                         child: Text("Take exam"))
                   ],
