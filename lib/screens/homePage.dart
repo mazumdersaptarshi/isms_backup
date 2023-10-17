@@ -6,7 +6,7 @@ import 'package:isms/screens/adminScreens/adminConsoleHomePage.dart';
 import 'package:isms/screens/coursesListScreen.dart';
 import 'package:isms/screens/createCourseScreen.dart';
 import 'package:isms/screens/createModuleScreen.dart';
-import 'package:isms/screens/examCreation.dart';
+import 'package:isms/screens/examCreationScreen.dart';
 import 'package:isms/screens/modulesListScreen.dart';
 
 import 'package:provider/provider.dart';

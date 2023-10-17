@@ -2,15 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:isms/courseManagement/coursesProvider.dart';
 import 'package:isms/models/newExam.dart';
 import 'package:isms/models/question.dart';
+import 'package:isms/screens/examCreationScreen.dart';
 import 'package:isms/userManagement/customUserProvider.dart';
 import 'package:provider/provider.dart';
 
 import '../userManagement/userCourseOperations.dart';
 
 class TakeExamScreen extends StatefulWidget {
-  TakeExamScreen({required this.exam, required this.courseIndex});
-
+  TakeExamScreen(
+      {required this.exam,
+      required this.courseIndex,
+      required this.examtype,
+      this.moduleIndex});
+  EXAMTYPE examtype;
   int courseIndex;
+  int? moduleIndex;
   NewExam exam;
   @override
   _TakeExamScreenState createState() => _TakeExamScreenState();
@@ -140,16 +146,35 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
                 Text(
                     'Congratulations! Your Score is: $correctAnswers/${questions.length}'),
                 SizedBox(height: 20),
-                ElevatedButton(
-                    onPressed: () {
-                      setUserCourseCompleted(
-                          customUserProvider: customUserProvider,
-                          courseDetails: {
-                            "courseID": coursesProvider
-                                .allCourses[widget.courseIndex].id
-                          });
-                    },
-                    child: Text("Mark course as Done")),
+                if (widget.examtype == EXAMTYPE.courseExam)
+                  ElevatedButton(
+                      onPressed: () {
+                        setUserCourseCompleted(
+                            customUserProvider: customUserProvider,
+                            courseDetails: {
+                              "courseID": coursesProvider
+                                  .allCourses[widget.courseIndex].id,
+                              "course_name": coursesProvider
+                                  .allCourses[widget.courseIndex].name,
+                            });
+                      },
+                      child: Text("Mark course as Done"))
+                else if (widget.examtype == EXAMTYPE.moduleExam)
+                  ElevatedButton(
+                      onPressed: () {
+                        setUserCourseModuleCompleted(
+                            customUserProvider: customUserProvider,
+                            courseDetails: {
+                              "courseID": coursesProvider
+                                  .allCourses[widget.courseIndex].id,
+                              "course_name": coursesProvider
+                                  .allCourses[widget.courseIndex].name
+                            },
+                            courseIndex: widget.courseIndex,
+                            moduleIndex: widget.moduleIndex!,
+                            coursesProvider: coursesProvider);
+                      },
+                      child: Text("Mark Module as Done")),
                 ElevatedButton(
                   onPressed: () => setState(() {
                     shuffleQuestions();

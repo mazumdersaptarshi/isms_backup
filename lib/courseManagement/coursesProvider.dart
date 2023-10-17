@@ -90,6 +90,18 @@ class CoursesProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  addExamsToCourseModule(
+      int courseIndex, int moduleIndex, List<NewExam> exams) {
+    try {
+      allCourses[courseIndex].modules![moduleIndex].exams?.addAll(exams);
+    } catch (e) {
+      allCourses[courseIndex].modules![moduleIndex].exams = [];
+      allCourses[courseIndex].modules![moduleIndex].exams?.addAll(exams);
+    }
+
+    notifyListeners();
+  }
+
   Future<void> addHardcodedExam(
       String courseId, Map<String, dynamic> examData) async {
     // 1) Getting reference to the specific course document by using the provided courseId.

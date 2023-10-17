@@ -29,3 +29,33 @@ Future fetchExams(
     print("FCN Courses ${course.hashCode}, has exams: ${course.exams}");
   }
 }
+
+Future fetchModuleExams(
+    {required int courseIndex,
+    required CoursesProvider coursesProvider,
+    required int moduleIndex}) async {
+  Course course = coursesProvider.allCourses[courseIndex];
+  Module module = course.modules![moduleIndex];
+  if (module.exams != null && module.exams!.isNotEmpty) {
+    return;
+  } else {
+    QuerySnapshot examsListSnapshot = await FirebaseFirestore.instance
+        .collection('courses')
+        .doc(course.name)
+        .collection('modules')
+        .doc(module.title)
+        .collection('exams')
+        .orderBy("index")
+        .get();
+    module.exams = [];
+    examsListSnapshot.docs.forEach((element) {
+      // print(element.data());
+      NewExam exam = NewExam.fromMap(element.data() as Map<String, dynamic>);
+
+      module.exams?.add(exam);
+    });
+    coursesProvider.addExamsToCourseModule(
+        courseIndex, moduleIndex, module.exams!);
+    print("FCN Module ${module.hashCode}, has exams: ${module.exams}");
+  }
+}

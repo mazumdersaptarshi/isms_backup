@@ -4,8 +4,8 @@ class CustomUser {
   String username;
   String email;
   String role;
-  List courses_started;
-  List courses_completed;
+  List<dynamic> courses_started;
+  List<dynamic> courses_completed;
 
   CustomUser({
     required this.username,
@@ -31,7 +31,7 @@ class CustomUser {
       email: map['email'],
       role: map['role'] ?? "",
       courses_started: map["courses_started"] ?? [],
-      courses_completed: map["courses_started"] ?? [],
+      courses_completed: map["courses_completed"] ?? [],
     );
   }
 }

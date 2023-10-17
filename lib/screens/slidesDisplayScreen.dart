@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:isms/models/slide.dart';
+import 'package:isms/screens/examCreationScreen.dart';
+import 'package:isms/screens/examListScreen.dart';
+import 'package:isms/screens/moduleExamsListScreen.dart';
 import 'package:isms/sharedWidgets/HtmlSlideDisplay.dart';
 
 class SlidesDisplayScreen extends StatefulWidget {
-  SlidesDisplayScreen({super.key, required this.slides});
+  SlidesDisplayScreen(
+      {super.key,
+      required this.slides,
+      required this.moduleIndex,
+      required this.courseIndex});
   List<Slide> slides;
+  int courseIndex;
+  int moduleIndex;
   @override
   _SlidesDisplayScreenState createState() => _SlidesDisplayScreenState();
 }
@@ -147,6 +156,22 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
                       print('Finish button pressed');
                     },
                     child: Text('Finish'),
+                  ),
+                ),
+                Visibility(
+                  visible: currentIndex == cardItems.length - 1,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ModuleExamListScreen(
+                                    courseIndex: widget.courseIndex,
+                                    examtype: EXAMTYPE.moduleExam,
+                                    moduleIndex: widget.moduleIndex,
+                                  )));
+                    },
+                    child: Text('Take quiz'),
                   ),
                 ),
                 Container(

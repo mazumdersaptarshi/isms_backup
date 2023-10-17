@@ -7,7 +7,7 @@ import 'package:isms/moduleManagement/fetchModules.dart';
 import 'package:isms/screens/coursesListScreen.dart';
 import 'package:isms/screens/createCourseScreen.dart';
 import 'package:isms/screens/createModuleScreen.dart';
-import 'package:isms/screens/examCreation.dart';
+import 'package:isms/screens/examCreationScreen.dart';
 import 'package:isms/screens/examListScreen.dart';
 import 'package:provider/provider.dart';
 import 'package:isms/utilityWidgets/modulesList/moduleListWidget.dart';
@@ -103,6 +103,7 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
                       MaterialPageRoute(
                           builder: (context) => ExamListScreen(
                                 courseIndex: widget.courseIndex,
+                                examtype: EXAMTYPE.courseExam,
                               )));
                 },
                 child: Text("View course exams")),
