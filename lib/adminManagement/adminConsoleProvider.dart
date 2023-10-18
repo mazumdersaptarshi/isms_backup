@@ -34,6 +34,9 @@ class AdminConsoleProvider extends ChangeNotifier {
         Map<String, dynamic> elementMap =
             element.data() as Map<String, dynamic>;
         CoursesDetails courseItem = CoursesDetails.fromMap(elementMap);
+        print('yyyyyyyyyyy');
+        print(courseItem.course_started);
+        print('courseItem: ${courseItem.course_completed}');
         allCoursesLocal.add(courseItem);
       });
 
@@ -67,7 +70,7 @@ class AdminConsoleProvider extends ChangeNotifier {
         try {
           Map<String, dynamic> userData =
               userSnapshot.data() as Map<String, dynamic>;
-
+          print('raw user data: $userData');
           // localUserDataList.add({
           //   'username': userData['username'],
           //   'email': userData['email'],
@@ -75,6 +78,9 @@ class AdminConsoleProvider extends ChangeNotifier {
           // });
           CustomUser userInfo = CustomUser.fromMap(userData);
           allUsersInfoLocal.add(userInfo);
+          allUsersInfoLocal.forEach((element) {
+            print(element.courses_completed);
+          });
         } catch (e) {
           print(
               'There was an issue with user Data; Could not fetch user data. Reason for error: $e');

@@ -1,18 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import 'package:isms/screens/adminScreens/adminConsoleHomePage.dart';
 import 'package:isms/screens/coursesListScreen.dart';
 import 'package:isms/screens/createCourseScreen.dart';
-import 'package:isms/screens/createModuleScreen.dart';
-import 'package:isms/screens/examCreation.dart';
-import 'package:isms/screens/modulesListScreen.dart';
-
-import 'package:provider/provider.dart';
+import 'package:isms/screens/userProfilePage.dart';
 
 import '../UserManagement/userInfo.dart';
-import '../courseManagement/coursesProvider.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -73,6 +67,15 @@ class _HomePageState extends State<HomePage> {
             },
             child: const Text('All courses'),
           ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => UserProfilePage()),
+              );
+            },
+            child: const Text('User profile'),
+          )
         ],
       ),
       floatingActionButton: FloatingActionButton(

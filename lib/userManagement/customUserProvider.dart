@@ -1,15 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:isms/userManagement/createUser.dart';
 import 'package:isms/models/customUser.dart';
+import 'package:isms/userManagement/createUser.dart';
+
+import '../models/userCoursesDetails.dart';
 
 class CustomUserProvider with ChangeNotifier {
   final _dbUserOperations = CreateUserDataOperations();
+  late String userUID = '';
   CustomUser? loggedInUser;
   List<CustomUser> users = []; // Main list should remain immutable
+  List<dynamic> allEnrolledCoursesGlobal = [];
 
+  List<dynamic> allCompletedCoursesGlobal = [];
   CustomUser? get getCurrentUser => loggedInUser;
+
+  CustomUserProvider() {
+    fetchUserDetails();
+    fetchAllCoursesUser();
+  }
 
   void setLoggedInUser(CustomUser user) {
     loggedInUser = user;
@@ -27,6 +37,7 @@ class CustomUserProvider with ChangeNotifier {
 
   Future<String?> fetchCurrentUsername() async {
     String? email = FirebaseAuth.instance.currentUser?.email;
+
     if (email == null) {
       print('No authenticated user.');
       return null;
@@ -83,7 +94,10 @@ class CustomUserProvider with ChangeNotifier {
   }
 
   Future<CustomUser?> fetchUserDetails() async {
+    print('fetchingUserDetails');
     String? uid = FirebaseAuth.instance.currentUser?.uid;
+    userUID = uid!;
+    print(userUID);
     if (uid == null) {
       print('No authenticated user.');
       return null;
@@ -103,5 +117,56 @@ class CustomUserProvider with ChangeNotifier {
   setUserCourseStarted(Map<String, dynamic> courseDetails) {
     loggedInUser?.courses_started.add(courseDetails);
     notifyListeners();
+  }
+
+  fetchAllCoursesUser({bool isNotifyListener = true}) async {
+    List<dynamic> allEnrolledCoursesLocal = [];
+    List<dynamic>? allCompletedCoursesLocal = [];
+    print('Inside fetch courses user provider');
+    if (userUID != '') {
+      Stream<DocumentSnapshot>? userStream = FirebaseFirestore.instance
+          .collection('users')
+          .doc(userUID)
+          .snapshots();
+      userStream.listen((snapshot) async {
+        List<dynamic>? allEnrolledCoursesLocal = [];
+        // snapshot.docs.forEach((element) {
+        //   print('element.data ${element.data()}');
+        //   Map<String, dynamic> elementMap =
+        //       element.data() as Map<String, dynamic>;
+        //   UserCoursesDetails courseItem =
+        //       UserCoursesDetails.fromMap(elementMap);
+        //   print('courseItem: ${courseItem.courses_completed}');
+        //   allEnrolledCoursesLocal.add(courseItem);
+        // });
+        print('snapshotData: ${snapshot.data()}');
+        UserCoursesDetails data =
+            UserCoursesDetails.fromMap(snapshot.data() as Map<String, dynamic>);
+
+        allEnrolledCoursesLocal = data.courses_started;
+
+        allCompletedCoursesLocal = data.courses_completed;
+        // Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
+        // if (data != null) {
+        //   print(data['username']);
+        //   print('courses_started');
+        //   print(data['courses_started']);
+        // }
+
+        if (isNotifyListener) notifyListeners();
+        allEnrolledCoursesGlobal.clear();
+
+        allEnrolledCoursesGlobal = allEnrolledCoursesLocal!;
+        allCompletedCoursesGlobal = allCompletedCoursesLocal!;
+        print('allEnrolledCoursesGlobal: $allEnrolledCoursesGlobal');
+      });
+    }
+  }
+
+  List<dynamic> getAllEnrolledCoursesList() {
+    print('entered futurebuilder allEnrolledCoursesGlobal');
+
+    print('function return value allUsersGlobal: $allEnrolledCoursesGlobal');
+    return allEnrolledCoursesGlobal;
   }
 }

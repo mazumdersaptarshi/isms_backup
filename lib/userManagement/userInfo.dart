@@ -156,7 +156,18 @@ class UserProfileWidget extends StatelessWidget {
           ),
           SizedBox(height: 20.0),
           Text(
-            'Courses',
+            'Courses Enrolled',
+            style: TextStyle(
+              fontSize: 20.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: 20.0),
+          Text('CS 101'),
+          Text('Drawing 101'),
+          SizedBox(height: 20.0),
+          Text(
+            'Courses Completed',
             style: TextStyle(
               fontSize: 20.0,
               fontWeight: FontWeight.bold,
