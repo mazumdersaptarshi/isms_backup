@@ -2,11 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:isms/models/customUser.dart';
 import 'package:isms/screens/checkLoggedInScreen.dart';
-import 'package:isms/screens/coursesListScreen.dart';
 import 'package:isms/screens/homePage.dart';
 import 'package:isms/userManagement/createUser.dart';
-import 'package:isms/models/customUser.dart';
 import 'package:provider/provider.dart';
 
 import '../userManagement/customUserProvider.dart';
@@ -52,9 +51,10 @@ class LoginPageState extends State<LoginPage> {
       hasCheckedForChangedDependencies = true;
       if (mounted) {
         await setLoggedInUser(
-            customUserProvider: Provider.of<CustomUserProvider>(context));
-        WidgetsBinding.instance.addPostFrameCallback((_) =>
-            isSignedIn(context, Provider.of<CustomUserProvider>(context)));
+            customUserProvider:
+                Provider.of<CustomUserProvider>(context, listen: false));
+        WidgetsBinding.instance.addPostFrameCallback((_) => isSignedIn(
+            context, Provider.of<CustomUserProvider>(context, listen: false)));
       }
     }
   }
@@ -62,7 +62,7 @@ class LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     CustomUserProvider customUserProvider =
-        Provider.of<CustomUserProvider>(context);
+        Provider.of<CustomUserProvider>(context, listen: false);
     return Scaffold(
       body: Center(
         child: Column(
