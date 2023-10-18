@@ -37,7 +37,7 @@ class LoginPageState extends State<LoginPage> {
   setLoggedInUser({required CustomUserProvider customUserProvider}) async {
     await customUserProvider.fetchUsers();
     customUserProvider.users.forEach((element) {
-      print(element.username);
+      //print(element.username);
       if (element.email == FirebaseAuth.instance.currentUser?.email)
         customUserProvider.setLoggedInUser(element);
     });
@@ -144,8 +144,8 @@ class LoginPageState extends State<LoginPage> {
     if (await GoogleSignIn().isSignedIn()) {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
-        debugPrint(user.displayName);
-        debugPrint(user.email);
+        //debugPrint(user.displayName);
+        //debugPrint(user.email);
       }
       await createUserIfNotExists(user);
       await setLoggedInUser(customUserProvider: customUserProvider);
@@ -171,8 +171,8 @@ class LoginPageState extends State<LoginPage> {
           await FirebaseAuth.instance.signInWithCredential(credential);
       final user = authResult.user;
       final String? email = user?.email;
-      debugPrint(user!.displayName);
-      debugPrint(user.email);
+      //debugPrint(user!.displayName);
+      //debugPrint(user.email);
       //final List<String> allowedDomains = ['pvp.co.jp'];
 
       if (email != null) {
@@ -197,7 +197,7 @@ class LoginPageState extends State<LoginPage> {
       await setLoggedInUser(customUserProvider: customUserProvider);
       return user;
     } catch (e) {
-      debugPrint('Error signing in with Google: $e');
+      //debugPrint('Error signing in with Google: $e');
       return null;
     }
   }
