@@ -130,15 +130,7 @@ class CustomUserProvider with ChangeNotifier {
           .snapshots();
       userStream.listen((snapshot) async {
         List<dynamic>? allEnrolledCoursesLocal = [];
-        // snapshot.docs.forEach((element) {
-        //   print('element.data ${element.data()}');
-        //   Map<String, dynamic> elementMap =
-        //       element.data() as Map<String, dynamic>;
-        //   UserCoursesDetails courseItem =
-        //       UserCoursesDetails.fromMap(elementMap);
-        //   print('courseItem: ${courseItem.courses_completed}');
-        //   allEnrolledCoursesLocal.add(courseItem);
-        // });
+
         print('snapshotData: ${snapshot.data()}');
         UserCoursesDetails data =
             UserCoursesDetails.fromMap(snapshot.data() as Map<String, dynamic>);
@@ -146,12 +138,6 @@ class CustomUserProvider with ChangeNotifier {
         allEnrolledCoursesLocal = data.courses_started;
 
         allCompletedCoursesLocal = data.courses_completed;
-        // Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
-        // if (data != null) {
-        //   print(data['username']);
-        //   print('courses_started');
-        //   print(data['courses_started']);
-        // }
 
         if (isNotifyListener) notifyListeners();
         allEnrolledCoursesGlobal.clear();
@@ -163,10 +149,19 @@ class CustomUserProvider with ChangeNotifier {
     }
   }
 
-  List<dynamic> getAllEnrolledCoursesList() {
+  Future<List> getAllEnrolledCoursesList() async {
     print('entered futurebuilder allEnrolledCoursesGlobal');
+    await Future.delayed(Duration(seconds: 2));
 
     print('function return value allUsersGlobal: $allEnrolledCoursesGlobal');
     return allEnrolledCoursesGlobal;
+  }
+
+  Future<List> getAllCompletedCoursesList() async {
+    print('entered futurebuilder allCompletedCoursesGlobal');
+    await Future.delayed(Duration(seconds: 2));
+
+    print('function return value allUsersGlobal: $allCompletedCoursesGlobal');
+    return allCompletedCoursesGlobal;
   }
 }

@@ -22,10 +22,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
         name: 'Dashboard', icon: Icons.dashboard, actionId: 'dashboard'),
     UserActions(name: 'Reports', icon: Icons.description, actionId: 'reports'),
     UserActions(
-        name: 'User Management', icon: Icons.group, actionId: 'user_mgmt'),
+        name: 'Courses Enrolled', icon: Icons.school, actionId: 'crs_enrl'),
     UserActions(
-        name: 'Course Management', icon: Icons.school, actionId: 'crs_mgmt'),
-    UserActions(name: 'Draft Courses', icon: Icons.edit, actionId: 'drf_crs'),
+        name: 'Courses Completed', icon: Icons.check, actionId: 'crs_compl'),
     UserActions(name: 'Exams', icon: Icons.assignment, actionId: 'exms'),
     UserActions(name: 'Logout', icon: Icons.exit_to_app, actionId: 'logout'),
   ];
@@ -66,9 +65,111 @@ class _UserProfilePageState extends State<UserProfilePage> {
       body: Column(
         children: [
           Expanded(child: UserProfileWidget()),
-          Text('Courses Enrolled:'),
+          Expanded(
+              flex: 2,
+              child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: 6,
+                  itemBuilder: (context, index) {
+                    final action = userActions[index];
+
+                    return ExpansionTile(
+                      leading: Icon(action.icon),
+                      title: Text(action.name!),
+                      children: [
+                        UserActionsDropdown(
+                          customUserProvider: customUserProvider,
+                          actionId: action.actionId!,
+                        ),
+                      ],
+                    );
+                  }))
         ],
       ),
+    );
+  }
+}
+
+class UserActionsDropdown extends StatelessWidget {
+  UserActionsDropdown(
+      {super.key, required this.customUserProvider, required this.actionId});
+  CustomUserProvider customUserProvider;
+  String actionId;
+  @override
+  Widget build(BuildContext context) {
+    if (actionId == 'crs_enrl') {
+      print('Hre');
+
+      return UserEnrolledCoursesDropdown(
+          customUserProvider: customUserProvider);
+    } else if (actionId == 'crs_compl') {
+      return Column(
+        children: [
+          FutureBuilder<List<dynamic>>(
+              future: customUserProvider.getAllCompletedCoursesList(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else if (snapshot.hasData && snapshot.data != null) {
+                  return ListView.builder(
+                    itemCount: snapshot.data!.length,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      print('SnapshotData: ${snapshot.data![index]}');
+                      return Text('${snapshot.data![index]['course_name']}');
+                    },
+                  );
+                } else {
+                  return Text('No data');
+                }
+              })
+        ],
+      );
+    } else {
+      return Column(
+        children: [
+          Text('No data to show!'),
+        ],
+      );
+    }
+  }
+}
+
+class UserEnrolledCoursesDropdown extends StatelessWidget {
+  const UserEnrolledCoursesDropdown({
+    super.key,
+    required this.customUserProvider,
+  });
+
+  final CustomUserProvider customUserProvider;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        FutureBuilder<List<dynamic>>(
+            future: customUserProvider.getAllEnrolledCoursesList(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator();
+              } else if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              } else if (snapshot.hasData && snapshot.data != null) {
+                return ListView.builder(
+                  itemCount: snapshot.data!.length,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    print('SnapshotData: ${snapshot.data![index]}');
+                    return Text('${snapshot.data![index]['course_name']}');
+                  },
+                );
+              } else {
+                return Text('No data');
+              }
+            })
+      ],
     );
   }
 }

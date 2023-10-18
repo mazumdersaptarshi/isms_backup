@@ -124,7 +124,6 @@ class UserProfileWidget extends StatelessWidget {
                     NetworkImage(FirebaseAuth.instance.currentUser!.photoURL!),
               ),
             ),
-          SizedBox(height: 25.0), // Increased padding
           Text(
             ' ${getUserName()}',
             style: TextStyle(
@@ -133,7 +132,6 @@ class UserProfileWidget extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 10.0), // Increased padding
           Text(
             ' ${getUserEmail()}',
             style: TextStyle(
@@ -141,7 +139,6 @@ class UserProfileWidget extends StatelessWidget {
               fontSize: 18,
             ),
           ),
-          SizedBox(height: 10.0), // Increased padding
           if (userRole != null)
             Text(
               'Role: $userRole',
@@ -150,30 +147,6 @@ class UserProfileWidget extends StatelessWidget {
                 fontSize: 18,
               ),
             ),
-          Divider(
-            // Horizontal line
-            color: Colors.black,
-          ),
-          SizedBox(height: 20.0),
-          Text(
-            'Courses Enrolled',
-            style: TextStyle(
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          SizedBox(height: 20.0),
-          Text('CS 101'),
-          Text('Drawing 101'),
-          SizedBox(height: 20.0),
-          Text(
-            'Courses Completed',
-            style: TextStyle(
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          SizedBox(height: 10.0),
           Expanded(
             child: FutureBuilder<DocumentSnapshot?>(
               future: getUserDetails(FirebaseAuth.instance.currentUser),
@@ -201,47 +174,7 @@ class UserProfileWidget extends StatelessWidget {
                     );
                   }
 
-                  dynamic courseCompletedData = userData['courses'];
-                  print(courseCompletedData);
-                  dynamic courseCompletedInfo = userData['courses'];
-                  String courseCompletedString = courseCompletedData.toString();
-                  int courseCompleted =
-                      (courseCompletedInfo is int) ? courseCompletedInfo : 0;
-
-                  double completionPercentage =
-                      courseCompleted / totalCourses.toDouble();
-
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: courseCompletedData?.length ?? 0,
-                    itemBuilder: (context, index) {
-                      dynamic courseItem = courseCompletedData?[index];
-                      if (courseItem == null) {
-                        return Container(); // or any other suitable widget
-                      }
-                      dynamic courseID =
-                          courseItem['course_ID'] ?? 'No Course ID';
-                      dynamic courseDetails = courseItem['course_details'];
-                      // bool isPassed = courseDetails != null && courseDetails.isNotEmpty ? courseDetails[0]['isPassed'] : false;
-                      // String stringPassed = isPassed ? 'Passed' : 'Not Passed';
-                      return ListTile(
-                        title: Text(courseID.toString()),
-                        //subtitle: Text(stringPassed),
-                        leading: CircularPercentIndicator(
-                          radius: 25.0,
-                          lineWidth: 2.0,
-                          percent: completionPercentage,
-                          center:
-                              Text('${(completionPercentage * 100).toInt()}%'),
-                          progressColor: Colors.green,
-                        ),
-                        onTap: () {
-                          // Handle the tap event for each list item
-                          // You can navigate to another screen or perform other actions here
-                        },
-                      );
-                    },
-                  );
+                  return Text('');
                 }
               },
             ),
