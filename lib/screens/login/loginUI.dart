@@ -52,9 +52,9 @@ class LoginPageState extends State<LoginPage> {
           children: [
             loginText(),
             const SizedBox(height: 150),
-            bugHubLogo(),
+            ISMSLogo(),
             const SizedBox(height: 150),
-            bugHubText(),
+            ISMSText(),
             const SizedBox(height: 40),
             signInButton(customUserProvider: customUserProvider),
             SignInFutureBuilder(_signInFuture),
@@ -68,7 +68,7 @@ class LoginPageState extends State<LoginPage> {
     return const Text('Login');
   }
 
-  Widget bugHubLogo() {
+  Widget ISMSLogo() {
     return const SizedBox(
       width: 150,
       height: 150,
@@ -76,7 +76,7 @@ class LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget bugHubText() {
+  Widget ISMSText() {
     return const Text('ISMS');
   }
 
