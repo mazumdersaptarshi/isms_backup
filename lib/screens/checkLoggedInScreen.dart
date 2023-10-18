@@ -36,6 +36,16 @@ class _CheckLoggedInState extends State<CheckLoggedIn> {
               context, MaterialPageRoute(builder: (context) => HomePage()));
         });
       }
+    } else if (FirebaseAuth.instance.currentUser == null) {
+      if (mounted) {
+        await setLoggedInUser(
+            customUserProvider: Provider.of<CustomUserProvider>(context));
+
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => LoginPage()));
+        });
+      }
     }
   }
 

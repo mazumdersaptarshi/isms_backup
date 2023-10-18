@@ -7,18 +7,21 @@ import 'package:isms/screens/coursesListScreen.dart';
 import 'package:isms/screens/homePage.dart';
 import 'package:isms/userManagement/createUser.dart';
 import 'package:isms/models/customUser.dart';
+import 'package:provider/provider.dart';
+
+import '../userManagement/customUserProvider.dart';
 
 class LogIn extends StatelessWidget {
   const LogIn({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const LoginPage();
+    return LoginPage();
   }
 }
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  LoginPage({super.key});
 
   @override
   LoginPageState createState() => LoginPageState();
@@ -26,15 +29,40 @@ class LoginPage extends StatefulWidget {
 
 class LoginPageState extends State<LoginPage> {
   Future<User?>? _signInFuture;
-
+  bool hasCheckedForChangedDependencies = false;
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => isSignedIn(context));
+  }
+
+  setLoggedInUser({required CustomUserProvider customUserProvider}) async {
+    await customUserProvider.fetchUsers();
+    customUserProvider.users.forEach((element) {
+      print(element.username);
+      if (element.email == FirebaseAuth.instance.currentUser?.email)
+        customUserProvider.setLoggedInUser(element);
+    });
+  }
+
+  @override
+  void didChangeDependencies() async {
+    super.didChangeDependencies();
+    if (!hasCheckedForChangedDependencies &&
+        FirebaseAuth.instance.currentUser != null) {
+      hasCheckedForChangedDependencies = true;
+      if (mounted) {
+        await setLoggedInUser(
+            customUserProvider: Provider.of<CustomUserProvider>(context));
+        WidgetsBinding.instance.addPostFrameCallback((_) =>
+            isSignedIn(context, Provider.of<CustomUserProvider>(context)));
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    CustomUserProvider customUserProvider =
+        Provider.of<CustomUserProvider>(context);
     return Scaffold(
       body: Center(
         child: Column(
@@ -46,7 +74,7 @@ class LoginPageState extends State<LoginPage> {
             const SizedBox(height: 150),
             bugHubText(),
             const SizedBox(height: 40),
-            signInButton(),
+            signInButton(customUserProvider: customUserProvider),
             SignInFutureBuilder(),
           ],
         ),
@@ -74,12 +102,12 @@ class LoginPageState extends State<LoginPage> {
     return const Text('ISMS');
   }
 
-  Widget signInButton() {
+  Widget signInButton({required CustomUserProvider customUserProvider}) {
     if (_signInFuture == null) {
       return ElevatedButton.icon(
         onPressed: () {
           setState(() {
-            _signInFuture = signInWithGoogle();
+            _signInFuture = signInWithGoogle(customUserProvider);
           });
         },
         icon: const Icon(Icons.mail),
@@ -111,7 +139,8 @@ class LoginPageState extends State<LoginPage> {
     return const SizedBox.shrink();
   }
 
-  Future<void> isSignedIn(BuildContext context) async {
+  Future<void> isSignedIn(
+      BuildContext context, CustomUserProvider customUserProvider) async {
     if (await GoogleSignIn().isSignedIn()) {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
@@ -119,6 +148,7 @@ class LoginPageState extends State<LoginPage> {
         debugPrint(user.email);
       }
       await createUserIfNotExists(user);
+      await setLoggedInUser(customUserProvider: customUserProvider);
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => CheckLoggedIn()),
@@ -126,7 +156,7 @@ class LoginPageState extends State<LoginPage> {
     }
   }
 
-  Future<User?> signInWithGoogle() async {
+  Future<User?> signInWithGoogle(CustomUserProvider customUserProvider) async {
     try {
       final googleUser = await GoogleSignIn().signIn();
       if (googleUser == null) return null;
@@ -164,6 +194,7 @@ class LoginPageState extends State<LoginPage> {
 
       //print(user);
       await createUserIfNotExists(user);
+      await setLoggedInUser(customUserProvider: customUserProvider);
       return user;
     } catch (e) {
       debugPrint('Error signing in with Google: $e');

@@ -7,7 +7,9 @@ import 'package:isms/screens/coursesListScreen.dart';
 import 'package:isms/screens/createCourseScreen.dart';
 import 'package:isms/screens/createModuleScreen.dart';
 import 'package:isms/screens/examCreationScreen.dart';
+import 'package:isms/screens/loginPage.dart';
 import 'package:isms/screens/modulesListScreen.dart';
+import 'package:isms/screens/userInfoScreen.dart';
 
 import 'package:provider/provider.dart';
 
@@ -48,10 +50,22 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  Future<void> _handleSignOut() async {
+    await FirebaseAuth.instance.signOut();
+
+    print("User signed out");
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => LoginPage()));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: [
+          IconButton(onPressed: _handleSignOut, icon: Icon(Icons.logout))
+        ],
+      ),
       body: Column(
         children: [
           ElevatedButton(
@@ -72,6 +86,15 @@ class _HomePageState extends State<HomePage> {
               );
             },
             child: const Text('All courses'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => UserInfoScreen()),
+              );
+            },
+            child: const Text('User Info'),
           ),
         ],
       ),
