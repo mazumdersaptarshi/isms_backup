@@ -9,7 +9,6 @@ import 'package:isms/models/slide.dart';
 import 'package:isms/moduleManagement/createModule.dart';
 import 'package:isms/screens/coursesListScreen.dart';
 import 'package:isms/slideManagement/createSlide.dart';
-import 'package:isms/temp.dart';
 import 'package:isms/utitlityFunctions/generateRandom.dart';
 import 'package:provider/provider.dart';
 import 'package:isms/models/course.dart';
