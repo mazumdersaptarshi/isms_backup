@@ -123,12 +123,13 @@ class CustomUserProvider with ChangeNotifier {
       if (course_started['courseID'] == course.id) {
         print("COMPLETED MODULEE ${course_started}");
         if (course_started['modules_completed'] != null) {
-          course_started['modules_completed'].forEach((element) {
+          for (int i = 0; i < course_started['modules_completed'].length; i++) {
+            var element = course_started['modules_completed'][i];
             if (element != course.modules![moduleIndex].title) {
               course_started['modules_completed']
                   .add(course.modules![moduleIndex].title);
             }
-          });
+          }
         } else {
           course_started['modules_completed'] = [];
           course_started['modules_completed']
