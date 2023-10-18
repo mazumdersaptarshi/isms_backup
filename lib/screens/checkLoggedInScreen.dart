@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:isms/screens/coursesListScreen.dart';
+import 'package:flutter/material.dart';
 import 'package:isms/screens/homePage.dart';
-import 'package:isms/screens/loginPage.dart';
+import 'package:isms/screens/login/loginUI.dart';
 import 'package:isms/userManagement/customUserProvider.dart';
 import 'package:provider/provider.dart';
 
@@ -32,7 +31,7 @@ class _CheckLoggedInState extends State<CheckLoggedIn> {
             customUserProvider: Provider.of<CustomUserProvider>(context));
 
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          Navigator.push(
+          Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => HomePage()));
         });
       }
@@ -42,7 +41,7 @@ class _CheckLoggedInState extends State<CheckLoggedIn> {
             customUserProvider: Provider.of<CustomUserProvider>(context));
 
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          Navigator.push(
+          Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => LoginPage()));
         });
       }

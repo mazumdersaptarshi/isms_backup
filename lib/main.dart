@@ -1,16 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:isms/adminManagement/adminConsoleProvider.dart';
 import 'package:isms/courseManagement/coursesProvider.dart';
-import 'package:isms/courseManagement/coursesProvider.dart';
-import 'package:isms/screens/coursesListScreen.dart';
-import 'package:isms/screens/createCourseScreen.dart';
-import 'package:isms/screens/createSlideScreen.dart';
-import 'package:isms/screens/loginPage.dart';
+import 'package:isms/screens/login/loginUI.dart';
 import 'package:isms/slideManagement/slidesCreationProvider.dart';
 import 'package:isms/userManagement/customUserProvider.dart';
 import 'package:provider/provider.dart';
+
 import 'firebase_options.dart';
 
 void main() async {
