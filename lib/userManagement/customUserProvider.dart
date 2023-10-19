@@ -125,7 +125,6 @@ class CustomUserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-
   fetchAllCoursesUser({bool isNotifyListener = true}) async {
     List<dynamic> allEnrolledCoursesLocal = [];
     List<dynamic>? allCompletedCoursesLocal = [];
@@ -170,6 +169,7 @@ class CustomUserProvider with ChangeNotifier {
 
     print('function return value allUsersGlobal: $allCompletedCoursesGlobal');
     return allCompletedCoursesGlobal;
+  }
 
   setUserCourseCompleted(Map<String, dynamic> courseDetails) {
     loggedInUser?.courses_completed.add(courseDetails);
@@ -201,6 +201,5 @@ class CustomUserProvider with ChangeNotifier {
       }
     });
     notifyListeners();
-
   }
 }
