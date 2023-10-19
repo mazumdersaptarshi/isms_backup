@@ -23,17 +23,17 @@ class TakeExamScreen extends StatefulWidget {
 }
 
 class _TakeExamScreenState extends State<TakeExamScreen> {
-  List<NewQuestion> questions = [];
-  int currentIndex = 0;
-  List<Set<int>> selectedAnswers = [];
-  bool showScore = false;
+  List<NewQuestion> _questions = [];
+  int _currentIndex = 0;
+  List<Set<int>> _selectedAnswers = [];
+  bool _showScore = false;
 
   @override
   void initState() {
     super.initState();
     loadQuestions();
     shuffleQuestions();
-    selectedAnswers = List.generate(questions.length, (index) => <int>{});
+    _selectedAnswers = List.generate(_questions.length, (index) => <int>{});
     print(widget.exam.questionAnswerSet);
   }
 
@@ -51,7 +51,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
       });
       NewQuestion newQuestion = NewQuestion(element['questionName'], options,
           correctAnswers, correctAnswers.length);
-      questions.add(newQuestion);
+      _questions.add(newQuestion);
     });
     // return [
     //   NewQuestion('What is the capital of France?',
@@ -76,7 +76,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
   }
 
   void shuffleQuestions() {
-    for (var q in questions) {
+    for (var q in _questions) {
       q.shuffledOptions.shuffle();
       q.shuffledCorrectAnswers = q.correctAnswers
           .map((index) => q.shuffledOptions.indexOf(q.options[index]))
@@ -86,8 +86,8 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
 
   bool get areAnswersSelected {
     int correctAnswerCount =
-        questions[currentIndex].shuffledCorrectAnswers.length;
-    int selectedCount = selectedAnswers[currentIndex].length;
+        _questions[_currentIndex].shuffledCorrectAnswers.length;
+    int selectedCount = _selectedAnswers[_currentIndex].length;
 
     if (correctAnswerCount > 1) {
       return selectedCount >= 1 && selectedCount <= correctAnswerCount;
@@ -97,13 +97,13 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
   }
 
   void onButtonPress() {
-    if (currentIndex < questions.length - 1) {
+    if (_currentIndex < _questions.length - 1) {
       setState(() {
-        currentIndex++;
+        _currentIndex++;
       });
     } else {
       setState(() {
-        showScore = true;
+        _showScore = true;
       });
     }
   }
@@ -111,8 +111,8 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(showScore ? 'Score' : 'Exam Module')),
-      body: showScore ? buildScoreWidget() : buildExamWidget(),
+      appBar: AppBar(title: Text(_showScore ? 'Score' : 'Exam Module')),
+      body: _showScore ? buildScoreWidget() : buildExamWidget(),
     );
   }
 
@@ -122,14 +122,14 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
 
     int correctAnswers = 0;
-    for (int i = 0; i < questions.length; i++) {
-      if (Set.from(questions[i].shuffledCorrectAnswers)
-          .containsAll(selectedAnswers[i])) {
+    for (int i = 0; i < _questions.length; i++) {
+      if (Set.from(_questions[i].shuffledCorrectAnswers)
+          .containsAll(_selectedAnswers[i])) {
         correctAnswers++;
       }
     }
 
-    double percentageScore = (correctAnswers / questions.length) * 100;
+    double percentageScore = (correctAnswers / _questions.length) * 100;
 
     if (percentageScore < 75) {
       return Center(
@@ -137,15 +137,15 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-                'Your Score is: $correctAnswers/${questions.length}. You need to get 75% to pass.'),
+                'Your Score is: $correctAnswers/${_questions.length}. You need to get 75% to pass.'),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () => setState(() {
                 shuffleQuestions();
-                currentIndex = 0;
-                selectedAnswers =
-                    List.generate(questions.length, (index) => <int>{});
-                showScore = false;
+                _currentIndex = 0;
+                _selectedAnswers =
+                    List.generate(_questions.length, (index) => <int>{});
+                _showScore = false;
               }),
               child: Text('Retake Exam'),
             )
@@ -158,7 +158,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-                'Congratulations! Your Score is: $correctAnswers/${questions.length}'),
+                'Congratulations! Your Score is: $correctAnswers/${_questions.length}'),
             SizedBox(height: 20),
             if (widget.examtype == EXAMTYPE.courseExam)
               ElevatedButton(
@@ -196,10 +196,10 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
             ElevatedButton(
               onPressed: () => setState(() {
                 shuffleQuestions();
-                currentIndex = 0;
-                selectedAnswers =
-                    List.generate(questions.length, (index) => <int>{});
-                showScore = false;
+                _currentIndex = 0;
+                _selectedAnswers =
+                    List.generate(_questions.length, (index) => <int>{});
+                _showScore = false;
               }),
               child: Text('Retry for Fun!'),
             ),
@@ -216,30 +216,30 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
         children: [
           SizedBox(height: 20),
           Text(
-            questions[currentIndex].question,
+            _questions[_currentIndex].question,
             style: TextStyle(fontSize: 20),
           ),
           SizedBox(height: 20),
           Text(
-            'Select ${questions[currentIndex].maxAllowedAnswers} answer(s)',
+            'Select ${_questions[_currentIndex].maxAllowedAnswers} answer(s)',
             style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 20),
-          ...List.generate(questions[currentIndex].shuffledOptions.length,
+          ...List.generate(_questions[_currentIndex].shuffledOptions.length,
               (index) {
             return ListTile(
-              title: Text(questions[currentIndex].shuffledOptions[index]),
+              title: Text(_questions[_currentIndex].shuffledOptions[index]),
               leading: Checkbox(
-                value: selectedAnswers[currentIndex].contains(index),
+                value: _selectedAnswers[_currentIndex].contains(index),
                 onChanged: (bool? value) {
                   setState(() {
                     if (value == true) {
-                      if (selectedAnswers[currentIndex].length <
-                          questions[currentIndex].maxAllowedAnswers) {
-                        selectedAnswers[currentIndex].add(index);
+                      if (_selectedAnswers[_currentIndex].length <
+                          _questions[_currentIndex].maxAllowedAnswers) {
+                        _selectedAnswers[_currentIndex].add(index);
                       }
                     } else {
-                      selectedAnswers[currentIndex].remove(index);
+                      _selectedAnswers[_currentIndex].remove(index);
                     }
                   });
                 },
@@ -249,7 +249,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
           ElevatedButton(
             onPressed: areAnswersSelected ? () => onButtonPress() : null,
             child:
-                Text(currentIndex < questions.length - 1 ? 'Next' : 'Submit'),
+                Text(_currentIndex < _questions.length - 1 ? 'Next' : 'Submit'),
           )
         ],
       ),

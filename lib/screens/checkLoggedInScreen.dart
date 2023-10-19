@@ -1,9 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/screens/homePage.dart';
 import 'package:isms/screens/login/loginUI.dart';
 import 'package:isms/userManagement/customUserProvider.dart';
 import 'package:provider/provider.dart';
+import 'package:isms/databaseOperations/databaseManager.dart';
 
 class CheckLoggedIn extends StatefulWidget {
   CheckLoggedIn({super.key});
@@ -24,7 +24,7 @@ class _CheckLoggedInState extends State<CheckLoggedIn> {
   void didChangeDependencies() async {
     super.didChangeDependencies();
     if (!hasCheckedForChangedDependencies &&
-        FirebaseAuth.instance.currentUser != null) {
+        DatabaseManager.auth.currentUser != null) {
       hasCheckedForChangedDependencies = true;
       if (mounted) {
         await setLoggedInUser(
@@ -35,7 +35,7 @@ class _CheckLoggedInState extends State<CheckLoggedIn> {
               context, MaterialPageRoute(builder: (context) => HomePage()));
         });
       }
-    } else if (FirebaseAuth.instance.currentUser == null) {
+    } else if (DatabaseManager.auth.currentUser == null) {
       if (mounted) {
         await setLoggedInUser(
             customUserProvider: Provider.of<CustomUserProvider>(context));
@@ -52,7 +52,7 @@ class _CheckLoggedInState extends State<CheckLoggedIn> {
     await customUserProvider.fetchUsers();
     customUserProvider.users.forEach((element) {
       print(element.username);
-      if (element.email == FirebaseAuth.instance.currentUser?.email)
+      if (element.email == DatabaseManager.auth.currentUser?.email)
         customUserProvider.setLoggedInUser(element);
     });
   }

@@ -7,7 +7,7 @@ class AuthUtils {
     await GoogleSignIn().disconnect();
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => const LogIn()),
+      MaterialPageRoute(builder: (context) => LoginPage()),
     );
   }
 }

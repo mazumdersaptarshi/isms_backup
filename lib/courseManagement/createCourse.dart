@@ -1,22 +1,18 @@
-import 'dart:typed_data';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
 
 import '../models/adminConsoleModels/coursesDetails.dart';
 
 Future<bool> createCourse({required Course course}) async {
   try {
-    Map<String, dynamic> courseMap = course.toMap();
+    Map<String, dynamic> _courseMap = course.toMap();
 
-    courseMap['createdAt'] = DateTime.now();
+    _courseMap['createdAt'] = DateTime.now();
 
     await FirebaseFirestore.instance
         .collection('courses')
         .doc(course.name)
-        .set(courseMap);
+        .set(_courseMap);
 
     print("Course creation successful");
     return true;

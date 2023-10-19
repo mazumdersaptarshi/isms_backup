@@ -4,15 +4,7 @@ import 'package:isms/screens/homePage.dart';
 import 'package:isms/userManagement/customUserProvider.dart';
 import 'package:isms/utitlityFunctions/auth_service.dart';
 import 'package:provider/provider.dart';
-
-class LogIn extends StatelessWidget {
-  const LogIn({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return LoginPage();
-  }
-}
+import 'package:isms/databaseOperations/databaseManager.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({super.key});
@@ -29,7 +21,7 @@ class LoginPageState extends State<LoginPage> {
   void didChangeDependencies() async {
     super.didChangeDependencies();
     if (!hasCheckedForChangedDependencies &&
-        FirebaseAuth.instance.currentUser != null) {
+        DatabaseManager.auth.currentUser != null) {
       hasCheckedForChangedDependencies = true;
       if (mounted) {
         await AuthService().handleSignInDependencies(

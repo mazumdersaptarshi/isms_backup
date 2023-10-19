@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:isms/userManagement/createUser.dart';
 import 'package:isms/userManagement/customUserProvider.dart';
 import 'package:isms/utitlityFunctions/auth_service.dart';
+import 'package:isms/databaseOperations/databaseManager.dart';
 
 class LoginLogic {
   final AuthService _authService = AuthService();
@@ -13,7 +14,7 @@ class LoginLogic {
   Future<void> setLoggedInUser(CustomUserProvider customUserProvider) async {
     await customUserProvider.fetchUsers();
     customUserProvider.users.forEach((element) {
-      if (element.email == FirebaseAuth.instance.currentUser?.email) {
+      if (element.email == DatabaseManager.auth.currentUser?.email) {
         customUserProvider.setLoggedInUser(element);
       }
     });

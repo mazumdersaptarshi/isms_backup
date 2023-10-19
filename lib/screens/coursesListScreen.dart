@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:isms/courseManagement/coursesProvider.dart';
-import 'package:isms/moduleManagement/fetchModules.dart';
 import 'package:isms/screens/createCourseScreen.dart';
-import 'package:isms/screens/createModuleScreen.dart';
 import 'package:isms/screens/modulesListScreen.dart';
-import 'package:isms/sharedWidgets/popupDialog.dart';
+
 import 'package:provider/provider.dart';
 
 class CoursesDisplayScreen extends StatefulWidget {

@@ -9,13 +9,15 @@ import 'package:isms/models/slide.dart';
 enum CoursesFetchStatus { idle, initiated, fetched }
 
 class CoursesProvider with ChangeNotifier {
-  List<Course> allCourses = [];
+  List<Course> _allCourses = [];
+
+  List<Course> get allCourses => _allCourses;
   bool isCoursesStreamFetched = false;
 
-  CoursesFetchStatus coursesFetchStatus = CoursesFetchStatus.idle;
+  CoursesFetchStatus _coursesFetchStatus = CoursesFetchStatus.idle;
 
   CoursesProvider() {
-    if (coursesFetchStatus != CoursesFetchStatus.initiated) getAllCourses();
+    if (_coursesFetchStatus != CoursesFetchStatus.initiated) getAllCourses();
   }
 
   @override
@@ -28,7 +30,7 @@ class CoursesProvider with ChangeNotifier {
 
   getAllCourses({bool isNotifyListener = true}) async {
     isCoursesStreamFetched = true;
-    coursesFetchStatus = CoursesFetchStatus.initiated;
+    _coursesFetchStatus = CoursesFetchStatus.initiated;
     print("FETCHING COURSES STREAMMMM");
 
     Stream<QuerySnapshot>? coursesStream = FirebaseFirestore.instance
@@ -51,7 +53,7 @@ class CoursesProvider with ChangeNotifier {
 
       if (isNotifyListener) notifyListeners();
 
-      coursesFetchStatus = CoursesFetchStatus.initiated;
+      _coursesFetchStatus = CoursesFetchStatus.initiated;
     });
   }
 
