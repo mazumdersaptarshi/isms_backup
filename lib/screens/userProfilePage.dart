@@ -1,22 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/models/UserActions.dart';
 import 'package:isms/userManagement/customUserProvider.dart';
+import 'package:isms/userManagement/userprofileHeaderWidget.dart';
 import 'package:provider/provider.dart';
 
-import '../UserManagement/userInfo.dart';
+import '../userManagement/userDataGetterMaster.dart';
 
-class UserProfilePage extends StatefulWidget {
-  const UserProfilePage({super.key});
-
-  @override
-  State<UserProfilePage> createState() => _UserProfilePageState();
-}
-
-class _UserProfilePageState extends State<UserProfilePage> {
-  DocumentSnapshot? currentUserSnapshot;
-  String? userRole;
+class UserProfilePage extends StatelessWidget {
   final List<UserActions> userActions = [
     UserActions(
         name: 'Dashboard', icon: Icons.dashboard, actionId: 'dashboard'),
@@ -29,30 +19,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
     UserActions(name: 'Logout', icon: Icons.exit_to_app, actionId: 'logout'),
   ];
 
-  Future<void> _loadUserInformation() async {
-    User? currentUser = FirebaseAuth.instance.currentUser;
-    if (currentUser != null) {
-      DocumentSnapshot? userSnapshot = await getUserDetails(currentUser);
-      if (userSnapshot != null) {
-        setState(() {
-          currentUserSnapshot = userSnapshot;
-        });
-        Map<String, dynamic>? userData =
-            userSnapshot.data() as Map<String, dynamic>?;
-        userRole = userData?['role'];
-      } else {
-        print('User not found');
-      }
-    }
-  }
+  UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
 
   @override
-  void initState() {
-    super.initState();
-    _loadUserInformation();
-    CustomUserProvider();
-  }
-
   Widget build(BuildContext context) {
     CustomUserProvider customUserProvider =
         Provider.of<CustomUserProvider>(context);
@@ -64,7 +33,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
       ),
       body: Column(
         children: [
-          Expanded(child: UserProfileWidget()),
+          Expanded(child: UserProfileHeaderWidget()),
           Expanded(
               flex: 2,
               child: ListView.builder(

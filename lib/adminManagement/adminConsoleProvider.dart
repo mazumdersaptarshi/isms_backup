@@ -15,8 +15,6 @@ class AdminConsoleProvider extends ChangeNotifier {
     print('provider invoked');
     fetchAllCoursesAdmin();
     fetchAllusersAdmin();
-    // linkUsersToAdminConsole();
-    // createNewUser();
   }
 
   fetchAllCoursesAdmin({bool isNotifyListener = true}) async {
@@ -41,6 +39,7 @@ class AdminConsoleProvider extends ChangeNotifier {
       });
 
       if (isNotifyListener) notifyListeners();
+      ;
       allCoursesGlobal = allCoursesLocal;
     });
   }
