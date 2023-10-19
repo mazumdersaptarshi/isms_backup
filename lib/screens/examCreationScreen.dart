@@ -10,10 +10,18 @@ import 'package:provider/provider.dart';
 
 List<Map<String, dynamic>> allQuestions = [];
 
+enum EXAMTYPE { courseExam, moduleExam }
+
 class ExamCreation extends StatefulWidget {
-  ExamCreation({super.key, required this.courseIndex});
+  ExamCreation(
+      {super.key,
+      required this.courseIndex,
+      required this.examtype,
+      this.moduleIndex});
   int noOfQuestions = 1;
   int courseIndex;
+  EXAMTYPE examtype;
+  int? moduleIndex;
   @override
   ExamCreationState createState() => ExamCreationState();
 }
@@ -93,10 +101,19 @@ class ExamCreationState extends State<ExamCreation> {
                         title: titleController.text,
                         questionAnswerSet: allQuestions);
 
-                    createExam(
-                        coursesProvider: coursesProvider,
-                        courseIndex: widget.courseIndex,
-                        exam: newExam);
+                    if (widget.examtype == EXAMTYPE.courseExam) {
+                      createCourseExam(
+                          coursesProvider: coursesProvider,
+                          courseIndex: widget.courseIndex,
+                          exam: newExam);
+                    } else if (widget.examtype == EXAMTYPE.moduleExam) {
+                      createModuleExam(
+                          coursesProvider: coursesProvider,
+                          courseIndex: widget.courseIndex,
+                          moduleIndex: widget.moduleIndex!,
+                          exam: newExam);
+                      allQuestions.clear();
+                    }
                   },
                   child: const Text('Submit'),
                 ),

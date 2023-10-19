@@ -9,13 +9,15 @@ import 'package:isms/models/slide.dart';
 enum CoursesFetchStatus { idle, initiated, fetched }
 
 class CoursesProvider with ChangeNotifier {
-  List<Course> allCourses = [];
+  List<Course> _allCourses = [];
+
+  List<Course> get allCourses => _allCourses;
   bool isCoursesStreamFetched = false;
 
-  CoursesFetchStatus coursesFetchStatus = CoursesFetchStatus.idle;
+  CoursesFetchStatus _coursesFetchStatus = CoursesFetchStatus.idle;
 
   CoursesProvider() {
-    if (coursesFetchStatus != CoursesFetchStatus.initiated) getAllCourses();
+    if (_coursesFetchStatus != CoursesFetchStatus.initiated) getAllCourses();
   }
 
   @override
@@ -28,7 +30,7 @@ class CoursesProvider with ChangeNotifier {
 
   getAllCourses({bool isNotifyListener = true}) async {
     isCoursesStreamFetched = true;
-    coursesFetchStatus = CoursesFetchStatus.initiated;
+    _coursesFetchStatus = CoursesFetchStatus.initiated;
     print("FETCHING COURSES STREAMMMM");
 
     Stream<QuerySnapshot>? coursesStream = FirebaseFirestore.instance
@@ -51,7 +53,7 @@ class CoursesProvider with ChangeNotifier {
 
       if (isNotifyListener) notifyListeners();
 
-      coursesFetchStatus = CoursesFetchStatus.initiated;
+      _coursesFetchStatus = CoursesFetchStatus.initiated;
     });
   }
 
@@ -90,22 +92,15 @@ class CoursesProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addHardcodedExam(
-      String courseId, Map<String, dynamic> examData) async {
-    // 1) Getting reference to the specific course document by using the provided courseId.
-    DocumentReference courseDocRef =
-        FirebaseFirestore.instance.collection('courses').doc(courseId);
+  addExamsToCourseModule(
+      int courseIndex, int moduleIndex, List<NewExam> exams) {
+    try {
+      allCourses[courseIndex].modules![moduleIndex].exams?.addAll(exams);
+    } catch (e) {
+      allCourses[courseIndex].modules![moduleIndex].exams = [];
+      allCourses[courseIndex].modules![moduleIndex].exams?.addAll(exams);
+    }
 
-    // 2) Check if 'exams' subcollection exists, and if not, create it.
-    CollectionReference examsCollection = courseDocRef.collection('exams');
-
-    // Get all documents from the 'exams' subcollection to determine the next index.
-    QuerySnapshot examDocs = await examsCollection.get();
-    int nextExamIndex = examDocs.docs.length + 1;
-
-    // 3) Inside the new document, store all the required fields and values.
-    examsCollection.doc('exam_$nextExamIndex').set(examData);
-
-    notifyListeners(); // Notify listeners after adding the data.
+    notifyListeners();
   }
 }

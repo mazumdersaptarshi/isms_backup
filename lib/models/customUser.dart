@@ -2,8 +2,8 @@ class CustomUser {
   String username;
   String email;
   String role;
-  // List<Map<String, dynamic>> courses_started;
-  // List<Map<String, dynamic>> courses_completed;
+
+
 
   List<dynamic> courses_started;
   List<dynamic> courses_completed;
@@ -27,6 +27,7 @@ class CustomUser {
   }
 
   factory CustomUser.fromMap(Map<String, dynamic> map) {
+
     print(map['username']);
     print(map['courses_started']);
     CustomUser customUser = CustomUser(

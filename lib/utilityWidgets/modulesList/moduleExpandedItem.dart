@@ -28,9 +28,7 @@ class _ModuleExpandedItemState extends State<ModuleExpandedItem> {
         child: SizedBox(
           width: 30,
           height: 30,
-          child: widget.info['info_status']
-              ? const Icon(Icons.check_circle_rounded, color: Colors.green)
-              : const Icon(Icons.circle, color: Colors.orange),
+          child: Icon(Icons.pages),
         ),
       ),
       onTap: () {

@@ -1,10 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import 'package:isms/courseManagement/coursesProvider.dart';
+import 'package:isms/userManagement/createUser.dart';
+
 import 'package:isms/models/customUser.dart';
 import 'package:isms/userManagement/createUser.dart';
 
 import '../models/userCoursesDetails.dart';
+
+import '../models/course.dart';
 
 class CustomUserProvider with ChangeNotifier {
   final _dbUserOperations = CreateUserDataOperations();
@@ -119,6 +125,7 @@ class CustomUserProvider with ChangeNotifier {
     notifyListeners();
   }
 
+
   fetchAllCoursesUser({bool isNotifyListener = true}) async {
     List<dynamic> allEnrolledCoursesLocal = [];
     List<dynamic>? allCompletedCoursesLocal = [];
@@ -163,5 +170,37 @@ class CustomUserProvider with ChangeNotifier {
 
     print('function return value allUsersGlobal: $allCompletedCoursesGlobal');
     return allCompletedCoursesGlobal;
+
+  setUserCourseCompleted(Map<String, dynamic> courseDetails) {
+    loggedInUser?.courses_completed.add(courseDetails);
+    notifyListeners();
+  }
+
+  setUserCourseModuleCompleted(
+      {required Map<String, dynamic> courseDetails,
+      required CoursesProvider coursesProvider,
+      required int courseIndex,
+      required int moduleIndex}) {
+    Course course = coursesProvider.allCourses[courseIndex];
+    loggedInUser?.courses_started.forEach((course_started) {
+      if (course_started['courseID'] == course.id) {
+        print("COMPLETED MODULEE ${course_started}");
+        if (course_started['modules_completed'] != null) {
+          for (int i = 0; i < course_started['modules_completed'].length; i++) {
+            var element = course_started['modules_completed'][i];
+            if (element != course.modules![moduleIndex].title) {
+              course_started['modules_completed']
+                  .add(course.modules![moduleIndex].title);
+            }
+          }
+        } else {
+          course_started['modules_completed'] = [];
+          course_started['modules_completed']
+              .add(course.modules![moduleIndex].title);
+        }
+      }
+    });
+    notifyListeners();
+
   }
 }

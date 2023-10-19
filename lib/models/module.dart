@@ -1,3 +1,4 @@
+import 'newExam.dart';
 import 'slide.dart';
 
 class Module {
@@ -6,11 +7,13 @@ class Module {
   String contentDescription;
   int index;
   List<Slide>? slides;
+  List<NewExam>? exams;
   Module(
       {required this.title,
       required this.id,
       required this.contentDescription,
       this.slides,
+      this.exams,
       this.index = 0});
 
   factory Module.fromMap(Map<String, dynamic> map) {
@@ -19,7 +22,8 @@ class Module {
         index: map['index'] ?? 0,
         title: map['title'],
         contentDescription: map['contentDescription'],
-        slides: map['slides']);
+        slides: map['slides'] ?? [],
+        exams: map['exams'] ?? []);
   }
 
   Map<String, dynamic> toMap() {
@@ -27,6 +31,7 @@ class Module {
       'id': id,
       'title': title,
       'slides': slides,
+      'exams': exams,
       'contentDescription': contentDescription,
       'index': index ?? 0
     };

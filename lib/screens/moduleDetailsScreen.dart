@@ -4,6 +4,7 @@ import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/screens/createModuleScreen.dart';
 import 'package:isms/screens/createSlideScreen.dart';
+import 'package:isms/screens/examCreationScreen.dart';
 import 'package:isms/screens/modulesListScreen.dart';
 import 'package:isms/slideManagement/fetchSlides.dart';
 import 'package:isms/screens/slidesDisplayScreen.dart';
@@ -101,6 +102,18 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
+                                  builder: (context) => ExamCreation(
+                                        courseIndex: widget.courseIndex,
+                                        examtype: EXAMTYPE.moduleExam,
+                                        moduleIndex: widget.moduleIndex,
+                                      )));
+                        },
+                        child: Text("Create new exam")),
+                    ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
                                   builder: (context) => CreateSlideScreen(
                                         courseIndex: widget.courseIndex,
                                         moduleIndex: widget.moduleIndex,
@@ -114,13 +127,17 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                               customUserProvider: customUserProvider,
                               courseDetails: {
                                 "courseID": coursesProvider
-                                    .allCourses[widget.courseIndex].id
+                                    .allCourses[widget.courseIndex].id,
+                                "course_name": coursesProvider
+                                    .allCourses[widget.courseIndex].name
                               });
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => SlidesDisplayScreen(
                                         slides: module!.slides!,
+                                        courseIndex: widget.courseIndex,
+                                        moduleIndex: widget.moduleIndex,
                                       )));
                         },
                         child: Text("Study module"),

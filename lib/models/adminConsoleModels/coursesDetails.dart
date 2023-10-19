@@ -57,9 +57,12 @@ class CoursesDetails {
       number_of_modules: map['number_of_modules'] ?? 0,
       course_name: map['course_name'] ?? 'n/a',
       number_of_exams: map['number_of_exams'] ?? 0,
+
       students: getEnrolledStudentsList(map),
       course_started: map['course_started'] ?? [],
       course_completed: map['course_completed'] ?? [],
+
+
     );
   }
 }

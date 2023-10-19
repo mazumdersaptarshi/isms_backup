@@ -1,12 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
 import 'package:isms/screens/adminScreens/adminConsolePage.dart';
 import 'package:isms/screens/coursesListScreen.dart';
 import 'package:isms/screens/createCourseScreen.dart';
 import 'package:isms/screens/userProfilePage.dart';
 
 import '../userManagement/userDataGetterMaster.dart';
+
+import 'package:isms/screens/adminScreens/adminConsoleHomePage.dart';
+import 'package:isms/screens/coursesListScreen.dart';
+import 'package:isms/screens/createCourseScreen.dart';
+import 'package:isms/screens/userInfoScreen.dart';
+import 'package:isms/sharedWidgets/customAppBar.dart';
+
+import '../UserManagement/userInfo.dart';
+
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -46,7 +56,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: CustomAppBar(),
       body: Column(
         children: [
           ElevatedButton(
@@ -71,11 +81,13 @@ class _HomePageState extends State<HomePage> {
             onPressed: () {
               Navigator.push(
                 context,
+
                 MaterialPageRoute(builder: (context) => UserProfilePage()),
               );
             },
             child: const Text('User profile'),
           )
+
         ],
       ),
       floatingActionButton: FloatingActionButton(
