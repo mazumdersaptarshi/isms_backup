@@ -1,10 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:isms/databaseOperations/databaseManager.dart';
 import 'package:isms/screens/homePage.dart';
-import 'package:isms/userManagement/customUserProvider.dart';
+import 'package:isms/userManagement/loggedInUserProvider.dart';
+import 'package:isms/userManagement/userDataGetterMaster.dart';
 import 'package:isms/utitlityFunctions/auth_service.dart';
 import 'package:provider/provider.dart';
-import 'package:isms/databaseOperations/databaseManager.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({super.key});
@@ -16,6 +17,7 @@ class LoginPage extends StatefulWidget {
 class LoginPageState extends State<LoginPage> {
   Future<User?>? _signInFuture;
   bool hasCheckedForChangedDependencies = false;
+  UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
 
   @override
   void didChangeDependencies() async {
@@ -27,7 +29,7 @@ class LoginPageState extends State<LoginPage> {
         await AuthService().handleSignInDependencies(
           context: context,
           customUserProvider:
-              Provider.of<CustomUserProvider>(context, listen: false),
+              Provider.of<LoggedInUserProvider>(context, listen: false),
         );
       }
     }
@@ -35,8 +37,8 @@ class LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    CustomUserProvider customUserProvider =
-        Provider.of<CustomUserProvider>(context, listen: false);
+    LoggedInUserProvider customUserProvider =
+        Provider.of<LoggedInUserProvider>(context, listen: false);
     return Scaffold(
       body: Center(
         child: Column(
@@ -72,7 +74,7 @@ class LoginPageState extends State<LoginPage> {
     return const Text('ISMS');
   }
 
-  Widget signInButton({required CustomUserProvider customUserProvider}) {
+  Widget signInButton({required LoggedInUserProvider customUserProvider}) {
     if (_signInFuture == null) {
       return ElevatedButton.icon(
         onPressed: () {
@@ -95,7 +97,11 @@ class LoginPageState extends State<LoginPage> {
           if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else if (snapshot.data != null) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
+            WidgetsBinding.instance.addPostFrameCallback((_) async {
+              userDataGetterMaster.getLoggedInUserInfoFromFirestore();
+              await AuthService.setLoggedInUser(
+                  customUserProvider: Provider.of<LoggedInUserProvider>(context,
+                      listen: false));
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => HomePage()),

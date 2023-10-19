@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../adminManagement/adminConsoleProvider.dart';
 import '../../models/adminConsoleModels/adminConsoleActions.dart';
-
 import 'adminActionDropdown.dart';
 
 class AdminActionsWidget extends StatelessWidget {
@@ -12,7 +11,7 @@ class AdminActionsWidget extends StatelessWidget {
   });
 
   final AdminActions action;
-  final AdminConsoleProvider adminConsoleProvider;
+  final AdminProvider adminConsoleProvider;
 
   @override
   Widget build(BuildContext context) {

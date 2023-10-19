@@ -5,13 +5,13 @@ import 'package:isms/models/adminConsoleModels/coursesDetails.dart';
 
 import '../models/customUser.dart';
 
-class AdminConsoleProvider extends ChangeNotifier {
+class AdminProvider extends ChangeNotifier {
   bool isCoursesStreamFetched = false;
   List<dynamic> allCoursesGlobal = [];
   List<dynamic> allUsersGlobal = [];
 
   Map<String, dynamic> snapshotData = {};
-  AdminConsoleProvider() {
+  AdminProvider() {
     print('provider invoked');
     fetchAllCoursesAdmin();
     fetchAllusersAdmin();
@@ -70,6 +70,8 @@ class AdminConsoleProvider extends ChangeNotifier {
           Map<String, dynamic> userData =
               userSnapshot.data() as Map<String, dynamic>;
           print('raw user data: $userData');
+          userData["uid"] = userSnapshot.id;
+
           // localUserDataList.add({
           //   'username': userData['username'],
           //   'email': userData['email'],

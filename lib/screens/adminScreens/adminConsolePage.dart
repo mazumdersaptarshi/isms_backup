@@ -25,8 +25,7 @@ class AdminConsolePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AdminConsoleProvider adminConsoleProvider =
-        Provider.of<AdminConsoleProvider>(context);
+    AdminProvider adminConsoleProvider = Provider.of<AdminProvider>(context);
     print('adminConsoleProvider: $adminConsoleProvider');
 
     return Scaffold(

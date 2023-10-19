@@ -1,29 +1,33 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:isms/userManagement/createUser.dart';
-
 import 'package:isms/models/customUser.dart';
 import 'package:isms/userManagement/createUser.dart';
-
-import '../models/userCoursesDetails.dart';
+import 'package:isms/userManagement/userDataGetterMaster.dart';
 
 import '../models/course.dart';
+import '../models/userCoursesDetails.dart';
 import '../projectModules/courseManagement/coursesProvider.dart';
 
-class CustomUserProvider with ChangeNotifier {
+class LoggedInUserProvider with ChangeNotifier {
   final _dbUserOperations = CreateUserDataOperations();
   late String userUID = '';
   CustomUser? loggedInUser;
   List<CustomUser> users = []; // Main list should remain immutable
-  List<dynamic> allEnrolledCoursesGlobal = [];
 
-  List<dynamic> allCompletedCoursesGlobal = [];
+  List<dynamic> allEnrolledCoursesGlobal =
+      []; //Global List to hold all enrolled courses for User
+
+  List<dynamic> allCompletedCoursesGlobal =
+      []; //Global List to hold all completed courses for User
   CustomUser? get getCurrentUser => loggedInUser;
+  UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
 
-  CustomUserProvider() {
+  LoggedInUserProvider() {
+    print('InsideLoggedInUserProviderInvoke');
     fetchUserDetails();
     fetchAllCoursesUser();
+    notifyListeners();
   }
 
   void setLoggedInUser(CustomUser user) {
@@ -32,7 +36,7 @@ class CustomUserProvider with ChangeNotifier {
   }
 
   Future<void> createUser(CustomUser user) async {
-    String? uid = FirebaseAuth.instance.currentUser?.uid;
+    String? uid = userDataGetterMaster.currentUser?.uid;
     if (uid != null) {
       await _dbUserOperations.createUser(uid, user);
     } else {
@@ -42,7 +46,7 @@ class CustomUserProvider with ChangeNotifier {
 
   Future<String?> fetchCurrentUsername() async {
     String? email = FirebaseAuth.instance.currentUser?.email;
-
+    // String? email = userDataGetterMaster.currentUserEmail;
     if (email == null) {
       print('No authenticated user.');
       return null;
@@ -76,7 +80,8 @@ class CustomUserProvider with ChangeNotifier {
 
       users = querySnapshot.docs
           .map((QueryDocumentSnapshot<Map<String, dynamic>> doc) {
-        final data = doc.data();
+        var data = doc.data();
+        data["uid"] = doc.id;
         return CustomUser.fromMap(data);
       }).toList();
       notifyListeners();
@@ -112,7 +117,9 @@ class CustomUserProvider with ChangeNotifier {
         await FirebaseFirestore.instance.collection('users').doc(uid).get();
 
     if (userDoc.exists) {
-      return CustomUser.fromMap(userDoc.data()!);
+      var docData = userDoc.data()!;
+      docData["uid"] = userDoc.id;
+      return CustomUser.fromMap(docData);
     } else {
       print('No matching user document found for UID $uid.');
       return null;
@@ -125,7 +132,7 @@ class CustomUserProvider with ChangeNotifier {
   }
 
   fetchAllCoursesUser({bool isNotifyListener = true}) async {
-    List<dynamic> allEnrolledCoursesLocal = [];
+    List<dynamic>? allEnrolledCoursesLocal = [];
     List<dynamic>? allCompletedCoursesLocal = [];
     print('Inside fetch courses user provider');
     if (userUID != '') {
@@ -133,9 +140,10 @@ class CustomUserProvider with ChangeNotifier {
           .collection('users')
           .doc(userUID)
           .snapshots();
-      userStream.listen((snapshot) async {
-        List<dynamic>? allEnrolledCoursesLocal = [];
-
+      // userStream = userDataGetterMaster.currentUserSnapshot
+      //     as Stream<DocumentSnapshot<Object?>>?;
+      print('userStream:  ${userStream}');
+      userStream?.listen((snapshot) async {
         print('snapshotData: ${snapshot.data()}');
         UserCoursesDetails data =
             UserCoursesDetails.fromMap(snapshot.data() as Map<String, dynamic>);
@@ -152,6 +160,38 @@ class CustomUserProvider with ChangeNotifier {
         print('allEnrolledCoursesGlobal: $allEnrolledCoursesGlobal');
       });
     }
+  }
+
+  List<dynamic> getAllEnrolledCoursesCurrentUser() {
+    List<dynamic>? allEnrolledCoursesLocal = [];
+    List<dynamic>? allCompletedCoursesLocal = [];
+    print('Inside fetch courses user provider');
+    if (userUID != '') {
+      Stream<DocumentSnapshot>? userStream = FirebaseFirestore.instance
+          .collection('users')
+          .doc(userUID)
+          .snapshots();
+      // userStream = userDataGetterMaster.currentUserSnapshot
+      //     as Stream<DocumentSnapshot<Object?>>?;
+      print('userStream:  ${userStream}');
+      userStream?.listen((snapshot) async {
+        print('snapshotData: ${snapshot.data()}');
+        UserCoursesDetails data =
+            UserCoursesDetails.fromMap(snapshot.data() as Map<String, dynamic>);
+
+        allEnrolledCoursesLocal = data.courses_started;
+
+        allCompletedCoursesLocal = data.courses_completed;
+
+        notifyListeners();
+        allEnrolledCoursesGlobal.clear();
+
+        allEnrolledCoursesGlobal = allEnrolledCoursesLocal!;
+        allCompletedCoursesGlobal = allCompletedCoursesLocal!;
+        print('allEnrolledCoursesGlobal: $allEnrolledCoursesGlobal');
+      });
+    }
+    return allEnrolledCoursesGlobal;
   }
 
   Future<List> getAllEnrolledCoursesList() async {

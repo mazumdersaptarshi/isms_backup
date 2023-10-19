@@ -1,15 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import 'package:isms/screens/adminScreens/adminConsolePage.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
 import 'package:isms/screens/userInfo/userProfilePage.dart';
-import '../userManagement/userDataGetterMaster.dart';
-import 'package:isms/screens/userInfo/userInfoScreen.dart';
 import 'package:isms/sharedWidgets/customAppBar.dart';
 
-import '../UserManagement/userInfo.dart';
+import '../userManagement/userDataGetterMaster.dart';
 import 'learningModuleScreens/courseScreens/createCourseScreen.dart';
 
 class HomePage extends StatefulWidget {

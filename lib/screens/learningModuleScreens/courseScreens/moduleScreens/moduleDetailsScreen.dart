@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
-import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/createModuleScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/createSlideScreen.dart';
-import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
-import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/modulesListScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/slidesDisplayScreen.dart';
-import 'package:isms/userManagement/customUserProvider.dart';
+import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
+import 'package:isms/userManagement/loggedInUserProvider.dart';
 import 'package:isms/userManagement/userCourseOperations.dart';
 import 'package:provider/provider.dart';
 
@@ -58,8 +55,8 @@ class _ModuleDetailsState extends State<ModuleDetails> {
   @override
   Widget build(BuildContext context) {
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
-    CustomUserProvider customUserProvider =
-        Provider.of<CustomUserProvider>(context);
+    LoggedInUserProvider customUserProvider =
+        Provider.of<LoggedInUserProvider>(context);
     Module? module;
     try {
       module = coursesProvider

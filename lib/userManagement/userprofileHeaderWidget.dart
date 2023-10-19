@@ -21,7 +21,7 @@ class UserProfileHeaderWidget extends StatelessWidget {
               ),
             ),
           Text(
-            ' ${userDataGetterMaster.userName}',
+            ' ${userDataGetterMaster.currentUserName}',
             style: TextStyle(
               color: Colors.black,
               fontSize: 18,
@@ -29,15 +29,15 @@ class UserProfileHeaderWidget extends StatelessWidget {
             ),
           ),
           Text(
-            ' ${userDataGetterMaster.userEmail}',
+            ' ${userDataGetterMaster.currentUserEmail}',
             style: TextStyle(
               color: Colors.black,
               fontSize: 18,
             ),
           ),
-          if (userDataGetterMaster.userRole != null)
+          if (userDataGetterMaster.currentUserRole != null)
             Text(
-              'Role: ${userDataGetterMaster.userRole}',
+              'Role: ${userDataGetterMaster.currentUserRole}',
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 18,

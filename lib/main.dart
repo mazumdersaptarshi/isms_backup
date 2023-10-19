@@ -4,9 +4,9 @@ import 'package:isms/adminManagement/adminConsoleProvider.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 import 'package:isms/projectModules/courseManagement/moduleManagement/slideManagement/slidesCreationProvider.dart';
 import 'package:isms/screens/login/loginScreen.dart';
-import 'package:isms/userManagement/customUserProvider.dart';
+import 'package:isms/userManagement/loggedInUserProvider.dart';
 import 'package:provider/provider.dart';
-import 'adminManagement/adminConsoleProvider.dart';
+
 import 'firebase_options.dart';
 
 void main() async {
@@ -24,8 +24,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<CustomUserProvider>(create: (context) {
-          return CustomUserProvider();
+        ChangeNotifierProvider<LoggedInUserProvider>(create: (context) {
+          return LoggedInUserProvider();
         }),
         ChangeNotifierProvider<CoursesProvider>(create: (context) {
           return CoursesProvider();
@@ -33,8 +33,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<SlidesCreationProvider>(create: (context) {
           return SlidesCreationProvider();
         }),
-        ChangeNotifierProvider<AdminConsoleProvider>(create: (context) {
-          return AdminConsoleProvider();
+        ChangeNotifierProvider<AdminProvider>(create: (context) {
+          return AdminProvider();
         }),
       ],
       child: MaterialApp(

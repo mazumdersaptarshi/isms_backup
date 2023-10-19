@@ -10,7 +10,7 @@ class AdminActionDropdown extends StatefulWidget {
     required this.actionId,
   });
 
-  final AdminConsoleProvider adminConsoleProvider;
+  final AdminProvider adminConsoleProvider;
   final String actionId;
 
   @override

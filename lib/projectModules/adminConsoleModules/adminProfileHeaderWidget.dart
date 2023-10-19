@@ -15,7 +15,7 @@ class AdminInfoWidget extends StatelessWidget {
                 NetworkImage(userDataGetterMaster.currentUser!.photoURL!),
           ),
         Text(
-          ' ${userDataGetterMaster.userName}',
+          ' ${userDataGetterMaster.currentUserName}',
           style: const TextStyle(
             color: Colors.black,
             fontSize: 18,
@@ -23,15 +23,15 @@ class AdminInfoWidget extends StatelessWidget {
           ),
         ),
         Text(
-          ' ${userDataGetterMaster.userEmail}',
+          ' ${userDataGetterMaster.currentUserEmail}',
           style: const TextStyle(
             color: Colors.black,
             fontSize: 18,
           ),
         ),
-        if (userDataGetterMaster.userRole != null)
+        if (userDataGetterMaster.currentUserRole != null)
           Text(
-            'Role: ${userDataGetterMaster.userRole}',
+            'Role: ${userDataGetterMaster.currentUserRole}',
             style: const TextStyle(
               color: Colors.black,
               fontSize: 18,

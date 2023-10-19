@@ -14,14 +14,14 @@ class UserDataGetterMaster {
   }
   //Getters
   User? get currentUser => _currentUser;
-  String? get userName => _currentUser?.displayName;
-  String? get userEmail => _currentUser?.email;
-  String? get userRole => _userRole;
+  String? get currentUserName => _currentUser?.displayName;
+  String? get currentUserEmail => _currentUser?.email;
+  String? get currentUserRole => _userRole;
   DocumentSnapshot? get currentUserSnapshot => _currentUserSnapshot;
 
   //Function called during constructor invoke, to get all required logged in user data from Firestore
   Future<void> getLoggedInUserInfoFromFirestore() async {
-    print('EnteredUserInfoClass');
+    print('getting new logged iN uSer: ${FirebaseAuth.instance.currentUser!}');
     _currentUser = FirebaseAuth.instance.currentUser!;
     User? user = _currentUser;
     DocumentSnapshot? userSnapshot;

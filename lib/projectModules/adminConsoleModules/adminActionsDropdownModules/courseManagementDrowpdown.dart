@@ -8,7 +8,7 @@ class CourseManagementDrowpdown extends StatelessWidget {
     required this.adminConsoleProvider,
   });
 
-  final AdminConsoleProvider adminConsoleProvider;
+  final AdminProvider adminConsoleProvider;
 
   @override
   Widget build(BuildContext context) {

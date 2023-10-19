@@ -3,13 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:isms/screens/login/checkLoggedInScreen.dart';
 import 'package:isms/userManagement/createUser.dart';
-import 'package:isms/userManagement/customUserProvider.dart';
+import 'package:isms/userManagement/loggedInUserProvider.dart';
+
+import '../databaseOperations/databaseManager.dart';
 
 class AuthService {
   final CreateUserDataOperations _createUserDataOperations =
       CreateUserDataOperations();
 
-  Future<User?> signInWithGoogle(CustomUserProvider customUserProvider) async {
+  Future<User?> signInWithGoogle(
+      LoggedInUserProvider customUserProvider) async {
     try {
       final googleUser = await GoogleSignIn().signIn();
       if (googleUser == null) return null;
@@ -33,7 +36,7 @@ class AuthService {
 
   Future<void> handleSignInDependencies({
     required BuildContext context,
-    required CustomUserProvider customUserProvider,
+    required LoggedInUserProvider customUserProvider,
   }) async {
     if (await GoogleSignIn().isSignedIn()) {
       final user = FirebaseAuth.instance.currentUser;
@@ -43,5 +46,15 @@ class AuthService {
         MaterialPageRoute(builder: (context) => CheckLoggedIn()),
       );
     }
+  }
+
+  static setLoggedInUser(
+      {required LoggedInUserProvider customUserProvider}) async {
+    await customUserProvider.fetchUsers();
+    customUserProvider.users.forEach((element) {
+      print(element.username);
+      if (element.email == DatabaseManager.auth.currentUser?.email)
+        customUserProvider.setLoggedInUser(element);
+    });
   }
 }

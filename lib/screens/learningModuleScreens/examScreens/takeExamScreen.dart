@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:isms/models/newExam.dart';
 import 'package:isms/models/question.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
-import 'package:isms/userManagement/customUserProvider.dart';
+import 'package:isms/userManagement/loggedInUserProvider.dart';
 import 'package:provider/provider.dart';
 
 import '../../../projectModules/courseManagement/coursesProvider.dart';
@@ -117,8 +117,8 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
   }
 
   Widget buildScoreWidget() {
-    CustomUserProvider customUserProvider =
-        Provider.of<CustomUserProvider>(context);
+    LoggedInUserProvider customUserProvider =
+        Provider.of<LoggedInUserProvider>(context);
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
 
     int correctAnswers = 0;
