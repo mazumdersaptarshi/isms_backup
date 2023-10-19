@@ -25,7 +25,6 @@ class UserProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     CustomUserProvider customUserProvider =
         Provider.of<CustomUserProvider>(context);
-    print('adminConsoleProvider: $customUserProvider');
 
     return Scaffold(
       appBar: AppBar(
