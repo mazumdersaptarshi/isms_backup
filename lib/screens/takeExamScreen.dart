@@ -96,165 +96,162 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
     }
   }
 
+  void onButtonPress() {
+    if (currentIndex < questions.length - 1) {
+      setState(() {
+        currentIndex++;
+      });
+    } else {
+      setState(() {
+        showScore = true;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text(showScore ? 'Score' : 'Exam Module')),
+      body: showScore ? buildScoreWidget() : buildExamWidget(),
+    );
+  }
+
+  Widget buildScoreWidget() {
     CustomUserProvider customUserProvider =
         Provider.of<CustomUserProvider>(context);
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
-    if (showScore) {
-      int correctAnswers = 0;
-      for (int i = 0; i < questions.length; i++) {
-        if (Set.from(questions[i].shuffledCorrectAnswers)
-            .containsAll(selectedAnswers[i])) {
-          correctAnswers++;
-        }
-      }
 
-      double percentageScore = (correctAnswers / questions.length) * 100;
-
-      if (percentageScore < 75) {
-        return Scaffold(
-          appBar: AppBar(title: Text('Retake Exam')),
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                    'Your Score is: $correctAnswers/${questions.length}. You need to get 75% to pass.'),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () => setState(() {
-                    shuffleQuestions();
-                    currentIndex = 0;
-                    selectedAnswers =
-                        List.generate(questions.length, (index) => <int>{});
-                    showScore = false;
-                  }),
-                  child: Text('Retake Exam'),
-                )
-              ],
-            ),
-          ),
-        );
-      } else {
-        return Scaffold(
-          appBar: AppBar(title: Text('Score')),
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                    'Congratulations! Your Score is: $correctAnswers/${questions.length}'),
-                SizedBox(height: 20),
-                if (widget.examtype == EXAMTYPE.courseExam)
-                  ElevatedButton(
-                      onPressed: () {
-                        setUserCourseCompleted(
-                            customUserProvider: customUserProvider,
-                            courseDetails: {
-                              "courseID": coursesProvider
-                                  .allCourses[widget.courseIndex].id,
-                              "course_name": coursesProvider
-                                  .allCourses[widget.courseIndex].name,
-                            });
-                      },
-                      child: Text("Mark course as Done"))
-                else if (widget.examtype == EXAMTYPE.moduleExam)
-                  ElevatedButton(
-                      onPressed: () {
-                        setUserCourseModuleCompleted(
-                            customUserProvider: customUserProvider,
-                            courseDetails: {
-                              "courseID": coursesProvider
-                                  .allCourses[widget.courseIndex].id,
-                              "course_name": coursesProvider
-                                  .allCourses[widget.courseIndex].name
-                            },
-                            courseIndex: widget.courseIndex,
-                            moduleIndex: widget.moduleIndex!,
-                            coursesProvider: coursesProvider);
-                      },
-                      child: Text("Mark Module as Done")),
-                ElevatedButton(
-                  onPressed: () => setState(() {
-                    shuffleQuestions();
-                    currentIndex = 0;
-                    selectedAnswers =
-                        List.generate(questions.length, (index) => <int>{});
-                    showScore = false;
-                  }),
-                  child: Text('Retry for Fun!'),
-                )
-              ],
-            ),
-          ),
-        );
+    int correctAnswers = 0;
+    for (int i = 0; i < questions.length; i++) {
+      if (Set.from(questions[i].shuffledCorrectAnswers)
+          .containsAll(selectedAnswers[i])) {
+        correctAnswers++;
       }
     }
 
-    return Scaffold(
-      appBar: AppBar(title: Text('Exam Module')),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
+    double percentageScore = (correctAnswers / questions.length) * 100;
+
+    if (percentageScore < 75) {
+      return Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
-              height: 20,
-            ),
             Text(
-              questions[currentIndex].question,
-              style: TextStyle(fontSize: 20),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Text(
-              'Select ${questions[currentIndex].maxAllowedAnswers} answer(s)',
-              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            ...List.generate(questions[currentIndex].shuffledOptions.length,
-                (index) {
-              return ListTile(
-                title: Text(questions[currentIndex].shuffledOptions[index]),
-                leading: Checkbox(
-                  value: selectedAnswers[currentIndex].contains(index),
-                  onChanged: (bool? value) {
-                    setState(() {
-                      if (value == true) {
-                        if (selectedAnswers[currentIndex].length <
-                            questions[currentIndex].maxAllowedAnswers) {
-                          selectedAnswers[currentIndex].add(index);
-                        }
-                      } else {
-                        selectedAnswers[currentIndex].remove(index);
-                      }
-                    });
-                  },
-                ),
-              );
-            }),
+                'Your Score is: $correctAnswers/${questions.length}. You need to get 75% to pass.'),
+            SizedBox(height: 20),
             ElevatedButton(
-              onPressed: areAnswersSelected
-                  ? () {
-                      if (currentIndex < questions.length - 1) {
-                        setState(() {
-                          currentIndex++;
-                        });
-                      } else {
-                        setState(() {
-                          showScore = true;
-                        });
-                      }
-                    }
-                  : null,
-              child:
-                  Text(currentIndex < questions.length - 1 ? 'Next' : 'Submit'),
+              onPressed: () => setState(() {
+                shuffleQuestions();
+                currentIndex = 0;
+                selectedAnswers =
+                    List.generate(questions.length, (index) => <int>{});
+                showScore = false;
+              }),
+              child: Text('Retake Exam'),
             )
           ],
         ),
+      );
+    } else {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+                'Congratulations! Your Score is: $correctAnswers/${questions.length}'),
+            SizedBox(height: 20),
+            if (widget.examtype == EXAMTYPE.courseExam)
+              ElevatedButton(
+                onPressed: () {
+                  setUserCourseCompleted(
+                    customUserProvider: customUserProvider,
+                    courseDetails: {
+                      "courseID":
+                          coursesProvider.allCourses[widget.courseIndex].id,
+                      "course_name":
+                          coursesProvider.allCourses[widget.courseIndex].name,
+                    },
+                  );
+                },
+                child: Text("Mark course as Done"),
+              )
+            else if (widget.examtype == EXAMTYPE.moduleExam)
+              ElevatedButton(
+                onPressed: () {
+                  setUserCourseModuleCompleted(
+                    customUserProvider: customUserProvider,
+                    courseDetails: {
+                      "courseID":
+                          coursesProvider.allCourses[widget.courseIndex].id,
+                      "course_name":
+                          coursesProvider.allCourses[widget.courseIndex].name,
+                    },
+                    courseIndex: widget.courseIndex,
+                    moduleIndex: widget.moduleIndex!,
+                    coursesProvider: coursesProvider,
+                  );
+                },
+                child: Text("Mark Module as Done"),
+              ),
+            ElevatedButton(
+              onPressed: () => setState(() {
+                shuffleQuestions();
+                currentIndex = 0;
+                selectedAnswers =
+                    List.generate(questions.length, (index) => <int>{});
+                showScore = false;
+              }),
+              child: Text('Retry for Fun!'),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
+  Widget buildExamWidget() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          SizedBox(height: 20),
+          Text(
+            questions[currentIndex].question,
+            style: TextStyle(fontSize: 20),
+          ),
+          SizedBox(height: 20),
+          Text(
+            'Select ${questions[currentIndex].maxAllowedAnswers} answer(s)',
+            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 20),
+          ...List.generate(questions[currentIndex].shuffledOptions.length,
+              (index) {
+            return ListTile(
+              title: Text(questions[currentIndex].shuffledOptions[index]),
+              leading: Checkbox(
+                value: selectedAnswers[currentIndex].contains(index),
+                onChanged: (bool? value) {
+                  setState(() {
+                    if (value == true) {
+                      if (selectedAnswers[currentIndex].length <
+                          questions[currentIndex].maxAllowedAnswers) {
+                        selectedAnswers[currentIndex].add(index);
+                      }
+                    } else {
+                      selectedAnswers[currentIndex].remove(index);
+                    }
+                  });
+                },
+              ),
+            );
+          }),
+          ElevatedButton(
+            onPressed: areAnswersSelected ? () => onButtonPress() : null,
+            child:
+                Text(currentIndex < questions.length - 1 ? 'Next' : 'Submit'),
+          )
+        ],
       ),
     );
   }

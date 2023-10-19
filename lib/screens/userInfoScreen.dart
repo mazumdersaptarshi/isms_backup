@@ -10,8 +10,7 @@ class UserInfoScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     CustomUserProvider customUserProvider =
         Provider.of<CustomUserProvider>(context);
-    CoursesProvider coursesProvider =
-        Provider.of<CoursesProvider>(context, listen: false);
+    CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
     List courses_started = customUserProvider.loggedInUser!.courses_started;
     List courses_completed = customUserProvider.loggedInUser!.courses_completed;
 
