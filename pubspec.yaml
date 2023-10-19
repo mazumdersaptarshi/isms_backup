@@ -51,6 +51,7 @@ dependencies:
   firebase_auth: ^4.10.1
   google_sign_in: ^6.1.5
   percent_indicator: ^4.2.3
+  firebase_messaging: ^14.7.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
