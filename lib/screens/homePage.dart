@@ -1,6 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import 'package:isms/screens/adminScreens/adminConsolePage.dart';
+import 'package:isms/screens/coursesListScreen.dart';
+import 'package:isms/screens/createCourseScreen.dart';
+import 'package:isms/screens/userProfilePage.dart';
+
+import '../userManagement/userDataGetterMaster.dart';
+
 import 'package:isms/screens/adminScreens/adminConsoleHomePage.dart';
 import 'package:isms/screens/coursesListScreen.dart';
 import 'package:isms/screens/createCourseScreen.dart';
@@ -8,6 +16,7 @@ import 'package:isms/screens/userInfoScreen.dart';
 import 'package:isms/sharedWidgets/customAppBar.dart';
 
 import '../UserManagement/userInfo.dart';
+
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -19,6 +28,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   DocumentSnapshot? currentUserSnapshot;
   String? userRole;
+  UserDataGetterMaster userInfoGetter = UserDataGetterMaster();
 
   @override
   void initState() {
@@ -29,7 +39,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> _loadUserInformation() async {
     User? currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser != null) {
-      DocumentSnapshot? userSnapshot = await getUserDetails(currentUser);
+      DocumentSnapshot? userSnapshot = userInfoGetter.currentUserSnapshot;
       if (userSnapshot != null) {
         setState(() {
           currentUserSnapshot = userSnapshot;
@@ -53,8 +63,7 @@ class _HomePageState extends State<HomePage> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => const AdminConsoleHomePage()),
+                MaterialPageRoute(builder: (context) => AdminConsolePage()),
               );
             },
             child: const Text('Admin Console'),
@@ -72,11 +81,13 @@ class _HomePageState extends State<HomePage> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => UserInfoScreen()),
+
+                MaterialPageRoute(builder: (context) => UserProfilePage()),
               );
             },
-            child: const Text('User Info'),
-          ),
+            child: const Text('User profile'),
+          )
+
         ],
       ),
       floatingActionButton: FloatingActionButton(

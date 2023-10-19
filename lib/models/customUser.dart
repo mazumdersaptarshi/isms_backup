@@ -1,9 +1,10 @@
-import 'package:isms/models/course.dart';
-
 class CustomUser {
   String username;
   String email;
   String role;
+
+
+
   List<dynamic> courses_started;
   List<dynamic> courses_completed;
 
@@ -26,13 +27,17 @@ class CustomUser {
   }
 
   factory CustomUser.fromMap(Map<String, dynamic> map) {
-    return CustomUser(
-      username: map['username'],
-      email: map['email'],
-      role: map['role'] ?? "",
-      courses_started: map["courses_started"] ?? [],
-      courses_completed: map["courses_completed"] ?? [],
-    );
+
+    print(map['username']);
+    print(map['courses_started']);
+    CustomUser customUser = CustomUser(
+        username: map['username'],
+        email: map['email'],
+        role: map['role'] ?? "",
+        courses_started: map['courses_started'] ?? [],
+        courses_completed: map['courses_completed'] ?? []);
+    print('courses_completed: ${customUser.courses_completed}');
+    return customUser;
   }
 }
 

@@ -1,26 +1,14 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:isms/projectModules/adminConsoleModules/adminInfo.dart';
-
+import 'package:isms/projectModules/adminConsoleModules/adminProfileHeaderWidget.dart';
 import 'package:provider/provider.dart';
 
-import '../../UserManagement/userInfo.dart';
 import '../../adminManagement/adminConsoleProvider.dart';
-
 import '../../models/adminConsoleModels/adminConsoleActions.dart';
 import '../../projectModules/adminConsoleModules/adminActionsWidget.dart';
+import '../../userManagement/userDataGetterMaster.dart';
 
-class AdminConsoleHomePage extends StatefulWidget {
-  const AdminConsoleHomePage({super.key});
-
-  @override
-  State<AdminConsoleHomePage> createState() => _AdminConsoleHomePageState();
-}
-
-class _AdminConsoleHomePageState extends State<AdminConsoleHomePage> {
-  DocumentSnapshot? currentUserSnapshot;
-  String? userRole;
+class AdminConsolePage extends StatelessWidget {
+  UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
 
   final List<AdminActions> adminActions = [
     AdminActions(
@@ -35,30 +23,7 @@ class _AdminConsoleHomePageState extends State<AdminConsoleHomePage> {
     AdminActions(name: 'Logout', icon: Icons.exit_to_app, actionId: 'logout'),
   ];
 
-  Future<void> _loadUserInformation() async {
-    User? currentUser = FirebaseAuth.instance.currentUser;
-    if (currentUser != null) {
-      DocumentSnapshot? userSnapshot = await getUserDetails(currentUser);
-      if (userSnapshot != null) {
-        setState(() {
-          currentUserSnapshot = userSnapshot;
-        });
-        Map<String, dynamic>? userData =
-            userSnapshot.data() as Map<String, dynamic>?;
-        userRole = userData?['role'];
-      } else {
-        print('User not found');
-      }
-    }
-  }
-
   @override
-  void initState() {
-    super.initState();
-    _loadUserInformation();
-    AdminConsoleProvider();
-  }
-
   Widget build(BuildContext context) {
     AdminConsoleProvider adminConsoleProvider =
         Provider.of<AdminConsoleProvider>(context);

@@ -27,24 +27,48 @@ class CourseManagementDrowpdown extends StatelessWidget {
                   itemCount: snapshot.data!.length,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
+                    print(('hguadhkghkafjk'));
+                    print(
+                        'course started users: ${snapshot.data![index].course_started}');
                     return ExpansionTile(
                       title: Text('${snapshot.data![index].course_name}'),
                       children: [
-                        for (var student in snapshot.data![index].students!)
-                          Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Text('${student.email}'),
-                                  Text('${student.isPassed}'),
-                                  Text('${student.course_percent_completed}'),
-                                  Text('${student.exams_percent_completed}'),
-                                ],
-                              )
-                            ],
-                          )
+                        ExpansionTile(
+                          title: Text(
+                            'Completed',
+                            style: TextStyle(color: Colors.green),
+                          ),
+                          trailing: Text(
+                            '${snapshot.data![index].course_completed!.length}',
+                            style: TextStyle(color: Colors.green),
+                          ),
+                          children: [
+                            for (var student
+                                in snapshot.data![index].course_completed!)
+                              Text(
+                                '${student['username']}',
+                                style: TextStyle(color: Colors.green),
+                              ),
+                          ],
+                        ),
+                        ExpansionTile(
+                          title: Text(
+                            'Started',
+                            style: TextStyle(color: Colors.yellow.shade900),
+                          ),
+                          trailing: Text(
+                            '${snapshot.data![index].course_started!.length}',
+                            style: TextStyle(color: Colors.yellow.shade900),
+                          ),
+                          children: [
+                            for (var student
+                                in snapshot.data![index].course_started!)
+                              Text(
+                                '${student['username']}',
+                                style: TextStyle(color: Colors.yellow.shade900),
+                              ),
+                          ],
+                        )
                       ],
                     );
                   },

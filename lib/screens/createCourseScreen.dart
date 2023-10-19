@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
+
+import 'package:isms/models/adminConsoleModels/coursesDetails.dart';
+import 'package:isms/models/course.dart';
+import 'package:isms/utitlityFunctions/generateRandom.dart';
+
+import '../courseManagement/createCourse.dart';
+
 import 'package:isms/courseManagement/createCourse.dart';
 import 'package:isms/models/adminConsoleModels/coursesDetails.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/utitlityFunctions/generateRandom.dart';
+
 
 class CreateCourseScreen extends StatelessWidget {
   const CreateCourseScreen({super.key});

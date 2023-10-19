@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../adminManagement/adminConsoleProvider.dart';
 import 'adminActionsDropdownModules/courseManagementDrowpdown.dart';
+import 'adminActionsDropdownModules/userManagementDropdown.dart';
 
 class AdminActionDropdown extends StatefulWidget {
   AdminActionDropdown({
@@ -23,27 +24,8 @@ class _AdminActionDropdownState extends State<AdminActionDropdown> {
       return CourseManagementDrowpdown(
           adminConsoleProvider: widget.adminConsoleProvider);
     } else if (widget.actionId == 'user_mgmt') {
-      return FutureBuilder<List<dynamic>>(
-          future: widget.adminConsoleProvider.getAllUsersList(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator();
-            } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            } else if (snapshot.hasData && snapshot.data != null) {
-              return ListView.builder(
-                itemCount: snapshot.data!.length,
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return ExpansionTile(
-                    title: Text('${index + 1}: ${snapshot.data![index]}'),
-                  );
-                },
-              );
-            } else {
-              return Text('No data');
-            }
-          });
+      return UsermanagementDropdown(
+          adminConsoleProvider: widget.adminConsoleProvider);
     } else {
       return Text('No data to show!');
     }

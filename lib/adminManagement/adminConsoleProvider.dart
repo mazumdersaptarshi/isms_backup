@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:isms/models/adminConsoleModels/coursesDetails.dart';
 
+import '../models/customUser.dart';
+
 class AdminConsoleProvider extends ChangeNotifier {
   bool isCoursesStreamFetched = false;
   List<dynamic> allCoursesGlobal = [];
@@ -13,8 +15,6 @@ class AdminConsoleProvider extends ChangeNotifier {
     print('provider invoked');
     fetchAllCoursesAdmin();
     fetchAllusersAdmin();
-    // linkUsersToAdminConsole();
-    // createNewUser();
   }
 
   fetchAllCoursesAdmin({bool isNotifyListener = true}) async {
@@ -32,16 +32,21 @@ class AdminConsoleProvider extends ChangeNotifier {
         Map<String, dynamic> elementMap =
             element.data() as Map<String, dynamic>;
         CoursesDetails courseItem = CoursesDetails.fromMap(elementMap);
+        print('yyyyyyyyyyy');
+        print(courseItem.course_started);
+        print('courseItem: ${courseItem.course_completed}');
         allCoursesLocal.add(courseItem);
       });
 
       if (isNotifyListener) notifyListeners();
+      ;
       allCoursesGlobal = allCoursesLocal;
     });
   }
 
   fetchAllusersAdmin({bool isNotifyListener = true}) async {
     List<Map<String, dynamic>> localUserDataList = [];
+    List<dynamic> allUsersInfoLocal = [];
     Stream<QuerySnapshot>? usersDocumentsStream = FirebaseFirestore.instance
         .collection('adminconsole')
         .doc('allusers')
@@ -58,24 +63,32 @@ class AdminConsoleProvider extends ChangeNotifier {
 
       CollectionReference users =
           FirebaseFirestore.instance.collection('users');
-
+      allUsersInfoLocal.clear();
       for (String userRef in userRefs) {
         DocumentSnapshot userSnapshot = await users!.doc(userRef).get();
         try {
           Map<String, dynamic> userData =
               userSnapshot.data() as Map<String, dynamic>;
-
-          localUserDataList.add({
-            'username': userData['username'],
-            'email': userData['email'],
-            'role': userData['role'],
+          print('raw user data: $userData');
+          // localUserDataList.add({
+          //   'username': userData['username'],
+          //   'email': userData['email'],
+          //   'role': userData['role'],
+          // });
+          CustomUser userInfo = CustomUser.fromMap(userData);
+          allUsersInfoLocal.add(userInfo);
+          allUsersInfoLocal.forEach((element) {
+            print(element.courses_completed);
           });
         } catch (e) {
           print(
               'There was an issue with user Data; Could not fetch user data. Reason for error: $e');
         }
       }
-      allUsersGlobal = localUserDataList;
+      if (isNotifyListener) notifyListeners();
+      allUsersGlobal.clear();
+      print('clearing allUsersGlobal');
+      allUsersGlobal = allUsersInfoLocal;
       print('allUsersGlobal: $allUsersGlobal');
     });
   }
@@ -89,6 +102,7 @@ class AdminConsoleProvider extends ChangeNotifier {
   Future<List> getAllUsersList() async {
     print('entered futurebuilder getAllUsersList');
     await Future.delayed(Duration(seconds: 2));
+    print('function return value allUsersGlobal: $allUsersGlobal');
     return allUsersGlobal;
   }
 }
