@@ -5,13 +5,13 @@ import 'package:isms/screens/createModuleScreen.dart';
 import 'package:isms/screens/createSlideScreen.dart';
 import 'package:isms/screens/examCreationScreen.dart';
 import 'package:isms/screens/modulesListScreen.dart';
-import 'package:isms/slideManagement/fetchSlides.dart';
 import 'package:isms/screens/slidesDisplayScreen.dart';
 import 'package:isms/userManagement/customUserProvider.dart';
 import 'package:isms/userManagement/userCourseOperations.dart';
 import 'package:provider/provider.dart';
 
 import '../projectModules/courseManagement/coursesProvider.dart';
+import '../projectModules/courseManagement/slideManagement/fetchSlides.dart';
 
 class ModuleDetails extends StatefulWidget {
   ModuleDetails(

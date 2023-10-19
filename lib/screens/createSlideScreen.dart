@@ -6,14 +6,14 @@ import 'package:isms/models/module.dart';
 import 'package:isms/models/slide.dart';
 import 'package:isms/moduleManagement/createModule.dart';
 import 'package:isms/screens/coursesListScreen.dart';
-import 'package:isms/slideManagement/createSlide.dart';
 import 'package:isms/utitlityFunctions/generateRandom.dart';
 import 'package:provider/provider.dart';
 import 'package:isms/models/course.dart';
-import 'package:isms/slideManagement/slidesCreationProvider.dart';
 import 'package:file_picker/file_picker.dart';
 
 import '../projectModules/courseManagement/coursesProvider.dart';
+import '../projectModules/courseManagement/slideManagement/createSlide.dart';
+import '../projectModules/courseManagement/slideManagement/slidesCreationProvider.dart';
 
 class CreateSlideScreen extends StatelessWidget {
   CreateSlideScreen({required this.courseIndex, required this.moduleIndex});

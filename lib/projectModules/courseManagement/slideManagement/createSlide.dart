@@ -8,7 +8,7 @@ import 'package:isms/models/module.dart';
 import 'package:isms/models/slide.dart';
 import 'package:isms/screens/createSlideScreen.dart';
 
-import '../projectModules/courseManagement/coursesProvider.dart';
+import '../coursesProvider.dart';
 
 Future<bool> createSlides(
     {required int courseIndex,

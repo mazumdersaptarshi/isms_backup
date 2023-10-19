@@ -4,7 +4,8 @@ import 'package:isms/screens/login/loginUI.dart';
 
 class AuthUtils {
   static void logout(BuildContext context) async {
-    await GoogleSignIn().disconnect();
+    //await GoogleSignIn().disconnect();
+    await GoogleSignIn().signOut();
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => LoginPage()),
