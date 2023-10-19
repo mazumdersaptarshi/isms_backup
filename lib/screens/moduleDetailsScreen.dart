@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:isms/courseManagement/coursesProvider.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/screens/createModuleScreen.dart';
@@ -11,6 +10,8 @@ import 'package:isms/screens/slidesDisplayScreen.dart';
 import 'package:isms/userManagement/customUserProvider.dart';
 import 'package:isms/userManagement/userCourseOperations.dart';
 import 'package:provider/provider.dart';
+
+import '../projectModules/courseManagement/coursesProvider.dart';
 
 class ModuleDetails extends StatefulWidget {
   ModuleDetails(

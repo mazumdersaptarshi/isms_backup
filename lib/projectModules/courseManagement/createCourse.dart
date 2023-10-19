@@ -4,8 +4,6 @@ import 'package:isms/models/adminConsoleModels/coursesDetails.dart';
 
 import 'package:isms/models/course.dart';
 
-import '../models/adminConsoleModels/coursesDetails.dart';
-
 Future<bool> createCourse({required Course course}) async {
   try {
     Map<String, dynamic> _courseMap = course.toMap();

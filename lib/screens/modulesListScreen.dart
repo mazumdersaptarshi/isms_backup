@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:isms/courseManagement/coursesProvider.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/models/slide.dart';
@@ -11,6 +10,8 @@ import 'package:isms/screens/examCreationScreen.dart';
 import 'package:isms/screens/examListScreen.dart';
 import 'package:provider/provider.dart';
 import 'package:isms/utilityWidgets/modulesList/moduleListWidget.dart';
+
+import '../projectModules/courseManagement/coursesProvider.dart';
 
 class ModulesListScreen extends StatefulWidget {
   ModulesListScreen({super.key, required this.courseIndex});

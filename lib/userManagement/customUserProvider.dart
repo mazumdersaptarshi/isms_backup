@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
-import 'package:isms/courseManagement/coursesProvider.dart';
 import 'package:isms/userManagement/createUser.dart';
 
 import 'package:isms/models/customUser.dart';
@@ -11,6 +9,7 @@ import 'package:isms/userManagement/createUser.dart';
 import '../models/userCoursesDetails.dart';
 
 import '../models/course.dart';
+import '../projectModules/courseManagement/coursesProvider.dart';
 
 class CustomUserProvider with ChangeNotifier {
   final _dbUserOperations = CreateUserDataOperations();

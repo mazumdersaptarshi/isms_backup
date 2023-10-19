@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:isms/courseManagement/coursesProvider.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/models/newExam.dart';
+
+import '../projectModules/courseManagement/coursesProvider.dart';
 
 Future<bool> createCourseExam(
     {required CoursesProvider coursesProvider,

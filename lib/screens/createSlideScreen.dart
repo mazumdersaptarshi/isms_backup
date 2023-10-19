@@ -2,8 +2,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
-import 'package:isms/courseManagement/coursesProvider.dart';
-import 'package:isms/courseManagement/createCourse.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/models/slide.dart';
 import 'package:isms/moduleManagement/createModule.dart';
@@ -14,6 +12,8 @@ import 'package:provider/provider.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/slideManagement/slidesCreationProvider.dart';
 import 'package:file_picker/file_picker.dart';
+
+import '../projectModules/courseManagement/coursesProvider.dart';
 
 class CreateSlideScreen extends StatelessWidget {
   CreateSlideScreen({required this.courseIndex, required this.moduleIndex});

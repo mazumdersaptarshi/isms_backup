@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:isms/courseManagement/coursesProvider.dart';
 import 'package:isms/examManagement/fetchExams.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
@@ -10,6 +9,8 @@ import 'package:isms/models/slide.dart';
 import 'package:isms/screens/examCreationScreen.dart';
 import 'package:isms/screens/takeExamScreen.dart';
 import 'package:provider/provider.dart';
+
+import '../projectModules/courseManagement/coursesProvider.dart';
 
 class ExamListScreen extends StatefulWidget {
   ExamListScreen(

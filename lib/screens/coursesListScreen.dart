@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:isms/courseManagement/coursesProvider.dart';
+
 import 'package:isms/screens/createCourseScreen.dart';
 import 'package:isms/screens/modulesListScreen.dart';
 
 import 'package:provider/provider.dart';
+
+import '../projectModules/courseManagement/coursesProvider.dart';
 
 class CoursesDisplayScreen extends StatefulWidget {
   CoursesDisplayScreen({super.key});

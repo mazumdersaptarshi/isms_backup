@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:isms/courseManagement/coursesProvider.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/screens/moduleDetailsScreen.dart';
+
+import '../projectModules/courseManagement/coursesProvider.dart';
 
 class ModuleCardWidget extends StatelessWidget {
   final int moduleIndex;

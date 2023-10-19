@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:isms/courseManagement/coursesProvider.dart';
 import 'package:isms/userManagement/customUserProvider.dart';
 import 'package:provider/provider.dart';
+
+import '../projectModules/courseManagement/coursesProvider.dart';
 
 class UserInfoScreen extends StatelessWidget {
   UserInfoScreen({super.key});

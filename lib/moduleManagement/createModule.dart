@@ -3,9 +3,10 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:isms/courseManagement/coursesProvider.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
+
+import '../projectModules/courseManagement/coursesProvider.dart';
 
 Future<bool> createModule(
     {required CoursesProvider coursesProvider,

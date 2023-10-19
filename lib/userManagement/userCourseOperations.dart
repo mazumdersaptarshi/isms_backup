@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:isms/courseManagement/coursesProvider.dart';
 import 'package:isms/userManagement/customUserProvider.dart';
 
 import '../models/module.dart';
+import '../projectModules/courseManagement/coursesProvider.dart';
 
 setUserCourseStarted(
     {required CustomUserProvider customUserProvider,

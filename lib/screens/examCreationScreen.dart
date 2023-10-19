@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:isms/courseManagement/coursesProvider.dart';
 import 'package:isms/examManagement/createExam.dart';
 import 'package:isms/models/enums.dart';
 import 'package:isms/models/newExam.dart';
@@ -7,6 +6,8 @@ import 'package:isms/utilityWidgets/optionTile.dart';
 import 'package:isms/utilityWidgets/questionWidget.dart';
 import 'package:isms/utitlityFunctions/generateRandom.dart';
 import 'package:provider/provider.dart';
+
+import '../projectModules/courseManagement/coursesProvider.dart';
 
 List<Map<String, dynamic>> allQuestions = [];
 

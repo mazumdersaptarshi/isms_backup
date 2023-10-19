@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:isms/courseManagement/coursesProvider.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/screens/moduleDetailsScreen.dart';
 import 'package:provider/provider.dart';
+import '../../projectModules/courseManagement/coursesProvider.dart';
 import 'moduleExpandedItem.dart';
 
 class ModuleListWidget extends StatefulWidget {
