@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:isms/screens/checkLoggedInScreen.dart';
+import 'package:isms/screens/login/checkLoggedInScreen.dart';
 import 'package:isms/userManagement/createUser.dart';
 import 'package:isms/userManagement/customUserProvider.dart';
 

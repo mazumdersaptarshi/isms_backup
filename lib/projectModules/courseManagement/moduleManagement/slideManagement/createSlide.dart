@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/models/slide.dart';
-import 'package:isms/screens/createSlideScreen.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/createSlideScreen.dart';
 
-import '../coursesProvider.dart';
+import '../../coursesProvider.dart';
 
 Future<bool> createSlides(
     {required int courseIndex,

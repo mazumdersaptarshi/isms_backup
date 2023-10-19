@@ -3,7 +3,7 @@ import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/models/newExam.dart';
 
-import '../projectModules/courseManagement/coursesProvider.dart';
+import '../coursesProvider.dart';
 
 Future<bool> createCourseExam(
     {required CoursesProvider coursesProvider,

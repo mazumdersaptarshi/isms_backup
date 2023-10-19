@@ -3,18 +3,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:isms/screens/adminScreens/adminConsolePage.dart';
-import 'package:isms/screens/coursesListScreen.dart';
-import 'package:isms/screens/createCourseScreen.dart';
-import 'package:isms/screens/userProfilePage.dart';
-
+import 'package:isms/screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
+import 'package:isms/screens/userInfo/userProfilePage.dart';
 import '../userManagement/userDataGetterMaster.dart';
-
-import 'package:isms/screens/coursesListScreen.dart';
-import 'package:isms/screens/createCourseScreen.dart';
-import 'package:isms/screens/userInfoScreen.dart';
+import 'package:isms/screens/userInfo/userInfoScreen.dart';
 import 'package:isms/sharedWidgets/customAppBar.dart';
 
 import '../UserManagement/userInfo.dart';
+import 'learningModuleScreens/courseScreens/createCourseScreen.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);

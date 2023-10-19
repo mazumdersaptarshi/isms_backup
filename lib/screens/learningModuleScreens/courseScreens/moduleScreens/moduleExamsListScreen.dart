@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:isms/examManagement/fetchExams.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 
 import 'package:isms/models/newExam.dart';
 import 'package:isms/models/slide.dart';
 
-import 'package:isms/screens/examCreationScreen.dart';
-import 'package:isms/screens/takeExamScreen.dart';
+import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
+import 'package:isms/screens/learningModuleScreens/examScreens/takeExamScreen.dart';
 import 'package:provider/provider.dart';
 
-import '../projectModules/courseManagement/coursesProvider.dart';
+import '../../../../projectModules/courseManagement/coursesProvider.dart';
+import '../../../../projectModules/courseManagement/examManagement/fetchExams.dart';
 
-class ExamListScreen extends StatefulWidget {
-  ExamListScreen(
+class ModuleExamListScreen extends StatefulWidget {
+  ModuleExamListScreen(
       {super.key,
       required this.courseIndex,
       required this.examtype,
@@ -23,10 +23,10 @@ class ExamListScreen extends StatefulWidget {
 
   EXAMTYPE examtype;
   @override
-  State<ExamListScreen> createState() => _ExamListScreenState();
+  State<ModuleExamListScreen> createState() => _ModuleExamListScreenState();
 }
 
-class _ExamListScreenState extends State<ExamListScreen> {
+class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
   bool isExamsFetched = false;
   @override
   void initState() {
@@ -37,10 +37,10 @@ class _ExamListScreenState extends State<ExamListScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (mounted && isExamsFetched == false) {
-      CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
-      fetchExams(
+      fetchModuleExams(
               courseIndex: widget.courseIndex,
-              coursesProvider: Provider.of<CoursesProvider>(context))
+              coursesProvider: Provider.of<CoursesProvider>(context),
+              moduleIndex: widget.moduleIndex!)
           .then((value) {
         setState(() {
           isExamsFetched = true;
@@ -54,7 +54,7 @@ class _ExamListScreenState extends State<ExamListScreen> {
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
     Course course = coursesProvider.allCourses[widget.courseIndex];
     List<NewExam>? exams = [];
-    Module module;
+    Module? module;
     if (widget.examtype == EXAMTYPE.moduleExam) {
       module = course.modules![widget.moduleIndex!];
       exams = module.exams;
@@ -70,7 +70,7 @@ class _ExamListScreenState extends State<ExamListScreen> {
               Navigator.pop(context);
             },
           ),
-          title: Text("${course.name}"),
+          title: Text("${module!.title}"),
           actions: [
             // ElevatedButton(
             //     onPressed: () {
@@ -95,16 +95,15 @@ class _ExamListScreenState extends State<ExamListScreen> {
                     Text(exam.title),
                     ElevatedButton(
                         onPressed: () {
-                          if (widget.examtype == EXAMTYPE.courseExam) {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => TakeExamScreen(
-                                          exam: exam,
-                                          courseIndex: widget.courseIndex,
-                                          examtype: EXAMTYPE.courseExam,
-                                        )));
-                          }
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => TakeExamScreen(
+                                        courseIndex: widget.courseIndex,
+                                        examtype: EXAMTYPE.moduleExam,
+                                        moduleIndex: widget.moduleIndex,
+                                        exam: exam,
+                                      )));
                         },
                         child: Text("Take exam"))
                   ],

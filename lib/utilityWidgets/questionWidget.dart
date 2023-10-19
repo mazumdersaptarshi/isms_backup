@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:isms/models/enums.dart';
-import 'package:isms/screens/examCreationScreen.dart';
+import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/utilityWidgets/optionTile.dart';
 import 'package:isms/utitlityFunctions/generateRandom.dart';
 

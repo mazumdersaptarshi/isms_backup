@@ -4,7 +4,7 @@ import 'package:isms/userManagement/customUserProvider.dart';
 import 'package:isms/userManagement/userprofileHeaderWidget.dart';
 import 'package:provider/provider.dart';
 
-import '../userManagement/userDataGetterMaster.dart';
+import '../../userManagement/userDataGetterMaster.dart';
 
 class UserProfilePage extends StatelessWidget {
   final List<UserActions> userActions = [

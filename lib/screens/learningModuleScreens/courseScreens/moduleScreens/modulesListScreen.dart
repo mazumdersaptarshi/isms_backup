@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
-import 'package:isms/models/slide.dart';
-import 'package:isms/moduleManagement/fetchModules.dart';
-import 'package:isms/screens/coursesListScreen.dart';
-import 'package:isms/screens/createCourseScreen.dart';
-import 'package:isms/screens/createModuleScreen.dart';
-import 'package:isms/screens/examCreationScreen.dart';
-import 'package:isms/screens/examListScreen.dart';
+
+import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/createModuleScreen.dart';
+import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
+import 'package:isms/screens/learningModuleScreens/examScreens/examListScreen.dart';
 import 'package:provider/provider.dart';
 import 'package:isms/utilityWidgets/modulesList/moduleListWidget.dart';
 
-import '../projectModules/courseManagement/coursesProvider.dart';
+import '../../../../projectModules/courseManagement/coursesProvider.dart';
+import '../../../../projectModules/courseManagement/moduleManagement/fetchModules.dart';
 
 class ModulesListScreen extends StatefulWidget {
   ModulesListScreen({super.key, required this.courseIndex});

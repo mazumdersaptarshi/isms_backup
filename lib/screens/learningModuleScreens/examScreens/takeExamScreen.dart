@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:isms/models/newExam.dart';
 import 'package:isms/models/question.dart';
-import 'package:isms/screens/examCreationScreen.dart';
+import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/userManagement/customUserProvider.dart';
 import 'package:provider/provider.dart';
 
-import '../projectModules/courseManagement/coursesProvider.dart';
-import '../userManagement/userCourseOperations.dart';
+import '../../../projectModules/courseManagement/coursesProvider.dart';
+import '../../../userManagement/userCourseOperations.dart';
 
 class TakeExamScreen extends StatefulWidget {
   TakeExamScreen(

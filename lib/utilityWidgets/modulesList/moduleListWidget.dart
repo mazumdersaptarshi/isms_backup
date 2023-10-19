@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/models/module.dart';
-import 'package:isms/screens/moduleDetailsScreen.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleDetailsScreen.dart';
 import 'package:provider/provider.dart';
 import '../../projectModules/courseManagement/coursesProvider.dart';
 import 'moduleExpandedItem.dart';

@@ -2,14 +2,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:isms/models/module.dart';
-import 'package:isms/moduleManagement/createModule.dart';
-import 'package:isms/screens/coursesListScreen.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
 import 'package:isms/utitlityFunctions/generateRandom.dart';
 import 'package:provider/provider.dart';
 import 'package:isms/models/course.dart';
 
-import '../main.dart';
-import '../projectModules/courseManagement/coursesProvider.dart';
+import '../../../../main.dart';
+import '../../../../projectModules/courseManagement/coursesProvider.dart';
+import '../../../../projectModules/courseManagement/moduleManagement/createModule.dart';
 
 class CreateModuleScreen extends StatelessWidget {
   CreateModuleScreen({required this.courseIndex});

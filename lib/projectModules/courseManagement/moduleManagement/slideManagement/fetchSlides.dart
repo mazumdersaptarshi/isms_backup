@@ -4,7 +4,7 @@ import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/models/slide.dart';
 
-import '../coursesProvider.dart';
+import '../../coursesProvider.dart';
 
 Future fetchSlides(
     {required CoursesProvider coursesProvider,

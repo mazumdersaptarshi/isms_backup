@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 
-import '../projectModules/courseManagement/coursesProvider.dart';
+import '../coursesProvider.dart';
 
 Future fetchModules(
     {required int courseIndex,

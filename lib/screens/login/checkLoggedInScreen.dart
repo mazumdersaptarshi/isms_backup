@@ -1,10 +1,8 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
-
 
 import 'package:flutter/material.dart';
 import 'package:isms/screens/homePage.dart';
-import 'package:isms/screens/login/loginUI.dart';
+import 'package:isms/screens/login/loginScreen.dart';
 
 import 'package:isms/userManagement/customUserProvider.dart';
 import 'package:provider/provider.dart';

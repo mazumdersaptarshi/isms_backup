@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
-import 'package:isms/screens/createModuleScreen.dart';
-import 'package:isms/screens/createSlideScreen.dart';
-import 'package:isms/screens/examCreationScreen.dart';
-import 'package:isms/screens/modulesListScreen.dart';
-import 'package:isms/screens/slidesDisplayScreen.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/createModuleScreen.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/createSlideScreen.dart';
+import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/modulesListScreen.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/slidesDisplayScreen.dart';
 import 'package:isms/userManagement/customUserProvider.dart';
 import 'package:isms/userManagement/userCourseOperations.dart';
 import 'package:provider/provider.dart';
 
-import '../projectModules/courseManagement/coursesProvider.dart';
-import '../projectModules/courseManagement/slideManagement/fetchSlides.dart';
+import '../../../../projectModules/courseManagement/coursesProvider.dart';
+import '../../../../projectModules/courseManagement/moduleManagement/slideManagement/fetchSlides.dart';
 
 class ModuleDetails extends StatefulWidget {
   ModuleDetails(
