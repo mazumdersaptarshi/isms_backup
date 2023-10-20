@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 
 import '../../userManagement/userDataGetterMaster.dart';
 
+List allEnrolledCourses = [];
+
 class UserProfilePage extends StatefulWidget {
   @override
   State<UserProfilePage> createState() => _UserProfilePageState();
@@ -25,16 +27,26 @@ class _UserProfilePageState extends State<UserProfilePage> {
     UserActions(name: 'Logout', icon: Icons.exit_to_app, actionId: 'logout'),
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    allEnrolledCourses = [];
+  }
+
   UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
   @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
-    if (!hasCheckedForChangedDependencies &&
-        userDataGetterMaster.currentUser != null) {
-      hasCheckedForChangedDependencies = true;
+    if (!hasCheckedForChangedDependencies) {
+      LoggedInUserProvider loggedInUserProvider =
+          Provider.of<LoggedInUserProvider>(context, listen: true);
       if (mounted) {
-        await Provider.of<LoggedInUserProvider>(context, listen: false)
-            .fetchAllCoursesUser();
+        print(" I AM ${loggedInUserProvider.loggedInUser!.email} ");
+        await loggedInUserProvider.fetchAllCoursesUser();
+        setState(() {
+          allEnrolledCourses = loggedInUserProvider.allEnrolledCoursesGlobal;
+          print("PRINTTTT ${loggedInUserProvider.allEnrolledCoursesGlobal}");
+        });
       }
     }
   }
@@ -121,17 +133,14 @@ class UserActionsDropdown extends StatelessWidget {
 class UserEnrolledCoursesDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    List<dynamic> enrolledCoursesList =
-        Provider.of<LoggedInUserProvider>(context, listen: false)
-            .getAllEnrolledCoursesCurrentUser();
     return Column(
       children: [
         ListView.builder(
-          itemCount: enrolledCoursesList.length,
+          itemCount: allEnrolledCourses.length,
           shrinkWrap: true,
           itemBuilder: (context, index) {
             print('SnapshotData: ');
-            return Text('${enrolledCoursesList![index]['course_name']}');
+            return Text('${allEnrolledCourses![index]['course_name']}');
           },
         ),
       ],

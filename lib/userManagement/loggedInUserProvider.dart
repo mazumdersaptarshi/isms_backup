@@ -13,6 +13,7 @@ class LoggedInUserProvider with ChangeNotifier {
   final _dbUserOperations = CreateUserDataOperations();
   late String userUID = '';
   CustomUser? loggedInUser;
+  bool isUserInfoUpdated = false;
   List<CustomUser> users = []; // Main list should remain immutable
 
   List<dynamic> allEnrolledCoursesGlobal =
@@ -32,6 +33,9 @@ class LoggedInUserProvider with ChangeNotifier {
 
   void setLoggedInUser(CustomUser user) {
     loggedInUser = user;
+    userUID = loggedInUser!.uid!;
+    print("SETTING LOGGEED IN USER ${loggedInUser},, $userUID");
+    isUserInfoUpdated = false;
     notifyListeners();
   }
 
@@ -135,6 +139,7 @@ class LoggedInUserProvider with ChangeNotifier {
     List<dynamic>? allEnrolledCoursesLocal = [];
     List<dynamic>? allCompletedCoursesLocal = [];
     print('Inside fetch courses user provider');
+    if (isUserInfoUpdated) return;
     if (userUID != '') {
       Stream<DocumentSnapshot>? userStream = FirebaseFirestore.instance
           .collection('users')
@@ -152,12 +157,13 @@ class LoggedInUserProvider with ChangeNotifier {
 
         allCompletedCoursesLocal = data.courses_completed;
 
-        if (isNotifyListener) notifyListeners();
         allEnrolledCoursesGlobal.clear();
 
         allEnrolledCoursesGlobal = allEnrolledCoursesLocal!;
         allCompletedCoursesGlobal = allCompletedCoursesLocal!;
         print('allEnrolledCoursesGlobal: $allEnrolledCoursesGlobal');
+        isUserInfoUpdated = true;
+        if (isNotifyListener) notifyListeners();
       });
     }
   }
