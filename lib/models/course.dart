@@ -5,31 +5,26 @@ import 'module.dart';
 class Course {
   String id;
   String name;
-  List<Module>? modules;
+  int? modulesCount;
+  List<Module> modules = [];
   List<NewExam>? exams;
 
-  Course({
-    required this.id,
-    required this.name,
-    this.modules,
-    this.exams,
-  });
+  Course({required this.id, required this.name, this.exams, this.modulesCount});
 
   factory Course.fromMap(Map<String, dynamic> map) {
     return Course(
-      id: map['id'],
-      name: map['name'],
-      modules: map['modules'],
-      exams: map['exams'],
-    );
+        id: map['id'],
+        name: map['name'],
+        exams: map['exams'],
+        modulesCount: map["modulesCount"] ?? 0);
   }
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'name': name,
-      'modules': modules,
       'exams': exams,
+      'modulesCount': modulesCount
     };
   }
 }

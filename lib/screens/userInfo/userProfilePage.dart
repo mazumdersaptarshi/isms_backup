@@ -131,14 +131,7 @@ class UserActionsDropdown extends StatelessWidget {
   }
 }
 
-class UserEnrolledCoursesDropdown extends StatefulWidget {
-  @override
-  State<UserEnrolledCoursesDropdown> createState() =>
-      _UserEnrolledCoursesDropdownState();
-}
-
-class _UserEnrolledCoursesDropdownState
-    extends State<UserEnrolledCoursesDropdown> {
+class UserEnrolledCoursesDropdown extends StatelessWidget {
   (bool, double) getCourseCompletedPercentage(
       {required CoursesProvider coursesProvider, required int index}) {
     double courseCompletionPercentage = 0;
@@ -152,7 +145,7 @@ class _UserEnrolledCoursesDropdownState
           fetchModules(courseIndex: i, coursesProvider: coursesProvider);
           if (element.name == allEnrolledCourses![index]["course_name"]) {
             if (element.modules != null && element.modules!.isNotEmpty) {
-              modulesCount = element.modules!.length;
+              modulesCount = element.modulesCount!;
               isValid = true;
             }
           }
@@ -195,7 +188,8 @@ class _UserEnrolledCoursesDropdownState
                     style: TextStyle(fontSize: 14),
                   ),
                   if (isValid)
-                    Text("${courseCompletionPercentage.toString()} %")
+                    Text(
+                        "${(courseCompletionPercentage * 100).ceil().toString()} %")
                 ],
               ),
               subtitle: Row(

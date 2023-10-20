@@ -25,7 +25,7 @@ class _ModuleListWidgetState extends State<ModuleListWidget> {
   Widget build(BuildContext context) {
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
     Module module = coursesProvider
-        .allCourses[widget.courseIndex].modules![widget.moduleIndex];
+        .allCourses[widget.courseIndex].modules[widget.moduleIndex];
     return ExpansionTile(
       title: Row(
         children: [

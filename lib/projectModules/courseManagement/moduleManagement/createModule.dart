@@ -32,6 +32,10 @@ Future<bool> createModule(
         .doc(module.title)
         .set(moduleMap);
 
+    await FirebaseFirestore.instance
+        .collection('courses')
+        .doc(course.name)
+        .update({'modulesCount': index});
     coursesProvider.addModulesToCourse(courseIndex, [module]);
     print("Module creation successful");
     return true;
