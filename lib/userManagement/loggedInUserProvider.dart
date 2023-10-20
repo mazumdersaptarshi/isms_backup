@@ -221,6 +221,45 @@ class LoggedInUserProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  setUserCourseExamCompleted(
+      {required Map<String, dynamic> courseDetails,
+      required CoursesProvider coursesProvider,
+      required int courseIndex,
+      required int examIndex}) {
+    examIndex--;
+    Course course = coursesProvider.allCourses[courseIndex];
+    loggedInUser?.courses_started.forEach((course_started) {
+      if (course_started['courseID'] == course.id) {
+        if (course_started['exams_completed'] != null &&
+            course_started['exams_completed'].isEmpty) {
+          course_started['exams_completed'].add(course.exams![examIndex].index);
+          print(
+              "COMPLETED EXAM was empty ${course_started['exams_completed']}");
+        } else if (course_started['exams_completed'] != null) {
+          bool isExamPresentInList = false;
+          for (int i = 0; i < course_started['exams_completed'].length; i++) {
+            var element = course_started['exams_completed'][i];
+            if (element == course.exams![examIndex].index) {
+              isExamPresentInList = true;
+            }
+          }
+          if (isExamPresentInList == false) {
+            course_started['exams_completed']
+                .add(course.exams![examIndex].index);
+            print("ADDING EXAM ${course.exams![examIndex].index}");
+            print("COMPLETED EXAM ${course_started['exams_completed']}");
+          }
+        } else {
+          print("COMPLETED MODULE IS NULL< SO HERE");
+          course_started['exams_completed'] = [];
+          course_started['exams_completed'].add(course.exams![examIndex].index);
+        }
+      }
+    });
+    print(loggedInUser!.courses_started);
+    notifyListeners();
+  }
+
   setUserCourseModuleCompleted(
       {required Map<String, dynamic> courseDetails,
       required CoursesProvider coursesProvider,

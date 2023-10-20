@@ -5,7 +5,7 @@ import 'module.dart';
 class Course {
   String id;
   String name;
-  int? modulesCount;
+  int? modulesCount = 0;
   List<Module> modules = [];
   List<NewExam>? exams;
 
@@ -15,7 +15,7 @@ class Course {
     return Course(
         id: map['id'],
         name: map['name'],
-        exams: map['exams'],
+        exams: map['exams'] ?? [],
         modulesCount: map["modulesCount"] ?? 0);
   }
 

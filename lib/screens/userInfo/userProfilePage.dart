@@ -144,10 +144,8 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
           var element = coursesProvider.allCourses[i];
           fetchModules(courseIndex: i, coursesProvider: coursesProvider);
           if (element.name == allEnrolledCourses![index]["course_name"]) {
-            if (element.modules != null && element.modules!.isNotEmpty) {
-              modulesCount = element.modulesCount!;
-              isValid = true;
-            }
+            modulesCount = element.modulesCount!;
+            isValid = true;
           }
         }
 
@@ -182,6 +180,7 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
             courseCompletionPercentage = b;
             return ListTile(
               title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     '${allEnrolledCourses![index]['course_name']} ',
@@ -207,7 +206,7 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                '${allEnrolledCourses![index]["modules_completed"][moduleIndex]}',
+                                '-> ${allEnrolledCourses![index]["modules_completed"][moduleIndex]}',
                                 style: TextStyle(fontSize: 14),
                               ),
                               Icon(

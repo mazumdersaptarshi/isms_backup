@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:isms/models/newExam.dart';
 import 'package:isms/userManagement/loggedInUserProvider.dart';
 
 import '../projectModules/courseManagement/coursesProvider.dart';
@@ -72,6 +73,52 @@ setUserCourseCompleted(
         courseMapFieldToUpdate: "course_completed",
         username: customUserProvider.loggedInUser!.username,
         uid: customUserProvider.loggedInUser!.uid!);
+  }
+}
+
+setUserCourseExamCompleted(
+    {required CoursesProvider coursesProvider,
+    required int courseIndex,
+    required LoggedInUserProvider customUserProvider,
+    required Map<String, dynamic> courseDetails,
+    required int examIndex}) async {
+  int noOfExamsCompleted = 0;
+  bool flag = false;
+  if (customUserProvider.loggedInUser!.courses_started.isNotEmpty) {
+    customUserProvider.loggedInUser!.courses_started.forEach((course) {
+      try {
+        if (course['course_name'] == courseDetails['course_name']) {
+          course['exams_completed'].forEach((exam_completed) {
+            noOfExamsCompleted++;
+            print("INCREMENTING noOfExamsCompleted: ${noOfExamsCompleted}");
+            if (exam_completed == examIndex) {
+              flag = true;
+            }
+          });
+        }
+      } catch (e) {}
+    });
+  }
+
+  if (flag == false) {
+    customUserProvider.setUserCourseExamCompleted(
+      courseDetails: courseDetails,
+      coursesProvider: coursesProvider,
+      courseIndex: courseIndex,
+      examIndex: examIndex,
+    );
+    noOfExamsCompleted++;
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(customUserProvider.loggedInUser!.uid)
+        .set(customUserProvider.loggedInUser!.toMap());
+  }
+
+  int noOfExams = coursesProvider.allCourses[courseIndex].exams!.length;
+  print("noOfExamsCompleted ${noOfExamsCompleted},, ${noOfExams}");
+  if (noOfExamsCompleted >= noOfExams) {
+    setUserCourseCompleted(
+        customUserProvider: customUserProvider, courseDetails: courseDetails);
   }
 }
 

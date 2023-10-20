@@ -53,26 +53,6 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
           correctAnswers, correctAnswers.length);
       _questions.add(newQuestion);
     });
-    // return [
-    //   NewQuestion('What is the capital of France?',
-    //       ['London', 'Berlin', 'Paris', 'Madrid'], [2], 1),
-    //   NewQuestion('Which planet is known as the Red Planet?',
-    //       ['Earth', 'Mars', 'Jupiter', 'Venus'], [1], 1),
-    //   NewQuestion(
-    //       'Who wrote "Romeo and Juliet"?',
-    //       [
-    //         'Charles Dickens',
-    //         'William Shakespeare',
-    //         'George Orwell',
-    //         'J.K. Rowling'
-    //       ],
-    //       [1],
-    //       1),
-    //   NewQuestion('Which of these is a prime number?', ['2', '15', '17', '19'],
-    //       [0, 2, 3], 3),
-    //   NewQuestion('What is the largest mammal?',
-    //       ['Elephant', 'Blue Whale', 'Giraffe', 'Kangaroo'], [1], 1),
-    // ];
   }
 
   void shuffleQuestions() {
@@ -163,17 +143,29 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
             if (widget.examtype == EXAMTYPE.courseExam)
               ElevatedButton(
                 onPressed: () {
-                  setUserCourseCompleted(
-                    customUserProvider: customUserProvider,
-                    courseDetails: {
-                      "courseID":
-                          coursesProvider.allCourses[widget.courseIndex].id,
-                      "course_name":
-                          coursesProvider.allCourses[widget.courseIndex].name,
-                    },
-                  );
+                  setUserCourseExamCompleted(
+                      coursesProvider: coursesProvider,
+                      courseIndex: widget.courseIndex,
+                      customUserProvider: customUserProvider,
+                      courseDetails: {
+                        "courseID":
+                            coursesProvider.allCourses[widget.courseIndex].id,
+                        "course_name":
+                            coursesProvider.allCourses[widget.courseIndex].name,
+                      },
+                      examIndex: widget.exam.index);
+                  // setUserCourseCompleted(
+                  //   customUserProvider: customUserProvider,
+                  //   courseDetails: {
+                  //     "courseID":
+                  //         coursesProvider.allCourses[widget.courseIndex].id,
+                  //     "course_name":
+                  //         coursesProvider.allCourses[widget.courseIndex].name,
+                  //   },
+                  // );
                 },
-                child: Text("Mark course as Done"),
+                child: Text(
+                    "Mark Exam as Done- completed ${widget.exam.index}/${coursesProvider.allCourses[widget.courseIndex].exams!.length}"),
               )
             else if (widget.examtype == EXAMTYPE.moduleExam)
               ElevatedButton(
