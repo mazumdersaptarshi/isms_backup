@@ -6,8 +6,6 @@ import 'package:provider/provider.dart';
 
 import '../../userManagement/userDataGetterMaster.dart';
 
-List allEnrolledCourses = [];
-
 class UserProfilePage extends StatefulWidget {
   @override
   State<UserProfilePage> createState() => _UserProfilePageState();
@@ -29,25 +27,14 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
   @override
-  void initState() {
-    super.initState();
-    List allEnrolledCourses = [];
-  }
-
-  @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
-    if (!hasCheckedForChangedDependencies) {
-      LoggedInUserProvider loggedInUserProvider =
-          Provider.of<LoggedInUserProvider>(context, listen: true);
+    if (!hasCheckedForChangedDependencies &&
+        userDataGetterMaster.currentUser != null) {
+      hasCheckedForChangedDependencies = true;
       if (mounted) {
-        print(
-            " I AM ${loggedInUserProvider.loggedInUser!.email} ,, ${loggedInUserProvider.isUserInfoUpdated}");
-        await loggedInUserProvider.fetchAllCoursesUser();
-        setState(() {
-          allEnrolledCourses = loggedInUserProvider.allEnrolledCoursesGlobal;
-          print("PRINTTTT ${loggedInUserProvider.allEnrolledCoursesGlobal}");
-        });
+        await Provider.of<LoggedInUserProvider>(context, listen: false)
+            .fetchAllCoursesUser();
       }
     }
   }
@@ -94,7 +81,34 @@ class UserActionsDropdown extends StatelessWidget {
       print('Hre');
 
       return UserEnrolledCoursesDropdown();
-    } else {
+    }
+    // else if (actionId == 'crs_compl') {
+    //   return Column(
+    //     children: [
+    //       FutureBuilder<List<dynamic>>(
+    //           future: loggedInUserProvider.getAllCompletedCoursesList(),
+    //           builder: (context, snapshot) {
+    //             if (snapshot.connectionState == ConnectionState.waiting) {
+    //               return CircularProgressIndicator();
+    //             } else if (snapshot.hasError) {
+    //               return Text('Error: ${snapshot.error}');
+    //             } else if (snapshot.hasData && snapshot.data != null) {
+    //               return ListView.builder(
+    //                 itemCount: snapshot.data!.length,
+    //                 shrinkWrap: true,
+    //                 itemBuilder: (context, index) {
+    //                   print('SnapshotData: ${snapshot.data![index]}');
+    //                   return Text('${snapshot.data![index]['course_name']}');
+    //                 },
+    //               );
+    //             } else {
+    //               return Text('No data');
+    //             }
+    //           })
+    //     ],
+    //   );
+    // }
+    else {
       return Column(
         children: [
           Text('No data to show!'),
@@ -107,14 +121,17 @@ class UserActionsDropdown extends StatelessWidget {
 class UserEnrolledCoursesDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    List<dynamic> enrolledCoursesList =
+        Provider.of<LoggedInUserProvider>(context, listen: false)
+            .getAllEnrolledCoursesCurrentUser();
     return Column(
       children: [
         ListView.builder(
-          itemCount: allEnrolledCourses.length,
+          itemCount: enrolledCoursesList.length,
           shrinkWrap: true,
           itemBuilder: (context, index) {
             print('SnapshotData: ');
-            return Text('${allEnrolledCourses![index]['course_name']}');
+            return Text('${enrolledCoursesList![index]['course_name']}');
           },
         ),
       ],

@@ -14,7 +14,7 @@ class LoggedInUserProvider with ChangeNotifier {
   late String userUID = '';
   CustomUser? loggedInUser;
   List<CustomUser> users = []; // Main list should remain immutable
-  bool isUserInfoUpdated = true;
+
   List<dynamic> allEnrolledCoursesGlobal =
       []; //Global List to hold all enrolled courses for User
 
@@ -32,7 +32,6 @@ class LoggedInUserProvider with ChangeNotifier {
 
   void setLoggedInUser(CustomUser user) {
     loggedInUser = user;
-    isUserInfoUpdated = false;
     notifyListeners();
   }
 
@@ -135,41 +134,7 @@ class LoggedInUserProvider with ChangeNotifier {
   fetchAllCoursesUser({bool isNotifyListener = true}) async {
     List<dynamic>? allEnrolledCoursesLocal = [];
     List<dynamic>? allCompletedCoursesLocal = [];
-    print('Inside fetch courses user provider ${isUserInfoUpdated}');
-    if (isUserInfoUpdated == true) return;
-    if (userUID != '') {
-      Stream<DocumentSnapshot>? userStream = FirebaseFirestore.instance
-          .collection('users')
-          .doc(loggedInUser!.uid)
-          .snapshots();
-      // userStream = userDataGetterMaster.currentUserSnapshot
-      //     as Stream<DocumentSnapshot<Object?>>?;
-      print('userStream:  ${userStream}');
-      userStream?.listen((snapshot) async {
-        print('snapshotData: ${snapshot.data()}');
-        UserCoursesDetails data =
-            UserCoursesDetails.fromMap(snapshot.data() as Map<String, dynamic>);
-
-        allEnrolledCoursesLocal = data.courses_started;
-
-        allCompletedCoursesLocal = data.courses_completed;
-
-        allEnrolledCoursesGlobal.clear();
-
-        allEnrolledCoursesGlobal = allEnrolledCoursesLocal!;
-        allCompletedCoursesGlobal = allCompletedCoursesLocal!;
-        print('allEnrolledCoursesGlobal: $allEnrolledCoursesGlobal');
-        isUserInfoUpdated = true;
-        if (isNotifyListener) notifyListeners();
-      });
-    }
-  }
-
-  List<dynamic> getAllEnrolledCoursesCurrentUser() {
-    List<dynamic>? allEnrolledCoursesLocal = [];
-    List<dynamic>? allCompletedCoursesLocal = [];
-    print('Inside fetch courses user provider ${isUserInfoUpdated}');
-    if (isUserInfoUpdated == true) return allEnrolledCoursesGlobal;
+    print('Inside fetch courses user provider');
     if (userUID != '') {
       Stream<DocumentSnapshot>? userStream = FirebaseFirestore.instance
           .collection('users')
@@ -187,13 +152,43 @@ class LoggedInUserProvider with ChangeNotifier {
 
         allCompletedCoursesLocal = data.courses_completed;
 
+        if (isNotifyListener) notifyListeners();
         allEnrolledCoursesGlobal.clear();
 
         allEnrolledCoursesGlobal = allEnrolledCoursesLocal!;
         allCompletedCoursesGlobal = allCompletedCoursesLocal!;
         print('allEnrolledCoursesGlobal: $allEnrolledCoursesGlobal');
-        isUserInfoUpdated = true;
+      });
+    }
+  }
+
+  List<dynamic> getAllEnrolledCoursesCurrentUser() {
+    List<dynamic>? allEnrolledCoursesLocal = [];
+    List<dynamic>? allCompletedCoursesLocal = [];
+    print('Inside fetch courses user provider');
+    if (userUID != '') {
+      Stream<DocumentSnapshot>? userStream = FirebaseFirestore.instance
+          .collection('users')
+          .doc(userUID)
+          .snapshots();
+      // userStream = userDataGetterMaster.currentUserSnapshot
+      //     as Stream<DocumentSnapshot<Object?>>?;
+      print('userStream:  ${userStream}');
+      userStream?.listen((snapshot) async {
+        print('snapshotData: ${snapshot.data()}');
+        UserCoursesDetails data =
+            UserCoursesDetails.fromMap(snapshot.data() as Map<String, dynamic>);
+
+        allEnrolledCoursesLocal = data.courses_started;
+
+        allCompletedCoursesLocal = data.courses_completed;
+
         notifyListeners();
+        allEnrolledCoursesGlobal.clear();
+
+        allEnrolledCoursesGlobal = allEnrolledCoursesLocal!;
+        allCompletedCoursesGlobal = allCompletedCoursesLocal!;
+        print('allEnrolledCoursesGlobal: $allEnrolledCoursesGlobal');
       });
     }
     return allEnrolledCoursesGlobal;
