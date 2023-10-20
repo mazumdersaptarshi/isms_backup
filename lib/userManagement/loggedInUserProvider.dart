@@ -14,7 +14,7 @@ class LoggedInUserProvider with ChangeNotifier {
   late String userUID = '';
   CustomUser? loggedInUser;
   List<CustomUser> users = []; // Main list should remain immutable
-
+  bool isUserInfoUpdated = true;
   List<dynamic> allEnrolledCoursesGlobal =
       []; //Global List to hold all enrolled courses for User
 
@@ -32,6 +32,7 @@ class LoggedInUserProvider with ChangeNotifier {
 
   void setLoggedInUser(CustomUser user) {
     loggedInUser = user;
+    isUserInfoUpdated = false;
     notifyListeners();
   }
 
@@ -134,11 +135,12 @@ class LoggedInUserProvider with ChangeNotifier {
   fetchAllCoursesUser({bool isNotifyListener = true}) async {
     List<dynamic>? allEnrolledCoursesLocal = [];
     List<dynamic>? allCompletedCoursesLocal = [];
-    print('Inside fetch courses user provider');
+    print('Inside fetch courses user provider ${isUserInfoUpdated}');
+    if (isUserInfoUpdated == true) return;
     if (userUID != '') {
       Stream<DocumentSnapshot>? userStream = FirebaseFirestore.instance
           .collection('users')
-          .doc(userUID)
+          .doc(loggedInUser!.uid)
           .snapshots();
       // userStream = userDataGetterMaster.currentUserSnapshot
       //     as Stream<DocumentSnapshot<Object?>>?;
@@ -152,12 +154,13 @@ class LoggedInUserProvider with ChangeNotifier {
 
         allCompletedCoursesLocal = data.courses_completed;
 
-        if (isNotifyListener) notifyListeners();
         allEnrolledCoursesGlobal.clear();
 
         allEnrolledCoursesGlobal = allEnrolledCoursesLocal!;
         allCompletedCoursesGlobal = allCompletedCoursesLocal!;
         print('allEnrolledCoursesGlobal: $allEnrolledCoursesGlobal');
+        isUserInfoUpdated = true;
+        if (isNotifyListener) notifyListeners();
       });
     }
   }
@@ -165,7 +168,8 @@ class LoggedInUserProvider with ChangeNotifier {
   List<dynamic> getAllEnrolledCoursesCurrentUser() {
     List<dynamic>? allEnrolledCoursesLocal = [];
     List<dynamic>? allCompletedCoursesLocal = [];
-    print('Inside fetch courses user provider');
+    print('Inside fetch courses user provider ${isUserInfoUpdated}');
+    if (isUserInfoUpdated == true) return allEnrolledCoursesGlobal;
     if (userUID != '') {
       Stream<DocumentSnapshot>? userStream = FirebaseFirestore.instance
           .collection('users')
@@ -183,12 +187,13 @@ class LoggedInUserProvider with ChangeNotifier {
 
         allCompletedCoursesLocal = data.courses_completed;
 
-        notifyListeners();
         allEnrolledCoursesGlobal.clear();
 
         allEnrolledCoursesGlobal = allEnrolledCoursesLocal!;
         allCompletedCoursesGlobal = allCompletedCoursesLocal!;
         print('allEnrolledCoursesGlobal: $allEnrolledCoursesGlobal');
+        isUserInfoUpdated = true;
+        notifyListeners();
       });
     }
     return allEnrolledCoursesGlobal;
