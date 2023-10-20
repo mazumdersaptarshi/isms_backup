@@ -52,13 +52,9 @@ class AuthService {
       {required LoggedInUserProvider customUserProvider}) async {
     await customUserProvider.fetchUsers();
     customUserProvider.users.forEach((element) {
-      print("${element.email},, ,, ${DatabaseManager.auth.currentUser?.email}");
-
-      if (element.email == DatabaseManager.auth.currentUser?.email) {
-        print(
-            "TRYNA SET LOGGED IN USER auth_service.dart ${DatabaseManager.auth.currentUser!.email}");
+      print(element.username);
+      if (element.email == DatabaseManager.auth.currentUser?.email)
         customUserProvider.setLoggedInUser(element);
-      }
     });
   }
 }
