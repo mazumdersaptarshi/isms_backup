@@ -33,6 +33,7 @@ class LoggedInUserProvider with ChangeNotifier {
   void setLoggedInUser(CustomUser user) {
     loggedInUser = user;
     isUserInfoUpdated = false;
+    print("Setting logged in user as ${user}");
     notifyListeners();
   }
 
