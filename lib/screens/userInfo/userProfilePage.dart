@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:isms/models/UserActions.dart';
+import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 import 'package:isms/userManagement/loggedInUserProvider.dart';
 import 'package:isms/userManagement/userprofileHeaderWidget.dart';
 import 'package:provider/provider.dart';
 
+import '../../projectModules/courseManagement/moduleManagement/fetchModules.dart';
 import '../../userManagement/userDataGetterMaster.dart';
 
 List allEnrolledCourses = [];
+List allCompletedCourses = [];
 
 class UserProfilePage extends StatefulWidget {
   @override
@@ -31,6 +34,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
   void initState() {
     super.initState();
     allEnrolledCourses = [];
+    allCompletedCourses = [];
   }
 
   UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
@@ -45,6 +49,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
         await loggedInUserProvider.fetchAllCoursesUser();
         setState(() {
           allEnrolledCourses = loggedInUserProvider.allEnrolledCoursesGlobal;
+          allCompletedCourses = loggedInUserProvider.allCompletedCoursesGlobal;
           print("PRINTTTT ${loggedInUserProvider.allEnrolledCoursesGlobal}");
         });
       }
@@ -121,26 +126,136 @@ class UserActionsDropdown extends StatelessWidget {
     //   );
     // }
     else {
-      return Column(
-        children: [
-          Text('No data to show!'),
-        ],
-      );
+      return UserCompletedCourses();
     }
   }
 }
 
-class UserEnrolledCoursesDropdown extends StatelessWidget {
+class UserEnrolledCoursesDropdown extends StatefulWidget {
+  @override
+  State<UserEnrolledCoursesDropdown> createState() =>
+      _UserEnrolledCoursesDropdownState();
+}
+
+class _UserEnrolledCoursesDropdownState
+    extends State<UserEnrolledCoursesDropdown> {
+  (bool, double) getCourseCompletedPercentage(
+      {required CoursesProvider coursesProvider, required int index}) {
+    double courseCompletionPercentage = 0;
+    bool isValid = false;
+    allEnrolledCourses.forEach((course) {
+      if (course["modules_completed"] != null) {
+        int modulesCount = 0;
+
+        for (int i = 0; i < coursesProvider.allCourses.length; i++) {
+          var element = coursesProvider.allCourses[i];
+          fetchModules(courseIndex: i, coursesProvider: coursesProvider);
+          if (element.name == allEnrolledCourses![index]["course_name"]) {
+            if (element.modules != null && element.modules!.isNotEmpty) {
+              modulesCount = element.modules!.length;
+              isValid = true;
+            }
+          }
+        }
+
+        int modulesCompletedCount =
+            allEnrolledCourses![index]["modules_completed"] != null
+                ? allEnrolledCourses![index]["modules_completed"].length
+                : 0;
+        if (isValid) {
+          courseCompletionPercentage = modulesCompletedCount / modulesCount;
+        }
+      }
+    });
+    return (isValid, courseCompletionPercentage);
+  }
+
   @override
   Widget build(BuildContext context) {
+    CoursesProvider coursesProvider =
+        Provider.of<CoursesProvider>(context, listen: false);
     return Column(
       children: [
         ListView.builder(
           itemCount: allEnrolledCourses.length,
           shrinkWrap: true,
           itemBuilder: (context, index) {
-            print('SnapshotData: ');
-            return Text('${allEnrolledCourses![index]['course_name']}');
+            double courseCompletionPercentage = 0;
+            bool isValid = false;
+
+            var (a, b) = getCourseCompletedPercentage(
+                coursesProvider: coursesProvider, index: index);
+            isValid = a;
+            courseCompletionPercentage = b;
+            return ListTile(
+              title: Row(
+                children: [
+                  Text(
+                    '${allEnrolledCourses![index]['course_name']} ',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  if (isValid)
+                    Text("${courseCompletionPercentage.toString()} %")
+                ],
+              ),
+              subtitle: Row(
+                children: [
+                  if (allEnrolledCourses![index]["modules_completed"] != null)
+                    Container(
+                      constraints: BoxConstraints(
+                          minHeight: 40,
+                          maxWidth: MediaQuery.of(context).size.width - 40),
+                      child: Column(
+                        children: List.generate(
+                            allEnrolledCourses![index]["modules_completed"]
+                                .length, (moduleIndex) {
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                '${allEnrolledCourses![index]["modules_completed"][moduleIndex]}',
+                                style: TextStyle(fontSize: 14),
+                              ),
+                              Icon(
+                                Icons.check_circle_rounded,
+                                color: Colors.green,
+                              ),
+                            ],
+                          );
+                        }),
+                      ),
+                    ),
+                ],
+              ),
+            );
+          },
+        ),
+      ],
+    );
+  }
+}
+
+class UserCompletedCourses extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ListView.builder(
+          itemCount: allCompletedCourses.length,
+          shrinkWrap: true,
+          itemBuilder: (context, index) {
+            return ListTile(
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '${allCompletedCourses![index]['course_name']} ',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  Icon(Icons.check_circle, color: Colors.green)
+                ],
+              ),
+            );
           },
         ),
       ],

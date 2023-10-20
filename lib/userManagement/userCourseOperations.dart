@@ -28,7 +28,7 @@ setUserCourseStarted(
     var uid = querySnapshot.docs.first.id;
     FirebaseFirestore.instance
         .collection("users")
-        .doc(uid)
+        .doc(customUserProvider.loggedInUser!.uid)
         .set(customUserProvider.loggedInUser!.toMap());
 
     setAdminConsoleCourseMap(
@@ -60,9 +60,11 @@ setUserCourseCompleted(
         .get();
 
     var uid = querySnapshot.docs.first.id;
+    print(
+        "MUST SET COURSE COMPLETED ${customUserProvider.loggedInUser!.toMap()} at $uid");
     FirebaseFirestore.instance
         .collection("users")
-        .doc(uid)
+        .doc(customUserProvider.loggedInUser!.uid)
         .set(customUserProvider.loggedInUser!.toMap());
 
     setAdminConsoleCourseMap(
@@ -88,6 +90,7 @@ setUserCourseModuleCompleted(
             if (element ==
                 coursesProvider
                     .allCourses[courseIndex].modules![moduleIndex].title) {
+              print("SETTING FLAG TRUE coz ${element}");
               flag = true;
             }
           });
@@ -96,7 +99,7 @@ setUserCourseModuleCompleted(
     });
   }
   if (flag == false) {
-    print("FLAG IS FALSE ${courseDetails['modules_completed']}");
+    print("FLAG IS FALSE ${courseDetails}");
     customUserProvider.setUserCourseModuleCompleted(
         courseDetails: courseDetails,
         coursesProvider: coursesProvider,
@@ -108,9 +111,12 @@ setUserCourseModuleCompleted(
         .get();
 
     var uid = querySnapshot.docs.first.id;
+
+    print(
+        "MUST UPDATE COURSE MODULE ${customUserProvider.loggedInUser!.courses_started}");
     FirebaseFirestore.instance
         .collection("users")
-        .doc(uid)
+        .doc(customUserProvider.loggedInUser!.uid)
         .set(customUserProvider.loggedInUser!.toMap());
   }
 }

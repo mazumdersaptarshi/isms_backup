@@ -229,7 +229,8 @@ class LoggedInUserProvider with ChangeNotifier {
     Course course = coursesProvider.allCourses[courseIndex];
     loggedInUser?.courses_started.forEach((course_started) {
       if (course_started['courseID'] == course.id) {
-        print("COMPLETED MODULEE ${course_started}");
+        print("COMPLETED MODULEE ${course_started['modules_completed']}");
+
         if (course_started['modules_completed'] != null) {
           for (int i = 0; i < course_started['modules_completed'].length; i++) {
             var element = course_started['modules_completed'][i];
@@ -239,12 +240,14 @@ class LoggedInUserProvider with ChangeNotifier {
             }
           }
         } else {
+          print("COMPLETED MODULE IS NULL< SO HERE");
           course_started['modules_completed'] = [];
           course_started['modules_completed']
               .add(course.modules![moduleIndex].title);
         }
       }
     });
+    print(loggedInUser!.courses_started);
     notifyListeners();
   }
 }
