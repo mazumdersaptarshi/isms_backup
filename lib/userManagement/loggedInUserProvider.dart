@@ -21,6 +21,7 @@ class LoggedInUserProvider with ChangeNotifier {
 
   List<dynamic> allCompletedCoursesGlobal =
       []; //Global List to hold all completed courses for User
+
   CustomUser? get getCurrentUser => loggedInUser;
   UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
 

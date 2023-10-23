@@ -178,46 +178,66 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
                 coursesProvider: coursesProvider, index: index);
             isValid = a;
             courseCompletionPercentage = b;
-            return ListTile(
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            return Container(
+              height: 120,
+              child: Column(
                 children: [
-                  Text(
-                    '${allEnrolledCourses![index]['course_name']} ',
-                    style: TextStyle(fontSize: 14),
-                  ),
-                  if (isValid)
-                    Text(
-                        "${(courseCompletionPercentage * 100).ceil().toString()} %")
-                ],
-              ),
-              subtitle: Row(
-                children: [
-                  if (allEnrolledCourses![index]["modules_completed"] != null)
-                    Container(
-                      constraints: BoxConstraints(
-                          minHeight: 40,
-                          maxWidth: MediaQuery.of(context).size.width - 40),
-                      child: Column(
-                        children: List.generate(
-                            allEnrolledCourses![index]["modules_completed"]
-                                .length, (moduleIndex) {
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                '-> ${allEnrolledCourses![index]["modules_completed"][moduleIndex]}',
-                                style: TextStyle(fontSize: 14),
-                              ),
-                              Icon(
-                                Icons.check_circle_rounded,
-                                color: Colors.green,
-                              ),
-                            ],
-                          );
-                        }),
-                      ),
+                  ListTile(
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '${allEnrolledCourses![index]['course_name']} ',
+                          style: TextStyle(fontSize: 14),
+                        ),
+                        if (isValid)
+                          Text(
+                              "${(courseCompletionPercentage * 100).ceil().toString()} %")
+                      ],
                     ),
+                    subtitle: Row(
+                      children: [
+                        if (allEnrolledCourses![index]["modules_completed"] !=
+                            null)
+                          Container(
+                            constraints: BoxConstraints(
+                                minHeight: 40,
+                                maxWidth:
+                                    MediaQuery.of(context).size.width - 40),
+                            child: Column(
+                              children: List.generate(
+                                  allEnrolledCourses![index]
+                                          ["modules_completed"]
+                                      .length, (moduleIndex) {
+                                return Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      '-> ${allEnrolledCourses![index]["modules_completed"][moduleIndex]}',
+                                      style: TextStyle(fontSize: 14),
+                                    ),
+                                    Icon(
+                                      Icons.check_circle_rounded,
+                                      color: Colors.green,
+                                    ),
+                                  ],
+                                );
+                              }),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Text("Exams completed: "),
+                      Text(
+                        '${allEnrolledCourses![index]['exams_completed']}',
+                        style: TextStyle(fontSize: 14),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             );

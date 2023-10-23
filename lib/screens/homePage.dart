@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 import 'package:isms/screens/adminScreens/adminConsolePage.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
 import 'package:isms/screens/userInfo/userProfilePage.dart';
 import 'package:isms/sharedWidgets/customAppBar.dart';
+import 'package:provider/provider.dart';
 
 import '../userManagement/userDataGetterMaster.dart';
 import 'learningModuleScreens/courseScreens/createCourseScreen.dart';
@@ -46,48 +48,52 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(),
-      body: Column(
-        children: [
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => AdminConsolePage()),
-              );
-            },
-            child: const Text('Admin Console'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => CoursesDisplayScreen()),
-              );
-            },
-            child: const Text('All courses'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => UserProfilePage()),
-              );
-            },
-            child: const Text('User profile'),
-          )
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => CreateCourseScreen()),
-          );
-        },
-        child: const Icon(Icons.add),
-      ),
-    );
+    return Consumer<CoursesProvider>(
+        builder: (BuildContext context, CoursesProvider value, Widget? child) {
+      return Scaffold(
+        appBar: CustomAppBar(),
+        body: Column(
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AdminConsolePage()),
+                );
+              },
+              child: const Text('Admin Console'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CoursesDisplayScreen()),
+                );
+              },
+              child: const Text('All courses'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => UserProfilePage()),
+                );
+              },
+              child: const Text('User profile'),
+            )
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => CreateCourseScreen()),
+            );
+          },
+          child: const Icon(Icons.add),
+        ),
+      );
+    });
   }
 }
