@@ -54,6 +54,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                       controller: optionControllers[index]!,
                       getTextValue: (optTextValue, optBoolValue) {
                         bool flag = false;
+
                         try {
                           widget.options.forEach((element) {
                             if (element["optionID"] == index) {
@@ -64,8 +65,6 @@ class _QuestionWidgetState extends State<QuestionWidget> {
 
                               flag = true;
                             }
-
-                            print("HHH :${element}");
                           });
                         } catch (e) {}
                         if (flag == false) {
@@ -91,27 +90,39 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                     if (question["questionID"] == qID) {
                       questionExists = true;
                       print("QUESTION EXISTSSSSS");
+                      if (newQuestionName != null && newQuestionName != "")
+                        question["questionName"] = newQuestionName;
+
+                      List<Map<String, dynamic>> tempOptions =
+                          question["options"];
+                      for (int i = 0; i < tempOptions.length; i++) {
+                        var option = tempOptions[i];
+                        for (int j = 0; j < widget.options.length; j++) {
+                          if (option["optionID"] ==
+                              widget.options[j]["optionID"]) {
+                            if (widget.options[j]["option_value"] != null &&
+                                widget.options[j]["option_value"] != "") {
+                              option = widget.options[j];
+                              question["options"][i] = widget.options[j];
+                            }
+                          }
+                        }
+                      }
+
                       break;
                     }
                   }
 
-                  if (!questionExists) {
+                  if (questionExists == false) {
                     setState(() {
                       allQuestions.add({
                         "questionID": qID,
                         "questionName": newQuestionName,
                         "options": widget.options,
                       });
-                      print(allQuestions);
-                    });
-                  } else {
-                    allQuestions.forEach((question) {
-                      if (question["questionID"] == qID) {
-                        question["questionName"] = newQuestionName;
-                        question["options"] = widget.options;
-                      }
                     });
                   }
+                  print(allQuestions);
                 },
                 child: Text("Save Question"),
               ),
@@ -119,23 +130,6 @@ class _QuestionWidgetState extends State<QuestionWidget> {
           ),
         ),
       ),
-    );
-  }
-
-  DropdownButton<QUESTIONTYPE> buildQuestionTypeDropdown() {
-    return DropdownButton<QUESTIONTYPE>(
-      value: QUESTIONTYPE.Checkbox,
-      onChanged: (QUESTIONTYPE? newValue) {
-        setState(() {});
-      },
-      items: QUESTIONTYPE.values.map<DropdownMenuItem<QUESTIONTYPE>>(
-        (QUESTIONTYPE value) {
-          return DropdownMenuItem<QUESTIONTYPE>(
-            value: value,
-            child: Text(EnumToString.getStringValue(value)!),
-          );
-        },
-      ).toList(),
     );
   }
 }

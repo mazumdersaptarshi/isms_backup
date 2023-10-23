@@ -58,7 +58,8 @@ class _OptionTileState extends State<OptionTile> {
             ElevatedButton(
                 onPressed: () {
                   setState(() {
-                    widget.getTextValue(widget.optionName, widget.isChecked);
+                    widget.getTextValue(
+                        widget.controller.text, widget.isChecked);
                     widget.isOptionSaved = true;
                   });
                 },

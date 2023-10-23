@@ -48,8 +48,8 @@ class CoursesProvider with ChangeNotifier {
           courses.add(courseItem);
         }
       });
-      allCourses.clear();
-      allCourses.addAll(courses);
+      _allCourses.clear();
+      _allCourses.addAll(courses);
 
       if (isNotifyListener) notifyListeners();
 
@@ -61,10 +61,10 @@ class CoursesProvider with ChangeNotifier {
     // if (allCourses[courseIndex].modules == null)
 
     try {
-      allCourses[courseIndex].modules?.addAll(modules);
+      _allCourses[courseIndex].modules?.addAll(modules);
     } catch (e) {
-      allCourses[courseIndex].modules = [];
-      allCourses[courseIndex].modules?.addAll(modules);
+      _allCourses[courseIndex].modules = [];
+      _allCourses[courseIndex].modules?.addAll(modules);
     }
 
     notifyListeners();
@@ -82,12 +82,14 @@ class CoursesProvider with ChangeNotifier {
   }
 
   addExamsToCourse(int courseIndex, List<NewExam> exams) {
-    try {
-      allCourses[courseIndex].exams?.addAll(exams);
-    } catch (e) {
-      allCourses[courseIndex].exams = [];
-      allCourses[courseIndex].exams?.addAll(exams);
-    }
+    print("ADDING EXAM TO : ${_allCourses[courseIndex].exams}");
+    allCourses[courseIndex].exams.addAll(exams);
+
+    notifyListeners();
+  }
+
+  fetchExamsToCourse(int courseIndex, List<NewExam> exams) {
+    _allCourses[courseIndex].exams = exams;
 
     notifyListeners();
   }
@@ -95,10 +97,10 @@ class CoursesProvider with ChangeNotifier {
   addExamsToCourseModule(
       int courseIndex, int moduleIndex, List<NewExam> exams) {
     try {
-      allCourses[courseIndex].modules![moduleIndex].exams?.addAll(exams);
+      _allCourses[courseIndex].modules![moduleIndex].exams?.addAll(exams);
     } catch (e) {
-      allCourses[courseIndex].modules![moduleIndex].exams = [];
-      allCourses[courseIndex].modules![moduleIndex].exams?.addAll(exams);
+      _allCourses[courseIndex].modules![moduleIndex].exams = [];
+      _allCourses[courseIndex].modules![moduleIndex].exams?.addAll(exams);
     }
 
     notifyListeners();

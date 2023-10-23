@@ -88,7 +88,10 @@ class _CourseModuleFormState extends State<CourseModuleForm> {
                         coursesProvider: coursesProvider,
                         module: module);
                     if (isModuleCreated) {
-                      Navigator.pop(context);
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CoursesDisplayScreen()));
                     }
                   }
                 },

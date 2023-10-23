@@ -26,7 +26,7 @@ Future fetchExams(
 
       course.exams?.add(exam);
     });
-    coursesProvider.addExamsToCourse(courseIndex, course.exams!);
+    coursesProvider.fetchExamsToCourse(courseIndex, course.exams!);
     print("FCN Courses ${course.hashCode}, has exams: ${course.exams}");
   }
 }

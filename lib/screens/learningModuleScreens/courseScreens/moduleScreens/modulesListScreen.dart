@@ -73,10 +73,8 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
           children: [
             ListView.builder(
               shrinkWrap: true,
-              itemCount: coursesProvider
-                  .allCourses[widget.courseIndex].modules?.length,
+              itemCount: course.modules?.length,
               itemBuilder: (BuildContext context, int moduleIndex) {
-                Module module = course.modules![moduleIndex];
                 return ModuleListWidget(
                   courseIndex: widget.courseIndex,
                   moduleIndex: moduleIndex,

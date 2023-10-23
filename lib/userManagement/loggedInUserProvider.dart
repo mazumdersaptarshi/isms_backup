@@ -13,6 +13,7 @@ class LoggedInUserProvider with ChangeNotifier {
   final _dbUserOperations = CreateUserDataOperations();
   late String userUID = '';
   CustomUser? loggedInUser;
+  bool isUserInfoUpdated = false;
   List<CustomUser> users = []; // Main list should remain immutable
 
   List<dynamic> allEnrolledCoursesGlobal =
@@ -20,6 +21,7 @@ class LoggedInUserProvider with ChangeNotifier {
 
   List<dynamic> allCompletedCoursesGlobal =
       []; //Global List to hold all completed courses for User
+
   CustomUser? get getCurrentUser => loggedInUser;
   UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
 
@@ -32,6 +34,9 @@ class LoggedInUserProvider with ChangeNotifier {
 
   void setLoggedInUser(CustomUser user) {
     loggedInUser = user;
+    userUID = loggedInUser!.uid!;
+    print("SETTING LOGGEED IN USER ${loggedInUser},, $userUID");
+    isUserInfoUpdated = false;
     notifyListeners();
   }
 
@@ -135,6 +140,7 @@ class LoggedInUserProvider with ChangeNotifier {
     List<dynamic>? allEnrolledCoursesLocal = [];
     List<dynamic>? allCompletedCoursesLocal = [];
     print('Inside fetch courses user provider');
+    if (isUserInfoUpdated) return;
     if (userUID != '') {
       Stream<DocumentSnapshot>? userStream = FirebaseFirestore.instance
           .collection('users')
@@ -152,12 +158,13 @@ class LoggedInUserProvider with ChangeNotifier {
 
         allCompletedCoursesLocal = data.courses_completed;
 
-        if (isNotifyListener) notifyListeners();
         allEnrolledCoursesGlobal.clear();
 
         allEnrolledCoursesGlobal = allEnrolledCoursesLocal!;
         allCompletedCoursesGlobal = allCompletedCoursesLocal!;
         print('allEnrolledCoursesGlobal: $allEnrolledCoursesGlobal');
+        isUserInfoUpdated = true;
+        if (isNotifyListener) notifyListeners();
       });
     }
   }
@@ -215,6 +222,45 @@ class LoggedInUserProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  setUserCourseExamCompleted(
+      {required Map<String, dynamic> courseDetails,
+      required CoursesProvider coursesProvider,
+      required int courseIndex,
+      required int examIndex}) {
+    examIndex--;
+    Course course = coursesProvider.allCourses[courseIndex];
+    loggedInUser?.courses_started.forEach((course_started) {
+      if (course_started['courseID'] == course.id) {
+        if (course_started['exams_completed'] != null &&
+            course_started['exams_completed'].isEmpty) {
+          course_started['exams_completed'].add(course.exams![examIndex].index);
+          print(
+              "COMPLETED EXAM was empty ${course_started['exams_completed']}");
+        } else if (course_started['exams_completed'] != null) {
+          bool isExamPresentInList = false;
+          for (int i = 0; i < course_started['exams_completed'].length; i++) {
+            var element = course_started['exams_completed'][i];
+            if (element == course.exams![examIndex].index) {
+              isExamPresentInList = true;
+            }
+          }
+          if (isExamPresentInList == false) {
+            course_started['exams_completed']
+                .add(course.exams![examIndex].index);
+            print("ADDING EXAM ${course.exams![examIndex].index}");
+            print("COMPLETED EXAM ${course_started['exams_completed']}");
+          }
+        } else {
+          print("COMPLETED MODULE IS NULL< SO HERE");
+          course_started['exams_completed'] = [];
+          course_started['exams_completed'].add(course.exams![examIndex].index);
+        }
+      }
+    });
+    print(loggedInUser!.courses_started);
+    notifyListeners();
+  }
+
   setUserCourseModuleCompleted(
       {required Map<String, dynamic> courseDetails,
       required CoursesProvider coursesProvider,
@@ -223,7 +269,8 @@ class LoggedInUserProvider with ChangeNotifier {
     Course course = coursesProvider.allCourses[courseIndex];
     loggedInUser?.courses_started.forEach((course_started) {
       if (course_started['courseID'] == course.id) {
-        print("COMPLETED MODULEE ${course_started}");
+        print("COMPLETED MODULEE ${course_started['modules_completed']}");
+
         if (course_started['modules_completed'] != null) {
           for (int i = 0; i < course_started['modules_completed'].length; i++) {
             var element = course_started['modules_completed'][i];
@@ -233,12 +280,14 @@ class LoggedInUserProvider with ChangeNotifier {
             }
           }
         } else {
+          print("COMPLETED MODULE IS NULL< SO HERE");
           course_started['modules_completed'] = [];
           course_started['modules_completed']
               .add(course.modules![moduleIndex].title);
         }
       }
     });
+    print(loggedInUser!.courses_started);
     notifyListeners();
   }
 }
