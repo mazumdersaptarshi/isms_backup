@@ -67,6 +67,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '931235749581',
     projectId: 'isms-2c025',
     storageBucket: 'isms-2c025.appspot.com',
+    androidClientId: '931235749581-0ossdpsusvkjakudi84ragh94p2td7vt.apps.googleusercontent.com',
     iosClientId: '931235749581-bnrf5esofvd3m6f8hi7hsq2sb2ltk5kr.apps.googleusercontent.com',
     iosBundleId: 'com.example.isms',
   );
@@ -77,6 +78,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '931235749581',
     projectId: 'isms-2c025',
     storageBucket: 'isms-2c025.appspot.com',
+    androidClientId: '931235749581-0ossdpsusvkjakudi84ragh94p2td7vt.apps.googleusercontent.com',
     iosClientId: '931235749581-kdkloent0cqvlvikbot8na16e1db2ec1.apps.googleusercontent.com',
     iosBundleId: 'com.example.isms.RunnerTests',
   );

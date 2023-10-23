@@ -1,12 +1,8 @@
-import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../adminManagement/adminConsoleProvider.dart';
+import '../../adminManagement/adminDataExporter.dart';
 import '../../screens/adminScreens/AdminInstructions/adminInstructionsCategories.dart';
 import 'adminActionsDropdownModules/courseManagementDrowpdown.dart';
 import 'adminActionsDropdownModules/userManagementDropdown.dart';
@@ -42,12 +38,17 @@ class _AdminActionDropdownState extends State<AdminActionDropdown> {
         categories: widget.categories,
       );
     } else if (widget.actionId == 'dwnld') {
-      return ElevatedButton(
-          onPressed: () {
-            DataExporter dataExporter = DataExporter();
-            dataExporter.createCSV();
-          },
-          child: Text('Download as CSV'));
+      return Column(
+        children: [
+          ElevatedButton(
+              onPressed: () {
+                DataExporter dataExporter =
+                    DataExporter(collectionDataToDownload: 'users');
+                dataExporter.downloadCSV();
+              },
+              child: Text('User Data')),
+        ],
+      );
     } else {
       return Text('No data to show!');
     }
@@ -80,34 +81,5 @@ class AdminInstructionsDropdown extends StatelessWidget {
               child: Text('${key}')),
       ],
     );
-  }
-}
-
-class DataExporter {
-  Future<void> createCSV() async {
-    QuerySnapshot querySnapshot =
-        await FirebaseFirestore.instance.collection('users').get();
-    final List<QueryDocumentSnapshot> allData = querySnapshot.docs;
-
-    List<List<String>> csvData = [
-      // Headers
-      ['username', 'uid', 'role']
-    ];
-
-    for (QueryDocumentSnapshot snapshot in allData) {
-      Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
-      csvData.add([
-        data['username'].toString(),
-        data['uid'].toString(),
-        data['role'].toString()
-      ]);
-    }
-    String csv = const ListToCsvConverter().convert(csvData);
-    final directory = await getTemporaryDirectory();
-    // final desktopDirectory = Directory('C:/Users/mazumders/Desktop');
-    final pathOfTheFileToWrite = directory!.path + "/myCsvFile.csv";
-    File file = File(pathOfTheFileToWrite);
-    print(directory?.path);
-    await file.writeAsString(csv);
   }
 }
