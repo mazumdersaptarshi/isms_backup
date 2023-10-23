@@ -21,6 +21,8 @@ class UserDataGetterMaster {
 
   //Function called during constructor invoke, to get all required logged in user data from Firestore
   Future<void> getLoggedInUserInfoFromFirestore() async {
+    print('Entered getLoggedInUserInfoFromFirestore');
+    print('${FirebaseAuth.instance.currentUser}');
     print('getting new logged iN uSer: ${FirebaseAuth.instance.currentUser!}');
     _currentUser = FirebaseAuth.instance.currentUser!;
     User? user = _currentUser;

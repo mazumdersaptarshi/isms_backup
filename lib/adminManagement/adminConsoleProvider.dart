@@ -107,4 +107,62 @@ class AdminProvider extends ChangeNotifier {
     print('function return value allUsersGlobal: $allUsersGlobal');
     return allUsersGlobal;
   }
+
+  Future<Map<String, dynamic>?> fetchAdminInstructions(
+      String category, String subCategory) async {
+    print(category);
+
+    //getting a reference of the collection, returns Future<QuerySnapshot<Map<String, dynamic>>>
+    var collectionRef = FirebaseFirestore.instance
+        .collection('adminconsole')
+        .doc('instructions')
+        .collection('${category}');
+    final ref1 = await collectionRef
+        .get(); //this makes it QuerySnapshot<Map<String, dynamic>>
+
+    for (var document in ref1.docs) {
+      print('Datasss: ${document.id}');
+
+      final ref = collectionRef
+          .doc('${document.id}')
+          .collection('${subCategory}')
+          .get();
+      print('ref: ${ref}');
+
+      QuerySnapshot<Map<String, dynamic>> querySnapshot = await ref;
+      for (QueryDocumentSnapshot<Map<String, dynamic>> doc
+          in querySnapshot.docs) {
+        // Access data via .data() or []
+        Map<String, dynamic> data = doc.data();
+        print("Document ID: ${doc.id}, Data: ${data}");
+
+        // Access individual fields
+        print("Number of slides': ${data['slides']?.length}");
+        print("Field 'name': ${data['slides']}");
+
+        return data;
+      }
+    }
+    return null;
+  }
+
+  Future<List> fetchAdminInstructionsFromFirestore(
+      String category, String subCategory) async {
+    DocumentReference docRef = FirebaseFirestore.instance
+        .collection('adminconsole')
+        .doc('instructions')
+        .collection('${category}')
+        .doc('${subCategory}');
+    DocumentSnapshot docSnapshot = await docRef.get();
+
+    if (docSnapshot.exists) {
+      Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
+
+      var slides = data['slides'];
+      return slides;
+    } else {
+      print('Document does not exist');
+      return [];
+    }
+  }
 }
