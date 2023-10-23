@@ -17,16 +17,13 @@ Future<bool> createCourseExam(
     Map<String, dynamic> examMap = exam.toMap();
 
     examMap['createdAt'] = DateTime.now();
-    print(
-        "CREATE EXAMM in function 1 ${coursesProvider.allCourses[courseIndex].exams}");
+
     await FirebaseFirestore.instance
         .collection('courses')
         .doc(course.name)
         .collection("exams")
         .doc(exam.title)
         .set(examMap);
-    print(
-        "CREATE EXAMM in function 2 ${coursesProvider.allCourses[courseIndex].exams}");
 
     coursesProvider.addExamsToCourse(courseIndex, [exam]);
 
@@ -34,8 +31,7 @@ Future<bool> createCourseExam(
         .collection('courses')
         .doc(course.name)
         .update({'examsCount': index});
-    print(
-        "CREATE EXAMM in function 3 ${coursesProvider.allCourses[courseIndex].exams}");
+
     print("Exam creation successful");
     return true;
   } catch (e) {
