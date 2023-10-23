@@ -11,29 +11,31 @@ Future<bool> createCourseExam(
     required NewExam exam}) async {
   try {
     Course course = coursesProvider.allCourses[courseIndex];
-    int index = 1;
-    try {
-      index = coursesProvider.allCourses[courseIndex].exams!.length + 1;
-    } catch (e) {
-      index = 1;
-    }
+    int index = coursesProvider.allCourses[courseIndex].exams.length + 1;
+
     exam.index = index;
     Map<String, dynamic> examMap = exam.toMap();
 
     examMap['createdAt'] = DateTime.now();
-
+    print(
+        "CREATE EXAMM in function 1 ${coursesProvider.allCourses[courseIndex].exams}");
     await FirebaseFirestore.instance
         .collection('courses')
         .doc(course.name)
         .collection("exams")
         .doc(exam.title)
         .set(examMap);
+    print(
+        "CREATE EXAMM in function 2 ${coursesProvider.allCourses[courseIndex].exams}");
+
+    coursesProvider.addExamsToCourse(courseIndex, [exam]);
 
     await FirebaseFirestore.instance
         .collection('courses')
         .doc(course.name)
         .update({'examsCount': index});
-    coursesProvider.addExamsToCourse(courseIndex, [exam]);
+    print(
+        "CREATE EXAMM in function 3 ${coursesProvider.allCourses[courseIndex].exams}");
     print("Exam creation successful");
     return true;
   } catch (e) {
@@ -69,7 +71,7 @@ Future<bool> createModuleExam(
         .doc(exam.title)
         .set(examMap);
 
-    coursesProvider.addExamsToCourse(courseIndex, [exam]);
+    coursesProvider.addExamsToCourseModule(courseIndex, moduleIndex, [exam]);
     print("Module Exam creation successful");
     return true;
   } catch (e) {

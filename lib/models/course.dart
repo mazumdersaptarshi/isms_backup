@@ -8,12 +8,11 @@ class Course {
   int? modulesCount = 0;
   int? examsCount = 0;
   List<Module> modules = [];
-  List<NewExam>? exams;
+  List<NewExam> exams = [];
 
   Course(
       {required this.id,
       required this.name,
-      this.exams,
       this.modulesCount,
       this.examsCount});
 
@@ -21,7 +20,6 @@ class Course {
     return Course(
         id: map['id'],
         name: map['name'],
-        exams: map['exams'] ?? [],
         modulesCount: map["modulesCount"] ?? 0,
         examsCount: map["examsCount"] ?? 0);
   }

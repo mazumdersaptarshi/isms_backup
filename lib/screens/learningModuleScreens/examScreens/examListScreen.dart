@@ -71,20 +71,10 @@ class _ExamListScreenState extends State<ExamListScreen> {
             },
           ),
           title: Text("${course.name}"),
-          actions: [
-            // ElevatedButton(
-            //     onPressed: () {
-            // Navigator.push(
-            //     context,
-            //     MaterialPageRoute(
-            //         builder: (context) => CreateModuleScreen(
-            //             courseIndex: widget.courseIndex)));
-            // },
-            //     child: Text("Add new module"))
-          ],
         ),
         body: Column(
           children: [
+            Text("${exams}"),
             ListView.builder(
               shrinkWrap: true,
               itemCount: exams?.length,
@@ -111,16 +101,6 @@ class _ExamListScreenState extends State<ExamListScreen> {
                 );
               },
             ),
-            // ElevatedButton(
-            //     onPressed: () {
-            //       Navigator.push(
-            //           context,
-            //           MaterialPageRoute(
-            //               builder: (context) => ExamCreation(
-            //                     courseIndex: widget.courseIndex,
-            //                   )));
-            //     },
-            //     child: Text("Create exam"))
           ],
         ),
       );

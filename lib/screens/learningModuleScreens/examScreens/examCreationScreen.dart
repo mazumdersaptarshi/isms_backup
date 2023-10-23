@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:isms/models/enums.dart';
 import 'package:isms/models/newExam.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
 import 'package:isms/utilityWidgets/optionTile.dart';
 import 'package:isms/utilityWidgets/questionWidget.dart';
 import 'package:isms/utitlityFunctions/generateRandom.dart';
@@ -32,6 +33,7 @@ class ExamCreationState extends State<ExamCreation> {
   TextEditingController titleController = TextEditingController();
   TextEditingController passingMarksController = TextEditingController();
   final ScrollController _controller = ScrollController();
+
   @override
   void dispose() {
     titleController.dispose();
@@ -103,6 +105,8 @@ class ExamCreationState extends State<ExamCreation> {
                         questionAnswerSet: allQuestions);
 
                     if (widget.examtype == EXAMTYPE.courseExam) {
+                      print(
+                          "CREATE EXAMM ${coursesProvider.allCourses[widget.courseIndex].exams}");
                       createCourseExam(
                           coursesProvider: coursesProvider,
                           courseIndex: widget.courseIndex,
@@ -115,6 +119,12 @@ class ExamCreationState extends State<ExamCreation> {
                           exam: newExam);
                       allQuestions.clear();
                     }
+
+                    allQuestions.clear();
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CoursesDisplayScreen()));
                   },
                   child: const Text('Submit'),
                 ),
