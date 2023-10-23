@@ -143,7 +143,7 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
 
         for (int i = 0; i < coursesProvider.allCourses.length; i++) {
           var element = coursesProvider.allCourses[i];
-          fetchModules(courseIndex: i, coursesProvider: coursesProvider);
+          // fetchModules(courseIndex: i, coursesProvider: coursesProvider);
           if (element.name == allEnrolledCourses![index]["course_name"]) {
             modulesCount = element.modulesCount!;
             noOfExams = element.examsCount!;
