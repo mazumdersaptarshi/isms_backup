@@ -54,6 +54,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                       controller: optionControllers[index]!,
                       getTextValue: (optTextValue, optBoolValue) {
                         bool flag = false;
+                        print("OPTTTEXT VALUE ${optTextValue}");
                         try {
                           widget.options.forEach((element) {
                             if (element["optionID"] == index) {
@@ -91,27 +92,42 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                     if (question["questionID"] == qID) {
                       questionExists = true;
                       print("QUESTION EXISTSSSSS");
+                      if (newQuestionName != null && newQuestionName != "")
+                        question["questionName"] = newQuestionName;
+
+                      List<Map<String, dynamic>> tempOptions =
+                          question["options"];
+                      for (int k = 0; k < tempOptions.length; k++) {
+                        var option = tempOptions[k];
+                        for (int i = 0; i < widget.options.length; i++) {
+                          if (option["optionID"] ==
+                              widget.options[i]["optionID"]) {
+                            if (widget.options[i]["option_value"] != null &&
+                                widget.options[i]["option_value"] != "") {
+                              option = widget.options[i];
+                              question["options"][k] = widget.options[i];
+                              print(
+                                  "OPTIONNNNNNNN: ${option["option_value"]},,${widget.options[i]["option_value"]} ftytryrty");
+                            }
+                          }
+                        }
+                      }
+                      print("TEMPOPTIONSSS ${question}");
+                      // question["options"] = tempOptions;
                       break;
                     }
                   }
 
-                  if (!questionExists) {
+                  if (questionExists == false) {
                     setState(() {
                       allQuestions.add({
                         "questionID": qID,
                         "questionName": newQuestionName,
                         "options": widget.options,
                       });
-                      print(allQuestions);
-                    });
-                  } else {
-                    allQuestions.forEach((question) {
-                      if (question["questionID"] == qID) {
-                        question["questionName"] = newQuestionName;
-                        question["options"] = widget.options;
-                      }
                     });
                   }
+                  print(allQuestions);
                 },
                 child: Text("Save Question"),
               ),
