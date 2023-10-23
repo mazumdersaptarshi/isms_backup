@@ -6,17 +6,24 @@ class Course {
   String id;
   String name;
   int? modulesCount = 0;
+  int? examsCount = 0;
   List<Module> modules = [];
   List<NewExam>? exams;
 
-  Course({required this.id, required this.name, this.exams, this.modulesCount});
+  Course(
+      {required this.id,
+      required this.name,
+      this.exams,
+      this.modulesCount,
+      this.examsCount});
 
   factory Course.fromMap(Map<String, dynamic> map) {
     return Course(
         id: map['id'],
         name: map['name'],
         exams: map['exams'] ?? [],
-        modulesCount: map["modulesCount"] ?? 0);
+        modulesCount: map["modulesCount"] ?? 0,
+        examsCount: map["examsCount"] ?? 0);
   }
 
   Map<String, dynamic> toMap() {
@@ -24,7 +31,8 @@ class Course {
       'id': id,
       'name': name,
       'exams': exams,
-      'modulesCount': modulesCount
+      'modulesCount': modulesCount,
+      'examsCount': examsCount
     };
   }
 }

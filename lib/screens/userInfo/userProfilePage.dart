@@ -132,9 +132,10 @@ class UserActionsDropdown extends StatelessWidget {
 }
 
 class UserEnrolledCoursesDropdown extends StatelessWidget {
-  (bool, double) getCourseCompletedPercentage(
+  (bool, double, int) getCourseCompletedPercentage(
       {required CoursesProvider coursesProvider, required int index}) {
     double courseCompletionPercentage = 0;
+    int noOfExams = 0;
     bool isValid = false;
     allEnrolledCourses.forEach((course) {
       if (course["modules_completed"] != null) {
@@ -145,6 +146,7 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
           fetchModules(courseIndex: i, coursesProvider: coursesProvider);
           if (element.name == allEnrolledCourses![index]["course_name"]) {
             modulesCount = element.modulesCount!;
+            noOfExams = element.examsCount!;
             isValid = true;
           }
         }
@@ -158,7 +160,7 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
         }
       }
     });
-    return (isValid, courseCompletionPercentage);
+    return (isValid, courseCompletionPercentage, noOfExams);
   }
 
   @override
@@ -173,10 +175,11 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
           itemBuilder: (context, index) {
             double courseCompletionPercentage = 0;
             bool isValid = false;
-
-            var (a, b) = getCourseCompletedPercentage(
+            int noOfExams = 0;
+            var (a, b, c) = getCourseCompletedPercentage(
                 coursesProvider: coursesProvider, index: index);
             isValid = a;
+            noOfExams = c;
             courseCompletionPercentage = b;
             return Container(
               height: 120,
@@ -231,9 +234,9 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      Text("Exams completed: "),
+                      Text("Exams passed: "),
                       Text(
-                        '${allEnrolledCourses![index]['exams_completed']}',
+                        '${allEnrolledCourses![index]['exams_completed'].length} of ${noOfExams}',
                         style: TextStyle(fontSize: 14),
                       ),
                     ],

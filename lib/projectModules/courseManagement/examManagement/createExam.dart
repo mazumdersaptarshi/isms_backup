@@ -29,6 +29,10 @@ Future<bool> createCourseExam(
         .doc(exam.title)
         .set(examMap);
 
+    await FirebaseFirestore.instance
+        .collection('courses')
+        .doc(course.name)
+        .update({'examsCount': index});
     coursesProvider.addExamsToCourse(courseIndex, [exam]);
     print("Exam creation successful");
     return true;
