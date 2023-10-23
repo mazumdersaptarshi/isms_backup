@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:isms/projectModules/adminConsoleModules/adminProfileHeaderWidget.dart';
 import 'package:provider/provider.dart';
 
-import '../../adminManagement/adminConsoleProvider.dart';
-import '../../models/adminConsoleModels/adminConsoleActions.dart';
-import '../../projectModules/adminConsoleModules/adminActionsWidget.dart';
-import '../../userManagement/userDataGetterMaster.dart';
+import '../../../adminManagement/adminConsoleProvider.dart';
+import '../../../models/adminConsoleModels/adminConsoleActions.dart';
+import '../../../projectModules/adminConsoleModules/adminActionsWidget.dart';
+import '../../../userManagement/userDataGetterMaster.dart';
 
 class AdminConsolePage extends StatelessWidget {
   UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
@@ -20,7 +20,10 @@ class AdminConsolePage extends StatelessWidget {
         name: 'Course Management', icon: Icons.school, actionId: 'crs_mgmt'),
     AdminActions(name: 'Draft Courses', icon: Icons.edit, actionId: 'drf_crs'),
     AdminActions(name: 'Exams', icon: Icons.assignment, actionId: 'exms'),
+    AdminActions(name: 'Instructions', icon: Icons.book, actionId: 'instr'),
     AdminActions(name: 'Logout', icon: Icons.exit_to_app, actionId: 'logout'),
+    AdminActions(
+        name: 'Download Data', icon: Icons.download, actionId: 'dwnld'),
   ];
 
   @override
