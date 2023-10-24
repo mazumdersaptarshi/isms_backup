@@ -3,27 +3,63 @@ import 'package:flutter/material.dart';
 class AdminInstructionSlides extends StatelessWidget {
   AdminInstructionSlides({super.key, this.slides});
   List<dynamic>? slides;
+  final PageController _controller = PageController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SlideList(
-      slides: slides,
+        body: Column(
+      children: [
+        Expanded(
+          child: SlideList(
+            slides: slides,
+            controller: _controller,
+          ),
+        ),
+        Row(
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                _controller.previousPage(
+                    duration: Duration(milliseconds: 300),
+                    curve: Curves.easeInOut);
+              },
+              child: Text("Previous"),
+            ),
+            SizedBox(
+              width: 16,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                _controller.nextPage(
+                    duration: Duration(milliseconds: 300),
+                    curve: Curves.easeInOut);
+              },
+              child: Text("Next"),
+            )
+          ],
+        )
+      ],
     ));
   }
 }
 
 class SlideList extends StatelessWidget {
   List<dynamic>? slides;
-  SlideList({this.slides});
+  final PageController? controller;
+
+  SlideList({this.slides, this.controller});
   @override
   Widget build(BuildContext context) {
     slides?.forEach((element) {
       print('yyyhn: $element');
     });
-    if (slides != []) {
+    if (slides != null && slides!.isNotEmpty) {
       try {
         return PageView(
           // Control the scroll direction, default is horizontal
+          controller: controller,
+
           scrollDirection: Axis.horizontal,
 
           children: [
@@ -38,8 +74,7 @@ class SlideList extends StatelessWidget {
         return SafeArea(
             child: Center(child: Text('No content currently available! >__<')));
       }
-    }
-    else{
+    } else {
       return Text('No data available');
     }
   }

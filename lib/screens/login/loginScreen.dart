@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:isms/databaseOperations/databaseManager.dart';
 import 'package:isms/firebase_options.dart';
-import 'package:isms/screens/homePage.dart';
 import 'package:isms/userManagement/loggedInUserProvider.dart';
 import 'package:isms/userManagement/userDataGetterMaster.dart';
 import 'package:isms/utitlityFunctions/auth_service.dart';
 import 'package:provider/provider.dart';
+
+import '../homePage.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({super.key});
@@ -44,7 +45,7 @@ class LoginPageState extends State<LoginPage> {
     }
   }
 
-  void GoogleSignInWeb() async {
+  Future<void> GoogleSignInWeb() async {
     GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
     GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
     AuthCredential credential = GoogleAuthProvider.credential(
@@ -70,8 +71,16 @@ class LoginPageState extends State<LoginPage> {
             ISMSText(),
             const SizedBox(height: 40),
             ElevatedButton(
-                onPressed: () {
-                  GoogleSignInWeb();
+                onPressed: () async {
+                  try {
+                    await GoogleSignInWeb();
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomePage()),
+                    );
+                  } catch (e) {
+                    print(e);
+                  }
                 },
                 child: Text('Google Test Login Web')),
             signInButton(customUserProvider: customUserProvider),
