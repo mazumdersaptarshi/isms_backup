@@ -35,18 +35,17 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _loadUserInformation() async {
     User? currentUser = FirebaseAuth.instance.currentUser;
-    if (currentUser != null) {
-      DocumentSnapshot? userSnapshot = userInfoGetter.currentUserSnapshot;
-      if (userSnapshot != null) {
-        setState(() {
-          currentUserSnapshot = userSnapshot;
-        });
-        Map<String, dynamic>? userData =
-            userSnapshot.data() as Map<String, dynamic>?;
-        userRole = userData?['role'];
-      } else {
-        print('User not found');
-      }
+    await userInfoGetter.getLoggedInUserInfoFromFirestore();
+    DocumentSnapshot? userSnapshot = userInfoGetter.currentUserSnapshot;
+    if (userSnapshot != null) {
+      setState(() {
+        currentUserSnapshot = userSnapshot;
+      });
+      Map<String, dynamic>? userData =
+          userSnapshot.data() as Map<String, dynamic>?;
+      userRole = userData?['role'];
+    } else {
+      print('User not found');
     }
   }
 
