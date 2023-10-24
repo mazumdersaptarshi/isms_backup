@@ -167,7 +167,8 @@ class LoggedInUserProvider with ChangeNotifier {
     });
   }
 
-  //Adding a new function with improved logic
+  //Currently this is the only func that is feeding the provider
+
   Future<List> currentUserCoursesGetter(String? actionId) async {
     List<dynamic>? allEnrolledCoursesLocal = [];
     List<dynamic>? allCompletedCoursesLocal = [];
