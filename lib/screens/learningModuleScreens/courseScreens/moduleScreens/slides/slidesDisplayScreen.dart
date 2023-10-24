@@ -4,7 +4,7 @@ import 'package:isms/models/slide.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examListScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleExamsListScreen.dart';
-import 'package:isms/sharedWidgets/HtmlSlideDisplay.dart';
+import 'package:isms/sharedWidgets/htmlSlideDisplay.dart';
 
 class SlidesDisplayScreen extends StatefulWidget {
   SlidesDisplayScreen(
