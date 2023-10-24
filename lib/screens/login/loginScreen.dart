@@ -6,7 +6,7 @@ import 'package:isms/databaseOperations/databaseManager.dart';
 import 'package:isms/firebase_options.dart';
 import 'package:isms/userManagement/loggedInUserProvider.dart';
 import 'package:isms/userManagement/userDataGetterMaster.dart';
-import 'package:isms/utitlityFunctions/auth_service.dart';
+import 'package:isms/utilityFunctions/auth_service.dart';
 import 'package:provider/provider.dart';
 
 import '../homePage.dart';

@@ -4,7 +4,7 @@ import 'package:isms/models/newExam.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
 import 'package:isms/utilityWidgets/optionTile.dart';
 import 'package:isms/utilityWidgets/questionWidget.dart';
-import 'package:isms/utitlityFunctions/generateRandom.dart';
+import 'package:isms/utilityFunctions/generateRandom.dart';
 import 'package:provider/provider.dart';
 
 import '../../../projectModules/courseManagement/coursesProvider.dart';

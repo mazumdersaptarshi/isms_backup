@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:isms/models/module.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
-import 'package:isms/utitlityFunctions/generateRandom.dart';
+import 'package:isms/utilityFunctions/generateRandom.dart';
 import 'package:provider/provider.dart';
 import 'package:isms/models/course.dart';
 

@@ -4,7 +4,7 @@ import 'package:isms/screens/homePage.dart';
 import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/userManagement/loggedInUserProvider.dart';
 import 'package:isms/userManagement/userDataGetterMaster.dart';
-import 'package:isms/utitlityFunctions/auth_service.dart';
+import 'package:isms/utilityFunctions/auth_service.dart';
 import 'package:provider/provider.dart';
 
 class CheckLoggedIn extends StatefulWidget {

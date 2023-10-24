@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:isms/models/adminConsoleModels/coursesDetails.dart';
 import 'package:isms/models/course.dart';
-import 'package:isms/utitlityFunctions/generateRandom.dart';
+import 'package:isms/utilityFunctions/generateRandom.dart';
 import 'package:isms/models/adminConsoleModels/coursesDetails.dart';
 import 'package:isms/models/course.dart';
-import 'package:isms/utitlityFunctions/generateRandom.dart';
 
 import '../../../projectModules/courseManagement/createCourse.dart';
 
