@@ -111,12 +111,13 @@ class LoggedInUserProvider with ChangeNotifier {
   Future<CustomUser?> fetchUserDetails() async {
     print('fetchingUserDetails');
     String? uid = FirebaseAuth.instance.currentUser?.uid;
-    userUID = uid!;
-    print(userUID);
     if (uid == null) {
       print('No authenticated user.');
       return null;
     }
+
+    userUID = uid!;
+    print(userUID);
 
     DocumentSnapshot<Map<String, dynamic>> userDoc =
         await FirebaseFirestore.instance.collection('users').doc(uid).get();

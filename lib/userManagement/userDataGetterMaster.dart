@@ -22,24 +22,23 @@ class UserDataGetterMaster {
   //Function called during constructor invoke, to get all required logged in user data from Firestore
   Future<void> getLoggedInUserInfoFromFirestore() async {
     print('Entered getLoggedInUserInfoFromFirestore');
-    print('${FirebaseAuth.instance.currentUser}');
-    print('getting new logged iN uSer: ${FirebaseAuth.instance.currentUser!}');
-    _currentUser = FirebaseAuth.instance.currentUser!;
-    User? user = _currentUser;
-    DocumentSnapshot? userSnapshot;
-
-    if (_currentUser != null) {
-      DocumentReference userRef =
-          FirebaseFirestore.instance.collection('users').doc(user?.uid);
-      userSnapshot = await userRef.get();
+    _currentUser = FirebaseAuth.instance.currentUser;
+    if (_currentUser == null) {
+      print('no user currently signed into Firebase');
+      return;
     }
+
+    print('user ${_currentUser!.email} currently signed into Firebase');
+    DocumentReference userRef =
+        FirebaseFirestore.instance.collection('users').doc(_currentUser!.uid);
+    DocumentSnapshot? userSnapshot = await userRef.get();
     if (userSnapshot != null) {
       _currentUserSnapshot = userSnapshot;
       Map<String, dynamic>? userData =
           userSnapshot.data() as Map<String, dynamic>?;
       _userRole = userData?['role'];
     } else {
-      print('User not found');
+      print('user ${_currentUser!.email} not found in Firestore');
     }
   }
 }
