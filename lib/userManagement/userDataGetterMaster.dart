@@ -7,16 +7,17 @@ class UserDataGetterMaster {
   static DocumentReference? userRef;
   static DocumentSnapshot? _currentUserSnapshot;
   static String? _userRole;
+  static String? _uid;
 
   UserDataGetterMaster() {
     print('Entered_userInfogetter');
-    getLoggedInUserInfoFromFirestore();
   }
   //Getters
   User? get currentUser => _currentUser;
   String? get currentUserName => _currentUser?.displayName;
   String? get currentUserEmail => _currentUser?.email;
   String? get currentUserRole => _userRole;
+  String? get currentUserUid => _currentUser?.uid;
   DocumentSnapshot? get currentUserSnapshot => _currentUserSnapshot;
 
   //Function called during constructor invoke, to get all required logged in user data from Firestore
@@ -27,10 +28,11 @@ class UserDataGetterMaster {
       print('no user currently signed into Firebase');
       return;
     }
+    User user = _currentUser!;
 
-    print('user ${_currentUser!.email} currently signed into Firebase');
+    print('user ${user.email} currently signed into Firebase');
     DocumentReference userRef =
-        FirebaseFirestore.instance.collection('users').doc(_currentUser!.uid);
+        FirebaseFirestore.instance.collection('users').doc(user.uid);
     DocumentSnapshot? userSnapshot = await userRef.get();
     if (userSnapshot != null) {
       _currentUserSnapshot = userSnapshot;
@@ -38,7 +40,7 @@ class UserDataGetterMaster {
           userSnapshot.data() as Map<String, dynamic>?;
       _userRole = userData?['role'];
     } else {
-      print('user ${_currentUser!.email} not found in Firestore');
+      print('user ${user.email} not found in Firestore');
     }
   }
 }

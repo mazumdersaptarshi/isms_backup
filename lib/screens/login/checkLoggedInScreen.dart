@@ -17,7 +17,7 @@ class CheckLoggedIn extends StatefulWidget {
 class _CheckLoggedInState extends State<CheckLoggedIn> {
   String? loggedInUser;
   bool hasCheckedForChangedDependencies = false;
-  UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
+  UserDataGetterMaster? userDataGetterMaster;
   @override
   void initState() {
     super.initState();
@@ -33,7 +33,7 @@ class _CheckLoggedInState extends State<CheckLoggedIn> {
         await AuthService.setLoggedInUser(
             customUserProvider:
                 Provider.of<LoggedInUserProvider>(context, listen: false));
-        await userDataGetterMaster.getLoggedInUserInfoFromFirestore();
+        userDataGetterMaster = UserDataGetterMaster();
         WidgetsBinding.instance.addPostFrameCallback((_) {
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => HomePage()));

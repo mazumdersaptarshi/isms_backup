@@ -16,10 +16,10 @@ class LoggedInUserProvider with ChangeNotifier {
   bool isUserInfoUpdated = false;
   List<CustomUser> users = []; // Main list should remain immutable
 
-  List<dynamic> allEnrolledCoursesGlobal =
+  static List<dynamic> allEnrolledCoursesGlobal =
       []; //Global List to hold all enrolled courses for User
 
-  List<dynamic> allCompletedCoursesGlobal =
+  static List<dynamic> allCompletedCoursesGlobal =
       []; //Global List to hold all completed courses for User
 
   CustomUser? get getCurrentUser => loggedInUser;
@@ -140,34 +140,75 @@ class LoggedInUserProvider with ChangeNotifier {
   fetchAllCoursesUser({bool isNotifyListener = true}) async {
     List<dynamic>? allEnrolledCoursesLocal = [];
     List<dynamic>? allCompletedCoursesLocal = [];
+    UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
     print('Inside fetch courses user provider');
-    if (isUserInfoUpdated) return;
-    if (userUID != '') {
-      Stream<DocumentSnapshot>? userStream = FirebaseFirestore.instance
-          .collection('users')
-          .doc(userUID)
-          .snapshots();
-      // userStream = userDataGetterMaster.currentUserSnapshot
-      //     as Stream<DocumentSnapshot<Object?>>?;
-      print('userStream:  ${userStream}');
-      userStream?.listen((snapshot) async {
-        print('snapshotData: ${snapshot.data()}');
-        UserCoursesDetails data =
-            UserCoursesDetails.fromMap(snapshot.data() as Map<String, dynamic>);
 
-        allEnrolledCoursesLocal = data.courses_started;
+    Stream<DocumentSnapshot>? userStream = FirebaseFirestore.instance
+        .collection('users')
+        .doc(userDataGetterMaster.currentUserUid)
+        .snapshots();
+    // userStream = userDataGetterMaster.currentUserSnapshot
+    //     as Stream<DocumentSnapshot<Object?>>?;
+    print('userStream:  ${userStream}');
+    userStream?.listen((snapshot) async {
+      Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
+      if(data == null) {
+        print('no course data');
+      } else {
+        print('snapshotData: ${data}');
+        UserCoursesDetails userCoursesDetails =
+            UserCoursesDetails.fromMap(data!);
 
-        allCompletedCoursesLocal = data.courses_completed;
+        allEnrolledCoursesLocal = userCoursesDetails.courses_started;
+
+        allCompletedCoursesLocal = userCoursesDetails.courses_completed;
 
         allEnrolledCoursesGlobal.clear();
 
         allEnrolledCoursesGlobal = allEnrolledCoursesLocal!;
         allCompletedCoursesGlobal = allCompletedCoursesLocal!;
         print('allEnrolledCoursesGlobal: $allEnrolledCoursesGlobal');
-        isUserInfoUpdated = true;
         if (isNotifyListener) notifyListeners();
-      });
+      }
+    });
+  }
+
+  //Currently this is the only func that is feeding the provider
+
+  Future<List> currentUserCoursesGetter(String? actionId) async {
+    List<dynamic>? allEnrolledCoursesLocal = [];
+    List<dynamic>? allCompletedCoursesLocal = [];
+    UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
+    print(
+        'Inside fetch courses user provider ${userDataGetterMaster.currentUserUid}');
+    try {
+      DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc('${userDataGetterMaster.currentUserUid}')
+          .get();
+
+      if (documentSnapshot.exists) {
+        Map<String, dynamic> mapdata =
+            documentSnapshot.data() as Map<String, dynamic>;
+        UserCoursesDetails data = UserCoursesDetails.fromMap(mapdata);
+        // Access specific fields from the document
+
+        print('Field 1: ${data.courses_started}');
+        allEnrolledCoursesGlobal = data.courses_started!;
+        allCompletedCoursesGlobal = data.courses_completed!;
+      } else {
+        print('Document does not exist');
+      }
+      print('890io: ${allEnrolledCoursesGlobal}');
+      if (actionId == 'crs_enrl') {
+        return allEnrolledCoursesGlobal;
+      } else if (actionId == 'crs_compl') {
+        return allCompletedCoursesGlobal;
+      }
+    } catch (e) {
+      return [];
     }
+    return [];
   }
 
   List<dynamic> getAllEnrolledCoursesCurrentUser() {

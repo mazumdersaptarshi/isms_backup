@@ -62,6 +62,14 @@
           }
         },
         {
+          "client_id": "931235749581-oo5f8r03abjkg91l0f4dfon5egl66a0d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.isms",
+            "certificate_hash": "ef4eb329dd1b88efb25f57218df435ccf136de21"
+          }
+        },
+        {
           "client_id": "931235749581-p7dre7a91jr4oaav07obllfq3qperhht.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
