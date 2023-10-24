@@ -47,6 +47,13 @@ class _AdminActionDropdownState extends State<AdminActionDropdown> {
                 dataExporter.downloadCSV();
               },
               child: Text('User Data')),
+          ElevatedButton(
+              onPressed: () {
+                DataExporter dataExporter =
+                    DataExporter(collectionDataToDownload: 'courses');
+                dataExporter.downloadCSV();
+              },
+              child: Text('Courses Data')),
         ],
       );
     } else {
