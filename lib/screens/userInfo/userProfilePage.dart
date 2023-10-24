@@ -5,7 +5,6 @@ import 'package:isms/userManagement/loggedInUserProvider.dart';
 import 'package:isms/userManagement/userprofileHeaderWidget.dart';
 import 'package:provider/provider.dart';
 
-import '../../projectModules/courseManagement/moduleManagement/fetchModules.dart';
 import '../../userManagement/userDataGetterMaster.dart';
 
 List allEnrolledCourses = [];
