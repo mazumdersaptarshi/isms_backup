@@ -36,11 +36,11 @@ class LoginPageState extends State<LoginPage> {
         DatabaseManager.auth.currentUser != null) {
       hasCheckedForChangedDependencies = true;
       if (mounted) {
-        await AuthService().handleSignInDependencies(
-          context: context,
-          customUserProvider:
-              Provider.of<LoggedInUserProvider>(context, listen: false),
-        );
+        // await AuthService().handleSignInDependencies(
+        //   context: context,
+        //   customUserProvider:
+        //       Provider.of<LoggedInUserProvider>(context, listen: false),
+        // );
       }
     }
   }
@@ -88,7 +88,7 @@ class LoginPageState extends State<LoginPage> {
                 },
                 child: Text('Google Test Login Web')),
             signInButton(customUserProvider: customUserProvider),
-            SignInFutureBuilder(_signInFuture),
+            // SignInFutureBuilder(_signInFuture),
           ],
         ),
       ),

@@ -28,7 +28,7 @@ class LoggedInUserProvider with ChangeNotifier {
   LoggedInUserProvider() {
     print('InsideLoggedInUserProviderInvoke');
     fetchUserDetails();
-    fetchAllCoursesUser();
+
     notifyListeners();
   }
 

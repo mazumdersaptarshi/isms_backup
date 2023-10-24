@@ -42,19 +42,18 @@ class _UserProfilePageState extends State<UserProfilePage> {
   @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
-    if (!hasCheckedForChangedDependencies) {
-      LoggedInUserProvider loggedInUserProvider =
-          Provider.of<LoggedInUserProvider>(context, listen: true);
-      if (mounted) {
-        print(" I AM ${loggedInUserProvider.loggedInUser!.email} ");
-        await loggedInUserProvider.fetchAllCoursesUser();
-        setState(() {
-          allEnrolledCourses = LoggedInUserProvider.allEnrolledCoursesGlobal;
-          allCompletedCourses = LoggedInUserProvider.allCompletedCoursesGlobal;
-          print("PRINTTTT ${LoggedInUserProvider.allEnrolledCoursesGlobal}");
-        });
-      }
-    }
+    // if (!hasCheckedForChangedDependencies) {
+    //   LoggedInUserProvider loggedInUserProvider =
+    //       Provider.of<LoggedInUserProvider>(context, listen: true);
+    //   if (mounted) {
+    //     await loggedInUserProvider.fetchAllCoursesUser();
+    //     setState(() {
+    //       allEnrolledCourses = LoggedInUserProvider.allEnrolledCoursesGlobal;
+    //       allCompletedCourses = LoggedInUserProvider.allCompletedCoursesGlobal;
+    //       print("PRINTTTT ${LoggedInUserProvider.allEnrolledCoursesGlobal}");
+    //     });
+    //   }
+    // }
   }
 
   @override
@@ -84,8 +83,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                   listen: false);
                           await loggedInUserProvider
                               .currentUserCoursesGetter(action.actionId);
-                          allEnrolledCourses =
-                              LoggedInUserProvider.allEnrolledCoursesGlobal;
                         }
                       },
                       children: [
@@ -139,7 +136,9 @@ class UserActionsDropdown extends StatelessWidget {
     //   );
     // }
     else if (actionId == 'crs_compl') {
-      return UserCompletedCourses();
+      return UserCompletedCoursesDropdown(
+        actionId: actionId,
+      );
     } else {
       return Text('No Data to show!');
     }
@@ -149,12 +148,16 @@ class UserActionsDropdown extends StatelessWidget {
 class UserEnrolledCoursesDropdown extends StatelessWidget {
   String? actionId;
   UserEnrolledCoursesDropdown({this.actionId});
-  (bool, double, int) getCourseCompletedPercentage(
-      {required CoursesProvider coursesProvider, required int index}) {
+  (bool, double, int) getCourseCompletedPercentage({
+    required CoursesProvider coursesProvider,
+    required int index,
+  }) {
     double courseCompletionPercentage = 0;
     int noOfExams = 0;
     bool isValid = false;
     print('Enrolled CoursesDropdown');
+    print(actionId);
+    allEnrolledCourses = LoggedInUserProvider.allEnrolledCoursesGlobal;
     allEnrolledCourses.forEach((course) {
       if (course["modules_completed"] != null) {
         int modulesCount = 0;
@@ -190,7 +193,7 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
     return Column(
       children: [
         FutureBuilder<List>(
-          future: loggedInUserProvider.currentUserCoursesGetter(actionId),
+          future: loggedInUserProvider.currentUserCoursesGetter('crs_enrl'),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return CircularProgressIndicator();
@@ -206,7 +209,9 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
                 bool isValid = false;
                 int noOfExams = 0;
                 var (a, b, c) = getCourseCompletedPercentage(
-                    coursesProvider: coursesProvider, index: index);
+                  coursesProvider: coursesProvider,
+                  index: index,
+                );
                 isValid = a;
                 noOfExams = c;
                 courseCompletionPercentage = b;
@@ -284,26 +289,39 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
   }
 }
 
-class UserCompletedCourses extends StatelessWidget {
+class UserCompletedCoursesDropdown extends StatelessWidget {
+  String? actionId;
+  UserCompletedCoursesDropdown({this.actionId});
   @override
   Widget build(BuildContext context) {
+    LoggedInUserProvider loggedInUserProvider =
+        Provider.of<LoggedInUserProvider>(context, listen: false);
     return Column(
       children: [
-        ListView.builder(
-          itemCount: allCompletedCourses.length,
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            return ListTile(
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    '${allCompletedCourses![index]['course_name']} ',
-                    style: TextStyle(fontSize: 14),
+        FutureBuilder<List>(
+          future: loggedInUserProvider.currentUserCoursesGetter('crs_compl'),
+          builder: (context, snapshot) {
+            print(
+                'gbvvb: ${loggedInUserProvider.currentUserCoursesGetter('crs_compl')}');
+            return ListView.builder(
+              itemCount: LoggedInUserProvider.allCompletedCoursesGlobal.length,
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                allCompletedCourses =
+                    LoggedInUserProvider.allCompletedCoursesGlobal;
+                return ListTile(
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '${allCompletedCourses![index]['course_name']} ',
+                        style: TextStyle(fontSize: 14),
+                      ),
+                      Icon(Icons.check_circle, color: Colors.green)
+                    ],
                   ),
-                  Icon(Icons.check_circle, color: Colors.green)
-                ],
-              ),
+                );
+              },
             );
           },
         ),

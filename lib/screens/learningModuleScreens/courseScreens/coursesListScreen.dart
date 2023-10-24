@@ -5,6 +5,7 @@ import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/m
 import 'package:provider/provider.dart';
 
 import '../../../projectModules/courseManagement/coursesProvider.dart';
+import '../../../themes/common_theme.dart';
 import 'createCourseScreen.dart';
 
 class CoursesDisplayScreen extends StatefulWidget {
@@ -26,20 +27,16 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
         child: ListView.builder(
           itemCount: coursesProvider.allCourses.length,
           itemBuilder: (context, courseIndex) {
-            return ListTile(
-              title: ListTile(
-                title: Text(coursesProvider.allCourses[courseIndex].name),
-              ),
-              trailing: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blueGrey,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10))),
-                child: Text(
-                  "Details",
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () {
+            return Card(
+              shape: customCardShape,
+              color: primaryColor,
+              elevation: 4,
+              margin: EdgeInsets.all(8.0),
+              child: ListTile(
+                trailing: Icon(Icons.arrow_forward_ios, color: secondaryColor),
+                title: Text(coursesProvider.allCourses[courseIndex].name,
+                    style: commonTextStyle),
+                onTap: () {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
