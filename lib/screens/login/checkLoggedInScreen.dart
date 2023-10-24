@@ -1,11 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:isms/databaseOperations/databaseManager.dart';
-import 'package:isms/screens/homePage.dart';
-import 'package:isms/screens/login/loginScreen.dart';
-import 'package:isms/userManagement/loggedInUserProvider.dart';
 import 'package:isms/userManagement/userDataGetterMaster.dart';
-import 'package:isms/utilityFunctions/auth_service.dart';
-import 'package:provider/provider.dart';
 
 class CheckLoggedIn extends StatefulWidget {
   CheckLoggedIn({super.key});
@@ -23,31 +17,31 @@ class _CheckLoggedInState extends State<CheckLoggedIn> {
     super.initState();
   }
 
-  @override
-  void didChangeDependencies() async {
-    super.didChangeDependencies();
-    if (!hasCheckedForChangedDependencies &&
-        DatabaseManager.auth.currentUser != null) {
-      hasCheckedForChangedDependencies = true;
-      if (mounted) {
-        await AuthService.setLoggedInUser(
-            customUserProvider:
-                Provider.of<LoggedInUserProvider>(context, listen: false));
-        userDataGetterMaster = UserDataGetterMaster();
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => HomePage()));
-        });
-      }
-    } else if (DatabaseManager.auth.currentUser == null) {
-      if (mounted) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => LoginPage()));
-        });
-      }
-    }
-  }
+  // @override
+  // void didChangeDependencies() async {
+  //   super.didChangeDependencies();
+  //   if (!hasCheckedForChangedDependencies &&
+  //       DatabaseManager.auth.currentUser != null) {
+  //     hasCheckedForChangedDependencies = true;
+  //     if (mounted) {
+  //       await AuthService.setLoggedInUser(
+  //           customUserProvider:
+  //               Provider.of<LoggedInUserProvider>(context, listen: false));
+  //       userDataGetterMaster = UserDataGetterMaster();
+  //       WidgetsBinding.instance.addPostFrameCallback((_) {
+  //         Navigator.pushReplacement(
+  //             context, MaterialPageRoute(builder: (context) => HomePage()));
+  //       });
+  //     }
+  //   } else if (DatabaseManager.auth.currentUser == null) {
+  //     if (mounted) {
+  //       WidgetsBinding.instance.addPostFrameCallback((_) {
+  //         Navigator.pushReplacement(
+  //             context, MaterialPageRoute(builder: (context) => LoginPage()));
+  //       });
+  //     }
+  //   }
+  // }
 
   // setLoggedInUser({required LoggedInUserProvider customUserProvider}) async {
   //   await customUserProvider.fetchUsers();

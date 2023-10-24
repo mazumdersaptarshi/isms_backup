@@ -8,7 +8,6 @@ import 'package:isms/userManagement/loggedInUserProvider.dart';
 import 'package:isms/userManagement/userDataGetterMaster.dart';
 import 'package:provider/provider.dart';
 
-import '../../utilityFunctions/auth_service.dart';
 import '../homePage.dart';
 
 class LoginPage extends StatefulWidget {
@@ -35,13 +34,13 @@ class LoginPageState extends State<LoginPage> {
     if (!hasCheckedForChangedDependencies &&
         DatabaseManager.auth.currentUser != null) {
       hasCheckedForChangedDependencies = true;
-      if (mounted) {
-        await AuthService().handleSignInDependencies(
-          context: context,
-          customUserProvider:
-              Provider.of<LoggedInUserProvider>(context, listen: false),
-        );
-      }
+      // if (mounted) {
+      //   await AuthService().handleSignInDependencies(
+      //     context: context,
+      //     customUserProvider:
+      //         Provider.of<LoggedInUserProvider>(context, listen: false),
+      //   );
+      // }
     }
   }
 
@@ -116,7 +115,7 @@ class LoginPageState extends State<LoginPage> {
       return ElevatedButton.icon(
         onPressed: () {
           setState(() {
-            _signInFuture = AuthService().signInWithGoogle(customUserProvider);
+            // _signInFuture = AuthService().signInWithGoogle(customUserProvider);
           });
         },
         icon: const Icon(Icons.mail),
@@ -136,9 +135,9 @@ class LoginPageState extends State<LoginPage> {
           } else if (snapshot.data != null) {
             WidgetsBinding.instance.addPostFrameCallback((_) async {
               userDataGetterMaster.getLoggedInUserInfoFromFirestore();
-              await AuthService.setLoggedInUser(
-                  customUserProvider: Provider.of<LoggedInUserProvider>(context,
-                      listen: false));
+              // await AuthService.setLoggedInUser(
+              //     customUserProvider: Provider.of<LoggedInUserProvider>(context,
+              //         listen: false));
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => HomePage()),

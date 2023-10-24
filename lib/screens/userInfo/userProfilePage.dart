@@ -46,8 +46,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
       LoggedInUserProvider loggedInUserProvider =
           Provider.of<LoggedInUserProvider>(context, listen: true);
       if (mounted) {
-        print(" I AM ${loggedInUserProvider.loggedInUser!.email} ");
-        await loggedInUserProvider.fetchAllCoursesUser();
+        // print(" I AM ${loggedInUserProvider.loggedInUser!.email} ");
+        // await loggedInUserProvider.fetchAllCoursesUser();
         setState(() {
           allEnrolledCourses = LoggedInUserProvider.allEnrolledCoursesGlobal;
           allCompletedCourses = LoggedInUserProvider.allCompletedCoursesGlobal;
