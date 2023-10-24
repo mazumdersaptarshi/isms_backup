@@ -58,15 +58,7 @@ class CoursesProvider with ChangeNotifier {
   }
 
   addModulesToCourse(int courseIndex, List<Module> modules) {
-    // if (allCourses[courseIndex].modules == null)
-
-    try {
-      _allCourses[courseIndex].modules?.addAll(modules);
-    } catch (e) {
-      _allCourses[courseIndex].modules = [];
-      _allCourses[courseIndex].modules?.addAll(modules);
-    }
-
+    _allCourses[courseIndex].modules.addAll(modules);
     notifyListeners();
   }
 
