@@ -6,9 +6,9 @@ import 'package:isms/databaseOperations/databaseManager.dart';
 import 'package:isms/firebase_options.dart';
 import 'package:isms/userManagement/loggedInUserProvider.dart';
 import 'package:isms/userManagement/userDataGetterMaster.dart';
-import 'package:isms/utilityFunctions/auth_service.dart';
 import 'package:provider/provider.dart';
 
+import '../../utilityFunctions/auth_service.dart';
 import '../homePage.dart';
 
 class LoginPage extends StatefulWidget {
@@ -53,6 +53,10 @@ class LoginPageState extends State<LoginPage> {
     UserCredential userCredential =
         await FirebaseAuth.instance.signInWithCredential(credential);
     print(userCredential.user?.displayName);
+    UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
+    await userDataGetterMaster.getLoggedInUserInfoFromFirestore();
+    print('uuuuu: ${userDataGetterMaster.currentUser}');
+    print(userDataGetterMaster.currentUserEmail);
   }
 
   @override

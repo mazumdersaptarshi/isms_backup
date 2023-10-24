@@ -32,6 +32,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
   @override
   void initState() {
     super.initState();
+    UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
+    print('abcdef: ${userDataGetterMaster.currentUserEmail}');
     allEnrolledCourses = [];
     allCompletedCourses = [];
   }
@@ -47,9 +49,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
         print(" I AM ${loggedInUserProvider.loggedInUser!.email} ");
         await loggedInUserProvider.fetchAllCoursesUser();
         setState(() {
-          allEnrolledCourses = loggedInUserProvider.allEnrolledCoursesGlobal;
-          allCompletedCourses = loggedInUserProvider.allCompletedCoursesGlobal;
-          print("PRINTTTT ${loggedInUserProvider.allEnrolledCoursesGlobal}");
+          allEnrolledCourses = LoggedInUserProvider.allEnrolledCoursesGlobal;
+          allCompletedCourses = LoggedInUserProvider.allCompletedCoursesGlobal;
+          print("PRINTTTT ${LoggedInUserProvider.allEnrolledCoursesGlobal}");
         });
       }
     }
@@ -75,6 +77,17 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     return ExpansionTile(
                       leading: Icon(action.icon),
                       title: Text(action.name!),
+                      onExpansionChanged: (expanded) async {
+                        if (expanded) {
+                          LoggedInUserProvider loggedInUserProvider =
+                              await Provider.of<LoggedInUserProvider>(context,
+                                  listen: false);
+                          await loggedInUserProvider
+                              .currentUserCoursesGetter(action.actionId);
+                          allEnrolledCourses =
+                              LoggedInUserProvider.allEnrolledCoursesGlobal;
+                        }
+                      },
                       children: [
                         UserActionsDropdown(
                           actionId: action.actionId!,
@@ -93,10 +106,11 @@ class UserActionsDropdown extends StatelessWidget {
   String actionId;
   @override
   Widget build(BuildContext context) {
+    print(actionId);
     if (actionId == 'crs_enrl') {
-      print('Hre');
-
-      return UserEnrolledCoursesDropdown();
+      return UserEnrolledCoursesDropdown(
+        actionId: actionId,
+      );
     }
     // else if (actionId == 'crs_compl') {
     //   return Column(
@@ -124,25 +138,30 @@ class UserActionsDropdown extends StatelessWidget {
     //     ],
     //   );
     // }
-    else {
+    else if (actionId == 'crs_compl') {
       return UserCompletedCourses();
+    } else {
+      return Text('No Data to show!');
     }
   }
 }
 
 class UserEnrolledCoursesDropdown extends StatelessWidget {
+  String? actionId;
+  UserEnrolledCoursesDropdown({this.actionId});
   (bool, double, int) getCourseCompletedPercentage(
       {required CoursesProvider coursesProvider, required int index}) {
     double courseCompletionPercentage = 0;
     int noOfExams = 0;
     bool isValid = false;
+    print('Enrolled CoursesDropdown');
     allEnrolledCourses.forEach((course) {
       if (course["modules_completed"] != null) {
         int modulesCount = 0;
 
         for (int i = 0; i < coursesProvider.allCourses.length; i++) {
           var element = coursesProvider.allCourses[i];
-          // fetchModules(courseIndex: i, coursesProvider: coursesProvider);
+
           if (element.name == allEnrolledCourses![index]["course_name"]) {
             modulesCount = element.modulesCount!;
             noOfExams = element.examsCount!;
@@ -166,82 +185,97 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
   Widget build(BuildContext context) {
     CoursesProvider coursesProvider =
         Provider.of<CoursesProvider>(context, listen: false);
+    LoggedInUserProvider loggedInUserProvider =
+        Provider.of<LoggedInUserProvider>(context, listen: false);
     return Column(
       children: [
-        ListView.builder(
-          itemCount: allEnrolledCourses.length,
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            double courseCompletionPercentage = 0;
-            bool isValid = false;
-            int noOfExams = 0;
-            var (a, b, c) = getCourseCompletedPercentage(
-                coursesProvider: coursesProvider, index: index);
-            isValid = a;
-            noOfExams = c;
-            courseCompletionPercentage = b;
-            return Container(
-              height: 120,
-              child: Column(
-                children: [
-                  ListTile(
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          '${allEnrolledCourses![index]['course_name']} ',
-                          style: TextStyle(fontSize: 14),
-                        ),
-                        if (isValid)
-                          Text(
-                              "${(courseCompletionPercentage * 100).ceil().toString()} %")
-                      ],
-                    ),
-                    subtitle: Row(
-                      children: [
-                        if (allEnrolledCourses![index]["modules_completed"] !=
-                            null)
-                          Container(
-                            constraints: BoxConstraints(
-                                minHeight: 40,
-                                maxWidth:
-                                    MediaQuery.of(context).size.width - 40),
-                            child: Column(
-                              children: List.generate(
-                                  allEnrolledCourses![index]
-                                          ["modules_completed"]
-                                      .length, (moduleIndex) {
-                                return Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      '-> ${allEnrolledCourses![index]["modules_completed"][moduleIndex]}',
-                                      style: TextStyle(fontSize: 14),
-                                    ),
-                                    Icon(
-                                      Icons.check_circle_rounded,
-                                      color: Colors.green,
-                                    ),
-                                  ],
-                                );
-                              }),
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
-                  Row(
+        FutureBuilder<List>(
+          future: loggedInUserProvider.currentUserCoursesGetter(actionId),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return CircularProgressIndicator();
+            }
+            if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return Text('No data available');
+            }
+            return ListView.builder(
+              itemCount: LoggedInUserProvider.allEnrolledCoursesGlobal.length,
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                double courseCompletionPercentage = 0;
+                bool isValid = false;
+                int noOfExams = 0;
+                var (a, b, c) = getCourseCompletedPercentage(
+                    coursesProvider: coursesProvider, index: index);
+                isValid = a;
+                noOfExams = c;
+                courseCompletionPercentage = b;
+                return Container(
+                  height: 120,
+                  child: Column(
                     children: [
-                      Text("Exams passed: "),
-                      Text(
-                        '${allEnrolledCourses![index]['exams_completed'].length} of ${noOfExams}',
-                        style: TextStyle(fontSize: 14),
+                      ListTile(
+                        title: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              '${allEnrolledCourses![index]['course_name']} ',
+                              style: TextStyle(fontSize: 14),
+                            ),
+                            if (isValid)
+                              Text(
+                                  "${(courseCompletionPercentage * 100).ceil().toString()} %")
+                          ],
+                        ),
+                        subtitle: Row(
+                          children: [
+                            if (allEnrolledCourses![index]
+                                    ["modules_completed"] !=
+                                null)
+                              Container(
+                                constraints: BoxConstraints(
+                                    minHeight: 40,
+                                    maxWidth:
+                                        MediaQuery.of(context).size.width - 40),
+                                child: Column(
+                                  children: List.generate(
+                                      allEnrolledCourses![index]
+                                              ["modules_completed"]
+                                          .length, (moduleIndex) {
+                                    return Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          '-> ${allEnrolledCourses![index]["modules_completed"][moduleIndex]}',
+                                          style: TextStyle(fontSize: 14),
+                                        ),
+                                        Icon(
+                                          Icons.check_circle_rounded,
+                                          color: Colors.green,
+                                        ),
+                                      ],
+                                    );
+                                  }),
+                                ),
+                              ),
+                          ],
+                        ),
                       ),
+                      if (allEnrolledCourses![index]['exams_completed'] != null)
+                        Row(
+                          children: [
+                            Text("Exams passed: "),
+                            Text(
+                              '${allEnrolledCourses![index]['exams_completed'].length} of ${noOfExams}',
+                              style: TextStyle(fontSize: 14),
+                            ),
+                          ],
+                        ),
                     ],
                   ),
-                ],
-              ),
+                );
+              },
             );
           },
         ),
