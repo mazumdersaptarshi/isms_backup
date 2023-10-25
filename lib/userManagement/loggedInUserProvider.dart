@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/models/customUser.dart';
-import 'package:isms/userManagement/createUser.dart';
 import 'package:isms/userManagement/userDataGetterMaster.dart';
 
 import '../models/course.dart';
@@ -9,7 +8,6 @@ import '../models/userCoursesDetails.dart';
 import '../projectModules/courseManagement/coursesProvider.dart';
 
 class LoggedInUserProvider with ChangeNotifier {
-  final _dbUserOperations = CreateUserDataOperations();
   late String userUID = '';
   // CustomUser? loggedInUser;
   bool isUserInfoUpdated = false;
@@ -24,15 +22,9 @@ class LoggedInUserProvider with ChangeNotifier {
   CustomUser? get getCurrentUser => userDataGetterMaster.loggedInUser;
   UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
 
-  setUserCourseStarted(Map<String, dynamic> courseDetails) {
-    // loggedInUser?.courses_started.add(courseDetails);
-    userDataGetterMaster.loggedInUser?.courses_started.add(courseDetails);
-    notifyListeners();
-  }
-
-  Future<List> currentUserCoursesGetter(String? actionId) async {
-    List<dynamic>? allEnrolledCoursesLocal = [];
-    List<dynamic>? allCompletedCoursesLocal = [];
+  //Getter function for all course related info from users collection, for the logged in User
+  //Basically populates the two static global variables allEnrolledCoursesGlobal and allCompletedCoursesGlobal
+  Future<List> getUserCoursesData(String? actionId) async {
     UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
     print(
         'Inside fetch courses user provider ${userDataGetterMaster.currentUserUid}');
@@ -64,6 +56,12 @@ class LoggedInUserProvider with ChangeNotifier {
       return [];
     }
     return [];
+  }
+
+  setUserCourseStarted(Map<String, dynamic> courseDetails) {
+    // loggedInUser?.courses_started.add(courseDetails);
+    userDataGetterMaster.loggedInUser?.courses_started.add(courseDetails);
+    notifyListeners();
   }
 
   setUserCourseCompleted(Map<String, dynamic> courseDetails) {
