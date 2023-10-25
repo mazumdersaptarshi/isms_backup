@@ -1,8 +1,5 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/adminManagement/adminConsoleProvider.dart';
@@ -11,6 +8,7 @@ import 'package:isms/projectModules/courseManagement/moduleManagement/slideManag
 import 'package:isms/screens/homePage.dart';
 import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/userManagement/loggedInUserProvider.dart';
+import 'package:isms/userManagement/userDataGetterMaster.dart';
 import 'package:provider/provider.dart';
 
 import 'firebase_options.dart';
@@ -62,6 +60,9 @@ class MyApp extends StatelessWidget {
                 if (snapshot.data == null) {
                   return LoginPage();
                 } else {
+                  UserDataGetterMaster userDataGetterMaster =
+                      UserDataGetterMaster();
+                  userDataGetterMaster.getLoggedInUserInfoFromFirestore();
                   return HomePage();
                 }
               }

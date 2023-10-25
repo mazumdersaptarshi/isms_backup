@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:isms/models/customUser.dart';
 
 class UserDataGetterMaster {
   //private user variables, accessible only to the Master Script internally
@@ -8,6 +9,7 @@ class UserDataGetterMaster {
   static DocumentSnapshot? _currentUserSnapshot;
   static String? _userRole;
   static String? _uid;
+  static CustomUser? _customUserObject;
 
   UserDataGetterMaster() {
     print('Entered_userInfogetter');
@@ -19,6 +21,7 @@ class UserDataGetterMaster {
   String? get currentUserRole => _userRole;
   String? get currentUserUid => _currentUser?.uid;
   DocumentSnapshot? get currentUserSnapshot => _currentUserSnapshot;
+  CustomUser? get loggedInUser => _customUserObject;
 
   //Function called during constructor invoke, to get all required logged in user data from Firestore
   Future<void> getLoggedInUserInfoFromFirestore() async {
@@ -39,6 +42,10 @@ class UserDataGetterMaster {
       Map<String, dynamic>? userData =
           userSnapshot.data() as Map<String, dynamic>?;
       _userRole = userData?['role'];
+      CustomUser loggedInUserObject = CustomUser.fromMap(userData!);
+
+      print('loggedInUserObject: ${loggedInUserObject.courses_completed}');
+      _customUserObject = loggedInUserObject;
     } else {
       print('user ${user.email} not found in Firestore');
     }
