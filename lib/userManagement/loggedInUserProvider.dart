@@ -21,7 +21,6 @@ class LoggedInUserProvider with ChangeNotifier {
   CustomUser? get getCurrentUser => userDataGetterMaster.loggedInUser;
   UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
   LoggedInUserProvider() {
-
     _auth.authStateChanges().listen((User? user) {
       if (user != null) {
         // The user is logged in
@@ -32,14 +31,11 @@ class LoggedInUserProvider with ChangeNotifier {
       }
     });
     listenToChanges();
-
   }
 
   void listenToChanges() {
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc('${userDataGetterMaster.currentUserUid}')
-        .snapshots()
+    userDataGetterMaster.currentUserDocumentReference
+        ?.snapshots()
         .listen((snapshot) {
       if (snapshot.exists) {
         _hasnewData = true;
