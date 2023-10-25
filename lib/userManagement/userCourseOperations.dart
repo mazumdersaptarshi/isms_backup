@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:isms/models/newExam.dart';
 import 'package:isms/userManagement/loggedInUserProvider.dart';
+import 'package:isms/userManagement/userDataGetterMaster.dart';
 
 import '../projectModules/courseManagement/coursesProvider.dart';
 
@@ -8,9 +8,9 @@ setUserCourseStarted(
     {required LoggedInUserProvider customUserProvider,
     required Map<String, dynamic> courseDetails}) async {
   bool flag = false;
-
-  if (customUserProvider.loggedInUser!.courses_started.isNotEmpty) {
-    customUserProvider.loggedInUser!.courses_started.forEach((course) {
+  UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
+  if (userDataGetterMaster.loggedInUser!.courses_started.isNotEmpty) {
+    userDataGetterMaster.loggedInUser!.courses_started.forEach((course) {
       try {
         if (course['courseID'] == courseDetails['courseID']) {
           flag = true;
@@ -23,20 +23,21 @@ setUserCourseStarted(
 
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection("users")
-        .where("username", isEqualTo: customUserProvider.loggedInUser!.username)
+        .where("username",
+            isEqualTo: userDataGetterMaster.loggedInUser!.username)
         .get();
 
     var uid = querySnapshot.docs.first.id;
     FirebaseFirestore.instance
         .collection("users")
-        .doc(customUserProvider.loggedInUser!.uid)
-        .set(customUserProvider.loggedInUser!.toMap());
+        .doc(userDataGetterMaster.loggedInUser!.uid)
+        .set(userDataGetterMaster.loggedInUser!.toMap());
 
     setAdminConsoleCourseMap(
         courseName: courseDetails["course_name"],
         courseMapFieldToUpdate: "course_started",
-        username: customUserProvider.loggedInUser!.username,
-        uid: customUserProvider.loggedInUser!.uid!);
+        username: userDataGetterMaster.loggedInUser!.username,
+        uid: userDataGetterMaster.loggedInUser!.uid!);
   }
 }
 
@@ -44,8 +45,10 @@ setUserCourseCompleted(
     {required LoggedInUserProvider customUserProvider,
     required Map<String, dynamic> courseDetails}) async {
   bool flag = false;
-  if (customUserProvider.loggedInUser!.courses_completed.isNotEmpty) {
-    customUserProvider.loggedInUser!.courses_completed.forEach((course) {
+  UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
+
+  if (userDataGetterMaster.loggedInUser!.courses_completed.isNotEmpty) {
+    userDataGetterMaster.loggedInUser!.courses_completed.forEach((course) {
       try {
         if (course['courseID'] == courseDetails['courseID']) {
           flag = true;
@@ -57,22 +60,23 @@ setUserCourseCompleted(
     customUserProvider.setUserCourseCompleted(courseDetails);
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection("users")
-        .where("username", isEqualTo: customUserProvider.loggedInUser!.username)
+        .where("username",
+            isEqualTo: userDataGetterMaster.loggedInUser!.username)
         .get();
 
     var uid = querySnapshot.docs.first.id;
     print(
-        "MUST SET COURSE COMPLETED ${customUserProvider.loggedInUser!.toMap()} at $uid");
+        "MUST SET COURSE COMPLETED ${userDataGetterMaster.loggedInUser!.toMap()} at $uid");
     FirebaseFirestore.instance
         .collection("users")
-        .doc(customUserProvider.loggedInUser!.uid)
-        .set(customUserProvider.loggedInUser!.toMap());
+        .doc(userDataGetterMaster.loggedInUser!.uid)
+        .set(userDataGetterMaster.loggedInUser!.toMap());
 
     setAdminConsoleCourseMap(
         courseName: courseDetails["course_name"],
         courseMapFieldToUpdate: "course_completed",
-        username: customUserProvider.loggedInUser!.username,
-        uid: customUserProvider.loggedInUser!.uid!);
+        username: userDataGetterMaster.loggedInUser!.username,
+        uid: userDataGetterMaster.loggedInUser!.uid!);
   }
 }
 
@@ -84,8 +88,10 @@ setUserCourseExamCompleted(
     required int examIndex}) async {
   int noOfExamsCompleted = 0;
   bool flag = false;
-  if (customUserProvider.loggedInUser!.courses_started.isNotEmpty) {
-    customUserProvider.loggedInUser!.courses_started.forEach((course) {
+  UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
+  print('rdcf: ${userDataGetterMaster.loggedInUser}');
+  if (userDataGetterMaster.loggedInUser!.courses_started.isNotEmpty) {
+    userDataGetterMaster.loggedInUser!.courses_started.forEach((course) {
       try {
         if (course['course_name'] == courseDetails['course_name']) {
           course['exams_completed'].forEach((exam_completed) {
@@ -110,8 +116,8 @@ setUserCourseExamCompleted(
     noOfExamsCompleted++;
     FirebaseFirestore.instance
         .collection("users")
-        .doc(customUserProvider.loggedInUser!.uid)
-        .set(customUserProvider.loggedInUser!.toMap());
+        .doc(userDataGetterMaster.loggedInUser!.uid)
+        .set(userDataGetterMaster.loggedInUser!.toMap());
   }
 
   int noOfExams = coursesProvider.allCourses[courseIndex].exams!.length;
@@ -129,8 +135,10 @@ setUserCourseModuleCompleted(
     required int courseIndex,
     required int moduleIndex}) async {
   bool flag = false;
-  if (customUserProvider.loggedInUser!.courses_started.isNotEmpty) {
-    customUserProvider.loggedInUser!.courses_started.forEach((course) {
+  UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
+
+  if (userDataGetterMaster.loggedInUser!.courses_started.isNotEmpty) {
+    userDataGetterMaster.loggedInUser!.courses_started.forEach((course) {
       try {
         if (course['courseID'] == courseDetails['courseID']) {
           course["modules_completed"].forEach((element) {
@@ -154,17 +162,18 @@ setUserCourseModuleCompleted(
         moduleIndex: moduleIndex);
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection("users")
-        .where("username", isEqualTo: customUserProvider.loggedInUser!.username)
+        .where("username",
+            isEqualTo: userDataGetterMaster.loggedInUser!.username)
         .get();
 
     var uid = querySnapshot.docs.first.id;
 
     print(
-        "MUST UPDATE COURSE MODULE ${customUserProvider.loggedInUser!.courses_started}");
+        "MUST UPDATE COURSE MODULE ${userDataGetterMaster.loggedInUser!.courses_started}");
     FirebaseFirestore.instance
         .collection("users")
-        .doc(customUserProvider.loggedInUser!.uid)
-        .set(customUserProvider.loggedInUser!.toMap());
+        .doc(userDataGetterMaster.loggedInUser!.uid)
+        .set(userDataGetterMaster.loggedInUser!.toMap());
   }
 }
 

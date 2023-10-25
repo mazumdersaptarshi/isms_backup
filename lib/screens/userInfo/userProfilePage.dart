@@ -32,32 +32,16 @@ class _UserProfilePageState extends State<UserProfilePage> {
   @override
   void initState() {
     super.initState();
-    UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
-    print('abcdef: ${userDataGetterMaster.currentUserEmail}');
     allEnrolledCourses = [];
     allCompletedCourses = [];
   }
 
   UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
   @override
-  void didChangeDependencies() async {
-    super.didChangeDependencies();
-    // if (!hasCheckedForChangedDependencies) {
-    //   LoggedInUserProvider loggedInUserProvider =
-    //       Provider.of<LoggedInUserProvider>(context, listen: true);
-    //   if (mounted) {
-    //     await loggedInUserProvider.fetchAllCoursesUser();
-    //     setState(() {
-    //       allEnrolledCourses = LoggedInUserProvider.allEnrolledCoursesGlobal;
-    //       allCompletedCourses = LoggedInUserProvider.allCompletedCoursesGlobal;
-    //       print("PRINTTTT ${LoggedInUserProvider.allEnrolledCoursesGlobal}");
-    //     });
-    //   }
-    // }
-  }
 
-  @override
   Widget build(BuildContext context) {
+    LoggedInUserProvider loggedInUserProvider =
+        Provider.of<LoggedInUserProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: Text('User Profile'),
@@ -78,16 +62,15 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       title: Text(action.name!),
                       onExpansionChanged: (expanded) async {
                         if (expanded) {
-                          LoggedInUserProvider loggedInUserProvider =
-                              await Provider.of<LoggedInUserProvider>(context,
-                                  listen: false);
-                          await loggedInUserProvider
-                              .currentUserCoursesGetter(action.actionId);
+                          // await loggedInUserProvider
+                          //     .getUserCoursesData(action.actionId);
+
                         }
                       },
                       children: [
                         UserActionsDropdown(
                           actionId: action.actionId!,
+                          loggedInUserProvider: loggedInUserProvider,
                         ),
                       ],
                     );
@@ -99,14 +82,17 @@ class _UserProfilePageState extends State<UserProfilePage> {
 }
 
 class UserActionsDropdown extends StatelessWidget {
-  UserActionsDropdown({super.key, required this.actionId});
+  UserActionsDropdown(
+      {super.key, required this.actionId, required this.loggedInUserProvider});
   String actionId;
+  LoggedInUserProvider loggedInUserProvider;
   @override
   Widget build(BuildContext context) {
     print(actionId);
     if (actionId == 'crs_enrl') {
       return UserEnrolledCoursesDropdown(
         actionId: actionId,
+        loggedInUserProvider: loggedInUserProvider,
       );
     }
     // else if (actionId == 'crs_compl') {
@@ -147,7 +133,11 @@ class UserActionsDropdown extends StatelessWidget {
 
 class UserEnrolledCoursesDropdown extends StatelessWidget {
   String? actionId;
-  UserEnrolledCoursesDropdown({this.actionId});
+
+  LoggedInUserProvider loggedInUserProvider;
+  UserEnrolledCoursesDropdown(
+      {this.actionId, required this.loggedInUserProvider});
+
   (bool, double, int) getCourseCompletedPercentage({
     required CoursesProvider coursesProvider,
     required int index,
@@ -157,7 +147,9 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
     bool isValid = false;
     print('Enrolled CoursesDropdown');
     print(actionId);
-    allEnrolledCourses = LoggedInUserProvider.allEnrolledCoursesGlobal;
+
+    allEnrolledCourses = loggedInUserProvider.allEnrolledCoursesGlobal;
+
     allEnrolledCourses.forEach((course) {
       if (course["modules_completed"] != null) {
         int modulesCount = 0;
@@ -193,7 +185,8 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
     return Column(
       children: [
         FutureBuilder<List>(
-          future: loggedInUserProvider.currentUserCoursesGetter('crs_enrl'),
+          future: loggedInUserProvider.getUserCoursesData('crs_enrl'),
+
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return CircularProgressIndicator();
@@ -202,7 +195,7 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
               return Text('No data available');
             }
             return ListView.builder(
-              itemCount: LoggedInUserProvider.allEnrolledCoursesGlobal.length,
+              itemCount: loggedInUserProvider.allEnrolledCoursesGlobal.length,
               shrinkWrap: true,
               itemBuilder: (context, index) {
                 double courseCompletionPercentage = 0;
@@ -299,16 +292,16 @@ class UserCompletedCoursesDropdown extends StatelessWidget {
     return Column(
       children: [
         FutureBuilder<List>(
-          future: loggedInUserProvider.currentUserCoursesGetter('crs_compl'),
+
+          future: loggedInUserProvider.getUserCoursesData('crs_compl'),
           builder: (context, snapshot) {
-            print(
-                'gbvvb: ${loggedInUserProvider.currentUserCoursesGetter('crs_compl')}');
             return ListView.builder(
-              itemCount: LoggedInUserProvider.allCompletedCoursesGlobal.length,
+              itemCount: loggedInUserProvider.allCompletedCoursesGlobal.length,
               shrinkWrap: true,
               itemBuilder: (context, index) {
                 allCompletedCourses =
-                    LoggedInUserProvider.allCompletedCoursesGlobal;
+                    loggedInUserProvider.allCompletedCoursesGlobal;
+
                 return ListTile(
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

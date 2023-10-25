@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:isms/projectModules/adminConsoleModules/adminProfileHeaderWidget.dart';
 import 'package:provider/provider.dart';
 
-import '../../../adminManagement/adminConsoleProvider.dart';
+import '../../../adminManagement/adminProvider.dart';
 import '../../../models/adminConsoleModels/adminConsoleActions.dart';
 import '../../../projectModules/adminConsoleModules/adminActionsWidget.dart';
 import '../../../userManagement/userDataGetterMaster.dart';

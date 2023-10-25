@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../adminManagement/adminConsoleProvider.dart';
 import '../../adminManagement/adminDataExporter.dart';
+import '../../adminManagement/adminProvider.dart';
 import '../../screens/adminScreens/AdminInstructions/adminInstructionsCategories.dart';
-import 'adminActionsDropdownModules/courseManagementDrowpdown.dart';
-import 'adminActionsDropdownModules/userManagementDropdown.dart';
+import 'adminActionsDropdownModules/allCoursesDropdown.dart';
+import 'adminActionsDropdownModules/allUsersDropdown.dart';
 
 class AdminActionDropdown extends StatefulWidget {
   AdminActionDropdown({
-    required this.adminConsoleProvider,
+    required this.adminProvider,
     required this.actionId,
   });
 
-  final AdminProvider adminConsoleProvider;
+  final AdminProvider adminProvider;
   final String actionId;
   final Map<String, dynamic> categories = {
     'people': ['Onboarding', 'Offboarding', 'Termination'],
@@ -28,11 +28,11 @@ class _AdminActionDropdownState extends State<AdminActionDropdown> {
   @override
   Widget build(BuildContext context) {
     if (widget.actionId == 'crs_mgmt') {
-      return CourseManagementDrowpdown(
-          adminConsoleProvider: widget.adminConsoleProvider);
+      return AllCoursesDropdown(
+        adminProvider: widget.adminProvider,
+      );
     } else if (widget.actionId == 'user_mgmt') {
-      return UsermanagementDropdown(
-          adminConsoleProvider: widget.adminConsoleProvider);
+      return AllUsersDropdown(adminProvider: widget.adminProvider);
     } else if (widget.actionId == 'instr') {
       return AdminInstructionsDropdown(
         categories: widget.categories,

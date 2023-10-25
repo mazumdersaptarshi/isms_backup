@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/models/newExam.dart';
@@ -26,7 +25,7 @@ Future fetchExams(
 
       course.exams?.add(exam);
     });
-    coursesProvider.fetchExamsToCourse(courseIndex, course.exams!);
+    // coursesProvider.fetchExamsToCourse(courseIndex, course.exams!);
     print("FCN Courses ${course.hashCode}, has exams: ${course.exams}");
   }
 }
@@ -55,8 +54,8 @@ Future fetchModuleExams(
 
       module.exams?.add(exam);
     });
-    coursesProvider.addExamsToCourseModule(
-        courseIndex, moduleIndex, module.exams!);
+    // coursesProvider.addExamsToCourseModule(
+    //     courseIndex, moduleIndex, module.exams!);
     print("FCN Module ${module.hashCode}, has exams: ${module.exams}");
   }
 }
