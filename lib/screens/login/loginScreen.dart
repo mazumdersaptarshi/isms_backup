@@ -3,9 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:isms/firebase_options.dart';
-import 'package:isms/userManagement/loggedInUserProvider.dart';
 import 'package:isms/userManagement/userDataGetterMaster.dart';
-import 'package:provider/provider.dart';
 
 import '../homePage.dart';
 
@@ -35,16 +33,11 @@ class LoginPageState extends State<LoginPage> {
         accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
     UserCredential userCredential =
         await FirebaseAuth.instance.signInWithCredential(credential);
-    print(userCredential.user?.displayName);
     await userDataGetterMaster.getLoggedInUserInfoFromFirestore();
-    print('uuuuu: ${userDataGetterMaster.currentUser}');
-    print(userDataGetterMaster.currentUserEmail);
   }
 
   @override
   Widget build(BuildContext context) {
-    LoggedInUserProvider customUserProvider =
-        Provider.of<LoggedInUserProvider>(context, listen: false);
     return Scaffold(
       body: Center(
         child: Column(

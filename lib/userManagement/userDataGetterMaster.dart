@@ -8,7 +8,6 @@ class UserDataGetterMaster {
   static DocumentReference? userRef;
   static DocumentSnapshot? _currentUserSnapshot;
   static String? _userRole;
-  static String? _uid;
   static CustomUser? _customUserObject;
 
   UserDataGetterMaster() {
@@ -21,6 +20,9 @@ class UserDataGetterMaster {
   String? get currentUserRole => _userRole;
   String? get currentUserUid => _currentUser?.uid;
   DocumentSnapshot? get currentUserSnapshot => _currentUserSnapshot;
+
+  Future<DocumentSnapshot<Object?>?> get newCurrentUserSnapshot async =>
+      await FirebaseFirestore.instance.collection('users').doc('${_currentUser?.uid}').get();
   CustomUser? get loggedInUser => _customUserObject;
 
   //Function called during constructor invoke, to get all required logged in user data from Firestore

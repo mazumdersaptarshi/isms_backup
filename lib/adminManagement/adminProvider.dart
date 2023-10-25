@@ -9,13 +9,33 @@ class AdminProvider extends ChangeNotifier {
   bool isCoursesStreamFetched = false;
   List<dynamic> allCoursesGlobal = [];
   List<dynamic> allUsersGlobal = [];
+  bool _hasnewData = false;
 
   Map<String, dynamic> snapshotData = {};
   AdminProvider() {
     print('provider invoked');
+    listenToChanges();
+  }
+
+  void listenToChanges() {
+    FirebaseFirestore.instance
+        .collection('adminconsole')
+        .doc('allcourses')
+        .collection('allCourseItems')
+        .snapshots()
+        .listen((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        _hasnewData = true;
+        notifyListeners();
+      }
+    });
   }
 
   Future<List> allCoursesDataFetcher() async {
+    if (!_hasnewData && allCoursesGlobal.isNotEmpty) {
+      print('No changes, fetching saved data');
+      return allCoursesGlobal;
+    }
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('adminconsole')
         .doc('allcourses')
@@ -32,6 +52,9 @@ class AdminProvider extends ChangeNotifier {
         allCoursesGlobal.add(courseItem);
       }
     });
+    _hasnewData = false;
+    print('Changes detected, returning updated data');
+
     return allCoursesGlobal;
   }
 
@@ -50,7 +73,6 @@ class AdminProvider extends ChangeNotifier {
           userRefs.add(documentSnapshot.id);
         }
       }
-      print('userRefss: ${userRefs}');
     });
     CollectionReference users = FirebaseFirestore.instance.collection('users');
     for (String userRef in userRefs) {
@@ -93,8 +115,6 @@ class AdminProvider extends ChangeNotifier {
         .get(); //this makes it QuerySnapshot<Map<String, dynamic>>
 
     for (var document in ref1.docs) {
-      print('Datasss: ${document.id}');
-
       final ref = collectionRef
           .doc('${document.id}')
           .collection('${subCategory}')
@@ -106,12 +126,6 @@ class AdminProvider extends ChangeNotifier {
           in querySnapshot.docs) {
         // Access data via .data() or []
         Map<String, dynamic> data = doc.data();
-        print("Document ID: ${doc.id}, Data: ${data}");
-
-        // Access individual fields
-        print("Number of slides': ${data['slides']?.length}");
-        print("Field 'name': ${data['slides']}");
-
         return data;
       }
     }
