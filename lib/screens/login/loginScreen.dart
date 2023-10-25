@@ -36,7 +36,6 @@ class LoginPageState extends State<LoginPage> {
     UserCredential userCredential =
         await FirebaseAuth.instance.signInWithCredential(credential);
     print(userCredential.user?.displayName);
-    UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
     await userDataGetterMaster.getLoggedInUserInfoFromFirestore();
     print('uuuuu: ${userDataGetterMaster.currentUser}');
     print(userDataGetterMaster.currentUserEmail);

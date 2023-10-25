@@ -25,7 +25,6 @@ class LoggedInUserProvider with ChangeNotifier {
   //Getter function for all course related info from users collection, for the logged in User
   //Basically populates the two static global variables allEnrolledCoursesGlobal and allCompletedCoursesGlobal
   Future<List> getUserCoursesData(String? actionId) async {
-    UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
     print(
         'Inside fetch courses user provider ${userDataGetterMaster.currentUserUid}');
     try {

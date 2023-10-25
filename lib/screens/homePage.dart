@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _loadUserInformation() async {
-    User? currentUser = FirebaseAuth.instance.currentUser;
+    User? currentUser = userInfoGetter.currentUser;
     await userInfoGetter.getLoggedInUserInfoFromFirestore();
     DocumentSnapshot? userSnapshot = userInfoGetter.currentUserSnapshot;
     if (userSnapshot != null) {
