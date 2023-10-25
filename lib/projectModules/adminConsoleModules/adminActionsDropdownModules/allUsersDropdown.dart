@@ -1,25 +1,22 @@
 import 'package:flutter/material.dart';
 
-import '../../../adminManagement/adminConsoleProvider.dart';
+import '../../../adminManagement/adminProvider.dart';
 
-class UsermanagementDropdown extends StatelessWidget {
-  const UsermanagementDropdown({
-    super.key,
-    required this.adminConsoleProvider,
-  });
+class AllUsersDropdown extends StatelessWidget {
+  AllUsersDropdown({super.key, required this.adminProvider});
+  final AdminProvider adminProvider;
 
-  final AdminProvider adminConsoleProvider;
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<dynamic>>(
-        future: adminConsoleProvider.getAllUsersList(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
-          } else if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          } else if (snapshot.hasData && snapshot.data != null) {
-            return ListView.builder(
+      future: adminProvider.allUsersDataFetcher(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else if (snapshot.hasData && snapshot.data != null) {
+          return ListView.builder(
               itemCount: snapshot.data!.length,
               shrinkWrap: true,
               itemBuilder: (context, index) {
@@ -29,7 +26,8 @@ class UsermanagementDropdown extends StatelessWidget {
                     children: [
                       Text(
                         '${index + 1}. ${snapshot.data![index].username}',
-                        style: TextStyle(fontSize: 14),
+                        style:
+                            TextStyle(fontSize: 14, color: Colors.blueAccent),
                       ),
                       Text(
                         '${snapshot.data![index].role}',
@@ -41,11 +39,11 @@ class UsermanagementDropdown extends StatelessWidget {
                     ExpansionTile(
                       title: const Text(
                         'Courses Completed',
-                        style: TextStyle(fontSize: 14),
+                        style: TextStyle(fontSize: 12),
                       ),
                       trailing: Text(
                         '${snapshot.data![index].courses_completed!.length}',
-                        style: TextStyle(fontSize: 14),
+                        style: TextStyle(fontSize: 12),
                       ),
                       children: [
                         for (var courseItem
@@ -56,11 +54,11 @@ class UsermanagementDropdown extends StatelessWidget {
                     ExpansionTile(
                       title: const Text(
                         'Courses Started',
-                        style: TextStyle(fontSize: 14),
+                        style: TextStyle(fontSize: 12),
                       ),
                       trailing: Text(
                         '${snapshot.data![index].courses_started!.length}',
-                        style: TextStyle(fontSize: 14),
+                        style: TextStyle(fontSize: 12),
                       ),
                       children: [
                         for (var courseItem
@@ -70,11 +68,11 @@ class UsermanagementDropdown extends StatelessWidget {
                     ),
                   ],
                 );
-              },
-            );
-          } else {
-            return Text('No data');
-          }
-        });
+              });
+        } else {
+          return Text('No data to return, unexpected error');
+        }
+      },
+    );
   }
 }
