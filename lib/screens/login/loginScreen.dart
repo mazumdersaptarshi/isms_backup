@@ -26,6 +26,8 @@ class LoginPageState extends State<LoginPage> {
         options: DefaultFirebaseOptions.currentPlatform);
   }
 
+
+
   Future<void> GoogleSignInWeb() async {
     GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
     GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
@@ -58,7 +60,10 @@ class LoginPageState extends State<LoginPage> {
                     print(e);
                   }
                 },
+
                 child: Text('Google Login ')),
+
+
           ],
         ),
       ),

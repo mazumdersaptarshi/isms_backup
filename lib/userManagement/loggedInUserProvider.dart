@@ -21,6 +21,7 @@ class LoggedInUserProvider with ChangeNotifier {
   CustomUser? get getCurrentUser => userDataGetterMaster.loggedInUser;
   UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
   LoggedInUserProvider() {
+
     _auth.authStateChanges().listen((User? user) {
       if (user != null) {
         // The user is logged in
@@ -31,6 +32,7 @@ class LoggedInUserProvider with ChangeNotifier {
       }
     });
     listenToChanges();
+
   }
 
   void listenToChanges() {

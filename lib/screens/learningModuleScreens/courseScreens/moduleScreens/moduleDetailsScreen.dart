@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../../projectModules/courseManagement/moduleManagement/slideManagement/fetchSlides.dart';
+import '../../../../themes/common_theme.dart';
 
 class ModuleDetails extends StatefulWidget {
   ModuleDetails(
@@ -74,86 +75,115 @@ class _ModuleDetailsState extends State<ModuleDetails> {
         title: module != null ? Text("${module.title}") : Text("No modules"),
       ),
       body: module != null
-          ? Container(
-              decoration: BoxDecoration(
-                  color: const Color.fromRGBO(187, 210, 206, 100),
-                  borderRadius: BorderRadius.circular(20)),
-              margin: EdgeInsets.all(10),
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      '${module!.title}',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Expanded(
-                      child: Text("${module!.contentDescription}"),
-                    ),
-                    ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ExamCreation(
-                                        courseIndex: widget.courseIndex,
-                                        examtype: EXAMTYPE.moduleExam,
-                                        moduleIndex: widget.moduleIndex,
-                                      )));
-                        },
-                        child: Text("Create new exam")),
-                    ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => CreateSlideScreen(
-                                        courseIndex: widget.courseIndex,
-                                        moduleIndex: widget.moduleIndex,
-                                      )));
-                        },
-                        child: Text("Add new slide")),
-                    if (isSlidesFetched && isSlidesListEmpty == false)
-                      ElevatedButton(
-                        onPressed: () async {
-                          await setUserCourseStarted(
-                              customUserProvider: customUserProvider,
-                              courseDetails: {
-                                "courseID": coursesProvider
-                                    .allCourses[widget.courseIndex].id,
-                                "course_name": coursesProvider
-                                    .allCourses[widget.courseIndex].name
-                              });
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SlidesDisplayScreen(
-                                        slides: module!.slides!,
-                                        courseIndex: widget.courseIndex,
-                                        moduleIndex: widget.moduleIndex,
-                                      )));
-                        },
-                        child: Text("Study module"),
-                      )
-                    else
-                      Container(
-                        height: 100,
-                        child: Center(
-                          child: Column(
-                            children: [
-                              Text("Loading slides"),
-                              CircularProgressIndicator(),
-                            ],
-                          ),
+          ? SingleChildScrollView(
+              child: Column(
+                children: [
+                  Text(
+                    coursesProvider.allCourses[widget.courseIndex].name,
+                    style: ModuleDescStyle,
+                  ),
+                  SizedBox(height: 20),
+                  // Card with course description
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.6,
+                    child: Card(
+                      elevation: 4,
+                      shape: customCardShape,
+                      color: primaryColor,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          module.contentDescription,
+                          style: commonTextStyle,
                         ),
                       ),
-                  ],
-                ),
+                    ),
+                  ),
+                  SizedBox(height: 20.0),
+                  // Study Module button aligned to the bottom and centered
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Column(
+                      children: [
+                        if (isSlidesFetched && isSlidesListEmpty == false)
+                          SizedBox(
+                            width: 200,
+                            child: ElevatedButton(
+                              style: customElevatedButtonStyle(),
+                              onPressed: () async {
+                                await setUserCourseStarted(
+                                    customUserProvider: customUserProvider,
+                                    courseDetails: {
+                                      "courseID": coursesProvider
+                                          .allCourses[widget.courseIndex].id,
+                                      "course_name": coursesProvider
+                                          .allCourses[widget.courseIndex].name
+                                    });
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            SlidesDisplayScreen(
+                                              slides: module!.slides!,
+                                              courseIndex: widget.courseIndex,
+                                              moduleIndex: widget.moduleIndex,
+                                            )));
+                              },
+                              child:
+                                  Text('Study Module', style: commonTextStyle),
+                            ),
+                          )
+                        else
+                          Container(
+                            height: 100,
+                            child: Center(
+                              child: Column(
+                                children: [
+                                  Text("Loading slides"),
+                                  CircularProgressIndicator(),
+                                ],
+                              ),
+                            ),
+                          ),
+                        SizedBox(
+                          width: 200,
+                          child: ElevatedButton(
+                            style: customElevatedButtonStyle(),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ExamCreation(
+                                            courseIndex: widget.courseIndex,
+                                            examtype: EXAMTYPE.moduleExam,
+                                            moduleIndex: widget.moduleIndex,
+                                          )));
+                            },
+                            child:
+                                Text('Create new exam', style: commonTextStyle),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 200,
+                          child: ElevatedButton(
+                            style: customElevatedButtonStyle(),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => CreateSlideScreen(
+                                            courseIndex: widget.courseIndex,
+                                            moduleIndex: widget.moduleIndex,
+                                          )));
+                            },
+                            child:
+                                Text('Add new slide', style: commonTextStyle),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             )
           : Container(

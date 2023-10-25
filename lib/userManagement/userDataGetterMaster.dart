@@ -42,6 +42,7 @@ class UserDataGetterMaster {
       userSnapshot = await userRef.get();
       _uid = user?.uid;
     }
+    print("INDSIDE INFOGETTER $userSnapshot");
     if (userSnapshot != null) {
       _currentUserSnapshot = userSnapshot;
       Map<String, dynamic>? userData =

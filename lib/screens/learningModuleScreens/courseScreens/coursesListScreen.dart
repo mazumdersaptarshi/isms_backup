@@ -4,6 +4,7 @@ import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/m
 
 import 'package:provider/provider.dart';
 
+import '../../../frontend/course_tile.dart';
 import '../../../projectModules/courseManagement/coursesProvider.dart';
 import 'createCourseScreen.dart';
 
@@ -26,28 +27,17 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
         child: ListView.builder(
           itemCount: coursesProvider.allCourses.length,
           itemBuilder: (context, courseIndex) {
-            return ListTile(
-              title: ListTile(
-                title: Text(coursesProvider.allCourses[courseIndex].name),
-              ),
-              trailing: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blueGrey,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10))),
-                child: Text(
-                  "Details",
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ModulesListScreen(
-                                courseIndex: courseIndex,
-                              )));
-                },
-              ),
+            return CourseTile(
+              index: courseIndex,
+              title: coursesProvider.allCourses[courseIndex].name,
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ModulesListScreen(
+                              courseIndex: courseIndex,
+                            )));
+              },
             );
           },
         ),
