@@ -83,7 +83,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                               await Provider.of<LoggedInUserProvider>(context,
                                   listen: false);
                           await loggedInUserProvider
-                              .currentUserCoursesGetter(action.actionId);
+                              .getUserCoursesData(action.actionId);
                         }
                       },
                       children: [
@@ -148,6 +148,7 @@ class UserActionsDropdown extends StatelessWidget {
 
 class UserEnrolledCoursesDropdown extends StatelessWidget {
   String? actionId;
+
   UserEnrolledCoursesDropdown({this.actionId});
   (bool, double, int) getCourseCompletedPercentage({
     required CoursesProvider coursesProvider,
@@ -194,7 +195,7 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
     return Column(
       children: [
         FutureBuilder<List>(
-          future: loggedInUserProvider.currentUserCoursesGetter('crs_enrl'),
+          future: loggedInUserProvider.getUserCoursesData('crs_enrl'),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return CircularProgressIndicator();
@@ -300,10 +301,10 @@ class UserCompletedCoursesDropdown extends StatelessWidget {
     return Column(
       children: [
         FutureBuilder<List>(
-          future: loggedInUserProvider.currentUserCoursesGetter('crs_compl'),
+          future: loggedInUserProvider.getUserCoursesData('crs_compl'),
           builder: (context, snapshot) {
             print(
-                'gbvvb: ${loggedInUserProvider.currentUserCoursesGetter('crs_compl')}');
+                'gbvvb: ${loggedInUserProvider.getUserCoursesData('crs_compl')}');
             return ListView.builder(
               itemCount: LoggedInUserProvider.allCompletedCoursesGlobal.length,
               shrinkWrap: true,

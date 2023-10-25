@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:isms/adminManagement/adminConsoleProvider.dart';
+import 'package:isms/adminManagement/adminProvider.dart';
 import 'package:isms/screens/adminScreens/AdminInstructions/adminInstructionSlides.dart';
 
 class AdminInstructionsCategories extends StatelessWidget {
