@@ -3,7 +3,7 @@ import 'package:isms/adminManagement/adminProvider.dart';
 import 'package:isms/screens/adminScreens/AdminInstructions/adminInstructionSlides.dart';
 import 'package:provider/provider.dart';
 import 'package:isms/userManagement/loggedInState.dart';
-import '../../login/loginScreen.dart';
+import 'package:isms/screens/login/loginScreen.dart';
 
 class AdminInstructionsCategories extends StatelessWidget {
   AdminInstructionsCategories(

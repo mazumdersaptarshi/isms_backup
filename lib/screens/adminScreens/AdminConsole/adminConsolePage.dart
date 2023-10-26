@@ -7,7 +7,7 @@ import '../../../models/adminConsoleModels/adminConsoleActions.dart';
 import '../../../projectModules/adminConsoleModules/adminActionsWidget.dart';
 import '../../../userManagement/userDataGetterMaster.dart';
 import 'package:isms/userManagement/loggedInState.dart';
-import '../../login/loginScreen.dart';
+import 'package:isms/screens/login/loginScreen.dart';
 
 class AdminConsolePage extends StatelessWidget {
   UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();

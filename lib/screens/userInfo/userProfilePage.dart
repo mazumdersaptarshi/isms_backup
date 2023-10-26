@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:isms/models/UserActions.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
-import '../login/loginScreen.dart';
+import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/userManagement/userprofileHeaderWidget.dart';
 import 'package:provider/provider.dart';
