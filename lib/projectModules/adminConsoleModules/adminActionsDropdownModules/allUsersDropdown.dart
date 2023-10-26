@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:isms/userManagement/loggedInUserProvider.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
 
 import '../../../adminManagement/adminProvider.dart';
@@ -142,11 +143,28 @@ class UserCourseStartedDetailsTile extends StatelessWidget {
             children: [
               Text('${courseItem["course_name"]}'),
               Text('${courseDetailsData["courseCompletionPercentage"] * 100}'),
+              CircularPercentIndicator(
+                radius: 20.0,
+                lineWidth: 5.0,
+                percent: courseDetailsData["courseCompletionPercentage"],
+                center: new Text(
+                  (courseDetailsData["courseCompletionPercentage"] * 100)
+                      .toString(),
+                  style: TextStyle(fontSize: 10),
+                ),
+                progressColor: Colors.yellow.shade900,
+              )
             ],
           ),
           if (courseItem["exams_completed"] != null)
-            Text(
-                'Exam completed: ${courseItem["exams_completed"].length} of ${courseDetailsData["noOfExams"]}'),
+            Row(
+              children: [
+                Text(
+                  'Exam completed: ${courseItem["exams_completed"].length} of ${courseDetailsData["noOfExams"]}',
+                  textAlign: TextAlign.left,
+                ),
+              ],
+            ),
         ],
       ),
     );
