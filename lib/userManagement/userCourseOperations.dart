@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:isms/userManagement/loggedInUserProvider.dart';
+import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/userManagement/userDataGetterMaster.dart';
 
 import '../projectModules/courseManagement/coursesProvider.dart';
 
 setUserCourseStarted(
-    {required LoggedInUserProvider customUserProvider,
+    {required LoggedInState loggedInState,
     required Map<String, dynamic> courseDetails}) async {
   bool flag = false;
   UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
@@ -19,7 +19,7 @@ setUserCourseStarted(
     });
   }
   if (flag == false) {
-    customUserProvider.setUserCourseStarted(courseDetails);
+    loggedInState.setUserCourseStarted(courseDetails);
 
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection("users")
@@ -42,7 +42,7 @@ setUserCourseStarted(
 }
 
 setUserCourseCompleted(
-    {required LoggedInUserProvider customUserProvider,
+    {required LoggedInState loggedInState,
     required Map<String, dynamic> courseDetails}) async {
   bool flag = false;
   UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
@@ -57,7 +57,7 @@ setUserCourseCompleted(
     });
   }
   if (flag == false) {
-    customUserProvider.setUserCourseCompleted(courseDetails);
+    loggedInState.setUserCourseCompleted(courseDetails);
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection("users")
         .where("username",
@@ -83,7 +83,7 @@ setUserCourseCompleted(
 setUserCourseExamCompleted(
     {required CoursesProvider coursesProvider,
     required int courseIndex,
-    required LoggedInUserProvider customUserProvider,
+    required LoggedInState loggedInState,
     required Map<String, dynamic> courseDetails,
     required int examIndex}) async {
   int noOfExamsCompleted = 0;
@@ -107,7 +107,7 @@ setUserCourseExamCompleted(
   }
 
   if (flag == false) {
-    customUserProvider.setUserCourseExamCompleted(
+    loggedInState.setUserCourseExamCompleted(
       courseDetails: courseDetails,
       coursesProvider: coursesProvider,
       courseIndex: courseIndex,
@@ -124,12 +124,12 @@ setUserCourseExamCompleted(
   print("noOfExamsCompleted ${noOfExamsCompleted},, ${noOfExams}");
   if (noOfExamsCompleted >= noOfExams) {
     setUserCourseCompleted(
-        customUserProvider: customUserProvider, courseDetails: courseDetails);
+        loggedInState: loggedInState, courseDetails: courseDetails);
   }
 }
 
 setUserCourseModuleCompleted(
-    {required LoggedInUserProvider customUserProvider,
+    {required LoggedInState loggedInState,
     required Map<String, dynamic> courseDetails,
     required CoursesProvider coursesProvider,
     required int courseIndex,
@@ -155,7 +155,7 @@ setUserCourseModuleCompleted(
   }
   if (flag == false) {
     print("FLAG IS FALSE ${courseDetails}");
-    customUserProvider.setUserCourseModuleCompleted(
+    loggedInState.setUserCourseModuleCompleted(
         courseDetails: courseDetails,
         coursesProvider: coursesProvider,
         courseIndex: courseIndex,

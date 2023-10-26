@@ -39,8 +39,8 @@ class UserDataGetterMaster {
     print('user ${user.email} currently signed into Firebase');
     DocumentReference _userRef =
         FirebaseFirestore.instance.collection('users').doc(user.uid);
-    DocumentSnapshot? userSnapshot = await _userRef.get();
-    if (userSnapshot != null) {
+    DocumentSnapshot userSnapshot = await _userRef.get();
+    if (userSnapshot.exists) {
       _currentUserSnapshot = userSnapshot;
       Map<String, dynamic>? userData =
           userSnapshot.data() as Map<String, dynamic>?;

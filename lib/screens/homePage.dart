@@ -13,7 +13,9 @@ import 'package:isms/sharedWidgets/customAppBar.dart';
 import 'package:provider/provider.dart';
 
 import '../userManagement/userDataGetterMaster.dart';
+import 'package:isms/userManagement/loggedInState.dart';
 import 'learningModuleScreens/courseScreens/createCourseScreen.dart';
+import 'login/loginScreen.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -51,6 +53,12 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    LoggedInState loggedInState = context.watch<LoggedInState>();
+
+    if (loggedInState.currentUser == null) {
+      return LoginPage();
+    }
+
     return Consumer<CoursesProvider>(
         builder: (BuildContext context, CoursesProvider value, Widget? child) {
       return Scaffold(

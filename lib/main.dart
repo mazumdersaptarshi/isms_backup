@@ -7,7 +7,7 @@ import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 import 'package:isms/projectModules/courseManagement/moduleManagement/slideManagement/slidesCreationProvider.dart';
 import 'package:isms/screens/homePage.dart';
 import 'package:isms/screens/login/loginScreen.dart';
-import 'package:isms/userManagement/loggedInUserProvider.dart';
+import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/userManagement/userDataGetterMaster.dart';
 import 'package:provider/provider.dart';
 
@@ -29,8 +29,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<LoggedInUserProvider>(create: (context) {
-          return LoggedInUserProvider();
+        ChangeNotifierProvider<LoggedInState>(create: (context) {
+          return LoggedInState();
         }),
         ChangeNotifierProvider<CoursesProvider>(create: (context) {
           return CoursesProvider();
@@ -48,25 +48,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        // home: LoginPage(),
-        home: StreamBuilder<User?>(
-            stream: FirebaseAuth.instance.authStateChanges(),
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (snapshot.hasError) {
-                return Text(snapshot.error.toString());
-              }
-              if (snapshot.connectionState == ConnectionState.active) {
-                if (snapshot.data == null) {
-                  return LoginPage();
-                } else {
-                  UserDataGetterMaster userDataGetterMaster =
-                      UserDataGetterMaster();
-                  userDataGetterMaster.getLoggedInUserInfoFromFirestore();
-                  return HomePage();
-                }
-              }
-              return LoginPage();
-            }),
+        home: LoginPage(),
       ),
     );
   }

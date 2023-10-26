@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:isms/firebase_options.dart';
 import 'package:isms/userManagement/userDataGetterMaster.dart';
+import 'package:isms/userManagement/loggedInState.dart';
+import 'package:provider/provider.dart';
 
 import '../homePage.dart';
 
@@ -41,6 +43,12 @@ class LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    LoggedInState loggedInState = context.watch<LoggedInState>();
+
+    if (loggedInState.currentUser != null) {
+      return HomePage();
+    }
+
     return Scaffold(
       body: Center(
         child: Column(
@@ -52,18 +60,11 @@ class LoginPageState extends State<LoginPage> {
                 onPressed: () async {
                   try {
                     await GoogleSignInWeb();
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomePage()),
-                    );
                   } catch (e) {
                     print(e);
                   }
                 },
-
                 child: Text('Google Login ')),
-
-
           ],
         ),
       ),

@@ -8,7 +8,15 @@ import '../models/course.dart';
 import '../models/userCoursesDetails.dart';
 import '../projectModules/courseManagement/coursesProvider.dart';
 
-class LoggedInUserProvider with ChangeNotifier {
+class LoggedInState with ChangeNotifier {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  UserDataGetterMaster _userDataGetterMaster = UserDataGetterMaster();
+  CustomUser? get getCurrentUser => _userDataGetterMaster.loggedInUser;
+
+  User? _currentUser;
+  User? get currentUser => _currentUser;
+
   List<dynamic> allEnrolledCoursesGlobal =
       []; //Global List to hold all enrolled courses for User
 
@@ -16,25 +24,25 @@ class LoggedInUserProvider with ChangeNotifier {
       []; //Global List to hold all completed courses for User
   bool _hasnewData = false;
   bool _authStateChanged = false;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  CustomUser? get getCurrentUser => userDataGetterMaster.loggedInUser;
-  UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
-  LoggedInUserProvider() {
+  LoggedInState() {
     _auth.authStateChanges().listen((User? user) {
-      if (user != null) {
-        // The user is logged in
-        _authStateChanged = true;
+      _currentUser = user;
+      if (_currentUser == null) {
+        print("no account is currently signed into Firebase");
       } else {
-        // The user is logged out
-        _authStateChanged = true;
+        print("account ${_currentUser!.email} is currently signed into Firebase");
+
+        _userDataGetterMaster.getLoggedInUserInfoFromFirestore();
       }
+      _authStateChanged = true;
+      notifyListeners();
     });
     listenToChanges();
   }
 
   void listenToChanges() {
-    userDataGetterMaster.currentUserDocumentReference
+    _userDataGetterMaster.currentUserDocumentReference
         ?.snapshots()
         .listen((snapshot) {
       if (snapshot.exists) {
@@ -56,10 +64,10 @@ class LoggedInUserProvider with ChangeNotifier {
           "Fetching fresh data because _authStateChanged = $_authStateChanged and _hasnewData = $_hasnewData");
 
       print(
-          'Inside fetch courses user provider ${userDataGetterMaster.currentUserUid}');
+          'Inside fetch courses user provider ${_userDataGetterMaster.currentUserUid}');
       try {
         DocumentSnapshot? newCurrentUserDocumentSnapshot =
-            await userDataGetterMaster.newCurrentUserSnapshot;
+            await _userDataGetterMaster.newCurrentUserSnapshot;
 
         if (newCurrentUserDocumentSnapshot!.exists) {
           Map<String, dynamic> mapdata =
@@ -106,13 +114,13 @@ class LoggedInUserProvider with ChangeNotifier {
 
   setUserCourseStarted(Map<String, dynamic> courseDetails) {
     // loggedInUser?.courses_started.add(courseDetails);
-    userDataGetterMaster.loggedInUser?.courses_started.add(courseDetails);
+    _userDataGetterMaster.loggedInUser?.courses_started.add(courseDetails);
     notifyListeners();
   }
 
   setUserCourseCompleted(Map<String, dynamic> courseDetails) {
     // loggedInUser?.courses_completed.add(courseDetails);
-    userDataGetterMaster.loggedInUser?.courses_completed.add(courseDetails);
+    _userDataGetterMaster.loggedInUser?.courses_completed.add(courseDetails);
     notifyListeners();
   }
 
@@ -124,7 +132,7 @@ class LoggedInUserProvider with ChangeNotifier {
     examIndex--;
     Course course = coursesProvider.allCourses[courseIndex];
     // loggedInUser?.courses_started.forEach((course_started) {
-    userDataGetterMaster.loggedInUser?.courses_started
+    _userDataGetterMaster.loggedInUser?.courses_started
         .forEach((course_started) {
       if (course_started['courseID'] == course.id) {
         if (course_started['exams_completed'] != null &&
@@ -153,7 +161,7 @@ class LoggedInUserProvider with ChangeNotifier {
         }
       }
     });
-    print(userDataGetterMaster.loggedInUser!.courses_started);
+    print(_userDataGetterMaster.loggedInUser!.courses_started);
     notifyListeners();
   }
 
@@ -164,7 +172,7 @@ class LoggedInUserProvider with ChangeNotifier {
       required int moduleIndex}) {
     Course course = coursesProvider.allCourses[courseIndex];
     // loggedInUser?.courses_started.forEach((course_started) {
-    userDataGetterMaster.loggedInUser?.courses_started
+    _userDataGetterMaster.loggedInUser?.courses_started
         .forEach((course_started) {
       if (course_started['courseID'] == course.id) {
         print("COMPLETED MODULEE ${course_started['modules_completed']}");
@@ -185,7 +193,7 @@ class LoggedInUserProvider with ChangeNotifier {
         }
       }
     });
-    print(userDataGetterMaster.loggedInUser!.courses_started);
+    print(_userDataGetterMaster.loggedInUser!.courses_started);
     notifyListeners();
   }
 }
