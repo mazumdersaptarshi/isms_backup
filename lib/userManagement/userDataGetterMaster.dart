@@ -54,4 +54,25 @@ class UserDataGetterMaster {
       print('User not found');
     }
   }
+
+  //basic setters for the user
+  set currentUser(User? user) {
+    _currentUser = user;
+  }
+
+  set currentUserRole(String? role) {
+    _userRole = role;
+  }
+
+  set currentUserUid(String? uid) {
+    _uid = uid;
+  }
+
+  set currentUserDocumentReference(DocumentReference? ref) {
+    _userRef = ref;
+  }
+
+  set currentUserSnapshot(DocumentSnapshot? snapshot) {
+    _currentUserSnapshot = snapshot;
+  }
 }
