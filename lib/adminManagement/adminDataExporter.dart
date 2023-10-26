@@ -15,12 +15,16 @@ class DataExporter {
   Future<void> downloadCSV() async {
     //Download Users data
     var csvData;
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection(collectionDataToDownload!)
-        .get();
+    QuerySnapshot querySnapshot;
     if (collectionDataToDownload == 'users') {
+      querySnapshot = await FirebaseFirestore.instance
+          .collection(collectionDataToDownload!)
+          .get();
       csvData = getUsersDataAsCSV(querySnapshot);
     } else if (collectionDataToDownload == 'courses') {
+      querySnapshot = await FirebaseFirestore.instance
+          .collection(collectionDataToDownload!)
+          .get();
       csvData = getCoursesDataAsCSV(querySnapshot);
     }
     // Loop through the documents to populate the CSV data

@@ -76,7 +76,7 @@ class SlideList extends StatelessWidget {
               SlideItem(
                   title: slide['title'] ?? 'n/a',
                   content: slide['content'] ?? 'n/a',
-                  color: Colors.red),
+                  color: Colors.deepPurpleAccent.shade200),
           ],
         );
       } catch (e) {
