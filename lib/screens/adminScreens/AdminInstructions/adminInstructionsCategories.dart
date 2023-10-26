@@ -11,7 +11,7 @@ class AdminInstructionsCategories extends StatelessWidget {
   String? category;
   List<String> subCategories;
 
-  Future<List?> fetchSlides2(
+  Future<List?> fetchSlidesList(
       AdminProvider adminProvider, String category, String subCategory) async {
     var slides = await adminProvider?.fetchAdminInstructionsFromFirestore(
         category!, subCategory);
@@ -28,14 +28,14 @@ class AdminInstructionsCategories extends StatelessWidget {
             for (var subCategory in subCategories)
               ElevatedButton(
                   onPressed: () async {
-                    var res2 = await fetchSlides2(
+                    var slidesList = await fetchSlidesList(
                         adminProvider!, category!, subCategory);
 
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => AdminInstructionSlides(
-                                slides: res2,
+                                slides: slidesList,
                               )),
                     );
                   },

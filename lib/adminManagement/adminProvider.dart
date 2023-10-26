@@ -5,17 +5,23 @@ import 'package:isms/models/adminConsoleModels/coursesDetails.dart';
 import 'package:isms/userManagement/userDataGetterMaster.dart';
 
 import '../models/customUser.dart';
+import '../userManagement/loggedInUserProvider.dart';
 
 class AdminProvider extends ChangeNotifier {
   bool isCoursesStreamFetched = false;
   List<dynamic> allCourses = [];
   List<dynamic> allUsers = [];
-  bool _hasnewData = false;
+  List<dynamic> userRefs = [];
+
+  bool _hasNewCoursesData = false;
+  bool _hasNewUsersData = false;
   UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
   Map<String, dynamic> snapshotData = {};
+  LoggedInUserProvider loggedInUserProvider = LoggedInUserProvider();
   AdminProvider() {
     print('provider invoked');
     listenToCoursesChanges();
+    listenToUsersChanges();
   }
 
   void listenToCoursesChanges() {
@@ -26,7 +32,7 @@ class AdminProvider extends ChangeNotifier {
         .snapshots()
         .listen((snapshot) {
       if (snapshot.docs.isNotEmpty) {
-        _hasnewData = true;
+        _hasNewCoursesData = true;
         notifyListeners();
       }
     });
@@ -35,19 +41,31 @@ class AdminProvider extends ChangeNotifier {
   void listenToUsersChanges() {
     FirebaseFirestore.instance
         .collection('adminconsole')
-        .doc('allcourses')
-        .collection('allCourseItems')
+        .doc('allusers')
+        .collection('userRefs')
         .snapshots()
         .listen((snapshot) {
       if (snapshot.docs.isNotEmpty) {
-        _hasnewData = true;
+        print('User added or removed');
+        _hasNewUsersData = true;
+        notifyListeners();
+      }
+    });
+
+    FirebaseFirestore.instance
+        .collection('users')
+        .snapshots()
+        .listen((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        _hasNewUsersData = true;
+        print('There was a chnage in user data');
         notifyListeners();
       }
     });
   }
 
   Future<List> allCoursesDataFetcher() async {
-    if (!_hasnewData && allCourses.isNotEmpty) {
+    if (!_hasNewCoursesData && allCourses.isNotEmpty) {
       print('No changes, fetching saved data');
       return allCourses;
     }
@@ -67,54 +85,67 @@ class AdminProvider extends ChangeNotifier {
         allCourses.add(courseItem);
       }
     });
-    _hasnewData = false;
+    _hasNewCoursesData = false;
     print('Changes detected, returning updated data');
 
     return allCourses;
   }
 
   Future<List> allUsersDataFetcher() async {
-    allUsers.clear();
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('adminconsole')
-        .doc('allusers')
-        .collection('userRefs')
-        .get();
-    List<dynamic> userRefs = [];
+    if (loggedInUserProvider.authStateChanged || _hasNewUsersData) {
+      //Clearing old data if there is new data available
+      allUsers.clear();
+      userRefs.clear();
+      print(
+          'Fething new data from firestore as authStateChanged: ${loggedInUserProvider.authStateChanged} and _hasNewUsersData: ${_hasNewUsersData}');
 
-    querySnapshot.docs.forEach((documentSnapshot) async {
-      if (documentSnapshot.exists) {
-        if (!userRefs.contains(documentSnapshot.id)) {
-          userRefs.add(documentSnapshot.id);
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('adminconsole')
+          .doc('allusers')
+          .collection('userRefs')
+          .get();
+
+      querySnapshot.docs.forEach((documentSnapshot) async {
+        if (documentSnapshot.exists) {
+          if (!userRefs.contains(documentSnapshot.id)) {
+            userRefs.add(documentSnapshot.id);
+          }
+        }
+      });
+      CollectionReference users =
+          FirebaseFirestore.instance.collection('users');
+      for (String userRef in userRefs) {
+        DocumentSnapshot userSnapshot = await users!.doc(userRef).get();
+        try {
+          Map<String, dynamic> userData =
+              userSnapshot.data() as Map<String, dynamic>;
+          print('raw user data: $userData');
+          userData["uid"] = userSnapshot.id;
+
+          // localUserDataList.add({
+          //   'username': userData['username'],
+          //   'email': userData['email'],
+          //   'role': userData['role'],
+          // });
+          CustomUser userInfo = CustomUser.fromMap(userData);
+
+          allUsers.add(userInfo);
+          allUsers.forEach((element) {
+            print(element.courses_completed);
+          });
+        } catch (e) {
+          print(
+              'There was an issue with user Data; Could not fetch user data. Reason for error: $e');
         }
       }
-    });
-    CollectionReference users = FirebaseFirestore.instance.collection('users');
-    for (String userRef in userRefs) {
-      DocumentSnapshot userSnapshot = await users!.doc(userRef).get();
-      try {
-        Map<String, dynamic> userData =
-            userSnapshot.data() as Map<String, dynamic>;
-        print('raw user data: $userData');
-        userData["uid"] = userSnapshot.id;
-
-        // localUserDataList.add({
-        //   'username': userData['username'],
-        //   'email': userData['email'],
-        //   'role': userData['role'],
-        // });
-        CustomUser userInfo = CustomUser.fromMap(userData);
-
-        allUsers.add(userInfo);
-        allUsers.forEach((element) {
-          print(element.courses_completed);
-        });
-      } catch (e) {
-        print(
-            'There was an issue with user Data; Could not fetch user data. Reason for error: $e');
-      }
+      _hasNewUsersData = false;
+      loggedInUserProvider.authStateChanged = false;
+      return allUsers;
+    } else {
+      print(
+          'Fetching cached data since no changes detected, authStateChanged: ${loggedInUserProvider.authStateChanged} and _hasNewUsersData: ${_hasNewUsersData}');
+      return allUsers;
     }
-    return allUsers;
   }
 
   Future<Map<String, dynamic>?> fetchAdminInstructions(
