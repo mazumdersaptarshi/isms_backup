@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
-import 'package:isms/models/module.dart';
-
+import 'package:isms/screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/createModuleScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examListScreen.dart';
-import 'package:provider/provider.dart';
 import 'package:isms/utilityWidgets/modulesList/moduleListWidget.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../../projectModules/courseManagement/moduleManagement/fetchModules.dart';
@@ -53,7 +52,10 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CoursesDisplayScreen()));
             },
           ),
           title: Text("${course.name}"),

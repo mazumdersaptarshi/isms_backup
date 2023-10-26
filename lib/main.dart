@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +24,11 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   // This widget is the root of your application.
+  Future<void> setUser() async {
+    UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
+    await userDataGetterMaster.getLoggedInUserInfoFromFirestore();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -59,10 +63,10 @@ class MyApp extends StatelessWidget {
                 if (snapshot.data == null) {
                   return LoginPage();
                 } else {
-                  UserDataGetterMaster userDataGetterMaster =
-                      UserDataGetterMaster();
-                  userDataGetterMaster.getLoggedInUserInfoFromFirestore();
-                  return HomePage();
+                  setUser().then((value) {
+                    return HomePage();
+                  });
+                  return LoginPage();
                 }
               }
               return LoginPage();
