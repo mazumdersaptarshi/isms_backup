@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
+
 import 'package:isms/screens/adminScreens/AdminConsole/adminConsolePage.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
 import 'package:isms/screens/userInfo/userProfilePage.dart';
@@ -58,33 +59,34 @@ class _HomePageState extends State<HomePage> {
           body: Column(
             children: [
               Text(userRole.toString()),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   if (userRole == "admin")
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10))),
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => AdminConsolePage()),
-                      );
-                    },
-                    child: Container(
-                      constraints: const BoxConstraints(minHeight: 50),
-                      child: const Column(
-                        children: [
-                          Icon(Icons.lock_person_rounded),
-                          Text("Admin console")
-                        ],
+                    ElevatedButton(
+                      style: ButtonStyle(
+                        shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10))),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AdminConsolePage()),
+                        );
+                      },
+                      child: Container(
+                        constraints: BoxConstraints(minHeight: 50),
+                        child: Column(
+                          children: [
+                            Icon(Icons.lock_person_rounded),
+                            Text("Admin console")
+                          ],
+                        ),
                       ),
                     ),
-                  ),
                   ElevatedButton(
                     onPressed: () {
                       Navigator.push(
@@ -93,49 +95,50 @@ class _HomePageState extends State<HomePage> {
                             builder: (context) => CoursesDisplayScreen()),
                       );
                     },
-                    style: ButtonStyle(
-                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10))),
-                    ),
                     child: Container(
                       width: 100,
-                      constraints: const BoxConstraints(minHeight: 50),
-                      child: const Column(
+                      constraints: BoxConstraints(minHeight: 50),
+                      child: Column(
                         children: [
                           Icon(Icons.laptop_chromebook_outlined),
                           Text("All courses")
                         ],
                       ),
                     ),
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10))),
+                    ),
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => UserProfilePage()),
+                    MaterialPageRoute(
+                      builder: (context) => UserProfilePage()),
                   );
                 },
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10))),
-                ),
                 child: Container(
                   width: 100,
-                  constraints: const BoxConstraints(minHeight: 50),
-                  child: const Column(
-                    children: [Icon(Icons.person_pin), Text("User profile")],
+                  constraints: BoxConstraints(minHeight: 50),
+                  child: Column(
+                    children: [
+                      Icon(Icons.person_pin),
+                      Text("User profile")
+                    ],
                   ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
                 style: ButtonStyle(
                   shape: MaterialStateProperty.all(RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10))),
                 ),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
                 onPressed: () async {
                   DateTime? pickedDate = await showDatePicker(
                       context: context,
@@ -162,10 +165,15 @@ class _HomePageState extends State<HomePage> {
                     }
                   }
                 },
-                child: const Text('Set Expiry date'),
+                child: Text('Set Expiry date'),
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10))),
+                ),
               ),
             ],
-          ));
+          )
+        );
     });
   }
 }
