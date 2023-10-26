@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 
 import '../../../adminManagement/adminProvider.dart';
 
@@ -20,6 +21,9 @@ class AllCoursesDropdown extends StatelessWidget {
               itemCount: snapshot.data!.length,
               shrinkWrap: true,
               itemBuilder: (context, index) {
+                print('allUserRefs: ${adminProvider.userRefs}');
+                print(
+                    'This course completed students percent: ${(snapshot.data![index].course_completed!.length / (adminProvider.userRefs.length) * 100)}');
                 return ExpansionTile(
                   title: Text(
                     '${index + 1}.  ${snapshot.data![index].course_name}',
@@ -31,9 +35,17 @@ class AllCoursesDropdown extends StatelessWidget {
                         'Completed',
                         style: TextStyle(color: Colors.green),
                       ),
-                      trailing: Text(
-                        '${snapshot.data![index].course_completed!.length}',
-                        style: TextStyle(color: Colors.green),
+                      trailing: CircularPercentIndicator(
+                        radius: 20.0,
+                        lineWidth: 5.0,
+                        percent:
+                            (snapshot.data![index].course_completed!.length /
+                                    (adminProvider.userRefs.length)) ??
+                                0,
+                        center: new Text(
+                            '${(snapshot.data![index].course_completed!.length / (adminProvider.userRefs.length) * 100).round()}%',
+                            style: TextStyle(fontSize: 10)),
+                        progressColor: Colors.green,
                       ),
                       children: [
                         for (var student
@@ -49,9 +61,17 @@ class AllCoursesDropdown extends StatelessWidget {
                         'Started',
                         style: TextStyle(color: Colors.yellow.shade900),
                       ),
-                      trailing: Text(
-                        '${snapshot.data![index].course_started!.length}',
-                        style: TextStyle(color: Colors.yellow.shade900),
+                      trailing: CircularPercentIndicator(
+                        radius: 20.0,
+                        lineWidth: 5.0,
+                        percent: (snapshot.data![index].course_started!.length /
+                                (adminProvider.userRefs.length)) ??
+                            0,
+                        center: new Text(
+                          '${(snapshot.data![index].course_started!.length / (adminProvider.userRefs.length) * 100).round()}%',
+                          style: TextStyle(fontSize: 10),
+                        ),
+                        progressColor: Colors.yellow.shade900,
                       ),
                       children: [
                         for (var student

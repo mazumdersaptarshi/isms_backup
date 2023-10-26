@@ -85,6 +85,19 @@ class AdminProvider extends ChangeNotifier {
         allCourses.add(courseItem);
       }
     });
+    QuerySnapshot userRefsQuerySnapshot = await FirebaseFirestore.instance
+        .collection('adminconsole')
+        .doc('allusers')
+        .collection('userRefs')
+        .get();
+    userRefsQuerySnapshot.docs.forEach((documentSnapshot) async {
+      if (documentSnapshot.exists) {
+        if (!userRefs.contains(documentSnapshot.id)) {
+          userRefs.add(documentSnapshot.id);
+        }
+      }
+    });
+
     _hasNewCoursesData = false;
     print('Changes detected, returning updated data');
 
