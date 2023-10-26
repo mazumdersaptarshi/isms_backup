@@ -17,6 +17,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           const Text('ISMS'),
           const Spacer(),
           buildUserAvatar(context),
+          IconButton(
+              onPressed: () => AuthUtils.logout(),
+              icon: Icon(Icons.logout))
         ],
       ),
     );
@@ -25,7 +28,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget buildUserAvatar(BuildContext context) {
     return IconButton(
       padding: const EdgeInsets.only(right: 5.0),
-      onPressed: () => AuthUtils.logout(),
+      onPressed: () {},
       icon: userDataGetterMaster.currentUser?.photoURL != null
           ? CircleAvatar(
               radius: 18,

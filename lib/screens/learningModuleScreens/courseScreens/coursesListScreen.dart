@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:isms/screens/homePage.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/modulesListScreen.dart';
-
 import 'package:provider/provider.dart';
 import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/userManagement/loggedInState.dart';
@@ -29,6 +28,13 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => HomePage()));
+          },
+        ),
         title: Text("All courses"),
       ),
       body: Container(
