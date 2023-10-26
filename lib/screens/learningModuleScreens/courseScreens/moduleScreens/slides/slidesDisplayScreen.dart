@@ -6,6 +6,10 @@ import 'package:isms/screens/learningModuleScreens/examScreens/examListScreen.da
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleExamsListScreen.dart';
 import 'package:isms/sharedWidgets/htmlSlideDisplay.dart';
 
+import 'package:provider/provider.dart';
+import 'package:isms/userManagement/loggedInState.dart';
+import 'package:isms/screens/login/loginScreen.dart';
+
 class SlidesDisplayScreen extends StatefulWidget {
   SlidesDisplayScreen(
       {super.key,
@@ -58,6 +62,12 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
 
   @override
   Widget build(BuildContext context) {
+    LoggedInState loggedInState = context.watch<LoggedInState>();
+
+    if (loggedInState.user == null) {
+      return LoginPage();
+    }
+
     final isWeb = kIsWeb;
 
     return Scaffold(

@@ -4,6 +4,7 @@ import 'package:isms/models/question.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
+import 'package:isms/screens/login/loginScreen.dart';
 
 import '../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../userManagement/userCourseOperations.dart';
@@ -90,6 +91,12 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
 
   @override
   Widget build(BuildContext context) {
+    LoggedInState loggedInState = context.watch<LoggedInState>();
+
+    if (loggedInState.user == null) {
+      return LoginPage();
+    }
+
     return Scaffold(
       appBar: AppBar(title: Text(_showScore ? 'Score' : 'Exam Module')),
       body: _showScore ? buildScoreWidget() : buildExamWidget(),

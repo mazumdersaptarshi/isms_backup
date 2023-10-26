@@ -9,6 +9,9 @@ import 'package:provider/provider.dart';
 import '../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../projectModules/courseManagement/examManagement/fetchExams.dart';
 
+import 'package:isms/screens/login/loginScreen.dart';
+import 'package:isms/userManagement/loggedInState.dart';
+
 class ExamListScreen extends StatefulWidget {
   ExamListScreen(
       {super.key,
@@ -48,6 +51,12 @@ class _ExamListScreenState extends State<ExamListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    LoggedInState loggedInState = context.watch<LoggedInState>();
+
+    if (loggedInState.user == null) {
+      return LoginPage();
+    }
+
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
     Course course = coursesProvider.allCourses[widget.courseIndex];
     List<NewExam>? exams = [];

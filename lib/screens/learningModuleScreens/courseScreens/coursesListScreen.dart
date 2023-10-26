@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/modulesListScreen.dart';
 
 import 'package:provider/provider.dart';
+import 'package:isms/screens/login/loginScreen.dart';
+import 'package:isms/userManagement/loggedInState.dart';
 
 import '../../../frontend/course_tile.dart';
 import '../../../projectModules/courseManagement/coursesProvider.dart';
@@ -18,6 +20,12 @@ class CoursesDisplayScreen extends StatefulWidget {
 class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
   @override
   Widget build(BuildContext context) {
+    LoggedInState loggedInState = context.watch<LoggedInState>();
+
+    if (loggedInState.user == null) {
+      return LoginPage();
+    }
+
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
     return Scaffold(
       appBar: AppBar(

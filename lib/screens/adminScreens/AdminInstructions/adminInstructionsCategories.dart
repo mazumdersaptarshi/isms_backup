@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:isms/adminManagement/adminProvider.dart';
 import 'package:isms/screens/adminScreens/AdminInstructions/adminInstructionSlides.dart';
+import 'package:provider/provider.dart';
+import 'package:isms/userManagement/loggedInState.dart';
+import '../../login/loginScreen.dart';
 
 class AdminInstructionsCategories extends StatelessWidget {
   AdminInstructionsCategories(
@@ -21,6 +24,12 @@ class AdminInstructionsCategories extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    LoggedInState loggedInState = context.watch<LoggedInState>();
+
+    if (loggedInState.user == null) {
+      return LoginPage();
+    }
+
     return Scaffold(
       body: SafeArea(
         child: Column(

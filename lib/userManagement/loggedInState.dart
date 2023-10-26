@@ -15,7 +15,7 @@ class LoggedInState with ChangeNotifier {
   CustomUser? get getCurrentUser => _userDataGetterMaster.loggedInUser;
 
   User? _currentUser;
-  User? get currentUser => _currentUser;
+  User? get user => _currentUser;
 
   List<dynamic> allEnrolledCoursesGlobal =
       []; //Global List to hold all enrolled courses for User

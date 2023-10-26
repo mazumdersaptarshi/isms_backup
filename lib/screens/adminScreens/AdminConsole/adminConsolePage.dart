@@ -6,6 +6,8 @@ import '../../../adminManagement/adminProvider.dart';
 import '../../../models/adminConsoleModels/adminConsoleActions.dart';
 import '../../../projectModules/adminConsoleModules/adminActionsWidget.dart';
 import '../../../userManagement/userDataGetterMaster.dart';
+import 'package:isms/userManagement/loggedInState.dart';
+import '../../login/loginScreen.dart';
 
 class AdminConsolePage extends StatelessWidget {
   UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
@@ -28,6 +30,12 @@ class AdminConsolePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    LoggedInState loggedInState = context.watch<LoggedInState>();
+
+    if (loggedInState.user == null) {
+      return LoginPage();
+    }
+
     AdminProvider adminConsoleProvider = Provider.of<AdminProvider>(context);
     print('adminConsoleProvider: $adminConsoleProvider');
 

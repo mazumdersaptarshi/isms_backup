@@ -45,7 +45,7 @@ class LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
 
-    if (loggedInState.currentUser != null) {
+    if (loggedInState.user != null) {
       return HomePage();
     }
 

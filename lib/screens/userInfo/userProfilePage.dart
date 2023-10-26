@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:isms/models/UserActions.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
+import '../login/loginScreen.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/userManagement/userprofileHeaderWidget.dart';
 import 'package:provider/provider.dart';
@@ -40,8 +41,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
   @override
 
   Widget build(BuildContext context) {
-    LoggedInState loggedInState =
-        Provider.of<LoggedInState>(context, listen: false);
+    LoggedInState loggedInState = context.watch<LoggedInState>();
+
+    if (loggedInState.user == null) {
+      return LoginPage();
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('User Profile'),

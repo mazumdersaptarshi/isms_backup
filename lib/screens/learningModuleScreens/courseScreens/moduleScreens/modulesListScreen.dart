@@ -11,6 +11,9 @@ import 'package:isms/utilityWidgets/modulesList/moduleListWidget.dart';
 import '../../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../../projectModules/courseManagement/moduleManagement/fetchModules.dart';
 
+import 'package:isms/screens/login/loginScreen.dart';
+import 'package:isms/userManagement/loggedInState.dart';
+
 class ModulesListScreen extends StatefulWidget {
   ModulesListScreen({super.key, required this.courseIndex});
   int courseIndex = 0;
@@ -44,6 +47,12 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    LoggedInState loggedInState = context.watch<LoggedInState>();
+
+    if (loggedInState.user == null) {
+      return LoginPage();
+    }
+
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
     Course course = coursesProvider.allCourses[widget.courseIndex];
 
