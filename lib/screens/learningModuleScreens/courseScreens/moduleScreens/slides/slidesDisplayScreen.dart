@@ -71,8 +71,8 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.blueGrey),
-        title: Text(
+        iconTheme: const IconThemeData(color: Colors.blueGrey),
+        title: const Text(
           'Slides',
           style: TextStyle(color: Colors.blueGrey),
         ),

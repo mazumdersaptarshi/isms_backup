@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:isms/screens/homePage.dart';
-import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/modulesListScreen.dart';
 import 'package:provider/provider.dart';
+
+import 'package:isms/screens/homePage.dart';
+import 'package:isms/frontend_temp/course_tile.dart';
+
+import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/modulesListScreen.dart';
 import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/userManagement/loggedInState.dart';
-
-import '../../../frontend_temp/course_tile.dart';
 import '../../../projectModules/courseManagement/coursesProvider.dart';
 import 'createCourseScreen.dart';
 

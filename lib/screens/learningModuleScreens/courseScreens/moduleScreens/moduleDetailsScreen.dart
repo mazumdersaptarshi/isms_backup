@@ -78,15 +78,19 @@ class _ModuleDetailsState extends State<ModuleDetails> {
             Navigator.pop(context);
           },
         ),
-        title: module != null ? Text("${module.title}") : Text("No modules"),
+        title: module != null ? Text("${module.title}", style: commonTitleStyle,) : Text("No modules",style: commonTitleStyle,),
       ),
       body: module != null
           ? SingleChildScrollView(
               child: Column(
                 children: [
-                  Text(
-                    coursesProvider.allCourses[widget.courseIndex].name,
-                    style: ModuleDescStyle,
+                  Container(
+                    alignment: Alignment.topLeft,
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: Text(
+                      coursesProvider.allCourses[widget.courseIndex].name,
+                      style: ModuleDescStyle,
+                    ),
                   ),
                   SizedBox(height: 20),
                   // Card with course description
