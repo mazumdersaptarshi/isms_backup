@@ -48,37 +48,37 @@ class _UserProfilePageState extends State<UserProfilePage> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('User Profile'),
-      ),
-      body: Column(
-        children: [
-          Expanded(child: UserProfileHeaderWidget()),
-          Expanded(
-              flex: 2,
-              child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: 6,
-                  itemBuilder: (context, index) {
-                    final action = userActions[index];
-
-                    return ExpansionTile(
-                      leading: Icon(action.icon),
-                      title: Text(action.name!),
-                      onExpansionChanged: (expanded) async {
-                        if (expanded) {
-                          // await loggedInState
-                          //     .getUserCoursesData(action.actionId);
-                        }
-                      },
-                      children: [
-                        UserActionsDropdown(
-                          actionId: action.actionId!,
-                          loggedInState: loggedInState,
-                        ),
-                      ],
-                    );
-                  }))
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 160.0,
+            flexibleSpace:
+                FlexibleSpaceBar(background: UserProfileHeaderWidget()),
+          ),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                final action = userActions[index];
+                return ExpansionTile(
+                  leading: Icon(action.icon),
+                  title: Text(action.name!),
+                  onExpansionChanged: (expanded) async {
+                    if (expanded) {
+                      // await loggedInState
+                      //     .getUserCoursesData(action.actionId);
+                    }
+                  },
+                  children: [
+                    UserActionsDropdown(
+                      actionId: action.actionId!,
+                      loggedInState: loggedInState,
+                    ),
+                  ],
+                );
+              },
+              childCount: 6, // Change this count as needed
+            ),
+          )
         ],
       ),
     );
@@ -190,7 +190,6 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
       children: [
         FutureBuilder<List>(
           future: loggedInState.getUserCoursesData('crs_enrl'),
-
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return CircularProgressIndicator();
@@ -201,6 +200,7 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
             return ListView.builder(
               itemCount: loggedInState.allEnrolledCoursesGlobal.length,
               shrinkWrap: true,
+              physics: ClampingScrollPhysics(),
               itemBuilder: (context, index) {
                 double courseCompletionPercentage = 0;
                 bool isValid = false;
@@ -301,6 +301,7 @@ class UserCompletedCoursesDropdown extends StatelessWidget {
             return ListView.builder(
               itemCount: loggedInState.allCompletedCoursesGlobal.length,
               shrinkWrap: true,
+              physics: ClampingScrollPhysics(),
               itemBuilder: (context, index) {
                 allCompletedCourses =
                     loggedInState.allCompletedCoursesGlobal;

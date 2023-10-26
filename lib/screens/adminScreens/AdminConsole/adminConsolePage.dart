@@ -14,14 +14,9 @@ class AdminConsolePage extends StatelessWidget {
 
   final List<AdminActions> adminActions = [
     AdminActions(
-        name: 'Dashboard', icon: Icons.dashboard, actionId: 'dashboard'),
-    AdminActions(name: 'Reports', icon: Icons.description, actionId: 'reports'),
-    AdminActions(
         name: 'User Management', icon: Icons.group, actionId: 'user_mgmt'),
     AdminActions(
         name: 'Course Management', icon: Icons.school, actionId: 'crs_mgmt'),
-    AdminActions(name: 'Draft Courses', icon: Icons.edit, actionId: 'drf_crs'),
-    AdminActions(name: 'Exams', icon: Icons.assignment, actionId: 'exms'),
     AdminActions(name: 'Instructions', icon: Icons.book, actionId: 'instr'),
     AdminActions(name: 'Logout', icon: Icons.exit_to_app, actionId: 'logout'),
     AdminActions(
@@ -40,25 +35,25 @@ class AdminConsolePage extends StatelessWidget {
     print('adminConsoleProvider: $adminConsoleProvider');
 
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Admin Console'),
+        body: CustomScrollView(
+      slivers: [
+        SliverAppBar(
+          expandedHeight: 120.0,
+          flexibleSpace: FlexibleSpaceBar(background: AdminInfoWidget()),
         ),
-        body: Column(
-          children: [
-            Expanded(flex: 1, child: AdminInfoWidget()),
-            Expanded(
-                flex: 2,
-                child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: adminActions.length,
-                    itemBuilder: (context, index) {
-                      final action = adminActions[index];
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+              final action = adminActions[index];
 
-                      return AdminActionsWidget(
-                          action: action,
-                          adminConsoleProvider: adminConsoleProvider);
-                    }))
-          ],
-        ));
+              return AdminActionsWidget(
+                  action: action, adminConsoleProvider: adminConsoleProvider);
+            },
+
+            childCount: adminActions.length, // Change this count as needed
+          ),
+        ),
+      ],
+    ));
   }
 }

@@ -31,6 +31,22 @@ class AdminInfoWidget extends StatelessWidget {
         ),
         if (userDataGetterMaster.currentUserRole != null)
           Text(
+            ' ${userDataGetterMaster.currentUserName}',
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        Text(
+          ' ${userDataGetterMaster.currentUserEmail}',
+          style: const TextStyle(
+            color: Colors.black,
+            fontSize: 18,
+          ),
+        ),
+        if (userDataGetterMaster.currentUserRole != null)
+          Text(
             'Role: ${userDataGetterMaster.currentUserRole}',
             style: const TextStyle(
               color: Colors.black,
@@ -39,6 +55,5 @@ class AdminInfoWidget extends StatelessWidget {
           ),
       ],
     );
-    ;
   }
 }

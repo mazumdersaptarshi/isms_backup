@@ -25,6 +25,7 @@ class AllUsersDropdown extends StatelessWidget {
           return ListView.builder(
               itemCount: snapshot.data!.length,
               shrinkWrap: true,
+              physics: ClampingScrollPhysics(),
               itemBuilder: (context, index) {
                 return ExpansionTile(
                   title: Row(

@@ -18,7 +18,7 @@ class AdminActionsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ExpansionTile(
       leading: Icon(action.icon),
-      title: Text(action.name!),
+      title: Text("${action.name}"),
       onExpansionChanged: (expanded) async {
         if (expanded) {
           AdminProvider adminProvider =
