@@ -6,38 +6,40 @@ class AdminInfoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        if (userDataGetterMaster.currentUser?.photoURL != null)
-          CircleAvatar(
-            radius: 50,
-            backgroundImage:
-                NetworkImage(userDataGetterMaster.currentUser!.photoURL!),
-          ),
-        Text(
-          ' ${userDataGetterMaster.currentUserName}',
-          style: const TextStyle(
-            color: Colors.black,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        Text(
-          ' ${userDataGetterMaster.currentUserEmail}',
-          style: const TextStyle(
-            color: Colors.black,
-            fontSize: 18,
-          ),
-        ),
-        if (userDataGetterMaster.currentUserRole != null)
+    return Container(
+      child: Column(
+        children: [
+          if (userDataGetterMaster.currentUser?.photoURL != null)
+            CircleAvatar(
+              radius: 30,
+              backgroundImage:
+                  NetworkImage(userDataGetterMaster.currentUser!.photoURL!),
+            ),
           Text(
-            'Role: ${userDataGetterMaster.currentUserRole}',
+            ' ${userDataGetterMaster.currentUserName}',
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            ' ${userDataGetterMaster.currentUserEmail}',
             style: const TextStyle(
               color: Colors.black,
               fontSize: 18,
             ),
           ),
-      ],
+          if (userDataGetterMaster.currentUserRole != null)
+            Text(
+              'Role: ${userDataGetterMaster.currentUserRole}',
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 18,
+              ),
+            ),
+        ],
+      ),
     );
     ;
   }

@@ -23,9 +23,7 @@ class _HomePageState extends State<HomePage> {
   String? userRole;
   DateTime? _expiryDate;
 
-
   UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
-
 
   @override
   void initState() {
@@ -54,33 +52,12 @@ class _HomePageState extends State<HomePage> {
           .instance.currentUser!.email, // replace with the user's email
     });
   }
-  // Future<bool> _loadUserInformation() async {
-  //   User? currentUser = FirebaseAuth.instance.currentUser;
-  //   if (currentUser != null) {
-  //     DocumentSnapshot? userSnapshot = userInfoGetter.currentUserSnapshot;
-  //     if (userSnapshot != null) {
-  //       setState(() {
-  //         currentUserSnapshot = userSnapshot;
-  //       });
-  //       Map<String, dynamic>? userData =
-  //           userSnapshot.data() as Map<String, dynamic>?;
-  //       userRole = userData?['role'];
-  //       return true;
-  //     } else {
-  //       print('User not found');
-  //       return false;
-  //     }
-  //   }
-  //   return false;
-  // }
-
 
   @override
   Widget build(BuildContext context) {
     return Consumer<CoursesProvider>(
         builder: (BuildContext context, CoursesProvider value, Widget? child) {
       return Scaffold(
-
           appBar: CustomAppBar(),
           body: Column(
             children: [
@@ -112,16 +89,12 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
-
-        
                   ElevatedButton(
                     onPressed: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-
-                            builder: (context) => UserProfilePage()),
-
+                            builder: (context) => CoursesDisplayScreen()),
                       );
                     },
                     child: Container(
@@ -129,11 +102,8 @@ class _HomePageState extends State<HomePage> {
                       constraints: BoxConstraints(minHeight: 50),
                       child: Column(
                         children: [
-
                           Icon(Icons.laptop_chromebook_outlined),
                           Text("All courses")
-
-
                         ],
                       ),
                     ),
@@ -141,7 +111,6 @@ class _HomePageState extends State<HomePage> {
                       shape: MaterialStateProperty.all(RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10))),
                     ),
-
                   ),
                 ],
               ),
@@ -196,7 +165,6 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           ));
-
     });
   }
 }

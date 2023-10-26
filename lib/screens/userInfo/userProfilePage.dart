@@ -38,43 +38,43 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
   @override
-
   Widget build(BuildContext context) {
     LoggedInUserProvider loggedInUserProvider =
         Provider.of<LoggedInUserProvider>(context, listen: false);
     return Scaffold(
-      appBar: AppBar(
-        title: Text('User Profile'),
-      ),
-      body: Column(
-        children: [
-          Expanded(child: UserProfileHeaderWidget()),
-          Expanded(
-              flex: 2,
-              child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: 6,
-                  itemBuilder: (context, index) {
-                    final action = userActions[index];
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 160.0,
+            flexibleSpace:
+                FlexibleSpaceBar(background: UserProfileHeaderWidget()),
+          ),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                final action = userActions[index];
 
-                    return ExpansionTile(
-                      leading: Icon(action.icon),
-                      title: Text(action.name!),
-                      onExpansionChanged: (expanded) async {
-                        if (expanded) {
-                          // await loggedInUserProvider
-                          //     .getUserCoursesData(action.actionId);
+                return ExpansionTile(
+                  leading: Icon(action.icon),
+                  title: Text(action.name!),
+                  onExpansionChanged: (expanded) async {
+                    if (expanded) {
+                      // await loggedInUserProvider
+                      //     .getUserCoursesData(action.actionId);
+                    }
+                  },
+                  children: [
+                    UserActionsDropdown(
+                      actionId: action.actionId!,
+                      loggedInUserProvider: loggedInUserProvider,
+                    ),
+                  ],
+                );
+              },
 
-                        }
-                      },
-                      children: [
-                        UserActionsDropdown(
-                          actionId: action.actionId!,
-                          loggedInUserProvider: loggedInUserProvider,
-                        ),
-                      ],
-                    );
-                  }))
+              childCount: 6, // Change this count as needed
+            ),
+          )
         ],
       ),
     );
@@ -186,7 +186,6 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
       children: [
         FutureBuilder<List>(
           future: loggedInUserProvider.getUserCoursesData('crs_enrl'),
-
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return CircularProgressIndicator();
@@ -197,6 +196,7 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
             return ListView.builder(
               itemCount: loggedInUserProvider.allEnrolledCoursesGlobal.length,
               shrinkWrap: true,
+              physics: ClampingScrollPhysics(),
               itemBuilder: (context, index) {
                 double courseCompletionPercentage = 0;
                 bool isValid = false;
@@ -292,12 +292,12 @@ class UserCompletedCoursesDropdown extends StatelessWidget {
     return Column(
       children: [
         FutureBuilder<List>(
-
           future: loggedInUserProvider.getUserCoursesData('crs_compl'),
           builder: (context, snapshot) {
             return ListView.builder(
               itemCount: loggedInUserProvider.allCompletedCoursesGlobal.length,
               shrinkWrap: true,
+              physics: ClampingScrollPhysics(),
               itemBuilder: (context, index) {
                 allCompletedCourses =
                     loggedInUserProvider.allCompletedCoursesGlobal;
