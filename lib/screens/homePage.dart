@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 import 'package:isms/screens/adminScreens/AdminConsole/adminConsolePage.dart';
@@ -19,6 +20,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   DocumentSnapshot? currentUserSnapshot;
   String? userRole;
+  DateTime? _expiryDate;
 
   UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
 
@@ -33,6 +35,21 @@ class _HomePageState extends State<HomePage> {
     // });
   }
 
+  void setExpiryDate() async {
+    await FirebaseFirestore.instance
+        .collection('adminconsole')
+        .doc('allAdmins')
+        .collection('admins')
+        .doc(FirebaseAuth.instance.currentUser!
+            .displayName) // replace 'username' with the logged in user's name
+        .set({
+      'createdTime': Timestamp.now(),
+      'expiredTime': Timestamp.fromDate(_expiryDate!),
+      'reminderSent': false,
+      'email': FirebaseAuth
+          .instance.currentUser!.email, // replace with the user's email
+    });
+  }
   // Future<bool> _loadUserInformation() async {
   //   User? currentUser = FirebaseAuth.instance.currentUser;
   //   if (currentUser != null) {
@@ -133,7 +150,36 @@ class _HomePageState extends State<HomePage> {
                   shape: MaterialStateProperty.all(RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10))),
                 ),
-              )
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  DateTime? pickedDate = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime.now(),
+                      lastDate: DateTime(2101));
+
+                  if (pickedDate != null) {
+                    final TimeOfDay? pickedTime = await showTimePicker(
+                      context: context,
+                      initialTime: TimeOfDay.now(),
+                    );
+
+                    if (pickedTime != null) {
+                      setState(() {
+                        _expiryDate = DateTime(
+                            pickedDate.year,
+                            pickedDate.month,
+                            pickedDate.day,
+                            pickedTime.hour,
+                            pickedTime.minute);
+                        setExpiryDate();
+                      });
+                    }
+                  }
+                },
+                child: const Text('Set Expiry date'),
+              ),
             ],
           ));
     });
