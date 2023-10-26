@@ -140,11 +140,12 @@ class UserCourseStartedDetailsTile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('${courseItem["course_name"]}'),
-              Text('${courseDetailsData["courseCompletionPercentage"]}'),
+              Text('${courseDetailsData["courseCompletionPercentage"] * 100}'),
             ],
           ),
-          Text(
-              'Exam completed: ${courseItem["exams_completed"].length} of ${courseDetailsData["noOfExams"]}'),
+          if (courseItem["exams_completed"] != null)
+            Text(
+                'Exam completed: ${courseItem["exams_completed"].length} of ${courseDetailsData["noOfExams"]}'),
         ],
       ),
     );
