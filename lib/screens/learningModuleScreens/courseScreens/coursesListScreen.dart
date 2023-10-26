@@ -4,7 +4,7 @@ import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/m
 
 import 'package:provider/provider.dart';
 
-import '../../../frontend/course_tile.dart';
+import '../../../frontend_temp/course_tile.dart';
 import '../../../projectModules/courseManagement/coursesProvider.dart';
 import 'createCourseScreen.dart';
 
