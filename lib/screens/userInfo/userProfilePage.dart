@@ -38,6 +38,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
   @override
+
   Widget build(BuildContext context) {
     LoggedInUserProvider loggedInUserProvider =
         Provider.of<LoggedInUserProvider>(context, listen: false);
@@ -63,6 +64,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         if (expanded) {
                           // await loggedInUserProvider
                           //     .getUserCoursesData(action.actionId);
+
                         }
                       },
                       children: [
@@ -131,9 +133,11 @@ class UserActionsDropdown extends StatelessWidget {
 
 class UserEnrolledCoursesDropdown extends StatelessWidget {
   String? actionId;
+
   LoggedInUserProvider loggedInUserProvider;
   UserEnrolledCoursesDropdown(
       {this.actionId, required this.loggedInUserProvider});
+
   (bool, double, int) getCourseCompletedPercentage({
     required CoursesProvider coursesProvider,
     required int index,
@@ -143,7 +147,9 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
     bool isValid = false;
     print('Enrolled CoursesDropdown');
     print(actionId);
+
     allEnrolledCourses = loggedInUserProvider.allEnrolledCoursesGlobal;
+
     allEnrolledCourses.forEach((course) {
       if (course["modules_completed"] != null) {
         int modulesCount = 0;
@@ -180,6 +186,7 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
       children: [
         FutureBuilder<List>(
           future: loggedInUserProvider.getUserCoursesData('crs_enrl'),
+
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return CircularProgressIndicator();
@@ -285,6 +292,7 @@ class UserCompletedCoursesDropdown extends StatelessWidget {
     return Column(
       children: [
         FutureBuilder<List>(
+
           future: loggedInUserProvider.getUserCoursesData('crs_compl'),
           builder: (context, snapshot) {
             return ListView.builder(
@@ -293,6 +301,7 @@ class UserCompletedCoursesDropdown extends StatelessWidget {
               itemBuilder: (context, index) {
                 allCompletedCourses =
                     loggedInUserProvider.allCompletedCoursesGlobal;
+
                 return ListTile(
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

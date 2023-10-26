@@ -2,22 +2,37 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:isms/models/adminConsoleModels/coursesDetails.dart';
+import 'package:isms/userManagement/userDataGetterMaster.dart';
 
 import '../models/customUser.dart';
 
 class AdminProvider extends ChangeNotifier {
   bool isCoursesStreamFetched = false;
-  List<dynamic> allCoursesGlobal = [];
-  List<dynamic> allUsersGlobal = [];
+  List<dynamic> allCourses = [];
+  List<dynamic> allUsers = [];
   bool _hasnewData = false;
-
+  UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
   Map<String, dynamic> snapshotData = {};
   AdminProvider() {
     print('provider invoked');
-    listenToChanges();
+    listenToCoursesChanges();
   }
 
-  void listenToChanges() {
+  void listenToCoursesChanges() {
+    FirebaseFirestore.instance
+        .collection('adminconsole')
+        .doc('allcourses')
+        .collection('allCourseItems')
+        .snapshots()
+        .listen((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        _hasnewData = true;
+        notifyListeners();
+      }
+    });
+  }
+
+  void listenToUsersChanges() {
     FirebaseFirestore.instance
         .collection('adminconsole')
         .doc('allcourses')
@@ -32,9 +47,9 @@ class AdminProvider extends ChangeNotifier {
   }
 
   Future<List> allCoursesDataFetcher() async {
-    if (!_hasnewData && allCoursesGlobal.isNotEmpty) {
+    if (!_hasnewData && allCourses.isNotEmpty) {
       print('No changes, fetching saved data');
-      return allCoursesGlobal;
+      return allCourses;
     }
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('adminconsole')
@@ -42,24 +57,24 @@ class AdminProvider extends ChangeNotifier {
         .collection('allCourseItems')
         .get();
     print('AllCoursesAdmin:');
-    allCoursesGlobal.clear();
+    allCourses.clear();
     querySnapshot.docs.forEach((documentSnapshot) {
       if (documentSnapshot.exists) {
         Map<String, dynamic> elementMap =
             documentSnapshot.data() as Map<String, dynamic>;
         CoursesDetails courseItem = CoursesDetails.fromMap(elementMap);
         print('coursDetais: ${courseItem.course_name}');
-        allCoursesGlobal.add(courseItem);
+        allCourses.add(courseItem);
       }
     });
     _hasnewData = false;
     print('Changes detected, returning updated data');
 
-    return allCoursesGlobal;
+    return allCourses;
   }
 
   Future<List> allUsersDataFetcher() async {
-    allUsersGlobal.clear();
+    allUsers.clear();
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('adminconsole')
         .doc('allusers')
@@ -90,8 +105,8 @@ class AdminProvider extends ChangeNotifier {
         // });
         CustomUser userInfo = CustomUser.fromMap(userData);
 
-        allUsersGlobal.add(userInfo);
-        allUsersGlobal.forEach((element) {
+        allUsers.add(userInfo);
+        allUsers.forEach((element) {
           print(element.courses_completed);
         });
       } catch (e) {
@@ -99,7 +114,7 @@ class AdminProvider extends ChangeNotifier {
             'There was an issue with user Data; Could not fetch user data. Reason for error: $e');
       }
     }
-    return allUsersGlobal;
+    return allUsers;
   }
 
   Future<Map<String, dynamic>?> fetchAdminInstructions(

@@ -5,7 +5,7 @@ import 'package:isms/models/customUser.dart';
 class UserDataGetterMaster {
   //private user variables, accessible only to the Master Script internally
   static User? _currentUser;
-  static DocumentReference? userRef;
+  static DocumentReference? _userRef;
   static DocumentSnapshot? _currentUserSnapshot;
   static String? _userRole;
   static CustomUser? _customUserObject;
@@ -19,6 +19,7 @@ class UserDataGetterMaster {
   String? get currentUserEmail => _currentUser?.email;
   String? get currentUserRole => _userRole;
   String? get currentUserUid => _currentUser?.uid;
+  DocumentReference? get currentUserDocumentReference => _userRef;
   DocumentSnapshot? get currentUserSnapshot => _currentUserSnapshot;
 
   Future<DocumentSnapshot<Object?>?> get newCurrentUserSnapshot async =>
@@ -36,9 +37,9 @@ class UserDataGetterMaster {
     User user = _currentUser!;
 
     print('user ${user.email} currently signed into Firebase');
-    DocumentReference userRef =
+    DocumentReference _userRef =
         FirebaseFirestore.instance.collection('users').doc(user.uid);
-    DocumentSnapshot? userSnapshot = await userRef.get();
+    DocumentSnapshot? userSnapshot = await _userRef.get();
     if (userSnapshot != null) {
       _currentUserSnapshot = userSnapshot;
       Map<String, dynamic>? userData =

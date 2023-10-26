@@ -26,6 +26,8 @@ class LoginPageState extends State<LoginPage> {
         options: DefaultFirebaseOptions.currentPlatform);
   }
 
+
+
   Future<void> GoogleSignInWeb() async {
     GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
     GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
@@ -33,6 +35,7 @@ class LoginPageState extends State<LoginPage> {
         accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
     UserCredential userCredential =
         await FirebaseAuth.instance.signInWithCredential(credential);
+    UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
     await userDataGetterMaster.getLoggedInUserInfoFromFirestore();
   }
 
@@ -57,7 +60,10 @@ class LoginPageState extends State<LoginPage> {
                     print(e);
                   }
                 },
+
                 child: Text('Google Login ')),
+
+
           ],
         ),
       ),

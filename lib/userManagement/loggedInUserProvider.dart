@@ -34,10 +34,8 @@ class LoggedInUserProvider with ChangeNotifier {
   }
 
   void listenToChanges() {
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc('${userDataGetterMaster.currentUserUid}')
-        .snapshots()
+    userDataGetterMaster.currentUserDocumentReference
+        ?.snapshots()
         .listen((snapshot) {
       if (snapshot.exists) {
         _hasnewData = true;
