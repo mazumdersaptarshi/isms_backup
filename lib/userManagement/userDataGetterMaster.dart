@@ -83,4 +83,21 @@ class UserDataGetterMaster {
       print('user ${user.email} not found in Firestore');
     }
   }
+
+  //basic setters for the user
+  set currentUser(User? user) {
+    _currentUser = user;
+  }
+
+  set currentUserRole(String? role) {
+    _userRole = role;
+  }
+
+  set currentUserDocumentReference(DocumentReference? ref) {
+    _userRef = ref;
+  }
+
+  set currentUserSnapshot(DocumentSnapshot? snapshot) {
+    _currentUserSnapshot = snapshot;
+  }
 }
