@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
+
+import 'package:isms/models/module.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
+
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/createModuleScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examListScreen.dart';

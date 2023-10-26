@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
+
 import 'package:isms/screens/adminScreens/AdminConsole/adminConsolePage.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
 import 'package:isms/screens/userInfo/userProfilePage.dart';
@@ -20,11 +21,14 @@ class _HomePageState extends State<HomePage> {
   DocumentSnapshot? currentUserSnapshot;
   String? userRole;
 
+
   UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
+
 
   @override
   void initState() {
     super.initState();
+
     userRole = userDataGetterMaster.currentUserRole!;
     // _loadUserInformation().then((value) {
     //   setState(() {
@@ -53,11 +57,13 @@ class _HomePageState extends State<HomePage> {
   //   return false;
   // }
 
+
   @override
   Widget build(BuildContext context) {
     return Consumer<CoursesProvider>(
         builder: (BuildContext context, CoursesProvider value, Widget? child) {
       return Scaffold(
+
           appBar: CustomAppBar(),
           body: Column(
             children: [
@@ -89,12 +95,16 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
+
+        
                   ElevatedButton(
                     onPressed: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => CoursesDisplayScreen()),
+
+                            builder: (context) => UserProfilePage()),
+
                       );
                     },
                     child: Container(
@@ -102,8 +112,11 @@ class _HomePageState extends State<HomePage> {
                       constraints: BoxConstraints(minHeight: 50),
                       child: Column(
                         children: [
+
                           Icon(Icons.laptop_chromebook_outlined),
                           Text("All courses")
+
+
                         ],
                       ),
                     ),
@@ -111,6 +124,7 @@ class _HomePageState extends State<HomePage> {
                       shape: MaterialStateProperty.all(RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10))),
                     ),
+
                   ),
                 ],
               ),
@@ -136,6 +150,7 @@ class _HomePageState extends State<HomePage> {
               )
             ],
           ));
+
     });
   }
 }
