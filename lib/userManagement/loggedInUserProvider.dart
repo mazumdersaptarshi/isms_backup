@@ -15,31 +15,27 @@ class LoggedInUserProvider with ChangeNotifier {
   List<dynamic> allCompletedCoursesGlobal =
       []; //Global List to hold all completed courses for User
   bool _hasnewData = false;
-  bool _authStateChanged = false;
+  bool authStateChanged = false;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   CustomUser? get getCurrentUser => userDataGetterMaster.loggedInUser;
   UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
   LoggedInUserProvider() {
-
     _auth.authStateChanges().listen((User? user) {
       if (user != null) {
         // The user is logged in
-        _authStateChanged = true;
+        authStateChanged = true;
       } else {
         // The user is logged out
-        _authStateChanged = true;
+        authStateChanged = true;
       }
     });
     listenToChanges();
-
   }
 
   void listenToChanges() {
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc('${userDataGetterMaster.currentUserUid}')
-        .snapshots()
+    userDataGetterMaster.currentUserDocumentReference
+        ?.snapshots()
         .listen((snapshot) {
       if (snapshot.exists) {
         _hasnewData = true;
@@ -53,11 +49,11 @@ class LoggedInUserProvider with ChangeNotifier {
   //Getter function for all course related info from users collection, for the logged in User
   //Basically populates the two static global variables allEnrolledCoursesGlobal and allCompletedCoursesGlobal
   Future<List> getUserCoursesData(String? actionId) async {
-    print('Current value of _authStateChanged: $_authStateChanged');
+    print('Current value of _authStateChanged: $authStateChanged');
     print('Current value of _hasnewData: $_hasnewData');
-    if (_authStateChanged || _hasnewData) {
+    if (authStateChanged || _hasnewData) {
       print(
-          "Fetching fresh data because _authStateChanged = $_authStateChanged and _hasnewData = $_hasnewData");
+          "Fetching fresh data because _authStateChanged = $authStateChanged and _hasnewData = $_hasnewData");
 
       print(
           'Inside fetch courses user provider ${userDataGetterMaster.currentUserUid}');
@@ -79,13 +75,13 @@ class LoggedInUserProvider with ChangeNotifier {
         }
         print('890io: ${allEnrolledCoursesGlobal}');
         if (actionId == 'crs_enrl') {
-          _authStateChanged = false;
+          authStateChanged = false;
           _hasnewData = false;
 
           print('changes detected, fetching new data');
           return allEnrolledCoursesGlobal;
         } else if (actionId == 'crs_compl') {
-          _authStateChanged = false;
+          authStateChanged = false;
           _hasnewData = false;
 
           print('changes detected, fetching new data');
@@ -96,7 +92,7 @@ class LoggedInUserProvider with ChangeNotifier {
       }
     }
     print(
-        "Using cached data because _authStateChanged = $_authStateChanged and _hasnewData = $_hasnewData");
+        "Using cached data because _authStateChanged = $authStateChanged and _hasnewData = $_hasnewData");
 
     print('No chnages detected, fetching cached data');
     if (actionId == 'crs_enrl') {

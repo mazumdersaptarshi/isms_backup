@@ -5,7 +5,7 @@ import 'package:isms/models/customUser.dart';
 class UserDataGetterMaster {
   //private user variables, accessible only to the Master Script internally
   static User? _currentUser;
-  static DocumentReference? userRef;
+  static DocumentReference? _userRef;
   static DocumentSnapshot? _currentUserSnapshot;
   static String? _userRole;
   static String? _uid;
@@ -20,7 +20,7 @@ class UserDataGetterMaster {
   String? get currentUserEmail => _currentUser?.email;
   String? get currentUserRole => _userRole;
   String? get currentUserUid => _uid;
-
+  DocumentReference? get currentUserDocumentReference => _userRef;
   DocumentSnapshot? get currentUserSnapshot => _currentUserSnapshot;
 
   Future<DocumentSnapshot<Object?>?> get newCurrentUserSnapshot async =>
@@ -37,12 +37,10 @@ class UserDataGetterMaster {
     DocumentSnapshot? userSnapshot;
 
     if (_currentUser != null) {
-      DocumentReference userRef =
-          FirebaseFirestore.instance.collection('users').doc(user?.uid);
-      userSnapshot = await userRef.get();
+      _userRef = FirebaseFirestore.instance.collection('users').doc(user?.uid);
+      userSnapshot = await _userRef?.get();
       _uid = user?.uid;
     }
-    print("INDSIDE INFOGETTER $userSnapshot");
     if (userSnapshot != null) {
       _currentUserSnapshot = userSnapshot;
       Map<String, dynamic>? userData =
@@ -55,5 +53,26 @@ class UserDataGetterMaster {
     } else {
       print('User not found');
     }
+  }
+
+  //basic setters for the user
+  set currentUser(User? user) {
+    _currentUser = user;
+  }
+
+  set currentUserRole(String? role) {
+    _userRole = role;
+  }
+
+  set currentUserUid(String? uid) {
+    _uid = uid;
+  }
+
+  set currentUserDocumentReference(DocumentReference? ref) {
+    _userRef = ref;
+  }
+
+  set currentUserSnapshot(DocumentSnapshot? snapshot) {
+    _currentUserSnapshot = snapshot;
   }
 }

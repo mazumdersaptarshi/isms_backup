@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:isms/screens/homePage.dart';
-
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/modulesListScreen.dart';
-
 import 'package:provider/provider.dart';
 
 import '../../../frontend_temp/course_tile.dart';
