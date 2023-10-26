@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:isms/utilityWidgets/logoutUtility.dart';
+import 'package:isms/utilityFunctions/authUtils.dart';
 import 'package:isms/userManagement/userDataGetterMaster.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -25,7 +25,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget buildUserAvatar(BuildContext context) {
     return IconButton(
       padding: const EdgeInsets.only(right: 5.0),
-      onPressed: () => AuthUtils.logout(context),
+      onPressed: () => AuthUtils.logout(),
       icon: userDataGetterMaster.currentUser?.photoURL != null
           ? CircleAvatar(
               radius: 18,
