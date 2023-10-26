@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:isms/models/slide.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleDetailsScreen.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/modulesListScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examListScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleExamsListScreen.dart';
@@ -67,7 +69,6 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
           'Slides',
           style: TextStyle(color: Colors.blueGrey),
         ),
-        backgroundColor: Colors.transparent,
         elevation: 0,
       ),
       body: Center(
@@ -81,8 +82,7 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
-                  height: 600,
-                  // Adjust the height as needed
+                  height: 500,
                   child: PageView(
                     controller: _pageController,
                     children: cardItems.map((item) {
@@ -151,8 +151,12 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
                   visible: currentIndex == cardItems.length - 1,
                   child: ElevatedButton(
                     onPressed: () {
-                      // Handle the "Finish" button action
-                      Navigator.pushNamed(context, '/');
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ModulesListScreen(
+                                    courseIndex: widget.courseIndex,
+                                  )));
                       print('Finish button pressed');
                     },
                     child: Text('Finish'),
