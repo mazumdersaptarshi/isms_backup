@@ -79,7 +79,7 @@ class _HomePageState extends State<HomePage> {
           body: Column(
             children: [
               Text(userRole.toString()),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -97,8 +97,8 @@ class _HomePageState extends State<HomePage> {
                         );
                       },
                       child: Container(
-                        constraints: BoxConstraints(minHeight: 50),
-                        child: Column(
+                        constraints: const BoxConstraints(minHeight: 50),
+                        child: const Column(
                           children: [
                             Icon(Icons.lock_person_rounded),
                             Text("Admin console")
@@ -114,24 +114,24 @@ class _HomePageState extends State<HomePage> {
                             builder: (context) => CoursesDisplayScreen()),
                       );
                     },
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10))),
+                    ),
                     child: Container(
                       width: 100,
-                      constraints: BoxConstraints(minHeight: 50),
-                      child: Column(
+                      constraints: const BoxConstraints(minHeight: 50),
+                      child: const Column(
                         children: [
                           Icon(Icons.laptop_chromebook_outlined),
                           Text("All courses")
                         ],
                       ),
                     ),
-                    style: ButtonStyle(
-                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10))),
-                    ),
                   ),
                 ],
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   Navigator.push(
@@ -139,19 +139,19 @@ class _HomePageState extends State<HomePage> {
                     MaterialPageRoute(builder: (context) => UserProfilePage()),
                   );
                 },
-                child: Container(
-                  width: 100,
-                  constraints: BoxConstraints(minHeight: 50),
-                  child: Column(
-                    children: [Icon(Icons.person_pin), Text("User profile")],
-                  ),
-                ),
                 style: ButtonStyle(
                   shape: MaterialStateProperty.all(RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10))),
                 ),
+                child: Container(
+                  width: 100,
+                  constraints: const BoxConstraints(minHeight: 50),
+                  child: const Column(
+                    children: [Icon(Icons.person_pin), Text("User profile")],
+                  ),
+                ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 style: ButtonStyle(
                   shape: MaterialStateProperty.all(RoundedRectangleBorder(
