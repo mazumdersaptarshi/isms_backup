@@ -9,6 +9,14 @@ import '../models/userCoursesDetails.dart';
 import '../projectModules/courseManagement/coursesProvider.dart';
 
 class LoggedInState with ChangeNotifier {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  UserDataGetterMaster _userDataGetterMaster = UserDataGetterMaster();
+  CustomUser? get getCurrentUser => _userDataGetterMaster.loggedInUser;
+
+  User? _currentUser;
+  User? get user => _currentUser;
+
   List<dynamic> allEnrolledCoursesGlobal =
       []; //Global List to hold all enrolled courses for User
 
@@ -16,25 +24,33 @@ class LoggedInState with ChangeNotifier {
       []; //Global List to hold all completed courses for User
   bool _hasnewData = false;
   bool authStateChanged = false;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  CustomUser? get getCurrentUser => userDataGetterMaster.loggedInUser;
-  UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
   LoggedInState() {
     _auth.authStateChanges().listen((User? user) {
-      if (user != null) {
-        // The user is logged in
-        authStateChanged = true;
+      if (_currentUser == null) {
+        _currentUser = user;
+        print("no account is currently signed into Firebase");
       } else {
-        // The user is logged out
-        authStateChanged = true;
+        print(
+            "account ${_currentUser!.email} is currently signed into Firebase");
+
+        _userDataGetterMaster.getLoggedInUserInfoFromFirestore().then((_value) {
+          print(
+              "account ${_currentUser!.email}'s data was fetched from Firestore");
+          // this is used as source of truth in the app, so it has to
+          // occur after getLoggedInUserInfoFromFirestore() to ensure all
+          // the user-related data is available
+          _currentUser = user;
+        });
       }
+      authStateChanged = true;
+      notifyListeners();
     });
     listenToChanges();
   }
 
   void listenToChanges() {
-    userDataGetterMaster.currentUserDocumentReference
+    _userDataGetterMaster.currentUserDocumentReference
         ?.snapshots()
         .listen((snapshot) {
       if (snapshot.exists) {
@@ -49,17 +65,17 @@ class LoggedInState with ChangeNotifier {
   //Getter function for all course related info from users collection, for the logged in User
   //Basically populates the two static global variables allEnrolledCoursesGlobal and allCompletedCoursesGlobal
   Future<List> getUserCoursesData(String? actionId) async {
-    print('Current value of _authStateChanged: $authStateChanged');
+    print('Current value of authStateChanged: $authStateChanged');
     print('Current value of _hasnewData: $_hasnewData');
     if (authStateChanged || _hasnewData) {
       print(
-          "Fetching fresh data because _authStateChanged = $authStateChanged and _hasnewData = $_hasnewData");
+          "Fetching fresh data because authStateChanged = $authStateChanged and _hasnewData = $_hasnewData");
 
       print(
-          'Inside fetch courses user provider ${userDataGetterMaster.currentUserUid}');
+          'Inside fetch courses user provider ${_userDataGetterMaster.currentUserUid}');
       try {
         DocumentSnapshot? newCurrentUserDocumentSnapshot =
-            await userDataGetterMaster.newCurrentUserSnapshot;
+            await _userDataGetterMaster.newCurrentUserSnapshot;
 
         if (newCurrentUserDocumentSnapshot!.exists) {
           Map<String, dynamic> mapdata =
@@ -92,7 +108,7 @@ class LoggedInState with ChangeNotifier {
       }
     }
     print(
-        "Using cached data because _authStateChanged = $authStateChanged and _hasnewData = $_hasnewData");
+        "Using cached data because authStateChanged = $authStateChanged and _hasnewData = $_hasnewData");
 
     print('No chnages detected, fetching cached data');
     if (actionId == 'crs_enrl') {
@@ -106,13 +122,13 @@ class LoggedInState with ChangeNotifier {
 
   setUserCourseStarted(Map<String, dynamic> courseDetails) {
     // loggedInUser?.courses_started.add(courseDetails);
-    userDataGetterMaster.loggedInUser?.courses_started.add(courseDetails);
+    _userDataGetterMaster.loggedInUser?.courses_started.add(courseDetails);
     notifyListeners();
   }
 
   setUserCourseCompleted(Map<String, dynamic> courseDetails) {
     // loggedInUser?.courses_completed.add(courseDetails);
-    userDataGetterMaster.loggedInUser?.courses_completed.add(courseDetails);
+    _userDataGetterMaster.loggedInUser?.courses_completed.add(courseDetails);
     notifyListeners();
   }
 
@@ -124,7 +140,7 @@ class LoggedInState with ChangeNotifier {
     examIndex--;
     Course course = coursesProvider.allCourses[courseIndex];
     // loggedInUser?.courses_started.forEach((course_started) {
-    userDataGetterMaster.loggedInUser?.courses_started
+    _userDataGetterMaster.loggedInUser?.courses_started
         .forEach((course_started) {
       if (course_started['courseID'] == course.id) {
         if (course_started['exams_completed'] != null &&
@@ -153,7 +169,7 @@ class LoggedInState with ChangeNotifier {
         }
       }
     });
-    print(userDataGetterMaster.loggedInUser!.courses_started);
+    print(_userDataGetterMaster.loggedInUser!.courses_started);
     notifyListeners();
   }
 
@@ -164,7 +180,7 @@ class LoggedInState with ChangeNotifier {
       required int moduleIndex}) {
     Course course = coursesProvider.allCourses[courseIndex];
     // loggedInUser?.courses_started.forEach((course_started) {
-    userDataGetterMaster.loggedInUser?.courses_started
+    _userDataGetterMaster.loggedInUser?.courses_started
         .forEach((course_started) {
       if (course_started['courseID'] == course.id) {
         print("COMPLETED MODULEE ${course_started['modules_completed']}");
@@ -185,7 +201,7 @@ class LoggedInState with ChangeNotifier {
         }
       }
     });
-    print(userDataGetterMaster.loggedInUser!.courses_started);
+    print(_userDataGetterMaster.loggedInUser!.courses_started);
     notifyListeners();
   }
 }

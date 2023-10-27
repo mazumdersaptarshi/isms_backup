@@ -1,10 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:isms/firebase_options.dart';
-import 'package:isms/userManagement/createUser.dart';
+import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/userManagement/userDataGetterMaster.dart';
+import 'package:isms/utilityFunctions/authUtils.dart';
+import 'package:provider/provider.dart';
 
 import '../homePage.dart';
 
@@ -19,8 +20,6 @@ class LoginPageState extends State<LoginPage> {
   Future<User?>? _signInFuture;
   bool hasCheckedForChangedDependencies = false;
   UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
-  CreateUserDataOperations createUserDataOperations =
-      CreateUserDataOperations();
 
   @override
   void main() async {
@@ -29,19 +28,14 @@ class LoginPageState extends State<LoginPage> {
         options: DefaultFirebaseOptions.currentPlatform);
   }
 
-  Future<void> GoogleSignInWeb() async {
-    GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-    GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
-    AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
-    UserCredential userCredential =
-        await FirebaseAuth.instance.signInWithCredential(credential);
-    UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
-    await userDataGetterMaster.getLoggedInUserInfoFromFirestore();
-  }
-
   @override
   Widget build(BuildContext context) {
+    LoggedInState loggedInState = context.watch<LoggedInState>();
+
+    if (loggedInState.user != null) {
+      return HomePage();
+    }
+
     return Scaffold(
       body: Center(
         child: Column(
@@ -52,23 +46,12 @@ class LoginPageState extends State<LoginPage> {
             ElevatedButton(
                 onPressed: () async {
                   try {
-                    await GoogleSignInWeb();
-
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomePage()),
-                    );
+                    await AuthUtils.login();
                   } catch (e) {
                     print(e);
                   }
                 },
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text('Google Login '),
-                    Icon(Icons.login),
-                  ],
-                )),
+                child: Text('Google Login ')),
           ],
         ),
       ),

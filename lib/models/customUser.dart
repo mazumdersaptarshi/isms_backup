@@ -2,7 +2,7 @@ class CustomUser {
   String username;
   String email;
   String role;
-  String? uid;
+  String uid;
 
   List<dynamic> courses_started;
   List<dynamic> courses_completed;
@@ -13,7 +13,7 @@ class CustomUser {
     required this.role,
     required this.courses_started,
     required this.courses_completed,
-    this.uid,
+    required this.uid,
   });
 
   Map<String, dynamic> toMap() {
