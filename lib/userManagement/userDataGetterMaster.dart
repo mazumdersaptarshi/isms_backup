@@ -1,18 +1,48 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:isms/models/customUser.dart';
+import 'package:isms/adminManagement/createUserReferenceForAdmin.dart';
 
 class UserDataGetterMaster {
-  //private user variables, accessible only to the Master Script internally
+  static FirebaseFirestore db = FirebaseFirestore.instance;
   static User? _currentUser;
   static DocumentReference? _userRef;
   static DocumentSnapshot? _currentUserSnapshot;
   static String? _userRole;
   static CustomUser? _customUserObject;
 
-  UserDataGetterMaster() {
-    print('Entered_userInfogetter');
+  static Future<void> createUserData(CustomUser customUser) async {
+    Map<String, dynamic> userJson = customUser.toMap();
+    print("creating the user ${userJson}");
+    await db.collection('users').doc(customUser.uid).set(userJson);
+
+    //Also creating a reference to the user on Admin side
+    CreateUserReferenceForAdmin userRefForAdmin =
+      CreateUserReferenceForAdmin();
+    userRefForAdmin.createUserRef(customUser.uid);
   }
+
+  static Future<void> ensureUserDataExists(User? user) async {
+    if (user == null) return;
+
+    final DocumentSnapshot userSnapshot =
+      await db.collection('users').doc(user.uid).get();
+
+    if (!userSnapshot.exists) {
+      await createUserData(
+          CustomUser(
+            username: user.displayName!,
+            email: user.email!,
+            role: 'user',
+            courses_started: [],
+            courses_completed: [],
+            uid: user.uid
+          ));
+    }
+  }
+
+
   //Getters
   User? get currentUser => _currentUser;
   String? get currentUserName => _currentUser?.displayName;
