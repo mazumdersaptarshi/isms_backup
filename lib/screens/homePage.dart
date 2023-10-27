@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 import 'package:isms/screens/adminScreens/AdminConsole/adminConsolePage.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
@@ -8,18 +8,19 @@ import 'package:isms/screens/userInfo/userProfilePage.dart';
 import 'package:isms/sharedWidgets/customAppBar.dart';
 import 'package:provider/provider.dart';
 
-import '../userManagement/userDataGetterMaster.dart';
+import 'package:isms/userManagement/userDataGetterMaster.dart';
+import 'package:isms/userManagement/loggedInState.dart';
+import 'learningModuleScreens/courseScreens/createCourseScreen.dart';
+import 'login/loginScreen.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
-  bool isUserInfoFetched = false;
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  DocumentSnapshot? currentUserSnapshot;
-  String? userRole;
+  late String userRole;
   DateTime? _expiryDate;
 
   UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
@@ -28,12 +29,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     userRole = 'admin';
-    // userRole = userDataGetterMaster.currentUserRole!;
-    // _loadUserInformation().then((value) {
-    //   setState(() {
-    //     widget.isUserInfoFetched = value;
-    //   });
-    // });
   }
 
   void setExpiryDate() async {
@@ -51,28 +46,17 @@ class _HomePageState extends State<HomePage> {
           .instance.currentUser!.email, // replace with the user's email
     });
   }
-  // Future<bool> _loadUserInformation() async {
-  //   User? currentUser = FirebaseAuth.instance.currentUser;
-  //   if (currentUser != null) {
-  //     DocumentSnapshot? userSnapshot = userInfoGetter.currentUserSnapshot;
-  //     if (userSnapshot != null) {
-  //       setState(() {
-  //         currentUserSnapshot = userSnapshot;
-  //       });
-  //       Map<String, dynamic>? userData =
-  //           userSnapshot.data() as Map<String, dynamic>?;
-  //       userRole = userData?['role'];
-  //       return true;
-  //     } else {
-  //       print('User not found');
-  //       return false;
-  //     }
-  //   }
-  //   return false;
-  // }
 
   @override
   Widget build(BuildContext context) {
+    LoggedInState loggedInState = context.watch<LoggedInState>();
+
+    if (loggedInState.user == null) {
+      return LoginPage();
+    }
+
+    //userRole = userDataGetterMaster.currentUserRole!;
+
     return Consumer<CoursesProvider>(
         builder: (BuildContext context, CoursesProvider value, Widget? child) {
       return Scaffold(

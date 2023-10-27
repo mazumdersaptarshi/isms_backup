@@ -4,6 +4,7 @@ import 'package:isms/models/question.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
+import 'package:isms/screens/login/loginScreen.dart';
 
 import '../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../userManagement/userCourseOperations.dart';
@@ -90,6 +91,12 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
 
   @override
   Widget build(BuildContext context) {
+    LoggedInState loggedInState = context.watch<LoggedInState>();
+
+    if (loggedInState.user == null) {
+      return LoginPage();
+    }
+
     return Scaffold(
       appBar: AppBar(title: Text(_showScore ? 'Score' : 'Exam Module')),
       body: _showScore ? buildScoreWidget() : buildExamWidget(),
@@ -97,7 +104,8 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
   }
 
   Widget buildScoreWidget() {
-    LoggedInState customUserProvider = Provider.of<LoggedInState>(context);
+    LoggedInState loggedInState =
+        Provider.of<LoggedInState>(context);
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
 
     int correctAnswers = 0;
@@ -145,7 +153,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
                   setUserCourseExamCompleted(
                       coursesProvider: coursesProvider,
                       courseIndex: widget.courseIndex,
-                      customUserProvider: customUserProvider,
+                      loggedInState: loggedInState,
                       courseDetails: {
                         "courseID":
                             coursesProvider.allCourses[widget.courseIndex].id,
@@ -154,7 +162,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
                       },
                       examIndex: widget.exam.index);
                   // setUserCourseCompleted(
-                  //   customUserProvider: customUserProvider,
+                  //   loggedInState: loggedInState,
                   //   courseDetails: {
                   //     "courseID":
                   //         coursesProvider.allCourses[widget.courseIndex].id,
@@ -170,7 +178,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
               ElevatedButton(
                 onPressed: () {
                   setUserCourseModuleCompleted(
-                    customUserProvider: customUserProvider,
+                    loggedInState: loggedInState,
                     courseDetails: {
                       "courseID":
                           coursesProvider.allCourses[widget.courseIndex].id,

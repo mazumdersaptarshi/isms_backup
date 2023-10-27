@@ -7,6 +7,9 @@ import 'package:isms/utilityFunctions/generateRandom.dart';
 import 'package:provider/provider.dart';
 import 'package:isms/models/course.dart';
 
+import 'package:isms/screens/login/loginScreen.dart';
+import 'package:isms/userManagement/loggedInState.dart';
+
 import '../../../../main.dart';
 import '../../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../../projectModules/courseManagement/moduleManagement/createModule.dart';
@@ -16,6 +19,12 @@ class CreateModuleScreen extends StatelessWidget {
   int courseIndex;
   @override
   Widget build(BuildContext context) {
+    LoggedInState loggedInState = context.watch<LoggedInState>();
+
+    if (loggedInState.user == null) {
+      return LoginPage();
+    }
+
     return CourseModuleForm(courseIndex: courseIndex);
   }
 }

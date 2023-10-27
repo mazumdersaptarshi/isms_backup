@@ -61,9 +61,6 @@ class DataExporter {
     for (QueryDocumentSnapshot snapshot in allData) {
       Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
       CustomUser userInfo = CustomUser.fromMap(data);
-      DocumentReference docRef = snapshot.reference;
-      CollectionReference subCollectionRef =
-          docRef.collection('subCollectionName');
 
       csvData.add([
         userInfo.username.toString(),

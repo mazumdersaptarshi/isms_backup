@@ -7,6 +7,8 @@ import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/userManagement/userCourseOperations.dart';
 import 'package:provider/provider.dart';
 
+import 'package:isms/screens/login/loginScreen.dart';
+
 import '../../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../../projectModules/courseManagement/moduleManagement/slideManagement/fetchSlides.dart';
 import '../../../../themes/common_theme.dart';
@@ -55,8 +57,14 @@ class _ModuleDetailsState extends State<ModuleDetails> {
 
   @override
   Widget build(BuildContext context) {
+    LoggedInState loggedInState = context.watch<LoggedInState>();
+
+    if (loggedInState.user == null) {
+      return LoginPage();
+    }
+
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
-    LoggedInState customUserProvider = Provider.of<LoggedInState>(context);
+    LoggedInState loggedInState = Provider.of<LoggedInState>(context);
     Module? module;
     try {
       module = coursesProvider
@@ -111,7 +119,7 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                               style: customElevatedButtonStyle(),
                               onPressed: () async {
                                 await setUserCourseStarted(
-                                    customUserProvider: customUserProvider,
+                              loggedInState: loggedInState,
                                     courseDetails: {
                                       "courseID": coursesProvider
                                           .allCourses[widget.courseIndex].id,

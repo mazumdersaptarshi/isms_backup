@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+
 import 'package:isms/models/adminConsoleModels/coursesDetails.dart';
 import 'package:isms/userManagement/userDataGetterMaster.dart';
 
 import '../models/customUser.dart';
-import '../userManagement/loggedInState.dart';
+import 'package:isms/userManagement/loggedInState.dart';
 
 class AdminProvider extends ChangeNotifier {
   bool isCoursesStreamFetched = false;
@@ -17,7 +18,7 @@ class AdminProvider extends ChangeNotifier {
   bool _hasNewUsersData = false;
   UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
   Map<String, dynamic> snapshotData = {};
-  LoggedInState loggedInUserProvider = LoggedInState();
+  LoggedInState loggedInState = LoggedInState();
   AdminProvider() {
     print('provider invoked');
     listenToCoursesChanges();
@@ -105,12 +106,12 @@ class AdminProvider extends ChangeNotifier {
   }
 
   Future<List> allUsersDataFetcher() async {
-    if (loggedInUserProvider.authStateChanged || _hasNewUsersData) {
+    if (loggedInState.authStateChanged || _hasNewUsersData) {
       //Clearing old data if there is new data available
       allUsers.clear();
       userRefs.clear();
       print(
-          'Fething new data from firestore as authStateChanged: ${loggedInUserProvider.authStateChanged} and _hasNewUsersData: ${_hasNewUsersData}');
+          'Fething new data from firestore as authStateChanged: ${loggedInState.authStateChanged} and _hasNewUsersData: ${_hasNewUsersData}');
 
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('adminconsole')
@@ -152,11 +153,11 @@ class AdminProvider extends ChangeNotifier {
         }
       }
       _hasNewUsersData = false;
-      loggedInUserProvider.authStateChanged = false;
+      loggedInState.authStateChanged = false;
       return allUsers;
     } else {
       print(
-          'Fetching cached data since no changes detected, authStateChanged: ${loggedInUserProvider.authStateChanged} and _hasNewUsersData: ${_hasNewUsersData}');
+          'Fetching cached data since no changes detected, authStateChanged: ${loggedInState.authStateChanged} and _hasNewUsersData: ${_hasNewUsersData}');
       return allUsers;
     }
   }
