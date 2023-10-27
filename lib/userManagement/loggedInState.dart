@@ -27,13 +27,19 @@ class LoggedInState with ChangeNotifier {
 
   LoggedInState() {
     _auth.authStateChanges().listen((User? user) {
-      _currentUser = user;
       if (_currentUser == null) {
+        _currentUser = user;
         print("no account is currently signed into Firebase");
       } else {
         print("account ${_currentUser!.email} is currently signed into Firebase");
 
-        _userDataGetterMaster.getLoggedInUserInfoFromFirestore();
+        _userDataGetterMaster.getLoggedInUserInfoFromFirestore().then((_value) {
+          print("account ${_currentUser!.email}'s data was fetched from Firestore");
+          // this is used as source of truth in the app, so it has to
+          // occur after getLoggedInUserInfoFromFirestore() to ensure all
+          // the user-related data is available
+          _currentUser = user;
+        });
       }
       authStateChanged = true;
       notifyListeners();
