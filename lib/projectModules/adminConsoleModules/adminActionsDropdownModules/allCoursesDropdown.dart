@@ -23,7 +23,7 @@ class AllCoursesDropdown extends StatelessWidget {
               itemBuilder: (context, index) {
                 print('allUserRefs: ${adminProvider.userRefs}');
                 print(
-                    'This course completed students percent: ${(snapshot.data![index].course_completed!.length / (adminProvider.userRefs.length) * 100)}');
+                    'This course ${snapshot.data![index].course_name}, relevant data: ${snapshot.data![index].course_completed!.length},  completed students percent: ${(snapshot.data![index].course_completed!.length / (adminProvider.userRefs.length) * 100)}');
                 return ExpansionTile(
                   title: Text(
                     '${index + 1}.  ${snapshot.data![index].course_name}',
@@ -67,7 +67,7 @@ class AllCoursesDropdown extends StatelessWidget {
                         percent: (snapshot.data![index].course_started!.length /
                                 (adminProvider.userRefs.length)) ??
                             0,
-                        center: new Text(
+                        center: Text(
                           '${(snapshot.data![index].course_started!.length / (adminProvider.userRefs.length) * 100).round()}%',
                           style: TextStyle(fontSize: 10),
                         ),

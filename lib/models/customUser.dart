@@ -21,8 +21,8 @@ class CustomUser {
       'username': username,
       'email': email,
       'role': role,
-      'courses_started': courses_started,
-      'courses_completed': courses_completed,
+      'courses_started': courses_started ?? [],
+      'courses_completed': courses_completed ?? [],
       'uid': this.uid,
     };
   }
