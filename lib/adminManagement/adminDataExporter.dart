@@ -93,6 +93,7 @@ class DataExporter {
     for (QueryDocumentSnapshot snapshot in allData) {
       Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
       Course coursesInfo = Course.fromMap(data);
+      DocumentReference docRef = snapshot.reference;
 
       csvData.add([
         coursesInfo.name.toString(),

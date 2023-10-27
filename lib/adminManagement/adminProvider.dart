@@ -5,7 +5,7 @@ import 'package:isms/models/adminConsoleModels/coursesDetails.dart';
 import 'package:isms/userManagement/userDataGetterMaster.dart';
 
 import '../models/customUser.dart';
-import '../userManagement/loggedInUserProvider.dart';
+import '../userManagement/loggedInState.dart';
 
 class AdminProvider extends ChangeNotifier {
   bool isCoursesStreamFetched = false;
@@ -17,7 +17,7 @@ class AdminProvider extends ChangeNotifier {
   bool _hasNewUsersData = false;
   UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
   Map<String, dynamic> snapshotData = {};
-  LoggedInUserProvider loggedInUserProvider = LoggedInUserProvider();
+  LoggedInState loggedInUserProvider = LoggedInState();
   AdminProvider() {
     print('provider invoked');
     listenToCoursesChanges();

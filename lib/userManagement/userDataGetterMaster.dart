@@ -45,7 +45,8 @@ class UserDataGetterMaster {
       _currentUserSnapshot = userSnapshot;
       Map<String, dynamic>? userData =
           userSnapshot.data() as Map<String, dynamic>?;
-      _userRole = userData?['role'];
+      _userRole = 'user';
+      print('dfgfds: ${_userRef}');
       CustomUser loggedInUserObject = CustomUser.fromMap(userData!);
 
       print('loggedInUserObject: ${loggedInUserObject.courses_completed}');

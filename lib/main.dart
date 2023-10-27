@@ -6,7 +6,7 @@ import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 import 'package:isms/projectModules/courseManagement/moduleManagement/slideManagement/slidesCreationProvider.dart';
 import 'package:isms/screens/homePage.dart';
 import 'package:isms/screens/login/loginScreen.dart';
-import 'package:isms/userManagement/loggedInUserProvider.dart';
+import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/userManagement/userDataGetterMaster.dart';
 import 'package:provider/provider.dart';
 
@@ -26,6 +26,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   Future<void> setUser() async {
     UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
+
     await userDataGetterMaster.getLoggedInUserInfoFromFirestore();
   }
 
@@ -33,8 +34,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<LoggedInUserProvider>(create: (context) {
-          return LoggedInUserProvider();
+        ChangeNotifierProvider<LoggedInState>(create: (context) {
+          return LoggedInState();
         }),
         ChangeNotifierProvider<CoursesProvider>(create: (context) {
           return CoursesProvider();
@@ -66,6 +67,7 @@ class MyApp extends StatelessWidget {
                   setUser().then((value) {
                     return HomePage();
                   });
+                  print('This_route');
                   return LoginPage();
                 }
               }

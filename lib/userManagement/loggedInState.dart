@@ -8,7 +8,7 @@ import '../models/course.dart';
 import '../models/userCoursesDetails.dart';
 import '../projectModules/courseManagement/coursesProvider.dart';
 
-class LoggedInUserProvider with ChangeNotifier {
+class LoggedInState with ChangeNotifier {
   List<dynamic> allEnrolledCoursesGlobal =
       []; //Global List to hold all enrolled courses for User
 
@@ -20,7 +20,7 @@ class LoggedInUserProvider with ChangeNotifier {
 
   CustomUser? get getCurrentUser => userDataGetterMaster.loggedInUser;
   UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
-  LoggedInUserProvider() {
+  LoggedInState() {
     _auth.authStateChanges().listen((User? user) {
       if (user != null) {
         // The user is logged in

@@ -1,14 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-import 'package:isms/databaseOperations/databaseManager.dart';
-import 'package:isms/models/customUser.dart';
-
-import '../adminManagement/createUserReferenceForAdmin.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:isms/databaseOperations/databaseManager.dart';
 import 'package:isms/models/customUser.dart';
 
+import '../adminManagement/createUserReferenceForAdmin.dart';
 
 class CreateUserDataOperations extends DatabaseManager {
   Future<void> createUser(String uid, CustomUser user) async {
@@ -22,11 +17,13 @@ class CreateUserDataOperations extends DatabaseManager {
   }
 
   Future<void> checkAndCreateUserIfNotExists(User? user) async {
+    print('Inside checkAndCreateUserIfNotExists');
     if (user == null) return;
 
     final userDoc = await db.collection('users').doc(user.uid).get();
 
     if (!userDoc.exists) {
+      print('Inside this');
       await createUser(
           user.uid,
           CustomUser(

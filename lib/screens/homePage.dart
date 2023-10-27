@@ -83,29 +83,29 @@ class _HomePageState extends State<HomePage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  if (userRole == "admin")
-                    ElevatedButton(
-                      style: ButtonStyle(
-                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10))),
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AdminConsolePage()),
-                        );
-                      },
-                      child: Container(
-                        constraints: BoxConstraints(minHeight: 50),
-                        child: Column(
-                          children: [
-                            Icon(Icons.lock_person_rounded),
-                            Text("Admin console")
-                          ],
-                        ),
+                  // if (userRole == "admin")
+                  ElevatedButton(
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10))),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AdminConsolePage()),
+                      );
+                    },
+                    child: Container(
+                      constraints: BoxConstraints(minHeight: 50),
+                      child: Column(
+                        children: [
+                          Icon(Icons.lock_person_rounded),
+                          Text("Admin console")
+                        ],
                       ),
                     ),
+                  ),
                   ElevatedButton(
                     onPressed: () {
                       Navigator.push(
@@ -151,7 +151,12 @@ class _HomePageState extends State<HomePage> {
                       borderRadius: BorderRadius.circular(10))),
                 ),
               ),
+              SizedBox(height: 20),
               ElevatedButton(
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10))),
+                ),
                 onPressed: () async {
                   DateTime? pickedDate = await showDatePicker(
                       context: context,

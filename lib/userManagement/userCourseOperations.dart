@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:isms/userManagement/loggedInUserProvider.dart';
+import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/userManagement/userDataGetterMaster.dart';
 
 import '../projectModules/courseManagement/coursesProvider.dart';
 
 setUserCourseStarted(
-    {required LoggedInUserProvider customUserProvider,
+    {required LoggedInState customUserProvider,
     required Map<String, dynamic> courseDetails}) async {
   bool flag = false;
   UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
@@ -42,7 +42,7 @@ setUserCourseStarted(
 }
 
 setUserCourseCompleted(
-    {required LoggedInUserProvider customUserProvider,
+    {required LoggedInState customUserProvider,
     required Map<String, dynamic> courseDetails}) async {
   bool flag = false;
   UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
@@ -83,7 +83,7 @@ setUserCourseCompleted(
 setUserCourseExamCompleted(
     {required CoursesProvider coursesProvider,
     required int courseIndex,
-    required LoggedInUserProvider customUserProvider,
+    required LoggedInState customUserProvider,
     required Map<String, dynamic> courseDetails,
     required int examIndex}) async {
   int noOfExamsCompleted = 0;
@@ -129,7 +129,7 @@ setUserCourseExamCompleted(
 }
 
 setUserCourseModuleCompleted(
-    {required LoggedInUserProvider customUserProvider,
+    {required LoggedInState customUserProvider,
     required Map<String, dynamic> courseDetails,
     required CoursesProvider coursesProvider,
     required int courseIndex,

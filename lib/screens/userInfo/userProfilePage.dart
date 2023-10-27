@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:isms/models/UserActions.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
-import 'package:isms/userManagement/loggedInUserProvider.dart';
+import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/userManagement/userprofileHeaderWidget.dart';
 import 'package:provider/provider.dart';
 
@@ -38,10 +38,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
   @override
-
   Widget build(BuildContext context) {
-    LoggedInUserProvider loggedInUserProvider =
-        Provider.of<LoggedInUserProvider>(context, listen: false);
+    LoggedInState loggedInUserProvider =
+        Provider.of<LoggedInState>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: Text('User Profile'),
@@ -64,7 +63,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         if (expanded) {
                           // await loggedInUserProvider
                           //     .getUserCoursesData(action.actionId);
-
                         }
                       },
                       children: [
@@ -85,7 +83,7 @@ class UserActionsDropdown extends StatelessWidget {
   UserActionsDropdown(
       {super.key, required this.actionId, required this.loggedInUserProvider});
   String actionId;
-  LoggedInUserProvider loggedInUserProvider;
+  LoggedInState loggedInUserProvider;
   @override
   Widget build(BuildContext context) {
     print(actionId);
@@ -134,7 +132,7 @@ class UserActionsDropdown extends StatelessWidget {
 class UserEnrolledCoursesDropdown extends StatelessWidget {
   String? actionId;
 
-  LoggedInUserProvider loggedInUserProvider;
+  LoggedInState loggedInUserProvider;
   UserEnrolledCoursesDropdown(
       {this.actionId, required this.loggedInUserProvider});
 
@@ -180,13 +178,12 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
   Widget build(BuildContext context) {
     CoursesProvider coursesProvider =
         Provider.of<CoursesProvider>(context, listen: false);
-    LoggedInUserProvider loggedInUserProvider =
-        Provider.of<LoggedInUserProvider>(context, listen: false);
+    LoggedInState loggedInUserProvider =
+        Provider.of<LoggedInState>(context, listen: false);
     return Column(
       children: [
         FutureBuilder<List>(
           future: loggedInUserProvider.getUserCoursesData('crs_enrl'),
-
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return CircularProgressIndicator();
@@ -287,12 +284,11 @@ class UserCompletedCoursesDropdown extends StatelessWidget {
   UserCompletedCoursesDropdown({this.actionId});
   @override
   Widget build(BuildContext context) {
-    LoggedInUserProvider loggedInUserProvider =
-        Provider.of<LoggedInUserProvider>(context, listen: false);
+    LoggedInState loggedInUserProvider =
+        Provider.of<LoggedInState>(context, listen: false);
     return Column(
       children: [
         FutureBuilder<List>(
-
           future: loggedInUserProvider.getUserCoursesData('crs_compl'),
           builder: (context, snapshot) {
             return ListView.builder(
