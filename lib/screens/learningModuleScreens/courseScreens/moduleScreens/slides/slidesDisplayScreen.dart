@@ -4,7 +4,7 @@ import 'package:isms/models/slide.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleExamsListScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/modulesListScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
-import 'package:isms/sharedWidgets/HtmlSlideDisplay.dart';
+import 'package:isms/sharedWidgets/htmlSlideDisplay.dart';
 import 'package:provider/provider.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/screens/login/loginScreen.dart';

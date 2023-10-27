@@ -10,7 +10,6 @@ import 'package:provider/provider.dart';
 
 import 'package:isms/userManagement/userDataGetterMaster.dart';
 import 'package:isms/userManagement/loggedInState.dart';
-import 'learningModuleScreens/courseScreens/createCourseScreen.dart';
 import 'login/loginScreen.dart';
 
 class HomePage extends StatefulWidget {
@@ -25,25 +24,20 @@ class _HomePageState extends State<HomePage> {
 
   UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
 
-  @override
-  void initState() {
-    super.initState();
-    userRole = 'admin';
-  }
-
   void setExpiryDate() async {
+    LoggedInState loggedInState = context.read<LoggedInState>();
+
     await FirebaseFirestore.instance
         .collection('adminconsole')
         .doc('allAdmins')
         .collection('admins')
-        .doc(FirebaseAuth.instance.currentUser!
+        .doc(loggedInState.user!
             .displayName) // replace 'username' with the logged in user's name
         .set({
       'createdTime': Timestamp.now(),
       'expiredTime': Timestamp.fromDate(_expiryDate!),
       'reminderSent': false,
-      'email': FirebaseAuth
-          .instance.currentUser!.email, // replace with the user's email
+      'email': loggedInState.user!.email, // replace with the user's email
     });
   }
 
@@ -55,7 +49,7 @@ class _HomePageState extends State<HomePage> {
       return LoginPage();
     }
 
-    //userRole = userDataGetterMaster.currentUserRole!;
+    userRole = userDataGetterMaster.currentUserRole!;
 
     return Consumer<CoursesProvider>(
         builder: (BuildContext context, CoursesProvider value, Widget? child) {
@@ -68,7 +62,7 @@ class _HomePageState extends State<HomePage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  // if (userRole == "admin")
+                  if (userRole == "admin")
                   ElevatedButton(
                     style: ButtonStyle(
                       shape: MaterialStateProperty.all(RoundedRectangleBorder(

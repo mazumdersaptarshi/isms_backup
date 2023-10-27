@@ -64,7 +64,6 @@ class _ModuleDetailsState extends State<ModuleDetails> {
     }
 
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
-    LoggedInState loggedInState = Provider.of<LoggedInState>(context);
     Module? module;
     try {
       module = coursesProvider
