@@ -4,6 +4,18 @@ import 'package:isms/adminManagement/createUserReferenceForAdmin.dart';
 import 'package:isms/models/customUser.dart';
 
 class UserDataGetterMaster {
+  UserDataGetterMaster() {
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user == null) {
+        print("User is currently signed out!");
+        _currentUser = null;
+      } else {
+        print("User is signed in!");
+        _currentUser = user;
+        getLoggedInUserInfoFromFirestore();
+      }
+    });
+  }
   static FirebaseFirestore db = FirebaseFirestore.instance;
   static User? _currentUser;
   static DocumentReference? _userRef;
@@ -57,7 +69,7 @@ class UserDataGetterMaster {
   //Function called during constructor invoke, to get all required logged in user data from Firestore
   Future<void> getLoggedInUserInfoFromFirestore() async {
     print('Entered getLoggedInUserInfoFromFirestore');
-    _currentUser = FirebaseAuth.instance.currentUser;
+    _currentUser = await FirebaseAuth.instance.currentUser;
     if (_currentUser == null) {
       print('no user currently signed into Firebase');
       return;
