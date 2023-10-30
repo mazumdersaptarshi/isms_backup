@@ -25,6 +25,10 @@ class AdminActionDropdown extends StatefulWidget {
 }
 
 class _AdminActionDropdownState extends State<AdminActionDropdown> {
+  bool isCoursesLoading =
+      false; //to manage state of courses button while data is being loaded for downloading
+  bool isUsersLoading =
+      false; //to manage state of users button while data is being loaded for downloading
   @override
   Widget build(BuildContext context) {
     if (widget.actionId == 'crs_mgmt') {
@@ -40,20 +44,36 @@ class _AdminActionDropdownState extends State<AdminActionDropdown> {
     } else if (widget.actionId == 'dwnld') {
       return Column(
         children: [
-          ElevatedButton(
-              onPressed: () {
-                DataExporter dataExporter =
-                    DataExporter(collectionDataToDownload: 'users');
-                dataExporter.downloadCSV();
-              },
-              child: Text('User Data')),
-          ElevatedButton(
-              onPressed: () {
-                DataExporter dataExporter =
-                    DataExporter(collectionDataToDownload: 'courses');
-                dataExporter.downloadCSV();
-              },
-              child: Text('Courses Data')),
+          !isUsersLoading
+              ? ElevatedButton(
+                  onPressed: () async {
+                    setState(() {
+                      isUsersLoading = true;
+                    });
+                    DataExporter dataExporter =
+                        DataExporter(collectionDataToDownload: 'users');
+                    await dataExporter.downloadCSV();
+                    setState(() {
+                      isUsersLoading = false; // Set to false after download
+                    });
+                  },
+                  child: Text('User Data'))
+              : CircularProgressIndicator(),
+          !isCoursesLoading
+              ? ElevatedButton(
+                  onPressed: () async {
+                    setState(() {
+                      isCoursesLoading = true;
+                    });
+                    DataExporter dataExporter =
+                        DataExporter(collectionDataToDownload: 'courses');
+                    await dataExporter.downloadCSV();
+                    setState(() {
+                      isCoursesLoading = false; // Set to false after download
+                    });
+                  },
+                  child: Text('Courses Data'))
+              : CircularProgressIndicator(),
         ],
       );
     } else {

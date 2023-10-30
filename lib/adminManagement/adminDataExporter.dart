@@ -7,7 +7,6 @@ import 'package:csv/csv.dart';
 import 'package:intl/intl.dart';
 import 'package:isms/models/course.dart';
 import 'package:to_csv/to_csv.dart' as exportCSV;
-import "package:universal_html/html.dart" as html;
 
 import '../models/customUser.dart';
 
@@ -35,30 +34,24 @@ class DataExporter {
     Uint8List bytes = Uint8List.fromList(utf8.encode(buffer));
 
     print(bytes);
-    // Convert to Uint8List
-    // Uint8List bytes = Uint8List.fromList(utf8.encode(buffer.toString()));
 
-    // Create Blob and download the file
     //Older way of downloading data
-    final blob = html.Blob([bytes]);
-    final url = html.Url.createObjectUrlFromBlob(blob);
-    final anchor = html.AnchorElement(href: url)
-      ..setAttribute('download', 'data.csv')
-      ..click();
-    html.Url.revokeObjectUrl(url);
-
-    List<List<String>> listOfLists = [
-      ['1', 'Bilal Saeed', '1374934', '912839812'],
-      ['2', 'Ahmar', '21341234', '192834821']
-    ]; //Outter List which contains the data List
-    List<String> header = ['a', 'b'];
-    exportCSV.myCSV([], csvData);
+    // final blob = html.Blob([bytes]);
+    // final url = html.Url.createObjectUrlFromBlob(blob);
+    // final anchor = html.AnchorElement(href: url)
+    //   ..setAttribute('download', 'data.csv')
+    //   ..click();
+    // html.Url.revokeObjectUrl(url);
+    await Future.delayed(Duration(
+        seconds:
+            1)); //Introducing delay to prevent spamming of download button in case download finishes too fast
+    exportCSV.myCSV(csvData[0], csvData.sublist(1));
   }
 
-  List<List<dynamic>> getUsersDataAsCSV(QuerySnapshot querySnapshot) {
+  List<List<String>> getUsersDataAsCSV(QuerySnapshot querySnapshot) {
     final List<QueryDocumentSnapshot> allData = querySnapshot.docs;
 
-    List<List<dynamic>> csvData = [
+    List<List<String>> csvData = [
       // Define the headers
       ['username', 'uid', 'email', 'courses_started', 'courses_completed']
     ];
