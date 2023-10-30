@@ -3,11 +3,10 @@ import 'package:isms/models/module.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/createSlideScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/slidesDisplayScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
+import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/userManagement/userCourseOperations.dart';
 import 'package:provider/provider.dart';
-
-import 'package:isms/screens/login/loginScreen.dart';
 
 import '../../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../../projectModules/courseManagement/moduleManagement/slideManagement/fetchSlides.dart';
@@ -59,7 +58,7 @@ class _ModuleDetailsState extends State<ModuleDetails> {
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
 
-    if (loggedInState.user == null) {
+    if (loggedInState.currentUser == null) {
       return LoginPage();
     }
 
@@ -78,7 +77,15 @@ class _ModuleDetailsState extends State<ModuleDetails> {
             Navigator.pop(context);
           },
         ),
-        title: module != null ? Text("${module.title}", style: commonTitleStyle,) : Text("No modules",style: commonTitleStyle,),
+        title: module != null
+            ? Text(
+                "${module.title}",
+                style: commonTitleStyle,
+              )
+            : Text(
+                "No modules",
+                style: commonTitleStyle,
+              ),
       ),
       body: module != null
           ? Column(

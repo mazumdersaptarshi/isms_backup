@@ -43,7 +43,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
 
-    if (loggedInState.user == null) {
+    if (loggedInState.currentUser == null) {
       return LoginPage();
     }
 
@@ -139,8 +139,7 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
   String? actionId;
 
   LoggedInState loggedInState;
-  UserEnrolledCoursesDropdown(
-      {this.actionId, required this.loggedInState});
+  UserEnrolledCoursesDropdown({this.actionId, required this.loggedInState});
 
   (bool, double, int) getCourseCompletedPercentage({
     required CoursesProvider coursesProvider,
@@ -303,8 +302,7 @@ class UserCompletedCoursesDropdown extends StatelessWidget {
               shrinkWrap: true,
               physics: ClampingScrollPhysics(),
               itemBuilder: (context, index) {
-                allCompletedCourses =
-                    loggedInState.allCompletedCoursesGlobal;
+                allCompletedCourses = loggedInState.allCompletedCoursesGlobal;
 
                 return ListTile(
                   title: Row(

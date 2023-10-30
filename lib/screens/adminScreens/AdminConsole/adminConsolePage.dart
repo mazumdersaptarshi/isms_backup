@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:isms/projectModules/adminConsoleModules/adminProfileHeaderWidget.dart';
+import 'package:isms/screens/login/loginScreen.dart';
+import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 
 import '../../../adminManagement/adminProvider.dart';
 import '../../../models/adminConsoleModels/adminConsoleActions.dart';
 import '../../../projectModules/adminConsoleModules/adminActionsWidget.dart';
 import '../../../userManagement/userDataGetterMaster.dart';
-import 'package:isms/userManagement/loggedInState.dart';
-import 'package:isms/screens/login/loginScreen.dart';
 
 class AdminConsolePage extends StatelessWidget {
   UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
@@ -27,7 +27,7 @@ class AdminConsolePage extends StatelessWidget {
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
 
-    if (loggedInState.user == null) {
+    if (loggedInState.currentUser == null) {
       return LoginPage();
     }
 

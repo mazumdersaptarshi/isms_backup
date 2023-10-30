@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:isms/models/newExam.dart';
 import 'package:isms/models/question.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
+import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
-import 'package:isms/screens/login/loginScreen.dart';
 
 import '../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../userManagement/userCourseOperations.dart';
@@ -93,7 +93,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
 
-    if (loggedInState.user == null) {
+    if (loggedInState.currentUser == null) {
       return LoginPage();
     }
 
@@ -104,8 +104,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
   }
 
   Widget buildScoreWidget() {
-    LoggedInState loggedInState =
-        Provider.of<LoggedInState>(context);
+    LoggedInState loggedInState = Provider.of<LoggedInState>(context);
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
 
     int correctAnswers = 0;

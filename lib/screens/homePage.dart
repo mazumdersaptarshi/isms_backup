@@ -1,16 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
-
 import 'package:isms/screens/adminScreens/AdminConsole/adminConsolePage.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
 import 'package:isms/screens/userInfo/userProfilePage.dart';
 import 'package:isms/sharedWidgets/customAppBar.dart';
+import 'package:isms/userManagement/loggedInState.dart';
+import 'package:isms/userManagement/userDataGetterMaster.dart';
 import 'package:provider/provider.dart';
 
-import 'package:isms/userManagement/userDataGetterMaster.dart';
-import 'package:isms/userManagement/loggedInState.dart';
 import 'login/loginScreen.dart';
 
 class HomePage extends StatefulWidget {
@@ -32,13 +30,14 @@ class _HomePageState extends State<HomePage> {
         .collection('adminconsole')
         .doc('allAdmins')
         .collection('admins')
-        .doc(loggedInState.user!
+        .doc(loggedInState.currentUser!
             .displayName) // replace 'username' with the logged in user's name
         .set({
       'createdTime': Timestamp.now(),
       'expiredTime': Timestamp.fromDate(_expiryDate!),
       'reminderSent': false,
-      'email': loggedInState.user!.email, // replace with the user's email
+      'email':
+          loggedInState.currentUser!.email, // replace with the user's email
     });
   }
 
@@ -46,7 +45,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
 
-    if (loggedInState.user == null) {
+    if (loggedInState.currentUser == null) {
       return LoginPage();
     }
 
@@ -66,9 +65,8 @@ class _HomePageState extends State<HomePage> {
                   if (userRole == "admin")
                     ElevatedButton(
                       style: ButtonStyle(
-                        shape: MaterialStateProperty.all(
-                            RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10))),
+                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10))),
                       ),
                       onPressed: () {
                         Navigator.push(
@@ -106,9 +104,8 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     style: ButtonStyle(
-                      shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10))),
+                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10))),
                     ),
                   ),
                 ],
@@ -118,18 +115,14 @@ class _HomePageState extends State<HomePage> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => UserProfilePage()),
+                    MaterialPageRoute(builder: (context) => UserProfilePage()),
                   );
                 },
                 child: Container(
                   width: 100,
                   constraints: BoxConstraints(minHeight: 50),
                   child: Column(
-                    children: [
-                      Icon(Icons.person_pin),
-                      Text("User profile")
-                    ],
+                    children: [Icon(Icons.person_pin), Text("User profile")],
                   ),
                 ),
                 style: ButtonStyle(
@@ -172,8 +165,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ],
-          )
-        );
+          ));
     });
   }
 }

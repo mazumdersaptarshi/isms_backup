@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:isms/adminManagement/adminProvider.dart';
 import 'package:isms/screens/adminScreens/AdminInstructions/adminInstructionSlides.dart';
-import 'package:provider/provider.dart';
-import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/screens/login/loginScreen.dart';
+import 'package:isms/userManagement/loggedInState.dart';
+import 'package:provider/provider.dart';
 
 class AdminInstructionsCategories extends StatelessWidget {
   AdminInstructionsCategories(
@@ -26,7 +26,7 @@ class AdminInstructionsCategories extends StatelessWidget {
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
 
-    if (loggedInState.user == null) {
+    if (loggedInState.currentUser == null) {
       return LoginPage();
     }
 

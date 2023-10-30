@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:isms/models/customUser.dart';
 import 'package:isms/userManagement/userDataGetterMaster.dart';
 
 import '../models/course.dart';
@@ -12,9 +11,9 @@ class LoggedInState with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   UserDataGetterMaster _userDataGetterMaster = UserDataGetterMaster();
-  CustomUser? get getCurrentUser => _userDataGetterMaster.loggedInUser;
+  // CustomUser? get getCurrentUser => _userDataGetterMaster.loggedInUser;
 
-  User? get user => _userDataGetterMaster.currentUser;
+  // User? get user => _userDataGetterMaster.currentUser;
 
   List<dynamic> allEnrolledCoursesGlobal =
       []; //Global List to hold all enrolled courses for User
@@ -28,7 +27,8 @@ class LoggedInState with ChangeNotifier {
     _auth.authStateChanges().listen((User? user) {
       authStateChanged = true;
       if (user == null) {
-        print("auth state changed: no account is currently signed into Firebase");
+        print(
+            "auth state changed: no account is currently signed into Firebase");
         _userDataGetterMaster.currentUser = null;
         notifyListeners();
       } else {
@@ -36,8 +36,7 @@ class LoggedInState with ChangeNotifier {
             "auth state changed: account ${user!.email} is currently signed into Firebase");
 
         _userDataGetterMaster.getLoggedInUserInfoFromFirestore().then((_value) {
-          print(
-              "account ${user!.email}'s data was fetched from Firestore");
+          print("account ${user!.email}'s data was fetched from Firestore");
           // this is used as source of truth in the app, so it has to
           // occur after getLoggedInUserInfoFromFirestore() to ensure all
           // the user-related data is available
@@ -49,10 +48,22 @@ class LoggedInState with ChangeNotifier {
     listenToChanges();
   }
 
+  //Getters from the State management provider, all classes can get the data about logged in User using these getters
+  User? get currentUser => _userDataGetterMaster.currentUser;
+  String? get currentUserName => _userDataGetterMaster.currentUserEmail;
+  String? get currentUserEmail => _userDataGetterMaster.currentUserEmail;
+  String? get currentUserRole => _userDataGetterMaster.currentUserRole;
+  String? get currentUserUid => _userDataGetterMaster.currentUserUid;
+  DocumentReference? get currentUserDocumentReference =>
+      _userDataGetterMaster.currentUserDocumentReference;
+  DocumentSnapshot? get currentUserSnapshot =>
+      _userDataGetterMaster.currentUserSnapshot;
+  Future<DocumentSnapshot<Object?>?>
+      get getNewCurrentUserDocumentSnapshot async =>
+          await _userDataGetterMaster.newCurrentUserSnapshot;
+
   void listenToChanges() {
-    _userDataGetterMaster.currentUserDocumentReference
-        ?.snapshots()
-        .listen((snapshot) {
+    currentUserDocumentReference?.snapshots().listen((snapshot) {
       if (snapshot.exists) {
         _hasnewData = true;
         notifyListeners();
@@ -71,11 +82,10 @@ class LoggedInState with ChangeNotifier {
       print(
           "Fetching fresh data because authStateChanged = $authStateChanged and _hasnewData = $_hasnewData");
 
-      print(
-          'Inside fetch courses user provider ${_userDataGetterMaster.currentUserUid}');
+      print('Inside fetch courses user provider ${currentUserUid}');
       try {
         DocumentSnapshot? newCurrentUserDocumentSnapshot =
-            await _userDataGetterMaster.newCurrentUserSnapshot;
+            await getNewCurrentUserDocumentSnapshot;
 
         if (newCurrentUserDocumentSnapshot!.exists) {
           Map<String, dynamic> mapdata =

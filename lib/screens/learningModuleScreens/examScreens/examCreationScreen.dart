@@ -2,17 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:isms/models/enums.dart';
 import 'package:isms/models/newExam.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
-import 'package:isms/utilityWidgets/optionTile.dart';
-import 'package:isms/utilityWidgets/questionWidget.dart';
+import 'package:isms/screens/login/loginScreen.dart';
+import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/utilityFunctions/generateRandom.dart';
+import 'package:isms/utilityWidgets/questionWidget.dart';
 import 'package:provider/provider.dart';
 
 import '../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../projectModules/courseManagement/examManagement/createExam.dart';
-
-import 'package:provider/provider.dart';
-import 'package:isms/screens/login/loginScreen.dart';
-import 'package:isms/userManagement/loggedInState.dart';
 
 List<Map<String, dynamic>> allQuestions = [];
 
@@ -55,7 +52,7 @@ class ExamCreationState extends State<ExamCreation> {
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
 
-    if (loggedInState.user == null) {
+    if (loggedInState.currentUser == null) {
       return LoginPage();
     }
 

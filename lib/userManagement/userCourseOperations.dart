@@ -136,11 +136,14 @@ setUserCourseModuleCompleted(
     required int moduleIndex}) async {
   bool flag = false;
   UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
-
+  print('Module completed: ${userDataGetterMaster.loggedInUser!}');
   if (userDataGetterMaster.loggedInUser!.courses_started.isNotEmpty) {
     userDataGetterMaster.loggedInUser!.courses_started.forEach((course) {
       try {
+        print('courseIds: ${course['courseID']}');
+        print('courseDetailsId: ${courseDetails['courseID']}');
         if (course['courseID'] == courseDetails['courseID']) {
+          print('They are same');
           course["modules_completed"].forEach((element) {
             if (element ==
                 coursesProvider

@@ -4,14 +4,13 @@ import 'package:isms/screens/learningModuleScreens/courseScreens/coursesListScre
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/createModuleScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examListScreen.dart';
+import 'package:isms/screens/login/loginScreen.dart';
+import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/utilityWidgets/modulesList/moduleListWidget.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../../projectModules/courseManagement/moduleManagement/fetchModules.dart';
-
-import 'package:isms/screens/login/loginScreen.dart';
-import 'package:isms/userManagement/loggedInState.dart';
 
 class ModulesListScreen extends StatefulWidget {
   ModulesListScreen({super.key, required this.courseIndex});
@@ -48,7 +47,7 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
 
-    if (loggedInState.user == null) {
+    if (loggedInState.currentUser == null) {
       return LoginPage();
     }
 

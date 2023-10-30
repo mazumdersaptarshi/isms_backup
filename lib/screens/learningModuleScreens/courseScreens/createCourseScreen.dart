@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
-
 import 'package:isms/models/adminConsoleModels/coursesDetails.dart';
 import 'package:isms/models/course.dart';
-import 'package:isms/utilityFunctions/generateRandom.dart';
-import 'package:isms/models/adminConsoleModels/coursesDetails.dart';
-import 'package:isms/models/course.dart';
-
-import '../../../projectModules/courseManagement/createCourse.dart';
-
-import 'package:provider/provider.dart';
 import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/userManagement/loggedInState.dart';
+import 'package:isms/utilityFunctions/generateRandom.dart';
+import 'package:provider/provider.dart';
+
+import '../../../projectModules/courseManagement/createCourse.dart';
 
 class CreateCourseScreen extends StatelessWidget {
   const CreateCourseScreen({super.key});
@@ -19,7 +15,7 @@ class CreateCourseScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
 
-    if (loggedInState.user == null) {
+    if (loggedInState.currentUser == null) {
       return LoginPage();
     }
 
