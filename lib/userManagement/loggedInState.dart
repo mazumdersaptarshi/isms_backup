@@ -14,8 +14,7 @@ class LoggedInState with ChangeNotifier {
   UserDataGetterMaster _userDataGetterMaster = UserDataGetterMaster();
   CustomUser? get getCurrentUser => _userDataGetterMaster.loggedInUser;
 
-  User? _currentUser;
-  User? get user => _currentUser;
+  User? get user => _userDataGetterMaster.currentUser;
 
   List<dynamic> allEnrolledCoursesGlobal =
       []; //Global List to hold all enrolled courses for User
@@ -27,24 +26,25 @@ class LoggedInState with ChangeNotifier {
 
   LoggedInState() {
     _auth.authStateChanges().listen((User? user) {
-      if (_currentUser == null) {
-        _currentUser = user;
-        print("no account is currently signed into Firebase");
+      authStateChanged = true;
+      if (user == null) {
+        print("auth state changed: no account is currently signed into Firebase");
+        _userDataGetterMaster.currentUser = null;
+        notifyListeners();
       } else {
         print(
-            "account ${_currentUser!.email} is currently signed into Firebase");
+            "auth state changed: account ${user!.email} is currently signed into Firebase");
 
         _userDataGetterMaster.getLoggedInUserInfoFromFirestore().then((_value) {
           print(
-              "account ${_currentUser!.email}'s data was fetched from Firestore");
+              "account ${user!.email}'s data was fetched from Firestore");
           // this is used as source of truth in the app, so it has to
           // occur after getLoggedInUserInfoFromFirestore() to ensure all
           // the user-related data is available
-          _currentUser = user;
+          _userDataGetterMaster.currentUser = user;
+          notifyListeners();
         });
       }
-      authStateChanged = true;
-      notifyListeners();
     });
     listenToChanges();
   }

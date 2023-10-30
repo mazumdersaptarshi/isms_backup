@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:isms/Frontend/courses.dart';
 
 import '../themes/common_theme.dart';
 

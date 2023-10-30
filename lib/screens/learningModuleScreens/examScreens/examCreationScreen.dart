@@ -10,6 +10,10 @@ import 'package:provider/provider.dart';
 import '../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../projectModules/courseManagement/examManagement/createExam.dart';
 
+import 'package:provider/provider.dart';
+import 'package:isms/screens/login/loginScreen.dart';
+import 'package:isms/userManagement/loggedInState.dart';
+
 List<Map<String, dynamic>> allQuestions = [];
 
 enum EXAMTYPE { courseExam, moduleExam }
@@ -49,6 +53,12 @@ class ExamCreationState extends State<ExamCreation> {
 
   @override
   Widget build(BuildContext context) {
+    LoggedInState loggedInState = context.watch<LoggedInState>();
+
+    if (loggedInState.user == null) {
+      return LoginPage();
+    }
+
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
     return Scaffold(
       appBar: AppBar(

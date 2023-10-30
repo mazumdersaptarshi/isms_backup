@@ -10,6 +10,9 @@ import 'package:provider/provider.dart';
 import 'package:isms/models/course.dart';
 import 'package:file_picker/file_picker.dart';
 
+import 'package:isms/userManagement/loggedInState.dart';
+import 'package:isms/screens/login/loginScreen.dart';
+
 import '../../../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../../../projectModules/courseManagement/moduleManagement/slideManagement/createSlide.dart';
 import '../../../../../projectModules/courseManagement/moduleManagement/slideManagement/slidesCreationProvider.dart';
@@ -20,6 +23,12 @@ class CreateSlideScreen extends StatelessWidget {
   int moduleIndex;
   @override
   Widget build(BuildContext context) {
+    LoggedInState loggedInState = context.watch<LoggedInState>();
+
+    if (loggedInState.user == null) {
+      return LoginPage();
+    }
+
     return SlideFormContainer(
       courseIndex: courseIndex,
       moduleIndex: moduleIndex,
