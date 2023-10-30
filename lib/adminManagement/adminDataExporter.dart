@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:csv/csv.dart';
+import 'package:intl/intl.dart';
 import 'package:isms/models/course.dart';
-import "package:universal_html/html.dart" as html;
+import 'package:to_csv/to_csv.dart' as exportCSV;
 
 import '../models/customUser.dart';
 
@@ -16,43 +18,40 @@ class DataExporter {
     //Download Users data
     var csvData;
     QuerySnapshot querySnapshot;
+    querySnapshot = await FirebaseFirestore.instance
+        .collection(collectionDataToDownload!)
+        .get();
     if (collectionDataToDownload == 'users') {
-      querySnapshot = await FirebaseFirestore.instance
-          .collection(collectionDataToDownload!)
-          .get();
       csvData = getUsersDataAsCSV(querySnapshot);
     } else if (collectionDataToDownload == 'courses') {
-      querySnapshot = await FirebaseFirestore.instance
-          .collection(collectionDataToDownload!)
-          .get();
-      csvData = getCoursesDataAsCSV(querySnapshot);
+      csvData = await getCoursesDataAsCSV(querySnapshot);
     }
     // Loop through the documents to populate the CSV data
 
     print(csvData);
-    // Create the CSV content
-    StringBuffer buffer = StringBuffer();
-    csvData.forEach((row) {
-      buffer.writeAll(row, ',');
-      buffer.write('\n');
-    });
-    print(buffer);
-    // Convert to Uint8List
-    Uint8List bytes = Uint8List.fromList(utf8.encode(buffer.toString()));
 
-    // Create Blob and download the file
-    final blob = html.Blob([bytes]);
-    final url = html.Url.createObjectUrlFromBlob(blob);
-    final anchor = html.AnchorElement(href: url)
-      ..setAttribute('download', 'data.csv')
-      ..click();
-    html.Url.revokeObjectUrl(url);
+    final buffer = ListToCsvConverter().convert(csvData);
+    Uint8List bytes = Uint8List.fromList(utf8.encode(buffer));
+
+    print(bytes);
+
+    //Older way of downloading data
+    // final blob = html.Blob([bytes]);
+    // final url = html.Url.createObjectUrlFromBlob(blob);
+    // final anchor = html.AnchorElement(href: url)
+    //   ..setAttribute('download', 'data.csv')
+    //   ..click();
+    // html.Url.revokeObjectUrl(url);
+    await Future.delayed(Duration(
+        seconds:
+            1)); //Introducing delay to prevent spamming of download button in case download finishes too fast
+    exportCSV.myCSV(csvData[0], csvData.sublist(1));
   }
 
-  List<List<dynamic>> getUsersDataAsCSV(QuerySnapshot querySnapshot) {
+  List<List<String>> getUsersDataAsCSV(QuerySnapshot querySnapshot) {
     final List<QueryDocumentSnapshot> allData = querySnapshot.docs;
 
-    List<List<dynamic>> csvData = [
+    List<List<String>> csvData = [
       // Define the headers
       ['username', 'uid', 'email', 'courses_started', 'courses_completed']
     ];
@@ -73,10 +72,10 @@ class DataExporter {
     return csvData;
   }
 
-  List<List<dynamic>> getCoursesDataAsCSV(QuerySnapshot querySnapshot) {
+  Future<List<List>> getCoursesDataAsCSV(QuerySnapshot querySnapshot) async {
     final List<QueryDocumentSnapshot> allData = querySnapshot.docs;
 
-    List<List<dynamic>> csvData = [
+    List<List<String>> csvData = [
       // Define the headers
       [
         'name',
@@ -88,22 +87,74 @@ class DataExporter {
         'createdAt'
       ]
     ];
-    print(allData);
+    // print(allData);
     // Loop through the documents to populate the CSV data
+
     for (QueryDocumentSnapshot snapshot in allData) {
+      var examsModulesDataMap = await getExamsModulesDataForCourse(snapshot);
       Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
       Course coursesInfo = Course.fromMap(data);
 
       csvData.add([
         coursesInfo.name.toString(),
         coursesInfo.id.toString(),
-        coursesInfo.exams.toString(),
+        examsModulesDataMap['examsData']
+            .toString(), //getting the exams data from the result returned by getExamsModulesDataForCourse
         coursesInfo.examsCount.toString(),
-        coursesInfo.modules.toString(),
+        examsModulesDataMap['modulesData']
+            .toString(), //getting the modules data from the result returned by getExamsModulesDataForCourse
         coursesInfo.modulesCount.toString(),
-        data['createdAt'].toString(),
+        formattedDate(data['createdAt'])
+        // data['createdAt'].toString(),
       ]);
     }
     return csvData;
+  }
+
+  //This function is for getting the exams and modules data for a particular course, and convert it into a map of Exams and Modules
+  Future<Map<String, List<dynamic>>> getExamsModulesDataForCourse(
+      QueryDocumentSnapshot queryDocumentSnapshot) async {
+    List<dynamic> examsData = [];
+    List<dynamic> modulesData = [];
+
+    //fetching exams data for that course
+    try {
+      CollectionReference examsCollection =
+          queryDocumentSnapshot.reference.collection("exams");
+      QuerySnapshot examsCollectionSnapshot = await examsCollection.get();
+      print('----------------------------------');
+      for (var doc in examsCollectionSnapshot.docs) {
+        examsData.add(doc.data());
+        // Perform operations using data
+      }
+    } catch (e) {
+      print(e);
+      examsData = [];
+    }
+
+    //fetching modules data for that course
+
+    try {
+      CollectionReference modulesCollection =
+          queryDocumentSnapshot.reference.collection("modules");
+      QuerySnapshot modulesCollectionSnapshot = await modulesCollection.get();
+      print('----------------------------------');
+      for (var doc in modulesCollectionSnapshot.docs) {
+        modulesData.add(doc.data());
+        // Perform operations using data
+      }
+    } catch (e) {
+      print(e);
+      modulesData = [];
+    }
+    return {'examsData': examsData, 'modulesData': modulesData};
+  }
+
+  String formattedDate(Timestamp timestamp) {
+    DateTime dateTime = timestamp.toDate();
+
+    String formattedDate = DateFormat('yyyy-MM-dd – kk:mm:ss').format(dateTime);
+    print(formattedDate);
+    return formattedDate;
   }
 }

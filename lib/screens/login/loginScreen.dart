@@ -1,7 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:isms/firebase_options.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/userManagement/userDataGetterMaster.dart';
 import 'package:isms/utilityFunctions/authUtils.dart';
@@ -24,8 +22,8 @@ class LoginPageState extends State<LoginPage> {
   @override
   void main() async {
     super.initState();
-    await Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform);
+    // await Firebase.initializeApp(
+    //     options: DefaultFirebaseOptions.currentPlatform);
   }
 
   @override
