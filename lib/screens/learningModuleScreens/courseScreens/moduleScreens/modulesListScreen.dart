@@ -67,17 +67,6 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
             },
           ),
           title: Text("${course.name}"),
-          actions: [
-            ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => CreateModuleScreen(
-                              courseIndex: widget.courseIndex)));
-                },
-                child: Text("Add new module"))
-          ],
         ),
         body: Column(
           children: [
@@ -92,6 +81,7 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
                 );
               },
             ),
+            SizedBox(height: 20),
             ElevatedButton(
                 onPressed: () {
                   Navigator.push(
@@ -103,6 +93,7 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
                               )));
                 },
                 child: Text("Create exam")),
+            SizedBox(height: 20),
             ElevatedButton(
                 onPressed: () {
                   Navigator.push(
@@ -114,6 +105,16 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
                               )));
                 },
                 child: Text("View course exams")),
+            SizedBox(height: 20),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => CreateModuleScreen(
+                              courseIndex: widget.courseIndex)));
+                },
+                child: Text("Add new module"))
           ],
         ),
       );

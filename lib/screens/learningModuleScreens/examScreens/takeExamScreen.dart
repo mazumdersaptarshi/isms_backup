@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:isms/models/newExam.dart';
 import 'package:isms/models/question.dart';
+import 'package:isms/screens/homePage.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/userManagement/loggedInState.dart';
@@ -158,6 +159,9 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
                             coursesProvider.allCourses[widget.courseIndex].name,
                       },
                       examIndex: widget.exam.index);
+
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => HomePage()));
                 },
                 child: Text(
                     "Mark Exam as Done- completed ${widget.exam.index}/${coursesProvider.allCourses[widget.courseIndex].exams!.length}"),
@@ -176,6 +180,9 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
                     moduleIndex: widget.moduleIndex!,
                     coursesProvider: coursesProvider,
                   );
+
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => HomePage()));
                 },
                 child: Text("Mark Module as Done"),
               ),

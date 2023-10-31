@@ -156,6 +156,7 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                             ),
                           ),
                         ),
+                      SizedBox(height: 20),
                       SizedBox(
                         width: 200,
                         child: ElevatedButton(
@@ -174,6 +175,7 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                               Text('Create new exam', style: commonTextStyle),
                         ),
                       ),
+                      SizedBox(height: 20),
                       SizedBox(
                         width: 200,
                         child: ElevatedButton(
