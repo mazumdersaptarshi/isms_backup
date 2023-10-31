@@ -48,10 +48,7 @@ class UserDataGetterMaster {
   DocumentSnapshot? get currentUserSnapshot => _currentUserSnapshot;
 
   Future<DocumentSnapshot<Object?>?> get newCurrentUserSnapshot async =>
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc('${_currentUser?.uid}')
-          .get();
+      await _userRef!.get();
   CustomUser? get loggedInUser => _customUserObject;
 
   //Function called during constructor invoke, to get all required logged in user data from Firestore
@@ -65,9 +62,9 @@ class UserDataGetterMaster {
     User user = _currentUser!;
 
     print('user ${user.email} currently signed into Firebase');
-    DocumentReference _userRef =
+    _userRef =
         FirebaseFirestore.instance.collection('users').doc(user.uid);
-    DocumentSnapshot userSnapshot = await _userRef.get();
+    DocumentSnapshot userSnapshot = await _userRef!.get();
     if (userSnapshot.exists) {
       _currentUserSnapshot = userSnapshot;
       Map<String, dynamic>? userData =
@@ -89,10 +86,6 @@ class UserDataGetterMaster {
 
   set currentUserRole(String? role) {
     _userRole = role;
-  }
-
-  set currentUserDocumentReference(DocumentReference? ref) {
-    _userRef = ref;
   }
 
   set currentUserSnapshot(DocumentSnapshot? snapshot) {
