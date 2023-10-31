@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:isms/userManagement/loggedInState.dart';
-import 'package:isms/utilityFunctions/authUtils.dart';
 import 'package:provider/provider.dart';
 
 import '../screens/login/loginScreen.dart';
@@ -22,7 +21,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           buildUserAvatar(context),
           IconButton(
               onPressed: () {
-                AuthUtils.logout();
+                LoggedInState.logout();
                 Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) => LoginPage()));
               },

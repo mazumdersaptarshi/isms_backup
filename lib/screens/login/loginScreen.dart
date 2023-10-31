@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/userManagement/loggedInState.dart';
-import 'package:isms/utilityFunctions/authUtils.dart';
+import 'package:isms/userManagement/userDataGetterMaster.dart';
 import 'package:provider/provider.dart';
 
 import '../homePage.dart';
@@ -43,7 +43,7 @@ class LoginPageState extends State<LoginPage> {
             ElevatedButton(
                 onPressed: () async {
                   try {
-                    await AuthUtils.login();
+                    await LoggedInState.login();
                   } catch (e) {
                     print(e);
                   }
