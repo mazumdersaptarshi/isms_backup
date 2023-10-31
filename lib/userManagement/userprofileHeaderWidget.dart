@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/userManagement/userDataGetterMaster.dart';
+import 'package:provider/provider.dart';
 
 class UserProfileHeaderWidget extends StatelessWidget {
   UserProfileHeaderWidget({required this.loggedInState});

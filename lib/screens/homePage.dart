@@ -124,7 +124,6 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
 
-
               // Text(initialLink.toString()),
               const SizedBox(height: 20),
               Row(
@@ -225,7 +224,8 @@ class _HomePageState extends State<HomePage> {
                               pickedDate.day,
                               pickedTime.hour,
                               pickedTime.minute);
-                          setExpiryDate();
+                          setExpiryDate(loggedInState.currentUserEmail!,
+                              loggedInState.currentUserName!);
                         });
                       }
                     }
