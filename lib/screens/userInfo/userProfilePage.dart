@@ -27,7 +27,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
     UserActions(
         name: 'Courses Completed', icon: Icons.check, actionId: 'crs_compl'),
     UserActions(name: 'Exams', icon: Icons.assignment, actionId: 'exms'),
-    UserActions(name: 'Logout', icon: Icons.exit_to_app, actionId: 'logout'),
+    // UserActions(name: 'Logout', icon: Icons.exit_to_app, actionId: 'logout'),
   ];
 
   @override
@@ -76,7 +76,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   ],
                 );
               },
-              childCount: 6, // Change this count as needed
+              childCount: 4, // Change this count as needed
             ),
           )
         ],

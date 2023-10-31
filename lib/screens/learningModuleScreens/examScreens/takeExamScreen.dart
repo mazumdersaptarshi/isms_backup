@@ -7,7 +7,6 @@ import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 
 import '../../../projectModules/courseManagement/coursesProvider.dart';
-import '../../../userManagement/userCourseOperations.dart';
 
 class TakeExamScreen extends StatefulWidget {
   TakeExamScreen(
@@ -149,10 +148,9 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
             if (widget.examtype == EXAMTYPE.courseExam)
               ElevatedButton(
                 onPressed: () {
-                  setUserCourseExamCompleted(
+                  loggedInState.setUserCourseExamCompleted(
                       coursesProvider: coursesProvider,
                       courseIndex: widget.courseIndex,
-                      loggedInState: loggedInState,
                       courseDetails: {
                         "courseID":
                             coursesProvider.allCourses[widget.courseIndex].id,
@@ -160,15 +158,6 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
                             coursesProvider.allCourses[widget.courseIndex].name,
                       },
                       examIndex: widget.exam.index);
-                  // setUserCourseCompleted(
-                  //   loggedInState: loggedInState,
-                  //   courseDetails: {
-                  //     "courseID":
-                  //         coursesProvider.allCourses[widget.courseIndex].id,
-                  //     "course_name":
-                  //         coursesProvider.allCourses[widget.courseIndex].name,
-                  //   },
-                  // );
                 },
                 child: Text(
                     "Mark Exam as Done- completed ${widget.exam.index}/${coursesProvider.allCourses[widget.courseIndex].exams!.length}"),
@@ -176,8 +165,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
             else if (widget.examtype == EXAMTYPE.moduleExam)
               ElevatedButton(
                 onPressed: () {
-                  setUserCourseModuleCompleted(
-                    loggedInState: loggedInState,
+                  loggedInState.setUserCourseModuleCompleted(
                     courseDetails: {
                       "courseID":
                           coursesProvider.allCourses[widget.courseIndex].id,

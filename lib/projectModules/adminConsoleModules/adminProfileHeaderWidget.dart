@@ -8,22 +8,12 @@ class AdminInfoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(
-          height: 20,
-        ),
         if (userDataGetterMaster.currentUser?.photoURL != null)
           CircleAvatar(
-            radius: 40,
+            radius: 50,
             backgroundImage:
                 NetworkImage(userDataGetterMaster.currentUser!.photoURL!),
           ),
-        Text(
-          ' ${userDataGetterMaster.currentUserEmail}',
-          style: const TextStyle(
-            color: Colors.black,
-            fontSize: 14,
-          ),
-        ),
         if (userDataGetterMaster.currentUserRole != null)
           Text(
             ' ${userDataGetterMaster.currentUserName}',
@@ -33,6 +23,13 @@ class AdminInfoWidget extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
+        Text(
+          ' ${userDataGetterMaster.currentUserEmail}',
+          style: const TextStyle(
+            color: Colors.black,
+            fontSize: 18,
+          ),
+        ),
         if (userDataGetterMaster.currentUserRole != null)
           Text(
             'Role: ${userDataGetterMaster.currentUserRole}',

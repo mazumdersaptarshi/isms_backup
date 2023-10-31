@@ -110,4 +110,13 @@ class UserDataGetterMaster {
   set currentUserSnapshot(DocumentSnapshot? snapshot) {
     _currentUserSnapshot = snapshot;
   }
+
+  setUserData() async {
+    print(
+        "MUST SET COURSE STARTED ${loggedInUser!.toMap()} at ${loggedInUser?.uid}");
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(loggedInUser!.uid)
+        .set(loggedInUser!.toMap());
+  }
 }

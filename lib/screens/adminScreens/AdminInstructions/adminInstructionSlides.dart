@@ -1,55 +1,82 @@
 import 'package:flutter/material.dart';
-import 'package:isms/screens/login/loginScreen.dart';
-import 'package:isms/userManagement/loggedInState.dart';
-import 'package:provider/provider.dart';
 
-class AdminInstructionSlides extends StatelessWidget {
-  AdminInstructionSlides({super.key, this.slides});
+import '../../../adminManagement/adminProvider.dart';
+
+class AdminInstructionSlides extends StatefulWidget {
+  AdminInstructionSlides(
+      {super.key,
+      required this.adminProvider,
+      required this.category,
+      required this.subCategory});
   List<dynamic>? slides;
+  String category;
+  String subCategory;
+  AdminProvider adminProvider;
+
+  @override
+  State<AdminInstructionSlides> createState() => _AdminInstructionSlidesState();
+}
+
+class _AdminInstructionSlidesState extends State<AdminInstructionSlides> {
   final PageController _controller = PageController();
+
+  Future<List?> fetchSlidesList(
+      AdminProvider adminProvider, String category, String subCategory) async {
+    var slides = await adminProvider?.fetchAdminInstructionsFromFirestore(
+        category!, subCategory);
+    print('slidessdcd: ${slides}');
+    return slides ?? [];
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchSlidesList(widget.adminProvider!, widget.category!, widget.subCategory)
+        .then((value) {
+      setState(() {
+        widget.slides = value!;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    LoggedInState loggedInState = context.watch<LoggedInState>();
-
-    if (loggedInState.currentUser == null) {
-      return LoginPage();
-    }
-
     return Scaffold(
-        body: Column(
-      children: [
-        Expanded(
-          child: SlideList(
-            slides: slides,
-            controller: _controller,
-          ),
-        ),
-        Row(
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                _controller.previousPage(
-                    duration: Duration(milliseconds: 300),
-                    curve: Curves.easeInOut);
-              },
-              child: Text("Previous"),
-            ),
-            SizedBox(
-              width: 16,
-            ),
-            ElevatedButton(
-              onPressed: () {
-                _controller.nextPage(
-                    duration: Duration(milliseconds: 300),
-                    curve: Curves.easeInOut);
-              },
-              child: Text("Next"),
-            )
-          ],
-        )
-      ],
-    ));
+        body: widget.slides != null
+            ? Column(
+                children: [
+                  Expanded(
+                    child: SlideList(
+                      slides: widget.slides,
+                      controller: _controller,
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          _controller.previousPage(
+                              duration: Duration(milliseconds: 300),
+                              curve: Curves.easeInOut);
+                        },
+                        child: Text("Previous"),
+                      ),
+                      SizedBox(
+                        width: 16,
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          _controller.nextPage(
+                              duration: Duration(milliseconds: 300),
+                              curve: Curves.easeInOut);
+                        },
+                        child: Text("Next"),
+                      )
+                    ],
+                  )
+                ],
+              )
+            : const CircularProgressIndicator());
   }
 }
 

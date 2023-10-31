@@ -5,7 +5,6 @@ import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/s
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/userManagement/loggedInState.dart';
-import 'package:isms/userManagement/userCourseOperations.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../projectModules/courseManagement/coursesProvider.dart';
@@ -126,14 +125,13 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                           child: ElevatedButton(
                             style: customElevatedButtonStyle(),
                             onPressed: () async {
-                              await setUserCourseStarted(
-                                  loggedInState: loggedInState,
-                                  courseDetails: {
-                                    "courseID": coursesProvider
-                                        .allCourses[widget.courseIndex].id,
-                                    "course_name": coursesProvider
-                                        .allCourses[widget.courseIndex].name
-                                  });
+                              await loggedInState
+                                  .setUserCourseStarted(courseDetails: {
+                                "courseID": coursesProvider
+                                    .allCourses[widget.courseIndex].id,
+                                "course_name": coursesProvider
+                                    .allCourses[widget.courseIndex].name
+                              });
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(

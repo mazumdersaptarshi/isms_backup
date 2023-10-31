@@ -18,7 +18,7 @@ class AdminConsolePage extends StatelessWidget {
     AdminActions(
         name: 'Course Management', icon: Icons.school, actionId: 'crs_mgmt'),
     AdminActions(name: 'Instructions', icon: Icons.book, actionId: 'instr'),
-    AdminActions(name: 'Logout', icon: Icons.exit_to_app, actionId: 'logout'),
+    // AdminActions(name: 'Logout', icon: Icons.exit_to_app, actionId: 'logout'),
     AdminActions(
         name: 'Download Data', icon: Icons.download, actionId: 'dwnld'),
   ];
