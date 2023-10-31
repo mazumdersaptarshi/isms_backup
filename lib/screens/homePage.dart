@@ -22,7 +22,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  DocumentSnapshot? currentUserSnapshot;
   late String userRole;
   DateTime? _expiryDate;
 

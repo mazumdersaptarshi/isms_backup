@@ -23,7 +23,6 @@ class LoggedInState with ChangeNotifier {
 
   List<dynamic> allCompletedCoursesGlobal =
       []; //Global List to hold all completed courses for User
-  bool _hasnewData = false;
   bool authStateChanged = false;
 
   LoggedInState() {
@@ -60,8 +59,6 @@ class LoggedInState with ChangeNotifier {
   CustomUser? get loggedInUser => _userDataGetterMaster.loggedInUser;
   DocumentReference? get currentUserDocumentReference =>
       _userDataGetterMaster.currentUserDocumentReference;
-  DocumentSnapshot? get currentUserSnapshot =>
-      _userDataGetterMaster.currentUserSnapshot;
   Future<DocumentSnapshot<Object?>?>
       get getNewCurrentUserDocumentSnapshot async =>
           await _userDataGetterMaster.newCurrentUserSnapshot;
@@ -69,72 +66,63 @@ class LoggedInState with ChangeNotifier {
   void listenToChanges() {
     currentUserDocumentReference?.snapshots().listen((snapshot) {
       if (snapshot.exists) {
-        _hasnewData = true;
+        print('user document was modified: storing new content');
+        storeUserCoursesData(snapshot);
         notifyListeners();
       } else {
-        print('No existing document');
+        print('user document was deleted');
       }
     });
   }
 
+  void storeUserCoursesData(DocumentSnapshot snapshot) {
+    if (snapshot!.exists) {
+      Map<String, dynamic> mapData =
+        snapshot.data() as Map<String, dynamic>;
+      UserCoursesDetails data = UserCoursesDetails.fromMap(mapData);
+      allEnrolledCoursesGlobal = data.courses_started!;
+      allCompletedCoursesGlobal = data.courses_completed!;
+    } else {
+      print('user document was deleted');
+    }
+  }
+
   //Getter function for all course related info from users collection, for the logged in User
   //Basically populates the two static global variables allEnrolledCoursesGlobal and allCompletedCoursesGlobal
-  Future<List> getUserCoursesData(String? actionId) async {
+  Future<void> fetchUserCoursesData() async {
     print('Current value of authStateChanged: $authStateChanged');
-    print('Current value of _hasnewData: $_hasnewData');
-    bool isRefreshAction = false;
-    if (actionId == 'ref') isRefreshAction = true;
 
-    if (authStateChanged || _hasnewData || isRefreshAction) {
+    if (authStateChanged) {
       print(
-          "Fetching fresh data because authStateChanged = $authStateChanged and _hasnewData = $_hasnewData");
+          "Fetching fresh data because authStateChanged = $authStateChanged");
 
       print('Inside fetch courses user provider ${currentUserUid}');
-      try {
-        DocumentSnapshot? newCurrentUserDocumentSnapshot =
-            await getNewCurrentUserDocumentSnapshot;
+      DocumentSnapshot? newCurrentUserDocumentSnapshot =
+          await getNewCurrentUserDocumentSnapshot;
 
-        if (newCurrentUserDocumentSnapshot!.exists) {
-          Map<String, dynamic> mapdata =
-              newCurrentUserDocumentSnapshot.data() as Map<String, dynamic>;
-          UserCoursesDetails data = UserCoursesDetails.fromMap(mapdata);
-          // Access specific fields from the document
-
-          print('Field 1: ${data.courses_started}');
-          allEnrolledCoursesGlobal = data.courses_started!;
-          allCompletedCoursesGlobal = data.courses_completed!;
-        } else {
-          print('Document does not exist');
-        }
-        print('890io: ${allEnrolledCoursesGlobal}');
-        if (actionId == 'crs_enrl') {
-          authStateChanged = false;
-          _hasnewData = false;
-
-          print('changes detected, fetching new data');
-          return allEnrolledCoursesGlobal;
-        } else if (actionId == 'crs_compl') {
-          authStateChanged = false;
-          _hasnewData = false;
-
-          print('changes detected, fetching new data');
-          return allCompletedCoursesGlobal;
-        }
-      } catch (e) {
-        return [];
-      }
+      storeUserCoursesData(newCurrentUserDocumentSnapshot!);
+      print('890io: ${allEnrolledCoursesGlobal}');
+      authStateChanged = false;
+    } else {
+      print(
+          "Using cached data because authStateChanged = $authStateChanged");
     }
-    print(
-        "Using cached data because authStateChanged = $authStateChanged and _hasnewData = $_hasnewData");
+  }
 
-    print('No chnages detected, fetching cached data');
+  Future<List> getUserCoursesData(String actionId) async {
+    await fetchUserCoursesData();
     if (actionId == 'crs_enrl') {
       return allEnrolledCoursesGlobal;
     }
-    if (actionId == 'crs_enrl') {
+    if (actionId == 'crs_compl') {
       return allCompletedCoursesGlobal;
     }
     return [];
+  }
+
+  Future<void> refreshUserCoursesData() async {
+    authStateChanged = true;
+    await fetchUserCoursesData();
   }
 
   setUserCourseStarted({required Map<String, dynamic> courseDetails}) {
