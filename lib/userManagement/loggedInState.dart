@@ -23,26 +23,17 @@ class LoggedInState with ChangeNotifier {
 
   List<dynamic> allCompletedCoursesGlobal =
       []; //Global List to hold all completed courses for User
-  bool authStateChanged = false;
 
   LoggedInState() {
     _auth.authStateChanges().listen((User? user) {
-      authStateChanged = true;
       if (user == null) {
-        print(
-            "auth state changed: no account is currently signed into Firebase");
-        _userDataGetterMaster.currentUser = null;
+        print("auth state changed: no account currently signed into Firebase");
+        _userDataGetterMaster.clear();
         notifyListeners();
       } else {
-        print(
-            "auth state changed: account ${user!.email} is currently signed into Firebase");
-
-        _userDataGetterMaster.getLoggedInUserInfoFromFirestore().then((_value) {
-          print("account ${user!.email}'s data was fetched from Firestore");
-          // this is used as source of truth in the app, so it has to
-          // occur after getLoggedInUserInfoFromFirestore() to ensure all
-          // the user-related data is available
-          _userDataGetterMaster.currentUser = user;
+        print("auth state changed: ${user!.email} currently signed into Firebase");
+        _userDataGetterMaster.fetchFromFirestore(user!).then((_value) {
+          storeUserCoursesData(currentUserSnapshot!);
           notifyListeners();
         });
       }
@@ -59,6 +50,8 @@ class LoggedInState with ChangeNotifier {
   CustomUser? get loggedInUser => _userDataGetterMaster.loggedInUser;
   DocumentReference? get currentUserDocumentReference =>
       _userDataGetterMaster.currentUserDocumentReference;
+  DocumentSnapshot? get currentUserSnapshot =>
+      _userDataGetterMaster.currentUserSnapshot;
   Future<DocumentSnapshot<Object?>?>
       get getNewCurrentUserDocumentSnapshot async =>
           await _userDataGetterMaster.newCurrentUserSnapshot;
@@ -89,28 +82,18 @@ class LoggedInState with ChangeNotifier {
 
   //Getter function for all course related info from users collection, for the logged in User
   //Basically populates the two static global variables allEnrolledCoursesGlobal and allCompletedCoursesGlobal
-  Future<void> fetchUserCoursesData() async {
-    print('Current value of authStateChanged: $authStateChanged');
+  Future<void> refreshUserCoursesData() async {
+    print(
+        "Fetching fresh data");
 
-    if (authStateChanged) {
-      print(
-          "Fetching fresh data because authStateChanged = $authStateChanged");
+    DocumentSnapshot? newCurrentUserDocumentSnapshot =
+        await getNewCurrentUserDocumentSnapshot;
 
-      print('Inside fetch courses user provider ${currentUserUid}');
-      DocumentSnapshot? newCurrentUserDocumentSnapshot =
-          await getNewCurrentUserDocumentSnapshot;
-
-      storeUserCoursesData(newCurrentUserDocumentSnapshot!);
-      print('890io: ${allEnrolledCoursesGlobal}');
-      authStateChanged = false;
-    } else {
-      print(
-          "Using cached data because authStateChanged = $authStateChanged");
-    }
+    storeUserCoursesData(newCurrentUserDocumentSnapshot!);
+    print('890io: ${allEnrolledCoursesGlobal}');
   }
 
   Future<List> getUserCoursesData(String actionId) async {
-    await fetchUserCoursesData();
     if (actionId == 'crs_enrl') {
       return allEnrolledCoursesGlobal;
     }
@@ -118,11 +101,6 @@ class LoggedInState with ChangeNotifier {
       return allCompletedCoursesGlobal;
     }
     return [];
-  }
-
-  Future<void> refreshUserCoursesData() async {
-    authStateChanged = true;
-    await fetchUserCoursesData();
   }
 
   setUserCourseStarted({required Map<String, dynamic> courseDetails}) {
