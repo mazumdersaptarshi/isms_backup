@@ -51,9 +51,11 @@ class _UserProfilePageState extends State<UserProfilePage> {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            expandedHeight: 210.0,
-            flexibleSpace:
-                FlexibleSpaceBar(background: UserProfileHeaderWidget()),
+            title: Text("User Profile"),
+            expandedHeight: 240.0,
+            flexibleSpace: FlexibleSpaceBar(
+                background:
+                    UserProfileHeaderWidget(loggedInState: loggedInState)),
           ),
           SliverList(
             delegate: SliverChildBuilderDelegate(

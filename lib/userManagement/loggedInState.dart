@@ -80,7 +80,10 @@ class LoggedInState with ChangeNotifier {
   Future<List> getUserCoursesData(String? actionId) async {
     print('Current value of authStateChanged: $authStateChanged');
     print('Current value of _hasnewData: $_hasnewData');
-    if (authStateChanged || _hasnewData) {
+    bool isRefreshAction = false;
+    if (actionId == 'ref') isRefreshAction = true;
+
+    if (authStateChanged || _hasnewData || isRefreshAction) {
       print(
           "Fetching fresh data because authStateChanged = $authStateChanged and _hasnewData = $_hasnewData");
 

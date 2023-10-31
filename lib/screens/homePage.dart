@@ -91,9 +91,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    userRole = userDataGetterMaster.currentUserRole!;
     final loggedInState = context.watch<LoggedInState>();
-
+    userRole = loggedInState.currentUserRole!;
     return Consumer<CoursesProvider>(
         builder: (BuildContext context, CoursesProvider value, Widget? child) {
       return Scaffold(
@@ -104,7 +103,7 @@ class _HomePageState extends State<HomePage> {
               Text(loggedInState.currentUserEmail.toString()),
               Text(loggedInState.currentUserName.toString()),
               Text(userRole.toString()),
-              Text(initialLink.toString()),
+              // Text(initialLink.toString()),
               const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -176,39 +175,40 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               const SizedBox(height: 20),
-              ElevatedButton(
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10))),
-                ),
-                onPressed: () async {
-                  DateTime? pickedDate = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime.now(),
-                      lastDate: DateTime(2101));
+              if (userRole == "admin")
+                ElevatedButton(
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10))),
+                  ),
+                  onPressed: () async {
+                    DateTime? pickedDate = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime.now(),
+                        lastDate: DateTime(2101));
 
-                  if (pickedDate != null) {
-                    final TimeOfDay? pickedTime = await showTimePicker(
-                      context: context,
-                      initialTime: TimeOfDay.now(),
-                    );
+                    if (pickedDate != null) {
+                      final TimeOfDay? pickedTime = await showTimePicker(
+                        context: context,
+                        initialTime: TimeOfDay.now(),
+                      );
 
-                    if (pickedTime != null) {
-                      setState(() {
-                        _expiryDate = DateTime(
-                            pickedDate.year,
-                            pickedDate.month,
-                            pickedDate.day,
-                            pickedTime.hour,
-                            pickedTime.minute);
-                        setExpiryDate();
-                      });
+                      if (pickedTime != null) {
+                        setState(() {
+                          _expiryDate = DateTime(
+                              pickedDate.year,
+                              pickedDate.month,
+                              pickedDate.day,
+                              pickedTime.hour,
+                              pickedTime.minute);
+                          setExpiryDate();
+                        });
+                      }
                     }
-                  }
-                },
-                child: const Text('Set Expiry date'),
-              ),
+                  },
+                  child: const Text('Set Expiry date'),
+                ),
             ],
           ));
     });
