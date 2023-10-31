@@ -48,7 +48,7 @@ class UserProfileHeaderWidget extends StatelessWidget {
             ),
           ElevatedButton(
               onPressed: () {
-                loggedInState.getUserCoursesData("ref");
+                loggedInState.refreshUserCoursesData();
               },
               child: Text("Refresh"))
         ],
