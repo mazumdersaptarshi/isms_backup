@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/userManagement/userDataGetterMaster.dart';
 
@@ -8,22 +9,24 @@ class UserProfileHeaderWidget extends StatelessWidget {
   LoggedInState loggedInState;
   @override
   Widget build(BuildContext context) {
+    final loggedInState = context.watch<LoggedInState>();
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          if (userDataGetterMaster.currentUser?.photoURL != null)
+          if (loggedInState.currentUser?.photoURL != null)
             Padding(
               padding: const EdgeInsets.only(
                   top: 25.0), // Increased padding on the top
               child: CircleAvatar(
                 radius: 50,
                 backgroundImage:
-                    NetworkImage(userDataGetterMaster.currentUser!.photoURL!),
+                    NetworkImage(loggedInState.currentUser!.photoURL!),
               ),
             ),
           Text(
-            ' ${userDataGetterMaster.currentUserName}',
+            ' ${loggedInState.currentUserName}',
             style: TextStyle(
               color: Colors.black,
               fontSize: 18,
@@ -31,15 +34,15 @@ class UserProfileHeaderWidget extends StatelessWidget {
             ),
           ),
           Text(
-            ' ${userDataGetterMaster.currentUserEmail}',
+            ' ${loggedInState.currentUserEmail}',
             style: TextStyle(
               color: Colors.black,
               fontSize: 18,
             ),
           ),
-          if (userDataGetterMaster.currentUserRole != null)
+          if (loggedInState.currentUserRole != null)
             Text(
-              'Role: ${userDataGetterMaster.currentUserRole}',
+              'Role: ${loggedInState.currentUserRole}',
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 18,

@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
@@ -12,7 +11,6 @@ import 'package:provider/provider.dart';
 import 'package:uni_links/uni_links.dart';
 
 import '../projectModules/adminConsoleModules/adminActionDropdown.dart';
-import '../userManagement/userDataGetterMaster.dart';
 import 'adminScreens/AdminInstructions/adminInstructionsCategories.dart';
 
 class HomePage extends StatefulWidget {
@@ -28,7 +26,7 @@ class _HomePageState extends State<HomePage> {
   late String userRole;
   DateTime? _expiryDate;
 
-  UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
+  // UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
   String? initialLink;
 
   Future<void> initUniLinks() async {
@@ -73,19 +71,18 @@ class _HomePageState extends State<HomePage> {
     initUniLinks();
   }
 
-  void setExpiryDate() async {
+  void setExpiryDate(String currentUserEmail, String currentUserName) async {
     await FirebaseFirestore.instance
         .collection('adminconsole')
         .doc('allAdmins')
         .collection('admins')
-        .doc(FirebaseAuth.instance.currentUser!
-            .displayName) // replace 'username' with the logged in user's name
+        .doc(
+            currentUserName) // replace 'username' with the logged in user's name
         .set({
       'createdTime': Timestamp.now(),
       'expiredTime': Timestamp.fromDate(_expiryDate!),
       'reminderSent': false,
-      'email': FirebaseAuth
-          .instance.currentUser!.email, // replace with the user's email
+      'email': currentUserEmail, // replace with the user's email
     });
   }
 
@@ -99,10 +96,35 @@ class _HomePageState extends State<HomePage> {
           appBar: CustomAppBar(),
           body: Column(
             children: [
-              Text('Logged in user: '),
-              Text(loggedInState.currentUserEmail.toString()),
-              Text(loggedInState.currentUserName.toString()),
-              Text(userRole.toString()),
+              Container(
+                padding: EdgeInsets.all(20),
+                color: Colors.deepPurpleAccent.shade200,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Logged in user: ',
+                        style: TextStyle(
+                          color: Colors.white,
+                        )),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      'Email: ${loggedInState.currentUserEmail.toString()}',
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                    Text('Name: ${loggedInState.currentUserName.toString()}',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold)),
+                    Text('Role: ${userRole.toString()}',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold)),
+                  ],
+                ),
+              ),
+
+
               // Text(initialLink.toString()),
               const SizedBox(height: 20),
               Row(
@@ -175,6 +197,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               const SizedBox(height: 20),
+
               if (userRole == "admin")
                 ElevatedButton(
                   style: ButtonStyle(

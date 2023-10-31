@@ -100,34 +100,7 @@ class UserActionsDropdown extends StatelessWidget {
         actionId: actionId,
         loggedInState: loggedInState,
       );
-    }
-    // else if (actionId == 'crs_compl') {
-    //   return Column(
-    //     children: [
-    //       FutureBuilder<List<dynamic>>(
-    //           future: loggedInState.getAllCompletedCoursesList(),
-    //           builder: (context, snapshot) {
-    //             if (snapshot.connectionState == ConnectionState.waiting) {
-    //               return CircularProgressIndicator();
-    //             } else if (snapshot.hasError) {
-    //               return Text('Error: ${snapshot.error}');
-    //             } else if (snapshot.hasData && snapshot.data != null) {
-    //               return ListView.builder(
-    //                 itemCount: snapshot.data!.length,
-    //                 shrinkWrap: true,
-    //                 itemBuilder: (context, index) {
-    //                   print('SnapshotData: ${snapshot.data![index]}');
-    //                   return Text('${snapshot.data![index]['course_name']}');
-    //                 },
-    //               );
-    //             } else {
-    //               return Text('No data');
-    //             }
-    //           })
-    //     ],
-    //   );
-    // }
-    else if (actionId == 'crs_compl') {
+    } else if (actionId == 'crs_compl') {
       return UserCompletedCoursesDropdown(
         actionId: actionId,
       );
