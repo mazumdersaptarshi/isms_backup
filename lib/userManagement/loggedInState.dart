@@ -51,7 +51,7 @@ class LoggedInState with ChangeNotifier {
 
   //Getters from the State management provider, all classes can get the data about logged in User using these getters
   User? get currentUser => _userDataGetterMaster.currentUser;
-  String? get currentUserName => _userDataGetterMaster.currentUserEmail;
+  String? get currentUserName => _userDataGetterMaster.currentUserName;
   String? get currentUserEmail => _userDataGetterMaster.currentUserEmail;
   String? get currentUserRole => _userDataGetterMaster.currentUserRole;
   String? get currentUserUid => _userDataGetterMaster.currentUserUid;
