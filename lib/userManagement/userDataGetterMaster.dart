@@ -4,18 +4,6 @@ import 'package:isms/adminManagement/createUserReferenceForAdmin.dart';
 import 'package:isms/models/customUser.dart';
 
 class UserDataGetterMaster {
-  UserDataGetterMaster() {
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      if (user == null) {
-        print("User is currently signed out!");
-        _currentUser = null;
-      } else {
-        print("User is signed in!");
-        _currentUser = user;
-        getLoggedInUserInfoFromFirestore();
-      }
-    });
-  }
   static FirebaseFirestore db = FirebaseFirestore.instance;
   static User? _currentUser;
   static DocumentReference? _userRef;
