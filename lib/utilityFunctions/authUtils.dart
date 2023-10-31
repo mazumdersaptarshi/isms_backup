@@ -22,10 +22,6 @@ class AuthUtils {
     // ensure the app has a user entry for this account
     UserDataGetterMaster.ensureUserDataExists(
         FirebaseAuth.instance.currentUser);
-
-    // fetch the info the app has on this account
-    UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
-    await userDataGetterMaster.getLoggedInUserInfoFromFirestore();
   }
 
   static Future<void> logout() async {
