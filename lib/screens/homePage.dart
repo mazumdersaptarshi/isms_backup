@@ -7,6 +7,7 @@ import 'package:isms/screens/adminScreens/AdminConsole/adminConsolePage.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
 import 'package:isms/screens/userInfo/userProfilePage.dart';
 import 'package:isms/sharedWidgets/customAppBar.dart';
+import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 import 'package:uni_links/uni_links.dart';
 
@@ -91,6 +92,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     userRole = userDataGetterMaster.currentUserRole!;
+    final loggedInState = context.watch<LoggedInState>();
 
     return Consumer<CoursesProvider>(
         builder: (BuildContext context, CoursesProvider value, Widget? child) {
@@ -98,6 +100,9 @@ class _HomePageState extends State<HomePage> {
           appBar: CustomAppBar(),
           body: Column(
             children: [
+              Text('Logged in user: '),
+              Text(loggedInState.currentUserEmail.toString()),
+              Text(loggedInState.currentUserName.toString()),
               Text(userRole.toString()),
               Text(initialLink.toString()),
               const SizedBox(height: 20),
