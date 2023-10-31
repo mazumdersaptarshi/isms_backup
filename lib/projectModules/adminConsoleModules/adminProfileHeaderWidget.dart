@@ -1,22 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:isms/userManagement/userDataGetterMaster.dart';
+import 'package:provider/provider.dart';
+
+import '../../userManagement/loggedInState.dart';
 
 class AdminInfoWidget extends StatelessWidget {
-  UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
-
   @override
   Widget build(BuildContext context) {
+    final loggedInState = context.watch<LoggedInState>();
+
     return Column(
       children: [
-        if (userDataGetterMaster.currentUser?.photoURL != null)
-          CircleAvatar(
-            radius: 50,
-            backgroundImage:
-                NetworkImage(userDataGetterMaster.currentUser!.photoURL!),
+        if (loggedInState.currentUser?.photoURL != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 25.0),
+            child: CircleAvatar(
+              radius: 50,
+              backgroundImage:
+                  NetworkImage(loggedInState.currentUser!.photoURL!),
+            ),
           ),
-        if (userDataGetterMaster.currentUserRole != null)
+        if (loggedInState.currentUserRole != null)
           Text(
-            ' ${userDataGetterMaster.currentUserName}',
+            ' ${loggedInState.currentUserName}',
             style: const TextStyle(
               color: Colors.black,
               fontSize: 18,
@@ -24,15 +29,15 @@ class AdminInfoWidget extends StatelessWidget {
             ),
           ),
         Text(
-          ' ${userDataGetterMaster.currentUserEmail}',
+          ' ${loggedInState.currentUserEmail}',
           style: const TextStyle(
             color: Colors.black,
             fontSize: 18,
           ),
         ),
-        if (userDataGetterMaster.currentUserRole != null)
+        if (loggedInState.currentUserRole != null)
           Text(
-            'Role: ${userDataGetterMaster.currentUserRole}',
+            'Role: ${loggedInState.currentUserRole}',
             style: const TextStyle(
               color: Colors.black,
               fontSize: 18,

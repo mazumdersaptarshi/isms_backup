@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:isms/userManagement/userDataGetterMaster.dart';
+import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/utilityFunctions/authUtils.dart';
+import 'package:provider/provider.dart';
 
 import '../screens/login/loginScreen.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
+  // UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
 
   @override
   Size get preferredSize =>
@@ -32,14 +33,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   Widget buildUserAvatar(BuildContext context) {
+    var loggedInState = context.watch<LoggedInState>();
     return IconButton(
       padding: const EdgeInsets.only(right: 5.0),
       onPressed: () {},
-      icon: userDataGetterMaster.currentUser?.photoURL != null
+      icon: loggedInState.currentUser?.photoURL != null
           ? CircleAvatar(
               radius: 18,
               backgroundImage:
-                  NetworkImage(userDataGetterMaster.currentUser!.photoURL!),
+                  NetworkImage(loggedInState.currentUser!.photoURL!),
             )
           : const Icon(
               Icons.account_circle,

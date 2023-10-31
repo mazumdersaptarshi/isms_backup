@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-
 import 'package:isms/userManagement/loggedInState.dart';
-import 'package:isms/userManagement/userDataGetterMaster.dart';
 import 'package:provider/provider.dart';
 
 class UserProfileHeaderWidget extends StatelessWidget {
-  UserProfileHeaderWidget({required this.loggedInState});
-  UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
-  LoggedInState loggedInState;
+  // UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
+  // LoggedInState loggedInState;
   @override
   Widget build(BuildContext context) {
     final loggedInState = context.watch<LoggedInState>();

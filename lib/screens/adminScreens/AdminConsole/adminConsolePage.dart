@@ -7,10 +7,9 @@ import 'package:provider/provider.dart';
 import '../../../adminManagement/adminProvider.dart';
 import '../../../models/adminConsoleModels/adminConsoleActions.dart';
 import '../../../projectModules/adminConsoleModules/adminActionsWidget.dart';
-import '../../../userManagement/userDataGetterMaster.dart';
 
 class AdminConsolePage extends StatelessWidget {
-  UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
+  // UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
 
   final List<AdminActions> adminActions = [
     AdminActions(
@@ -38,7 +37,6 @@ class AdminConsolePage extends StatelessWidget {
         body: CustomScrollView(
       slivers: [
         SliverAppBar(
-          title: Text("Admin Console"),
           expandedHeight: 190.0,
           flexibleSpace: FlexibleSpaceBar(background: AdminInfoWidget()),
         ),

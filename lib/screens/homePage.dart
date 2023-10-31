@@ -94,146 +94,186 @@ class _HomePageState extends State<HomePage> {
         builder: (BuildContext context, CoursesProvider value, Widget? child) {
       return Scaffold(
           appBar: CustomAppBar(),
-          body: Column(
-            children: [
-              Container(
-                padding: EdgeInsets.all(20),
-                color: Colors.deepPurpleAccent.shade200,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          body: Container(
+            padding: const EdgeInsets.all(16.0),
+            decoration: BoxDecoration(
+              color: Colors.deepPurpleAccent.shade200,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Logged in user: ',
+                          style: TextStyle(
+                            color: Colors.white,
+                          )),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        'Email: ${loggedInState.currentUserEmail.toString()}',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                      Text('Name: ${loggedInState.currentUserName.toString()}',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold)),
+                      Text('Role: ${userRole.toString()}',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                ),
+
+                // Text(initialLink.toString()),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Text('Logged in user: ',
-                        style: TextStyle(
-                          color: Colors.white,
-                        )),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      'Email: ${loggedInState.currentUserEmail.toString()}',
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
-                    ),
-                    Text('Name: ${loggedInState.currentUserName.toString()}',
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold)),
-                    Text('Role: ${userRole.toString()}',
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold)),
+                    if (userRole == "admin")
+                      HomePageTile(
+                        tileId: 'adminConsole',
+                      ),
+                    HomePageTile(tileId: 'courses'),
                   ],
                 ),
-              ),
-
-              // Text(initialLink.toString()),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  if (userRole == "admin")
-                    ElevatedButton(
-                      style: ButtonStyle(
-                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10))),
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => AdminConsolePage()));
-                      },
-                      child: Container(
-                        constraints: const BoxConstraints(minHeight: 50),
-                        child: const Column(
-                          children: [
-                            Icon(Icons.lock_person_rounded),
-                            Text("Admin console")
-                          ],
-                        ),
-                      ),
-                    ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CoursesDisplayScreen()));
-                    },
-                    style: ButtonStyle(
-                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10))),
-                    ),
-                    child: Container(
-                      width: 100,
-                      constraints: const BoxConstraints(minHeight: 50),
-                      child: const Column(
-                        children: [
-                          Icon(Icons.laptop_chromebook_outlined),
-                          Text("All courses")
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => UserProfilePage()),
-                  );
-                },
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10))),
-                ),
-                child: Container(
-                  width: 100,
-                  constraints: const BoxConstraints(minHeight: 50),
-                  child: const Column(
-                    children: [Icon(Icons.person_pin), Text("User profile")],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              if (userRole == "admin")
+                const SizedBox(height: 20),
                 ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => UserProfilePage()),
+                    );
+                  },
                   style: ButtonStyle(
                     shape: MaterialStateProperty.all(RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10))),
                   ),
-                  onPressed: () async {
-                    DateTime? pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime.now(),
-                        lastDate: DateTime(2101));
-
-                    if (pickedDate != null) {
-                      final TimeOfDay? pickedTime = await showTimePicker(
-                        context: context,
-                        initialTime: TimeOfDay.now(),
-                      );
-
-                      if (pickedTime != null) {
-                        setState(() {
-                          _expiryDate = DateTime(
-                              pickedDate.year,
-                              pickedDate.month,
-                              pickedDate.day,
-                              pickedTime.hour,
-                              pickedTime.minute);
-                          setExpiryDate(loggedInState.currentUserEmail!,
-                              loggedInState.currentUserName!);
-                        });
-                      }
-                    }
-                  },
-                  child: const Text('Set Expiry date'),
+                  child: Container(
+                    width: 100,
+                    constraints: const BoxConstraints(minHeight: 50),
+                    child: const Column(
+                      children: [Icon(Icons.person_pin), Text("User profile")],
+                    ),
+                  ),
                 ),
-            ],
+                const SizedBox(height: 20),
+
+                if (userRole == "admin")
+                  ElevatedButton(
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10))),
+                    ),
+                    onPressed: () async {
+                      DateTime? pickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime.now(),
+                          lastDate: DateTime(2101));
+
+                      if (pickedDate != null) {
+                        final TimeOfDay? pickedTime = await showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay.now(),
+                        );
+
+                        if (pickedTime != null) {
+                          setState(() {
+                            _expiryDate = DateTime(
+                                pickedDate.year,
+                                pickedDate.month,
+                                pickedDate.day,
+                                pickedTime.hour,
+                                pickedTime.minute);
+                            setExpiryDate(loggedInState.currentUserEmail!,
+                                loggedInState.currentUserName!);
+                          });
+                        }
+                      }
+                    },
+                    child: const Text('Set Expiry date'),
+                  ),
+              ],
+            ),
           ));
     });
+  }
+}
+
+class HomePageTile extends StatelessWidget {
+  HomePageTile({required this.tileId});
+  String tileId;
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: InkWell(
+          onTap: () {
+            if (tileId == 'adminConsole')
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => AdminConsolePage()));
+            else if (tileId == 'courses')
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CoursesDisplayScreen()));
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: TileContent(
+              tileId: tileId,
+            ),
+          ),
+        ));
+  }
+}
+
+class TileContent extends StatelessWidget {
+  TileContent({required this.tileId});
+  String tileId;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        width: 100,
+        child: Column(
+          children: [
+            if (tileId == 'adminConsole')
+              Column(
+                children: [
+                  Icon(Icons.lock, color: Colors.deepPurpleAccent),
+                  SizedBox(height: 8),
+                  Text(
+                    "Admin Console",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.deepPurpleAccent),
+                  )
+                ],
+              ),
+            if (tileId == 'courses')
+              Column(
+                children: [
+                  Icon(Icons.book, color: Colors.deepPurpleAccent),
+                  SizedBox(height: 8),
+                  Text(
+                    "Courses",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.deepPurpleAccent),
+                  )
+                ],
+              ),
+          ],
+        ));
   }
 }

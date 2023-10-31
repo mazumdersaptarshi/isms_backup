@@ -6,8 +6,6 @@ import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/userManagement/userprofileHeaderWidget.dart';
 import 'package:provider/provider.dart';
 
-import '../../userManagement/userDataGetterMaster.dart';
-
 List allEnrolledCourses = [];
 List allCompletedCourses = [];
 
@@ -37,7 +35,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
     allCompletedCourses = [];
   }
 
-  UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
+  // UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
 
   @override
   Widget build(BuildContext context) {
@@ -51,11 +49,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            title: Text("User Profile"),
             expandedHeight: 240.0,
-            flexibleSpace: FlexibleSpaceBar(
-                background:
-                    UserProfileHeaderWidget(loggedInState: loggedInState)),
+            flexibleSpace:
+                FlexibleSpaceBar(background: UserProfileHeaderWidget()),
           ),
           SliverList(
             delegate: SliverChildBuilderDelegate(
@@ -129,26 +125,24 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
     allEnrolledCourses = loggedInState.allEnrolledCoursesGlobal;
 
     allEnrolledCourses.forEach((course) {
-      if (course["modules_completed"] != null) {
-        int modulesCount = 0;
+      int modulesCount = 0;
 
-        for (int i = 0; i < coursesProvider.allCourses.length; i++) {
-          var element = coursesProvider.allCourses[i];
+      for (int i = 0; i < coursesProvider.allCourses.length; i++) {
+        var element = coursesProvider.allCourses[i];
 
-          if (element.name == allEnrolledCourses![index]["course_name"]) {
-            modulesCount = element.modulesCount!;
-            noOfExams = element.examsCount!;
-            isValid = true;
-          }
+        if (element.name == allEnrolledCourses![index]["course_name"]) {
+          modulesCount = element.modulesCount!;
+          noOfExams = element.examsCount!;
+          isValid = true;
         }
+      }
 
-        int modulesCompletedCount =
-            allEnrolledCourses![index]["modules_completed"] != null
-                ? allEnrolledCourses![index]["modules_completed"].length
-                : 0;
-        if (isValid) {
-          courseCompletionPercentage = modulesCompletedCount / modulesCount;
-        }
+      int modulesCompletedCount =
+          allEnrolledCourses![index]["modules_completed"] != null
+              ? allEnrolledCourses![index]["modules_completed"].length
+              : 0;
+      if (isValid) {
+        courseCompletionPercentage = modulesCompletedCount / modulesCount;
       }
     });
     return (isValid, courseCompletionPercentage, noOfExams);
@@ -272,27 +266,31 @@ class UserCompletedCoursesDropdown extends StatelessWidget {
         FutureBuilder<List>(
           future: loggedInState.getUserCoursesData('crs_compl'),
           builder: (context, snapshot) {
-            return ListView.builder(
-              itemCount: loggedInState.allCompletedCoursesGlobal.length,
-              shrinkWrap: true,
-              physics: ClampingScrollPhysics(),
-              itemBuilder: (context, index) {
-                allCompletedCourses = loggedInState.allCompletedCoursesGlobal;
+            if (loggedInState.allCompletedCoursesGlobal.length > 0) {
+              return ListView.builder(
+                itemCount: loggedInState.allCompletedCoursesGlobal.length,
+                shrinkWrap: true,
+                physics: ClampingScrollPhysics(),
+                itemBuilder: (context, index) {
+                  allCompletedCourses = loggedInState.allCompletedCoursesGlobal;
 
-                return ListTile(
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '${allCompletedCourses![index]['course_name']} ',
-                        style: TextStyle(fontSize: 14),
-                      ),
-                      Icon(Icons.check_circle, color: Colors.green)
-                    ],
-                  ),
-                );
-              },
-            );
+                  return ListTile(
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '${allCompletedCourses![index]['course_name']} ',
+                          style: TextStyle(fontSize: 14),
+                        ),
+                        Icon(Icons.check_circle, color: Colors.green)
+                      ],
+                    ),
+                  );
+                },
+              );
+            } else {
+              return Text('No data available');
+            }
           },
         ),
       ],

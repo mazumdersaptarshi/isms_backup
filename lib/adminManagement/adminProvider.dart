@@ -1,12 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-
 import 'package:isms/models/adminConsoleModels/coursesDetails.dart';
-import 'package:isms/userManagement/userDataGetterMaster.dart';
+import 'package:isms/userManagement/loggedInState.dart';
 
 import '../models/customUser.dart';
-import 'package:isms/userManagement/loggedInState.dart';
 
 class AdminProvider extends ChangeNotifier {
   bool isCoursesStreamFetched = false;
@@ -16,7 +14,7 @@ class AdminProvider extends ChangeNotifier {
 
   bool _hasNewCoursesData = false;
   bool _hasNewUsersData = false;
-  UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
+  // UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
   Map<String, dynamic> snapshotData = {};
   LoggedInState loggedInState = LoggedInState();
   AdminProvider() {

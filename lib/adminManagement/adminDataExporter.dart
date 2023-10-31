@@ -35,13 +35,6 @@ class DataExporter {
 
     print(bytes);
 
-    //Older way of downloading data
-    // final blob = html.Blob([bytes]);
-    // final url = html.Url.createObjectUrlFromBlob(blob);
-    // final anchor = html.AnchorElement(href: url)
-    //   ..setAttribute('download', 'data.csv')
-    //   ..click();
-    // html.Url.revokeObjectUrl(url);
     await Future.delayed(Duration(
         seconds:
             1)); //Introducing delay to prevent spamming of download button in case download finishes too fast

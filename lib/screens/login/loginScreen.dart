@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/userManagement/loggedInState.dart';
-import 'package:isms/userManagement/userDataGetterMaster.dart';
 import 'package:isms/utilityFunctions/authUtils.dart';
 import 'package:provider/provider.dart';
 
@@ -17,7 +16,7 @@ class LoginPage extends StatefulWidget {
 class LoginPageState extends State<LoginPage> {
   Future<User?>? _signInFuture;
   bool hasCheckedForChangedDependencies = false;
-  UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
+  // UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
 
   @override
   void main() async {

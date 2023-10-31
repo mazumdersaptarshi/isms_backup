@@ -101,25 +101,23 @@ class UserCourseStartedDetailsTile extends StatelessWidget {
     bool isValid = false;
     print('Enrolled CoursesDropdown');
 
-    if (courseItem["modules_completed"] != null) {
-      int modulesCount = 0;
+    int modulesCount = 0;
 
-      for (int i = 0; i < coursesProvider.allCourses.length; i++) {
-        var element = coursesProvider.allCourses[i];
+    for (int i = 0; i < coursesProvider.allCourses.length; i++) {
+      var element = coursesProvider.allCourses[i];
 
-        if (element.name == courseItem["course_name"]) {
-          modulesCount = element.modulesCount!;
-          noOfExams = element.examsCount!;
-          isValid = true;
-        }
+      if (element.name == courseItem["course_name"]) {
+        modulesCount = element.modulesCount!;
+        noOfExams = element.examsCount!;
+        isValid = true;
       }
+    }
 
-      int modulesCompletedCount = courseItem["modules_completed"] != null
-          ? courseItem["modules_completed"].length
-          : 0;
-      if (isValid) {
-        courseCompletionPercentage = modulesCompletedCount / modulesCount;
-      }
+    int modulesCompletedCount = courseItem["modules_completed"] != null
+        ? courseItem["modules_completed"].length
+        : 0;
+    if (isValid) {
+      courseCompletionPercentage = modulesCompletedCount / modulesCount;
     }
 
     return {
@@ -146,6 +144,7 @@ class UserCourseStartedDetailsTile extends StatelessWidget {
                 percent: courseDetailsData["courseCompletionPercentage"],
                 center: new Text(
                   (courseDetailsData["courseCompletionPercentage"] * 100)
+                      .ceil()
                       .toString(),
                   style: TextStyle(fontSize: 10),
                 ),
