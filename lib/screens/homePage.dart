@@ -24,7 +24,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   DocumentSnapshot? currentUserSnapshot;
-  String? userRole;
+  late String userRole;
   DateTime? _expiryDate;
 
   UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
@@ -68,7 +68,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-    userRole = 'admin';
+    // userRole = 'admin';
     initUniLinks();
   }
 
@@ -90,6 +90,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    userRole = userDataGetterMaster.currentUserRole!;
+
     return Consumer<CoursesProvider>(
         builder: (BuildContext context, CoursesProvider value, Widget? child) {
       return Scaffold(
@@ -102,28 +104,28 @@ class _HomePageState extends State<HomePage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  // if (userRole == "admin")
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10))),
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AdminConsolePage()));
-                    },
-                    child: Container(
-                      constraints: const BoxConstraints(minHeight: 50),
-                      child: const Column(
-                        children: [
-                          Icon(Icons.lock_person_rounded),
-                          Text("Admin console")
-                        ],
+                  if (userRole == "admin")
+                    ElevatedButton(
+                      style: ButtonStyle(
+                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10))),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AdminConsolePage()));
+                      },
+                      child: Container(
+                        constraints: const BoxConstraints(minHeight: 50),
+                        child: const Column(
+                          children: [
+                            Icon(Icons.lock_person_rounded),
+                            Text("Admin console")
+                          ],
+                        ),
                       ),
                     ),
-                  ),
                   ElevatedButton(
                     onPressed: () {
                       Navigator.push(

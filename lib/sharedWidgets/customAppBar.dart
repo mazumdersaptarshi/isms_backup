@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:isms/utilityFunctions/authUtils.dart';
 import 'package:isms/userManagement/userDataGetterMaster.dart';
+import 'package:isms/utilityFunctions/authUtils.dart';
+
+import '../screens/login/loginScreen.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
@@ -18,7 +20,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           const Spacer(),
           buildUserAvatar(context),
           IconButton(
-              onPressed: () => AuthUtils.logout(),
+              onPressed: () {
+                AuthUtils.logout();
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => LoginPage()));
+              },
               icon: Icon(Icons.logout))
         ],
       ),
