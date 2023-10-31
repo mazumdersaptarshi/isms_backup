@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import 'loggedInState.dart';
+import 'package:isms/userManagement/loggedInState.dart';
+import 'package:isms/userManagement/userDataGetterMaster.dart';
 
 class UserProfileHeaderWidget extends StatelessWidget {
-  // UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
-
+  UserProfileHeaderWidget({required this.loggedInState});
+  UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
+  LoggedInState loggedInState;
   @override
   Widget build(BuildContext context) {
     final loggedInState = context.watch<LoggedInState>();
@@ -47,6 +48,11 @@ class UserProfileHeaderWidget extends StatelessWidget {
                 fontSize: 18,
               ),
             ),
+          ElevatedButton(
+              onPressed: () {
+                loggedInState.getUserCoursesData("ref");
+              },
+              child: Text("Refresh"))
         ],
       ),
     );

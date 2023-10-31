@@ -124,6 +124,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
 
+
               // Text(initialLink.toString()),
               const SizedBox(height: 20),
               Row(
@@ -196,40 +197,41 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               const SizedBox(height: 20),
-              ElevatedButton(
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10))),
-                ),
-                onPressed: () async {
-                  DateTime? pickedDate = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime.now(),
-                      lastDate: DateTime(2101));
 
-                  if (pickedDate != null) {
-                    final TimeOfDay? pickedTime = await showTimePicker(
-                      context: context,
-                      initialTime: TimeOfDay.now(),
-                    );
+              if (userRole == "admin")
+                ElevatedButton(
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10))),
+                  ),
+                  onPressed: () async {
+                    DateTime? pickedDate = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime.now(),
+                        lastDate: DateTime(2101));
 
-                    if (pickedTime != null) {
-                      setState(() {
-                        _expiryDate = DateTime(
-                            pickedDate.year,
-                            pickedDate.month,
-                            pickedDate.day,
-                            pickedTime.hour,
-                            pickedTime.minute);
-                        setExpiryDate(loggedInState.currentUserEmail!,
-                            loggedInState.currentUserName!);
-                      });
+                    if (pickedDate != null) {
+                      final TimeOfDay? pickedTime = await showTimePicker(
+                        context: context,
+                        initialTime: TimeOfDay.now(),
+                      );
+
+                      if (pickedTime != null) {
+                        setState(() {
+                          _expiryDate = DateTime(
+                              pickedDate.year,
+                              pickedDate.month,
+                              pickedDate.day,
+                              pickedTime.hour,
+                              pickedTime.minute);
+                          setExpiryDate();
+                        });
+                      }
                     }
-                  }
-                },
-                child: const Text('Set Expiry date'),
-              ),
+                  },
+                  child: const Text('Set Expiry date'),
+                ),
             ],
           ));
     });

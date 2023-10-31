@@ -51,9 +51,11 @@ class _UserProfilePageState extends State<UserProfilePage> {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            expandedHeight: 160.0,
-            flexibleSpace:
-                FlexibleSpaceBar(background: UserProfileHeaderWidget()),
+            title: Text("User Profile"),
+            expandedHeight: 240.0,
+            flexibleSpace: FlexibleSpaceBar(
+                background:
+                    UserProfileHeaderWidget(loggedInState: loggedInState)),
           ),
           SliverList(
             delegate: SliverChildBuilderDelegate(
@@ -185,7 +187,7 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
                 noOfExams = c;
                 courseCompletionPercentage = b;
                 return Container(
-                  height: 120,
+                  constraints: BoxConstraints(minHeight: 50),
                   child: Column(
                     children: [
                       ListTile(

@@ -4,6 +4,8 @@ import 'package:isms/models/module.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleDetailsScreen.dart';
 import 'package:provider/provider.dart';
 import '../../projectModules/courseManagement/coursesProvider.dart';
+import '../../screens/learningModuleScreens/courseScreens/moduleScreens/moduleExamsListScreen.dart';
+import '../../screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'moduleExpandedItem.dart';
 
 class ModuleListWidget extends StatefulWidget {
@@ -60,7 +62,19 @@ class _ModuleListWidgetState extends State<ModuleListWidget> {
                         moduleIndex: widget.moduleIndex)));
           },
         ),
-        ModuleExpandedItem(info: {'info_title': "Quiz", 'info_status': false}),
+        ModuleExpandedItem(
+          info: {'info_title': "Quiz", 'info_status': false},
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ModuleExamListScreen(
+                          courseIndex: widget.courseIndex,
+                          examtype: EXAMTYPE.moduleExam,
+                          moduleIndex: widget.moduleIndex,
+                        )));
+          },
+        ),
       ],
     );
   }

@@ -1,13 +1,14 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:isms/models/slide.dart';
+import 'package:isms/screens/homePage.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleExamsListScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/modulesListScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
-import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/sharedWidgets/htmlSlideDisplay.dart';
-import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
+import 'package:isms/userManagement/loggedInState.dart';
+import 'package:isms/screens/login/loginScreen.dart';
 
 class SlidesDisplayScreen extends StatefulWidget {
   SlidesDisplayScreen(
@@ -154,36 +155,39 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
                     ],
                   ),
                 ],
-                Visibility(
-                  visible: currentIndex == cardItems.length - 1,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ModulesListScreen(
-                                    courseIndex: widget.courseIndex,
-                                  )));
-                      print('Finish button pressed');
-                    },
-                    child: Text('Finish'),
-                  ),
-                ),
-                Visibility(
-                  visible: currentIndex == cardItems.length - 1,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ModuleExamListScreen(
-                                    courseIndex: widget.courseIndex,
-                                    examtype: EXAMTYPE.moduleExam,
-                                    moduleIndex: widget.moduleIndex,
-                                  )));
-                    },
-                    child: Text('Take quiz'),
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Visibility(
+                      visible: currentIndex == cardItems.length - 1,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ModuleExamListScreen(
+                                        courseIndex: widget.courseIndex,
+                                        examtype: EXAMTYPE.moduleExam,
+                                        moduleIndex: widget.moduleIndex,
+                                      )));
+                        },
+                        child: Text('Take quiz'),
+                      ),
+                    ),
+                    SizedBox(width: 20),
+                    Visibility(
+                      visible: currentIndex == cardItems.length - 1,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => HomePage()));
+                        },
+                        child: Text('Back to Home'),
+                      ),
+                    ),
+                  ],
                 ),
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 20),

@@ -38,7 +38,8 @@ class AdminConsolePage extends StatelessWidget {
         body: CustomScrollView(
       slivers: [
         SliverAppBar(
-          expandedHeight: 120.0,
+          title: Text("Admin Console"),
+          expandedHeight: 190.0,
           flexibleSpace: FlexibleSpaceBar(background: AdminInfoWidget()),
         ),
         SliverList(

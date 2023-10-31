@@ -140,7 +140,6 @@ class UserCourseStartedDetailsTile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('${courseItem["course_name"]}'),
-              Text('${courseDetailsData["courseCompletionPercentage"] * 100}'),
               CircularPercentIndicator(
                 radius: 20.0,
                 lineWidth: 5.0,

@@ -23,6 +23,7 @@ class ModuleDetails extends StatefulWidget {
 class _ModuleDetailsState extends State<ModuleDetails> {
   bool isSlidesFetched = false;
   bool isSlidesListEmpty = false;
+  late String userRole;
   @override
   void initState() {
     super.initState();
@@ -56,7 +57,7 @@ class _ModuleDetailsState extends State<ModuleDetails> {
   @override
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
-
+    userRole = loggedInState.currentUserRole!;
     if (loggedInState.currentUser == null) {
       return LoginPage();
     }
@@ -156,40 +157,45 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                             ),
                           ),
                         ),
-                      SizedBox(
-                        width: 200,
-                        child: ElevatedButton(
-                          style: customElevatedButtonStyle(),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ExamCreation(
-                                          courseIndex: widget.courseIndex,
-                                          examtype: EXAMTYPE.moduleExam,
-                                          moduleIndex: widget.moduleIndex,
-                                        )));
-                          },
-                          child:
-                              Text('Create new exam', style: commonTextStyle),
+                      SizedBox(height: 20),
+                      if (userRole == "admin")
+                        SizedBox(
+                          width: 200,
+                          child: ElevatedButton(
+                            style: customElevatedButtonStyle(),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ExamCreation(
+                                            courseIndex: widget.courseIndex,
+                                            examtype: EXAMTYPE.moduleExam,
+                                            moduleIndex: widget.moduleIndex,
+                                          )));
+                            },
+                            child:
+                                Text('Create new exam', style: commonTextStyle),
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        width: 200,
-                        child: ElevatedButton(
-                          style: customElevatedButtonStyle(),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => CreateSlideScreen(
-                                          courseIndex: widget.courseIndex,
-                                          moduleIndex: widget.moduleIndex,
-                                        )));
-                          },
-                          child: Text('Add new slide', style: commonTextStyle),
+                      SizedBox(height: 20),
+                      if (userRole == "admin")
+                        SizedBox(
+                          width: 200,
+                          child: ElevatedButton(
+                            style: customElevatedButtonStyle(),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => CreateSlideScreen(
+                                            courseIndex: widget.courseIndex,
+                                            moduleIndex: widget.moduleIndex,
+                                          )));
+                            },
+                            child:
+                                Text('Add new slide', style: commonTextStyle),
+                          ),
                         ),
-                      ),
                     ],
                   ),
                 ),
