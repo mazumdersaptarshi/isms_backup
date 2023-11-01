@@ -7,17 +7,16 @@ import '../projectModules/courseManagement/coursesProvider.dart';
 
 class ModuleCardWidget extends StatelessWidget {
   final int moduleIndex;
-  final int courseIndex;
+  Course course;
   CoursesProvider coursesProvider;
   ModuleCardWidget(
       {required this.coursesProvider,
-      required this.courseIndex,
+      required this.course,
       required this.moduleIndex});
 
   @override
   Widget build(BuildContext context) {
-    Module module =
-        coursesProvider.allCourses[courseIndex].modules![moduleIndex];
+    Module module = course.modules![moduleIndex];
     return Card(
       margin: EdgeInsets.all(10),
       child: Column(
@@ -37,7 +36,7 @@ class ModuleCardWidget extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                           builder: (context) => ModuleDetails(
-                                courseIndex: courseIndex,
+                                course: course,
                                 moduleIndex: moduleIndex,
                               )));
                 },

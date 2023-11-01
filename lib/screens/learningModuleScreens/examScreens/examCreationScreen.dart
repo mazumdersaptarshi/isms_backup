@@ -8,6 +8,7 @@ import 'package:isms/utilityFunctions/generateRandom.dart';
 import 'package:isms/utilityWidgets/questionWidget.dart';
 import 'package:provider/provider.dart';
 
+import '../../../models/course.dart';
 import '../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../projectModules/courseManagement/examManagement/createExam.dart';
 
@@ -18,11 +19,11 @@ enum EXAMTYPE { courseExam, moduleExam }
 class ExamCreation extends StatefulWidget {
   ExamCreation(
       {super.key,
-      required this.courseIndex,
+      required this.course,
       required this.examtype,
       this.moduleIndex});
   int noOfQuestions = 1;
-  int courseIndex;
+  Course course;
   EXAMTYPE examtype;
   int? moduleIndex;
   @override
@@ -102,8 +103,6 @@ class ExamCreationState extends State<ExamCreation> {
                 ElevatedButton(
                   onPressed: () {
                     print(allQuestions);
-                    print(
-                        "${coursesProvider.allCourses[widget.courseIndex].name},");
 
                     NewExam newExam = NewExam(
                         examID: generateRandomId(),
@@ -112,16 +111,15 @@ class ExamCreationState extends State<ExamCreation> {
                         questionAnswerSet: allQuestions);
 
                     if (widget.examtype == EXAMTYPE.courseExam) {
-                      print(
-                          "CREATE EXAMM ${coursesProvider.allCourses[widget.courseIndex].exams}");
+                      print("CREATE EXAMM ${widget.course.exams}");
                       createCourseExam(
                           coursesProvider: coursesProvider,
-                          courseIndex: widget.courseIndex,
+                          course: widget.course,
                           exam: newExam);
                     } else if (widget.examtype == EXAMTYPE.moduleExam) {
                       createModuleExam(
                           coursesProvider: coursesProvider,
-                          courseIndex: widget.courseIndex,
+                          course: widget.course,
                           moduleIndex: widget.moduleIndex!,
                           exam: newExam);
                       allQuestions.clear();

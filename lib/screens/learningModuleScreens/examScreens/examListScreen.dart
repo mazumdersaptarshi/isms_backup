@@ -14,10 +14,10 @@ import '../../../projectModules/courseManagement/examManagement/fetchExams.dart'
 class ExamListScreen extends StatefulWidget {
   ExamListScreen(
       {super.key,
-      required this.courseIndex,
+      required this.course,
       required this.examtype,
       this.moduleIndex});
-  int courseIndex = 0;
+  Course course;
   int? moduleIndex;
 
   EXAMTYPE examtype;
@@ -34,7 +34,7 @@ class _ExamListScreenState extends State<ExamListScreen> {
 
   fetchExamsList({required CoursesProvider coursesProvider}) async {
     await fetchExams(
-        courseIndex: widget.courseIndex,
+        course: widget.course,
         coursesProvider: Provider.of<CoursesProvider>(context));
     setState(() {
       isExamsFetched = true;
@@ -53,14 +53,14 @@ class _ExamListScreenState extends State<ExamListScreen> {
     if (isExamsFetched == false) {
       fetchExamsList(coursesProvider: coursesProvider);
     }
-    Course course = coursesProvider.allCourses[widget.courseIndex];
+
     List<NewExam>? exams = [];
     Module module;
     if (widget.examtype == EXAMTYPE.moduleExam) {
-      module = course.modules![widget.moduleIndex!];
+      module = widget.course.modules![widget.moduleIndex!];
       exams = module.exams;
     } else {
-      exams = coursesProvider.allCourses[widget.courseIndex].exams;
+      exams = widget.course.exams;
     }
     if (isExamsFetched) {
       return Scaffold(
@@ -71,7 +71,7 @@ class _ExamListScreenState extends State<ExamListScreen> {
               Navigator.pop(context);
             },
           ),
-          title: Text("${course.name}"),
+          title: Text("${widget.course.name}"),
         ),
         body: Column(
           children: [
@@ -92,8 +92,8 @@ class _ExamListScreenState extends State<ExamListScreen> {
                                 MaterialPageRoute(
                                     builder: (context) => TakeExamScreen(
                                           exam: exam,
-                                          courseIndex: widget.courseIndex,
                                           examtype: EXAMTYPE.courseExam,
+                                          course: widget.course,
                                         )));
                           }
                         },

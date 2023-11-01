@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:isms/models/course.dart';
 import 'package:isms/models/slide.dart';
 import 'package:isms/screens/homePage.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleExamsListScreen.dart';
@@ -15,9 +16,9 @@ class SlidesDisplayScreen extends StatefulWidget {
       {super.key,
       required this.slides,
       required this.moduleIndex,
-      required this.courseIndex});
+      required this.course});
   List<Slide> slides;
-  int courseIndex;
+  Course course;
   int moduleIndex;
   @override
   _SlidesDisplayScreenState createState() => _SlidesDisplayScreenState();
@@ -166,7 +167,7 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => ModuleExamListScreen(
-                                        courseIndex: widget.courseIndex,
+                                        course: widget.course,
                                         examtype: EXAMTYPE.moduleExam,
                                         moduleIndex: widget.moduleIndex,
                                       )));

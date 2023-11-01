@@ -57,25 +57,24 @@ class CoursesProvider with ChangeNotifier {
     });
   }
 
-  addModulesToCourse(int courseIndex, List<Module> modules) {
-    _allCourses[courseIndex].modules.addAll(modules);
+  addModulesToCourse(Course course, List<Module> modules) {
+    course.modules.addAll(modules);
     notifyListeners();
   }
 
-  addSlidesToModules(int courseIndex, int moduleIndex, List<Slide> slides) {
+  addSlidesToModules(Module module, List<Slide> slides) {
     try {
-      allCourses[courseIndex].modules![moduleIndex].slides!.addAll(slides);
+      module.slides!.addAll(slides);
     } catch (e) {
-      allCourses[courseIndex].modules![moduleIndex].slides = [];
-      allCourses[courseIndex].modules![moduleIndex].slides!.addAll(slides);
+      module.slides = [];
+      module.slides!.addAll(slides);
     }
 
     notifyListeners();
   }
 
-  addExamsToCourse(int courseIndex, List<NewExam> exams) {
-    print("ADDING EXAM TO : ${_allCourses[courseIndex].exams}");
-    allCourses[courseIndex].exams.addAll(exams);
+  addExamsToCourse(Course course, List<NewExam> exams) {
+    course.exams.addAll(exams);
 
     notifyListeners();
   }
@@ -86,13 +85,12 @@ class CoursesProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  addExamsToCourseModule(
-      int courseIndex, int moduleIndex, List<NewExam> exams) {
+  addExamsToCourseModule(Module module, List<NewExam> exams) {
     try {
-      _allCourses[courseIndex].modules![moduleIndex].exams?.addAll(exams);
+      module.exams?.addAll(exams);
     } catch (e) {
-      _allCourses[courseIndex].modules![moduleIndex].exams = [];
-      _allCourses[courseIndex].modules![moduleIndex].exams?.addAll(exams);
+      module.exams = [];
+      module.exams?.addAll(exams);
     }
 
     notifyListeners();

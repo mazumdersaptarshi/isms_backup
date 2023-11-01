@@ -6,7 +6,7 @@ import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/utilityFunctions/generateRandom.dart';
 import 'package:provider/provider.dart';
 
-import '../../../projectModules/courseManagement/createCourse.dart';
+import '../../../projectModules/courseManagement/coursesDataMaster.dart';
 
 class CreateCourseScreen extends StatelessWidget {
   const CreateCourseScreen({super.key});
@@ -84,7 +84,8 @@ class _CourseCreationFormState extends State<CourseCreationForm> {
                       id: generateRandomId(),
                       name: _nameController.text,
                     );
-                    bool isCourseCreated = await createCourse(course: course);
+                    bool isCourseCreated =
+                        await CoursesDataMaster.createCourse(course: course);
 
                     CoursesDetails coursesDetails = CoursesDetails(
                       course_id: generateRandomId(),
@@ -93,7 +94,7 @@ class _CourseCreationFormState extends State<CourseCreationForm> {
                       number_of_exams: 0,
                     );
                     bool isCourseAdminConsoleCreated =
-                        await createCourseAdminConsole(
+                        await CoursesDataMaster.createCourseAdminConsole(
                             coursesDetails: coursesDetails);
                     if (isCourseCreated) {
                       Navigator.pop(context);

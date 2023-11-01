@@ -9,14 +9,16 @@ import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/utilityFunctions/generateRandom.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../../models/course.dart';
+import '../../../../../models/module.dart';
 import '../../../../../projectModules/courseManagement/coursesProvider.dart';
-import '../../../../../projectModules/courseManagement/moduleManagement/slideManagement/createSlide.dart';
+import '../../../../../projectModules/courseManagement/moduleManagement/slideManagement/slidesDataMaster.dart';
 import '../../../../../projectModules/courseManagement/moduleManagement/slideManagement/slidesCreationProvider.dart';
 
 class CreateSlideScreen extends StatelessWidget {
-  CreateSlideScreen({required this.courseIndex, required this.moduleIndex});
-  int courseIndex;
-  int moduleIndex;
+  CreateSlideScreen({required this.course, required this.module});
+  Course course;
+  Module module;
   @override
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
@@ -26,17 +28,18 @@ class CreateSlideScreen extends StatelessWidget {
     }
 
     return SlideFormContainer(
-      courseIndex: courseIndex,
-      moduleIndex: moduleIndex,
+      course: course,
+      module: module,
     );
   }
 }
 
 class SlideFormContainer extends StatefulWidget {
-  SlideFormContainer({required this.courseIndex, required this.moduleIndex});
+  SlideFormContainer({required this.course, required this.module});
 
-  int courseIndex;
-  int moduleIndex;
+  Course course;
+  Module module;
+  SlidesDataMaster? slidesDataMaster;
   @override
   _SlideFormContainerState createState() => _SlideFormContainerState();
 }
@@ -57,6 +60,11 @@ class _SlideFormContainerState extends State<SlideFormContainer> {
   @override
   Widget build(BuildContext context) {
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
+    widget.slidesDataMaster = SlidesDataMaster(
+        course: widget.course,
+        coursesProvider: coursesProvider,
+        module: widget.module);
+
     return Consumer<SlidesCreationProvider>(
       builder: (BuildContext context,
           SlidesCreationProvider slidesCreationProvider, Widget? child) {
@@ -90,10 +98,7 @@ class _SlideFormContainerState extends State<SlideFormContainer> {
                   ),
                   FilledButton(
                       onPressed: () async {
-                        await createSlides(
-                            courseIndex: widget.courseIndex,
-                            coursesProvider: coursesProvider,
-                            moduleIndex: widget.moduleIndex,
+                        await widget.slidesDataMaster?.createSlides(
                             slides: slidesCreationProvider.slidesList);
 
                         slidesCreationProvider.clearSlidesList();

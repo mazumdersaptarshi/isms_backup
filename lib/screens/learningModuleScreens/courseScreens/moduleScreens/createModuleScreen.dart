@@ -6,12 +6,14 @@ import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/utilityFunctions/generateRandom.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../models/course.dart';
 import '../../../../projectModules/courseManagement/coursesProvider.dart';
-import '../../../../projectModules/courseManagement/moduleManagement/createModule.dart';
+import '../../../../projectModules/courseManagement/moduleManagement/moduleDataMaster.dart';
 
 class CreateModuleScreen extends StatelessWidget {
-  CreateModuleScreen({required this.courseIndex});
-  int courseIndex;
+  CreateModuleScreen({required this.course});
+  Course course;
+
   @override
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
@@ -20,13 +22,14 @@ class CreateModuleScreen extends StatelessWidget {
       return LoginPage();
     }
 
-    return CourseModuleForm(courseIndex: courseIndex);
+    return CourseModuleForm(course: course);
   }
 }
 
 class CourseModuleForm extends StatefulWidget {
-  CourseModuleForm({required this.courseIndex});
-  int courseIndex;
+  CourseModuleForm({required this.course});
+  Course course;
+  late ModuleDataMaster moduleDataMaster;
   @override
   _CourseModuleFormState createState() => _CourseModuleFormState();
 }
@@ -40,6 +43,8 @@ class _CourseModuleFormState extends State<CourseModuleForm> {
   @override
   Widget build(BuildContext context) {
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
+    widget.moduleDataMaster = ModuleDataMaster(
+        course: widget.course, coursesProvider: coursesProvider);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -87,10 +92,8 @@ class _CourseModuleFormState extends State<CourseModuleForm> {
                       title: _titleController.text,
                       contentDescription: _descriptionController.text,
                     );
-                    bool isModuleCreated = await createModule(
-                        courseIndex: widget.courseIndex,
-                        coursesProvider: coursesProvider,
-                        module: module);
+                    bool isModuleCreated = await widget.moduleDataMaster
+                        .createModule(module: module);
                     if (isModuleCreated) {
                       Navigator.pushReplacement(
                           context,

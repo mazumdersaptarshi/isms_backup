@@ -6,9 +6,7 @@ import 'package:isms/models/newExam.dart';
 import '../coursesProvider.dart';
 
 Future fetchExams(
-    {required int courseIndex,
-    required CoursesProvider coursesProvider}) async {
-  Course course = coursesProvider.allCourses[courseIndex];
+    {required Course course, required CoursesProvider coursesProvider}) async {
   if (course.exams != null && course.exams!.isNotEmpty) {
     return;
   } else {
@@ -31,10 +29,9 @@ Future fetchExams(
 }
 
 Future fetchModuleExams(
-    {required int courseIndex,
+    {required Course course,
     required CoursesProvider coursesProvider,
     required int moduleIndex}) async {
-  Course course = coursesProvider.allCourses[courseIndex];
   Module module = course.modules![moduleIndex];
   if (module.exams != null && module.exams!.isNotEmpty) {
     return;

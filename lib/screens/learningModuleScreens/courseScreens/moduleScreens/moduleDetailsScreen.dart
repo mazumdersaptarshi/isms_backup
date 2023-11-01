@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:isms/models/module.dart';
+import 'package:isms/projectModules/courseManagement/moduleManagement/slideManagement/slidesDataMaster.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/createSlideScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/slidesDisplayScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
@@ -7,15 +8,15 @@ import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../models/course.dart';
 import '../../../../projectModules/courseManagement/coursesProvider.dart';
-import '../../../../projectModules/courseManagement/moduleManagement/slideManagement/fetchSlides.dart';
 import '../../../../themes/common_theme.dart';
 
 class ModuleDetails extends StatefulWidget {
-  ModuleDetails(
-      {super.key, required this.courseIndex, required this.moduleIndex});
-  int courseIndex;
+  ModuleDetails({super.key, required this.course, required this.moduleIndex});
+  Course course;
   int moduleIndex;
+  SlidesDataMaster? slidesDataMaster;
   @override
   State<ModuleDetails> createState() => _ModuleDetailsState();
 }
@@ -23,40 +24,32 @@ class ModuleDetails extends StatefulWidget {
 class _ModuleDetailsState extends State<ModuleDetails> {
   bool isSlidesFetched = false;
   bool isSlidesListEmpty = false;
+
   late String userRole;
   @override
   void initState() {
     super.initState();
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (mounted && isSlidesFetched == false) {
-      CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
-      fetchSlides(
-              coursesProvider: coursesProvider,
-              courseIndex: widget.courseIndex,
-              moduleIndex: widget.moduleIndex)
-          .then((value) {
-        setState(() {
-          {
-            Module module = coursesProvider
-                .allCourses[widget.courseIndex].modules![widget.moduleIndex];
-            print("MODULE.SLIDES: ${module.slides}");
-            if (module.slides == null || module.slides == []) {
-              isSlidesListEmpty = true;
-            }
-            isSlidesFetched = true;
-          }
-        });
-      });
-    }
+  fetchSlidesList({required CoursesProvider coursesProvider}) async {
+    await widget.slidesDataMaster!.fetchSlides();
+
+    setState(() {
+      {
+        Module module = widget.course.modules![widget.moduleIndex];
+        print("MODULE.SLIDES: ${module.slides}");
+        if (module.slides == null || module.slides == []) {
+          isSlidesListEmpty = true;
+        }
+        isSlidesFetched = true;
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
+
     userRole = loggedInState.currentUserRole!;
     if (loggedInState.currentUser == null) {
       return LoginPage();
@@ -65,10 +58,15 @@ class _ModuleDetailsState extends State<ModuleDetails> {
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
     Module? module;
     try {
-      module = coursesProvider
-          .allCourses[widget.courseIndex].modules![widget.moduleIndex];
+      module = widget.course.modules![widget.moduleIndex];
     } catch (e) {}
-
+    widget.slidesDataMaster = SlidesDataMaster(
+        course: widget.course,
+        coursesProvider: coursesProvider,
+        module: widget.course.modules![widget.moduleIndex]);
+    if (isSlidesFetched == false) {
+      fetchSlidesList(coursesProvider: coursesProvider);
+    }
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -92,7 +90,7 @@ class _ModuleDetailsState extends State<ModuleDetails> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  coursesProvider.allCourses[widget.courseIndex].name,
+                  widget.course.name,
                   style: ModuleDescStyle,
                 ),
                 SizedBox(height: 20),
@@ -126,19 +124,17 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                           child: ElevatedButton(
                             style: customElevatedButtonStyle(),
                             onPressed: () async {
-                              await loggedInState
-                                  .setUserCourseStarted(courseDetails: {
-                                "courseID": coursesProvider
-                                    .allCourses[widget.courseIndex].id,
-                                "course_name": coursesProvider
-                                    .allCourses[widget.courseIndex].name
-                              });
+                              await loggedInState.setUserCourseStarted(
+                                  courseDetails: {
+                                    "courseID": widget.course.id,
+                                    "course_name": widget.course.name
+                                  });
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => SlidesDisplayScreen(
                                             slides: module!.slides!,
-                                            courseIndex: widget.courseIndex,
+                                            course: widget.course,
                                             moduleIndex: widget.moduleIndex,
                                           )));
                             },
@@ -168,7 +164,7 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => ExamCreation(
-                                            courseIndex: widget.courseIndex,
+                                            course: widget.course,
                                             examtype: EXAMTYPE.moduleExam,
                                             moduleIndex: widget.moduleIndex,
                                           )));
@@ -188,9 +184,9 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => CreateSlideScreen(
-                                            courseIndex: widget.courseIndex,
-                                            moduleIndex: widget.moduleIndex,
-                                          )));
+                                          course: widget.course,
+                                          module: widget.course
+                                              .modules[widget.moduleIndex])));
                             },
                             child:
                                 Text('Add new slide', style: commonTextStyle),

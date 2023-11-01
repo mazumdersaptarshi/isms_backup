@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleDetailsScreen.dart';
 import 'package:provider/provider.dart';
+import '../../models/course.dart';
 import '../../projectModules/courseManagement/coursesProvider.dart';
 import '../../screens/learningModuleScreens/courseScreens/moduleScreens/moduleExamsListScreen.dart';
 import '../../screens/learningModuleScreens/examScreens/examCreationScreen.dart';
@@ -10,12 +11,12 @@ import 'moduleExpandedItem.dart';
 
 class ModuleListWidget extends StatefulWidget {
   bool isModuleCompleted;
-  int courseIndex;
+  Course course;
   int moduleIndex;
   ModuleListWidget(
       {super.key,
       this.isModuleCompleted = false,
-      required this.courseIndex,
+      required this.course,
       required this.moduleIndex});
 
   @override
@@ -25,9 +26,7 @@ class ModuleListWidget extends StatefulWidget {
 class _ModuleListWidgetState extends State<ModuleListWidget> {
   @override
   Widget build(BuildContext context) {
-    CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
-    Module module = coursesProvider
-        .allCourses[widget.courseIndex].modules[widget.moduleIndex];
+    Module module = widget.course.modules[widget.moduleIndex];
     return ExpansionTile(
       title: Row(
         children: [
@@ -58,7 +57,7 @@ class _ModuleListWidgetState extends State<ModuleListWidget> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => ModuleDetails(
-                        courseIndex: widget.courseIndex,
+                        course: widget.course,
                         moduleIndex: widget.moduleIndex)));
           },
         ),
@@ -69,7 +68,7 @@ class _ModuleListWidgetState extends State<ModuleListWidget> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => ModuleExamListScreen(
-                          courseIndex: widget.courseIndex,
+                          course: widget.course,
                           examtype: EXAMTYPE.moduleExam,
                           moduleIndex: widget.moduleIndex,
                         )));

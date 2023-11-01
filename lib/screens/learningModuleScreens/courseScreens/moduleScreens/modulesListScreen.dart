@@ -10,12 +10,12 @@ import 'package:isms/utilityWidgets/modulesList/moduleListWidget.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../projectModules/courseManagement/coursesProvider.dart';
-import '../../../../projectModules/courseManagement/moduleManagement/fetchModules.dart';
+import '../../../../projectModules/courseManagement/moduleManagement/moduleDataMaster.dart';
 
 class ModulesListScreen extends StatefulWidget {
-  ModulesListScreen({super.key, required this.courseIndex});
-  int courseIndex = 0;
-
+  ModulesListScreen({super.key, required this.course});
+  Course course;
+  ModuleDataMaster? moduleDataMaster;
   @override
   State<ModulesListScreen> createState() => _ModulesListScreenState();
 }
@@ -25,8 +25,7 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
   late String userRole;
 
   fetchCourseModules({required CoursesProvider coursesProvider}) async {
-    await fetchModules(
-        courseIndex: widget.courseIndex, coursesProvider: coursesProvider);
+    await widget.moduleDataMaster?.fetchModules();
     setState(() {
       isModulesFetched = true;
     });
@@ -41,15 +40,18 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
     CoursesProvider coursesProvider = context.watch<CoursesProvider>();
+
+    widget.moduleDataMaster = ModuleDataMaster(
+        course: widget.course, coursesProvider: coursesProvider);
+
     if (isModulesFetched == false) {
       fetchCourseModules(coursesProvider: coursesProvider);
     }
+
     userRole = loggedInState.currentUserRole!;
     if (loggedInState.currentUser == null) {
       return LoginPage();
     }
-
-    Course course = coursesProvider.allCourses[widget.courseIndex];
 
     if (isModulesFetched) {
       return Scaffold(
@@ -63,16 +65,16 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
                       builder: (context) => CoursesDisplayScreen()));
             },
           ),
-          title: Text("${course.name}"),
+          title: Text("${widget.course.name}"),
         ),
         body: Column(
           children: [
             ListView.builder(
               shrinkWrap: true,
-              itemCount: course.modules?.length,
+              itemCount: widget.course.modules?.length,
               itemBuilder: (BuildContext context, int moduleIndex) {
                 return ModuleListWidget(
-                  courseIndex: widget.courseIndex,
+                  course: widget.course,
                   moduleIndex: moduleIndex,
                   isModuleCompleted: true,
                 );
@@ -86,8 +88,8 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => ExamCreation(
-                                  courseIndex: widget.courseIndex,
                                   examtype: EXAMTYPE.courseExam,
+                                  course: widget.course,
                                 )));
                   },
                   child: Text("Create exam")),
@@ -98,7 +100,7 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => ExamListScreen(
-                                courseIndex: widget.courseIndex,
+                                course: widget.course,
                                 examtype: EXAMTYPE.courseExam,
                               )));
                 },
@@ -110,8 +112,8 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => CreateModuleScreen(
-                                courseIndex: widget.courseIndex)));
+                            builder: (context) =>
+                                CreateModuleScreen(course: widget.course)));
                   },
                   child: Text("Add new module"))
           ],

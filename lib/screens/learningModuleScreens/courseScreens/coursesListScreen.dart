@@ -49,7 +49,7 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => ModulesListScreen(
-                              courseIndex: courseIndex,
+                              course: coursesProvider.allCourses[courseIndex],
                             )));
               },
             );

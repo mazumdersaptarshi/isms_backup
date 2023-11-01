@@ -7,11 +7,10 @@ import '../coursesProvider.dart';
 
 Future<bool> createCourseExam(
     {required CoursesProvider coursesProvider,
-    required int courseIndex,
+    required Course course,
     required NewExam exam}) async {
   try {
-    Course course = coursesProvider.allCourses[courseIndex];
-    int index = coursesProvider.allCourses[courseIndex].exams.length + 1;
+    int index = course.exams.length + 1;
 
     exam.index = index;
     Map<String, dynamic> examMap = exam.toMap();
@@ -25,7 +24,7 @@ Future<bool> createCourseExam(
         .doc(exam.title)
         .set(examMap);
 
-    coursesProvider.addExamsToCourse(courseIndex, [exam]);
+    coursesProvider.addExamsToCourse(course, [exam]);
 
     await FirebaseFirestore.instance
         .collection('courses')
@@ -41,11 +40,10 @@ Future<bool> createCourseExam(
 
 Future<bool> createModuleExam(
     {required CoursesProvider coursesProvider,
-    required int courseIndex,
+    required Course course,
     required int moduleIndex,
     required NewExam exam}) async {
   try {
-    Course course = coursesProvider.allCourses[courseIndex];
     Module module = course.modules![moduleIndex];
     int index = 1;
     try {
@@ -67,7 +65,7 @@ Future<bool> createModuleExam(
         .doc(exam.title)
         .set(examMap);
 
-    coursesProvider.addExamsToCourseModule(courseIndex, moduleIndex, [exam]);
+    coursesProvider.addExamsToCourseModule(module, [exam]);
     print("Module Exam creation successful");
     return true;
   } catch (e) {

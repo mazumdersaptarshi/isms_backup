@@ -184,7 +184,7 @@ class LoggedInState with ChangeNotifier {
   setUserCourseExamCompleted(
       {required Map<String, dynamic> courseDetails,
       required CoursesProvider coursesProvider,
-      required int courseIndex,
+      required Course course,
       required int examIndex}) {
     int noOfExamsCompleted = 0;
     bool flag = false;
@@ -206,7 +206,7 @@ class LoggedInState with ChangeNotifier {
     }
     if (flag == false) {
       examIndex--;
-      Course course = coursesProvider.allCourses[courseIndex];
+
       loggedInUser?.courses_started.forEach((course_started) {
         if (course_started['courseID'] == course.id) {
           if (course_started['exams_completed'] != null &&
@@ -241,7 +241,7 @@ class LoggedInState with ChangeNotifier {
       noOfExamsCompleted++;
       _userDataGetterMaster.setUserData();
     }
-    int noOfExams = coursesProvider.allCourses[courseIndex].exams!.length;
+    int noOfExams = course.exams!.length;
     print("noOfExamsCompleted ${noOfExamsCompleted},, ${noOfExams}");
     if (noOfExamsCompleted >= noOfExams) {
       setUserCourseCompleted(courseDetails: courseDetails);
@@ -252,7 +252,7 @@ class LoggedInState with ChangeNotifier {
   setUserCourseModuleCompleted(
       {required Map<String, dynamic> courseDetails,
       required CoursesProvider coursesProvider,
-      required int courseIndex,
+      required Course course,
       required int moduleIndex}) {
     bool flag = false;
     if (loggedInUser!.courses_started.isNotEmpty) {
@@ -260,9 +260,7 @@ class LoggedInState with ChangeNotifier {
         try {
           if (course['courseID'] == courseDetails['courseID']) {
             course["modules_completed"].forEach((element) {
-              if (element ==
-                  coursesProvider
-                      .allCourses[courseIndex].modules![moduleIndex].title) {
+              if (element == course.modules![moduleIndex].title) {
                 print("SETTING FLAG TRUE coz ${element}");
                 flag = true;
               }
@@ -273,7 +271,7 @@ class LoggedInState with ChangeNotifier {
     }
     if (flag == false) {
       print("FLAG IS FALSE ${courseDetails}");
-      Course course = coursesProvider.allCourses[courseIndex];
+
       _userDataGetterMaster.loggedInUser?.courses_started
           .forEach((course_started) {
         if (course_started['courseID'] == course.id) {

@@ -7,16 +7,17 @@ import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 
+import '../../../models/course.dart';
 import '../../../projectModules/courseManagement/coursesProvider.dart';
 
 class TakeExamScreen extends StatefulWidget {
   TakeExamScreen(
       {required this.exam,
-      required this.courseIndex,
+      required this.course,
       required this.examtype,
       this.moduleIndex});
   EXAMTYPE examtype;
-  int courseIndex;
+  Course course;
   int? moduleIndex;
   NewExam exam;
   @override
@@ -151,12 +152,10 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
                 onPressed: () {
                   loggedInState.setUserCourseExamCompleted(
                       coursesProvider: coursesProvider,
-                      courseIndex: widget.courseIndex,
+                      course: widget.course,
                       courseDetails: {
-                        "courseID":
-                            coursesProvider.allCourses[widget.courseIndex].id,
-                        "course_name":
-                            coursesProvider.allCourses[widget.courseIndex].name,
+                        "courseID": widget.course.id,
+                        "course_name": widget.course.name,
                       },
                       examIndex: widget.exam.index);
 
@@ -164,19 +163,17 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
                       MaterialPageRoute(builder: (context) => HomePage()));
                 },
                 child: Text(
-                    "Mark Exam as Done- completed ${widget.exam.index}/${coursesProvider.allCourses[widget.courseIndex].exams!.length}"),
+                    "Mark Exam as Done- completed ${widget.exam.index}/${widget.course.exams!.length}"),
               )
             else if (widget.examtype == EXAMTYPE.moduleExam)
               ElevatedButton(
                 onPressed: () {
                   loggedInState.setUserCourseModuleCompleted(
                     courseDetails: {
-                      "courseID":
-                          coursesProvider.allCourses[widget.courseIndex].id,
-                      "course_name":
-                          coursesProvider.allCourses[widget.courseIndex].name,
+                      "courseID": widget.course.id,
+                      "course_name": widget.course.name,
                     },
-                    courseIndex: widget.courseIndex,
+                    course: widget.course,
                     moduleIndex: widget.moduleIndex!,
                     coursesProvider: coursesProvider,
                   );
