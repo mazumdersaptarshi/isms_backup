@@ -303,6 +303,139 @@ class LoggedInState with ChangeNotifier {
     notifyListeners();
   }
 
+  setUserCourseModuleStarted(
+      {required Map<String, dynamic> courseDetails,
+      required CoursesProvider coursesProvider,
+      required Course course,
+      required Module module}) {
+    bool flag = false;
+    if (loggedInUser!.courses_started.isNotEmpty) {
+      loggedInUser!.courses_started.forEach((course) {
+        try {
+          if (course['courseID'] == courseDetails['courseID']) {
+            course["modules_started"].forEach((element) {
+              if (element == module.title) {
+                print("SETTING FLAG TRUE coz ${element}");
+                flag = true;
+              }
+            });
+          }
+        } catch (e) {}
+      });
+    }
+    if (flag == false) {
+      print("FLAG IS FALSE ${courseDetails}");
+
+      _userDataGetterMaster.loggedInUser?.courses_started
+          .forEach((course_started) {
+        if (course_started['courseID'] == course.id) {
+          print("STARTED MODULEE ${course_started['modules_started']}");
+          bool flag_2 = false;
+          if (course_started['modules_started'] != null) {
+            for (int i = 0; i < course_started['modules_started'].length; i++) {
+              var element = course_started['modules_started'][i];
+              if (element == module.title) {
+                flag_2 = true;
+              }
+            }
+            if (flag_2 == false) {
+              course_started['modules_started'].add(module.title);
+            }
+          } else {
+            print("COMPLETED MODULE IS NULL< SO HERE");
+            course_started['modules_started'] = [];
+            course_started['modules_started'].add(module.title);
+          }
+        }
+      });
+      print(_userDataGetterMaster.loggedInUser!.courses_started);
+      _userDataGetterMaster.setUserData();
+    }
+    notifyListeners();
+  }
+
+  setUserModuleExamCompleted(
+      {required Map<String, dynamic> courseDetails,
+      required CoursesProvider coursesProvider,
+      required Course course,
+      required Module module,
+      required int examIndex}) {
+    bool flag = false;
+    if (loggedInUser!.courses_started.isNotEmpty) {
+      loggedInUser!.courses_started.forEach((course) {
+        try {
+          if (course['courseID'] == courseDetails['courseID']) {
+            course["modules_started"].forEach((course_module) {
+              if (course_module == module.title) {
+                flag = true;
+              }
+            });
+          }
+        } catch (e) {}
+      });
+    }
+    if (flag == false) {
+      print("FLAG IS FALSE ${courseDetails}");
+
+      _userDataGetterMaster.loggedInUser?.courses_started
+          .forEach((course_started) {
+        if (course_started['courseID'] == course.id) {
+          int noOfModuleExamsCompleted = 0;
+          bool flag_2 = false;
+          if (course_started['modules_started'] != null) {
+            for (int i = 0; i < course_started['modules_started'].length; i++) {
+              var course_module = course_started['modules_started'][i];
+
+              if (course_module["module_name"] == module.title) {
+                noOfModuleExamsCompleted = 0;
+                if (course_module["exams_completed"] != null &&
+                    course_module["exams_completed"].isNotEmpty)
+                  course_module["exams_completed"].forEach((module_exam) {
+                    if (module_exam == examIndex) flag_2 = true;
+                    noOfModuleExamsCompleted++;
+                  });
+              }
+              if (flag_2 == false) {
+                if (course_module['exams_completed'] == null)
+                  course_module['exams_completed'] = <Map<String, dynamic>>[];
+                course_module['exams_completed'].add(examIndex);
+                noOfModuleExamsCompleted++;
+                print("NO OF EXAMS $noOfModuleExamsCompleted ,, ");
+                if (noOfModuleExamsCompleted >= module.exams!.length) {
+                  setUserCourseModuleCompleted(
+                      courseDetails: courseDetails,
+                      coursesProvider: coursesProvider,
+                      course: course,
+                      module: module);
+                }
+              }
+            }
+          } else {
+            print("COMPLETED EXAMS IS NULL< SO HERE");
+            course_started['modules_started'] = <Map<dynamic, dynamic>>[];
+
+            course_started['modules_started']
+                .add({"module_name": module.title, "exams_completed": []});
+
+            course_started['modules_started'][0]['exams_completed']
+                .addAll([examIndex]);
+            noOfModuleExamsCompleted++;
+            if (noOfModuleExamsCompleted >= module.exams!.length) {
+              setUserCourseModuleCompleted(
+                  courseDetails: courseDetails,
+                  coursesProvider: coursesProvider,
+                  course: course,
+                  module: module);
+            }
+          }
+        }
+      });
+      print(_userDataGetterMaster.loggedInUser!.courses_started);
+      _userDataGetterMaster.setUserData();
+    }
+    notifyListeners();
+  }
+
   setAdminConsoleCourseMap(
       {required String courseName,
       required String username,

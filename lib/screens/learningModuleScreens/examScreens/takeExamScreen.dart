@@ -169,7 +169,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
             else if (widget.examtype == EXAMTYPE.moduleExam)
               ElevatedButton(
                 onPressed: () {
-                  loggedInState.setUserCourseModuleCompleted(
+                  loggedInState.setUserModuleExamCompleted(
                     courseDetails: {
                       "courseID": widget.course.id,
                       "course_name": widget.course.name,
@@ -177,6 +177,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
                     course: widget.course,
                     module: widget.module!,
                     coursesProvider: coursesProvider,
+                    examIndex: widget.exam.index,
                   );
 
                   Navigator.pushReplacement(context,
