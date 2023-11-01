@@ -67,7 +67,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-    // userRole = 'admin';
     initUniLinks();
   }
 

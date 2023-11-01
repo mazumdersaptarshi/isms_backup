@@ -32,20 +32,14 @@ class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
     super.initState();
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (mounted && isExamsFetched == false) {
-      fetchModuleExams(
-              courseIndex: widget.courseIndex,
-              coursesProvider: Provider.of<CoursesProvider>(context),
-              moduleIndex: widget.moduleIndex!)
-          .then((value) {
-        setState(() {
-          isExamsFetched = true;
-        });
-      });
-    }
+  fetchExamsList({required CoursesProvider coursesProvider}) async {
+    await fetchModuleExams(
+        courseIndex: widget.courseIndex,
+        coursesProvider: Provider.of<CoursesProvider>(context),
+        moduleIndex: widget.moduleIndex!);
+    setState(() {
+      isExamsFetched = true;
+    });
   }
 
   @override
@@ -56,7 +50,10 @@ class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
       return LoginPage();
     }
 
-    CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
+    CoursesProvider coursesProvider = context.watch<CoursesProvider>();
+    if (isExamsFetched == false) {
+      fetchExamsList(coursesProvider: coursesProvider);
+    }
     Course course = coursesProvider.allCourses[widget.courseIndex];
     List<NewExam>? exams = [];
     Module? module;

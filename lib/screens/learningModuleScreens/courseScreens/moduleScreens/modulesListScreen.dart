@@ -23,36 +23,32 @@ class ModulesListScreen extends StatefulWidget {
 class _ModulesListScreenState extends State<ModulesListScreen> {
   bool isModulesFetched = false;
   late String userRole;
+
+  fetchCourseModules({required CoursesProvider coursesProvider}) async {
+    await fetchModules(
+        courseIndex: widget.courseIndex, coursesProvider: coursesProvider);
+    setState(() {
+      isModulesFetched = true;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (mounted && isModulesFetched == false) {
-      CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
-      fetchModules(
-              courseIndex: widget.courseIndex,
-              coursesProvider: Provider.of<CoursesProvider>(context))
-          .then((value) {
-        setState(() {
-          isModulesFetched = true;
-        });
-      });
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
+    CoursesProvider coursesProvider = context.watch<CoursesProvider>();
+    if (isModulesFetched == false) {
+      fetchCourseModules(coursesProvider: coursesProvider);
+    }
     userRole = loggedInState.currentUserRole!;
     if (loggedInState.currentUser == null) {
       return LoginPage();
     }
 
-    CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
     Course course = coursesProvider.allCourses[widget.courseIndex];
 
     if (isModulesFetched) {
