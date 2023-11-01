@@ -16,9 +16,9 @@ class ModuleExamListScreen extends StatefulWidget {
       {super.key,
       required this.course,
       required this.examtype,
-      this.moduleIndex});
+      required this.module});
   Course course;
-  int? moduleIndex;
+  Module module;
 
   EXAMTYPE examtype;
   @override
@@ -36,7 +36,7 @@ class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
     await fetchModuleExams(
         course: widget.course,
         coursesProvider: Provider.of<CoursesProvider>(context),
-        moduleIndex: widget.moduleIndex!);
+        module: widget.module);
     setState(() {
       isExamsFetched = true;
     });
@@ -58,7 +58,7 @@ class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
     List<NewExam>? exams = [];
     Module? module;
     if (widget.examtype == EXAMTYPE.moduleExam) {
-      module = course.modules![widget.moduleIndex!];
+      module = widget.module;
       exams = module.exams;
     } else {
       exams = widget.course.exams;
@@ -103,7 +103,7 @@ class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
                                   builder: (context) => TakeExamScreen(
                                         course: widget.course,
                                         examtype: EXAMTYPE.moduleExam,
-                                        moduleIndex: widget.moduleIndex,
+                                        module: widget.module,
                                         exam: exam,
                                       )));
                         },

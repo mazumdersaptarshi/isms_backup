@@ -9,6 +9,7 @@ import 'package:isms/utilityWidgets/questionWidget.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/course.dart';
+import '../../../models/module.dart';
 import '../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../projectModules/courseManagement/examManagement/createExam.dart';
 
@@ -18,14 +19,11 @@ enum EXAMTYPE { courseExam, moduleExam }
 
 class ExamCreation extends StatefulWidget {
   ExamCreation(
-      {super.key,
-      required this.course,
-      required this.examtype,
-      this.moduleIndex});
+      {super.key, required this.course, required this.examtype, this.module});
   int noOfQuestions = 1;
   Course course;
   EXAMTYPE examtype;
-  int? moduleIndex;
+  Module? module;
   @override
   ExamCreationState createState() => ExamCreationState();
 }
@@ -120,7 +118,7 @@ class ExamCreationState extends State<ExamCreation> {
                       createModuleExam(
                           coursesProvider: coursesProvider,
                           course: widget.course,
-                          moduleIndex: widget.moduleIndex!,
+                          module: widget.module!,
                           exam: newExam);
                       allQuestions.clear();
                     }

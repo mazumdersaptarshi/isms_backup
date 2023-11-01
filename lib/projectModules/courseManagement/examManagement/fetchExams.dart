@@ -31,8 +31,7 @@ Future fetchExams(
 Future fetchModuleExams(
     {required Course course,
     required CoursesProvider coursesProvider,
-    required int moduleIndex}) async {
-  Module module = course.modules![moduleIndex];
+    required Module module}) async {
   if (module.exams != null && module.exams!.isNotEmpty) {
     return;
   } else {

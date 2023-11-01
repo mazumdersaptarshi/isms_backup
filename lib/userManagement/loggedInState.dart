@@ -5,6 +5,7 @@ import 'package:isms/userManagement/userDataGetterMaster.dart';
 
 import '../models/course.dart';
 import '../models/customUser.dart';
+import '../models/module.dart';
 import '../models/userCoursesDetails.dart';
 import '../projectModules/courseManagement/coursesProvider.dart';
 
@@ -253,14 +254,14 @@ class LoggedInState with ChangeNotifier {
       {required Map<String, dynamic> courseDetails,
       required CoursesProvider coursesProvider,
       required Course course,
-      required int moduleIndex}) {
+      required Module module}) {
     bool flag = false;
     if (loggedInUser!.courses_started.isNotEmpty) {
       loggedInUser!.courses_started.forEach((course) {
         try {
           if (course['courseID'] == courseDetails['courseID']) {
             course["modules_completed"].forEach((element) {
-              if (element == course.modules![moduleIndex].title) {
+              if (element == module.title) {
                 print("SETTING FLAG TRUE coz ${element}");
                 flag = true;
               }
@@ -282,19 +283,17 @@ class LoggedInState with ChangeNotifier {
                 i < course_started['modules_completed'].length;
                 i++) {
               var element = course_started['modules_completed'][i];
-              if (element == course.modules![moduleIndex].title) {
+              if (element == module.title) {
                 flag = true;
               }
             }
             if (flag == false) {
-              course_started['modules_completed']
-                  .add(course.modules![moduleIndex].title);
+              course_started['modules_completed'].add(module.title);
             }
           } else {
             print("COMPLETED MODULE IS NULL< SO HERE");
             course_started['modules_completed'] = [];
-            course_started['modules_completed']
-                .add(course.modules![moduleIndex].title);
+            course_started['modules_completed'].add(module.title);
           }
         }
       });

@@ -41,10 +41,9 @@ Future<bool> createCourseExam(
 Future<bool> createModuleExam(
     {required CoursesProvider coursesProvider,
     required Course course,
-    required int moduleIndex,
+    required Module module,
     required NewExam exam}) async {
   try {
-    Module module = course.modules![moduleIndex];
     int index = 1;
     try {
       index = module.exams!.length + 1;

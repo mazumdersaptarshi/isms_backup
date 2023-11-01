@@ -13,9 +13,9 @@ import '../../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../../themes/common_theme.dart';
 
 class ModuleDetails extends StatefulWidget {
-  ModuleDetails({super.key, required this.course, required this.moduleIndex});
+  ModuleDetails({super.key, required this.course, required this.module});
   Course course;
-  int moduleIndex;
+  Module module;
   SlidesDataMaster? slidesDataMaster;
   @override
   State<ModuleDetails> createState() => _ModuleDetailsState();
@@ -36,9 +36,7 @@ class _ModuleDetailsState extends State<ModuleDetails> {
 
     setState(() {
       {
-        Module module = widget.course.modules![widget.moduleIndex];
-        print("MODULE.SLIDES: ${module.slides}");
-        if (module.slides == null || module.slides == []) {
+        if (widget.module.slides == null || widget.module.slides == []) {
           isSlidesListEmpty = true;
         }
         isSlidesFetched = true;
@@ -56,14 +54,12 @@ class _ModuleDetailsState extends State<ModuleDetails> {
     }
 
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
-    Module? module;
-    try {
-      module = widget.course.modules![widget.moduleIndex];
-    } catch (e) {}
+
+    try {} catch (e) {}
     widget.slidesDataMaster = SlidesDataMaster(
         course: widget.course,
         coursesProvider: coursesProvider,
-        module: widget.course.modules![widget.moduleIndex]);
+        module: widget.module);
     if (isSlidesFetched == false) {
       fetchSlidesList(coursesProvider: coursesProvider);
     }
@@ -75,9 +71,9 @@ class _ModuleDetailsState extends State<ModuleDetails> {
             Navigator.pop(context);
           },
         ),
-        title: module != null
+        title: widget.module != null
             ? Text(
-                "${module.title}",
+                "${widget.module.title}",
                 style: commonTitleStyle,
               )
             : Text(
@@ -85,7 +81,7 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                 style: commonTitleStyle,
               ),
       ),
-      body: module != null
+      body: widget.module != null
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -105,7 +101,7 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Text(
-                          module.contentDescription,
+                          widget.module.contentDescription,
                           style: commonTextStyle,
                         ),
                       ),
@@ -133,9 +129,9 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => SlidesDisplayScreen(
-                                            slides: module!.slides!,
+                                            slides: widget.module!.slides!,
                                             course: widget.course,
-                                            moduleIndex: widget.moduleIndex,
+                                            module: widget.module,
                                           )));
                             },
                             child: Text('Study Module', style: commonTextStyle),
@@ -166,7 +162,7 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                                       builder: (context) => ExamCreation(
                                             course: widget.course,
                                             examtype: EXAMTYPE.moduleExam,
-                                            moduleIndex: widget.moduleIndex,
+                                            module: widget.module,
                                           )));
                             },
                             child:
@@ -185,8 +181,7 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                                   MaterialPageRoute(
                                       builder: (context) => CreateSlideScreen(
                                           course: widget.course,
-                                          module: widget.course
-                                              .modules[widget.moduleIndex])));
+                                          module: widget.module)));
                             },
                             child:
                                 Text('Add new slide', style: commonTextStyle),

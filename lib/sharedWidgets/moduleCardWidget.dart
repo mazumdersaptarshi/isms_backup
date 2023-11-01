@@ -6,17 +6,16 @@ import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/m
 import '../projectModules/courseManagement/coursesProvider.dart';
 
 class ModuleCardWidget extends StatelessWidget {
-  final int moduleIndex;
+  Module module;
   Course course;
   CoursesProvider coursesProvider;
   ModuleCardWidget(
       {required this.coursesProvider,
       required this.course,
-      required this.moduleIndex});
+      required this.module});
 
   @override
   Widget build(BuildContext context) {
-    Module module = course.modules![moduleIndex];
     return Card(
       margin: EdgeInsets.all(10),
       child: Column(
@@ -37,7 +36,7 @@ class ModuleCardWidget extends StatelessWidget {
                       MaterialPageRoute(
                           builder: (context) => ModuleDetails(
                                 course: course,
-                                moduleIndex: moduleIndex,
+                                module: module,
                               )));
                 },
                 child: Text(

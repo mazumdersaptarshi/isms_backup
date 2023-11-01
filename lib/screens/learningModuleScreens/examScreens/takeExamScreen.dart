@@ -8,6 +8,7 @@ import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/course.dart';
+import '../../../models/module.dart';
 import '../../../projectModules/courseManagement/coursesProvider.dart';
 
 class TakeExamScreen extends StatefulWidget {
@@ -15,10 +16,10 @@ class TakeExamScreen extends StatefulWidget {
       {required this.exam,
       required this.course,
       required this.examtype,
-      this.moduleIndex});
+      this.module});
   EXAMTYPE examtype;
   Course course;
-  int? moduleIndex;
+  Module? module;
   NewExam exam;
   @override
   _TakeExamScreenState createState() => _TakeExamScreenState();
@@ -174,7 +175,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
                       "course_name": widget.course.name,
                     },
                     course: widget.course,
-                    moduleIndex: widget.moduleIndex!,
+                    module: widget.module!,
                     coursesProvider: coursesProvider,
                   );
 

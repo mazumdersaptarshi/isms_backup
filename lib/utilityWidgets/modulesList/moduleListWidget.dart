@@ -12,12 +12,12 @@ import 'moduleExpandedItem.dart';
 class ModuleListWidget extends StatefulWidget {
   bool isModuleCompleted;
   Course course;
-  int moduleIndex;
+  Module module;
   ModuleListWidget(
       {super.key,
       this.isModuleCompleted = false,
       required this.course,
-      required this.moduleIndex});
+      required this.module});
 
   @override
   _ModuleListWidgetState createState() => _ModuleListWidgetState();
@@ -26,7 +26,6 @@ class ModuleListWidget extends StatefulWidget {
 class _ModuleListWidgetState extends State<ModuleListWidget> {
   @override
   Widget build(BuildContext context) {
-    Module module = widget.course.modules[widget.moduleIndex];
     return ExpansionTile(
       title: Row(
         children: [
@@ -42,7 +41,7 @@ class _ModuleListWidgetState extends State<ModuleListWidget> {
           ),
           SizedBox(width: 10),
           Text(
-            "#Module${module.index}",
+            "#Module${widget.module.index}",
             style: TextStyle(
               fontWeight: FontWeight.bold,
             ),
@@ -51,14 +50,13 @@ class _ModuleListWidgetState extends State<ModuleListWidget> {
       ),
       children: [
         ModuleExpandedItem(
-          info: {'info_title': module.title, 'info_status': true},
+          info: {'info_title': widget.module.title, 'info_status': true},
           onPressed: () {
             Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => ModuleDetails(
-                        course: widget.course,
-                        moduleIndex: widget.moduleIndex)));
+                        course: widget.course, module: widget.module)));
           },
         ),
         ModuleExpandedItem(
@@ -70,7 +68,7 @@ class _ModuleListWidgetState extends State<ModuleListWidget> {
                     builder: (context) => ModuleExamListScreen(
                           course: widget.course,
                           examtype: EXAMTYPE.moduleExam,
-                          moduleIndex: widget.moduleIndex,
+                          module: widget.module,
                         )));
           },
         ),

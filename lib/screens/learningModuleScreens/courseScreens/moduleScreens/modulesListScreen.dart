@@ -75,7 +75,7 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
               itemBuilder: (BuildContext context, int moduleIndex) {
                 return ModuleListWidget(
                   course: widget.course,
-                  moduleIndex: moduleIndex,
+                  module: widget.course.modules[moduleIndex],
                   isModuleCompleted: true,
                 );
               },

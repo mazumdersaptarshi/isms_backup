@@ -11,15 +11,17 @@ import 'package:provider/provider.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/screens/login/loginScreen.dart';
 
+import '../../../../../models/module.dart';
+
 class SlidesDisplayScreen extends StatefulWidget {
   SlidesDisplayScreen(
       {super.key,
       required this.slides,
-      required this.moduleIndex,
+      required this.module,
       required this.course});
   List<Slide> slides;
   Course course;
-  int moduleIndex;
+  Module module;
   @override
   _SlidesDisplayScreenState createState() => _SlidesDisplayScreenState();
 }
@@ -169,7 +171,7 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
                                   builder: (context) => ModuleExamListScreen(
                                         course: widget.course,
                                         examtype: EXAMTYPE.moduleExam,
-                                        moduleIndex: widget.moduleIndex,
+                                        module: widget.module,
                                       )));
                         },
                         child: Text('Take quiz'),
