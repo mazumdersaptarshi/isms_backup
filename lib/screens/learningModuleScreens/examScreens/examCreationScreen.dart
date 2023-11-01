@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 import '../../../models/course.dart';
 import '../../../models/module.dart';
 import '../../../projectModules/courseManagement/coursesProvider.dart';
-import '../../../projectModules/courseManagement/examManagement/createExam.dart';
+import '../../../projectModules/courseManagement/examManagement/examDataMaster.dart';
 
 List<Map<String, dynamic>> allQuestions = [];
 
@@ -24,6 +24,7 @@ class ExamCreation extends StatefulWidget {
   Course course;
   EXAMTYPE examtype;
   Module? module;
+  late ExamDataMaster examDataMaster;
   @override
   ExamCreationState createState() => ExamCreationState();
 }
@@ -56,6 +57,8 @@ class ExamCreationState extends State<ExamCreation> {
     }
 
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
+    widget.examDataMaster =
+        ExamDataMaster(course: widget.course, coursesProvider: coursesProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Create Exam'),
@@ -110,16 +113,10 @@ class ExamCreationState extends State<ExamCreation> {
 
                     if (widget.examtype == EXAMTYPE.courseExam) {
                       print("CREATE EXAMM ${widget.course.exams}");
-                      createCourseExam(
-                          coursesProvider: coursesProvider,
-                          course: widget.course,
-                          exam: newExam);
+                      widget.examDataMaster.createCourseExam(exam: newExam);
                     } else if (widget.examtype == EXAMTYPE.moduleExam) {
-                      createModuleExam(
-                          coursesProvider: coursesProvider,
-                          course: widget.course,
-                          module: widget.module!,
-                          exam: newExam);
+                      widget.examDataMaster.createModuleExam(
+                          module: widget.module!, exam: newExam);
                       allQuestions.clear();
                     }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/models/newExam.dart';
+import 'package:isms/projectModules/courseManagement/examManagement/examDataMaster.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/takeExamScreen.dart';
 import 'package:isms/screens/login/loginScreen.dart';
@@ -9,7 +10,6 @@ import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../projectModules/courseManagement/coursesProvider.dart';
-import '../../../../projectModules/courseManagement/examManagement/fetchExams.dart';
 
 class ModuleExamListScreen extends StatefulWidget {
   ModuleExamListScreen(
@@ -19,7 +19,7 @@ class ModuleExamListScreen extends StatefulWidget {
       required this.module});
   Course course;
   Module module;
-
+  late ExamDataMaster examDataMaster;
   EXAMTYPE examtype;
   @override
   State<ModuleExamListScreen> createState() => _ModuleExamListScreenState();
@@ -33,10 +33,7 @@ class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
   }
 
   fetchExamsList({required CoursesProvider coursesProvider}) async {
-    await fetchModuleExams(
-        course: widget.course,
-        coursesProvider: Provider.of<CoursesProvider>(context),
-        module: widget.module);
+    await widget.examDataMaster.fetchModuleExams(module: widget.module);
     setState(() {
       isExamsFetched = true;
     });
@@ -51,9 +48,7 @@ class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
     }
 
     CoursesProvider coursesProvider = context.watch<CoursesProvider>();
-    if (isExamsFetched == false) {
-      fetchExamsList(coursesProvider: coursesProvider);
-    }
+
     Course course = widget.course;
     List<NewExam>? exams = [];
     Module? module;
@@ -62,6 +57,11 @@ class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
       exams = module.exams;
     } else {
       exams = widget.course.exams;
+    }
+    widget.examDataMaster =
+        ExamDataMaster(course: course, coursesProvider: coursesProvider);
+    if (isExamsFetched == false) {
+      fetchExamsList(coursesProvider: coursesProvider);
     }
     if (isExamsFetched) {
       return Scaffold(

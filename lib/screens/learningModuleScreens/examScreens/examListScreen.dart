@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/models/newExam.dart';
+import 'package:isms/projectModules/courseManagement/examManagement/examDataMaster.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/takeExamScreen.dart';
 import 'package:isms/screens/login/loginScreen.dart';
@@ -9,7 +10,6 @@ import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 
 import '../../../projectModules/courseManagement/coursesProvider.dart';
-import '../../../projectModules/courseManagement/examManagement/fetchExams.dart';
 
 class ExamListScreen extends StatefulWidget {
   ExamListScreen(
@@ -19,7 +19,7 @@ class ExamListScreen extends StatefulWidget {
       this.moduleIndex});
   Course course;
   int? moduleIndex;
-
+  late ExamDataMaster examDataMaster;
   EXAMTYPE examtype;
   @override
   State<ExamListScreen> createState() => _ExamListScreenState();
@@ -33,9 +33,7 @@ class _ExamListScreenState extends State<ExamListScreen> {
   }
 
   fetchExamsList({required CoursesProvider coursesProvider}) async {
-    await fetchExams(
-        course: widget.course,
-        coursesProvider: Provider.of<CoursesProvider>(context));
+    await widget.examDataMaster.fetchExams();
     setState(() {
       isExamsFetched = true;
     });
@@ -50,9 +48,6 @@ class _ExamListScreenState extends State<ExamListScreen> {
     }
 
     CoursesProvider coursesProvider = context.watch<CoursesProvider>();
-    if (isExamsFetched == false) {
-      fetchExamsList(coursesProvider: coursesProvider);
-    }
 
     List<NewExam>? exams = [];
     Module module;
@@ -62,6 +57,12 @@ class _ExamListScreenState extends State<ExamListScreen> {
     } else {
       exams = widget.course.exams;
     }
+    widget.examDataMaster =
+        ExamDataMaster(course: widget.course, coursesProvider: coursesProvider);
+    if (isExamsFetched == false) {
+      fetchExamsList(coursesProvider: coursesProvider);
+    }
+
     if (isExamsFetched) {
       return Scaffold(
         appBar: AppBar(
