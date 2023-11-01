@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
+import 'package:isms/projectModules/notificationModules/initLinkHandler.dart';
 import 'package:isms/screens/adminScreens/AdminConsole/adminConsolePage.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
 import 'package:isms/screens/userInfo/userProfilePage.dart';
@@ -25,49 +26,13 @@ class _HomePageState extends State<HomePage> {
   DocumentSnapshot? currentUserSnapshot;
   late String userRole;
   DateTime? _expiryDate;
-
-  // UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
   String? initialLink;
-
-  Future<void> initUniLinks() async {
-    try {
-      initialLink = await getInitialLink();
-      // setState(() {
-      //   initialLink = "http://localhost:49430/adminConsolePage?category=people";
-      // });
-
-      print("Received link is ${initialLink}");
-
-      Uri uri = Uri.parse(initialLink!);
-      String parameter = uri.pathSegments[0];
-      if (parameter == "adminConsolePage") {
-        String? category = uri.queryParameters['category'];
-
-        for (String key in categories!.keys) {
-          if (key == category) {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => AdminInstructionsCategories(
-                          category: category!,
-                          subCategories: categories?[key],
-                        )));
-          }
-        }
-      }
-    } on PlatformException {}
-    onOpen:
-    (String link) {
-      // Handle the link when it's received
-      initialLink = "${link}_onOpen";
-    };
-  }
 
   @override
   void initState() {
     super.initState();
 
-    initUniLinks();
+    InitLinkHandler.initUniLinks(context: context);
   }
 
   void setExpiryDate(String currentUserEmail, String currentUserName) async {
