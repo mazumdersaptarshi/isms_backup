@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:isms/frontend_temp/course_tile.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/sharedWidgets/course_tile.dart';
 import 'package:isms/screens/homePage.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/modulesListScreen.dart';
 import 'package:isms/screens/login/loginScreen.dart';
+import 'package:isms/sharedWidgets/leaningModulesAppBar.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 
@@ -27,17 +28,18 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
 
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
+      appBar: LearningModulesAppBar(
+        leadingWidget: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.push(
                 context, MaterialPageRoute(builder: (context) => HomePage()));
           },
         ),
-        title: Text("All courses"),
+        title: "All Courses",
       ),
       body: Container(
+        margin: EdgeInsets.only(top: 20),
         child: ListView.builder(
           itemCount: coursesProvider.allCourses.length,
           itemBuilder: (context, courseIndex) {

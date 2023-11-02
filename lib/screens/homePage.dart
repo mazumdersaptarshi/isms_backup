@@ -24,7 +24,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   DocumentSnapshot? currentUserSnapshot;
-  late String userRole;
+  late String userRole = 'user';
   DateTime? _expiryDate;
   String? initialLink;
 
@@ -53,7 +53,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final loggedInState = context.watch<LoggedInState>();
-    userRole = loggedInState.currentUserRole!;
+    userRole = loggedInState.currentUserRole != null
+        ? loggedInState.currentUserRole!
+        : 'user';
     return Consumer<CoursesProvider>(
         builder: (BuildContext context, CoursesProvider value, Widget? child) {
       return Scaffold(
