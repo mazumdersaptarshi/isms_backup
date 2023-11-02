@@ -430,6 +430,7 @@ class LoggedInState with ChangeNotifier {
           }
         }
       });
+
       print(_userDataGetterMaster.loggedInUser!.courses_started);
       _userDataGetterMaster.setUserData();
     }

@@ -113,7 +113,7 @@ class UserDataGetterMaster {
 
   setUserData() async {
     print(
-        "MUST SET COURSE STARTED ${loggedInUser!.toMap()} at ${loggedInUser?.uid}");
+        "SETTING NEW USER INFO ${loggedInUser!.toMap()} at ${loggedInUser?.uid}");
     FirebaseFirestore.instance
         .collection("users")
         .doc(loggedInUser!.uid)
