@@ -43,23 +43,50 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
       ),
       body: Container(
         margin: EdgeInsets.only(top: 20),
-        child: ListView.builder(
-          itemCount: coursesProvider.allCourses.length,
-          itemBuilder: (context, courseIndex) {
-            return CourseTile(
-              index: courseIndex,
-              title: coursesProvider.allCourses[courseIndex].name,
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ModulesListScreen(
-                              course: coursesProvider.allCourses[courseIndex],
-                            )));
-              },
-            );
-          },
-        ),
+        child: MediaQuery.sizeOf(context).width <= 700
+            ? ListView.builder(
+                itemCount: coursesProvider.allCourses.length,
+                itemBuilder: (context, courseIndex) {
+                  return CourseTile(
+                    index: courseIndex,
+                    title: coursesProvider.allCourses[courseIndex].name,
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ModulesListScreen(
+                                    course:
+                                        coursesProvider.allCourses[courseIndex],
+                                  )));
+                    },
+                  );
+                },
+              )
+            : Align(
+                alignment: Alignment.topCenter,
+                child: Container(
+                  width: MediaQuery.sizeOf(context).width * 0.7,
+                  child: GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3, childAspectRatio: 16 / 9),
+                      itemCount: coursesProvider.allCourses.length,
+                      itemBuilder: (context, courseIndex) {
+                        return CourseTile(
+                          index: courseIndex,
+                          title: coursesProvider.allCourses[courseIndex].name,
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ModulesListScreen(
+                                          course: coursesProvider
+                                              .allCourses[courseIndex],
+                                        )));
+                          },
+                        );
+                      }),
+                ),
+              ),
       ),
       floatingActionButton: widget.userRole == 'admin'
           ? FloatingActionButton(
