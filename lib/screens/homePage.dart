@@ -62,10 +62,6 @@ class _HomePageState extends State<HomePage> {
           appBar: CustomAppBar(),
           body: Container(
             padding: const EdgeInsets.all(16.0),
-            decoration: BoxDecoration(
-              color: Colors.deepPurpleAccent.shade200,
-              borderRadius: BorderRadius.circular(8),
-            ),
             child: Column(
               children: [
                 Container(
@@ -75,7 +71,7 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       Text('Logged in user: ',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Colors.black,
                           )),
                       SizedBox(
                         height: 10,
@@ -83,15 +79,15 @@ class _HomePageState extends State<HomePage> {
                       Text(
                         'Email: ${loggedInState.currentUserEmail.toString()}',
                         style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
+                            color: Colors.black, fontWeight: FontWeight.bold),
                       ),
                       Text('Name: ${loggedInState.currentUserName.toString()}',
                           style: TextStyle(
-                              color: Colors.white,
+                              color: Colors.black,
                               fontWeight: FontWeight.bold)),
                       Text('Role: ${userRole.toString()}',
                           style: TextStyle(
-                              color: Colors.white,
+                              color: Colors.black,
                               fontWeight: FontWeight.bold)),
                     ],
                   ),

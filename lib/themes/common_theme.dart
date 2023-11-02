@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 // Theme Constants
-const primaryColor = Color.fromARGB(255, 221, 244, 250);
+const primaryColor = Color.fromARGB(255, 128, 132, 255);
 
 const bgColor = Color.fromARGB(255, 255, 255, 255);
 // const primaryColor = Color.fromARGB(255, 9, 25, 112);
@@ -48,7 +48,7 @@ ThemeData customTheme = ThemeData(
     labelSmall: TextStyle(color: Colors.black),
   ),
   colorScheme:
-      ColorScheme.fromSeed(seedColor: primaryColor, background: Colors.white),
+      ColorScheme.fromSeed(seedColor: Colors.white, background: Colors.white),
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
       backgroundColor: primaryColor,
       extendedTextStyle: TextStyle(color: Colors.white)),
@@ -59,7 +59,7 @@ ThemeData customTheme = ThemeData(
     style: ElevatedButton.styleFrom(
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(10))),
-        // backgroundColor: primaryColor,
+        backgroundColor: primaryColor,
         textStyle: TextStyle(color: Colors.black)),
   ),
 );

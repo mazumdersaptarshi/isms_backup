@@ -36,9 +36,6 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
   final PageController _pageController = PageController(initialPage: 0);
 
   List<Map<String, dynamic>> _initializeCardItems() {
-    final String commonText =
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
-
     List<Map<String, dynamic>> slidesMap = [];
     widget.slides.forEach((element) {
       slidesMap.add({'title': element.title, 'text': element.content});
@@ -98,6 +95,7 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
                   pageController: _pageController,
                   cardItems: cardItems,
                   currentIndex: currentIndex),
+              SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -116,7 +114,6 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
                       },
                       child: Text(
                         'Take quiz',
-                        style: customTheme.textTheme.bodyMedium,
                       ),
                     ),
                   ),
@@ -132,7 +129,6 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
                       },
                       child: Text(
                         'Back to Home',
-                        style: customTheme.textTheme.bodyMedium,
                       ),
                     ),
                   ),

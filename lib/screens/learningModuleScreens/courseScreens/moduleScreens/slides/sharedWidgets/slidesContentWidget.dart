@@ -15,6 +15,7 @@ class SlidesContentWidget extends StatelessWidget {
   final isWeb = kIsWeb;
   @override
   Widget build(BuildContext context) {
+    print(cardItems);
     return Card(
       surfaceTintColor: Colors.white,
       elevation: 4,
@@ -23,7 +24,7 @@ class SlidesContentWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              height: 500,
+              height: isWeb ? MediaQuery.of(context).size.height - 240 : 500,
               child: PageView(
                 controller: pageController,
                 children: cardItems.map((item) {
@@ -36,11 +37,15 @@ class SlidesContentWidget extends StatelessWidget {
                           Text(
                             '${item['title']}:',
                             style: TextStyle(
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.blueGrey),
+                                fontSize: 25, fontWeight: FontWeight.bold),
                           ),
-                          SizedBox(height: 10),
+                          SizedBox(height: 20),
+                          Divider(
+                            height: 2,
+                            color: Colors.grey,
+                            thickness: 2,
+                          ),
+                          SizedBox(height: 20),
                           HTMLSlideDisplay(htmlString: item['text'])
                         ],
                       ),
@@ -89,11 +94,11 @@ class SlidesContentWidget extends StatelessWidget {
               ),
             ],
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              alignment: Alignment.bottomRight,
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              alignment: Alignment.bottomCenter,
               child: Text(
                 'Slide ${currentIndex + 1} of ${cardItems.length}',
-                style: TextStyle(fontSize: 15, color: Colors.blueGrey),
+                style: TextStyle(fontSize: 15, color: Colors.grey),
               ),
             ),
           ],

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/projectModules/courseManagement/moduleManagement/slideManagement/slidesDataMaster.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/modulesListScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/createSlideScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/slidesDisplayScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/screens/login/loginScreen.dart';
+import 'package:isms/sharedWidgets/leaningModulesAppBar.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 
@@ -64,22 +66,17 @@ class _ModuleDetailsState extends State<ModuleDetails> {
       fetchSlidesList(coursesProvider: coursesProvider);
     }
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
+      appBar: LearningModulesAppBar(
+        leadingWidget: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        ModulesListScreen(course: widget.course)));
           },
         ),
-        title: widget.module != null
-            ? Text(
-                "${widget.module.title}",
-                style: commonTitleStyle,
-              )
-            : Text(
-                "No modules",
-                style: commonTitleStyle,
-              ),
       ),
       body: widget.module != null
           ? Column(
