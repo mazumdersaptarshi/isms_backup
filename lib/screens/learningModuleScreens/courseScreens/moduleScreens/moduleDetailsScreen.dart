@@ -48,11 +48,11 @@ class _ModuleDetailsState extends State<ModuleDetails> {
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
 
-    userRole = loggedInState.currentUserRole!;
     if (loggedInState.currentUser == null) {
       return LoginPage();
     }
 
+    userRole = loggedInState.currentUserRole;
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
 
     try {} catch (e) {}

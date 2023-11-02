@@ -46,7 +46,7 @@ class LoggedInState with ChangeNotifier {
   User? get currentUser => _userDataGetterMaster.currentUser;
   String? get currentUserName => _userDataGetterMaster.currentUserName;
   String? get currentUserEmail => _userDataGetterMaster.currentUserEmail;
-  String? get currentUserRole => _userDataGetterMaster.currentUserRole;
+  String get currentUserRole => _userDataGetterMaster.currentUserRole;
   String? get currentUserUid => _userDataGetterMaster.currentUserUid;
   CustomUser? get loggedInUser => _userDataGetterMaster.loggedInUser;
   DocumentReference? get currentUserDocumentReference =>

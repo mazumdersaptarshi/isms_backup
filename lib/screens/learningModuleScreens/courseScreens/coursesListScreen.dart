@@ -22,12 +22,12 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
   @override
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
-    widget.userRole = loggedInState.currentUserRole != null
-        ? loggedInState.currentUserRole!
-        : 'user';
+
     if (loggedInState.currentUser == null) {
       return LoginPage();
     }
+
+    widget.userRole = loggedInState.currentUserRole;
 
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
     return Scaffold(

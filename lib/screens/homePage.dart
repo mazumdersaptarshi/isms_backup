@@ -52,9 +52,13 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final loggedInState = context.watch<LoggedInState>();
-    userRole = loggedInState.currentUserRole != null
-        ? loggedInState.currentUserRole!
-        : 'user';
+
+    if (loggedInState.currentUser == null) {
+      return LoginPage();
+    }
+
+    userRole = loggedInState.currentUserRole;
+
     return Consumer<CoursesProvider>(
         builder: (BuildContext context, CoursesProvider value, Widget? child) {
       return Scaffold(
@@ -88,7 +92,7 @@ class _HomePageState extends State<HomePage> {
                           style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold)),
-                      Text('Role: ${userRole.toString()}',
+                      Text('Role: ${userRole}',
                           style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold)),

@@ -8,7 +8,7 @@ class UserDataGetterMaster {
   static User? _currentUser;
   static DocumentReference? _userRef;
   static DocumentSnapshot? _currentUserSnapshot;
-  static String? _userRole;
+  static late String _userRole;
   static CustomUser? _customUserObject;
 
   static Future<void> createUserData(CustomUser customUser) async {
@@ -42,7 +42,7 @@ class UserDataGetterMaster {
   User? get currentUser => _currentUser;
   String? get currentUserName => _currentUser?.displayName;
   String? get currentUserEmail => _currentUser?.email;
-  String? get currentUserRole => _userRole;
+  String get currentUserRole => _userRole;
   String? get currentUserUid => _currentUser?.uid;
   DocumentReference? get currentUserDocumentReference => _userRef;
   DocumentSnapshot? get currentUserSnapshot => _currentUserSnapshot;
@@ -62,7 +62,7 @@ class UserDataGetterMaster {
       _currentUserSnapshot = userSnapshot;
       Map<String, dynamic>? userData =
           userSnapshot.data() as Map<String, dynamic>?;
-      _userRole = userData?['role'];
+      _userRole = userData?['role']!;
       CustomUser loggedInUserObject = CustomUser.fromMap(userData!);
 
       print('data fetched from Firestore for user ${user.email}');
@@ -81,10 +81,6 @@ class UserDataGetterMaster {
     // first step: unset _currentUser, so the app knows it is signed out
     // and won't attempt to read any user data
     _currentUser = null;
-  }
-
-  set currentUserRole(String? role) {
-    _userRole = role;
   }
 
   setUserData() async {
