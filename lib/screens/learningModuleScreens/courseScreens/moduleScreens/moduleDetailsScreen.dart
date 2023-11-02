@@ -122,6 +122,14 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                                     "courseID": widget.course.id,
                                     "course_name": widget.course.name
                                   });
+                              await loggedInState.setUserCourseModuleStarted(
+                                  courseDetails: {
+                                    "courseID": widget.course.id,
+                                    "course_name": widget.course.name
+                                  },
+                                  coursesProvider: coursesProvider,
+                                  course: widget.course,
+                                  module: widget.module);
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
