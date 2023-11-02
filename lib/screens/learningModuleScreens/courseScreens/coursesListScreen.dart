@@ -71,7 +71,7 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
               },
               backgroundColor:
                   customTheme.floatingActionButtonTheme.backgroundColor,
-              child: Icon(Icons.add, color: Colors.white),
+              child: Icon(Icons.add),
             )
           : null,
     );

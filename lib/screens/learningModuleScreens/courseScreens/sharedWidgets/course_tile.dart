@@ -15,9 +15,10 @@ class CourseTile extends StatelessWidget {
       height: 150,
       child: GestureDetector(
         child: Card(
+          surfaceTintColor: Colors.white,
           elevation: 4,
           shape: customCardShape,
-          color: primaryColor,
+          color: Colors.white,
           child: Padding(
             padding: const EdgeInsets.all(10),
             child: Row(
@@ -36,9 +37,11 @@ class CourseTile extends StatelessWidget {
                   child: Row(
                     children: [
                       SizedBox(width: 20),
-                      Expanded(child: Text(title, style: commonTextStyle)),
-                      const Icon(Icons.arrow_forward_ios,
-                          color: secondaryColor),
+                      Expanded(
+                          child: Text(title,
+                              style: commonTextStyle.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black))),
                     ],
                   ),
                 )

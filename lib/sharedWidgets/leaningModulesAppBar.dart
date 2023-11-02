@@ -34,12 +34,13 @@ class LearningModulesAppBar extends StatelessWidget
         ],
       ),
       leading: leadingWidget,
-      backgroundColor: primaryColor,
-      titleTextStyle: Theme.of(context)
-          .textTheme
-          .bodyLarge
-          ?.copyWith(color: Colors.white, fontSize: 20),
-      iconTheme: Theme.of(context).primaryIconTheme,
+      elevation: 4,
+      surfaceTintColor: Colors.white,
+      backgroundColor: bgColor,
+      titleTextStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
+          color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
+      iconTheme:
+          Theme.of(context).primaryIconTheme.copyWith(color: Colors.black),
     );
   }
 

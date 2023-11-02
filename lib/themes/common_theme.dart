@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 // Theme Constants
-const primaryColor = Color.fromARGB(255, 4, 123, 154);
+const primaryColor = Color.fromARGB(255, 221, 244, 250);
+
+const bgColor = Color.fromARGB(255, 255, 255, 255);
 // const primaryColor = Color.fromARGB(255, 9, 25, 112);
-const secondaryColor = Colors.white;
+const textColor = Colors.black54;
 const shadowColor = Colors.black54;
 const defaultFontSize = 15.0;
 const smallFontSize = 12.0;
@@ -24,7 +26,7 @@ TextStyle ModuleDescStyle =
     TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: primaryColor);
 
 TextStyle commonTextStyle =
-    TextStyle(fontSize: defaultFontSize, color: secondaryColor);
+    TextStyle(fontSize: defaultFontSize, color: textColor);
 
 TextStyle commonTitleStyle = TextStyle(
   fontSize: 17,
