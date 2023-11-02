@@ -8,11 +8,12 @@ import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 
 import '../../../projectModules/courseManagement/coursesProvider.dart';
+import '../../../themes/common_theme.dart';
 import 'createCourseScreen.dart';
 
 class CoursesDisplayScreen extends StatefulWidget {
   CoursesDisplayScreen({super.key});
-
+  String userRole = "user";
   @override
   State<CoursesDisplayScreen> createState() => _CoursesDisplayScreenState();
 }
@@ -21,7 +22,9 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
   @override
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
-
+    widget.userRole = loggedInState.currentUserRole != null
+        ? loggedInState.currentUserRole!
+        : 'user';
     if (loggedInState.currentUser == null) {
       return LoginPage();
     }
@@ -58,13 +61,19 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
           },
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => CreateCourseScreen()));
-        },
-        child: Icon(Icons.add),
-      ),
+      floatingActionButton: widget.userRole == 'admin'
+          ? FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CreateCourseScreen()));
+              },
+              backgroundColor:
+                  customTheme.floatingActionButtonTheme.backgroundColor,
+              child: Icon(Icons.add, color: Colors.white),
+            )
+          : null,
     );
   }
 }

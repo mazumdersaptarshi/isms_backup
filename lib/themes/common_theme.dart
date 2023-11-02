@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 // Theme Constants
-const primaryColor = Color.fromARGB(255, 117, 118, 189);
+const primaryColor = Color.fromARGB(255, 4, 123, 154);
 // const primaryColor = Color.fromARGB(255, 9, 25, 112);
 const secondaryColor = Colors.white;
 const shadowColor = Colors.black54;
@@ -33,3 +33,7 @@ TextStyle commonTitleStyle = TextStyle(
 ShapeBorder customCardShape = RoundedRectangleBorder(
   borderRadius: BorderRadius.circular(10.0),
 );
+ThemeData customTheme = ThemeData(
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: primaryColor,
+        extendedTextStyle: TextStyle(color: Colors.white)));
