@@ -3,10 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/slide.dart';
 import 'package:isms/screens/homePage.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleDetailsScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleExamsListScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/modulesListScreen.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/sharedWidgets/slidesContentWidget.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
-import 'package:isms/sharedWidgets/htmlSlideDisplay.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/sharedWidgets/htmlSlideDisplay.dart';
+import 'package:isms/sharedWidgets/leaningModulesAppBar.dart';
+import 'package:isms/themes/common_theme.dart';
 import 'package:provider/provider.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/screens/login/loginScreen.dart';
@@ -71,137 +75,70 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
       return LoginPage();
     }
 
-    final isWeb = kIsWeb;
-
     return Scaffold(
-      appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.blueGrey),
-        title: const Text(
-          'Slides',
-          style: TextStyle(color: Colors.blueGrey),
+      appBar: LearningModulesAppBar(
+        leadingWidget: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ModuleDetails(
+                        course: widget.course, module: widget.module)));
+          },
         ),
-        elevation: 0,
       ),
-      body: Center(
+      body: Align(
+        alignment: Alignment.topCenter,
         child: Container(
-          decoration: BoxDecoration(
-              color: Colors.yellow.shade200,
-              borderRadius: BorderRadius.all(Radius.circular(20))),
-          margin: EdgeInsets.symmetric(horizontal: 10),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  height: 500,
-                  child: PageView(
-                    controller: _pageController,
-                    children: cardItems.map((item) {
-                      return Padding(
-                        padding: EdgeInsets.all(20),
-                        child: Container(
-                          height: 500,
-                          child: ListView(
-                            children: [
-                              Text(
-                                '${item['title']}:',
-                                style: TextStyle(
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.blueGrey),
-                              ),
-                              SizedBox(height: 10),
-                              HTMLSlideDisplay(htmlString: item['text'])
-                            ],
-                          ),
-                        ),
-                      );
-                    }).toList(),
+          margin: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+          child: Column(
+            children: [
+              SlidesContentWidget(
+                  pageController: _pageController,
+                  cardItems: cardItems,
+                  currentIndex: currentIndex),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Visibility(
+                    visible: currentIndex == cardItems.length - 1,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ModuleExamListScreen(
+                                      course: widget.course,
+                                      examtype: EXAMTYPE.moduleExam,
+                                      module: widget.module,
+                                    )));
+                      },
+                      child: Text(
+                        'Take quiz',
+                        style: customTheme.textTheme.bodyMedium,
+                      ),
+                    ),
                   ),
-                ),
-                if (isWeb) ...[
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        icon: Icon(
-                          Icons.arrow_left,
-                          size: 30,
-                        ),
-                        onPressed: () {
-                          if (currentIndex > 0) {
-                            _pageController.previousPage(
-                              duration: Duration(milliseconds: 300),
-                              curve: Curves.easeInOut,
-                            );
-                          }
-                        },
+                  SizedBox(width: 20),
+                  Visibility(
+                    visible: currentIndex == cardItems.length - 1,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => HomePage()));
+                      },
+                      child: Text(
+                        'Back to Home',
+                        style: customTheme.textTheme.bodyMedium,
                       ),
-                      SizedBox(
-                        width: 30,
-                      ),
-                      IconButton(
-                        icon: Icon(
-                          Icons.arrow_right,
-                          size: 30,
-                        ),
-                        onPressed: () {
-                          if (currentIndex < cardItems.length - 1) {
-                            _pageController.nextPage(
-                              duration: Duration(milliseconds: 300),
-                              curve: Curves.easeInOut,
-                            );
-                          }
-                        },
-                      ),
-                    ],
+                    ),
                   ),
                 ],
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Visibility(
-                      visible: currentIndex == cardItems.length - 1,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ModuleExamListScreen(
-                                        course: widget.course,
-                                        examtype: EXAMTYPE.moduleExam,
-                                        module: widget.module,
-                                      )));
-                        },
-                        child: Text('Take quiz'),
-                      ),
-                    ),
-                    SizedBox(width: 20),
-                    Visibility(
-                      visible: currentIndex == cardItems.length - 1,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => HomePage()));
-                        },
-                        child: Text('Back to Home'),
-                      ),
-                    ),
-                  ],
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  alignment: Alignment.bottomRight,
-                  child: Text(
-                    'Slide ${currentIndex + 1} of ${cardItems.length}',
-                    style: TextStyle(fontSize: 15, color: Colors.blueGrey),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

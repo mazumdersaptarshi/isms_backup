@@ -36,6 +36,30 @@ ShapeBorder customCardShape = RoundedRectangleBorder(
   borderRadius: BorderRadius.circular(10.0),
 );
 ThemeData customTheme = ThemeData(
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: primaryColor,
-        extendedTextStyle: TextStyle(color: Colors.white)));
+  textTheme: TextTheme(
+    displayMedium: TextStyle(color: Colors.black),
+    displayLarge: TextStyle(color: Colors.black),
+    displaySmall: TextStyle(color: Colors.black),
+    bodyMedium: TextStyle(color: Colors.black),
+    bodySmall: TextStyle(color: Colors.black),
+    bodyLarge: TextStyle(color: Colors.black),
+    labelLarge: TextStyle(color: Colors.black),
+    labelMedium: TextStyle(color: Colors.black),
+    labelSmall: TextStyle(color: Colors.black),
+  ),
+  colorScheme:
+      ColorScheme.fromSeed(seedColor: primaryColor, background: Colors.white),
+  floatingActionButtonTheme: const FloatingActionButtonThemeData(
+      backgroundColor: primaryColor,
+      extendedTextStyle: TextStyle(color: Colors.white)),
+  buttonTheme: const ButtonThemeData(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)))),
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10))),
+        // backgroundColor: primaryColor,
+        textStyle: TextStyle(color: Colors.black)),
+  ),
+);
