@@ -115,7 +115,7 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
                                     )));
                       },
                       child: Text(
-                        'Take quiz',
+                        'Take exams',
                         style: customTheme.textTheme.bodyMedium,
                       ),
                     ),

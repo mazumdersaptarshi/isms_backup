@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/projectModules/courseManagement/moduleManagement/slideManagement/slidesDataMaster.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleExamsListScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/createSlideScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/slidesDisplayScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
@@ -149,6 +150,27 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                             ),
                           ),
                         ),
+
+                      SizedBox(
+                        width: 200,
+                        child: ElevatedButton(
+                          style: customElevatedButtonStyle(),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ModuleExamListScreen(
+                                          course: widget.course,
+                                          examtype: EXAMTYPE.moduleExam,
+                                          module: widget.module,
+                                        )));
+                          },
+                          child: Text('Module Exams', style: commonTextStyle),
+                        ),
+                      ),
+
+                      // TODO see if this can be removed, as it's
+                      // already in the module exam list page
                       SizedBox(height: 20),
                       if (userRole == "admin")
                         SizedBox(
