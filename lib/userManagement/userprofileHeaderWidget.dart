@@ -19,8 +19,8 @@ class UserProfileHeaderWidget extends StatelessWidget {
                   top: 25.0), // Increased padding on the top
               child: CircleAvatar(
                 radius: 50,
-                backgroundImage:
-                    NetworkImage(loggedInState.currentUser!.photoURL!),
+                //backgroundImage:
+                //    NetworkImage(loggedInState.currentUser!.photoURL!),
               ),
             ),
           Text(

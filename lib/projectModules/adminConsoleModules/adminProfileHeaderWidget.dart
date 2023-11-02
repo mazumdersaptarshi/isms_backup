@@ -15,8 +15,8 @@ class AdminInfoWidget extends StatelessWidget {
             padding: const EdgeInsets.only(top: 25.0),
             child: CircleAvatar(
               radius: 50,
-              backgroundImage:
-                  NetworkImage(loggedInState.currentUser!.photoURL!),
+              //backgroundImage:
+              //    NetworkImage(loggedInState.currentUser!.photoURL!),
             ),
           ),
         if (loggedInState.currentUserRole != null)

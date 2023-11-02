@@ -40,8 +40,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       icon: loggedInState.currentUser?.photoURL != null
           ? CircleAvatar(
               radius: 18,
-              backgroundImage:
-                  NetworkImage(loggedInState.currentUser!.photoURL!),
+              //backgroundImage:
+              //    NetworkImage(loggedInState.currentUser!.photoURL!),
             )
           : const Icon(
               Icons.account_circle,
