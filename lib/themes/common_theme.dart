@@ -23,7 +23,7 @@ ButtonStyle customElevatedButtonStyle() {
 }
 
 TextStyle ModuleDescStyle =
-    TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: primaryColor);
+    TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white);
 
 TextStyle commonTextStyle =
     TextStyle(fontSize: defaultFontSize, color: textColor);
