@@ -1,35 +1,39 @@
-/**
- * Sends an email using the SendGrid service.
- * @async
- * @returns {Promise<void>} runs when email is sent.
- */
-
 const axios = require("axios");
 const functions = require("firebase-functions");
 const apiKey = functions.config().sendgrid.key;
 
-async function sendEmail(recipientEmail) {
+function formatDate(timestamp) {
+  const date = timestamp.toDate();
+  const year = date.getUTCFullYear();
+  const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+  const day = String(date.getUTCDate()).padStart(2, '0');
+  const hours = String(date.getUTCHours() + 9).padStart(2, '0'); 
+  const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  return `${year}/${month}/${day} ${hours % 12}:${minutes} ${ampm}`;
+}
+
+async function sendEmail(recipientEmail, name, expiredTime, certificationName) {
   if (!apiKey) {
     throw new Error("SENDGRID_API_KEY environment variable is not set");
   }
+
   const apiUrl = "https://api.sendgrid.com/v3/mail/send";
+  const formattedDate = formatDate(expiredTime);
 
   const data = {
     "personalizations": [
       {
-        "to": [
-          {"email": recipientEmail},
-        ],
+        "to": [{"email": recipientEmail}],
+        "dynamic_template_data": {
+          "name": name,
+          "expiredTime": formattedDate,
+          "certification_name": certificationName,
+        },
       },
     ],
     "from": {"email": "a.mason@pvp.co.jp"},
-    "template_id": "d-52714ade487b4b8ca6ae412c1ec53b62", // Use your template ID here
-
-    // The "content" field is not needed when using a template, but if your template expects dynamic values,
-    // you can set them with the "dynamic_template_data" field.
-    "dynamic_template_data": {
-      // "variableName": "value",   // Uncomment and add variables as required by your template
-    },
+    "template_id": "d-9b3d5bf1242a4f479fcd781ed225e3c9",
   };
 
   try {
