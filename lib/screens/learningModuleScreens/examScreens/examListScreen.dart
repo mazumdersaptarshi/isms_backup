@@ -27,6 +27,8 @@ class ExamListScreen extends StatefulWidget {
 
 class _ExamListScreenState extends State<ExamListScreen> {
   bool isExamsFetched = false;
+  late String userRole;
+
   @override
   void initState() {
     super.initState();
@@ -46,6 +48,8 @@ class _ExamListScreenState extends State<ExamListScreen> {
     if (loggedInState.currentUser == null) {
       return LoginPage();
     }
+
+    userRole = loggedInState.currentUserRole;
 
     CoursesProvider coursesProvider = context.watch<CoursesProvider>();
 
@@ -103,6 +107,19 @@ class _ExamListScreenState extends State<ExamListScreen> {
                 );
               },
             ),
+            SizedBox(height: 20),
+            if (userRole == "admin")
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ExamCreation(
+                                  examtype: EXAMTYPE.courseExam,
+                                  course: widget.course,
+                                )));
+                  },
+                  child: Text("Create exam")),
           ],
         ),
       );

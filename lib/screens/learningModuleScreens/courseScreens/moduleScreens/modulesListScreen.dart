@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
@@ -6,11 +7,13 @@ import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScree
 import 'package:isms/screens/learningModuleScreens/examScreens/examListScreen.dart';
 import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/userManagement/loggedInState.dart';
-import 'package:isms/utilityWidgets/modulesList/moduleListWidget.dart';
+import 'sharedWidgets/moduleTile.dart';
+import 'package:isms/sharedWidgets/leaningModulesAppBar.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../../projectModules/courseManagement/moduleManagement/moduleDataMaster.dart';
+import '../../../../themes/common_theme.dart';
 
 class ModulesListScreen extends StatefulWidget {
   ModulesListScreen({super.key, required this.course});
@@ -54,81 +57,105 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
 
     userRole = loggedInState.currentUserRole;
 
-    if (isModulesFetched) {
-      return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => CoursesDisplayScreen()));
-            },
-          ),
-          title: Text("${widget.course.name}"),
+    // compute the grid shape:
+    // requirements
+    int tileMinWidth = 250;
+    double tileRatio = 16 / 9;
+    // available width, in pixels
+    double screenWidth = MediaQuery.sizeOf(context).width;
+    // number of tiles that can fit vertically on the screen
+    int maxColumns = max((screenWidth/tileMinWidth).floor(), 1);
+    // number of tiles that have to fit on the screen
+    int itemCount = coursesProvider.allCourses.length;
+    // grid width, in tiles
+    int numberColumns = min(itemCount, maxColumns);
+    // grid width, in pixels
+    double gridWidth = screenWidth * numberColumns / maxColumns;
+
+    return Scaffold(
+      appBar: LearningModulesAppBar(
+        leadingWidget: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => CoursesDisplayScreen()));
+          },
         ),
-        body: Column(
-          children: [
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: widget.course.modules?.length,
-              itemBuilder: (BuildContext context, int moduleIndex) {
-                return ModuleListWidget(
-                  course: widget.course,
-                  module: widget.course.modules[moduleIndex],
-                  isModuleCompleted: true,
-                );
-              },
+        title: "${widget.course.name} / All Modules",
+      ),
+
+      body: Container(
+        margin: EdgeInsets.only(top: 20),
+        //padding: const EdgeInsets.all(16.0),
+        child: isModulesFetched
+          ? Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ExamListScreen(
+                              course: widget.course,
+                              examtype: EXAMTYPE.courseExam,
+                            ),
+                          ),
+                        );
+                      },
+                      child: Text("View course exams"),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 20),
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Container(
+                    width: gridWidth,
+                    child: GridView.builder(
+                      shrinkWrap: true,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: numberColumns,
+                        childAspectRatio: tileRatio,
+                      ),
+                      itemCount: itemCount,
+                      itemBuilder: (BuildContext context, int moduleIndex) {
+                        return ModuleTile(
+                          course: widget.course,
+                          module: widget.course.modules[moduleIndex],
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            )
+          : AlertDialog(
+              title: Text("Fetching modules"),
+              content: Align(
+                  alignment: Alignment.topCenter,
+                  child: CircularProgressIndicator()),
             ),
-            SizedBox(height: 20),
-            if (userRole == "admin")
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ExamCreation(
-                                  examtype: EXAMTYPE.courseExam,
-                                  course: widget.course,
-                                )));
-                  },
-                  child: Text("Create exam")),
-            SizedBox(height: 20),
-            ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ExamListScreen(
-                                course: widget.course,
-                                examtype: EXAMTYPE.courseExam,
-                              )));
-                },
-                child: Text("View course exams")),
-            SizedBox(height: 20),
-            if (userRole == "admin")
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                CreateModuleScreen(course: widget.course)));
-                  },
-                  child: Text("Add new module"))
-          ],
-        ),
-      );
-    } else {
-      return Container(
-        child: const AlertDialog(
-          title: Text("Fetching modules"),
-          content: Align(
-              alignment: Alignment.topCenter,
-              child: CircularProgressIndicator()),
-        ),
-      );
-    }
+      ),
+
+      floatingActionButton: userRole == 'admin'
+          ? FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            CreateModuleScreen(course: widget.course)));
+              },
+              backgroundColor:
+                  customTheme.floatingActionButtonTheme.backgroundColor,
+              child: Icon(Icons.add),
+            )
+          : null,
+    );
   }
 }
