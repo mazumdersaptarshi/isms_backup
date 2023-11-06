@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/utilityFunctions/authUtils.dart';
 import 'package:provider/provider.dart';

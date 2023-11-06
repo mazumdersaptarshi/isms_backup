@@ -4,11 +4,11 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:csv/csv.dart';
-import 'package:intl/intl.dart';
 import 'package:isms/models/course.dart';
-import 'package:to_csv/to_csv.dart' as exportCSV;
+import 'package:isms/utilityFunctions/csvDataHandler.dart';
 
 import '../models/customUser.dart';
+import '../utilityFunctions/exportAsCSV.dart';
 
 class DataExporter {
   String? collectionDataToDownload = 'users';
@@ -25,6 +25,8 @@ class DataExporter {
       csvData = getUsersDataAsCSV(querySnapshot);
     } else if (collectionDataToDownload == 'courses') {
       csvData = await getCoursesDataAsCSV(querySnapshot);
+    } else if (collectionDataToDownload == 'adminconsole') {
+      getCoursesProgressDataAsCSV(querySnapshot);
     }
     // Loop through the documents to populate the CSV data
 
@@ -38,7 +40,55 @@ class DataExporter {
     await Future.delayed(Duration(
         seconds:
             1)); //Introducing delay to prevent spamming of download button in case download finishes too fast
-    exportCSV.myCSV(csvData[0], csvData.sublist(1));
+    // exportAsCSV(csvData[0], csvData.sublist(1));
+  }
+
+  Future<void> getCoursesProgressDataAsCSV(QuerySnapshot querySnapshot) async {
+    var allCourseItemsCollection = FirebaseFirestore.instance
+        .collection('adminconsole')
+        .doc('allcourses')
+        .collection('allCourseItems');
+    var allCourseItemsData = await allCourseItemsCollection.get();
+
+    List<List<String>> csvData = [
+      [
+        'course_name',
+        'course_id',
+        'creation_date',
+        'course_started',
+        'course_completed'
+      ],
+    ];
+    for (var courseItemDoc in allCourseItemsData.docs) {
+      // Access fields inside the sub-document
+      var courseItem = courseItemDoc.data();
+
+      // Process or print the field data as needed
+      print(courseItem);
+      String courseName = courseItem['course_name'] ?? '';
+      String courseId = courseItem['course_id'] ?? '';
+      String creationDate = courseItem['createdAt'].toString() ?? '';
+      List<String> course_completed_users = [];
+      List<String> course_started_users = [];
+
+      for (var user in courseItem['course_started'] ?? []) {
+        course_started_users.add(user['username'] ?? '');
+      }
+      for (var user in courseItem['course_completed'] ?? []) {
+        course_completed_users.add(user['username'] ?? '');
+      }
+      List<String> row = [
+        courseName,
+        courseId,
+        creationDate,
+        course_started_users.toString(),
+        course_completed_users.toString()
+      ];
+
+      csvData.add(row);
+      exportAsCSV(csvData[0], csvData.sublist(1),
+          '$courseName -Progress Cumulative Report');
+    }
   }
 
   List<List<String>> getUsersDataAsCSV(QuerySnapshot querySnapshot) {
@@ -46,22 +96,71 @@ class DataExporter {
 
     List<List<String>> csvData = [
       // Define the headers
-      ['username', 'uid', 'email', 'courses_started', 'courses_completed']
+      ['username', 'email', 'courses_enrolled', 'courses_completed']
     ];
     print(allData);
     // Loop through the documents to populate the CSV data
+
     for (QueryDocumentSnapshot snapshot in allData) {
-      Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
-      CustomUser userInfo = CustomUser.fromMap(data);
+      List<String> currentUserCoursesEnrolled = [];
+      List<String> currentUserCoursesCompleted = [];
+      List<String> currentUserCoursesCompletedIDs = [];
+
+      Map<String, dynamic> dataMap = snapshot.data() as Map<String, dynamic>;
+      CustomUser userInfo = CustomUser.fromMap(dataMap);
+
+      List<List<String>> userCsvData = [
+        // Define the headers
+        [
+          'username',
+          'email',
+          'course_title',
+          'modules_started',
+          'is_course_completed',
+          'is_module_completed'
+        ]
+      ];
+      for (var course in dataMap['courses_completed']) {
+        String courseTitle = course['course_name'] ?? '';
+        String courseId = course['courseID'] ?? '';
+        currentUserCoursesCompleted.add(courseTitle);
+        currentUserCoursesCompletedIDs.add(courseId);
+      }
+      for (var course in dataMap['courses_started']) {
+        String courseTitle = course['course_name'] ?? '';
+        String courseId = course['courseID'] ?? '';
+
+        String courseCompleted = 'no';
+        if (currentUserCoursesCompletedIDs.contains(course['id'])) {
+          courseCompleted = 'yes';
+        }
+        currentUserCoursesEnrolled.add(courseTitle);
+
+        List<String> row = [
+          userInfo.username,
+          userInfo.email,
+          courseTitle,
+          '',
+          courseCompleted,
+          ''
+        ];
+        userCsvData.add(row);
+      }
+      exportAsCSV(userCsvData[0], userCsvData.sublist(1), userInfo.username);
 
       csvData.add([
         userInfo.username.toString(),
-        userInfo.uid.toString(),
         userInfo.email.toString(),
-        userInfo.courses_started.toString(),
-        userInfo.courses_completed.toString()
+        // userInfo.courses_started.toString(),
+        currentUserCoursesEnrolled.toString(),
+        // userInfo.courses_completed.toString()
+        currentUserCoursesCompleted.toString(),
       ]);
     }
+
+    String filePrefixName = 'Users_Overview';
+
+    exportAsCSV(csvData[0], csvData.sublist(1), filePrefixName);
     return csvData;
   }
 
@@ -85,21 +184,45 @@ class DataExporter {
 
     for (QueryDocumentSnapshot snapshot in allData) {
       var examsModulesDataMap = await getExamsModulesDataForCourse(snapshot);
-      Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
-      Course coursesInfo = Course.fromMap(data);
+      Map<String, dynamic> dataMap = snapshot.data() as Map<String, dynamic>;
+      Course coursesInfo = Course.fromMap(dataMap);
+
+      print(
+          'examsModulesDataMap: ${examsModulesDataMap['modulesData'].toString()}');
+      // var examsData = CSVDataHandler.mapsToReadableStringConverter(
+      //     examsModulesDataMap['examsData']!);
+      // var modulesData = CSVDataHandler.mapsToReadableStringConverter(
+      //     examsModulesDataMap['modulesData']!);
+      exportCourseOverviewDetails(dataMap, coursesInfo.name);
+      exportCourseModulesSlides(
+          examsModulesDataMap['modulesData']!, coursesInfo.name);
+      exportCourseModulesQuestions(
+          examsModulesDataMap['modulesData']!, coursesInfo.name);
+      exportCourseExams(examsModulesDataMap['examsData']!, coursesInfo.name);
 
       csvData.add([
         coursesInfo.name.toString(),
         coursesInfo.id.toString(),
-        examsModulesDataMap['examsData']
-            .toString(), //getting the exams data from the result returned by getExamsModulesDataForCourse
+        examsModulesDataMap['examsData'].toString(),
         coursesInfo.examsCount.toString(),
-        examsModulesDataMap['modulesData']
-            .toString(), //getting the modules data from the result returned by getExamsModulesDataForCourse
-        coursesInfo.modulesCount.toString(),
-        formattedDate(data['createdAt'])
-        // data['createdAt'].toString(),
+        examsModulesDataMap['modulesData'].toString(),
+        CSVDataHandler.timestampToReadableDate(dataMap['createdAt'])
       ]);
+      // print(modulesData);
+      // csvData.add([
+      //   // data['name'].toString(),
+      //   coursesInfo.name.toString(),
+      //   coursesInfo.id.toString(),
+      //
+      //   examsData, //getting the exams data from the result returned by getExamsModulesDataForCourse
+      //   coursesInfo.examsCount.toString(),
+      //   // examsModulesDataMap['modulesData']
+      //   //     .toString(), //getting the modules data from the result returned by getExamsModulesDataForCourse
+      //   modulesData,
+      //   coursesInfo.modulesCount.toString(),
+      //   CSVDataHandler.timestampToReadableDate(data['createdAt'])
+      //   // data['createdAt'].toString(),
+      // ]);
     }
     return csvData;
   }
@@ -132,22 +255,251 @@ class DataExporter {
           queryDocumentSnapshot.reference.collection("modules");
       QuerySnapshot modulesCollectionSnapshot = await modulesCollection.get();
       print('----------------------------------');
-      for (var doc in modulesCollectionSnapshot.docs) {
-        modulesData.add(doc.data());
-        // Perform operations using data
-      }
+
+      modulesData = await getModuleData(modulesCollectionSnapshot, modulesData);
     } catch (e) {
       print(e);
       modulesData = [];
     }
-    return {'examsData': examsData, 'modulesData': modulesData};
+    return {
+      'examsData': examsData,
+      'modulesData': modulesData,
+    };
   }
 
-  String formattedDate(Timestamp timestamp) {
-    DateTime dateTime = timestamp.toDate();
+  Future<List> getModuleData(QuerySnapshot modulesCollectionSnapshot,
+      List<dynamic> moduleDataType) async {
+    for (var doc in modulesCollectionSnapshot.docs) {
+      var docData = doc.data() as Map<String, dynamic>;
+      print('docData: ${doc.data()}');
+      DocumentReference docRef = doc.reference;
+      CollectionReference colRef = docRef.collection('slides');
+      QuerySnapshot subCollectionSnapshot = await colRef.get();
+      var moduleSlides = [];
+      for (QueryDocumentSnapshot subDoc in subCollectionSnapshot.docs) {
+        print(subDoc.data());
+        print('titlee: ${subDoc['title']}');
+        print('contentt: ${subDoc['content']}');
+        moduleSlides.add(subDoc.data());
+      }
+      print('moduleSlides: ${moduleSlides}');
+      docData!['slides'] = moduleSlides;
+      print('newDocData: ${docData['slides']}');
 
-    String formattedDate = DateFormat('yyyy-MM-dd – kk:mm:ss').format(dateTime);
-    print(formattedDate);
-    return formattedDate;
+      moduleDataType.add(docData);
+    }
+
+    for (var doc in modulesCollectionSnapshot.docs) {
+      var docData = doc.data() as Map<String, dynamic>;
+      print('docData: ${doc.data()}');
+      DocumentReference docRef = doc.reference;
+      CollectionReference colRef = docRef.collection('exams');
+      QuerySnapshot subCollectionSnapshot = await colRef.get();
+      var moduleExams = [];
+      for (QueryDocumentSnapshot subDoc in subCollectionSnapshot.docs) {
+        print(subDoc.data());
+        print('titlee: ${subDoc['title']}');
+        print('passing marks: ${subDoc['passing_marks']}');
+        moduleExams.add(subDoc.data());
+      }
+      print('moduleSlides: ${moduleExams}');
+      docData!['exams'] = moduleExams;
+      print('newDocData: ${docData['slides']}');
+
+      moduleDataType.add(docData);
+    }
+    return moduleDataType;
   }
+
+  // This downloads the details of the Courses separately
+
+  Future<void> exportCourseOverviewDetails(
+      Map<String, dynamic> dataMap, String courseName) async {
+    // QuerySnapshot querySnapshot;
+    // querySnapshot = await FirebaseFirestore.instance
+    //     .collection(collectionDataToDownload!)
+    //     .get();
+    // final List<QueryDocumentSnapshot> allData = querySnapshot.docs;
+
+    List<List<String>> csvData = [
+      // Define the headers
+      ['name', 'id', 'examsCount', 'modules', 'modulesCount', 'createdAt']
+    ];
+
+    // Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+    csvData.add([
+      // data['name'].toString(),
+      dataMap['name'].toString(),
+      dataMap['id'].toString(),
+      dataMap['examsCount'].toString(),
+      dataMap['modulesCount'].toString(),
+      CSVDataHandler.timestampToReadableDate(dataMap['createdAt'])
+      // data['createdAt'].toString(),
+    ]);
+    String filePrefixName = '${courseName}_Overview';
+
+    exportAsCSV(csvData[0], csvData.sublist(1), filePrefixName);
+  }
+
+  Future<void> exportCourseModulesSlides(List<dynamic> dataMap,
+      [String? courseName]) async {
+    List<List<String>> csvData = [];
+
+    List<String> headers = [
+      'moduleTitle',
+      'moduleDescription',
+      'moduleIndex',
+      'moduleId',
+      'moduleCreationDate',
+      'modulesCount',
+      'slideTitle',
+      'slideContent',
+      'slideIndex',
+      'slideId',
+      'slideCreationDate',
+      'slidesCount'
+    ];
+    csvData.add(headers);
+    int modulesCount = dataMap.length;
+
+    for (var module in dataMap) {
+      String moduleTitle = module['title'] ?? '';
+      String moduleDescription = module['contentDescription'] ?? '';
+      String moduleIndex = module['index'].toString() ?? '';
+
+      String moduleId = module['id'].toString() ?? '';
+      String moduleCreationDate = module['createdAt'].toString();
+
+      // Loop through each slide in the module
+      var slides = module['slides'] ?? [];
+      for (var slide in slides) {
+        String slideTitle = slide['title'] ?? '';
+        String slideContent = slide['content'] ?? '';
+        slideContent = slideContent
+            .replaceAll("<p>", "")
+            .replaceAll("</p>", "")
+            .replaceAll("<div><br></div>", ""); // Remove HTML tags
+        String slideIndex = slide['index'].toString() ?? '';
+        String slideId = slide['id'].toString() ?? '';
+        String slideCreationDate = slide['createdAt'].toString();
+        String slidesCount = slides.length.toString();
+
+        // Create the CSV row and add it to csvData
+        List<String> row = [
+          moduleTitle,
+          moduleDescription,
+          moduleIndex,
+          moduleId,
+          moduleCreationDate,
+          modulesCount.toString(),
+          slideTitle,
+          slideContent,
+          slideIndex,
+          slideId,
+          slideCreationDate,
+          slidesCount
+        ];
+
+        csvData.add(row);
+      }
+    }
+    String filePrefixName = '${courseName}_Modules_Slides';
+
+    exportAsCSV(csvData[0], csvData.sublist(1), filePrefixName!);
+  }
+
+  Future<void> exportCourseModulesQuestions(List<dynamic> dataMap,
+      [String? courseName]) async {
+    List<List<String>> csvData = [];
+    List<String> headers = [
+      'moduleTitle',
+      'moduleDescription',
+      'moduleIndex',
+      'moduleId',
+      'moduleCreationDate',
+      'questionId',
+      'questionText',
+      'options',
+      'passingMarks',
+    ];
+
+    csvData.add(headers);
+    for (var module in dataMap) {
+      String moduleTitle = module['title'] ?? '';
+      String moduleDescription = module['contentDescription'] ?? '';
+      String moduleIndex = module['index'].toString() ?? '';
+
+      String moduleId = module['id'].toString() ?? '';
+      String moduleCreationDate = module['createdAt'].toString();
+      var exams = module['exams'] ?? [];
+      for (var exam in exams) {
+        String passingMarks = exam['passing_marks'].toString() ?? '';
+        var questionAnswerSet = exam['question_answer_set'] ?? [];
+        print('questionAnswerSet: ${questionAnswerSet}');
+        for (var set in questionAnswerSet) {
+          String questionId = set['questionID'].toString() ?? '';
+          String questionText = set['questionName'] ?? '';
+          String options = set['options'].toString() ?? '';
+
+          print('${questionId}, ${options}');
+          List<String> row = [
+            moduleTitle,
+            moduleDescription,
+            moduleIndex,
+            moduleId,
+            moduleCreationDate,
+            questionId,
+            questionText,
+            options,
+            passingMarks,
+          ];
+          csvData.add(row);
+        }
+      }
+    }
+    String filePrefixName = '${courseName}_Modules_Questions';
+    exportAsCSV(csvData[0], csvData.sublist(1), filePrefixName!);
+  }
+
+  Future<void> exportCourseExams(List<dynamic> dataMap,
+      [String? courseName]) async {
+    List<List<String>> csvData = [];
+    List<String> headers = [
+      'examIndex',
+      'title',
+      'examId',
+      'questionId',
+      'question',
+      'options',
+      'passing_marks',
+    ];
+    csvData.add(headers);
+    for (var exam in dataMap) {
+      String index = exam['index'].toString() ?? '';
+      String title = exam['title'] ?? '';
+      String examId = exam['exam_ID'] ?? '';
+      String passingMarks = exam['passing_marks'].toString() ?? '';
+      for (var setItem in exam['question_answer_set']) {
+        String question = setItem['questionName'] ?? '';
+        String questionId = setItem['questionID'] ?? '';
+        String options = setItem['options'].toString() ?? '';
+
+        List<String> row = [
+          index,
+          title,
+          examId,
+          questionId,
+          question,
+          options,
+          passingMarks,
+        ];
+        csvData.add(row);
+      }
+    }
+    String filePrefixName = '${courseName}_Course_Exams';
+    exportAsCSV(csvData[0], csvData.sublist(1), filePrefixName!);
+  }
+
+  Future<void> exportCoursesProgressDetails(
+      Map<String, dynamic> dataMap, String fileName) async {}
 }
