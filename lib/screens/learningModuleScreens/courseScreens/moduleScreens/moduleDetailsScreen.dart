@@ -80,202 +80,101 @@ class _ModuleDetailsState extends State<ModuleDetails> {
         ),
         title: "${widget.course.name} > ${widget.module.title}",
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+
+      body: Container(
+        padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(
-            "${widget.module.title}",
-              style: ModuleDescStyle,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ModuleExamListScreen(
+                          course: widget.course,
+                          examtype: EXAMTYPE.moduleExam,
+                          module: widget.module,
+                        )
+                      )
+                    );
+                  },
+                  child: Text("View module exams"),
+                ),
+                // TODO move the slides loading logic here
+                //if (/*isSlidesFetched && isSlidesListEmpty ==*/ false)
+                //else
+                //  Container(
+                //    height: 100,
+                //    child: Center(
+                //      child: Column(
+                //        children: [
+                //          Text("Loading slides"),
+                //          CircularProgressIndicator(),
+                //        ],
+                //      ),
+                //    ),
+                //  ),
+                ElevatedButton(
+                  style: customElevatedButtonStyle(),
+                  onPressed: () async {
+                    await loggedInState.setUserCourseStarted(
+                      courseDetails: {
+                        "courseID": widget.course.id,
+                        "course_name": widget.course.name
+                      });
+                    await loggedInState.setUserCourseModuleStarted(
+                      courseDetails: {
+                        "courseID": widget.course.id,
+                        "course_name": widget.course.name
+                      },
+                      coursesProvider: coursesProvider,
+                      course: widget.course,
+                      module: widget.module);
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SlidesDisplayScreen(
+                          slides: widget.module!.slides!,
+                          course: widget.course,
+                          module: widget.module,
+                        ),
+                      ),
+                    );
+                  },
+                  child: Text('Study Module'),
+                ),
+              ],
             ),
-            SizedBox(height: 20),
-            Spacer(),
+            SizedBox(height: 20.0),
             Container(
               padding: EdgeInsets.all(16.0),
               decoration: BoxDecoration(
-                color: Colors.orange[200],
+                color: Theme.of(context).colorScheme.secondaryContainer,
                 borderRadius: BorderRadius.circular(20.0),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
+                  "${widget.module.title}",
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSecondaryContainer,
+                      fontSize: 22,
+                    ),
+                  ),
+                  SizedBox(height: 20.0),
+                  Text(
                     widget.module.contentDescription,
                     style: TextStyle(
-                      color: Colors.black,
+                      color: Theme.of(context).colorScheme.onSecondaryContainer,
                       fontSize: 18,
                     ),
                   ),
-                  SizedBox(height: 20.0),
-                  // TODO move the slides loading logic into
-                  // SlidesDisplayScreen
-                  if (isSlidesFetched && isSlidesListEmpty == false)
-                    ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.orange),
-                        foregroundColor:
-                        MaterialStateProperty.all<Color>(Colors.black),
-                      ),
-                      onPressed: () async {
-                        await loggedInState.setUserCourseStarted(
-                            courseDetails: {
-                              "courseID": widget.course.id,
-                              "course_name": widget.course.name
-                            });
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SlidesDisplayScreen(
-                                      slides: widget.module!.slides!,
-                                      course: widget.course,
-                                      module: widget.module,
-                                    )));
-                      },
-                      child: Text('Study Module', style: commonTextStyle),
-                    )
-                  else
-                    Container(
-                      height: 100,
-                      child: Center(
-                        child: Column(
-                          children: [
-                            Text("Loading slides"),
-                            CircularProgressIndicator(),
-                          ],
-                        ),
-                      ),
-                    ),
-                  SizedBox(height: 20.0),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ModuleExamListScreen(
-                                  course: widget.course,
-                                  examtype: EXAMTYPE.moduleExam,
-                                  module: widget.module,
-                                )));
-                    },
-                    child: Text('Module Exams', style: commonTextStyle),
-                    style: ButtonStyle(
-                      backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.orange),
-                      foregroundColor:
-                      MaterialStateProperty.all<Color>(Colors.black),
-                    ),
-                  ),
-
-                  //SizedBox(height: 20),
-                  //if (userRole == "admin")
-                  //  SizedBox(
-                  //    width: 200,
-                  //    child: ElevatedButton(
-                  //      style: customElevatedButtonStyle(),
-                  //      onPressed: () {
-                  //        Navigator.push(
-                  //            context,
-                  //            MaterialPageRoute(
-                  //                builder: (context) => CreateSlideScreen(
-                  //                    course: widget.course,
-                  //                    module: widget.module)));
-                  //      },
-                  //      child:
-                  //          Text('Add new slide', style: commonTextStyle),
-                  //    ),
-                  //  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 20.0),
-            // Study Module button aligned to the bottom and centered
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Column(
-                children: [
-                  if (isSlidesFetched && isSlidesListEmpty == false)
-                    SizedBox(
-                      width: 200,
-                      child: ElevatedButton(
-                        style: customElevatedButtonStyle(),
-                        onPressed: () async {
-                          await loggedInState.setUserCourseStarted(
-                              courseDetails: {
-                                "courseID": widget.course.id,
-                                "course_name": widget.course.name
-                              });
-                          await loggedInState.setUserCourseModuleStarted(
-                              courseDetails: {
-                                "courseID": widget.course.id,
-                                "course_name": widget.course.name
-                              },
-                              coursesProvider: coursesProvider,
-                              course: widget.course,
-                              module: widget.module);
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SlidesDisplayScreen(
-                                        slides: widget.module!.slides!,
-                                        course: widget.course,
-                                        module: widget.module,
-                                      )));
-                        },
-                        child: Text('Study Module', style: commonTextStyle),
-                      ),
-                    )
-                  else
-                    Container(
-                      height: 100,
-                      child: Center(
-                        child: Column(
-                          children: [
-                            Text("Loading slides"),
-                            CircularProgressIndicator(),
-                          ],
-                        ),
-                      ),
-                    ),
-                  SizedBox(height: 20),
-                  if (userRole == "admin")
-                    SizedBox(
-                      width: 200,
-                      child: ElevatedButton(
-                        style: customElevatedButtonStyle(),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ExamCreation(
-                                        course: widget.course,
-                                        examtype: EXAMTYPE.moduleExam,
-                                        module: widget.module,
-                                      )));
-                        },
-                        child:
-                            Text('Create new exam', style: commonTextStyle),
-                      ),
-                    ),
-                  SizedBox(height: 20),
-                  if (userRole == "admin")
-                    SizedBox(
-                      width: 200,
-                      child: ElevatedButton(
-                        style: customElevatedButtonStyle(),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => CreateSlideScreen(
-                                      course: widget.course,
-                                      module: widget.module)));
-                        },
-                        child:
-                            Text('Add new slide', style: commonTextStyle),
-                      ),
-                    ),
                 ],
               ),
             ),
