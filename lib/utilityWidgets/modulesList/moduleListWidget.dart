@@ -7,17 +7,20 @@ import '../../models/course.dart';
 import '../../projectModules/courseManagement/coursesProvider.dart';
 import '../../screens/learningModuleScreens/courseScreens/moduleScreens/moduleExamsListScreen.dart';
 import '../../screens/learningModuleScreens/examScreens/examCreationScreen.dart';
+import '../../userManagement/loggedInState.dart';
 import 'moduleExpandedItem.dart';
 
 class ModuleListWidget extends StatefulWidget {
   bool isModuleCompleted;
+  bool isModuleStarted;
   Course course;
   Module module;
   ModuleListWidget(
       {super.key,
       this.isModuleCompleted = false,
       required this.course,
-      required this.module});
+      required this.module,
+      this.isModuleStarted = false});
 
   @override
   _ModuleListWidgetState createState() => _ModuleListWidgetState();
@@ -26,6 +29,8 @@ class ModuleListWidget extends StatefulWidget {
 class _ModuleListWidgetState extends State<ModuleListWidget> {
   @override
   Widget build(BuildContext context) {
+    LoggedInState loggedInState = context.watch<LoggedInState>();
+
     return ExpansionTile(
       title: Row(
         children: [
@@ -59,19 +64,20 @@ class _ModuleListWidgetState extends State<ModuleListWidget> {
                         course: widget.course, module: widget.module)));
           },
         ),
-        ModuleExpandedItem(
-          info: {'info_title': "Quiz", 'info_status': false},
-          onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ModuleExamListScreen(
-                          course: widget.course,
-                          examtype: EXAMTYPE.moduleExam,
-                          module: widget.module,
-                        )));
-          },
-        ),
+        if (widget.isModuleStarted)
+          ModuleExpandedItem(
+            info: {'info_title': "Quiz", 'info_status': false},
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ModuleExamListScreen(
+                            course: widget.course,
+                            examtype: EXAMTYPE.moduleExam,
+                            module: widget.module,
+                          )));
+            },
+          ),
       ],
     );
   }

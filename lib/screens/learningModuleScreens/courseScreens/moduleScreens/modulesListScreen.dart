@@ -9,6 +9,7 @@ import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/utilityWidgets/modulesList/moduleListWidget.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../models/module.dart';
 import '../../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../../projectModules/courseManagement/moduleManagement/moduleDataMaster.dart';
 
@@ -34,6 +35,18 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
   @override
   void initState() {
     super.initState();
+  }
+
+  bool checkIfModuleStarted(
+      {required LoggedInState loggedInState, required Module module}) {
+    bool flag = false;
+    loggedInState.loggedInUser!.courses_started.forEach((course_started) {
+      course_started["modules_started"].forEach((module_started) {
+        print("CHECKING ${module_started["module_name"]},, ${module.title}");
+        if (module_started["module_name"] == module.title) flag = true;
+      });
+    });
+    return flag;
   }
 
   @override
@@ -77,6 +90,9 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
                   course: widget.course,
                   module: widget.course.modules[moduleIndex],
                   isModuleCompleted: true,
+                  isModuleStarted: checkIfModuleStarted(
+                      loggedInState: loggedInState,
+                      module: widget.course.modules[moduleIndex]),
                 );
               },
             ),

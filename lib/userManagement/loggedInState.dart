@@ -398,29 +398,22 @@ class LoggedInState with ChangeNotifier {
                       });
 
                       if (examFlag == false) {
-                        // print(
-                        //     " JJJJJJJJJJ ${courseDetails},, ${started_module} ,, ${module.title}");
-
                         started_module["exams_completed"].add(examIndex);
-                        // print(
-                        //     "YUP ADDED EXAM ,,${started_module},,.. ${started_module["exams_completed"]}");
-                        List tempList = List.from(loggedInUser!
+
+                        List modules_started_copy = List.from(loggedInUser!
                             .courses_started[i]["modules_started"]);
-                        int tempInd = 0;
-                        tempList.forEach((m) {
+                        int modules_started_index = 0;
+                        modules_started_copy.forEach((m) {
                           if (m["module_name"] ==
                               started_module["module_name"]) {
                             m = started_module;
                             loggedInUser!.courses_started[i]["modules_started"]
-                                [tempInd] = m;
+                                [modules_started_index] = m;
                             print("MMMMMMMM ${m}");
                           }
-                          tempInd++;
+                          modules_started_index++;
                         });
 
-                        // print(" STARTTTEDDD MODULEE ${started_module}");
-                        print(
-                            "COURSESSS STARTTTEDDD  ${loggedInUser!.courses_started}");
                         _userDataGetterMaster.setUserData();
                         if (started_module["exams_completed"].length >=
                             module.exams?.length) {
