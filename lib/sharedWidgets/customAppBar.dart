@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/utilityFunctions/authUtils.dart';
 import 'package:provider/provider.dart';
@@ -15,6 +16,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      surfaceTintColor: Colors.white,
       title: Row(
         children: [
           const Text('ISMS'),
@@ -29,6 +31,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               icon: Icon(Icons.logout))
         ],
       ),
+      backgroundColor: Colors.white,
+      titleTextStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
+          color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
+      iconTheme:
+          Theme.of(context).primaryIconTheme.copyWith(color: Colors.black),
     );
   }
 
