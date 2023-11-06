@@ -21,8 +21,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           const Spacer(),
           buildUserAvatar(context),
           IconButton(
-              onPressed: () {
-                LoggedInState.logout();
+              onPressed: () async {
+                await LoggedInState.logout();
                 Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) => LoginPage()));
               },

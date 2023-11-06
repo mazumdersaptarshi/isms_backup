@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 import 'package:isms/projectModules/notificationModules/initLinkHandler.dart';
 import 'package:isms/screens/adminScreens/AdminConsole/adminConsolePage.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
+import 'package:isms/screens/reminderScreen.dart';
 import 'package:isms/screens/userInfo/userProfilePage.dart';
 import 'package:isms/sharedWidgets/customAppBar.dart';
 import 'package:isms/userManagement/loggedInState.dart';
@@ -29,22 +31,30 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-    InitLinkHandler.initUniLinks(context: context);
+    InitLinkHandler.initLinks(context: context);
   }
 
-  void setExpiryDate(String currentUserEmail, String currentUserName) async {
-    await FirebaseFirestore.instance
+  // Utility function to check and potentially create the admin document
+  Future<void> checkAndCreateUserDocument(
+    String uid,
+    String currentUserEmail,
+    String currentUserName,
+  ) async {
+    DocumentReference adminDocRef = FirebaseFirestore.instance
         .collection('adminconsole')
         .doc('allAdmins')
         .collection('admins')
-        .doc(
-            currentUserName) // replace 'username' with the logged in user's name
-        .set({
-      'createdTime': Timestamp.now(),
-      'expiredTime': Timestamp.fromDate(_expiryDate!),
-      'reminderSent': false,
-      'email': currentUserEmail, // replace with the user's email
-    });
+        .doc(uid);
+
+    bool docExists = await adminDocRef.get().then((doc) => doc.exists);
+
+    if (!docExists) {
+      await adminDocRef.set({
+        'email': currentUserEmail,
+        'name': currentUserName,
+        'certifications': [],
+      });
+    }
   }
 
   @override
@@ -208,33 +218,29 @@ class _HomePageState extends State<HomePage> {
                                   borderRadius: BorderRadius.circular(10))),
                         ),
                         onPressed: () async {
-                          DateTime? pickedDate = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime.now(),
-                              lastDate: DateTime(2101));
-
-                          if (pickedDate != null) {
-                            final TimeOfDay? pickedTime = await showTimePicker(
-                              context: context,
-                              initialTime: TimeOfDay.now(),
+                          if (userRole == "admin") {
+                            await checkAndCreateUserDocument(
+                              loggedInState.currentUserUid!,
+                              loggedInState.currentUserEmail!,
+                              loggedInState.currentUserName!,
                             );
-
-                            if (pickedTime != null) {
-                              setState(() {
-                                _expiryDate = DateTime(
-                                    pickedDate.year,
-                                    pickedDate.month,
-                                    pickedDate.day,
-                                    pickedTime.hour,
-                                    pickedTime.minute);
-                                setExpiryDate(loggedInState.currentUserEmail!,
-                                    loggedInState.currentUserName!);
-                              });
-                            }
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ReminderScreen()),
+                            );
+                          } else {
+                            Fluttertoast.showToast(
+                                msg: "You are not admin",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.CENTER,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: Colors.red,
+                                textColor: Colors.white,
+                                fontSize: 16.0);
                           }
                         },
-                        child: const Text('Set Expiry date'),
+                        child: const Text('Set Reminders'),
                       ),
                   ],
                 ),
