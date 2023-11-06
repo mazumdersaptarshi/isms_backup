@@ -84,8 +84,6 @@ class UserDataGetterMaster {
   }
 
   setUserData() async {
-    print(
-        "SETTING NEW USER INFO ${loggedInUser!.toMap()} at ${loggedInUser?.uid}");
     FirebaseFirestore.instance
         .collection("users")
         .doc(loggedInUser!.uid)
