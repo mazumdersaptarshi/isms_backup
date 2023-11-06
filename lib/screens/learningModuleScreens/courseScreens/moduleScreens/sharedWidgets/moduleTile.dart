@@ -13,10 +13,15 @@ import 'package:isms/utilityWidgets/modulesList/moduleExpandedItem.dart';
 class ModuleTile extends StatelessWidget {
   Course course;
   Module module;
+  bool isModuleStarted;
+  bool isModuleCompleted;
+
   ModuleTile(
       {super.key,
       required this.course,
-      required this.module});
+      required this.module,
+      this.isModuleStarted = false,
+      this.isModuleCompleted = false});
 
   @override
   Widget build(BuildContext context) {
@@ -30,34 +35,47 @@ class ModuleTile extends StatelessWidget {
           color: Colors.white,
           child: Padding(
             padding: const EdgeInsets.all(10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: Stack(
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  child: Image.network(
-                    "https://www.shutterstock.com/image-vector/coding-vector-illustration-600w-687456625.jpg",
-                    height: 120,
-                    width: 120,
-                    fit: BoxFit.cover,
+                Positioned( // will be positioned in the top right of the container
+                  top: 0,
+                  left: 0,
+                  child: Icon(
+                    isModuleCompleted
+                    ? Icons.check_circle
+                    : (isModuleStarted ? Icons.circle : Icons.unpublished),
                   ),
                 ),
-                Expanded(
-                  child: Row(
-                    children: [
-                      SizedBox(width: 20),
-                      Expanded(
-                        child: Text(module.title,
-                        style: commonTextStyle.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black),
-                        ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      child: Image.network(
+                        "https://www.shutterstock.com/image-vector/coding-vector-illustration-600w-687456625.jpg",
+                        height: 120,
+                        width: 120,
+                        fit: BoxFit.cover,
                       ),
-                    ],
-                  ),
-                )
-              ],
-            ),
+                    ),
+                    Expanded(
+                      child: Row(
+                        children: [
+                          SizedBox(width: 20),
+                              Expanded(
+                                child: Text(module.title,
+                                style: commonTextStyle.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black),
+                                ),
+                              ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ]
+            )
           ),
         ),
         onTap: () {
