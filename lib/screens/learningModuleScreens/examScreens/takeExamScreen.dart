@@ -173,6 +173,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
                     courseDetails: {
                       "courseID": widget.course.id,
                       "course_name": widget.course.name,
+                      "module_title": widget.module?.title,
                     },
                     course: widget.course,
                     module: widget.module!,
@@ -180,10 +181,10 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
                     examIndex: widget.exam.index,
                   );
 
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => HomePage()));
+                  // Navigator.pushReplacement(context,
+                  //     MaterialPageRoute(builder: (context) => HomePage()));
                 },
-                child: Text("Mark Module as Done"),
+                child: Text("Mark Quiz as Done"),
               ),
             ElevatedButton(
               onPressed: () => setState(() {

@@ -256,12 +256,13 @@ class LoggedInState with ChangeNotifier {
       required Course course,
       required Module module}) {
     bool flag = false;
+    print("HERRRRRRRRRRREEEEEEE");
     if (loggedInUser!.courses_started.isNotEmpty) {
       loggedInUser!.courses_started.forEach((course) {
         try {
           if (course['courseID'] == courseDetails['courseID']) {
             course["modules_completed"].forEach((element) {
-              if (element == module.title) {
+              if (element["module_name"] == module.title) {
                 print("SETTING FLAG TRUE coz ${element}");
                 flag = true;
               }
@@ -284,10 +285,14 @@ class LoggedInState with ChangeNotifier {
                 i++) {
               var element = course_started['modules_completed'][i];
               if (element == module.title) {
+                print(
+                    "IN HERE BRO ${element["module_name"]},, ${module.title}");
                 flag = true;
               }
             }
             if (flag == false) {
+              print(
+                  "FLAG IS FALSE AS MODULE IS DEF NOT COMPELTED ${module.title}");
               course_started['modules_completed'].add(module.title);
             }
           } else {
@@ -314,7 +319,7 @@ class LoggedInState with ChangeNotifier {
         try {
           if (course['courseID'] == courseDetails['courseID']) {
             course["modules_started"].forEach((element) {
-              if (element == module.title) {
+              if (element["module_name"] == module.title) {
                 print("SETTING FLAG TRUE coz ${element}");
                 flag = true;
               }
@@ -334,17 +339,19 @@ class LoggedInState with ChangeNotifier {
           if (course_started['modules_started'] != null) {
             for (int i = 0; i < course_started['modules_started'].length; i++) {
               var element = course_started['modules_started'][i];
-              if (element == module.title) {
+              if (element["module_name"] == module.title) {
                 flag_2 = true;
               }
             }
             if (flag_2 == false) {
-              course_started['modules_started'].add(module.title);
+              course_started['modules_started']
+                  .add({"module_name": module.title});
             }
           } else {
             print("COMPLETED MODULE IS NULL< SO HERE");
             course_started['modules_started'] = [];
-            course_started['modules_started'].add(module.title);
+            course_started['modules_started']
+                .add({"module_name": module.title});
           }
         }
       });
@@ -362,78 +369,82 @@ class LoggedInState with ChangeNotifier {
       required int examIndex}) {
     bool flag = false;
     if (loggedInUser!.courses_started.isNotEmpty) {
-      loggedInUser!.courses_started.forEach((course) {
+      var course_started;
+      int index = 0;
+      for (int i = 0; i < loggedInUser!.courses_started.length; i++) {
+        course_started = loggedInUser!.courses_started[i];
         try {
-          if (course['courseID'] == courseDetails['courseID']) {
-            course["modules_started"].forEach((course_module) {
-              if (course_module == module.title) {
-                flag = true;
+          if (course_started['courseID'] == courseDetails['courseID']) {
+            course_started["modules_started"].forEach((course_module) {
+              if (course_module["module_name"] == module.title) {
+                if (course_started["modules_started"] != null) {
+                  int moduleStartedIndex = 0;
+                  course_started["modules_started"].forEach((started_module) {
+                    started_module = started_module as Map<String, dynamic>;
+
+                    if (started_module["module_name"] == module.title) {
+                      bool examFlag = false;
+
+                      if (started_module["exams_completed"] == null) {
+                        started_module = {
+                          ...started_module,
+                          ...{"exams_completed": []}
+                        };
+                      }
+
+                      started_module["exams_completed"]
+                          .forEach((exam_completed) {
+                        if (exam_completed == examIndex) examFlag = true;
+                      });
+
+                      if (examFlag == false) {
+                        // print(
+                        //     " JJJJJJJJJJ ${courseDetails},, ${started_module} ,, ${module.title}");
+
+                        started_module["exams_completed"].add(examIndex);
+                        // print(
+                        //     "YUP ADDED EXAM ,,${started_module},,.. ${started_module["exams_completed"]}");
+                        List tempList = List.from(loggedInUser!
+                            .courses_started[i]["modules_started"]);
+                        int tempInd = 0;
+                        tempList.forEach((m) {
+                          if (m["module_name"] ==
+                              started_module["module_name"]) {
+                            m = started_module;
+                            loggedInUser!.courses_started[i]["modules_started"]
+                                [tempInd] = m;
+                            print("MMMMMMMM ${m}");
+                          }
+                          tempInd++;
+                        });
+
+                        // print(" STARTTTEDDD MODULEE ${started_module}");
+                        print(
+                            "COURSESSS STARTTTEDDD  ${loggedInUser!.courses_started}");
+                        _userDataGetterMaster.setUserData();
+                        if (started_module["exams_completed"].length >=
+                            module.exams?.length) {
+                          setUserCourseModuleCompleted(
+                              courseDetails: courseDetails,
+                              coursesProvider: coursesProvider,
+                              course: course,
+                              module: module);
+                        } else
+                          print("PRINT BEFORE SET ${course_started}");
+                        index = 1;
+                      }
+                    }
+                    moduleStartedIndex++;
+                  });
+                } else
+                  course_started["modules_started"] = [];
               }
             });
           }
         } catch (e) {}
-      });
+      }
     }
-    if (flag == false) {
-      print("FLAG IS FALSE ${courseDetails}");
 
-      _userDataGetterMaster.loggedInUser?.courses_started
-          .forEach((course_started) {
-        if (course_started['courseID'] == course.id) {
-          int noOfModuleExamsCompleted = 0;
-          bool flag_2 = false;
-          if (course_started['modules_started'] != null) {
-            for (int i = 0; i < course_started['modules_started'].length; i++) {
-              var course_module = course_started['modules_started'][i];
-
-              if (course_module["module_name"] == module.title) {
-                noOfModuleExamsCompleted = 0;
-                if (course_module["exams_completed"] != null &&
-                    course_module["exams_completed"].isNotEmpty)
-                  course_module["exams_completed"].forEach((module_exam) {
-                    if (module_exam == examIndex) flag_2 = true;
-                    noOfModuleExamsCompleted++;
-                  });
-              }
-              if (flag_2 == false) {
-                if (course_module['exams_completed'] == null)
-                  course_module['exams_completed'] = <Map<String, dynamic>>[];
-                course_module['exams_completed'].add(examIndex);
-                noOfModuleExamsCompleted++;
-                print("NO OF EXAMS $noOfModuleExamsCompleted ,, ");
-                if (noOfModuleExamsCompleted >= module.exams!.length) {
-                  setUserCourseModuleCompleted(
-                      courseDetails: courseDetails,
-                      coursesProvider: coursesProvider,
-                      course: course,
-                      module: module);
-                }
-              }
-            }
-          } else {
-            print("COMPLETED EXAMS IS NULL< SO HERE");
-            course_started['modules_started'] = <Map<dynamic, dynamic>>[];
-
-            course_started['modules_started']
-                .add({"module_name": module.title, "exams_completed": []});
-
-            course_started['modules_started'][0]['exams_completed']
-                .addAll([examIndex]);
-            noOfModuleExamsCompleted++;
-            if (noOfModuleExamsCompleted >= module.exams!.length) {
-              setUserCourseModuleCompleted(
-                  courseDetails: courseDetails,
-                  coursesProvider: coursesProvider,
-                  course: course,
-                  module: module);
-            }
-          }
-        }
-      });
-
-      print(_userDataGetterMaster.loggedInUser!.courses_started);
-      _userDataGetterMaster.setUserData();
-    }
     notifyListeners();
   }
 
