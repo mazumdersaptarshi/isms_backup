@@ -75,6 +75,13 @@ class _AdminActionDropdownState extends State<AdminActionDropdown> {
                   },
                   child: Text('Courses Data'))
               : CircularProgressIndicator(),
+          ElevatedButton(
+              onPressed: () async {
+                DataExporter dataExporter =
+                    DataExporter(collectionDataToDownload: 'adminconsole');
+                await dataExporter.downloadCSV();
+              },
+              child: Text('Courses Progress Data'))
         ],
       );
     } else {

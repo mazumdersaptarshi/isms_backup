@@ -46,10 +46,23 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
     // TODO de-enable
     //loggedInState.loggedInUser!.courses_started.forEach((course_started) {
     //  course_started["modules_started"].forEach((module_started) {
-    //    print("CHECKING ${module_started["module_name"]},, ${module.title}");
     //    if (module_started["module_name"] == module.title) flag = true;
     //  });
     //});
+
+    return flag;
+  }
+
+  bool checkIfAllModulesCompleted({required LoggedInState loggedInState}) {
+    bool flag = false;
+
+    loggedInState.loggedInUser!.courses_started.forEach((course_started) {
+      if (course_started["course_name"] == widget.course.name) {
+        if (course_started["modules_completed"] != null &&
+            course_started["modules_completed"].length >=
+                widget.course.modulesCount) flag = true;
+      }
+    });
     return flag;
   }
 
@@ -57,7 +70,8 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
     CoursesProvider coursesProvider = context.watch<CoursesProvider>();
-
+    bool isALlModulesCompleted =
+        checkIfAllModulesCompleted(loggedInState: loggedInState);
     widget.moduleDataMaster = ModuleDataMaster(
         course: widget.course, coursesProvider: coursesProvider);
 
@@ -109,20 +123,21 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ExamListScreen(
-                              course: widget.course,
-                              examtype: EXAMTYPE.courseExam,
+                    if (isALlModulesCompleted)
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ExamListScreen(
+                                course: widget.course,
+                                examtype: EXAMTYPE.courseExam,
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                      child: Text("View course exams"),
-                    ),
+                          );
+                        },
+                        child: Text("View course exams"),
+                      ),
                   ],
                 ),
                 SizedBox(height: 20),

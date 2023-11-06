@@ -104,7 +104,7 @@ class LoggedInState with ChangeNotifier {
     return [];
   }
 
-  setUserCourseStarted({required Map<String, dynamic> courseDetails}) {
+  setUserCourseStarted({required Map<String, dynamic> courseDetails}) async {
     bool flag = false;
     if (loggedInUser!.courses_started.isNotEmpty) {
       loggedInUser!.courses_started.forEach((course) {
@@ -117,8 +117,8 @@ class LoggedInState with ChangeNotifier {
     }
     if (flag == false) {
       loggedInUser?.courses_started.add(courseDetails);
-      _userDataGetterMaster.setUserData();
-      setAdminConsoleCourseMap(
+      await _userDataGetterMaster.setUserData();
+      await setAdminConsoleCourseMap(
           courseName: courseDetails["course_name"],
           courseMapFieldToUpdate: "course_started",
           username: loggedInUser!.username,
@@ -127,7 +127,7 @@ class LoggedInState with ChangeNotifier {
     notifyListeners();
   }
 
-  setUserCourseCompleted({required Map<String, dynamic> courseDetails}) {
+  setUserCourseCompleted({required Map<String, dynamic> courseDetails}) async {
     bool flag = false;
     if (loggedInUser!.courses_completed.isNotEmpty) {
       loggedInUser!.courses_completed.forEach((course) {
@@ -140,8 +140,8 @@ class LoggedInState with ChangeNotifier {
     }
     if (flag == false) {
       loggedInUser?.courses_completed.add(courseDetails);
-      _userDataGetterMaster.setUserData();
-      setAdminConsoleCourseMap(
+      await _userDataGetterMaster.setUserData();
+      await setAdminConsoleCourseMap(
           courseName: courseDetails["course_name"],
           courseMapFieldToUpdate: "course_completed",
           username: loggedInUser!.username,
@@ -150,11 +150,11 @@ class LoggedInState with ChangeNotifier {
     notifyListeners();
   }
 
-  setUserCourseExamCompleted(
+  Future<bool> setUserCourseExamCompleted(
       {required Map<String, dynamic> courseDetails,
       required CoursesProvider coursesProvider,
       required Course course,
-      required int examIndex}) {
+      required int examIndex}) async {
     int noOfExamsCompleted = 0;
     bool flag = false;
     print('rdcf: ${loggedInUser}');
@@ -208,31 +208,33 @@ class LoggedInState with ChangeNotifier {
       });
       print(loggedInUser!.courses_started);
       noOfExamsCompleted++;
-      _userDataGetterMaster.setUserData();
+      await _userDataGetterMaster.setUserData();
     }
     int noOfExams = course.exams!.length;
     print("noOfExamsCompleted ${noOfExamsCompleted},, ${noOfExams}");
-    if (noOfExamsCompleted >= noOfExams) {
-      setUserCourseCompleted(courseDetails: courseDetails);
-    }
+    // if (noOfExamsCompleted >= noOfExams) {
+    //   await setUserCourseCompleted(courseDetails: courseDetails);
+    // }
     notifyListeners();
+    return noOfExamsCompleted >= noOfExams;
   }
 
   setUserCourseModuleCompleted(
       {required Map<String, dynamic> courseDetails,
       required CoursesProvider coursesProvider,
       required Course course,
-      required Module module}) {
+      required Module module}) async {
     bool flag = false;
     print("HERRRRRRRRRRREEEEEEE");
     if (loggedInUser!.courses_started.isNotEmpty) {
       loggedInUser!.courses_started.forEach((course) {
         try {
           if (course['courseID'] == courseDetails['courseID']) {
-            course["modules_completed"].forEach((element) {
+            course["modules_completed"].forEach((element) async {
               if (element["module_name"] == module.title) {
                 print("SETTING FLAG TRUE coz ${element}");
                 flag = true;
+                await _userDataGetterMaster.setUserData();
               }
             });
           }
@@ -240,12 +242,9 @@ class LoggedInState with ChangeNotifier {
       });
     }
     if (flag == false) {
-      print("FLAG IS FALSE ${courseDetails}");
-
       _userDataGetterMaster.loggedInUser?.courses_started
           .forEach((course_started) {
         if (course_started['courseID'] == course.id) {
-          print("COMPLETED MODULEE ${course_started['modules_completed']}");
           bool flag = false;
           if (course_started['modules_completed'] != null) {
             for (int i = 0;
@@ -253,25 +252,23 @@ class LoggedInState with ChangeNotifier {
                 i++) {
               var element = course_started['modules_completed'][i];
               if (element == module.title) {
-                print(
-                    "IN HERE BRO ${element["module_name"]},, ${module.title}");
                 flag = true;
               }
             }
             if (flag == false) {
-              print(
-                  "FLAG IS FALSE AS MODULE IS DEF NOT COMPELTED ${module.title}");
-              course_started['modules_completed'].add(module.title);
+              course_started['modules_completed']
+                  .add({"module_name": module.title, "module_id": module.id});
             }
           } else {
             print("COMPLETED MODULE IS NULL< SO HERE");
             course_started['modules_completed'] = [];
-            course_started['modules_completed'].add(module.title);
+            course_started['modules_completed']
+                .add({"module_name": module.title, "module_id": module.id});
           }
         }
       });
       print(_userDataGetterMaster.loggedInUser!.courses_started);
-      _userDataGetterMaster.setUserData();
+      await _userDataGetterMaster.setUserData();
     }
     notifyListeners();
   }
@@ -280,7 +277,7 @@ class LoggedInState with ChangeNotifier {
       {required Map<String, dynamic> courseDetails,
       required CoursesProvider coursesProvider,
       required Course course,
-      required Module module}) {
+      required Module module}) async {
     bool flag = false;
     if (loggedInUser!.courses_started.isNotEmpty) {
       loggedInUser!.courses_started.forEach((course) {
@@ -324,7 +321,7 @@ class LoggedInState with ChangeNotifier {
         }
       });
       print(_userDataGetterMaster.loggedInUser!.courses_started);
-      _userDataGetterMaster.setUserData();
+      await _userDataGetterMaster.setUserData();
     }
     notifyListeners();
   }
@@ -334,11 +331,10 @@ class LoggedInState with ChangeNotifier {
       required CoursesProvider coursesProvider,
       required Course course,
       required Module module,
-      required int examIndex}) {
-    bool flag = false;
+      required int examIndex}) async {
     if (loggedInUser!.courses_started.isNotEmpty) {
       var course_started;
-      int index = 0;
+
       for (int i = 0; i < loggedInUser!.courses_started.length; i++) {
         course_started = loggedInUser!.courses_started[i];
         try {
@@ -347,7 +343,8 @@ class LoggedInState with ChangeNotifier {
               if (course_module["module_name"] == module.title) {
                 if (course_started["modules_started"] != null) {
                   int moduleStartedIndex = 0;
-                  course_started["modules_started"].forEach((started_module) {
+                  course_started["modules_started"]
+                      .forEach((started_module) async {
                     started_module = started_module as Map<String, dynamic>;
 
                     if (started_module["module_name"] == module.title) {
@@ -363,6 +360,8 @@ class LoggedInState with ChangeNotifier {
                       started_module["exams_completed"]
                           .forEach((exam_completed) {
                         if (exam_completed == examIndex) examFlag = true;
+                        print(
+                            "PPPPRINTTT ${started_module["exams_completed"].length},,${module.exams?.length} ");
                       });
 
                       if (examFlag == false) {
@@ -381,19 +380,17 @@ class LoggedInState with ChangeNotifier {
                           }
                           modules_started_index++;
                         });
-
-                        _userDataGetterMaster.setUserData();
-                        if (started_module["exams_completed"].length >=
-                            module.exams?.length) {
-                          setUserCourseModuleCompleted(
-                              courseDetails: courseDetails,
-                              coursesProvider: coursesProvider,
-                              course: course,
-                              module: module);
-                        } else
-                          print("PRINT BEFORE SET ${course_started}");
-                        index = 1;
                       }
+                      await _userDataGetterMaster.setUserData();
+                      if (started_module["exams_completed"].length >=
+                          module.exams?.length) {
+                        await setUserCourseModuleCompleted(
+                            courseDetails: courseDetails,
+                            coursesProvider: coursesProvider,
+                            course: course,
+                            module: module);
+                      } else
+                        print("PRINT BEFORE SET ${course_started}");
                     }
                     moduleStartedIndex++;
                   });
@@ -414,6 +411,7 @@ class LoggedInState with ChangeNotifier {
       required String username,
       required String uid,
       required String courseMapFieldToUpdate}) async {
+    print("ENTERED setAdminConsoleCourseMap");
     DocumentSnapshot courseSnapshot = await FirebaseFirestore.instance
         .collection("adminconsole")
         .doc("allcourses")

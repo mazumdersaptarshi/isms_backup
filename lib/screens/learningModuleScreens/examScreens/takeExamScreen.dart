@@ -150,16 +150,25 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
             SizedBox(height: 20),
             if (widget.examtype == EXAMTYPE.courseExam)
               ElevatedButton(
-                onPressed: () {
-                  loggedInState.setUserCourseExamCompleted(
-                      coursesProvider: coursesProvider,
-                      course: widget.course,
-                      courseDetails: {
-                        "courseID": widget.course.id,
-                        "course_name": widget.course.name,
-                      },
-                      examIndex: widget.exam.index);
-
+                onPressed: () async {
+                  bool isAllExamsCompleted =
+                      await loggedInState.setUserCourseExamCompleted(
+                          coursesProvider: coursesProvider,
+                          course: widget.course,
+                          courseDetails: {
+                            "courseID": widget.course.id,
+                            "course_name": widget.course.name,
+                            "course_modules_completed":
+                                widget.course.modulesCount
+                          },
+                          examIndex: widget.exam.index);
+                  if (isAllExamsCompleted) {
+                    await loggedInState.setUserCourseCompleted(courseDetails: {
+                      "courseID": widget.course.id,
+                      "course_name": widget.course.name,
+                      "course_modules_completed": widget.course.modulesCount
+                    });
+                  }
                   Navigator.pushReplacement(context,
                       MaterialPageRoute(builder: (context) => HomePage()));
                 },
