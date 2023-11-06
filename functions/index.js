@@ -1,32 +1,59 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
-const {sendEmail} = require("./emailSender");
+const { sendEmail } = require("./emailSender");
 
 admin.initializeApp();
 
-exports.scheduledEmailFunction = functions.pubsub.
-    schedule("every 5 minutes").onRun(async () => {
-      const now = admin.firestore.Timestamp.now();
-      const adminsRef = admin.firestore().collection("adminconsole")
-          .doc("allAdmins").collection("admins");
-      const snapshot = await adminsRef.get();
+exports.scheduledEmailFunction = functions.pubsub
+  .schedule("every 5 minutes")
+  .onRun(async () => {
+    const now = admin.firestore.Timestamp.now();
+    const adminsRef = admin
+      .firestore()
+      .collection("adminconsole")
+      .doc("allAdmins")
+      .collection("admins");
+    const snapshot = await adminsRef.get();
 
-      await Promise.all(snapshot.docs.map(async (doc) => {
+    await Promise.all(
+      snapshot.docs.map(async (doc) => {
         const data = doc.data();
-        const expiredTime = data.expiredTime;
         const email = data.email;
-        const timeDifference = expiredTime.toMillis() - now.toMillis();
+        const name = data.name;
+        const certifications = data.certifications || [];
 
-        if (timeDifference <= 86400000 && timeDifference > 0) {
-          if (!data.reminderSent) {
-            await sendEmail(email);
-            await doc.ref.update({reminderSent: true});
+        for (const certification of certifications) {
+          const expiredTime = certification.expiredTime;
+
+          if (expiredTime) {
+            const timeDifference = expiredTime.toMillis() - now.toMillis();
+
+            if (timeDifference <= 86400000 && timeDifference > 0) {
+              if (!certification.reminderSent) {
+                await sendEmail(
+                  email,
+                  name,
+                  expiredTime,
+                  certification.certification_name
+                );
+
+                // Mark reminderSent as true inside the certification map
+                const certificationIndex = certifications.indexOf(certification);
+                certifications[certificationIndex].reminderSent = true;
+
+                await doc.ref.update({
+                  certifications: certifications,
+                });
+              } else {
+                console.log("Reminder has already been sent to", email);
+              }
+            }
           } else {
-            console.log("Reminder has already been sent to", email);
+            console.log("Expired Time is undefined for certification:", certification);
           }
         }
-      }));
+      })
+    );
 
-
-      return null;
-    });
+    return null;
+  });
