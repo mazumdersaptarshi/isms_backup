@@ -13,6 +13,7 @@ class AdminProvider extends ChangeNotifier {
   List<dynamic> userRefs = [];
 
   bool _hasNewCoursesData = false;
+  bool _authStateChanged = false;
   bool _hasNewUsersData = false;
   // UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
   Map<String, dynamic> snapshotData = {};
@@ -104,12 +105,12 @@ class AdminProvider extends ChangeNotifier {
   }
 
   Future<List> allUsersDataFetcher() async {
-    if (loggedInState.authStateChanged || _hasNewUsersData) {
+    if (_authStateChanged || _hasNewUsersData) {
       //Clearing old data if there is new data available
       allUsers.clear();
       userRefs.clear();
       print(
-          'Fething new data from firestore as authStateChanged: ${loggedInState.authStateChanged} and _hasNewUsersData: ${_hasNewUsersData}');
+          'Fething new data from firestore as authStateChanged: ${_authStateChanged} and _hasNewUsersData: ${_hasNewUsersData}');
 
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('adminconsole')
@@ -151,11 +152,11 @@ class AdminProvider extends ChangeNotifier {
         }
       }
       _hasNewUsersData = false;
-      loggedInState.authStateChanged = false;
+      _authStateChanged = false;
       return allUsers;
     } else {
       print(
-          'Fetching cached data since no changes detected, authStateChanged: ${loggedInState.authStateChanged} and _hasNewUsersData: ${_hasNewUsersData}');
+          'Fetching cached data since no changes detected, authStateChanged: ${_authStateChanged} and _hasNewUsersData: ${_hasNewUsersData}');
       return allUsers;
     }
   }

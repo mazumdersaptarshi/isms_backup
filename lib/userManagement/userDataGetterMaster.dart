@@ -4,23 +4,11 @@ import 'package:isms/adminManagement/createUserReferenceForAdmin.dart';
 import 'package:isms/models/customUser.dart';
 
 class UserDataGetterMaster {
-  UserDataGetterMaster() {
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      if (user == null) {
-        print("User is currently signed out!");
-        _currentUser = null;
-      } else {
-        print("User is signed in!");
-        _currentUser = user;
-        getLoggedInUserInfoFromFirestore();
-      }
-    });
-  }
   static FirebaseFirestore db = FirebaseFirestore.instance;
   static User? _currentUser;
   static DocumentReference? _userRef;
   static DocumentSnapshot? _currentUserSnapshot;
-  static String? _userRole;
+  static late String _userRole;
   static CustomUser? _customUserObject;
 
   static Future<void> createUserData(CustomUser customUser) async {
@@ -54,61 +42,45 @@ class UserDataGetterMaster {
   User? get currentUser => _currentUser;
   String? get currentUserName => _currentUser?.displayName;
   String? get currentUserEmail => _currentUser?.email;
-  String? get currentUserRole => _userRole;
+  String get currentUserRole => _userRole;
   String? get currentUserUid => _currentUser?.uid;
   DocumentReference? get currentUserDocumentReference => _userRef;
   DocumentSnapshot? get currentUserSnapshot => _currentUserSnapshot;
 
-  Future<DocumentSnapshot<Object?>?> get newCurrentUserSnapshot async =>
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc('${_currentUser?.uid}')
-          .get();
+  Future<DocumentSnapshot<Object?>?> get newCurrentUserSnapshot async {
+    _currentUserSnapshot = await _userRef!.get();
+    return _currentUserSnapshot;
+  }
   CustomUser? get loggedInUser => _customUserObject;
 
-  //Function called during constructor invoke, to get all required logged in user data from Firestore
-  Future<void> getLoggedInUserInfoFromFirestore() async {
-    print('Entered getLoggedInUserInfoFromFirestore');
-    _currentUser = await FirebaseAuth.instance.currentUser;
-    if (_currentUser == null) {
-      print('no user currently signed into Firebase');
-      return;
-    }
-    User user = _currentUser!;
-
-    print('user ${user.email} currently signed into Firebase');
-    DocumentReference _userRef =
+  // fetch data from Firestore and store it in the app
+  Future<void> fetchFromFirestore(User user) async {
+    _userRef =
         FirebaseFirestore.instance.collection('users').doc(user.uid);
-    DocumentSnapshot userSnapshot = await _userRef.get();
+    DocumentSnapshot userSnapshot = await _userRef!.get();
     if (userSnapshot.exists) {
       _currentUserSnapshot = userSnapshot;
       Map<String, dynamic>? userData =
           userSnapshot.data() as Map<String, dynamic>?;
-      _userRole = userData?['role'];
+      _userRole = userData?['role']!;
       CustomUser loggedInUserObject = CustomUser.fromMap(userData!);
 
-      print('loggedInUserObject: ${loggedInUserObject.courses_completed}');
+      print('data fetched from Firestore for user ${user.email}');
       _customUserObject = loggedInUserObject;
     } else {
       print('user ${user.email} not found in Firestore');
     }
-  }
 
-  //basic setters for the user
-  set currentUser(User? user) {
+    // last step: set _currentUser, so the app knows that it is signed
+    // in and can now access user data
     _currentUser = user;
   }
 
-  set currentUserRole(String? role) {
-    _userRole = role;
-  }
-
-  set currentUserDocumentReference(DocumentReference? ref) {
-    _userRef = ref;
-  }
-
-  set currentUserSnapshot(DocumentSnapshot? snapshot) {
-    _currentUserSnapshot = snapshot;
+  // clear user data upon sign-out
+  void clear() {
+    // first step: unset _currentUser, so the app knows it is signed out
+    // and won't attempt to read any user data
+    _currentUser = null;
   }
 
   setUserData() async {

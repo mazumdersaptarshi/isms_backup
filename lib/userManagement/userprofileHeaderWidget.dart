@@ -38,17 +38,16 @@ class UserProfileHeaderWidget extends StatelessWidget {
               fontSize: 18,
             ),
           ),
-          if (loggedInState.currentUserRole != null)
-            Text(
-              'Role: ${loggedInState.currentUserRole}',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 18,
-              ),
+          Text(
+            'Role: ${loggedInState.currentUserRole}',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 18,
             ),
+          ),
           ElevatedButton(
               onPressed: () {
-                loggedInState.getUserCoursesData("ref");
+                loggedInState.refreshUserCoursesData();
               },
               child: Text("Refresh"))
         ],

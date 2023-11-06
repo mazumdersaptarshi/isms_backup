@@ -19,7 +19,7 @@ class AdminInfoWidget extends StatelessWidget {
               //    NetworkImage(loggedInState.currentUser!.photoURL!),
             ),
           ),
-        if (loggedInState.currentUserRole != null)
+        if (loggedInState.currentUserName != null)
           Text(
             ' ${loggedInState.currentUserName}',
             style: const TextStyle(
@@ -35,14 +35,13 @@ class AdminInfoWidget extends StatelessWidget {
             fontSize: 18,
           ),
         ),
-        if (loggedInState.currentUserRole != null)
-          Text(
-            'Role: ${loggedInState.currentUserRole}',
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 18,
-            ),
+        Text(
+          'Role: ${loggedInState.currentUserRole}',
+          style: const TextStyle(
+            color: Colors.black,
+            fontSize: 18,
           ),
+        ),
       ],
     );
   }

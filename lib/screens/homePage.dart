@@ -11,6 +11,7 @@ import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 import 'package:uni_links/uni_links.dart';
 
+import 'login/loginScreen.dart';
 import '../projectModules/adminConsoleModules/adminActionDropdown.dart';
 import 'adminScreens/AdminInstructions/adminInstructionsCategories.dart';
 
@@ -23,8 +24,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  DocumentSnapshot? currentUserSnapshot;
-  late String userRole = 'user';
+  late String userRole;
   DateTime? _expiryDate;
   String? initialLink;
 
@@ -53,9 +53,13 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final loggedInState = context.watch<LoggedInState>();
-    userRole = loggedInState.currentUserRole != null
-        ? loggedInState.currentUserRole!
-        : 'user';
+
+    if (loggedInState.currentUser == null) {
+      return LoginPage();
+    }
+
+    userRole = loggedInState.currentUserRole;
+
     return Consumer<CoursesProvider>(
         builder: (BuildContext context, CoursesProvider value, Widget? child) {
       return Scaffold(
@@ -85,7 +89,7 @@ class _HomePageState extends State<HomePage> {
                           style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold)),
-                      Text('Role: ${userRole.toString()}',
+                      Text('Role: ${userRole}',
                           style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold)),

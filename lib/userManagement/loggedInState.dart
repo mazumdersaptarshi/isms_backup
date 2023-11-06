@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
 import 'package:isms/userManagement/userDataGetterMaster.dart';
 
 import '../models/course.dart';
@@ -22,27 +24,17 @@ class LoggedInState with ChangeNotifier {
 
   List<dynamic> allCompletedCoursesGlobal =
       []; //Global List to hold all completed courses for User
-  bool _hasnewData = false;
-  bool authStateChanged = false;
 
   LoggedInState() {
     _auth.authStateChanges().listen((User? user) {
-      authStateChanged = true;
       if (user == null) {
-        print(
-            "auth state changed: no account is currently signed into Firebase");
-        _userDataGetterMaster.currentUser = null;
+        print("auth state changed: no account currently signed into Firebase");
+        _userDataGetterMaster.clear();
         notifyListeners();
       } else {
-        print(
-            "auth state changed: account ${user!.email} is currently signed into Firebase");
-
-        _userDataGetterMaster.getLoggedInUserInfoFromFirestore().then((_value) {
-          print("account ${user!.email}'s data was fetched from Firestore");
-          // this is used as source of truth in the app, so it has to
-          // occur after getLoggedInUserInfoFromFirestore() to ensure all
-          // the user-related data is available
-          _userDataGetterMaster.currentUser = user;
+        print("auth state changed: ${user!.email} currently signed into Firebase");
+        _userDataGetterMaster.fetchFromFirestore(user!).then((_value) {
+          storeUserCoursesData(currentUserSnapshot!);
           notifyListeners();
         });
       }
@@ -54,7 +46,7 @@ class LoggedInState with ChangeNotifier {
   User? get currentUser => _userDataGetterMaster.currentUser;
   String? get currentUserName => _userDataGetterMaster.currentUserName;
   String? get currentUserEmail => _userDataGetterMaster.currentUserEmail;
-  String? get currentUserRole => _userDataGetterMaster.currentUserRole;
+  String get currentUserRole => _userDataGetterMaster.currentUserRole;
   String? get currentUserUid => _userDataGetterMaster.currentUserUid;
   CustomUser? get loggedInUser => _userDataGetterMaster.loggedInUser;
   DocumentReference? get currentUserDocumentReference =>
@@ -68,69 +60,45 @@ class LoggedInState with ChangeNotifier {
   void listenToChanges() {
     currentUserDocumentReference?.snapshots().listen((snapshot) {
       if (snapshot.exists) {
-        _hasnewData = true;
+        print('user document was modified: storing new content');
+        storeUserCoursesData(snapshot);
         notifyListeners();
       } else {
-        print('No existing document');
+        print('user document was deleted');
       }
     });
   }
 
+  void storeUserCoursesData(DocumentSnapshot snapshot) {
+    if (snapshot!.exists) {
+      Map<String, dynamic> mapData =
+        snapshot.data() as Map<String, dynamic>;
+      UserCoursesDetails data = UserCoursesDetails.fromMap(mapData);
+      allEnrolledCoursesGlobal = data.courses_started!;
+      allCompletedCoursesGlobal = data.courses_completed!;
+    } else {
+      print('user document was deleted');
+    }
+  }
+
   //Getter function for all course related info from users collection, for the logged in User
   //Basically populates the two static global variables allEnrolledCoursesGlobal and allCompletedCoursesGlobal
-  Future<List> getUserCoursesData(String? actionId) async {
-    print('Current value of authStateChanged: $authStateChanged');
-    print('Current value of _hasnewData: $_hasnewData');
-    bool isRefreshAction = false;
-    if (actionId == 'ref') isRefreshAction = true;
-
-    if (authStateChanged || _hasnewData || isRefreshAction) {
-      print(
-          "Fetching fresh data because authStateChanged = $authStateChanged and _hasnewData = $_hasnewData");
-
-      print('Inside fetch courses user provider ${currentUserUid}');
-      try {
-        DocumentSnapshot? newCurrentUserDocumentSnapshot =
-            await getNewCurrentUserDocumentSnapshot;
-
-        if (newCurrentUserDocumentSnapshot!.exists) {
-          Map<String, dynamic> mapdata =
-              newCurrentUserDocumentSnapshot.data() as Map<String, dynamic>;
-          UserCoursesDetails data = UserCoursesDetails.fromMap(mapdata);
-          // Access specific fields from the document
-
-          print('Field 1: ${data.courses_started}');
-          allEnrolledCoursesGlobal = data.courses_started!;
-          allCompletedCoursesGlobal = data.courses_completed!;
-        } else {
-          print('Document does not exist');
-        }
-        print('890io: ${allEnrolledCoursesGlobal}');
-        if (actionId == 'crs_enrl') {
-          authStateChanged = false;
-          _hasnewData = false;
-
-          print('changes detected, fetching new data');
-          return allEnrolledCoursesGlobal;
-        } else if (actionId == 'crs_compl') {
-          authStateChanged = false;
-          _hasnewData = false;
-
-          print('changes detected, fetching new data');
-          return allCompletedCoursesGlobal;
-        }
-      } catch (e) {
-        return [];
-      }
-    }
+  Future<void> refreshUserCoursesData() async {
     print(
-        "Using cached data because authStateChanged = $authStateChanged and _hasnewData = $_hasnewData");
+        "Fetching fresh data");
 
-    print('No chnages detected, fetching cached data');
+    DocumentSnapshot? newCurrentUserDocumentSnapshot =
+        await getNewCurrentUserDocumentSnapshot;
+
+    storeUserCoursesData(newCurrentUserDocumentSnapshot!);
+    print('890io: ${allEnrolledCoursesGlobal}');
+  }
+
+  Future<List> getUserCoursesData(String actionId) async {
     if (actionId == 'crs_enrl') {
       return allEnrolledCoursesGlobal;
     }
-    if (actionId == 'crs_enrl') {
+    if (actionId == 'crs_compl') {
       return allCompletedCoursesGlobal;
     }
     return [];
@@ -461,5 +429,33 @@ class LoggedInState with ChangeNotifier {
           .doc(courseName)
           .set(courseMap);
     }
+  }
+
+  static Future<void> login() async {
+    // get a signed-into Google account (authentication),
+    // and sign it into the app (authorisation)
+    GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+    // only provide accessToken (the result of authorisation),
+    // as idToken is the result of authentication and is null in data
+    // returned by GoogleSignIn
+    AuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+    );
+    // sign into the corresponding Firebase account
+    UserCredential userCredential =
+        await FirebaseAuth.instance.signInWithCredential(credential);
+
+    // ensure the app has a user entry for this account
+    UserDataGetterMaster.ensureUserDataExists(
+        FirebaseAuth.instance.currentUser);
+  }
+
+  static Future<void> logout() async {
+    // sign the Firebase account out of the Firebase app
+    await FirebaseAuth.instance.signOut();
+    // sign the Google account out of the underlying GCP app
+    await GoogleSignIn().signOut();
   }
 }

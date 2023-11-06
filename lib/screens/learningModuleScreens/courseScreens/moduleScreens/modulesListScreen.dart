@@ -48,10 +48,11 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
       fetchCourseModules(coursesProvider: coursesProvider);
     }
 
-    userRole = loggedInState.currentUserRole!;
     if (loggedInState.currentUser == null) {
       return LoginPage();
     }
+
+    userRole = loggedInState.currentUserRole;
 
     if (isModulesFetched) {
       return Scaffold(
