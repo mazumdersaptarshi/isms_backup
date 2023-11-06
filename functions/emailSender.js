@@ -2,16 +2,32 @@ const axios = require("axios");
 const functions = require("firebase-functions");
 const apiKey = functions.config().sendgrid.key;
 
+function getDayWithSuffix(day) {
+  if (day >= 11 && day <= 13) {
+    return `${day}th`;
+  }
+  switch (day % 10) {
+    case 1: return `${day}st`;
+    case 2: return `${day}nd`;
+    case 3: return `${day}rd`;
+    default: return `${day}th`;
+  }
+}
+
 function formatDate(timestamp) {
   const date = timestamp.toDate();
-  const year = date.getUTCFullYear();
-  const month = String(date.getUTCMonth() + 1).padStart(2, '0');
-  const day = String(date.getUTCDate()).padStart(2, '0');
-  const hours = String(date.getUTCHours() + 9).padStart(2, '0'); 
+  const options = { year: "numeric", month: "long", day: "numeric" };
+  const formattedDate = new Intl.DateTimeFormat("en-US", options).format(date);
+
+  const dayWithSuffix = getDayWithSuffix(date.getDate());
+
+  const hours = String(date.getUTCHours() + 9).padStart(2, '0');
   const minutes = String(date.getUTCMinutes()).padStart(2, '0');
-  const ampm = hours >= 12 ? 'PM' : 'AM';
-  return `${year}/${month}/${day} ${hours % 12}:${minutes} ${ampm}`;
+  const ampm = date.getUTCHours() >= 12 ? 'PM' : 'AM';
+
+  return `${formattedDate.replace(/\d+/, dayWithSuffix)} at ${hours}:${minutes} ${ampm}`;
 }
+
 
 async function sendEmail(recipientEmail, name, expiredTime, certificationName) {
   if (!apiKey) {
