@@ -43,7 +43,7 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
   bool checkIfModuleStarted(
       {required LoggedInState loggedInState, required Module module}) {
     bool flag = false;
-    loggedInState.loggedInUser!.courses_started.forEach((course_started) {
+    loggedInState.loggedInUser.courses_started.forEach((course_started) {
       if (course_started["course_name"] == widget.course.name) {
         course_started["modules_started"].forEach((module_started) {
           if (module_started["module_name"] == module.title) flag = true;
@@ -57,7 +57,7 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
   bool checkIfAllModulesCompleted({required LoggedInState loggedInState}) {
     bool flag = false;
 
-    loggedInState.loggedInUser!.courses_started.forEach((course_started) {
+    loggedInState.loggedInUser.courses_started.forEach((course_started) {
       if (course_started["course_name"] == widget.course.name) {
         if (course_started["modules_completed"] != null &&
             course_started["modules_completed"].length >=
