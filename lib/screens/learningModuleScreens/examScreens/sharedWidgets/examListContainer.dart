@@ -44,26 +44,35 @@ class ExamListContainer extends StatelessWidget {
    }
   @override
   Widget build(BuildContext context) {
-    return  Column(
-      children: [
-        ListView.builder(
-          shrinkWrap: true,
-          itemCount: exams?.length,
-          itemBuilder: (BuildContext context, int examIndex) {
-            NewExam exam = exams![examIndex];
-            return ExamTile(
-              title: exam.title,
-              onPressed: () {
-              if(examtype== EXAMTYPE.courseExam)
-                NavigateToCourseExamPage(context: context, exam: exam);
-              else NavigateToModuleExamPage(context: context, exam: exam);
+    return  Align(
+      alignment: Alignment.topCenter,
+      child: Container(
+        width: MediaQuery.of(context).size.width > 700?
+              MediaQuery.of(context).size.width*0.5:
+              MediaQuery.of(context).size.width,
+        child: Column(
+          children: [
+            SizedBox(height: 20),
+            ListView.builder(
+              shrinkWrap: true,
+              itemCount: exams?.length,
+              itemBuilder: (BuildContext context, int examIndex) {
+                NewExam exam = exams![examIndex];
+                return ExamTile(
+                  title: exam.title,
+                  onPressed: () {
+                  if(examtype== EXAMTYPE.courseExam)
+                    NavigateToCourseExamPage(context: context, exam: exam);
+                  else NavigateToModuleExamPage(context: context, exam: exam);
 
+                  },
+                  questionCount: exam.questionAnswerSet.length,
+                );
               },
-              questionCount: exam.questionAnswerSet.length,
-            );
-          },
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }
