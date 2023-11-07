@@ -34,6 +34,20 @@ class _ModuleDetailsState extends State<ModuleDetails> {
     super.initState();
   }
 
+  bool checkIfModuleCompleted(
+      {required LoggedInState loggedInState}) {
+    bool flag = false;
+    loggedInState.loggedInUser.courses_started.forEach((course_started) {
+      if (course_started["course_name"] == widget.course.name) {
+        course_started["modules_completed"].forEach((module_completed) {
+          if (module_completed["module_name"] == widget.module.title) flag = true;
+        });
+      }
+    });
+
+    return flag;
+  }
+
   fetchSlidesList({required CoursesProvider coursesProvider}) async {
     await widget.slidesDataMaster!.fetchSlides();
 
@@ -89,21 +103,22 @@ class _ModuleDetailsState extends State<ModuleDetails> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ModuleExamListScreen(
-                          course: widget.course,
-                          examtype: EXAMTYPE.moduleExam,
-                          module: widget.module,
+                if (checkIfModuleCompleted(loggedInState: loggedInState))
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ModuleExamListScreen(
+                            course: widget.course,
+                            examtype: EXAMTYPE.moduleExam,
+                            module: widget.module,
+                          )
                         )
-                      )
-                    );
-                  },
-                  child: Text("View module exams"),
-                ),
+                      );
+                    },
+                    child: Text("View module exams"),
+                  ),
                 // TODO move the slides loading logic here
                 //if (/*isSlidesFetched && isSlidesListEmpty ==*/ false)
                 //else

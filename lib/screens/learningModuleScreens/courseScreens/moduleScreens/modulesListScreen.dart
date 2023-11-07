@@ -54,6 +54,20 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
     return flag;
   }
 
+  bool checkIfModuleCompleted(
+      {required LoggedInState loggedInState, required Module module}) {
+    bool flag = false;
+    loggedInState.loggedInUser.courses_started.forEach((course_started) {
+      if (course_started["course_name"] == widget.course.name) {
+        course_started["modules_completed"].forEach((module_completed) {
+          if (module_completed["module_name"] == module.title) flag = true;
+        });
+      }
+    });
+
+    return flag;
+  }
+
   bool checkIfAllModulesCompleted({required LoggedInState loggedInState}) {
     bool flag = false;
 
@@ -160,7 +174,9 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
                           isModuleStarted: checkIfModuleStarted(
                               loggedInState: loggedInState,
                               module: widget.course.modules[moduleIndex]),
-                          isModuleCompleted: false,
+                          isModuleCompleted: checkIfModuleCompleted(
+                              loggedInState: loggedInState,
+                              module: widget.course.modules[moduleIndex]),
                         );
                       },
                     ),
