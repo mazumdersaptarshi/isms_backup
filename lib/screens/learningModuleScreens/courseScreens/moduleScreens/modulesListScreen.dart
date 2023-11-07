@@ -109,7 +109,7 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
     // number of tiles that can fit vertically on the screen
     int maxColumns = max((screenWidth/tileMinWidth).floor(), 1);
     // number of tiles that have to fit on the screen
-    int itemCount = widget.course.modules.length;
+    int itemCount = widget.course.modulesCount?? 0;
     // grid width, in tiles
     int numberColumns = min(itemCount, maxColumns);
     // grid width, in pixels

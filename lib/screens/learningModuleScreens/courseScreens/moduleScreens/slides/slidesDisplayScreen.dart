@@ -77,11 +77,9 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
         leadingWidget: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.push(
+            Navigator.pop(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => ModuleDetails(
-                        course: widget.course, module: widget.module)));
+               );
           },
         ),
       ),

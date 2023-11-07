@@ -27,6 +27,7 @@ class ModuleTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 150,
+
       child: GestureDetector(
         child: Card(
           surfaceTintColor: Colors.white,
@@ -85,6 +86,7 @@ class ModuleTile extends StatelessWidget {
               builder: (context) => ModuleDetails(
                 course: course,
                 module: module,
+                isModuleStarted: isModuleStarted,
               ),
             ),
           );

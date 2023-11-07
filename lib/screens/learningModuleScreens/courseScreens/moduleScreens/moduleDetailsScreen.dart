@@ -16,9 +16,10 @@ import '../../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../../themes/common_theme.dart';
 
 class ModuleDetails extends StatefulWidget {
-  ModuleDetails({super.key, required this.course, required this.module});
+  ModuleDetails({super.key, required this.course, required this.module, required this.isModuleStarted});
   Course course;
   Module module;
+  bool isModuleStarted;
   SlidesDataMaster? slidesDataMaster;
   @override
   State<ModuleDetails> createState() => _ModuleDetailsState();
@@ -34,19 +35,19 @@ class _ModuleDetailsState extends State<ModuleDetails> {
     super.initState();
   }
 
-  bool checkIfModuleCompleted(
-      {required LoggedInState loggedInState}) {
-    bool flag = false;
-    loggedInState.loggedInUser.courses_started.forEach((course_started) {
-      if (course_started["course_name"] == widget.course.name) {
-        course_started["modules_completed"].forEach((module_completed) {
-          if (module_completed["module_name"] == widget.module.title) flag = true;
-        });
-      }
-    });
+  //bool checkIfModuleCompleted(
+  //    {required LoggedInState loggedInState}) {
+  //  bool flag = false;
+  //  loggedInState.loggedInUser.courses_started.forEach((course_started) {
+  //    if (course_started["course_name"] == widget.course.name) {
+  //      course_started["modules_completed"].forEach((module_completed) {
+  //        if (module_completed["module_name"] == widget.module.title) flag = true;
+  //      });
+  //    }
+  //  });
 
-    return flag;
-  }
+  //  return flag;
+  //}
 
   fetchSlidesList({required CoursesProvider coursesProvider}) async {
     await widget.slidesDataMaster!.fetchSlides();
@@ -103,7 +104,7 @@ class _ModuleDetailsState extends State<ModuleDetails> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                if (checkIfModuleCompleted(loggedInState: loggedInState))
+                if(widget.isModuleStarted)
                   ElevatedButton(
                     onPressed: () {
                       Navigator.push(
@@ -139,12 +140,14 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                     await loggedInState.setUserCourseStarted(
                       courseDetails: {
                         "courseID": widget.course.id,
-                        "course_name": widget.course.name
+                        "course_name": widget.course.name,
+                        "course_modules_count": widget.course.modulesCount
                       });
                     await loggedInState.setUserCourseModuleStarted(
                       courseDetails: {
                         "courseID": widget.course.id,
-                        "course_name": widget.course.name
+                        "course_name": widget.course.name,
+                        "course_modules_count": widget.course.modulesCount
                       },
                       coursesProvider: coursesProvider,
                       course: widget.course,
