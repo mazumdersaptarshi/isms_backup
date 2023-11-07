@@ -4,19 +4,22 @@ import 'package:isms/models/module.dart';
 import 'package:isms/models/newExam.dart';
 import 'package:isms/projectModules/courseManagement/examManagement/examDataMaster.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
+import 'package:isms/screens/learningModuleScreens/examScreens/sharedWidgets/examListContainer.dart';
+import 'package:isms/screens/learningModuleScreens/examScreens/sharedWidgets/exam_tile.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/takeExamScreen.dart';
 import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 
 import '../../../projectModules/courseManagement/coursesProvider.dart';
+import '../../../sharedWidgets/leaningModulesAppBar.dart';
 
 class ExamListScreen extends StatefulWidget {
   ExamListScreen(
       {super.key,
-      required this.course,
-      required this.examtype,
-      this.moduleIndex});
+        required this.course,
+        required this.examtype,
+        this.moduleIndex});
   Course course;
   int? moduleIndex;
   late ExamDataMaster examDataMaster;
@@ -27,8 +30,6 @@ class ExamListScreen extends StatefulWidget {
 
 class _ExamListScreenState extends State<ExamListScreen> {
   bool isExamsFetched = false;
-  late String userRole;
-
   @override
   void initState() {
     super.initState();
@@ -49,8 +50,6 @@ class _ExamListScreenState extends State<ExamListScreen> {
       return LoginPage();
     }
 
-    userRole = loggedInState.currentUserRole;
-
     CoursesProvider coursesProvider = context.watch<CoursesProvider>();
 
     List<NewExam>? exams = [];
@@ -67,71 +66,34 @@ class _ExamListScreenState extends State<ExamListScreen> {
       fetchExamsList(coursesProvider: coursesProvider);
     }
 
-    if (isExamsFetched) {
+
       return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
+        appBar: LearningModulesAppBar(
+          leadingWidget: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pop(
+                context,
+              );
             },
           ),
-          title: Text("${widget.course.name}"),
+          title: "${widget.course!.name}/ Exams",
+
         ),
-        body: Column(
-          children: [
-            Text("${exams}"),
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: exams?.length,
-              itemBuilder: (BuildContext context, int examIndex) {
-                NewExam exam = exams![examIndex];
-                return Row(
-                  children: [
-                    Text(exam.title),
-                    ElevatedButton(
-                        onPressed: () {
-                          if (widget.examtype == EXAMTYPE.courseExam) {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => TakeExamScreen(
-                                          exam: exam,
-                                          examtype: EXAMTYPE.courseExam,
-                                          course: widget.course,
-                                        )));
-                          }
-                        },
-                        child: Text("Take exam"))
-                  ],
-                );
-              },
-            ),
-            SizedBox(height: 20),
-            if (userRole == "admin")
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ExamCreation(
-                                  examtype: EXAMTYPE.courseExam,
-                                  course: widget.course,
-                                )));
-                  },
-                  child: Text("Create exam")),
-          ],
+        body: isExamsFetched ?
+            ExamListContainer(exams:exams ?? [], course: widget.course, examtype: EXAMTYPE.courseExam, loggedInState: loggedInState)
+
+            : Container(
+          width: MediaQuery.of(context).size.width,
+          height: 200,
+          child: const AlertDialog(
+            title: Text("Fetching Exams"),
+            content: Align(
+                alignment: Alignment.topCenter,
+                child: CircularProgressIndicator()),
+          ),
         ),
       );
-    } else {
-      return Container(
-        child: const AlertDialog(
-          title: Text("Fetching Exams"),
-          content: Align(
-              alignment: Alignment.topCenter,
-              child: CircularProgressIndicator()),
-        ),
-      );
-    }
+
   }
 }

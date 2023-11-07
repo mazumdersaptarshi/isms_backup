@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/sharedWidgets/course_tile.dart';
 import 'package:isms/screens/homePage.dart';
@@ -30,6 +32,19 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
     widget.userRole = loggedInState.currentUserRole;
 
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
+
+    int tileMinWidth = 300;
+    double tileRatio = 16 / 9;
+    // available width, in pixels
+    double screenWidth = MediaQuery.sizeOf(context).width * 0.7;
+    // number of tiles that can fit vertically on the screen
+    int maxColumns = max((screenWidth/tileMinWidth).floor(), 1);
+    // number of tiles that have to fit on the screen
+    int itemCount = coursesProvider.allCourses.length?? 0;
+    // grid width, in tiles
+    int numberColumns = min(itemCount, maxColumns);
+    // grid width, in pixels
+    double gridWidth = screenWidth * numberColumns / maxColumns;
     return Scaffold(
       appBar: LearningModulesAppBar(
         leadingWidget: IconButton(
@@ -65,10 +80,12 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
             : Align(
                 alignment: Alignment.topCenter,
                 child: Container(
-                  width: MediaQuery.sizeOf(context).width * 0.7,
+
+                  // width: MediaQuery.sizeOf(context).width * 0.7,
+                  width: gridWidth,
                   child: GridView.builder(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3, childAspectRatio: 16 / 9),
+                          crossAxisCount: numberColumns, childAspectRatio: tileRatio),
                       itemCount: coursesProvider.allCourses.length,
                       itemBuilder: (context, courseIndex) {
                         return CourseTile(

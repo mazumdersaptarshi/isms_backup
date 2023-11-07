@@ -16,9 +16,10 @@ import '../../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../../themes/common_theme.dart';
 
 class ModuleDetails extends StatefulWidget {
-  ModuleDetails({super.key, required this.course, required this.module});
+  ModuleDetails({super.key, required this.course, required this.module, required this.isModuleStarted});
   Course course;
   Module module;
+  bool isModuleStarted;
   SlidesDataMaster? slidesDataMaster;
   @override
   State<ModuleDetails> createState() => _ModuleDetailsState();
@@ -33,6 +34,20 @@ class _ModuleDetailsState extends State<ModuleDetails> {
   void initState() {
     super.initState();
   }
+
+  //bool checkIfModuleCompleted(
+  //    {required LoggedInState loggedInState}) {
+  //  bool flag = false;
+  //  loggedInState.loggedInUser.courses_started.forEach((course_started) {
+  //    if (course_started["course_name"] == widget.course.name) {
+  //      course_started["modules_completed"].forEach((module_completed) {
+  //        if (module_completed["module_name"] == widget.module.title) flag = true;
+  //      });
+  //    }
+  //  });
+
+  //  return flag;
+  //}
 
   fetchSlidesList({required CoursesProvider coursesProvider}) async {
     await widget.slidesDataMaster!.fetchSlides();
@@ -89,21 +104,22 @@ class _ModuleDetailsState extends State<ModuleDetails> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ModuleExamListScreen(
-                          course: widget.course,
-                          examtype: EXAMTYPE.moduleExam,
-                          module: widget.module,
+
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ModuleExamListScreen(
+                            course: widget.course,
+                            examtype: EXAMTYPE.moduleExam,
+                            module: widget.module,
+                          )
                         )
-                      )
-                    );
-                  },
-                  child: Text("View module exams"),
-                ),
+                      );
+                    },
+                    child: Text("View module exams"),
+                  ),
                 // TODO move the slides loading logic here
                 //if (/*isSlidesFetched && isSlidesListEmpty ==*/ false)
                 //else
@@ -119,17 +135,19 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                 //    ),
                 //  ),
                 ElevatedButton(
-                  style: customElevatedButtonStyle(),
+
                   onPressed: () async {
                     await loggedInState.setUserCourseStarted(
                       courseDetails: {
                         "courseID": widget.course.id,
-                        "course_name": widget.course.name
+                        "course_name": widget.course.name,
+                        "course_modules_count": widget.course.modulesCount
                       });
                     await loggedInState.setUserCourseModuleStarted(
                       courseDetails: {
                         "courseID": widget.course.id,
-                        "course_name": widget.course.name
+                        "course_name": widget.course.name,
+                        "course_modules_count": widget.course.modulesCount
                       },
                       coursesProvider: coursesProvider,
                       course: widget.course,

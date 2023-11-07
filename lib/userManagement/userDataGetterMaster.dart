@@ -8,8 +8,7 @@ class UserDataGetterMaster {
   static User? _currentUser;
   static DocumentReference? _userRef;
   static DocumentSnapshot? _currentUserSnapshot;
-  static late String _userRole;
-  static CustomUser? _customUserObject;
+  static late CustomUser _customUserObject;
 
   static Future<void> createUserData(CustomUser customUser) async {
     Map<String, dynamic> userJson = customUser.toMap();
@@ -42,7 +41,6 @@ class UserDataGetterMaster {
   User? get currentUser => _currentUser;
   String? get currentUserName => _currentUser?.displayName;
   String? get currentUserEmail => _currentUser?.email;
-  String get currentUserRole => _userRole;
   String? get currentUserUid => _currentUser?.uid;
   DocumentReference? get currentUserDocumentReference => _userRef;
   DocumentSnapshot? get currentUserSnapshot => _currentUserSnapshot;
@@ -51,7 +49,12 @@ class UserDataGetterMaster {
     _currentUserSnapshot = await _userRef!.get();
     return _currentUserSnapshot;
   }
-  CustomUser? get loggedInUser => _customUserObject;
+
+  // TODO consider making this nullable again, using it as criterion for
+  // being signed-in, and pushing _currentUser inside as a non-nullable
+  // field
+  CustomUser get loggedInUser => _customUserObject;
+  String get currentUserRole => _customUserObject.role;
 
   // fetch data from Firestore and store it in the app
   Future<void> fetchFromFirestore(User user) async {
@@ -59,21 +62,26 @@ class UserDataGetterMaster {
         FirebaseFirestore.instance.collection('users').doc(user.uid);
     DocumentSnapshot userSnapshot = await _userRef!.get();
     if (userSnapshot.exists) {
+      print('data fetched from Firestore for user ${user.email}');
       _currentUserSnapshot = userSnapshot;
       Map<String, dynamic>? userData =
           userSnapshot.data() as Map<String, dynamic>?;
-      _userRole = userData?['role']!;
-      CustomUser loggedInUserObject = CustomUser.fromMap(userData!);
+      _customUserObject = CustomUser.fromMap(userData!);
 
-      print('data fetched from Firestore for user ${user.email}');
-      _customUserObject = loggedInUserObject;
+      // last step: set _currentUser, so the app knows that it is signed
+      // in and can now access user data
+      _currentUser = user;
     } else {
       print('user ${user.email} not found in Firestore');
-    }
+      // no data was found in Firestore for this user, so something went
+      // wrong during the account creation and we cannot proceed with
+      // the sign-in, therefore we sign out
+      clear();
 
-    // last step: set _currentUser, so the app knows that it is signed
-    // in and can now access user data
-    _currentUser = user;
+      // NOTE: if the user is siging in for the first time, the creation
+      // of the user record in Firestore might be ongoing; in this case
+      // we could consider a retry strategy
+    }
   }
 
   // clear user data upon sign-out
@@ -86,7 +94,7 @@ class UserDataGetterMaster {
   setUserData() async {
     FirebaseFirestore.instance
         .collection("users")
-        .doc(loggedInUser!.uid)
-        .set(loggedInUser!.toMap());
+        .doc(loggedInUser.uid)
+        .set(loggedInUser.toMap());
   }
 }

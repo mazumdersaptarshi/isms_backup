@@ -15,7 +15,6 @@ class LoggedInState with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   UserDataGetterMaster _userDataGetterMaster = UserDataGetterMaster();
-  // CustomUser? get getCurrentUser => _userDataGetterMaster.loggedInUser;
 
   // User? get user => _userDataGetterMaster.currentUser;
 
@@ -48,7 +47,7 @@ class LoggedInState with ChangeNotifier {
   String? get currentUserEmail => _userDataGetterMaster.currentUserEmail;
   String get currentUserRole => _userDataGetterMaster.currentUserRole;
   String? get currentUserUid => _userDataGetterMaster.currentUserUid;
-  CustomUser? get loggedInUser => _userDataGetterMaster.loggedInUser;
+  CustomUser get loggedInUser => _userDataGetterMaster.loggedInUser;
   DocumentReference? get currentUserDocumentReference =>
       _userDataGetterMaster.currentUserDocumentReference;
   DocumentSnapshot? get currentUserSnapshot =>
@@ -106,8 +105,8 @@ class LoggedInState with ChangeNotifier {
 
   setUserCourseStarted({required Map<String, dynamic> courseDetails}) async {
     bool flag = false;
-    if (loggedInUser!.courses_started.isNotEmpty) {
-      loggedInUser!.courses_started.forEach((course) {
+    if (loggedInUser.courses_started.isNotEmpty) {
+      loggedInUser.courses_started.forEach((course) {
         try {
           if (course['courseID'] == courseDetails['courseID']) {
             flag = true;
@@ -116,21 +115,21 @@ class LoggedInState with ChangeNotifier {
       });
     }
     if (flag == false) {
-      loggedInUser?.courses_started.add(courseDetails);
+      loggedInUser.courses_started.add(courseDetails);
       await _userDataGetterMaster.setUserData();
       await setAdminConsoleCourseMap(
           courseName: courseDetails["course_name"],
           courseMapFieldToUpdate: "course_started",
-          username: loggedInUser!.username,
-          uid: loggedInUser!.uid!);
+          username: loggedInUser.username,
+          uid: loggedInUser.uid!);
     }
     notifyListeners();
   }
 
   setUserCourseCompleted({required Map<String, dynamic> courseDetails}) async {
     bool flag = false;
-    if (loggedInUser!.courses_completed.isNotEmpty) {
-      loggedInUser!.courses_completed.forEach((course) {
+    if (loggedInUser.courses_completed.isNotEmpty) {
+      loggedInUser.courses_completed.forEach((course) {
         try {
           if (course['courseID'] == courseDetails['courseID']) {
             flag = true;
@@ -139,13 +138,13 @@ class LoggedInState with ChangeNotifier {
       });
     }
     if (flag == false) {
-      loggedInUser?.courses_completed.add(courseDetails);
+      loggedInUser.courses_completed.add(courseDetails);
       await _userDataGetterMaster.setUserData();
       await setAdminConsoleCourseMap(
           courseName: courseDetails["course_name"],
           courseMapFieldToUpdate: "course_completed",
-          username: loggedInUser!.username,
-          uid: loggedInUser!.uid!);
+          username: loggedInUser.username,
+          uid: loggedInUser.uid!);
     }
     notifyListeners();
   }
@@ -158,8 +157,8 @@ class LoggedInState with ChangeNotifier {
     int noOfExamsCompleted = 0;
     bool flag = false;
     print('rdcf: ${loggedInUser}');
-    if (loggedInUser!.courses_started.isNotEmpty) {
-      loggedInUser!.courses_started.forEach((course) {
+    if (loggedInUser.courses_started.isNotEmpty) {
+      loggedInUser.courses_started.forEach((course) {
         try {
           if (course['course_name'] == courseDetails['course_name']) {
             course['exams_completed'].forEach((exam_completed) {
@@ -176,7 +175,7 @@ class LoggedInState with ChangeNotifier {
     if (flag == false) {
       examIndex--;
 
-      loggedInUser?.courses_started.forEach((course_started) {
+      loggedInUser.courses_started.forEach((course_started) {
         if (course_started['courseID'] == course.id) {
           if (course_started['exams_completed'] != null &&
               course_started['exams_completed'].isEmpty) {
@@ -206,7 +205,7 @@ class LoggedInState with ChangeNotifier {
           }
         }
       });
-      print(loggedInUser!.courses_started);
+      print(loggedInUser.courses_started);
       noOfExamsCompleted++;
       await _userDataGetterMaster.setUserData();
     }
@@ -226,8 +225,8 @@ class LoggedInState with ChangeNotifier {
       required Module module}) async {
     bool flag = false;
     print("HERRRRRRRRRRREEEEEEE");
-    if (loggedInUser!.courses_started.isNotEmpty) {
-      loggedInUser!.courses_started.forEach((course) {
+    if (loggedInUser.courses_started.isNotEmpty) {
+      loggedInUser.courses_started.forEach((course) {
         try {
           if (course['courseID'] == courseDetails['courseID']) {
             course["modules_completed"].forEach((element) async {
@@ -242,7 +241,7 @@ class LoggedInState with ChangeNotifier {
       });
     }
     if (flag == false) {
-      _userDataGetterMaster.loggedInUser?.courses_started
+      _userDataGetterMaster.loggedInUser.courses_started
           .forEach((course_started) {
         if (course_started['courseID'] == course.id) {
           bool flag = false;
@@ -267,7 +266,7 @@ class LoggedInState with ChangeNotifier {
           }
         }
       });
-      print(_userDataGetterMaster.loggedInUser!.courses_started);
+      print(_userDataGetterMaster.loggedInUser.courses_started);
       await _userDataGetterMaster.setUserData();
     }
     notifyListeners();
@@ -279,8 +278,8 @@ class LoggedInState with ChangeNotifier {
       required Course course,
       required Module module}) async {
     bool flag = false;
-    if (loggedInUser!.courses_started.isNotEmpty) {
-      loggedInUser!.courses_started.forEach((course) {
+    if (loggedInUser.courses_started.isNotEmpty) {
+      loggedInUser.courses_started.forEach((course) {
         try {
           if (course['courseID'] == courseDetails['courseID']) {
             course["modules_started"].forEach((element) {
@@ -296,7 +295,7 @@ class LoggedInState with ChangeNotifier {
     if (flag == false) {
       print("FLAG IS FALSE ${courseDetails}");
 
-      _userDataGetterMaster.loggedInUser?.courses_started
+      _userDataGetterMaster.loggedInUser.courses_started
           .forEach((course_started) {
         if (course_started['courseID'] == course.id) {
           print("STARTED MODULEE ${course_started['modules_started']}");
@@ -320,7 +319,7 @@ class LoggedInState with ChangeNotifier {
           }
         }
       });
-      print(_userDataGetterMaster.loggedInUser!.courses_started);
+      print(_userDataGetterMaster.loggedInUser.courses_started);
       await _userDataGetterMaster.setUserData();
     }
     notifyListeners();
@@ -332,11 +331,11 @@ class LoggedInState with ChangeNotifier {
       required Course course,
       required Module module,
       required int examIndex}) async {
-    if (loggedInUser!.courses_started.isNotEmpty) {
+    if (loggedInUser.courses_started.isNotEmpty) {
       var course_started;
 
-      for (int i = 0; i < loggedInUser!.courses_started.length; i++) {
-        course_started = loggedInUser!.courses_started[i];
+      for (int i = 0; i < loggedInUser.courses_started.length; i++) {
+        course_started = loggedInUser.courses_started[i];
         try {
           if (course_started['courseID'] == courseDetails['courseID']) {
             course_started["modules_started"].forEach((course_module) {
@@ -367,14 +366,14 @@ class LoggedInState with ChangeNotifier {
                       if (examFlag == false) {
                         started_module["exams_completed"].add(examIndex);
 
-                        List modules_started_copy = List.from(loggedInUser!
+                        List modules_started_copy = List.from(loggedInUser
                             .courses_started[i]["modules_started"]);
                         int modules_started_index = 0;
                         modules_started_copy.forEach((m) {
                           if (m["module_name"] ==
                               started_module["module_name"]) {
                             m = started_module;
-                            loggedInUser!.courses_started[i]["modules_started"]
+                            loggedInUser.courses_started[i]["modules_started"]
                                 [modules_started_index] = m;
                             print("MMMMMMMM ${m}");
                           }

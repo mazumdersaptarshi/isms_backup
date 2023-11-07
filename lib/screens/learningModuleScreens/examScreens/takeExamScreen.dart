@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:isms/models/newExam.dart';
 import 'package:isms/models/question.dart';
 import 'package:isms/screens/homePage.dart';
+import 'package:isms/screens/learningModuleScreens/examScreens/examCompletionStrategies.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/screens/login/loginScreen.dart';
+import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 
@@ -14,13 +16,15 @@ import '../../../projectModules/courseManagement/coursesProvider.dart';
 class TakeExamScreen extends StatefulWidget {
   TakeExamScreen(
       {required this.exam,
-      required this.course,
-      required this.examtype,
-      this.module});
+        required this.course,
+        required this.examtype,
+        this.module,
+      required this.examCompletionStrategy});
   EXAMTYPE examtype;
   Course course;
   Module? module;
   NewExam exam;
+  ExamCompletionStrategy examCompletionStrategy;
   @override
   _TakeExamScreenState createState() => _TakeExamScreenState();
 }
@@ -41,6 +45,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
   }
 
   loadQuestions() {
+    print("LOADING QUESTIONS");
     widget.exam.questionAnswerSet.forEach((element) {
       List<String> options = [];
       List<int> correctAnswers = [];
@@ -100,7 +105,13 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
     }
 
     return Scaffold(
-      appBar: AppBar(title: Text(_showScore ? 'Score' : 'Exam Module')),
+      appBar: AppBar(
+        title: Text(
+          _showScore ? 'Score' : 'Exam Module',
+          style: TextStyle(color: white),
+        ),
+        backgroundColor: secondaryColor,
+      ),
       body: _showScore ? buildScoreWidget() : buildExamWidget(),
     );
   }
@@ -148,53 +159,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
             Text(
                 'Congratulations! Your Score is: $correctAnswers/${_questions.length}'),
             SizedBox(height: 20),
-            if (widget.examtype == EXAMTYPE.courseExam)
-              ElevatedButton(
-                onPressed: () async {
-                  bool isAllExamsCompleted =
-                      await loggedInState.setUserCourseExamCompleted(
-                          coursesProvider: coursesProvider,
-                          course: widget.course,
-                          courseDetails: {
-                            "courseID": widget.course.id,
-                            "course_name": widget.course.name,
-                            "course_modules_completed":
-                                widget.course.modulesCount
-                          },
-                          examIndex: widget.exam.index);
-                  if (isAllExamsCompleted) {
-                    await loggedInState.setUserCourseCompleted(courseDetails: {
-                      "courseID": widget.course.id,
-                      "course_name": widget.course.name,
-                      "course_modules_completed": widget.course.modulesCount
-                    });
-                  }
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => HomePage()));
-                },
-                child: Text(
-                    "Mark Exam as Done- completed ${widget.exam.index}/${widget.course.exams!.length}"),
-              )
-            else if (widget.examtype == EXAMTYPE.moduleExam)
-              ElevatedButton(
-                onPressed: () {
-                  loggedInState.setUserModuleExamCompleted(
-                    courseDetails: {
-                      "courseID": widget.course.id,
-                      "course_name": widget.course.name,
-                      "module_title": widget.module?.title,
-                    },
-                    course: widget.course,
-                    module: widget.module!,
-                    coursesProvider: coursesProvider,
-                    examIndex: widget.exam.index,
-                  );
-
-                  // Navigator.pushReplacement(context,
-                  //     MaterialPageRoute(builder: (context) => HomePage()));
-                },
-                child: Text("Mark Quiz as Done"),
-              ),
+            widget.examCompletionStrategy.buildSumbitButton(context: context),
             ElevatedButton(
               onPressed: () => setState(() {
                 shuffleQuestions();
@@ -213,45 +178,84 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
 
   Widget buildExamWidget() {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(0),
       child: Column(
         children: [
-          SizedBox(height: 20),
-          Text(
-            _questions[_currentIndex].question,
-            style: TextStyle(fontSize: 20),
-          ),
-          SizedBox(height: 20),
-          Text(
-            'Select ${_questions[_currentIndex].maxAllowedAnswers} answer(s)',
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: 200,
+            color: secondaryColor,
+            child: Padding(
+              padding:
+              const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(height: 20),
+                  Text(
+                    _questions[_currentIndex].question,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 20, color: white),
+                  ),
+                  SizedBox(height: 50),
+                  Text(
+                    'Select ${_questions[_currentIndex].maxAllowedAnswers} answer(s)',
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: white),
+                  ),
+                ],
+              ),
+            ),
           ),
           SizedBox(height: 20),
           ...List.generate(_questions[_currentIndex].shuffledOptions.length,
-              (index) {
-            return ListTile(
-              title: Text(_questions[_currentIndex].shuffledOptions[index]),
-              leading: Checkbox(
-                value: _selectedAnswers[_currentIndex].contains(index),
-                onChanged: (bool? value) {
-                  setState(() {
-                    if (value == true) {
-                      if (_selectedAnswers[_currentIndex].length <
-                          _questions[_currentIndex].maxAllowedAnswers) {
-                        _selectedAnswers[_currentIndex].add(index);
-                      }
-                    } else {
-                      _selectedAnswers[_currentIndex].remove(index);
-                    }
-                  });
-                },
-              ),
-            );
-          }),
+                  (index) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Card(
+                    surfaceTintColor: white,
+                    elevation: 4,
+                    shadowColor: secondaryColor,
+                    shape: customCardShape,
+                    child: ListTile(
+                      title: Text(_questions[_currentIndex].shuffledOptions[index]),
+                      leading: Checkbox(
+                        fillColor: MaterialStateProperty.resolveWith<Color>(
+                                (Set<MaterialState> states) {
+                              if (states.contains(MaterialState.disabled)) {
+                                return Colors.grey; // Fill color for the disabled state
+                              }
+                              if (states.contains(MaterialState.selected)) {
+                                return secondaryColor; // Fill color when the checkbox is checked
+                              }
+                              return white; // Fill color when the checkbox is unchecked
+                            }),
+                        value: _selectedAnswers[_currentIndex].contains(index),
+                        onChanged: (bool? value) {
+                          setState(() {
+                            if (value == true) {
+                              if (_selectedAnswers[_currentIndex].length <
+                                  _questions[_currentIndex].maxAllowedAnswers) {
+                                _selectedAnswers[_currentIndex].add(index);
+                              }
+                            } else {
+                              _selectedAnswers[_currentIndex].remove(index);
+                            }
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                );
+              }),
+          SizedBox(height: 15,),
           ElevatedButton(
+            style: customElevatedButtonStyle(),
             onPressed: areAnswersSelected ? () => onButtonPress() : null,
             child:
-                Text(_currentIndex < _questions.length - 1 ? 'Next' : 'Submit'),
+            Text(_currentIndex < _questions.length - 1 ? 'Next' : 'Submit',style: TextStyle(color: white),),
           )
         ],
       ),
