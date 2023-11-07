@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() {
   runApp(CourseDetailsPage(courseTitle: 'Python Basics'));
 }
@@ -38,15 +37,12 @@ class CourseDetailsPage extends StatelessWidget {
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => Moduledescpage(courseTitle: 'Module ${index + 1}'),
-                  //   ),
-                  // );
+                  
+                 
                 },
                 child: Container(
-                  margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                  margin: const EdgeInsets.symmetric(
+                      vertical: 10.0, horizontal: 20.0),
                   padding: const EdgeInsets.all(25.0),
                   decoration: BoxDecoration(
                     color: Colors.orange[200],

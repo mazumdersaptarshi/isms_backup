@@ -1,57 +1,145 @@
 import 'package:flutter/material.dart';
+import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
-import 'package:provider/provider.dart';
+import 'package:isms/screens/login/loginScreen.dart';
 
-import '../screens/login/loginScreen.dart';
+import '../screens/adminScreens/AdminConsole/adminConsolePage.dart';
+import '../screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
+import '../screens/userInfo/userProfilePage.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  // UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
+  CustomAppBar({this.loggedInState});
+  LoggedInState? loggedInState;
+  final Map<String, ValueNotifier<bool>> _hovering = {
+    "Explore": ValueNotifier(false),
+    "My Learning": ValueNotifier(false),
+    "Account": ValueNotifier(false),
+    "Admin": ValueNotifier(false),
+  };
 
   @override
-  Size get preferredSize =>
-      Size.fromHeight(kToolbarHeight); // Define the preferred size
+  Size get preferredSize => Size.fromHeight(kToolbarHeight);
 
   @override
   Widget build(BuildContext context) {
+    void navigateToUserProfilePage() {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => UserProfilePage()),
+      );
+    }
+
+    void navigateToCoursesPage() {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => CoursesDisplayScreen()));
+    }
+
+    void navigateToAdminConsolePage() {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => AdminConsolePage()));
+    }
+
     return AppBar(
-      surfaceTintColor: Colors.white,
-      title: Row(
-        children: [
-          const Text('ISMS'),
-          const Spacer(),
-          buildUserAvatar(context),
-          IconButton(
-              onPressed: () async {
-                await LoggedInState.logout();
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => LoginPage()));
-              },
-              icon: Icon(Icons.logout))
-        ],
+      title: Padding(
+        padding: const EdgeInsets.only(left: 16.0),
+        child: Row(
+          children: [
+            Icon(Icons.severe_cold_rounded),
+            SizedBox(
+              width: 10,
+            ),
+            Text(
+              'ISMS',
+              style: TextStyle(
+                fontFamily: 'Montserrat',
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+                fontSize: 24,
+              ),
+            ),
+          ],
+        ),
       ),
-      backgroundColor: Colors.white,
-      titleTextStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
-          color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
-      iconTheme:
-          Theme.of(context).primaryIconTheme.copyWith(color: Colors.black),
+      actions: <Widget>[
+        appBarItem(Icons.explore, "Explore", navigateToCoursesPage),
+        appBarItem(Icons.lightbulb_outline, "My Learning", () {}),
+        appBarItem(Icons.account_circle, "Account", navigateToUserProfilePage),
+        if (loggedInState?.currentUserRole == 'admin')
+          appBarItem(Icons.admin_panel_settings_outlined, "Admin",
+              navigateToAdminConsolePage),
+        Padding(
+          padding: const EdgeInsets.only(right: 16.0),
+          child: IconButton(
+            icon: Icon(Icons.logout),
+            tooltip: 'Logout',
+            onPressed: () async {
+              await LoggedInState.logout();
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => LoginPage()),
+              );
+            },
+          ),
+        ),
+      ],
+      backgroundColor: Colors.deepPurpleAccent.shade100,
+      elevation: 0,
     );
   }
 
-  Widget buildUserAvatar(BuildContext context) {
-    var loggedInState = context.watch<LoggedInState>();
-    return IconButton(
-      padding: const EdgeInsets.only(right: 5.0),
-      onPressed: () {},
-      icon: loggedInState.currentUser?.photoURL != null
-          ? CircleAvatar(
-              radius: 18,
-              //backgroundImage:
-              //    NetworkImage(loggedInState.currentUser!.photoURL!),
-            )
-          : const Icon(
-              Icons.account_circle,
-              color: Colors.white,
-            ),
+  Widget appBarItem(IconData icon, String title, VoidCallback onTap) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      onEnter: (_) => _hovering[title]!.value = true,
+      onExit: (_) => _hovering[title]!.value = false,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0)
+              .copyWith(top: 4.0, bottom: 4.0),
+          child: ValueListenableBuilder<bool>(
+            valueListenable: _hovering[title]!,
+            builder: (context, isHover, child) {
+              return AnimatedContainer(
+                duration: const Duration(milliseconds: 250),
+                curve: Curves.easeInOut,
+                transform: Matrix4.identity()..scale(isHover ? 1.1 : 1.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize
+                      .min, // Use the minimum space required by children
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(
+                      icon,
+                      size: 22, // Base size for the icon
+                      color: Colors.white,
+                    ),
+                    SizedBox(height: 4), // Consistent gap
+                    Flexible(
+                      child: Text(title,
+                          overflow: TextOverflow.ellipsis, // Prevent overflow
+                          style: customTheme.textTheme?.bodyMedium
+                              ?.copyWith(fontSize: 10, color: Colors.white)),
+                    ),
+                    Visibility(
+                      maintainAnimation: true,
+                      maintainState: true,
+                      maintainSize: true,
+                      visible: isHover,
+                      child: Container(
+                        margin: EdgeInsets.only(top: 2), // Reduced margin
+                        height: 2,
+                        width: 30,
+                        color: Colors.white,
+                      ),
+                    )
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+      ),
     );
   }
 }
