@@ -37,15 +37,11 @@ ShapeBorder customCardShape = RoundedRectangleBorder(
 );
 ThemeData customTheme = ThemeData(
   textTheme: TextTheme(
-    displayMedium: TextStyle(color: Colors.black),
-    displayLarge: TextStyle(color: Colors.black),
-    displaySmall: TextStyle(color: Colors.black),
-    bodyMedium: TextStyle(color: Colors.black),
-    bodySmall: TextStyle(color: Colors.black),
-    bodyLarge: TextStyle(color: Colors.black),
-    labelLarge: TextStyle(color: Colors.black),
-    labelMedium: TextStyle(color: Colors.black),
-    labelSmall: TextStyle(color: Colors.black),
+    bodyLarge: TextStyle(fontFamily: "Poppins"),
+    bodyMedium: TextStyle(fontFamily: "Poppins"),
+    labelMedium: TextStyle(fontFamily: "Poppins"),
+    displayLarge: TextStyle(fontFamily: "Poppins"),
+    displayMedium: TextStyle(fontFamily: "Poppins"),
   ),
   colorScheme:
       ColorScheme.fromSeed(seedColor: Colors.white, background: Colors.white),
