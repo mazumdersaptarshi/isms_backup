@@ -16,9 +16,10 @@ import '../../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../../themes/common_theme.dart';
 
 class ModuleDetails extends StatefulWidget {
-  ModuleDetails({super.key, required this.course, required this.module});
+  ModuleDetails({super.key, required this.course, required this.module, required this.isModuleStarted});
   Course course;
   Module module;
+  bool isModuleStarted;
   SlidesDataMaster? slidesDataMaster;
   @override
   State<ModuleDetails> createState() => _ModuleDetailsState();
@@ -89,6 +90,7 @@ class _ModuleDetailsState extends State<ModuleDetails> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
+                if(widget.isModuleStarted)
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(
@@ -124,12 +126,14 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                     await loggedInState.setUserCourseStarted(
                       courseDetails: {
                         "courseID": widget.course.id,
-                        "course_name": widget.course.name
+                        "course_name": widget.course.name,
+                        "course_modules_count": widget.course.modulesCount
                       });
                     await loggedInState.setUserCourseModuleStarted(
                       courseDetails: {
                         "courseID": widget.course.id,
-                        "course_name": widget.course.name
+                        "course_name": widget.course.name,
+                        "course_modules_count": widget.course.modulesCount
                       },
                       coursesProvider: coursesProvider,
                       course: widget.course,

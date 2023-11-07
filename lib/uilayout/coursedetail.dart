@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'Moduledescpage.dart';
-import 'testdetails.dart';
+
 
 void main() {
   runApp(CourseDetailsPage(courseTitle: 'Python Basics'));
@@ -39,12 +38,12 @@ class CourseDetailsPage extends StatelessWidget {
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Moduledescpage(courseTitle: 'Module ${index + 1}'),
-                    ),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => Moduledescpage(courseTitle: 'Module ${index + 1}'),
+                  //   ),
+                  // );
                 },
                 child: Container(
                   margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),

@@ -183,6 +183,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
                       "courseID": widget.course.id,
                       "course_name": widget.course.name,
                       "module_title": widget.module?.title,
+                      "course_modules_count": widget.course.modulesCount
                     },
                     course: widget.course,
                     module: widget.module!,
