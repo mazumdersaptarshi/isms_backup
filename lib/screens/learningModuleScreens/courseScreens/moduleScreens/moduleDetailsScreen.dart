@@ -104,7 +104,7 @@ class _ModuleDetailsState extends State<ModuleDetails> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                if(widget.isModuleStarted)
+
                   ElevatedButton(
                     onPressed: () {
                       Navigator.push(

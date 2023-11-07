@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:isms/models/newExam.dart';
 import 'package:isms/models/question.dart';
 import 'package:isms/screens/homePage.dart';
+import 'package:isms/screens/learningModuleScreens/examScreens/examCompletionStrategies.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/themes/common_theme.dart';
@@ -17,11 +18,13 @@ class TakeExamScreen extends StatefulWidget {
       {required this.exam,
         required this.course,
         required this.examtype,
-        this.module});
+        this.module,
+      required this.examCompletionStrategy});
   EXAMTYPE examtype;
   Course course;
   Module? module;
   NewExam exam;
+  ExamCompletionStrategy examCompletionStrategy;
   @override
   _TakeExamScreenState createState() => _TakeExamScreenState();
 }
@@ -42,6 +45,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
   }
 
   loadQuestions() {
+    print("LOADING QUESTIONS");
     widget.exam.questionAnswerSet.forEach((element) {
       List<String> options = [];
       List<int> correctAnswers = [];
@@ -155,45 +159,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
             Text(
                 'Congratulations! Your Score is: $correctAnswers/${_questions.length}'),
             SizedBox(height: 20),
-            if (widget.examtype == EXAMTYPE.courseExam)
-              ElevatedButton(
-                onPressed: () async {
-                  await loggedInState.setUserCourseExamCompleted(
-                      coursesProvider: coursesProvider,
-                      course: widget.course,
-                      courseDetails: {
-                        "courseID": widget.course.id,
-                        "course_name": widget.course.name,
-                      },
-                      examIndex: widget.exam.index).then((val){
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (context) => HomePage()));
-                  });
-
-
-                },
-                child: Text(
-                    "Mark Exam as Done- completed ${widget.exam.index}/${widget.course.exams!.length}"),
-              )
-            else if (widget.examtype == EXAMTYPE.moduleExam)
-              ElevatedButton(
-                onPressed: () {
-                  loggedInState.setUserModuleExamCompleted(
-                    courseDetails: {
-                      "courseID": widget.course.id,
-                      "course_name": widget.course.name,
-                    },
-                    course: widget.course,
-                    module: widget.module!,
-                    coursesProvider: coursesProvider,
-                    examIndex: widget.exam.index,
-                  );
-
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => HomePage()));
-                },
-                child: Text("Mark Module as Done"),
-              ),
+            widget.examCompletionStrategy.buildSumbitButton(context: context),
             ElevatedButton(
               onPressed: () => setState(() {
                 shuffleQuestions();

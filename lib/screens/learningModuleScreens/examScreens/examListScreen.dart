@@ -4,6 +4,7 @@ import 'package:isms/models/module.dart';
 import 'package:isms/models/newExam.dart';
 import 'package:isms/projectModules/courseManagement/examManagement/examDataMaster.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
+import 'package:isms/screens/learningModuleScreens/examScreens/sharedWidgets/examListContainer.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/sharedWidgets/exam_tile.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/takeExamScreen.dart';
 import 'package:isms/screens/login/loginScreen.dart';
@@ -79,35 +80,10 @@ class _ExamListScreenState extends State<ExamListScreen> {
           title: "${widget.course!.name}/ Exams",
 
         ),
-        body: isExamsFetched ? Container(
-          height:MediaQuery.of(context).size.height,
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: exams?.length,
-            itemBuilder: (
-                BuildContext context,
-                int examIndex,
-                ) {
-              NewExam exam = exams![examIndex];
-              return ExamTile(
-                title: exam.title,
-                onPressed: () {
-                  if (widget.examtype == EXAMTYPE.courseExam) {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => TakeExamScreen(
-                              exam: exam,
-                              examtype: EXAMTYPE.courseExam,
-                              course: widget.course,
-                            )));
-                  }
-                },
-                questionCount: exam.questionAnswerSet.length,
-              );
-            },
-          ),
-        ): Container(
+        body: isExamsFetched ?
+            ExamListContainer(exams:exams ?? [], course: widget.course, examtype: EXAMTYPE.courseExam, loggedInState: loggedInState)
+
+            : Container(
           width: MediaQuery.of(context).size.width,
           height: 200,
           child: const AlertDialog(
