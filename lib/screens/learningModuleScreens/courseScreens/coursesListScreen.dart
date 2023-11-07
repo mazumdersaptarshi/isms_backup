@@ -36,7 +36,7 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
     int tileMinWidth = 250;
     double tileRatio = 16 / 9;
     // available width, in pixels
-    double screenWidth = MediaQuery.sizeOf(context).width;
+    double screenWidth = MediaQuery.sizeOf(context).width * 0.7;
     // number of tiles that can fit vertically on the screen
     int maxColumns = max((screenWidth/tileMinWidth).floor(), 1);
     // number of tiles that have to fit on the screen
@@ -80,7 +80,7 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
             : Align(
                 alignment: Alignment.topCenter,
                 child: Container(
-                  width: MediaQuery.sizeOf(context).width * 0.7,
+                  width: screenWidth,
                   child: GridView.builder(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: numberColumns, childAspectRatio: tileRatio),
