@@ -91,11 +91,20 @@ TextStyle commonTitleStyle = TextStyle(
 ShapeBorder customCardShape = RoundedRectangleBorder(
   borderRadius: BorderRadius.circular(10.0),
 );
-ThemeData customTheme = ThemeData(
 
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: secondaryColor,
-        extendedTextStyle: TextStyle(color:white)),
+// TODO
+// - build a colorscheme (start with `fromSeed()`)
+// - remove as much colors as possible from everywhere else
+// - same for other aspects of theme (font size, etc)
+ThemeData customTheme = ThemeData(
+  //useMaterial3: true,
+
+  //colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+  //colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+
+  floatingActionButtonTheme: FloatingActionButtonThemeData(
+    backgroundColor: secondaryColor,
+    extendedTextStyle: TextStyle(color:white)),
 
 
   textTheme: TextTheme(
@@ -107,7 +116,7 @@ ThemeData customTheme = ThemeData(
   ),
   colorScheme:
       ColorScheme.fromSeed(seedColor: Colors.white, background: Colors.white),
- 
+
   buttonTheme: const ButtonThemeData(
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10)))),
@@ -119,10 +128,8 @@ ThemeData customTheme = ThemeData(
         RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(5))
         ),
-
       ),
-        minimumSize: MaterialStateProperty.all(Size(150.0, 48.0)),// You can customize other button properties here.
+      minimumSize: MaterialStateProperty.all(Size(150.0, 48.0)),
     ),
-
   ),
 );

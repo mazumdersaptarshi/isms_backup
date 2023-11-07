@@ -91,12 +91,12 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
     widget.moduleDataMaster = ModuleDataMaster(
         course: widget.course, coursesProvider: coursesProvider);
 
-    if (isModulesFetched == false) {
-      fetchCourseModules(coursesProvider: coursesProvider);
-    }
-
     if (loggedInState.currentUser == null) {
       return LoginPage();
+    }
+
+    if (isModulesFetched == false) {
+      fetchCourseModules(coursesProvider: coursesProvider);
     }
 
     userRole = loggedInState.currentUserRole;
