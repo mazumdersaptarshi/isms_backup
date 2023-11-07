@@ -10,14 +10,14 @@ import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../projectModules/courseManagement/coursesProvider.dart';
-import '../../../../themes/common_theme.dart';
+import '../../examScreens/sharedWidgets/exam_tile.dart';
 
 class ModuleExamListScreen extends StatefulWidget {
   ModuleExamListScreen(
       {super.key,
-      required this.course,
-      required this.examtype,
-      required this.module});
+        required this.course,
+        required this.examtype,
+        required this.module});
   Course course;
   Module module;
   late ExamDataMaster examDataMaster;
@@ -28,8 +28,6 @@ class ModuleExamListScreen extends StatefulWidget {
 
 class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
   bool isExamsFetched = false;
-  late String userRole;
-
   @override
   void initState() {
     super.initState();
@@ -50,7 +48,6 @@ class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
       return LoginPage();
     }
 
-    userRole = loggedInState.currentUserRole!;
     CoursesProvider coursesProvider = context.watch<CoursesProvider>();
 
     Course course = widget.course;
@@ -76,113 +73,42 @@ class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
               Navigator.pop(context);
             },
           ),
-          // TODO
-          // - make the breadcrumbs clickable
-          // - on overflow, show the end rather than the beginning
-          title: Text("${course!.name} > ${module!.title} > Exams"),
+          title: Text("${module!.title}"),
           actions: [
-            if (userRole == "admin")
-              ElevatedButton(
-                style: customElevatedButtonStyle(),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ExamCreation(
-                            course: widget.course,
-                            examtype: EXAMTYPE.moduleExam,
-                            module: widget.module,
-                  )));
-                },
-                child: Text('Create a module exam', style: commonTextStyle),
-              ),
+            // ElevatedButton(
+            //     onPressed: () {
+            // Navigator.push(
+            //     context,
+            //     MaterialPageRoute(
+            //         builder: (context) => CreateModuleScreen(
+            //             courseIndex: widget.courseIndex)));
+            // },
+            //     child: Text("Add new module"))
           ],
         ),
         body: Column(
           children: [
-            Container(
-              height: 150,
-              decoration: BoxDecoration(
-                color: Colors.blue[900],
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(50),
-                  bottomRight: Radius.circular(50),
-                ),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Hi [Name], finish the exams below.',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 10, right: 10),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: exams?.length,
-                  itemBuilder: (BuildContext context, int examIndex) {
-                    NewExam exam = exams![examIndex];
-                    return Card(
-                      margin: EdgeInsets.symmetric(vertical: 10.0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                      child: InkWell(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20.0),
-                          child: Container(
-                            color: Colors.orange[200],
-                            child: ListTile(
-                              contentPadding: EdgeInsets.all(16.0),
-                              title: Text(
-                                exam.title,
-                                style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-                              ),
-                              subtitle: Row(
-                                children: [
-                                  Icon(Icons.timer, color: Colors.black),
-                                  SizedBox(width: 8),
-                                  Text('?? mins', style: TextStyle(color: Colors.black)),
-                                ],
-                              ),
-                              //trailing: IconButton(
-                              //  icon: Icon(Icons.arrow_forward_ios, color: Colors.black),
-                              //),
-                            ),
-                          ),
-                        ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => TakeExamScreen(
-                                course: widget.course,
-                                examtype: EXAMTYPE.moduleExam,
-                                module: widget.module,
-                                exam: exam,
-                          )));
-                        },
-                        // TODO add a onHover() to make the card be more
-                        // like a button
-                      ),
-                    );
+            ListView.builder(
+              shrinkWrap: true,
+              itemCount: exams?.length,
+              itemBuilder: (BuildContext context, int examIndex) {
+                NewExam exam = exams![examIndex];
+                return ExamTile(
+                  title: exam.title,
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => TakeExamScreen(
+                              course: widget.course,
+                              examtype: EXAMTYPE.moduleExam,
+                              module: widget.module,
+                              exam: exam,
+                            )));
                   },
-                ),
-              ),
+                  questionCount: exam.questionAnswerSet.length,
+                );
+              },
             ),
           ],
         ),

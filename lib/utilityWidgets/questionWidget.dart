@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:isms/models/enums.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
+import 'package:isms/themes/common_theme.dart';
 import 'package:isms/utilityWidgets/optionTile.dart';
 import 'package:isms/utilityFunctions/generateRandom.dart';
 
@@ -21,9 +22,9 @@ class _QuestionWidgetState extends State<QuestionWidget> {
   final String qID = generateRandomId();
   final TextEditingController questionController = TextEditingController();
   final List<TextEditingController> optionControllers =
-      List.generate(4, (index) => TextEditingController());
+  List.generate(4, (index) => TextEditingController());
   List<OptionCreationProvider> optionCreationProviders =
-      List.generate(4, (index) => OptionCreationProvider());
+  List.generate(4, (index) => OptionCreationProvider());
 
   @override
   void dispose() {
@@ -39,14 +40,15 @@ class _QuestionWidgetState extends State<QuestionWidget> {
     return SingleChildScrollView(
       child: Form(
         child: Container(
-          height: 300,
+          height: 500,
           child: Column(
             children: [
               TextFormField(
                 controller: questionController,
+                decoration: customInputDecoration(hintText: 'Enter Question'),
               ),
               Container(
-                height: 200,
+                height: 250,
                 child: ListView.builder(
                   itemCount: 4,
                   itemBuilder: (context, index) {
@@ -82,49 +84,54 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                   },
                 ),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  final newQuestionName = questionController.text;
-                  bool questionExists = false;
-                  for (final question in allQuestions) {
-                    if (question["questionID"] == qID) {
-                      questionExists = true;
-                      print("QUESTION EXISTSSSSS");
-                      if (newQuestionName != null && newQuestionName != "")
-                        question["questionName"] = newQuestionName;
+              SizedBox(height: 20,),
+              SizedBox(
+                width: 200,
+                child: ElevatedButton(
+                  style: customElevatedButtonStyle(),
+                  onPressed: () {
+                    final newQuestionName = questionController.text;
+                    bool questionExists = false;
+                    for (final question in allQuestions) {
+                      if (question["questionID"] == qID) {
+                        questionExists = true;
+                        print("QUESTION EXISTSSSSS");
+                        if (newQuestionName != null && newQuestionName != "")
+                          question["questionName"] = newQuestionName;
 
-                      List<Map<String, dynamic>> tempOptions =
-                          question["options"];
-                      for (int i = 0; i < tempOptions.length; i++) {
-                        var option = tempOptions[i];
-                        for (int j = 0; j < widget.options.length; j++) {
-                          if (option["optionID"] ==
-                              widget.options[j]["optionID"]) {
-                            if (widget.options[j]["option_value"] != null &&
-                                widget.options[j]["option_value"] != "") {
-                              option = widget.options[j];
-                              question["options"][i] = widget.options[j];
+                        List<Map<String, dynamic>> tempOptions =
+                        question["options"];
+                        for (int i = 0; i < tempOptions.length; i++) {
+                          var option = tempOptions[i];
+                          for (int j = 0; j < widget.options.length; j++) {
+                            if (option["optionID"] ==
+                                widget.options[j]["optionID"]) {
+                              if (widget.options[j]["option_value"] != null &&
+                                  widget.options[j]["option_value"] != "") {
+                                option = widget.options[j];
+                                question["options"][i] = widget.options[j];
+                              }
                             }
                           }
                         }
+
+                        break;
                       }
-
-                      break;
                     }
-                  }
 
-                  if (questionExists == false) {
-                    setState(() {
-                      allQuestions.add({
-                        "questionID": qID,
-                        "questionName": newQuestionName,
-                        "options": widget.options,
+                    if (questionExists == false) {
+                      setState(() {
+                        allQuestions.add({
+                          "questionID": qID,
+                          "questionName": newQuestionName,
+                          "options": widget.options,
+                        });
                       });
-                    });
-                  }
-                  print(allQuestions);
-                },
-                child: Text("Save Question"),
+                    }
+                    print(allQuestions);
+                  },
+                  child: Text("Save Question",style: buttonText,),
+                ),
               ),
             ],
           ),

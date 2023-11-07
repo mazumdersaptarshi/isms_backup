@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:isms/themes/common_theme.dart';
 
 class OptionTile extends StatefulWidget {
   OptionTile({
@@ -36,6 +37,16 @@ class _OptionTileState extends State<OptionTile> {
       child: Row(
         children: [
           Checkbox(
+              fillColor: MaterialStateProperty.resolveWith<Color>(
+                      (Set<MaterialState> states) {
+                    if (states.contains(MaterialState.disabled)) {
+                      return Colors.grey; // Fill color for the disabled state
+                    }
+                    if (states.contains(MaterialState.selected)) {
+                      return secondaryColor; // Fill color when the checkbox is checked
+                    }
+                    return white; // Fill color when the checkbox is unchecked
+                  }),
               value: widget.isChecked,
               onChanged: (value) {
                 setState(() {
@@ -46,24 +57,39 @@ class _OptionTileState extends State<OptionTile> {
               }),
           Expanded(
               child: TextFormField(
-            controller: widget.controller,
-            onChanged: (value) {
-              setState(() {
-                widget.optionName = value;
-                widget.isOptionSaved = false;
-              });
-            },
-          )),
-          if (widget.isOptionSaved == false)
-            ElevatedButton(
-                onPressed: () {
+                decoration: customInputDecoration(hintText: 'Enter Option'),
+                controller: widget.controller,
+                onChanged: (value) {
                   setState(() {
-                    widget.getTextValue(
-                        widget.controller.text, widget.isChecked);
-                    widget.isOptionSaved = true;
+                    widget.optionName = value;
+                    widget.isOptionSaved = false;
                   });
                 },
-                child: Text("Save option"))
+              )),
+          if (widget.isOptionSaved == false)
+            Row(
+              children: [
+                SizedBox(
+                  width: 10,
+                ),
+                SizedBox(
+                  width: 80,
+                  child: ElevatedButton(
+                      style: customElevatedButtonStyle(),
+                      onPressed: () {
+                        setState(() {
+                          widget.getTextValue(
+                              widget.controller.text, widget.isChecked);
+                          widget.isOptionSaved = true;
+                        });
+                      },
+                      child: Text(
+                        "Save",
+                        style: optionButtonText,
+                      )),
+                ),
+              ],
+            )
         ],
       ),
     );

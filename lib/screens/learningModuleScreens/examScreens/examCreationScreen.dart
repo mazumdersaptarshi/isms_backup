@@ -3,6 +3,7 @@ import 'package:isms/models/enums.dart';
 import 'package:isms/models/newExam.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
 import 'package:isms/screens/login/loginScreen.dart';
+import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/utilityFunctions/generateRandom.dart';
 import 'package:isms/utilityWidgets/questionWidget.dart';
@@ -70,22 +71,31 @@ class ExamCreationState extends State<ExamCreation> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                TextFormField(
-                  controller: titleController,
-                  decoration: InputDecoration(
-                    hintText: "Enter title for exam",
+                Container(
+                  width: 500,
+                  decoration: customBoxTheme,
+                  child: TextFormField(
+                    controller: titleController,
+                    decoration:
+                    customInputDecoration(hintText: "Enter title for exam"),
                   ),
                 ),
-                TextFormField(
-                  controller: passingMarksController,
-                  decoration: InputDecoration(
-                    hintText: "Enter passing marks for exam",
+                SizedBox(
+                  height: 15,
+                ),
+                Container(
+                  width: 500,
+                  decoration: customBoxTheme,
+                  child: TextFormField(
+                    controller: passingMarksController,
+                    decoration: customInputDecoration(
+                        hintText: "Enter passing marks for exam"),
                   ),
                 ),
                 const SizedBox(height: 20.0),
                 Container(
+                    width: 500,
                     height: 460,
-                    color: Colors.orangeAccent,
                     child: ListView.builder(
                       controller: _controller,
                       itemCount: widget.noOfQuestions,
@@ -94,39 +104,48 @@ class ExamCreationState extends State<ExamCreation> {
                         questiontype: QUESTIONTYPE.Checkbox,
                       ),
                     )),
-                ElevatedButton(
-                  onPressed: () {
-                    _addNewQuestion();
-                    _controller.jumpTo(_controller.position.maxScrollExtent);
-                  },
-                  child: const Text('Add a question'),
+                SizedBox(
+                  width: 200,
+                  child: ElevatedButton(
+                    style: customElevatedButtonStyle(),
+                    onPressed: () {
+                      _addNewQuestion();
+                      _controller.jumpTo(_controller.position.maxScrollExtent);
+                    },
+                    child: Text('Add a question',style: buttonText,),
+                  ),
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    print(allQuestions);
+                SizedBox(height: 10,),
+                SizedBox(
+                  width: 200,
+                  child: ElevatedButton(
+                    style: customElevatedButtonStyle(),
+                    onPressed: () {
+                      print(allQuestions);
 
-                    NewExam newExam = NewExam(
-                        examID: generateRandomId(),
-                        passingMarks: int.parse(passingMarksController.text),
-                        title: titleController.text,
-                        questionAnswerSet: allQuestions);
+                      NewExam newExam = NewExam(
+                          examID: generateRandomId(),
+                          passingMarks: int.parse(passingMarksController.text),
+                          title: titleController.text,
+                          questionAnswerSet: allQuestions);
 
-                    if (widget.examtype == EXAMTYPE.courseExam) {
-                      print("CREATE EXAMM ${widget.course.exams}");
-                      widget.examDataMaster.createCourseExam(exam: newExam);
-                    } else if (widget.examtype == EXAMTYPE.moduleExam) {
-                      widget.examDataMaster.createModuleExam(
-                          module: widget.module!, exam: newExam);
+                      if (widget.examtype == EXAMTYPE.courseExam) {
+                        print("CREATE EXAMM ${widget.course.exams}");
+                        widget.examDataMaster.createCourseExam(exam: newExam);
+                      } else if (widget.examtype == EXAMTYPE.moduleExam) {
+                        widget.examDataMaster.createModuleExam(
+                            module: widget.module!, exam: newExam);
+                        allQuestions.clear();
+                      }
+
                       allQuestions.clear();
-                    }
-
-                    allQuestions.clear();
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => CoursesDisplayScreen()));
-                  },
-                  child: const Text('Submit'),
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CoursesDisplayScreen()));
+                    },
+                    child: Text('Submit',style: buttonText,),
+                  ),
                 ),
               ],
             ),
