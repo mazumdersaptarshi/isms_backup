@@ -77,6 +77,11 @@ class _HomePageState extends State<HomePage> {
           Navigator.push(context, MaterialPageRoute(builder: (context)=>AdminConsolePage()));
         },
         title: "Admin Console",),
+      HomePageItem(
+        onTap: (){
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>AdminConsolePage()));
+        },
+        title: "Admin Console",),
     ];
 
 
@@ -151,68 +156,64 @@ class _HomePageState extends State<HomePage> {
           appBar: CustomAppBar(
             loggedInState: loggedInState,
           ),
-          body: Container(
-            height: MediaQuery.of(context).size.height,
-            child: Stack(
-              children: [Column(
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.all(20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(
-                            "Welcome back, \n${loggedInState.currentUserName}",
-                            style: customTheme.textTheme?.bodyMedium
-                                ?.copyWith(fontSize: 30, color: Colors.white),
-                          ),
-                          Flexible(
-                            flex:
-                                1, // The flex factor. You can adjust this number to take more or less space in the Row or Column.
-                            child: Container(
-                              width: MediaQuery.of(context).size.width *
-                                  0.13, // 50% of screen width
+          body: CustomScrollView(
+            slivers: [
+              SliverAppBar(backgroundColor: Colors.deepPurpleAccent.shade100,
+              automaticallyImplyLeading: false,
+              expandedHeight: 250,
+              pinned: false,
+              flexibleSpace: FlexibleSpaceBar(
+                background: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Text(
+                      "Welcome back, \n${loggedInState.currentUserName}",
+                      style: customTheme.textTheme?.bodyMedium
+                          ?.copyWith(fontSize: 30, color: Colors.white),
+                    ),
+                    Flexible(
+                      flex:
+                      1, // The flex factor. You can adjust this number to take more or less space in the Row or Column.
+                      child: Container(
+                        width: MediaQuery.of(context).size.width *
+                            0.13, // 50% of screen width
 
-                              child: Image.asset(
-                                "assets/images/security.png",
-                                fit: BoxFit
-                                    .cover, // This will cover the available space, you can change it to BoxFit.contain to prevent the image from being cropped.
-                              ),
-                            ),
-                          ),
-                        ],
+                        child: Image.asset(
+                          "assets/images/security.png",
+                          fit: BoxFit
+                              .cover, // This will cover the available space, you can change it to BoxFit.contain to prevent the image from being cropped.
+                        ),
                       ),
                     ),
-                  ),
-                  Expanded(
-                    flex: 5,
-                    child: Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius:
-                            BorderRadius.only(topLeft: Radius.circular(30)),
-                      ),
-
-                    ),
-                  )
-                ],
+                  ],
+                ),
               ),
-                Positioned(
-                  left: MediaQuery.of(context).size.width*0.1,
-                  top: 200,
-                  child: Container(
-
-
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    child: HomePageItemsContainer(homePageItems: homePageItems)
-                  ),
-                )
-              ],
             ),
+            SliverToBoxAdapter(
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height-40,
+
+
+                  child: Stack(children: [
+                    Positioned(
+                      top: 100,
+                        child: Container(
+                          height: MediaQuery.of(context).size.height-40,
+                          width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(topLeft: Radius.circular(20))
+                      ),
+                    )),
+                    Positioned(
+                        top: 20,
+                        child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            child: HomePageItemsContainer(homePageItems: homePageItems)))])),
+            )
+            ],
+
           ));
     });
   }
@@ -224,11 +225,26 @@ class HomePageItemsContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double itemContainerWidth=  MediaQuery.of(context).size.width*0.5;
-    return MediaQuery.of(context).size.width> 500? Row(
-      children: homePageItems,
+    return MediaQuery.of(context).size.width> 800?
+    Container(
+      width: MediaQuery.of(context).size.width,
+      height: 300,
+      child: Container(
+        margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.1),
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: homePageItems.length,
+
+          itemBuilder: (BuildContext contenxt, int index){
+            return homePageItems[index];
+          },
+
+        ),
+      ),
     ):
     Container(
-      width: MediaQuery.of(context).size.width*0.8,
+      width: MediaQuery.of(context).size.width*0.9,
+      margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.03),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: homePageItems,
@@ -246,11 +262,14 @@ class HomePageItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 300,
-      width: 300,
+     constraints: BoxConstraints(
+       minWidth: 300
+     ),
       child: GestureDetector(
         onTap: (){
           onTap();},
         child: Card(
+          elevation: 10,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(10))
           ),

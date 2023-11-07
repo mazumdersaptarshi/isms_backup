@@ -6,6 +6,7 @@ import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/c
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examListScreen.dart';
 import 'package:isms/screens/login/loginScreen.dart';
+import 'package:isms/sharedWidgets/customAppBar.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'sharedWidgets/moduleTile.dart';
 import 'package:isms/sharedWidgets/leaningModulesAppBar.dart';
@@ -116,17 +117,8 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
     double gridWidth = screenWidth * numberColumns / maxColumns;
 
     return Scaffold(
-      appBar: LearningModulesAppBar(
-        leadingWidget: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => CoursesDisplayScreen()));
-          },
-        ),
-        title: "${widget.course.name} / All Modules",
+      appBar: CustomAppBar(
+        loggedInState: loggedInState,
       ),
 
       body: Container(

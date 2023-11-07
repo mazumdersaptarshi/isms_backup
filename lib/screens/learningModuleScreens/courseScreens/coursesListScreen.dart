@@ -5,6 +5,7 @@ import 'package:isms/screens/learningModuleScreens/courseScreens/sharedWidgets/c
 import 'package:isms/screens/homePage.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/modulesListScreen.dart';
 import 'package:isms/screens/login/loginScreen.dart';
+import 'package:isms/sharedWidgets/customAppBar.dart';
 import 'package:isms/sharedWidgets/leaningModulesAppBar.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
@@ -46,15 +47,8 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
     // grid width, in pixels
     double gridWidth = screenWidth * numberColumns / maxColumns;
     return Scaffold(
-      appBar: LearningModulesAppBar(
-        leadingWidget: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => HomePage()));
-          },
-        ),
-        title: "All Courses",
+      appBar: CustomAppBar(
+        loggedInState: loggedInState,
       ),
       body: Container(
         margin: EdgeInsets.only(top: 20),

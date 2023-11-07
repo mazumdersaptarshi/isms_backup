@@ -7,6 +7,7 @@ import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/s
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/slidesDisplayScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/screens/login/loginScreen.dart';
+import 'package:isms/sharedWidgets/customAppBar.dart';
 import 'package:isms/sharedWidgets/leaningModulesAppBar.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
@@ -81,19 +82,8 @@ class _ModuleDetailsState extends State<ModuleDetails> {
       fetchSlidesList(coursesProvider: coursesProvider);
     }
     return Scaffold(
-      appBar: LearningModulesAppBar(
-        leadingWidget: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            //Navigator.pop(context);
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        ModulesListScreen(course: widget.course)));
-          },
-        ),
-        title: "${widget.course.name} > ${widget.module.title}",
+      appBar: CustomAppBar(
+        loggedInState: loggedInState,
       ),
 
       body: Container(

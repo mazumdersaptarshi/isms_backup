@@ -16,6 +16,7 @@ import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/screens/login/loginScreen.dart';
 
 import '../../../../../models/module.dart';
+import '../../../../../sharedWidgets/customAppBar.dart';
 
 class SlidesDisplayScreen extends StatefulWidget {
   SlidesDisplayScreen(
@@ -73,15 +74,8 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
     }
 
     return Scaffold(
-      appBar: LearningModulesAppBar(
-        leadingWidget: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(
-                context,
-               );
-          },
-        ),
+      appBar: CustomAppBar(
+        loggedInState: loggedInState,
       ),
       body: Align(
         alignment: Alignment.topCenter,

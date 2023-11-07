@@ -12,6 +12,7 @@ import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../projectModules/courseManagement/coursesProvider.dart';
+import '../../../../sharedWidgets/customAppBar.dart';
 import '../../examScreens/sharedWidgets/exam_tile.dart';
 
 class ModuleExamListScreen extends StatefulWidget {
@@ -68,17 +69,8 @@ class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
     }
 
       return Scaffold(
-        appBar: LearningModulesAppBar(
-          leadingWidget: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pop(
-                  context,
-                  );
-            },
-          ),
-          title: "${module!.title}/ Quizzes",
-
+        appBar: CustomAppBar(
+          loggedInState: loggedInState,
         ),
         body: isExamsFetched?
             ExamListContainer(exams: exams?? [], course: course, examtype: EXAMTYPE.moduleExam, module: module, loggedInState: loggedInState)
