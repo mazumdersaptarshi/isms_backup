@@ -33,7 +33,7 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
 
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
 
-    int tileMinWidth = 250;
+    int tileMinWidth = 300;
     double tileRatio = 16 / 9;
     // available width, in pixels
     double screenWidth = MediaQuery.sizeOf(context).width * 0.7;
@@ -80,7 +80,9 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
             : Align(
                 alignment: Alignment.topCenter,
                 child: Container(
-                  width: screenWidth,
+
+                  // width: MediaQuery.sizeOf(context).width * 0.7,
+                  width: gridWidth,
                   child: GridView.builder(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: numberColumns, childAspectRatio: tileRatio),

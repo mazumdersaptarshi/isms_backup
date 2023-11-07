@@ -6,6 +6,7 @@ import 'package:isms/projectModules/courseManagement/examManagement/examDataMast
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/takeExamScreen.dart';
 import 'package:isms/screens/login/loginScreen.dart';
+import 'package:isms/sharedWidgets/leaningModulesAppBar.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 
@@ -64,29 +65,21 @@ class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
     if (isExamsFetched == false) {
       fetchExamsList(coursesProvider: coursesProvider);
     }
-    if (isExamsFetched) {
+
       return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
+        appBar: LearningModulesAppBar(
+          leadingWidget: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pop(
+                  context,
+                  );
             },
           ),
-          title: Text("${module!.title}"),
-          actions: [
-            // ElevatedButton(
-            //     onPressed: () {
-            // Navigator.push(
-            //     context,
-            //     MaterialPageRoute(
-            //         builder: (context) => CreateModuleScreen(
-            //             courseIndex: widget.courseIndex)));
-            // },
-            //     child: Text("Add new module"))
-          ],
+          title: "${module!.title}/ Quizzes",
+
         ),
-        body: Column(
+        body: isExamsFetched? Column(
           children: [
             ListView.builder(
               shrinkWrap: true,
@@ -111,17 +104,17 @@ class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
               },
             ),
           ],
+        ): Container(
+          width: MediaQuery.of(context).size.width,
+          height: 200,
+          child: const AlertDialog(
+            title: Text("Fetching Exams"),
+            content: Align(
+                alignment: Alignment.topCenter,
+                child: CircularProgressIndicator()),
+          ),
         ),
       );
-    } else {
-      return Container(
-        child: const AlertDialog(
-          title: Text("Fetching Exams"),
-          content: Align(
-              alignment: Alignment.topCenter,
-              child: CircularProgressIndicator()),
-        ),
-      );
-    }
+
   }
 }

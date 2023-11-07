@@ -135,7 +135,7 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                 //    ),
                 //  ),
                 ElevatedButton(
-                  style: customElevatedButtonStyle(),
+
                   onPressed: () async {
                     await loggedInState.setUserCourseStarted(
                       courseDetails: {

@@ -93,5 +93,20 @@ ShapeBorder customCardShape = RoundedRectangleBorder(
 );
 ThemeData customTheme = ThemeData(
     floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: primaryColor,
-        extendedTextStyle: TextStyle(color:white)));
+        backgroundColor: secondaryColor,
+        extendedTextStyle: TextStyle(color:white)),
+
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ButtonStyle(
+      backgroundColor: MaterialStateProperty.all(secondaryColor),
+      shape: MaterialStateProperty.all< RoundedRectangleBorder>(
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(5))
+        ),
+
+      ),
+        minimumSize: MaterialStateProperty.all(Size(150.0, 48.0)),// You can customize other button properties here.
+    ),
+
+  ),
+);

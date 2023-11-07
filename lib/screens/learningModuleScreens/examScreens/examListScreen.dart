@@ -11,6 +11,7 @@ import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 
 import '../../../projectModules/courseManagement/coursesProvider.dart';
+import '../../../sharedWidgets/leaningModulesAppBar.dart';
 
 class ExamListScreen extends StatefulWidget {
   ExamListScreen(
@@ -64,18 +65,21 @@ class _ExamListScreenState extends State<ExamListScreen> {
       fetchExamsList(coursesProvider: coursesProvider);
     }
 
-    if (isExamsFetched) {
+
       return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
+        appBar: LearningModulesAppBar(
+          leadingWidget: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pop(
+                context,
+              );
             },
           ),
-          title: Text("${widget.course.name}"),
+          title: "${widget.course!.name}/ Exams",
+
         ),
-        body: Container(
+        body: isExamsFetched ? Container(
           height:MediaQuery.of(context).size.height,
           child: ListView.builder(
             shrinkWrap: true,
@@ -103,17 +107,17 @@ class _ExamListScreenState extends State<ExamListScreen> {
               );
             },
           ),
+        ): Container(
+          width: MediaQuery.of(context).size.width,
+          height: 200,
+          child: const AlertDialog(
+            title: Text("Fetching Exams"),
+            content: Align(
+                alignment: Alignment.topCenter,
+                child: CircularProgressIndicator()),
+          ),
         ),
       );
-    } else {
-      return Container(
-        child: const AlertDialog(
-          title: Text("Fetching Exams"),
-          content: Align(
-              alignment: Alignment.topCenter,
-              child: CircularProgressIndicator()),
-        ),
-      );
-    }
+
   }
 }
