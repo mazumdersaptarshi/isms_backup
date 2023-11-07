@@ -28,6 +28,8 @@ class _HomePageState extends State<HomePage> {
   DateTime? _expiryDate;
   String? initialLink;
 
+
+
   @override
   void initState() {
     super.initState();
@@ -60,6 +62,24 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> homePageItems=[HomePageItem(
+      onTap: (){
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>CoursesDisplayScreen()));
+      },
+      title: "All Courses",),
+      HomePageItem(
+        onTap: (){
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>AdminConsolePage()));
+        },
+        title: "Admin Console",),
+      HomePageItem(
+        onTap: (){
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>AdminConsolePage()));
+        },
+        title: "Admin Console",),
+    ];
+
+
     final loggedInState = context.watch<LoggedInState>();
 
     if (loggedInState.currentUser == null) {
@@ -70,6 +90,7 @@ class _HomePageState extends State<HomePage> {
 
     return Consumer<CoursesProvider>(
         builder: (BuildContext context, CoursesProvider value, Widget? child) {
+
       return Scaffold(
           backgroundColor: Colors.deepPurpleAccent.shade100,
           bottomNavigationBar: kIsWeb
@@ -130,57 +151,115 @@ class _HomePageState extends State<HomePage> {
           appBar: CustomAppBar(
             loggedInState: loggedInState,
           ),
-          body: Column(
-            children: [
-              Expanded(
-                flex: 2,
-                child: Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.all(20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text(
-                        "Welcome back, \n${loggedInState.currentUserName}",
-                        style: customTheme.textTheme?.bodyMedium
-                            ?.copyWith(fontSize: 30, color: Colors.white),
-                      ),
-                      Flexible(
-                        flex:
-                            1, // The flex factor. You can adjust this number to take more or less space in the Row or Column.
-                        child: Container(
-                          width: MediaQuery.of(context).size.width *
-                              0.13, // 50% of screen width
-
-                          child: Image.asset(
-                            "assets/images/security.png",
-                            fit: BoxFit
-                                .cover, // This will cover the available space, you can change it to BoxFit.contain to prevent the image from being cropped.
+          body: Container(
+            height: MediaQuery.of(context).size.height,
+            child: Stack(
+              children: [Column(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.all(20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text(
+                            "Welcome back, \n${loggedInState.currentUserName}",
+                            style: customTheme.textTheme?.bodyMedium
+                                ?.copyWith(fontSize: 30, color: Colors.white),
                           ),
-                        ),
+                          Flexible(
+                            flex:
+                                1, // The flex factor. You can adjust this number to take more or less space in the Row or Column.
+                            child: Container(
+                              width: MediaQuery.of(context).size.width *
+                                  0.13, // 50% of screen width
+
+                              child: Image.asset(
+                                "assets/images/security.png",
+                                fit: BoxFit
+                                    .cover, // This will cover the available space, you can change it to BoxFit.contain to prevent the image from being cropped.
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
+                  Expanded(
+                    flex: 5,
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius:
+                            BorderRadius.only(topLeft: Radius.circular(30)),
+                      ),
+
+                    ),
+                  )
+                ],
               ),
-              Expanded(
-                flex: 5,
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius:
-                        BorderRadius.only(topLeft: Radius.circular(30)),
+                Positioned(
+                  left: MediaQuery.of(context).size.width*0.1,
+                  top: 200,
+                  child: Container(
+
+
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: HomePageItemsContainer(homePageItems: homePageItems)
                   ),
-                  child: Column(
-                    children: [
-                      Text("uu"),
-                    ],
-                  ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ));
     });
+  }
+}
+
+class HomePageItemsContainer extends StatelessWidget {
+   HomePageItemsContainer({super.key, required this.homePageItems});
+  List<Widget> homePageItems;
+  @override
+  Widget build(BuildContext context) {
+    double itemContainerWidth=  MediaQuery.of(context).size.width*0.5;
+    return MediaQuery.of(context).size.width> 500? Row(
+      children: homePageItems,
+    ):
+    Container(
+      width: MediaQuery.of(context).size.width*0.8,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: homePageItems,
+      ),
+    );
+  }
+}
+
+
+class HomePageItem extends StatelessWidget {
+   HomePageItem({super.key, required this.onTap, required this.title});
+  Function onTap;
+  String title;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 300,
+      width: 300,
+      child: GestureDetector(
+        onTap: (){
+          onTap();},
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10))
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Text(title),
+          ),
+        ),
+      ),
+    );
   }
 }
