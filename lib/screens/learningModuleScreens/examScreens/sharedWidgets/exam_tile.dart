@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../../../../themes/common_theme.dart';
 
-class CourseTile extends StatelessWidget {
-  final int index;
+class ExamTile extends StatelessWidget {
   final String title;
+  final int questionCount;
   Function? onPressed;
-  CourseTile(
-      {required this.index, required this.title, required this.onPressed});
+  ExamTile({ required this.title, required this.onPressed,required this.questionCount});
 
   @override
   Widget build(BuildContext context) {
@@ -25,15 +24,6 @@ class CourseTile extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  child: Image.network(
-                    "https://www.shutterstock.com/image-vector/coding-vector-illustration-600w-687456625.jpg",
-                    height: 120,
-                    width: 120,
-                    fit: BoxFit.cover,
-                  ),
-                ),
                 Expanded(
                   child: Row(
                     children: [
@@ -41,11 +31,15 @@ class CourseTile extends StatelessWidget {
                       Expanded(
                           child: Text(title,
                               style: commonTextStyle.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black))),
+                                  fontWeight: FontWeight.bold, color: black))),
                     ],
                   ),
-                )
+                ),
+                Icon(Icons.question_answer,color: secondaryColor,size: 15,),
+                SizedBox(width: 8,),
+                Text("Total questions: ${questionCount.toString()}",
+                  style: TextStyle(fontSize: 12, color: secondaryColor,fontWeight: FontWeight.bold),
+                ),
               ],
             ),
           ),

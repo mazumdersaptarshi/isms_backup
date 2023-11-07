@@ -4,6 +4,7 @@ import 'package:isms/models/module.dart';
 import 'package:isms/models/newExam.dart';
 import 'package:isms/projectModules/courseManagement/examManagement/examDataMaster.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
+import 'package:isms/screens/learningModuleScreens/examScreens/sharedWidgets/exam_tile.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/takeExamScreen.dart';
 import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/userManagement/loggedInState.dart';
@@ -14,9 +15,9 @@ import '../../../projectModules/courseManagement/coursesProvider.dart';
 class ExamListScreen extends StatefulWidget {
   ExamListScreen(
       {super.key,
-      required this.course,
-      required this.examtype,
-      this.moduleIndex});
+        required this.course,
+        required this.examtype,
+        this.moduleIndex});
   Course course;
   int? moduleIndex;
   late ExamDataMaster examDataMaster;
@@ -27,8 +28,6 @@ class ExamListScreen extends StatefulWidget {
 
 class _ExamListScreenState extends State<ExamListScreen> {
   bool isExamsFetched = false;
-  late String userRole;
-
   @override
   void initState() {
     super.initState();
@@ -48,8 +47,6 @@ class _ExamListScreenState extends State<ExamListScreen> {
     if (loggedInState.currentUser == null) {
       return LoginPage();
     }
-
-    userRole = loggedInState.currentUserRole;
 
     CoursesProvider coursesProvider = context.watch<CoursesProvider>();
 
@@ -78,49 +75,34 @@ class _ExamListScreenState extends State<ExamListScreen> {
           ),
           title: Text("${widget.course.name}"),
         ),
-        body: Column(
-          children: [
-            Text("${exams}"),
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: exams?.length,
-              itemBuilder: (BuildContext context, int examIndex) {
-                NewExam exam = exams![examIndex];
-                return Row(
-                  children: [
-                    Text(exam.title),
-                    ElevatedButton(
-                        onPressed: () {
-                          if (widget.examtype == EXAMTYPE.courseExam) {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => TakeExamScreen(
-                                          exam: exam,
-                                          examtype: EXAMTYPE.courseExam,
-                                          course: widget.course,
-                                        )));
-                          }
-                        },
-                        child: Text("Take exam"))
-                  ],
-                );
-              },
-            ),
-            SizedBox(height: 20),
-            if (userRole == "admin")
-              ElevatedButton(
-                  onPressed: () {
+        body: Container(
+          height:MediaQuery.of(context).size.height,
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: exams?.length,
+            itemBuilder: (
+                BuildContext context,
+                int examIndex,
+                ) {
+              NewExam exam = exams![examIndex];
+              return ExamTile(
+                title: exam.title,
+                onPressed: () {
+                  if (widget.examtype == EXAMTYPE.courseExam) {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ExamCreation(
-                                  examtype: EXAMTYPE.courseExam,
-                                  course: widget.course,
-                                )));
-                  },
-                  child: Text("Create exam")),
-          ],
+                            builder: (context) => TakeExamScreen(
+                              exam: exam,
+                              examtype: EXAMTYPE.courseExam,
+                              course: widget.course,
+                            )));
+                  }
+                },
+                questionCount: exam.questionAnswerSet.length,
+              );
+            },
+          ),
         ),
       );
     } else {
