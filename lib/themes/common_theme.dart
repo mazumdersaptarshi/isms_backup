@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 // Theme Constants
-const primaryColor = Color.fromARGB(255, 221, 244, 250);
-const secondaryColor = Color.fromARGB(255, 128, 132, 255);
-const bgColor = Color.fromARGB(255, 255, 255, 255);
+const primaryColor = Colors.deepPurpleAccent;
+const secondaryColor = Colors.deepPurpleAccent;
+const bgColor = Colors.deepPurpleAccent;
 const white = Colors.white;
 const black = Colors.black;
 const transparent = Colors.transparent;
@@ -24,17 +24,13 @@ ButtonStyle customElevatedButtonStyle() {
   );
 }
 
-
 TextStyle buttonText = TextStyle(
   color: white,
   fontSize: defaultFontSize,
 );
 
 TextStyle optionButtonText = TextStyle(
-    color: white,
-    fontSize: smallFontSize,
-    fontWeight: FontWeight.bold
-);
+    color: white, fontSize: smallFontSize, fontWeight: FontWeight.bold);
 
 BoxDecoration customButtonTheme = BoxDecoration(
   color: secondaryColor,
@@ -50,7 +46,7 @@ BoxDecoration customButtonTheme = BoxDecoration(
 
 BoxDecoration customBoxTheme = BoxDecoration(
   color: white,
-  boxShadow: const[
+  boxShadow: const [
     BoxShadow(
       color: secondaryColor,
       offset: Offset(0, 2),
@@ -80,7 +76,7 @@ InputDecoration customInputDecoration({
 }
 
 TextStyle ModuleDescStyle =
-TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: primaryColor);
+    TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: primaryColor);
 
 TextStyle commonTextStyle = TextStyle(fontSize: defaultFontSize, color: black);
 
@@ -92,12 +88,9 @@ ShapeBorder customCardShape = RoundedRectangleBorder(
   borderRadius: BorderRadius.circular(10.0),
 );
 ThemeData customTheme = ThemeData(
-
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: secondaryColor,
-        extendedTextStyle: TextStyle(color:white)),
-
-
+  floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: secondaryColor,
+      extendedTextStyle: TextStyle(color: white)),
   textTheme: TextTheme(
     bodyLarge: TextStyle(fontFamily: "Poppins"),
     bodyMedium: TextStyle(fontFamily: "Poppins"),
@@ -107,22 +100,18 @@ ThemeData customTheme = ThemeData(
   ),
   colorScheme:
       ColorScheme.fromSeed(seedColor: Colors.white, background: Colors.white),
- 
   buttonTheme: const ButtonThemeData(
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10)))),
-
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ButtonStyle(
       backgroundColor: MaterialStateProperty.all(secondaryColor),
-      shape: MaterialStateProperty.all< RoundedRectangleBorder>(
+      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
         RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(5))
-        ),
-
+            borderRadius: BorderRadius.all(Radius.circular(5))),
       ),
-        minimumSize: MaterialStateProperty.all(Size(150.0, 48.0)),// You can customize other button properties here.
+      minimumSize: MaterialStateProperty.all(
+          Size(150.0, 48.0)), // You can customize other button properties here.
     ),
-
   ),
 );
