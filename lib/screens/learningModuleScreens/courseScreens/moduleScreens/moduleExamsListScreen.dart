@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
@@ -13,15 +15,14 @@ import '../../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../../themes/common_theme.dart';
 
 class ModuleExamListScreen extends StatefulWidget {
-  ModuleExamListScreen(
+  const ModuleExamListScreen(
       {super.key,
       required this.course,
       required this.examtype,
       required this.module});
-  Course course;
-  Module module;
-  late ExamDataMaster examDataMaster;
-  EXAMTYPE examtype;
+  final Course course;
+  final Module module;
+  final EXAMTYPE examtype;
   @override
   State<ModuleExamListScreen> createState() => _ModuleExamListScreenState();
 }
@@ -29,14 +30,15 @@ class ModuleExamListScreen extends StatefulWidget {
 class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
   bool isExamsFetched = false;
   late String userRole;
-
+  late ExamDataMaster examDataMaster;
+  
   @override
   void initState() {
     super.initState();
   }
 
   fetchExamsList({required CoursesProvider coursesProvider}) async {
-    await widget.examDataMaster.fetchModuleExams(module: widget.module);
+    await examDataMaster.fetchModuleExams(module: widget.module);
     setState(() {
       isExamsFetched = true;
     });
@@ -47,10 +49,10 @@ class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
     LoggedInState loggedInState = context.watch<LoggedInState>();
 
     if (loggedInState.currentUser == null) {
-      return LoginPage();
+      return const LoginPage();
     }
 
-    userRole = loggedInState.currentUserRole!;
+    userRole = loggedInState.currentUserRole;
     CoursesProvider coursesProvider = context.watch<CoursesProvider>();
 
     Course course = widget.course;
@@ -62,7 +64,7 @@ class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
     } else {
       exams = widget.course.exams;
     }
-    widget.examDataMaster =
+    examDataMaster =
         ExamDataMaster(course: course, coursesProvider: coursesProvider);
     if (isExamsFetched == false) {
       fetchExamsList(coursesProvider: coursesProvider);
@@ -71,7 +73,7 @@ class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
       return Scaffold(
         appBar: AppBar(
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () {
               Navigator.pop(context);
             },
@@ -79,7 +81,7 @@ class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
           // TODO
           // - make the breadcrumbs clickable
           // - on overflow, show the end rather than the beginning
-          title: Text("${course!.name} > ${module!.title} > Exams"),
+          title: Text("${course.name} > ${module!.title} > Exams"),
           actions: [
             if (userRole == "admin")
               ElevatedButton(
@@ -104,12 +106,12 @@ class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
               height: 150,
               decoration: BoxDecoration(
                 color: Colors.blue[900],
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(50),
                   bottomRight: Radius.circular(50),
                 ),
               ),
-              child: Column(
+              child: const Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
@@ -122,7 +124,7 @@ class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
                   Align(
                     alignment: Alignment.topRight,
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 10, right: 10),
+                      padding: EdgeInsets.only(top: 10, right: 10),
                     ),
                   ),
                 ],
@@ -137,7 +139,7 @@ class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
                   itemBuilder: (BuildContext context, int examIndex) {
                     NewExam exam = exams![examIndex];
                     return Card(
-                      margin: EdgeInsets.symmetric(vertical: 10.0),
+                      margin: const EdgeInsets.symmetric(vertical: 10.0),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0),
                       ),
@@ -147,12 +149,12 @@ class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
                           child: Container(
                             color: Colors.orange[200],
                             child: ListTile(
-                              contentPadding: EdgeInsets.all(16.0),
+                              contentPadding: const EdgeInsets.all(16.0),
                               title: Text(
                                 exam.title,
-                                style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                                style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
                               ),
-                              subtitle: Row(
+                              subtitle: const Row(
                                 children: [
                                   Icon(Icons.timer, color: Colors.black),
                                   SizedBox(width: 8),
@@ -188,14 +190,12 @@ class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
         ),
       );
     } else {
-      return Container(
-        child: const AlertDialog(
+      return const AlertDialog(
           title: Text("Fetching Exams"),
           content: Align(
               alignment: Alignment.topCenter,
               child: CircularProgressIndicator()),
-        ),
-      );
+        );
     }
   }
 }

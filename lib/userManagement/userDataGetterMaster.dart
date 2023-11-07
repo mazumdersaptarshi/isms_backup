@@ -1,5 +1,8 @@
+// ignore_for_file: file_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:isms/adminManagement/createUserReferenceForAdmin.dart';
 import 'package:isms/models/customUser.dart';
 
@@ -13,7 +16,7 @@ class UserDataGetterMaster {
 
   static Future<void> createUserData(CustomUser customUser) async {
     Map<String, dynamic> userJson = customUser.toMap();
-    print("creating the user ${userJson}");
+    debugPrint("creating the user $userJson");
     await db.collection('users').doc(customUser.uid).set(userJson);
 
     //Also creating a reference to the user on Admin side
@@ -65,10 +68,10 @@ class UserDataGetterMaster {
       _userRole = userData?['role']!;
       CustomUser loggedInUserObject = CustomUser.fromMap(userData!);
 
-      print('data fetched from Firestore for user ${user.email}');
+      debugPrint('data fetched from Firestore for user ${user.email}');
       _customUserObject = loggedInUserObject;
     } else {
-      print('user ${user.email} not found in Firestore');
+      debugPrint('user ${user.email} not found in Firestore');
     }
 
     // last step: set _currentUser, so the app knows that it is signed

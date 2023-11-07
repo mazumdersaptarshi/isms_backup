@@ -1,6 +1,6 @@
-import 'package:flutter/foundation.dart';
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 // Theme Constants
 const primaryColor = Color.fromARGB(255, 128, 132, 255);
@@ -23,12 +23,12 @@ ButtonStyle customElevatedButtonStyle() {
 }
 
 TextStyle ModuleDescStyle =
-    TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white);
+    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white);
 
 TextStyle commonTextStyle =
-    TextStyle(fontSize: defaultFontSize, color: textColor);
+    const TextStyle(fontSize: defaultFontSize, color: textColor);
 
-TextStyle commonTitleStyle = TextStyle(
+TextStyle commonTitleStyle = const TextStyle(
   fontSize: 17,
 );
 
@@ -36,7 +36,7 @@ ShapeBorder customCardShape = RoundedRectangleBorder(
   borderRadius: BorderRadius.circular(10.0),
 );
 ThemeData customTheme = ThemeData(
-  textTheme: TextTheme(
+  textTheme: const TextTheme(
     displayMedium: TextStyle(color: Colors.black),
     displayLarge: TextStyle(color: Colors.black),
     displaySmall: TextStyle(color: Colors.black),
@@ -60,6 +60,6 @@ ThemeData customTheme = ThemeData(
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(10))),
         backgroundColor: primaryColor,
-        textStyle: TextStyle(color: Colors.black)),
+        textStyle: const TextStyle(color: Colors.black)),
   ),
 );

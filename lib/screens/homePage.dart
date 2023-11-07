@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -15,8 +17,7 @@ import 'package:provider/provider.dart';
 import 'login/loginScreen.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key? key}) : super(key: key);
-  bool isUserInfoFetched = false;
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -24,8 +25,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late String userRole;
-  DateTime? _expiryDate;
+  //DateTime? _expiryDate;
   String? initialLink;
+  bool isUserInfoFetched = false;
 
   @override
   void initState() {
@@ -62,7 +64,7 @@ class _HomePageState extends State<HomePage> {
     final loggedInState = context.watch<LoggedInState>();
 
     if (loggedInState.currentUser == null) {
-      return LoginPage();
+      return const LoginPage();
     }
 
     userRole = loggedInState.currentUserRole;
@@ -125,10 +127,10 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-          appBar: CustomAppBar(),
+          appBar: const CustomAppBar(),
           body: Row(
             children: [
-              NavigationRail(destinations: [
+              NavigationRail(destinations: const [
                 NavigationRailDestination(
                   icon: Icon(Icons.favorite_border),
                   selectedIcon: Icon(Icons.favorite),
@@ -145,7 +147,7 @@ class _HomePageState extends State<HomePage> {
                   label: Text('Stars'),
                 ),
               ], selectedIndex: 0),
-              Container(
+              SizedBox(
                 width: MediaQuery.of(context).size.width - 100,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -178,10 +180,10 @@ class _HomePageState extends State<HomePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         if (userRole == "admin")
-                          HomePageTile(
+                          const HomePageTile(
                             tileId: 'adminConsole',
                           ),
-                        HomePageTile(tileId: 'courses'),
+                        const HomePageTile(tileId: 'courses'),
                       ],
                     ),
                     const SizedBox(height: 20),
@@ -190,7 +192,7 @@ class _HomePageState extends State<HomePage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => UserProfilePage()),
+                              builder: (context) => const UserProfilePage()),
                         );
                       },
                       style: ButtonStyle(
@@ -224,10 +226,11 @@ class _HomePageState extends State<HomePage> {
                               loggedInState.currentUserEmail!,
                               loggedInState.currentUserName!,
                             );
+                             if (!context.mounted) return;
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => ReminderScreen()),
+                                  builder: (context) => const ReminderScreen()),
                             );
                           } else {
                             Fluttertoast.showToast(
@@ -252,8 +255,8 @@ class _HomePageState extends State<HomePage> {
 }
 
 class HomePageTile extends StatelessWidget {
-  HomePageTile({required this.tileId});
-  String tileId;
+  const HomePageTile({super.key, required this.tileId});
+  final String tileId;
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -262,14 +265,16 @@ class HomePageTile extends StatelessWidget {
         ),
         child: InkWell(
           onTap: () {
-            if (tileId == 'adminConsole')
+            if (tileId == 'adminConsole') {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => AdminConsolePage()));
-            else if (tileId == 'courses')
+            } else if (tileId == 'courses'){
+              if (!context.mounted) return;
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => CoursesDisplayScreen()));
+                      builder: (context) => const CoursesDisplayScreen()));
+            }
           },
           child: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -282,11 +287,11 @@ class HomePageTile extends StatelessWidget {
 }
 
 class TileContent extends StatelessWidget {
-  TileContent({required this.tileId});
-  String tileId;
+  const TileContent({super.key, required this.tileId});
+  final String tileId;
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
         width: 100,
         child: Column(
           children: [

@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
@@ -12,15 +14,14 @@ import 'package:provider/provider.dart';
 import '../../../projectModules/courseManagement/coursesProvider.dart';
 
 class ExamListScreen extends StatefulWidget {
-  ExamListScreen(
+  const ExamListScreen(
       {super.key,
       required this.course,
       required this.examtype,
       this.moduleIndex});
-  Course course;
-  int? moduleIndex;
-  late ExamDataMaster examDataMaster;
-  EXAMTYPE examtype;
+  final Course course;
+  final int? moduleIndex;
+  final EXAMTYPE examtype;
   @override
   State<ExamListScreen> createState() => _ExamListScreenState();
 }
@@ -28,6 +29,8 @@ class ExamListScreen extends StatefulWidget {
 class _ExamListScreenState extends State<ExamListScreen> {
   bool isExamsFetched = false;
   late String userRole;
+  late ExamDataMaster examDataMaster;
+  
 
   @override
   void initState() {
@@ -35,7 +38,7 @@ class _ExamListScreenState extends State<ExamListScreen> {
   }
 
   fetchExamsList({required CoursesProvider coursesProvider}) async {
-    await widget.examDataMaster.fetchExams();
+    await examDataMaster.fetchExams();
     setState(() {
       isExamsFetched = true;
     });
@@ -46,7 +49,7 @@ class _ExamListScreenState extends State<ExamListScreen> {
     LoggedInState loggedInState = context.watch<LoggedInState>();
 
     if (loggedInState.currentUser == null) {
-      return LoginPage();
+      return const LoginPage();
     }
 
     userRole = loggedInState.currentUserRole;
@@ -56,12 +59,12 @@ class _ExamListScreenState extends State<ExamListScreen> {
     List<NewExam>? exams = [];
     Module module;
     if (widget.examtype == EXAMTYPE.moduleExam) {
-      module = widget.course.modules![widget.moduleIndex!];
+      module = widget.course.modules[widget.moduleIndex!];
       exams = module.exams;
     } else {
       exams = widget.course.exams;
     }
-    widget.examDataMaster =
+    examDataMaster =
         ExamDataMaster(course: widget.course, coursesProvider: coursesProvider);
     if (isExamsFetched == false) {
       fetchExamsList(coursesProvider: coursesProvider);
@@ -71,16 +74,16 @@ class _ExamListScreenState extends State<ExamListScreen> {
       return Scaffold(
         appBar: AppBar(
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () {
               Navigator.pop(context);
             },
           ),
-          title: Text("${widget.course.name}"),
+          title: Text(widget.course.name),
         ),
         body: Column(
           children: [
-            Text("${exams}"),
+            Text("$exams"),
             ListView.builder(
               shrinkWrap: true,
               itemCount: exams?.length,
@@ -102,12 +105,12 @@ class _ExamListScreenState extends State<ExamListScreen> {
                                         )));
                           }
                         },
-                        child: Text("Take exam"))
+                        child: const Text("Take exam"))
                   ],
                 );
               },
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             if (userRole == "admin")
               ElevatedButton(
                   onPressed: () {
@@ -119,19 +122,17 @@ class _ExamListScreenState extends State<ExamListScreen> {
                                   course: widget.course,
                                 )));
                   },
-                  child: Text("Create exam")),
+                  child: const Text("Create exam")),
           ],
         ),
       );
     } else {
-      return Container(
-        child: const AlertDialog(
+      return const AlertDialog(
           title: Text("Fetching Exams"),
           content: Align(
               alignment: Alignment.topCenter,
               child: CircularProgressIndicator()),
-        ),
-      );
+        );
     }
   }
 }

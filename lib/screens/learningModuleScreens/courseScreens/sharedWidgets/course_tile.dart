@@ -5,13 +5,13 @@ import '../../../../themes/common_theme.dart';
 class CourseTile extends StatelessWidget {
   final int index;
   final String title;
-  Function? onPressed;
-  CourseTile(
-      {required this.index, required this.title, required this.onPressed});
+  final Function? onPressed;
+  const CourseTile(
+      {super.key, required this.index, required this.title, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 150,
       child: GestureDetector(
         child: Card(
@@ -25,7 +25,7 @@ class CourseTile extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
                   child: Image.network(
                     "https://www.shutterstock.com/image-vector/coding-vector-illustration-600w-687456625.jpg",
                     height: 120,
@@ -36,7 +36,7 @@ class CourseTile extends StatelessWidget {
                 Expanded(
                   child: Row(
                     children: [
-                      SizedBox(width: 20),
+                      const SizedBox(width: 20),
                       Expanded(
                           child: Text(title,
                               style: commonTextStyle.copyWith(

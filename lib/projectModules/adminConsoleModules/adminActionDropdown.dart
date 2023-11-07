@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 
 import '../../adminManagement/adminDataExporter.dart';
@@ -13,7 +15,7 @@ final Map<String, dynamic> categories = {
 };
 
 class AdminActionDropdown extends StatefulWidget {
-  AdminActionDropdown({
+  const AdminActionDropdown({super.key, 
     required this.adminProvider,
     required this.actionId,
   });
@@ -58,8 +60,8 @@ class _AdminActionDropdownState extends State<AdminActionDropdown> {
                       isUsersLoading = false; // Set to false after download
                     });
                   },
-                  child: Text('User Data'))
-              : CircularProgressIndicator(),
+                  child: const Text('User Data'))
+              : const CircularProgressIndicator(),
           !isCoursesLoading
               ? ElevatedButton(
                   onPressed: () async {
@@ -73,26 +75,26 @@ class _AdminActionDropdownState extends State<AdminActionDropdown> {
                       isCoursesLoading = false; // Set to false after download
                     });
                   },
-                  child: Text('Courses Data'))
-              : CircularProgressIndicator(),
+                  child: const Text('Courses Data'))
+              : const CircularProgressIndicator(),
           ElevatedButton(
               onPressed: () async {
                 DataExporter dataExporter =
                     DataExporter(collectionDataToDownload: 'adminconsole');
                 await dataExporter.downloadCSV();
               },
-              child: Text('Courses Progress Data'))
+              child: const Text('Courses Progress Data'))
         ],
       );
     } else {
-      return Text('No data to show!');
+      return const Text('No data to show!');
     }
   }
 }
 
 class AdminInstructionsDropdown extends StatelessWidget {
-  AdminInstructionsDropdown({super.key, this.categories});
-  Map<String, dynamic>? categories;
+  const AdminInstructionsDropdown({super.key, this.categories});
+  final Map<String, dynamic>? categories;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -107,7 +109,7 @@ class AdminInstructionsDropdown extends StatelessWidget {
                         builder: (context) => AdminInstructionsCategories(
                             category: key, subCategories: categories?[key])));
               },
-              child: Text('${key}')),
+              child: Text(key)),
       ],
     );
   }

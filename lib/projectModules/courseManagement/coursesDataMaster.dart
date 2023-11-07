@@ -1,4 +1,7 @@
+// ignore_for_file: file_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 
 import 'package:isms/models/adminConsoleModels/coursesDetails.dart';
 
@@ -18,13 +21,13 @@ class CoursesDataMaster {
 
   static Future<bool> createCourse({required Course course}) async {
     try {
-      Map<String, dynamic> _courseMap = course.toMap();
+      Map<String, dynamic> courseMap = course.toMap();
 
-      _courseMap['createdAt'] = DateTime.now();
+      courseMap['createdAt'] = DateTime.now();
 
-      await coursesRef.doc(course.name).set(_courseMap);
+      await coursesRef.doc(course.name).set(courseMap);
 
-      print("Course creation successful");
+      debugPrint("Course creation successful");
       return true;
     } catch (e) {
       return false;
@@ -42,7 +45,7 @@ class CoursesDataMaster {
           .doc(coursesDetails.course_name)
           .set(courseMap);
 
-      print("Course creation successful");
+      debugPrint("Course creation successful");
       return true;
     } catch (e) {
       return false;

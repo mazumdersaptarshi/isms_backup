@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, non_constant_identifier_names
+
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
@@ -17,9 +19,8 @@ import '../../../../projectModules/courseManagement/moduleManagement/moduleDataM
 import '../../../../themes/common_theme.dart';
 
 class ModulesListScreen extends StatefulWidget {
-  ModulesListScreen({super.key, required this.course});
-  Course course;
-  ModuleDataMaster? moduleDataMaster;
+  const ModulesListScreen({super.key, required this.course});
+  final Course course;
   @override
   State<ModulesListScreen> createState() => _ModulesListScreenState();
 }
@@ -27,9 +28,10 @@ class ModulesListScreen extends StatefulWidget {
 class _ModulesListScreenState extends State<ModulesListScreen> {
   bool isModulesFetched = false;
   late String userRole;
+  ModuleDataMaster? moduleDataMaster;
 
   fetchCourseModules({required CoursesProvider coursesProvider}) async {
-    await widget.moduleDataMaster?.fetchModules();
+    await moduleDataMaster?.fetchModules();
     setState(() {
       isModulesFetched = true;
     });
@@ -56,13 +58,13 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
   bool checkIfAllModulesCompleted({required LoggedInState loggedInState}) {
     bool flag = false;
 
-    loggedInState.loggedInUser!.courses_started.forEach((course_started) {
+    for (var course_started in loggedInState.loggedInUser!.courses_started) {
       if (course_started["course_name"] == widget.course.name) {
         if (course_started["modules_completed"] != null &&
             course_started["modules_completed"].length >=
                 widget.course.modulesCount) flag = true;
       }
-    });
+    }
     return flag;
   }
 
@@ -72,7 +74,7 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
     CoursesProvider coursesProvider = context.watch<CoursesProvider>();
     bool isALlModulesCompleted =
         checkIfAllModulesCompleted(loggedInState: loggedInState);
-    widget.moduleDataMaster = ModuleDataMaster(
+    moduleDataMaster = ModuleDataMaster(
         course: widget.course, coursesProvider: coursesProvider);
 
     if (isModulesFetched == false) {
@@ -80,7 +82,7 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
     }
 
     if (loggedInState.currentUser == null) {
-      return LoginPage();
+      return const LoginPage();
     }
 
     userRole = loggedInState.currentUserRole;
@@ -103,19 +105,19 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
     return Scaffold(
       appBar: LearningModulesAppBar(
         leadingWidget: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => CoursesDisplayScreen()));
+                    builder: (context) => const CoursesDisplayScreen()));
           },
         ),
         title: "${widget.course.name} / All Modules",
       ),
 
       body: Container(
-        margin: EdgeInsets.only(top: 20),
+        margin: const EdgeInsets.only(top: 20),
         //padding: const EdgeInsets.all(16.0),
         child: isModulesFetched
           ? Column(
@@ -136,14 +138,14 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
                             ),
                           );
                         },
-                        child: Text("View course exams"),
+                        child: const Text("View course exams"),
                       ),
                   ],
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Align(
                   alignment: Alignment.topCenter,
-                  child: Container(
+                  child: SizedBox(
                     width: gridWidth,
                     child: GridView.builder(
                       shrinkWrap: true,
@@ -167,7 +169,7 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
                 ),
               ],
             )
-          : AlertDialog(
+          : const AlertDialog(
               title: Text("Fetching modules"),
               content: Align(
                   alignment: Alignment.topCenter,
@@ -186,7 +188,7 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
               },
               backgroundColor:
                   customTheme.floatingActionButtonTheme.backgroundColor,
-              child: Icon(Icons.add),
+              child: const Icon(Icons.add),
             )
           : null,
     );

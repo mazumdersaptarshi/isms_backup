@@ -1,3 +1,6 @@
+// ignore_for_file: file_names
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/models/newExam.dart';
 import 'package:isms/models/question.dart';
@@ -12,21 +15,21 @@ import '../../../models/module.dart';
 import '../../../projectModules/courseManagement/coursesProvider.dart';
 
 class TakeExamScreen extends StatefulWidget {
-  TakeExamScreen(
-      {required this.exam,
+  const TakeExamScreen(
+      {super.key, required this.exam,
       required this.course,
       required this.examtype,
       this.module});
-  EXAMTYPE examtype;
-  Course course;
-  Module? module;
-  NewExam exam;
+  final EXAMTYPE examtype;
+  final Course course;
+  final Module? module;
+  final NewExam exam;
   @override
-  _TakeExamScreenState createState() => _TakeExamScreenState();
+  State<TakeExamScreen> createState() => _TakeExamScreenState();
 }
 
 class _TakeExamScreenState extends State<TakeExamScreen> {
-  List<NewQuestion> _questions = [];
+  final List<NewQuestion> _questions = [];
   int _currentIndex = 0;
   List<Set<int>> _selectedAnswers = [];
   bool _showScore = false;
@@ -37,11 +40,13 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
     loadQuestions();
     shuffleQuestions();
     _selectedAnswers = List.generate(_questions.length, (index) => <int>{});
-    print(widget.exam.questionAnswerSet);
+    if (kDebugMode) {
+      print(widget.exam.questionAnswerSet);
+    }
   }
 
   loadQuestions() {
-    widget.exam.questionAnswerSet.forEach((element) {
+    for (var element in widget.exam.questionAnswerSet) {
       List<String> options = [];
       List<int> correctAnswers = [];
       int index = 0;
@@ -55,7 +60,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
       NewQuestion newQuestion = NewQuestion(element['questionName'], options,
           correctAnswers, correctAnswers.length);
       _questions.add(newQuestion);
-    });
+    }
   }
 
   void shuffleQuestions() {
@@ -96,7 +101,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
     LoggedInState loggedInState = context.watch<LoggedInState>();
 
     if (loggedInState.currentUser == null) {
-      return LoginPage();
+      return const LoginPage();
     }
 
     return Scaffold(
@@ -126,7 +131,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
           children: [
             Text(
                 'Your Score is: $correctAnswers/${_questions.length}. You need to get 75% to pass.'),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () => setState(() {
                 shuffleQuestions();
@@ -135,7 +140,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
                     List.generate(_questions.length, (index) => <int>{});
                 _showScore = false;
               }),
-              child: Text('Retake Exam'),
+              child: const Text('Retake Exam'),
             )
           ],
         ),
@@ -147,7 +152,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
           children: [
             Text(
                 'Congratulations! Your Score is: $correctAnswers/${_questions.length}'),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             if (widget.examtype == EXAMTYPE.courseExam)
               ElevatedButton(
                 onPressed: () async {
@@ -169,11 +174,12 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
                       "course_modules_completed": widget.course.modulesCount
                     });
                   }
+                  if (!context.mounted) return;
                   Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => HomePage()));
+                      MaterialPageRoute(builder: (context) => const HomePage()));
                 },
                 child: Text(
-                    "Mark Exam as Done- completed ${widget.exam.index}/${widget.course.exams!.length}"),
+                    "Mark Exam as Done- completed ${widget.exam.index}/${widget.course.exams.length}"),
               )
             else if (widget.examtype == EXAMTYPE.moduleExam)
               ElevatedButton(
@@ -193,7 +199,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
                   // Navigator.pushReplacement(context,
                   //     MaterialPageRoute(builder: (context) => HomePage()));
                 },
-                child: Text("Mark Quiz as Done"),
+                child: const Text("Mark Quiz as Done"),
               ),
             ElevatedButton(
               onPressed: () => setState(() {
@@ -203,7 +209,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
                     List.generate(_questions.length, (index) => <int>{});
                 _showScore = false;
               }),
-              child: Text('Retry for Fun!'),
+              child: const Text('Retry for Fun!'),
             ),
           ],
         ),
@@ -216,17 +222,17 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Text(
             _questions[_currentIndex].question,
-            style: TextStyle(fontSize: 20),
+            style: const TextStyle(fontSize: 20),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Text(
             'Select ${_questions[_currentIndex].maxAllowedAnswers} answer(s)',
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           ...List.generate(_questions[_currentIndex].shuffledOptions.length,
               (index) {
             return ListTile(

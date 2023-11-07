@@ -1,6 +1,7 @@
+// ignore_for_file: file_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/models/newExam.dart';
@@ -9,7 +10,7 @@ import 'package:isms/models/slide.dart';
 enum CoursesFetchStatus { idle, initiated, fetched }
 
 class CoursesProvider with ChangeNotifier {
-  List<Course> _allCourses = [];
+  final List<Course> _allCourses = [];
 
   List<Course> get allCourses => _allCourses;
   bool isCoursesStreamFetched = false;
@@ -23,7 +24,7 @@ class CoursesProvider with ChangeNotifier {
   @override
   notifyListeners() {
     if (kDebugMode) {
-      print("Notifying listeners");
+      debugPrint("Notifying listeners");
     }
     super.notifyListeners();
   }
@@ -31,23 +32,23 @@ class CoursesProvider with ChangeNotifier {
   getAllCourses({bool isNotifyListener = true}) async {
     isCoursesStreamFetched = true;
     _coursesFetchStatus = CoursesFetchStatus.initiated;
-    print("FETCHING COURSES STREAMMMM");
+    debugPrint("FETCHING COURSES STREAMMMM");
 
     Stream<QuerySnapshot>? coursesStream = FirebaseFirestore.instance
         .collection('courses')
         .orderBy("createdAt")
         .snapshots();
-    coursesStream!.listen((snapshot) async {
+    coursesStream.listen((snapshot) async {
       final List<Course> courses = [];
 
-      snapshot.docs.forEach((element) {
+      for (var element in snapshot.docs) {
         Map<String, dynamic> elementMap =
             element.data() as Map<String, dynamic>;
         if (elementMap['name'] != "exam") {
           Course courseItem = Course.fromMap(elementMap);
           courses.add(courseItem);
         }
-      });
+      }
       _allCourses.clear();
       _allCourses.addAll(courses);
 

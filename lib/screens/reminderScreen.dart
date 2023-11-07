@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/userManagement/loggedInState.dart';
@@ -55,7 +57,7 @@ class ReminderLine extends StatelessWidget {
   final String text;
   final Function(String, DateTime) setExpiryDateForCertificate;
 
-  ReminderLine(
+  const ReminderLine(
       {super.key,
       required this.text,
       required this.setExpiryDateForCertificate});
@@ -81,6 +83,7 @@ class ReminderLine extends StatelessWidget {
                   lastDate: DateTime(2101));
 
               if (pickedDate != null) {
+                 if (!context.mounted) return;
                 final TimeOfDay? pickedTime = await showTimePicker(
                   context: context,
                   initialTime: TimeOfDay.now(),

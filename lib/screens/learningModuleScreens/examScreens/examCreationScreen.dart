@@ -1,3 +1,6 @@
+// ignore_for_file: file_names
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/models/enums.dart';
 import 'package:isms/models/newExam.dart';
@@ -18,18 +21,18 @@ List<Map<String, dynamic>> allQuestions = [];
 enum EXAMTYPE { courseExam, moduleExam }
 
 class ExamCreation extends StatefulWidget {
-  ExamCreation(
+  const ExamCreation(
       {super.key, required this.course, required this.examtype, this.module});
-  int noOfQuestions = 1;
-  Course course;
-  EXAMTYPE examtype;
-  Module? module;
-  late ExamDataMaster examDataMaster;
+  final Course course;
+  final EXAMTYPE examtype;
+  final Module? module;
   @override
   ExamCreationState createState() => ExamCreationState();
 }
 
 class ExamCreationState extends State<ExamCreation> {
+  int noOfQuestions = 1;
+  late ExamDataMaster examDataMaster;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController titleController = TextEditingController();
   TextEditingController passingMarksController = TextEditingController();
@@ -44,7 +47,7 @@ class ExamCreationState extends State<ExamCreation> {
 
   void _addNewQuestion() {
     setState(() {
-      widget.noOfQuestions++;
+      noOfQuestions++;
     });
   }
 
@@ -53,11 +56,11 @@ class ExamCreationState extends State<ExamCreation> {
     LoggedInState loggedInState = context.watch<LoggedInState>();
 
     if (loggedInState.currentUser == null) {
-      return LoginPage();
+      return const LoginPage();
     }
 
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
-    widget.examDataMaster =
+    examDataMaster =
         ExamDataMaster(course: widget.course, coursesProvider: coursesProvider);
     return Scaffold(
       appBar: AppBar(
@@ -72,13 +75,13 @@ class ExamCreationState extends State<ExamCreation> {
               children: [
                 TextFormField(
                   controller: titleController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     hintText: "Enter title for exam",
                   ),
                 ),
                 TextFormField(
                   controller: passingMarksController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     hintText: "Enter passing marks for exam",
                   ),
                 ),
@@ -88,10 +91,10 @@ class ExamCreationState extends State<ExamCreation> {
                     color: Colors.orangeAccent,
                     child: ListView.builder(
                       controller: _controller,
-                      itemCount: widget.noOfQuestions,
+                      itemCount: noOfQuestions,
                       itemBuilder: (context, index) => QuestionWidget(
                         onQuestionSaved: () {},
-                        questiontype: QUESTIONTYPE.Checkbox,
+                        questiontype: QUESTIONTYPE.checkbox,
                       ),
                     )),
                 ElevatedButton(
@@ -103,7 +106,9 @@ class ExamCreationState extends State<ExamCreation> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    print(allQuestions);
+                    if (kDebugMode) {
+                      print(allQuestions);
+                    }
 
                     NewExam newExam = NewExam(
                         examID: generateRandomId(),
@@ -112,10 +117,10 @@ class ExamCreationState extends State<ExamCreation> {
                         questionAnswerSet: allQuestions);
 
                     if (widget.examtype == EXAMTYPE.courseExam) {
-                      print("CREATE EXAMM ${widget.course.exams}");
-                      widget.examDataMaster.createCourseExam(exam: newExam);
+                      debugPrint("CREATE EXAMM ${widget.course.exams}");
+                      examDataMaster.createCourseExam(exam: newExam);
                     } else if (widget.examtype == EXAMTYPE.moduleExam) {
-                      widget.examDataMaster.createModuleExam(
+                      examDataMaster.createModuleExam(
                           module: widget.module!, exam: newExam);
                       allQuestions.clear();
                     }
@@ -124,7 +129,7 @@ class ExamCreationState extends State<ExamCreation> {
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => CoursesDisplayScreen()));
+                            builder: (context) => const CoursesDisplayScreen()));
                   },
                   child: const Text('Submit'),
                 ),

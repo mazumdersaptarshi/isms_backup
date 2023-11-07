@@ -1,22 +1,18 @@
-import 'package:flutter/cupertino.dart';
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleDetailsScreen.dart';
-import 'package:provider/provider.dart';
 import 'package:isms/models/course.dart';
-import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
-import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleExamsListScreen.dart';
-import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/themes/common_theme.dart';
-import 'package:isms/utilityWidgets/modulesList/moduleExpandedItem.dart';
 
 class ModuleTile extends StatelessWidget {
-  Course course;
-  Module module;
-  bool isModuleStarted;
-  bool isModuleCompleted;
+  final Course course;
+  final Module module;
+  final bool isModuleStarted;
+  final bool isModuleCompleted;
 
-  ModuleTile(
+  const ModuleTile(
       {super.key,
       required this.course,
       required this.module,
@@ -25,7 +21,7 @@ class ModuleTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 150,
       child: GestureDetector(
         child: Card(
@@ -50,7 +46,7 @@ class ModuleTile extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
                       child: Image.network(
                         "https://www.shutterstock.com/image-vector/coding-vector-illustration-600w-687456625.jpg",
                         height: 120,
@@ -61,7 +57,7 @@ class ModuleTile extends StatelessWidget {
                     Expanded(
                       child: Row(
                         children: [
-                          SizedBox(width: 20),
+                          const SizedBox(width: 20),
                               Expanded(
                                 child: Text(module.title,
                                 style: commonTextStyle.copyWith(

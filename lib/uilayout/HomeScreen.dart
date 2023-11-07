@@ -1,5 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:isms/uilayout/sidebar.dart';
 import '../screens/userInfo/userProfilePage.dart';
@@ -14,23 +14,25 @@ class HomeScreen extends StatelessWidget {
     'How to Train your Dragon', 'How to cook(ft.Raj)', 'Learn how to Code', 'How to Lose a Guy in 10 Days', 'Learn how to dance', 'How I Met Your Mother', 'How to do Magic',
     'How to Get Away with Murder', 'How to be rich', 'How the Grinch Stole christmas', 'How are you barbie ', 'How to be happy(ft. sap)'
   ];
+
+  HomeScreen({super.key});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(150.0),  // increase the AppBar size
+          preferredSize: const Size.fromHeight(150.0),  // increase the AppBar size
           child: AppBar(
             backgroundColor: Colors.blue[900], // Dark blue background
-            title: Text('My Courses', style: TextStyle(color: Colors.white)), // White text
+            title: const Text('My Courses', style: TextStyle(color: Colors.white)), // White text
             centerTitle: true,
-            shape: RoundedRectangleBorder(
+            shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(
                 bottom: Radius.circular(50),
               ),
             ),
             bottom: PreferredSize(
-              preferredSize: Size.fromHeight(30.0),
+              preferredSize: const Size.fromHeight(30.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -42,11 +44,11 @@ class HomeScreen extends StatelessWidget {
             ),
             actions: [
               IconButton(
-                icon: Icon(Icons.account_circle, color: Colors.white),
+                icon: const Icon(Icons.account_circle, color: Colors.white),
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => UserProfilePage()),
+                    MaterialPageRoute(builder: (context) => const UserProfilePage()),
                   );
                 },
               ),
@@ -56,7 +58,7 @@ class HomeScreen extends StatelessWidget {
         body: Padding(
           padding: const EdgeInsets.all(10.0),
           child: GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 1,
               childAspectRatio: 6/3,
             ),
@@ -66,7 +68,7 @@ class HomeScreen extends StatelessWidget {
             },
           ),
         ),
-        drawer: Sidebar(),
+        drawer: const Sidebar(),
       ),
     );
   }
@@ -75,16 +77,16 @@ Widget courseAppBarAction(String title, BuildContext context) {
   return GestureDetector(
     onTap: () {},
     child: Padding(
-      padding: EdgeInsets.symmetric(vertical: 5.0),
+      padding: const EdgeInsets.symmetric(vertical: 5.0),
       child: Text(title,
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
     ),
   );
 }
 class CourseTile extends StatelessWidget {
   final String title;
 
-  CourseTile({required this.title});
+  const CourseTile({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -98,12 +100,12 @@ class CourseTile extends StatelessWidget {
         children: [
           ListTile(
             title: Text(title,
-        style: TextStyle(
+        style: const TextStyle(
           color: Colors.black,
           fontWeight: FontWeight.bold,
         ),
       ),
-            trailing: Icon(Icons.arrow_forward_ios),
+            trailing: const Icon(Icons.arrow_forward_ios),
             onTap: () {
               Navigator.push(
                 context,

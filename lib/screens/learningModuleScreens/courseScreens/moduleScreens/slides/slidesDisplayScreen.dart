@@ -1,16 +1,14 @@
-import 'package:flutter/foundation.dart' show kIsWeb;
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/slide.dart';
 import 'package:isms/screens/homePage.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleDetailsScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleExamsListScreen.dart';
-import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/modulesListScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/sharedWidgets/slidesContentWidget.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
-import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/sharedWidgets/htmlSlideDisplay.dart';
 import 'package:isms/sharedWidgets/leaningModulesAppBar.dart';
-import 'package:isms/themes/common_theme.dart';
 import 'package:provider/provider.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/screens/login/loginScreen.dart';
@@ -18,16 +16,16 @@ import 'package:isms/screens/login/loginScreen.dart';
 import '../../../../../models/module.dart';
 
 class SlidesDisplayScreen extends StatefulWidget {
-  SlidesDisplayScreen(
+  const SlidesDisplayScreen(
       {super.key,
       required this.slides,
       required this.module,
       required this.course});
-  List<Slide> slides;
-  Course course;
-  Module module;
+ final  List<Slide> slides;
+  final Course course;
+  final Module module;
   @override
-  _SlidesDisplayScreenState createState() => _SlidesDisplayScreenState();
+  State<SlidesDisplayScreen> createState() => _SlidesDisplayScreenState();
 }
 
 class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
@@ -37,9 +35,9 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
 
   List<Map<String, dynamic>> _initializeCardItems() {
     List<Map<String, dynamic>> slidesMap = [];
-    widget.slides.forEach((element) {
+    for (var element in widget.slides) {
       slidesMap.add({'title': element.title, 'text': element.content});
-    });
+    }
     return slidesMap;
   }
 
@@ -69,13 +67,13 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
     LoggedInState loggedInState = context.watch<LoggedInState>();
 
     if (loggedInState.currentUser == null) {
-      return LoginPage();
+      return const LoginPage();
     }
 
     return Scaffold(
       appBar: LearningModulesAppBar(
         leadingWidget: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.push(
                 context,
@@ -88,14 +86,14 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
       body: Align(
         alignment: Alignment.topCenter,
         child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
           child: Column(
             children: [
               SlidesContentWidget(
                   pageController: _pageController,
                   cardItems: cardItems,
                   currentIndex: currentIndex),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -112,12 +110,12 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
                                       module: widget.module,
                                     )));
                       },
-                      child: Text(
+                      child: const Text(
                         'Take exams',
                       ),
                     ),
                   ),
-                  SizedBox(width: 20),
+                  const SizedBox(width: 20),
                   Visibility(
                     visible: currentIndex == cardItems.length - 1,
                     child: ElevatedButton(
@@ -125,9 +123,9 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => HomePage()));
+                                builder: (context) => const HomePage()));
                       },
-                      child: Text(
+                      child: const Text(
                         'Back to Home',
                       ),
                     ),

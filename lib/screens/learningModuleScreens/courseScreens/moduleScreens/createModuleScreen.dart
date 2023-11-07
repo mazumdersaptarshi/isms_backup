@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
@@ -11,15 +13,15 @@ import '../../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../../projectModules/courseManagement/moduleManagement/moduleDataMaster.dart';
 
 class CreateModuleScreen extends StatelessWidget {
-  CreateModuleScreen({required this.course});
-  Course course;
+  const CreateModuleScreen({super.key, required this.course});
+  final Course course;
 
   @override
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
 
     if (loggedInState.currentUser == null) {
-      return LoginPage();
+      return const LoginPage();
     }
 
     return CourseModuleForm(course: course);
@@ -27,14 +29,15 @@ class CreateModuleScreen extends StatelessWidget {
 }
 
 class CourseModuleForm extends StatefulWidget {
-  CourseModuleForm({required this.course});
-  Course course;
-  late ModuleDataMaster moduleDataMaster;
+  const CourseModuleForm({super.key, required this.course});
+  final Course course;
   @override
-  _CourseModuleFormState createState() => _CourseModuleFormState();
+  State<CourseModuleForm> createState() => _CourseModuleFormState();
 }
 
 class _CourseModuleFormState extends State<CourseModuleForm> {
+  late ModuleDataMaster moduleDataMaster;
+  
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final TextEditingController _titleController = TextEditingController();
@@ -43,17 +46,17 @@ class _CourseModuleFormState extends State<CourseModuleForm> {
   @override
   Widget build(BuildContext context) {
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
-    widget.moduleDataMaster = ModuleDataMaster(
+    moduleDataMaster = ModuleDataMaster(
         course: widget.course, coursesProvider: coursesProvider);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
-        title: Text('Create New Module'),
+        title: const Text('Create New Module'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -63,7 +66,7 @@ class _CourseModuleFormState extends State<CourseModuleForm> {
             children: <Widget>[
               TextFormField(
                 controller: _titleController,
-                decoration: InputDecoration(labelText: 'Title'),
+                decoration: const InputDecoration(labelText: 'Title'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter a title';
@@ -71,10 +74,10 @@ class _CourseModuleFormState extends State<CourseModuleForm> {
                   return null;
                 },
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               TextFormField(
                 controller: _descriptionController,
-                decoration: InputDecoration(labelText: 'Content'),
+                decoration: const InputDecoration(labelText: 'Content'),
                 maxLines: 4,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -83,7 +86,7 @@ class _CourseModuleFormState extends State<CourseModuleForm> {
                   return null;
                 },
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
@@ -92,17 +95,18 @@ class _CourseModuleFormState extends State<CourseModuleForm> {
                       title: _titleController.text,
                       contentDescription: _descriptionController.text,
                     );
-                    bool isModuleCreated = await widget.moduleDataMaster
+                    bool isModuleCreated = await moduleDataMaster
                         .createModule(module: module);
                     if (isModuleCreated) {
+                      if (!context.mounted) return;
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => CoursesDisplayScreen()));
+                              builder: (context) => const CoursesDisplayScreen()));
                     }
                   }
                 },
-                child: Text('Submit'),
+                child: const Text('Submit'),
               ),
             ],
           ),

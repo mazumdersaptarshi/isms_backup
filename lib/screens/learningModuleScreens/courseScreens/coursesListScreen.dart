@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/sharedWidgets/course_tile.dart';
 import 'package:isms/screens/homePage.dart';
@@ -12,37 +14,37 @@ import '../../../themes/common_theme.dart';
 import 'createCourseScreen.dart';
 
 class CoursesDisplayScreen extends StatefulWidget {
-  CoursesDisplayScreen({super.key});
-  String userRole = "user";
+  const CoursesDisplayScreen({super.key});
   @override
   State<CoursesDisplayScreen> createState() => _CoursesDisplayScreenState();
 }
 
 class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
+  String userRole = "user";
   @override
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
 
     if (loggedInState.currentUser == null) {
-      return LoginPage();
+      return const LoginPage();
     }
 
-    widget.userRole = loggedInState.currentUserRole;
+    userRole = loggedInState.currentUserRole;
 
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
     return Scaffold(
       appBar: LearningModulesAppBar(
         leadingWidget: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => HomePage()));
+                context, MaterialPageRoute(builder: (context) => const HomePage()));
           },
         ),
         title: "All Courses",
       ),
       body: Container(
-        margin: EdgeInsets.only(top: 20),
+        margin: const EdgeInsets.only(top: 20),
         child: MediaQuery.sizeOf(context).width <= 700
             ? ListView.builder(
                 itemCount: coursesProvider.allCourses.length,
@@ -64,10 +66,10 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
               )
             : Align(
                 alignment: Alignment.topCenter,
-                child: Container(
+                child: SizedBox(
                   width: MediaQuery.sizeOf(context).width * 0.7,
                   child: GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 3, childAspectRatio: 16 / 9),
                       itemCount: coursesProvider.allCourses.length,
                       itemBuilder: (context, courseIndex) {
@@ -88,17 +90,17 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
                 ),
               ),
       ),
-      floatingActionButton: widget.userRole == 'admin'
+      floatingActionButton: userRole == 'admin'
           ? FloatingActionButton(
               onPressed: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => CreateCourseScreen()));
+                        builder: (context) => const CreateCourseScreen()));
               },
               backgroundColor:
                   customTheme.floatingActionButtonTheme.backgroundColor,
-              child: Icon(Icons.add),
+              child: const Icon(Icons.add),
             )
           : null,
     );

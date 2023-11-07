@@ -1,14 +1,16 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:isms/adminManagement/adminProvider.dart';
 import 'package:isms/screens/adminScreens/AdminInstructions/adminInstructionSlides.dart';
 import 'package:provider/provider.dart';
 
 class AdminInstructionsCategories extends StatelessWidget {
-  AdminInstructionsCategories(
+  const AdminInstructionsCategories(
       {super.key, required this.category, required this.subCategories});
 
-  String category;
-  List<String>? subCategories;
+  final String category;
+  final List<String>? subCategories;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,7 @@ class AdminInstructionsCategories extends StatelessWidget {
                                 )),
                       );
                     },
-                    child: Text('${subCategory}')),
+                    child: Text(subCategory)),
           ],
         ),
       ),

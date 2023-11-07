@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable, file_names
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -6,7 +8,7 @@ import '../../models/adminConsoleModels/adminConsoleActions.dart';
 import 'adminActionDropdown.dart';
 
 class AdminActionsWidget extends StatelessWidget {
-  AdminActionsWidget({
+  const AdminActionsWidget({super.key, 
     required this.action,
     required this.adminConsoleProvider,
   });
@@ -30,7 +32,7 @@ class AdminActionsWidget extends StatelessWidget {
       children: [
         AdminActionDropdown(
           adminProvider: adminConsoleProvider,
-          actionId: action.actionId! ?? 'n/a',
+          actionId: action.actionId!,
         )
       ],
     );
