@@ -43,12 +43,13 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
   bool checkIfModuleStarted(
       {required LoggedInState loggedInState, required Module module}) {
     bool flag = false;
-    // TODO de-enable
-    //loggedInState.loggedInUser!.courses_started.forEach((course_started) {
-    //  course_started["modules_started"].forEach((module_started) {
-    //    if (module_started["module_name"] == module.title) flag = true;
-    //  });
-    //});
+    loggedInState.loggedInUser!.courses_started.forEach((course_started) {
+      if (course_started["course_name"] == widget.course.name) {
+        course_started["modules_started"].forEach((module_started) {
+          if (module_started["module_name"] == module.title) flag = true;
+        });
+      }
+    });
 
     return flag;
   }
@@ -94,7 +95,7 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
     // number of tiles that can fit vertically on the screen
     int maxColumns = max((screenWidth/tileMinWidth).floor(), 1);
     // number of tiles that have to fit on the screen
-    int itemCount = coursesProvider.allCourses.length;
+    int itemCount = widget.course.modules.length;
     // grid width, in tiles
     int numberColumns = min(itemCount, maxColumns);
     // grid width, in pixels
