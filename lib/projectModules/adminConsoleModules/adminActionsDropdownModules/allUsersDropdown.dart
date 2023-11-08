@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
 
 import '../../../adminManagement/adminProvider.dart';
+import '../../../screens/analyticsSharedWidgets/courseDropdownWidget.dart';
+import '../../../screens/analyticsSharedWidgets/userCourseStartedDetailsWidget.dart';
 import '../../courseManagement/coursesProvider.dart';
 
 class AllUsersDropdown extends StatelessWidget {
   AllUsersDropdown({super.key, required this.adminProvider});
+
   final AdminProvider adminProvider;
 
   @override
@@ -26,56 +28,48 @@ class AllUsersDropdown extends StatelessWidget {
               shrinkWrap: true,
               physics: ClampingScrollPhysics(),
               itemBuilder: (context, index) {
-                return ExpansionTile(
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                return Card(
+                  margin: EdgeInsets.all(4.0),
+                  elevation: 4.0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                        15.0), // Rounded edges for the card
+                  ),
+                  child: ExpansionTile(
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '${index + 1}. ${snapshot.data![index].username}',
+                          style: TextStyle(
+                            fontSize: 14,
+                          ),
+                        ),
+                        Chip(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.secondary,
+                          label: Text(
+                            '${snapshot.data![index].role}',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ],
+                    ),
                     children: [
-                      Text(
-                        '${index + 1}. ${snapshot.data![index].username}',
-                        style:
-                            TextStyle(fontSize: 14, color: Colors.blueAccent),
-                      ),
-                      Text(
-                        '${snapshot.data![index].role}',
-                        style: TextStyle(fontSize: 14),
-                      ),
+                      _buildCoursesTile(
+                          'Courses Completed',
+                          snapshot.data![index].courses_completed,
+                          context,
+                          index,
+                          coursesProvider),
+                      _buildCoursesTile(
+                          'Courses Enrolled',
+                          snapshot.data![index].courses_started,
+                          context,
+                          index,
+                          coursesProvider),
                     ],
                   ),
-                  children: [
-                    ExpansionTile(
-                      title: const Text(
-                        'Courses Completed',
-                        style: TextStyle(fontSize: 12),
-                      ),
-                      trailing: Text(
-                        '${snapshot.data![index].courses_completed!.length}',
-                        style: TextStyle(fontSize: 12),
-                      ),
-                      children: [
-                        for (var courseItem
-                            in snapshot.data![index].courses_completed!)
-                          Text('${courseItem['course_name']}'),
-                      ],
-                    ),
-                    ExpansionTile(
-                      title: const Text(
-                        'Courses Started',
-                        style: TextStyle(fontSize: 12),
-                      ),
-                      trailing: Text(
-                        '${snapshot.data![index].courses_started!.length}',
-                        style: TextStyle(fontSize: 12),
-                      ),
-                      children: [
-                        for (var courseItem
-                            in snapshot.data![index].courses_started!)
-                          UserCourseStartedDetailsTile(
-                              courseItem: courseItem,
-                              coursesProvider: coursesProvider,
-                              index: index),
-                      ],
-                    ),
-                  ],
                 );
               });
         } else {
@@ -84,85 +78,36 @@ class AllUsersDropdown extends StatelessWidget {
       },
     );
   }
-}
 
-class UserCourseStartedDetailsTile extends StatelessWidget {
-  UserCourseStartedDetailsTile(
-      {super.key,
-      required this.courseItem,
-      required this.coursesProvider,
-      required this.index});
-  var courseItem;
-  CoursesProvider coursesProvider;
-  int index;
-  Map<String, dynamic> getCourseCompletedPercentage() {
-    double courseCompletionPercentage = 0;
-    int noOfExams = 0;
-    bool isValid = false;
-    print('Enrolled CoursesDropdown');
-
-    int modulesCount = 0;
-
-    for (int i = 0; i < coursesProvider.allCourses.length; i++) {
-      var element = coursesProvider.allCourses[i];
-
-      if (element.name == courseItem["course_name"]) {
-        modulesCount = element.modulesCount!;
-        noOfExams = element.examsCount!;
-        isValid = true;
-      }
-    }
-
-    int modulesCompletedCount = courseItem["modules_completed"] != null
-        ? courseItem["modules_completed"].length
-        : 0;
-    if (isValid) {
-      courseCompletionPercentage = modulesCompletedCount / modulesCount;
-    }
-
-    return {
-      "isValid": isValid,
-      "courseCompletionPercentage": courseCompletionPercentage,
-      "noOfExams": noOfExams
-    };
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    var courseDetailsData = getCourseCompletedPercentage();
-    return Container(
-      constraints: BoxConstraints(minHeight: 50),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('${courseItem["course_name"]}'),
-              CircularPercentIndicator(
-                radius: 20.0,
-                lineWidth: 5.0,
-                percent: courseDetailsData["courseCompletionPercentage"],
-                center: new Text(
-                  (courseDetailsData["courseCompletionPercentage"] * 100)
-                      .ceil()
-                      .toString(),
-                  style: TextStyle(fontSize: 10),
-                ),
-                progressColor: Colors.yellow.shade900,
-              )
-            ],
-          ),
-          if (courseItem["exams_completed"] != null)
-            Row(
-              children: [
-                Text(
-                  'Exam completed: ${courseItem["exams_completed"].length} of ${courseDetailsData["noOfExams"]}',
-                  textAlign: TextAlign.left,
-                ),
-              ],
-            ),
-        ],
+  Widget _buildCoursesTile(String title, List<dynamic> courses,
+      BuildContext context, int index, CoursesProvider coursesProvider) {
+    return ExpansionTile(
+      backgroundColor: Colors.grey.shade100,
+      title: Text(
+        title,
+        style: TextStyle(
+          fontSize: 12,
+          // Use theme color for consistency
+        ),
       ),
+      trailing: Text(
+        '${courses.length}',
+        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+      ),
+      children: [
+        if (title == 'Courses Completed')
+          for (var courseItem in courses)
+            CourseDropdownWidget(
+              courseItem: courseItem,
+              detailType: 'courses_completed',
+            ),
+        if (title == 'Courses Enrolled')
+          for (var courseItem in courses)
+            UserCourseStartedDetailsWidget(
+                courseItem: courseItem,
+                coursesProvider: coursesProvider,
+                index: index),
+      ],
     );
   }
 }

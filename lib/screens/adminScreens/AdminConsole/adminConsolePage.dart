@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/sharedWidgets/customAppBar.dart';
 import 'package:isms/userManagement/loggedInState.dart';
+import 'package:provider/provider.dart';
 
 import '../../../adminManagement/adminProvider.dart';
 import '../../../models/adminConsoleModels/adminConsoleActions.dart';
-import '../../../projectModules/adminConsoleModules/adminProfileHeaderWidget.dart';
 import '../../../projectModules/adminConsoleModules/adminActionsWidget.dart';
+import '../../../projectModules/adminConsoleModules/adminProfileHeaderWidget.dart';
 
 class AdminConsolePage extends StatelessWidget {
   final List<AdminActions> adminActions = [
@@ -37,7 +37,7 @@ class AdminConsolePage extends StatelessWidget {
         slivers: [
           SliverAppBar(
             backgroundColor: Colors.deepPurpleAccent.shade100,
-            expandedHeight: 220.0,
+            expandedHeight: 250.0,
             automaticallyImplyLeading: false,
             flexibleSpace: FlexibleSpaceBar(background: AdminInfoWidget()),
           ),
@@ -50,7 +50,6 @@ class AdminConsolePage extends StatelessWidget {
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(30),
-                  topRight: Radius.circular(30),
                 ),
               ),
               padding: EdgeInsets.symmetric(vertical: 20),

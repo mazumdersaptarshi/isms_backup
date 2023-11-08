@@ -88,18 +88,23 @@ ShapeBorder customCardShape = RoundedRectangleBorder(
   borderRadius: BorderRadius.circular(10.0),
 );
 ThemeData customTheme = ThemeData(
+  fontFamily: 'Poppins',
   floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: secondaryColor,
       extendedTextStyle: TextStyle(color: white)),
-  textTheme: TextTheme(
-    bodyLarge: TextStyle(fontFamily: "Poppins"),
-    bodyMedium: TextStyle(fontFamily: "Poppins"),
-    labelMedium: TextStyle(fontFamily: "Poppins"),
-    displayLarge: TextStyle(fontFamily: "Poppins"),
-    displayMedium: TextStyle(fontFamily: "Poppins"),
+  // textTheme: TextTheme(
+  //   bodySmall: TextStyle(fontFamily: "Poppins"),
+  //   bodyLarge: TextStyle(fontFamily: "Poppins"),
+  //   bodyMedium: TextStyle(fontFamily: "Poppins"),
+  //   labelMedium: TextStyle(fontFamily: "Poppins"),
+  //   displayLarge: TextStyle(fontFamily: "Poppins"),
+  //   displayMedium: TextStyle(fontFamily: "Poppins"),
+  // ),
+  colorScheme: ColorScheme.fromSwatch().copyWith(
+    primary: Colors.deepPurpleAccent.shade100,
+    secondary: Colors.grey.shade400,
+    tertiary: Colors.grey.shade600,
   ),
-  colorScheme:
-      ColorScheme.fromSeed(seedColor: Colors.white, background: Colors.white),
   buttonTheme: const ButtonThemeData(
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10)))),
