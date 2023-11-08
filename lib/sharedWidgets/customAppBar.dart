@@ -71,6 +71,17 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         if (loggedInState?.currentUserRole == 'admin' && kIsWeb)
           appBarItem(Icons.admin_panel_settings_outlined, "Admin",
               navigateToAdminConsolePage),
+        Container(
+          margin: EdgeInsets.symmetric(
+              vertical: 8), // Adds space above and below the divider
+
+          child: VerticalDivider(
+            width: 1, // Width of the divider line
+            thickness: 1, // Thickness of the divider line
+            color: Colors.white
+                .withOpacity(0.5), // Divider color with some transparency
+          ),
+        ),
         Padding(
           padding: const EdgeInsets.only(right: 16.0),
           child: IconButton(
