@@ -7,6 +7,7 @@ import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/s
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/slidesDisplayScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/screens/login/loginScreen.dart';
+import 'package:isms/sharedWidgets/customAppBar.dart';
 import 'package:isms/sharedWidgets/leaningModulesAppBar.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
@@ -26,10 +27,8 @@ class ModuleDetails extends StatefulWidget {
 }
 
 class _ModuleDetailsState extends State<ModuleDetails> {
-  bool isSlidesFetched = false;
-  bool isSlidesListEmpty = false;
-
   late String userRole;
+
   @override
   void initState() {
     super.initState();
@@ -49,19 +48,6 @@ class _ModuleDetailsState extends State<ModuleDetails> {
   //  return flag;
   //}
 
-  fetchSlidesList({required CoursesProvider coursesProvider}) async {
-    await widget.slidesDataMaster!.fetchSlides();
-
-    setState(() {
-      {
-        if (widget.module.slides == null || widget.module.slides == []) {
-          isSlidesListEmpty = true;
-        }
-        isSlidesFetched = true;
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
@@ -77,27 +63,13 @@ class _ModuleDetailsState extends State<ModuleDetails> {
         course: widget.course,
         coursesProvider: coursesProvider,
         module: widget.module);
-    if (isSlidesFetched == false) {
-      fetchSlidesList(coursesProvider: coursesProvider);
-    }
     return Scaffold(
-      appBar: LearningModulesAppBar(
-        leadingWidget: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            //Navigator.pop(context);
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        ModulesListScreen(course: widget.course)));
-          },
-        ),
-        title: "${widget.course.name} > ${widget.module.title}",
+      appBar: CustomAppBar(
+        loggedInState: loggedInState,
       ),
 
       body: Container(
-        padding: EdgeInsets.all(16.0),
+        margin: EdgeInsets.only(top: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -120,22 +92,7 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                     },
                     child: Text("View module exams"),
                   ),
-                // TODO move the slides loading logic here
-                //if (/*isSlidesFetched && isSlidesListEmpty ==*/ false)
-                //else
-                //  Container(
-                //    height: 100,
-                //    child: Center(
-                //      child: Column(
-                //        children: [
-                //          Text("Loading slides"),
-                //          CircularProgressIndicator(),
-                //        ],
-                //      ),
-                //    ),
-                //  ),
                 ElevatedButton(
-
                   onPressed: () async {
                     await loggedInState.setUserCourseStarted(
                       courseDetails: {
@@ -157,9 +114,9 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => SlidesDisplayScreen(
-                          slides: widget.module!.slides!,
                           course: widget.course,
                           module: widget.module,
+                          slidesDataMaster: widget.slidesDataMaster!,
                         ),
                       ),
                     );
@@ -170,7 +127,8 @@ class _ModuleDetailsState extends State<ModuleDetails> {
             ),
             SizedBox(height: 20.0),
             Container(
-              padding: EdgeInsets.all(16.0),
+              margin: EdgeInsets.symmetric(horizontal: 20.0),
+              padding: EdgeInsets.all(20.0),
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.secondaryContainer,
                 borderRadius: BorderRadius.circular(20.0),
@@ -196,6 +154,7 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                 ],
               ),
             ),
+
           ],
         ),
       ),

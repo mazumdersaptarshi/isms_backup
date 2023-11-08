@@ -12,18 +12,16 @@ import '../../../userManagement/loggedInState.dart';
 import '../../homePage.dart';
 
 abstract class ExamCompletionStrategy {
-  ExamCompletionStrategy({required this.loggedInState}){
-
-  }
+  ExamCompletionStrategy({required this.loggedInState}) {}
   LoggedInState loggedInState;
   Widget buildSumbitButton({required BuildContext context});
 
-  Future<void> handleExamCompletion(
-      {required BuildContext context});
+  Future<void> handleExamCompletion({required BuildContext context});
 }
 
 class CourseExamCompletionStrategy implements ExamCompletionStrategy {
-  CourseExamCompletionStrategy({required this.course, required this.exam, required this.loggedInState} );
+  CourseExamCompletionStrategy(
+      {required this.course, required this.exam, required this.loggedInState});
 
   Course course;
   NewExam exam;
@@ -32,7 +30,7 @@ class CourseExamCompletionStrategy implements ExamCompletionStrategy {
   LoggedInState loggedInState;
 
   @override
-  Widget buildSumbitButton({required BuildContext context}){
+  Widget buildSumbitButton({required BuildContext context}) {
     return ElevatedButton(
       onPressed: () async {
         handleExamCompletion(context: context);
@@ -56,18 +54,26 @@ class CourseExamCompletionStrategy implements ExamCompletionStrategy {
         "course_modules_count": course.modulesCount
       },
       examIndex: exam.index,
-    ).then((val) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => HomePage()));
+    );
+
+    await loggedInState.setUserCourseCompleted(courseDetails: {
+      "courseID": course.id,
+      "course_name": course.name,
+      "course_modules_count": course.modulesCount
     });
+
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => HomePage()));
   }
-
-
 }
 
 class ModuleExamCompletionStrategy implements ExamCompletionStrategy {
-  ModuleExamCompletionStrategy({required this.module, required this.course, required this.exam, required this.loggedInState}){
-    this.isModuleStarted= checkIfModuleStartedd();
+  ModuleExamCompletionStrategy(
+      {required this.module,
+      required this.course,
+      required this.exam,
+      required this.loggedInState}) {
+    this.isModuleStarted = checkIfModuleStartedd();
     print("CREATING STRTEGYYY ");
   }
 
@@ -76,38 +82,38 @@ class ModuleExamCompletionStrategy implements ExamCompletionStrategy {
   Module module;
   @override
   LoggedInState loggedInState;
-  bool isModuleStarted= false;
-
+  bool isModuleStarted = false;
 
   bool checkIfModuleStartedd() {
     bool flag = false;
     loggedInState.loggedInUser.courses_started.forEach((course_started) {
-      if (course_started["modules_started"] !=null && course_started["course_name"] == course.name) {
-
+      if (course_started["modules_started"] != null &&
+          course_started["course_name"] == course.name) {
         course_started["modules_started"].forEach((module_completed) {
-          if (module_completed["module_name"] == module.title)
-            flag = true;
+          if (module_completed["module_name"] == module.title) flag = true;
         });
       }
     });
     return flag;
   }
-  @override
-  Widget buildSumbitButton({required BuildContext context}){
 
-    if(isModuleStarted)
-    return ElevatedButton(
-      onPressed: () async {
-        handleExamCompletion(context: context);
-      },
-      child: Text(
-          "Mark Module as Done- completed ${exam.index}/${module.exams!.length}"),
-    );
-    else return ElevatedButton(
-      onPressed: (){},
-      child: Text("Study the module first"),
-    );
+  @override
+  Widget buildSumbitButton({required BuildContext context}) {
+    if (isModuleStarted)
+      return ElevatedButton(
+        onPressed: () async {
+          handleExamCompletion(context: context);
+        },
+        child: Text(
+            "Mark Module as Done- completed ${exam.index}/${module.exams!.length}"),
+      );
+    else
+      return ElevatedButton(
+        onPressed: () {},
+        child: Text("Study the module first"),
+      );
   }
+
   @override
   Future<void> handleExamCompletion({required BuildContext context}) async {
     final loggedInState = context.read<LoggedInState>();
@@ -123,8 +129,9 @@ class ModuleExamCompletionStrategy implements ExamCompletionStrategy {
       module: module!,
       coursesProvider: coursesProvider,
       examIndex: exam.index,
-    ).then((val){
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => HomePage()));});
+    ).then((val) {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => HomePage()));
+    });
   }
 }

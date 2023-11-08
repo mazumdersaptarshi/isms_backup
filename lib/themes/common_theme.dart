@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 // Theme Constants
 const primaryColor = Colors.deepPurpleAccent;
+
 const secondaryColor = Colors.deepPurpleAccent;
 const bgColor = Colors.deepPurpleAccent;
+
 const white = Colors.white;
 const black = Colors.black;
 const transparent = Colors.transparent;
@@ -87,24 +89,30 @@ TextStyle commonTitleStyle = TextStyle(
 ShapeBorder customCardShape = RoundedRectangleBorder(
   borderRadius: BorderRadius.circular(10.0),
 );
+
+
+// TODO
+// - build a colorscheme (start with `fromSeed()`)
+// - remove as much colors as possible from everywhere else
+// - same for other aspects of theme (font size, etc)
 ThemeData customTheme = ThemeData(
   fontFamily: 'Poppins',
   floatingActionButtonTheme: FloatingActionButtonThemeData(
-      backgroundColor: secondaryColor,
+      backgroundColor: primaryColor.shade100,
       extendedTextStyle: TextStyle(color: white)),
-  // textTheme: TextTheme(
-  //   bodySmall: TextStyle(fontFamily: "Poppins"),
-  //   bodyLarge: TextStyle(fontFamily: "Poppins"),
-  //   bodyMedium: TextStyle(fontFamily: "Poppins"),
-  //   labelMedium: TextStyle(fontFamily: "Poppins"),
-  //   displayLarge: TextStyle(fontFamily: "Poppins"),
-  //   displayMedium: TextStyle(fontFamily: "Poppins"),
-  // ),
+  textTheme: TextTheme(
+    bodyLarge: TextStyle(fontFamily: "Poppins"),
+    bodyMedium: TextStyle(fontFamily: "Poppins"),
+    labelMedium: TextStyle(fontFamily: "Poppins"),
+    displayLarge: TextStyle(fontFamily: "Poppins"),
+    displayMedium: TextStyle(fontFamily: "Poppins"),
+  ),
   colorScheme: ColorScheme.fromSwatch().copyWith(
     primary: Colors.deepPurpleAccent.shade100,
     secondary: Colors.grey.shade400,
     tertiary: Colors.grey.shade600,
   ),
+
   buttonTheme: const ButtonThemeData(
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10)))),
@@ -115,8 +123,9 @@ ThemeData customTheme = ThemeData(
         RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(5))),
       ),
-      minimumSize: MaterialStateProperty.all(
-          Size(150.0, 48.0)), // You can customize other button properties here.
+
+      minimumSize: MaterialStateProperty.all(Size(150.0, 48.0)),
+
     ),
   ),
 );
