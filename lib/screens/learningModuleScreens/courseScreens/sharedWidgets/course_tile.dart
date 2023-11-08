@@ -15,6 +15,7 @@ class CourseTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int imageIndex = index % 4;
     return Container(
       height: 150,
       child: GestureDetector(
@@ -32,12 +33,18 @@ class CourseTile extends StatelessWidget {
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                   child: Row(
                     children: [
-                      Image.network(
-                        "https://www.shutterstock.com/image-vector/coding-vector-illustration-600w-687456625.jpg",
+                      Image.asset(
+                        "assets/images/BookIcon${imageIndex}.png",
                         height: 120,
                         width: 120,
-                        fit: BoxFit.cover,
+                        fit: BoxFit.contain,
                       ),
+                      // Image.network(
+                      //   "https://www.shutterstock.com/image-vector/coding-vector-illustration-600w-687456625.jpg",
+                      //   height: 120,
+                      //   width: 120,
+                      //   fit: BoxFit.cover,
+                      // ),
                       SizedBox(width: 20),
                     ],
                   ),
