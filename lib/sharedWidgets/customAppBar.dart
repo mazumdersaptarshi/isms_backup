@@ -62,10 +62,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       actions: <Widget>[
-        appBarItem(Icons.explore, "Explore", navigateToCoursesPage),
-        appBarItem(Icons.lightbulb_outline, "My Learning", () {}),
-        appBarItem(Icons.account_circle, "Account", navigateToUserProfilePage),
-        if (loggedInState?.currentUserRole == 'admin')
+        if (kIsWeb) appBarItem(Icons.explore, "Explore", navigateToCoursesPage),
+        if (kIsWeb) appBarItem(Icons.lightbulb_outline, "My Learning", () {}),
+        if (kIsWeb)
+          appBarItem(
+              Icons.account_circle, "Account", navigateToUserProfilePage),
+        if (loggedInState?.currentUserRole == 'admin' && kIsWeb)
           appBarItem(Icons.admin_panel_settings_outlined, "Admin",
               navigateToAdminConsolePage),
         Padding(
@@ -74,12 +76,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             icon: const Icon(Icons.logout),
             tooltip: 'Logout',
             onPressed: () async {
-              await LoggedInState.logout();
-              if (!context.mounted) return;
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const LoginPage()),
-              );
+              await LoggedInState.logout().then((value) {
+                if (!context.mounted) return;
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginPage()),
+                );
+              });
             },
           ),
         ),

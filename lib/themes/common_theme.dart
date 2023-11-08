@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 
 // Theme Constants
-const primaryColor = Color.fromARGB(255, 221, 244, 250);
+const primaryColor = Colors.deepPurpleAccent;
 const secondaryColor = Color.fromARGB(255, 128, 132, 255);
 const bgColor = Color.fromARGB(255, 255, 255, 255);
 const white = Colors.white;
@@ -79,7 +79,7 @@ InputDecoration customInputDecoration({
 }
 
 TextStyle ModuleDescStyle = const TextStyle(
-    fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white);
+    fontSize: 20, fontWeight: FontWeight.bold, color: primaryColor);
 
 TextStyle commonTextStyle =
     const TextStyle(fontSize: defaultFontSize, color: black);

@@ -7,6 +7,7 @@ import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 import 'package:isms/projectModules/notificationModules/initLinkHandler.dart';
 import 'package:isms/screens/adminScreens/AdminConsole/adminConsolePage.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
+import 'package:isms/sharedWidgets/bottomNavBar.dart';
 import 'package:isms/sharedWidgets/customAppBar.dart';
 import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
@@ -25,7 +26,6 @@ class _HomePageState extends State<HomePage> {
   late String userRole;
   //DateTime? _expiryDate;
   String? initialLink;
-  bool isUserInfoFetched = false;
 
   @override
   void initState() {
@@ -59,6 +59,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    double homePageContainerHeight = 1300;
     List<Widget> homePageItems = [
       HomePageItem(
         onTap: () {
@@ -103,71 +104,19 @@ class _HomePageState extends State<HomePage> {
     return Consumer<CoursesProvider>(
         builder: (BuildContext context, CoursesProvider value, Widget? child) {
       return Scaffold(
-          backgroundColor: Colors.deepPurpleAccent.shade100,
           bottomNavigationBar: kIsWeb
               ? null
-              : Container(
-                  decoration: const BoxDecoration(
-                    //Here goes the same radius, u can put into a var or function
-                    borderRadius:
-                        BorderRadius.only(bottomLeft: Radius.circular(10)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color(0x14000000),
-                        spreadRadius: 0,
-                        blurRadius: 10,
-                      ),
-                    ],
-                  ),
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-                    ),
-                    child: BottomAppBar(
-                      shape: const CircularNotchedRectangle(),
-                      notchMargin: 6.0,
-                      child: BottomNavigationBar(
-                        items: const <BottomNavigationBarItem>[
-                          BottomNavigationBarItem(
-                            icon: Icon(Icons.home_outlined),
-                            label: 'Home',
-                          ),
-                          BottomNavigationBarItem(
-                            icon: Icon(Icons
-                                .account_circle_outlined), // Fallback icon if no image is available
-                            label: 'Account',
-                          ),
-                        ],
-                        currentIndex: 0,
-                        selectedItemColor: Colors.deepPurpleAccent,
-                        backgroundColor: Colors.white,
-                        type: BottomNavigationBarType.fixed,
-                        elevation: 5,
-                        onTap: (int index) {},
-                        selectedLabelStyle: const TextStyle(
-                          fontSize:
-                              12, // Adjust the font size here for selected label
-                        ),
-                        unselectedLabelStyle: const TextStyle(
-                          fontSize:
-                              12, // Adjust the font size here for unselected label
-                        ),
-
-// This will be set when a new tab is tapped
-                      ),
-                    ),
-                  ),
-                ),
+              : BottomNavBar(selectedIndex: 0, loggedInState: loggedInState),
           appBar: CustomAppBar(
             loggedInState: loggedInState,
           ),
           body: CustomScrollView(
             slivers: [
               SliverAppBar(
-                backgroundColor: Colors.deepPurpleAccent.shade100,
+                elevation: 10,
+                backgroundColor: primaryColor.shade100,
                 automaticallyImplyLeading: false,
-                expandedHeight: 250,
+                expandedHeight: 200,
                 pinned: false,
                 flexibleSpace: FlexibleSpaceBar(
                   background: Row(
@@ -199,12 +148,21 @@ class _HomePageState extends State<HomePage> {
               SliverToBoxAdapter(
                 child: SizedBox(
                     width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height - 40,
+                    height: homePageContainerHeight,
                     child: Stack(children: [
+                      Positioned(
+                          top: 0,
+                          child: Container(
+                            height: homePageContainerHeight,
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                              color: primaryColor.shade100,
+                            ),
+                          )),
                       Positioned(
                           top: 100,
                           child: Container(
-                            height: MediaQuery.of(context).size.height - 40,
+                            height: homePageContainerHeight,
                             width: MediaQuery.of(context).size.width,
                             decoration: const BoxDecoration(
                                 color: Colors.white,
@@ -214,8 +172,7 @@ class _HomePageState extends State<HomePage> {
                       Positioned(
                           top: 20,
                           child: Container(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
+                              padding: const EdgeInsets.symmetric(horizontal: 10),
                               child: HomePageItemsContainer(
                                   homePageItems: homePageItems)))
                     ])),

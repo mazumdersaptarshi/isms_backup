@@ -235,7 +235,6 @@ class LoggedInState with ChangeNotifier {
       required Course course,
       required Module module}) async {
     bool flag = false;
-    debugPrint("HERRRRRRRRRRREEEEEEE");
     if (loggedInUser.courses_started.isNotEmpty) {
       for (var course in loggedInUser.courses_started) {
         try {
@@ -254,7 +253,8 @@ class LoggedInState with ChangeNotifier {
       }
     }
     if (flag == false) {
-      for (var courseStarted in _userDataGetterMaster.loggedInUser.courses_started) {
+      for (var courseStarted
+          in _userDataGetterMaster.loggedInUser.courses_started) {
         if (courseStarted['courseID'] == course.id) {
           bool flag = false;
           if (courseStarted['modules_completed'] != null) {
@@ -311,7 +311,8 @@ class LoggedInState with ChangeNotifier {
     if (flag == false) {
       debugPrint("FLAG IS FALSE $courseDetails");
 
-      for (var courseStarted in _userDataGetterMaster.loggedInUser.courses_started) {
+      for (var courseStarted
+          in _userDataGetterMaster.loggedInUser.courses_started) {
         if (courseStarted['courseID'] == course.id) {
           debugPrint("STARTED MODULEE ${courseStarted['modules_started']}");
           bool flag_2 = false;
