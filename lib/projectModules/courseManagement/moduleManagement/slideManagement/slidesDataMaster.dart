@@ -21,36 +21,33 @@ class SlidesDataMaster extends ModuleDataMaster {
   CollectionReference? _slidesRef;
   CollectionReference? get slidesRef => _slidesRef;
 
-  Future<bool> createSlides({required List<Slide> slides}) async {
-    List<Map<String, dynamic>> slidesMapList = [];
-    int startingIndex = 0;
-    try {
-      startingIndex = module.slides!.length;
-    } catch (e) {
-      startingIndex = 0;
-    }
-
-    try {
-      slides.forEach((slideItem) {
-        startingIndex++;
-        slideItem.index = startingIndex;
-        Map<String, dynamic> slideMap = slideItem.toMap();
-        slideMap['createdAt'] = DateTime.now();
-        slidesMapList.add(slideMap);
-      });
-
-      slidesMapList.forEach((slideMap) async {
-        await slidesRef!.doc(slideMap['id']).set(slideMap);
-        print("Created slide ${slideMap}");
-      });
-
-      coursesProvider.addSlidesToModules(module, slides);
-      print("Slides creation successful");
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
+  //Future<bool> createSlides({required List<Slide> slides}) async {
+  //  List<Map<String, dynamic>> slidesMapList = [];
+  //  int startingIndex = 0;
+  //  try {
+  //    startingIndex = module.slides!.length;
+  //  } catch (e) {
+  //    startingIndex = 0;
+  //  }
+  //  try {
+  //    slides.forEach((slideItem) {
+  //      startingIndex++;
+  //      slideItem.index = startingIndex;
+  //      Map<String, dynamic> slideMap = slideItem.toMap();
+  //      slideMap['createdAt'] = DateTime.now();
+  //      slidesMapList.add(slideMap);
+  //    });
+  //    slidesMapList.forEach((slideMap) async {
+  //      await slidesRef!.doc(slideMap['id']).set(slideMap);
+  //      print("Created slide ${slideMap}");
+  //    });
+  //    coursesProvider.addSlidesToModules(module, slides);
+  //    print("Slides creation successful");
+  //    return true;
+  //  } catch (e) {
+  //    return false;
+  //  }
+  //}
 
   Future fetchSlides() async {
     if (module.slides != null && module.slides!.isNotEmpty) {
