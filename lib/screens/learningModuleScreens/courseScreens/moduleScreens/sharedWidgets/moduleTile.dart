@@ -58,8 +58,8 @@ class ModuleTile extends StatelessWidget {
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                           child: SvgPicture.asset(
                             "assets/images/moduleIcons/ModuleIcon${imageIndex + 1}.svg",
-                            height: 150,
-                            width: 150,
+                            height: 200,
+                            width: 200,
                             fit: BoxFit.contain,
                           ),
                         ),

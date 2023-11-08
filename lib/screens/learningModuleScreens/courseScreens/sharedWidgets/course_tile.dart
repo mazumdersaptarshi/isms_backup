@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../themes/common_theme.dart';
 
@@ -33,10 +34,10 @@ class CourseTile extends StatelessWidget {
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                   child: Row(
                     children: [
-                      Image.asset(
-                        "assets/images/BookIcon${imageIndex}.png",
-                        height: 120,
-                        width: 120,
+                      SvgPicture.asset(
+                        "assets/images/courseIcons/courseIcon${imageIndex}.svg",
+                        height: 200,
+                        width: 200,
                         fit: BoxFit.contain,
                       ),
                       // Image.network(
@@ -58,16 +59,22 @@ class CourseTile extends StatelessWidget {
                           style: commonTextStyle.copyWith(
                               fontWeight: FontWeight.bold,
                               color: Colors.black)),
-                      RichText(
-                          text: TextSpan(
-                              text: "Modules Count :",
-                              style: customTheme.textTheme.labelMedium!
-                                  .copyWith(color: Colors.grey, fontSize: 14),
-                              children: [
-                            TextSpan(
-                                text: " ${modulesCount!}",
-                                style: customTheme.textTheme.labelMedium)
-                          ]))
+                      Container(
+                          width: 150,
+                          child: Divider()),
+                      SizedBox(height: 10),
+                      Expanded(
+                        child: RichText(
+                            text: TextSpan(
+                                text: "Modules Count :",
+                                style: customTheme.textTheme.labelMedium!
+                                    .copyWith(color: Colors.grey, fontSize: 14),
+                                children: [
+                              TextSpan(
+                                  text: " ${modulesCount!}",
+                                  style: customTheme.textTheme.labelMedium)
+                            ])),
+                      )
                     ],
                   ),
                 )

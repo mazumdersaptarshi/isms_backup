@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 import 'package:isms/projectModules/notificationModules/initLinkHandler.dart';
@@ -223,6 +226,7 @@ class HomePageItem extends StatelessWidget {
   HomePageItem({super.key, required this.onTap, required this.title});
   Function onTap;
   String title;
+  int randIndex=  Random().nextInt(5);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -238,7 +242,20 @@ class HomePageItem extends StatelessWidget {
               borderRadius: BorderRadius.all(Radius.circular(10))),
           child: Padding(
             padding: const EdgeInsets.all(20.0),
-            child: Text(title),
+            child: Column(
+              children: [
+                SvgPicture.asset(
+                  "assets/images/courseIcons/courseIcon${randIndex}.svg",
+                  width: 200,
+                  height: 200,
+                  fit: BoxFit.contain,
+                ),
+                Text(title, style: customTheme.textTheme.labelMedium!.copyWith(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold
+                ),),
+              ],
+            ),
           ),
         ),
       ),

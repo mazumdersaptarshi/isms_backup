@@ -40,6 +40,7 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
 
     int tileMinWidth = 300;
+    int tileMinheight = 300;
     double tileRatio = 16 / 9;
     // available width, in pixels
     double horizontalMargin = MediaQuery.sizeOf(context).width > 900 ? 200 : 10;
@@ -61,7 +62,7 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
       bottomNavigationBar:
           kIsWeb ? null : BottomNavBar(loggedInState: loggedInState),
       body: Container(
-        margin: EdgeInsets.only(top: 20),
+        margin: EdgeInsets.only(top: 20, left: horizontalMargin, right: horizontalMargin),
         child: CustomScrollView(
           slivers: [
             SliverGrid.builder(
@@ -70,7 +71,8 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
                 itemCount: coursesProvider.allCourses.length,
                 itemBuilder: (context, courseIndex) {
                   return Container(
-                    margin: EdgeInsets.symmetric(horizontal: horizontalMargin),
+                    // margin: EdgeInsets.symmetric(horizontal: 10),
+
                     child: CourseTile(
                       index: courseIndex,
                       title: coursesProvider.allCourses[courseIndex].name,
