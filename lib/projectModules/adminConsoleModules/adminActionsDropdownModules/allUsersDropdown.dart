@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
@@ -6,7 +8,7 @@ import '../../../adminManagement/adminProvider.dart';
 import '../../courseManagement/coursesProvider.dart';
 
 class AllUsersDropdown extends StatelessWidget {
-  AllUsersDropdown({super.key, required this.adminProvider});
+  const AllUsersDropdown({super.key, required this.adminProvider});
   final AdminProvider adminProvider;
 
   @override
@@ -17,14 +19,14 @@ class AllUsersDropdown extends StatelessWidget {
       future: adminProvider.allUsersDataFetcher(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else if (snapshot.hasData && snapshot.data != null) {
           return ListView.builder(
               itemCount: snapshot.data!.length,
               shrinkWrap: true,
-              physics: ClampingScrollPhysics(),
+              physics: const ClampingScrollPhysics(),
               itemBuilder: (context, index) {
                 return ExpansionTile(
                   title: Row(
@@ -33,11 +35,11 @@ class AllUsersDropdown extends StatelessWidget {
                       Text(
                         '${index + 1}. ${snapshot.data![index].username}',
                         style:
-                            TextStyle(fontSize: 14, color: Colors.blueAccent),
+                            const TextStyle(fontSize: 14, color: Colors.blueAccent),
                       ),
                       Text(
                         '${snapshot.data![index].role}',
-                        style: TextStyle(fontSize: 14),
+                        style: const TextStyle(fontSize: 14),
                       ),
                     ],
                   ),
@@ -49,7 +51,7 @@ class AllUsersDropdown extends StatelessWidget {
                       ),
                       trailing: Text(
                         '${snapshot.data![index].courses_completed!.length}',
-                        style: TextStyle(fontSize: 12),
+                        style: const TextStyle(fontSize: 12),
                       ),
                       children: [
                         for (var courseItem
@@ -64,7 +66,7 @@ class AllUsersDropdown extends StatelessWidget {
                       ),
                       trailing: Text(
                         '${snapshot.data![index].courses_started!.length}',
-                        style: TextStyle(fontSize: 12),
+                        style: const TextStyle(fontSize: 12),
                       ),
                       children: [
                         for (var courseItem
@@ -79,7 +81,7 @@ class AllUsersDropdown extends StatelessWidget {
                 );
               });
         } else {
-          return Text('No data to return, unexpected error');
+          return const Text('No data to return, unexpected error');
         }
       },
     );
@@ -87,19 +89,19 @@ class AllUsersDropdown extends StatelessWidget {
 }
 
 class UserCourseStartedDetailsTile extends StatelessWidget {
-  UserCourseStartedDetailsTile(
+  const UserCourseStartedDetailsTile(
       {super.key,
       required this.courseItem,
       required this.coursesProvider,
       required this.index});
-  var courseItem;
-  CoursesProvider coursesProvider;
-  int index;
+  final Map<String, dynamic> courseItem;
+  final CoursesProvider coursesProvider;
+  final int index;
   Map<String, dynamic> getCourseCompletedPercentage() {
     double courseCompletionPercentage = 0;
     int noOfExams = 0;
     bool isValid = false;
-    print('Enrolled CoursesDropdown');
+    debugPrint('Enrolled CoursesDropdown');
 
     int modulesCount = 0;
 
@@ -131,7 +133,7 @@ class UserCourseStartedDetailsTile extends StatelessWidget {
   Widget build(BuildContext context) {
     var courseDetailsData = getCourseCompletedPercentage();
     return Container(
-      constraints: BoxConstraints(minHeight: 50),
+      constraints: const BoxConstraints(minHeight: 50),
       child: Column(
         children: [
           Row(
@@ -142,11 +144,11 @@ class UserCourseStartedDetailsTile extends StatelessWidget {
                 radius: 20.0,
                 lineWidth: 5.0,
                 percent: courseDetailsData["courseCompletionPercentage"],
-                center: new Text(
+                center: Text(
                   (courseDetailsData["courseCompletionPercentage"] * 100)
                       .ceil()
                       .toString(),
-                  style: TextStyle(fontSize: 10),
+                  style: const TextStyle(fontSize: 10),
                 ),
                 progressColor: Colors.yellow.shade900,
               )

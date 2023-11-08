@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 
 // Theme Constants
@@ -24,17 +26,13 @@ ButtonStyle customElevatedButtonStyle() {
   );
 }
 
-
-TextStyle buttonText = TextStyle(
+TextStyle buttonText = const TextStyle(
   color: white,
   fontSize: defaultFontSize,
 );
 
-TextStyle optionButtonText = TextStyle(
-    color: white,
-    fontSize: smallFontSize,
-    fontWeight: FontWeight.bold
-);
+TextStyle optionButtonText = const TextStyle(
+    color: white, fontSize: smallFontSize, fontWeight: FontWeight.bold);
 
 BoxDecoration customButtonTheme = BoxDecoration(
   color: secondaryColor,
@@ -50,7 +48,7 @@ BoxDecoration customButtonTheme = BoxDecoration(
 
 BoxDecoration customBoxTheme = BoxDecoration(
   color: white,
-  boxShadow: const[
+  boxShadow: const [
     BoxShadow(
       color: secondaryColor,
       offset: Offset(0, 2),
@@ -66,25 +64,27 @@ InputDecoration customInputDecoration({
 }) {
   return InputDecoration(
     hintText: hintText,
-    contentPadding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+    contentPadding:
+        const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
     enabledBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: transparent, width: 1.0),
+      borderSide: const BorderSide(color: transparent, width: 1.0),
       borderRadius: BorderRadius.circular(10.0),
     ),
     focusColor: secondaryColor,
     focusedBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: secondaryColor, width: 2.0),
+      borderSide: const BorderSide(color: secondaryColor, width: 2.0),
       borderRadius: BorderRadius.circular(10.0),
     ),
   );
 }
 
-TextStyle ModuleDescStyle =
-TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: primaryColor);
+TextStyle ModuleDescStyle = const TextStyle(
+    fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white);
 
-TextStyle commonTextStyle = TextStyle(fontSize: defaultFontSize, color: black);
+TextStyle commonTextStyle =
+    const TextStyle(fontSize: defaultFontSize, color: black);
 
-TextStyle commonTitleStyle = TextStyle(
+TextStyle commonTitleStyle = const TextStyle(
   fontSize: 17,
 );
 
@@ -92,13 +92,10 @@ ShapeBorder customCardShape = RoundedRectangleBorder(
   borderRadius: BorderRadius.circular(10.0),
 );
 ThemeData customTheme = ThemeData(
-
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: secondaryColor,
-        extendedTextStyle: TextStyle(color:white)),
-
-
-  textTheme: TextTheme(
+  floatingActionButtonTheme: const FloatingActionButtonThemeData(
+      backgroundColor: secondaryColor,
+      extendedTextStyle: TextStyle(color: white)),
+  textTheme: const TextTheme(
     bodyLarge: TextStyle(fontFamily: "Poppins"),
     bodyMedium: TextStyle(fontFamily: "Poppins"),
     labelMedium: TextStyle(fontFamily: "Poppins"),
@@ -107,22 +104,18 @@ ThemeData customTheme = ThemeData(
   ),
   colorScheme:
       ColorScheme.fromSeed(seedColor: Colors.white, background: Colors.white),
- 
   buttonTheme: const ButtonThemeData(
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10)))),
-
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ButtonStyle(
       backgroundColor: MaterialStateProperty.all(secondaryColor),
-      shape: MaterialStateProperty.all< RoundedRectangleBorder>(
-        RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(5))
-        ),
-
+      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+        const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(5))),
       ),
-        minimumSize: MaterialStateProperty.all(Size(150.0, 48.0)),// You can customize other button properties here.
+      minimumSize: MaterialStateProperty.all(const Size(
+          150.0, 48.0)), // You can customize other button properties here.
     ),
-
   ),
 );

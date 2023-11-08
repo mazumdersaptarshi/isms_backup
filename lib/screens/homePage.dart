@@ -1,13 +1,12 @@
+// ignore_for_file: file_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 import 'package:isms/projectModules/notificationModules/initLinkHandler.dart';
 import 'package:isms/screens/adminScreens/AdminConsole/adminConsolePage.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
-import 'package:isms/screens/reminderScreen.dart';
-import 'package:isms/screens/userInfo/userProfilePage.dart';
 import 'package:isms/sharedWidgets/customAppBar.dart';
 import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
@@ -16,8 +15,7 @@ import 'package:provider/provider.dart';
 import 'login/loginScreen.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key? key}) : super(key: key);
-  bool isUserInfoFetched = false;
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -25,10 +23,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late String userRole;
-  DateTime? _expiryDate;
+  //DateTime? _expiryDate;
   String? initialLink;
-
-
+  bool isUserInfoFetched = false;
 
   @override
   void initState() {
@@ -62,40 +59,49 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> homePageItems=[HomePageItem(
-      onTap: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>CoursesDisplayScreen()));
-      },
-      title: "All Courses",),
+    List<Widget> homePageItems = [
       HomePageItem(
-        onTap: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>AdminConsolePage()));
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const CoursesDisplayScreen()));
         },
-        title: "Admin Console",),
+        title: "All Courses",
+      ),
       HomePageItem(
-        onTap: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>AdminConsolePage()));
+        onTap: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => AdminConsolePage()));
         },
-        title: "Admin Console",),
+        title: "Admin Console",
+      ),
       HomePageItem(
-        onTap: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>AdminConsolePage()));
+        onTap: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => AdminConsolePage()));
         },
-        title: "Admin Console",),
+        title: "Admin Console",
+      ),
+      HomePageItem(
+        onTap: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => AdminConsolePage()));
+        },
+        title: "Admin Console",
+      ),
     ];
-
 
     final loggedInState = context.watch<LoggedInState>();
 
     if (loggedInState.currentUser == null) {
-      return LoginPage();
+      return const LoginPage();
     }
 
     userRole = loggedInState.currentUserRole;
 
     return Consumer<CoursesProvider>(
         builder: (BuildContext context, CoursesProvider value, Widget? child) {
-
       return Scaffold(
           backgroundColor: Colors.deepPurpleAccent.shade100,
           bottomNavigationBar: kIsWeb
@@ -158,121 +164,119 @@ class _HomePageState extends State<HomePage> {
           ),
           body: CustomScrollView(
             slivers: [
-              SliverAppBar(backgroundColor: Colors.deepPurpleAccent.shade100,
-              automaticallyImplyLeading: false,
-              expandedHeight: 250,
-              pinned: false,
-              flexibleSpace: FlexibleSpaceBar(
-                background: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(
-                      "Welcome back, \n${loggedInState.currentUserName}",
-                      style: customTheme.textTheme?.bodyMedium
-                          ?.copyWith(fontSize: 30, color: Colors.white),
-                    ),
-                    Flexible(
-                      flex:
-                      1, // The flex factor. You can adjust this number to take more or less space in the Row or Column.
-                      child: Container(
-                        width: MediaQuery.of(context).size.width *
-                            0.13, // 50% of screen width
+              SliverAppBar(
+                backgroundColor: Colors.deepPurpleAccent.shade100,
+                automaticallyImplyLeading: false,
+                expandedHeight: 250,
+                pinned: false,
+                flexibleSpace: FlexibleSpaceBar(
+                  background: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text(
+                        "Welcome back, \n${loggedInState.currentUserName}",
+                        style: customTheme.textTheme.bodyMedium
+                            ?.copyWith(fontSize: 30, color: Colors.white),
+                      ),
+                      Flexible(
+                        flex:
+                            1, // The flex factor. You can adjust this number to take more or less space in the Row or Column.
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width *
+                              0.13, // 50% of screen width
 
-                        child: Image.asset(
-                          "assets/images/security.png",
-                          fit: BoxFit
-                              .cover, // This will cover the available space, you can change it to BoxFit.contain to prevent the image from being cropped.
+                          child: Image.asset(
+                            "assets/images/security.png",
+                            fit: BoxFit
+                                .cover, // This will cover the available space, you can change it to BoxFit.contain to prevent the image from being cropped.
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-            SliverToBoxAdapter(
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height-40,
-
-
-                  child: Stack(children: [
-                    Positioned(
-                      top: 100,
-                        child: Container(
-                          height: MediaQuery.of(context).size.height-40,
-                          width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(topLeft: Radius.circular(20))
-                      ),
-                    )),
-                    Positioned(
-                        top: 20,
-                        child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 10),
-                            child: HomePageItemsContainer(homePageItems: homePageItems)))])),
-            )
+              SliverToBoxAdapter(
+                child: SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height - 40,
+                    child: Stack(children: [
+                      Positioned(
+                          top: 100,
+                          child: Container(
+                            height: MediaQuery.of(context).size.height - 40,
+                            width: MediaQuery.of(context).size.width,
+                            decoration: const BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(20))),
+                          )),
+                      Positioned(
+                          top: 20,
+                          child: Container(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              child: HomePageItemsContainer(
+                                  homePageItems: homePageItems)))
+                    ])),
+              )
             ],
-
           ));
     });
   }
 }
 
 class HomePageItemsContainer extends StatelessWidget {
-   HomePageItemsContainer({super.key, required this.homePageItems});
-  List<Widget> homePageItems;
+  const HomePageItemsContainer({super.key, required this.homePageItems});
+  final List<Widget> homePageItems;
   @override
   Widget build(BuildContext context) {
-    double itemContainerWidth=  MediaQuery.of(context).size.width*0.5;
-    return MediaQuery.of(context).size.width> 800?
-    Container(
-      width: MediaQuery.of(context).size.width,
-      height: 300,
-      child: Container(
-        margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.1),
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: homePageItems.length,
-
-          itemBuilder: (BuildContext contenxt, int index){
-            return homePageItems[index];
-          },
-
-        ),
-      ),
-    ):
-    Container(
-      width: MediaQuery.of(context).size.width*0.9,
-      margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.03),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: homePageItems,
-      ),
-    );
+    //double itemContainerWidth = MediaQuery.of(context).size.width * 0.5;
+    return MediaQuery.of(context).size.width > 800
+        ? SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: 300,
+            child: Container(
+              margin: EdgeInsets.only(
+                  left: MediaQuery.of(context).size.width * 0.1),
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: homePageItems.length,
+                itemBuilder: (BuildContext contenxt, int index) {
+                  return homePageItems[index];
+                },
+              ),
+            ),
+          )
+        : Container(
+            width: MediaQuery.of(context).size.width * 0.9,
+            margin:
+                EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.03),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: homePageItems,
+            ),
+          );
   }
 }
 
-
 class HomePageItem extends StatelessWidget {
-   HomePageItem({super.key, required this.onTap, required this.title});
-  Function onTap;
-  String title;
+  const HomePageItem({super.key, required this.onTap, required this.title});
+  final Function onTap;
+  final String title;
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 300,
-     constraints: BoxConstraints(
-       minWidth: 300
-     ),
+      constraints: const BoxConstraints(minWidth: 300),
       child: GestureDetector(
-        onTap: (){
-          onTap();},
+        onTap: () {
+          onTap();
+        },
         child: Card(
           elevation: 10,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10))
-          ),
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10))),
           child: Padding(
             padding: const EdgeInsets.all(20.0),
             child: Text(title),

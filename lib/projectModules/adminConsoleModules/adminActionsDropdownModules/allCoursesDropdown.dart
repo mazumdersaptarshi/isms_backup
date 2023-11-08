@@ -1,10 +1,12 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 import '../../../adminManagement/adminProvider.dart';
 
 class AllCoursesDropdown extends StatelessWidget {
-  AllCoursesDropdown({super.key, required this.adminProvider});
+  const AllCoursesDropdown({super.key, required this.adminProvider});
   final AdminProvider adminProvider;
 
   @override
@@ -13,26 +15,26 @@ class AllCoursesDropdown extends StatelessWidget {
       future: adminProvider.allCoursesDataFetcher(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else if (snapshot.hasData && snapshot.data != null) {
           return ListView.builder(
               itemCount: snapshot.data!.length,
               shrinkWrap: true,
-              physics: ClampingScrollPhysics(),
+              physics: const ClampingScrollPhysics(),
               itemBuilder: (context, index) {
-                print('allUserRefs: ${adminProvider.userRefs}');
-                print(
+                debugPrint('allUserRefs: ${adminProvider.userRefs}');
+                debugPrint(
                     'This course ${snapshot.data![index].course_name}, relevant data: ${snapshot.data![index].course_completed!.length},  completed students percent: ${(snapshot.data![index].course_completed!.length / (adminProvider.userRefs.length) * 100)}');
                 return ExpansionTile(
                   title: Text(
                     '${index + 1}.  ${snapshot.data![index].course_name}',
-                    style: TextStyle(color: Colors.blueAccent),
+                    style: const TextStyle(color: Colors.blueAccent),
                   ),
                   children: [
                     ExpansionTile(
-                      title: Text(
+                      title: const Text(
                         'Completed',
                         style: TextStyle(color: Colors.green),
                       ),
@@ -43,9 +45,9 @@ class AllCoursesDropdown extends StatelessWidget {
                             (snapshot.data![index].course_completed!.length /
                                     (adminProvider.userRefs.length)) ??
                                 0,
-                        center: new Text(
+                        center: Text(
                             '${(snapshot.data![index].course_completed!.length / (adminProvider.userRefs.length) * 100).round()}%',
-                            style: TextStyle(fontSize: 10)),
+                            style: const TextStyle(fontSize: 10)),
                         progressColor: Colors.green,
                       ),
                       children: [
@@ -53,7 +55,7 @@ class AllCoursesDropdown extends StatelessWidget {
                             in snapshot.data![index].course_completed!)
                           Text(
                             '${student['username']}',
-                            style: TextStyle(color: Colors.green),
+                            style: const TextStyle(color: Colors.green),
                           ),
                       ],
                     ),
@@ -70,7 +72,7 @@ class AllCoursesDropdown extends StatelessWidget {
                             0,
                         center: Text(
                           '${(snapshot.data![index].course_started!.length / (adminProvider.userRefs.length) * 100).round()}%',
-                          style: TextStyle(fontSize: 10),
+                          style: const TextStyle(fontSize: 10),
                         ),
                         progressColor: Colors.yellow.shade900,
                       ),
@@ -87,7 +89,7 @@ class AllCoursesDropdown extends StatelessWidget {
                 );
               });
         }
-        return Text('Could not load data, unforseen error!');
+        return const Text('Could not load data, unforseen error!');
       },
     );
   }

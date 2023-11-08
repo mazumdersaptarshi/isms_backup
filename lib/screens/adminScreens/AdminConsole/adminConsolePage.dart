@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:isms/projectModules/adminConsoleModules/adminProfileHeaderWidget.dart';
 import 'package:isms/screens/login/loginScreen.dart';
@@ -22,21 +24,23 @@ class AdminConsolePage extends StatelessWidget {
         name: 'Download Data', icon: Icons.download, actionId: 'dwnld'),
   ];
 
+  AdminConsolePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
 
     if (loggedInState.currentUser == null) {
-      return LoginPage();
+      return const LoginPage();
     }
 
     AdminProvider adminConsoleProvider = Provider.of<AdminProvider>(context);
-    print('adminConsoleProvider: $adminConsoleProvider');
+    debugPrint('adminConsoleProvider: $adminConsoleProvider');
 
     return Scaffold(
         body: CustomScrollView(
       slivers: [
-        SliverAppBar(
+        const SliverAppBar(
           expandedHeight: 220.0,
           flexibleSpace: FlexibleSpaceBar(background: AdminInfoWidget()),
         ),

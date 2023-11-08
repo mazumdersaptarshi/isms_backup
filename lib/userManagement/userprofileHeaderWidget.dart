@@ -1,8 +1,12 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 
 class UserProfileHeaderWidget extends StatelessWidget {
+  const UserProfileHeaderWidget({super.key});
+
   // UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
   // LoggedInState loggedInState;
   @override
@@ -14,8 +18,8 @@ class UserProfileHeaderWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           if (loggedInState.currentUser?.photoURL != null)
-            Padding(
-              padding: const EdgeInsets.only(
+            const Padding(
+              padding: EdgeInsets.only(
                   top: 25.0), // Increased padding on the top
               child: CircleAvatar(
                 radius: 50,
@@ -25,7 +29,7 @@ class UserProfileHeaderWidget extends StatelessWidget {
             ),
           Text(
             ' ${loggedInState.currentUserName}',
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.black,
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -33,14 +37,14 @@ class UserProfileHeaderWidget extends StatelessWidget {
           ),
           Text(
             ' ${loggedInState.currentUserEmail}',
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.black,
               fontSize: 18,
             ),
           ),
           Text(
             'Role: ${loggedInState.currentUserRole}',
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.black,
               fontSize: 18,
             ),
@@ -49,7 +53,7 @@ class UserProfileHeaderWidget extends StatelessWidget {
               onPressed: () {
                 loggedInState.refreshUserCoursesData();
               },
-              child: Text("Refresh"))
+              child: const Text("Refresh"))
         ],
       ),
     );

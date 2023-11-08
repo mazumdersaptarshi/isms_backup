@@ -1,7 +1,9 @@
+// ignore_for_file: file_names
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/models/newExam.dart';
 import 'package:isms/models/question.dart';
-import 'package:isms/screens/homePage.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCompletionStrategies.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/screens/login/loginScreen.dart';
@@ -11,26 +13,26 @@ import 'package:provider/provider.dart';
 
 import '../../../models/course.dart';
 import '../../../models/module.dart';
-import '../../../projectModules/courseManagement/coursesProvider.dart';
 
 class TakeExamScreen extends StatefulWidget {
-  TakeExamScreen(
-      {required this.exam,
-        required this.course,
-        required this.examtype,
-        this.module,
+  const TakeExamScreen(
+      {super.key,
+      required this.exam,
+      required this.course,
+      required this.examtype,
+      this.module,
       required this.examCompletionStrategy});
-  EXAMTYPE examtype;
-  Course course;
-  Module? module;
-  NewExam exam;
-  ExamCompletionStrategy examCompletionStrategy;
+  final EXAMTYPE examtype;
+  final Course course;
+  final Module? module;
+  final NewExam exam;
+  final ExamCompletionStrategy examCompletionStrategy;
   @override
-  _TakeExamScreenState createState() => _TakeExamScreenState();
+  State<TakeExamScreen> createState() => _TakeExamScreenState();
 }
 
 class _TakeExamScreenState extends State<TakeExamScreen> {
-  List<NewQuestion> _questions = [];
+  final List<NewQuestion> _questions = [];
   int _currentIndex = 0;
   List<Set<int>> _selectedAnswers = [];
   bool _showScore = false;
@@ -41,12 +43,14 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
     loadQuestions();
     shuffleQuestions();
     _selectedAnswers = List.generate(_questions.length, (index) => <int>{});
-    print(widget.exam.questionAnswerSet);
+    if (kDebugMode) {
+      print(widget.exam.questionAnswerSet);
+    }
   }
 
   loadQuestions() {
-    print("LOADING QUESTIONS");
-    widget.exam.questionAnswerSet.forEach((element) {
+    debugPrint("LOADING QUESTIONS");
+    for (var element in widget.exam.questionAnswerSet) {
       List<String> options = [];
       List<int> correctAnswers = [];
       int index = 0;
@@ -60,7 +64,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
       NewQuestion newQuestion = NewQuestion(element['questionName'], options,
           correctAnswers, correctAnswers.length);
       _questions.add(newQuestion);
-    });
+    }
   }
 
   void shuffleQuestions() {
@@ -101,14 +105,14 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
     LoggedInState loggedInState = context.watch<LoggedInState>();
 
     if (loggedInState.currentUser == null) {
-      return LoginPage();
+      return const LoginPage();
     }
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
           _showScore ? 'Score' : 'Exam Module',
-          style: TextStyle(color: white),
+          style: const TextStyle(color: white),
         ),
         backgroundColor: secondaryColor,
       ),
@@ -117,8 +121,8 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
   }
 
   Widget buildScoreWidget() {
-    LoggedInState loggedInState = Provider.of<LoggedInState>(context);
-    CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
+    //LoggedInState loggedInState = Provider.of<LoggedInState>(context);
+    //CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
 
     int correctAnswers = 0;
     for (int i = 0; i < _questions.length; i++) {
@@ -137,7 +141,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
           children: [
             Text(
                 'Your Score is: $correctAnswers/${_questions.length}. You need to get 75% to pass.'),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () => setState(() {
                 shuffleQuestions();
@@ -146,7 +150,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
                     List.generate(_questions.length, (index) => <int>{});
                 _showScore = false;
               }),
-              child: Text('Retake Exam'),
+              child: const Text('Retake Exam'),
             )
           ],
         ),
@@ -158,7 +162,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
           children: [
             Text(
                 'Congratulations! Your Score is: $correctAnswers/${_questions.length}'),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             widget.examCompletionStrategy.buildSumbitButton(context: context),
             ElevatedButton(
               onPressed: () => setState(() {
@@ -168,7 +172,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
                     List.generate(_questions.length, (index) => <int>{});
                 _showScore = false;
               }),
-              child: Text('Retry for Fun!'),
+              child: const Text('Retry for Fun!'),
             ),
           ],
         ),
@@ -187,20 +191,20 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
             color: secondaryColor,
             child: Padding(
               padding:
-              const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Text(
                     _questions[_currentIndex].question,
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 20, color: white),
+                    style: const TextStyle(fontSize: 20, color: white),
                   ),
-                  SizedBox(height: 50),
+                  const SizedBox(height: 50),
                   Text(
                     'Select ${_questions[_currentIndex].maxAllowedAnswers} answer(s)',
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
                         color: white),
@@ -209,53 +213,57 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
               ),
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           ...List.generate(_questions[_currentIndex].shuffledOptions.length,
-                  (index) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Card(
-                    surfaceTintColor: white,
-                    elevation: 4,
-                    shadowColor: secondaryColor,
-                    shape: customCardShape,
-                    child: ListTile(
-                      title: Text(_questions[_currentIndex].shuffledOptions[index]),
-                      leading: Checkbox(
-                        fillColor: MaterialStateProperty.resolveWith<Color>(
-                                (Set<MaterialState> states) {
-                              if (states.contains(MaterialState.disabled)) {
-                                return Colors.grey; // Fill color for the disabled state
-                              }
-                              if (states.contains(MaterialState.selected)) {
-                                return secondaryColor; // Fill color when the checkbox is checked
-                              }
-                              return white; // Fill color when the checkbox is unchecked
-                            }),
-                        value: _selectedAnswers[_currentIndex].contains(index),
-                        onChanged: (bool? value) {
-                          setState(() {
-                            if (value == true) {
-                              if (_selectedAnswers[_currentIndex].length <
-                                  _questions[_currentIndex].maxAllowedAnswers) {
-                                _selectedAnswers[_currentIndex].add(index);
-                              }
-                            } else {
-                              _selectedAnswers[_currentIndex].remove(index);
-                            }
-                          });
-                        },
-                      ),
-                    ),
+              (index) {
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Card(
+                surfaceTintColor: white,
+                elevation: 4,
+                shadowColor: secondaryColor,
+                shape: customCardShape,
+                child: ListTile(
+                  title: Text(_questions[_currentIndex].shuffledOptions[index]),
+                  leading: Checkbox(
+                    fillColor: MaterialStateProperty.resolveWith<Color>(
+                        (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.disabled)) {
+                        return Colors.grey; // Fill color for the disabled state
+                      }
+                      if (states.contains(MaterialState.selected)) {
+                        return secondaryColor; // Fill color when the checkbox is checked
+                      }
+                      return white; // Fill color when the checkbox is unchecked
+                    }),
+                    value: _selectedAnswers[_currentIndex].contains(index),
+                    onChanged: (bool? value) {
+                      setState(() {
+                        if (value == true) {
+                          if (_selectedAnswers[_currentIndex].length <
+                              _questions[_currentIndex].maxAllowedAnswers) {
+                            _selectedAnswers[_currentIndex].add(index);
+                          }
+                        } else {
+                          _selectedAnswers[_currentIndex].remove(index);
+                        }
+                      });
+                    },
                   ),
-                );
-              }),
-          SizedBox(height: 15,),
+                ),
+              ),
+            );
+          }),
+          const SizedBox(
+            height: 15,
+          ),
           ElevatedButton(
             style: customElevatedButtonStyle(),
             onPressed: areAnswersSelected ? () => onButtonPress() : null,
-            child:
-            Text(_currentIndex < _questions.length - 1 ? 'Next' : 'Submit',style: TextStyle(color: white),),
+            child: Text(
+              _currentIndex < _questions.length - 1 ? 'Next' : 'Submit',
+              style: const TextStyle(color: white),
+            ),
           )
         ],
       ),

@@ -1,24 +1,25 @@
-import 'package:firebase_auth/firebase_auth.dart';
+// ignore_for_file: file_names, non_constant_identifier_names
+
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:isms/userManagement/loggedInState.dart';
-import 'package:isms/userManagement/userDataGetterMaster.dart';
 import 'package:provider/provider.dart';
 
 import '../homePage.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({super.key});
+  const LoginPage({super.key});
 
   @override
   LoginPageState createState() => LoginPageState();
 }
 
 class LoginPageState extends State<LoginPage> {
-  Future<User?>? _signInFuture;
+  //Future<User?>? _signInFuture;
   bool hasCheckedForChangedDependencies = false;
   // UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
 
-  @override
   void main() async {
     super.initState();
     // await Firebase.initializeApp(
@@ -30,7 +31,7 @@ class LoginPageState extends State<LoginPage> {
     LoggedInState loggedInState = context.watch<LoggedInState>();
 
     if (loggedInState.currentUser != null) {
-      return HomePage();
+      return const HomePage();
     }
 
     return Scaffold(
@@ -45,10 +46,10 @@ class LoginPageState extends State<LoginPage> {
                   try {
                     await LoggedInState.login();
                   } catch (e) {
-                    print(e);
+                    log(e.toString());
                   }
                 },
-                child: Text('Google Login ')),
+                child: const Text('Google Login ')),
           ],
         ),
       ),

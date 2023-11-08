@@ -1,7 +1,8 @@
+// ignore_for_file: file_names, non_constant_identifier_names
+
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
-import 'package:isms/screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/createModuleScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examListScreen.dart';
@@ -9,7 +10,6 @@ import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/sharedWidgets/customAppBar.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'sharedWidgets/moduleTile.dart';
-import 'package:isms/sharedWidgets/leaningModulesAppBar.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../models/module.dart';
@@ -18,9 +18,8 @@ import '../../../../projectModules/courseManagement/moduleManagement/moduleDataM
 import '../../../../themes/common_theme.dart';
 
 class ModulesListScreen extends StatefulWidget {
-  ModulesListScreen({super.key, required this.course});
-  Course course;
-  ModuleDataMaster? moduleDataMaster;
+  const ModulesListScreen({super.key, required this.course});
+  final Course course;
   @override
   State<ModulesListScreen> createState() => _ModulesListScreenState();
 }
@@ -28,9 +27,10 @@ class ModulesListScreen extends StatefulWidget {
 class _ModulesListScreenState extends State<ModulesListScreen> {
   bool isModulesFetched = false;
   late String userRole;
+  ModuleDataMaster? moduleDataMaster;
 
   fetchCourseModules({required CoursesProvider coursesProvider}) async {
-    await widget.moduleDataMaster?.fetchModules();
+    await moduleDataMaster?.fetchModules();
     setState(() {
       isModulesFetched = true;
     });
@@ -44,13 +44,13 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
   bool checkIfModuleStarted(
       {required LoggedInState loggedInState, required Module module}) {
     bool flag = false;
-    loggedInState.loggedInUser.courses_started.forEach((course_started) {
+    for (var course_started in loggedInState.loggedInUser.courses_started) {
       if (course_started["course_name"] == widget.course.name) {
         course_started["modules_started"].forEach((module_started) {
           if (module_started["module_name"] == module.title) flag = true;
         });
       }
-    });
+    }
 
     return flag;
   }
@@ -58,13 +58,14 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
   bool checkIfModuleCompleted(
       {required LoggedInState loggedInState, required Module module}) {
     bool flag = false;
-    loggedInState.loggedInUser.courses_started.forEach((course_started) {
-      if (course_started["course_name"] == widget.course.name &&  course_started["modules_completed"] !=null) {
+    for (var course_started in loggedInState.loggedInUser.courses_started) {
+      if (course_started["course_name"] == widget.course.name &&
+          course_started["modules_completed"] != null) {
         course_started["modules_completed"].forEach((module_completed) {
           if (module_completed["module_name"] == module.title) flag = true;
         });
       }
-    });
+    }
 
     return flag;
   }
@@ -72,13 +73,13 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
   bool checkIfAllModulesCompleted({required LoggedInState loggedInState}) {
     bool flag = false;
 
-    loggedInState.loggedInUser.courses_started.forEach((course_started) {
+    for (var course_started in loggedInState.loggedInUser.courses_started) {
       if (course_started["course_name"] == widget.course.name) {
         if (course_started["modules_completed"] != null &&
             course_started["modules_completed"].length >=
                 widget.course.modulesCount) flag = true;
       }
-    });
+    }
     return flag;
   }
 
@@ -88,7 +89,7 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
     CoursesProvider coursesProvider = context.watch<CoursesProvider>();
     bool isALlModulesCompleted =
         checkIfAllModulesCompleted(loggedInState: loggedInState);
-    widget.moduleDataMaster = ModuleDataMaster(
+    moduleDataMaster = ModuleDataMaster(
         course: widget.course, coursesProvider: coursesProvider);
 
     if (isModulesFetched == false) {
@@ -96,7 +97,7 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
     }
 
     if (loggedInState.currentUser == null) {
-      return LoginPage();
+      return const LoginPage();
     }
 
     userRole = loggedInState.currentUserRole;
@@ -108,9 +109,9 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
     // available width, in pixels
     double screenWidth = MediaQuery.sizeOf(context).width;
     // number of tiles that can fit vertically on the screen
-    int maxColumns = max((screenWidth/tileMinWidth).floor(), 1);
+    int maxColumns = max((screenWidth / tileMinWidth).floor(), 1);
     // number of tiles that have to fit on the screen
-    int itemCount = widget.course.modulesCount?? 0;
+    int itemCount = widget.course.modulesCount ?? 0;
     // grid width, in tiles
     int numberColumns = min(itemCount, maxColumns);
     // grid width, in pixels
@@ -120,70 +121,68 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
       appBar: CustomAppBar(
         loggedInState: loggedInState,
       ),
-
       body: Container(
-        margin: EdgeInsets.only(top: 20),
+        margin: const EdgeInsets.only(top: 20),
         //padding: const EdgeInsets.all(16.0),
         child: isModulesFetched
-          ? Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    if (isALlModulesCompleted)
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ExamListScreen(
-                                course: widget.course,
-                                examtype: EXAMTYPE.courseExam,
+            ? Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      if (isALlModulesCompleted)
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ExamListScreen(
+                                  course: widget.course,
+                                  examtype: EXAMTYPE.courseExam,
+                                ),
                               ),
-                            ),
+                            );
+                          },
+                          child: const Text("View course exams"),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: SizedBox(
+                      width: gridWidth,
+                      child: GridView.builder(
+                        shrinkWrap: true,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: numberColumns,
+                          childAspectRatio: tileRatio,
+                        ),
+                        itemCount: itemCount,
+                        itemBuilder: (BuildContext context, int moduleIndex) {
+                          return ModuleTile(
+                            course: widget.course,
+                            module: widget.course.modules[moduleIndex],
+                            isModuleStarted: checkIfModuleStarted(
+                                loggedInState: loggedInState,
+                                module: widget.course.modules[moduleIndex]),
+                            isModuleCompleted: checkIfModuleCompleted(
+                                loggedInState: loggedInState,
+                                module: widget.course.modules[moduleIndex]),
                           );
                         },
-                        child: Text("View course exams"),
                       ),
-                  ],
-                ),
-                SizedBox(height: 20),
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: Container(
-                    width: gridWidth,
-                    child: GridView.builder(
-                      shrinkWrap: true,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: numberColumns,
-                        childAspectRatio: tileRatio,
-                      ),
-                      itemCount: itemCount,
-                      itemBuilder: (BuildContext context, int moduleIndex) {
-                        return ModuleTile(
-                          course: widget.course,
-                          module: widget.course.modules[moduleIndex],
-                          isModuleStarted: checkIfModuleStarted(
-                              loggedInState: loggedInState,
-                              module: widget.course.modules[moduleIndex]),
-                          isModuleCompleted: checkIfModuleCompleted(
-                              loggedInState: loggedInState,
-                              module: widget.course.modules[moduleIndex]),
-                        );
-                      },
                     ),
                   ),
-                ),
-              ],
-            )
-          : AlertDialog(
-              title: Text("Fetching modules"),
-              content: Align(
-                  alignment: Alignment.topCenter,
-                  child: CircularProgressIndicator()),
-            ),
+                ],
+              )
+            : const AlertDialog(
+                title: Text("Fetching modules"),
+                content: Align(
+                    alignment: Alignment.topCenter,
+                    child: CircularProgressIndicator()),
+              ),
       ),
-
       floatingActionButton: userRole == 'admin'
           ? FloatingActionButton(
               onPressed: () {
@@ -195,7 +194,7 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
               },
               backgroundColor:
                   customTheme.floatingActionButtonTheme.backgroundColor,
-              child: Icon(Icons.add),
+              child: const Icon(Icons.add),
             )
           : null,
     );

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(CourseDetailsPage(courseTitle: 'Python Basics'));
+  runApp(const CourseDetailsPage(courseTitle: 'Python Basics'));
 }
 
 class CourseDetailsPage extends StatelessWidget {
   final String courseTitle;
 
-  CourseDetailsPage({required this.courseTitle});
+  const CourseDetailsPage({super.key, required this.courseTitle});
 
   @override
   Widget build(BuildContext context) {
@@ -15,15 +15,15 @@ class CourseDetailsPage extends StatelessWidget {
       textDirection: TextDirection.ltr,
       child: Scaffold(
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(150.0),
+          preferredSize: const Size.fromHeight(150.0),
           child: AppBar(
             backgroundColor: Colors.blue[900],
-            title: Text(
+            title: const Text(
               'Course Details',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             centerTitle: true,
-            shape: RoundedRectangleBorder(
+            shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(
                 bottom: Radius.circular(50),
               ),
@@ -36,10 +36,7 @@ class CourseDetailsPage extends StatelessWidget {
             itemCount: 8,
             itemBuilder: (context, index) {
               return GestureDetector(
-                onTap: () {
-                  
-                 
-                },
+                onTap: () {},
                 child: Container(
                   margin: const EdgeInsets.symmetric(
                       vertical: 10.0, horizontal: 20.0),
@@ -53,9 +50,10 @@ class CourseDetailsPage extends StatelessWidget {
                     children: [
                       Text(
                         'Module ${index + 1}',
-                        style: TextStyle(color: Colors.black, fontSize: 20),
+                        style:
+                            const TextStyle(color: Colors.black, fontSize: 20),
                       ),
-                      Icon(
+                      const Icon(
                         Icons.arrow_downward,
                         color: Colors.black,
                       ),

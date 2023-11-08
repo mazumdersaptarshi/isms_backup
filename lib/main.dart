@@ -14,7 +14,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  print('Firebase initialized');
+  debugPrint('Firebase initialized');
   runApp(const MyApp());
 }
 
@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: customTheme,
-        home: LoginPage(),
+        home: const LoginPage(),
       ),
     );
   }

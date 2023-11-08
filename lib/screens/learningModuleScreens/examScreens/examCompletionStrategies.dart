@@ -1,7 +1,6 @@
-import 'dart:math';
+// ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:isms/screens/learningModuleScreens/examScreens/takeExamScreen.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/course.dart';
@@ -12,18 +11,16 @@ import '../../../userManagement/loggedInState.dart';
 import '../../homePage.dart';
 
 abstract class ExamCompletionStrategy {
-  ExamCompletionStrategy({required this.loggedInState}){
-
-  }
+  ExamCompletionStrategy({required this.loggedInState});
   LoggedInState loggedInState;
   Widget buildSumbitButton({required BuildContext context});
 
-  Future<void> handleExamCompletion(
-      {required BuildContext context});
+  Future<void> handleExamCompletion({required BuildContext context});
 }
 
 class CourseExamCompletionStrategy implements ExamCompletionStrategy {
-  CourseExamCompletionStrategy({required this.course, required this.exam, required this.loggedInState} );
+  CourseExamCompletionStrategy(
+      {required this.course, required this.exam, required this.loggedInState});
 
   Course course;
   NewExam exam;
@@ -32,13 +29,13 @@ class CourseExamCompletionStrategy implements ExamCompletionStrategy {
   LoggedInState loggedInState;
 
   @override
-  Widget buildSumbitButton({required BuildContext context}){
+  Widget buildSumbitButton({required BuildContext context}) {
     return ElevatedButton(
       onPressed: () async {
         handleExamCompletion(context: context);
       },
       child: Text(
-          "Mark Exam as Done- completed ${exam.index}/${course.exams!.length}"),
+          "Mark Exam as Done- completed ${exam.index}/${course.exams.length}"),
     );
   }
 
@@ -47,7 +44,8 @@ class CourseExamCompletionStrategy implements ExamCompletionStrategy {
     final loggedInState = context.read<LoggedInState>();
     final coursesProvider = context.read<CoursesProvider>();
 
-    await loggedInState.setUserCourseExamCompleted(
+    await loggedInState
+        .setUserCourseExamCompleted(
       coursesProvider: coursesProvider,
       course: course,
       courseDetails: {
@@ -56,19 +54,22 @@ class CourseExamCompletionStrategy implements ExamCompletionStrategy {
         "course_modules_count": course.modulesCount
       },
       examIndex: exam.index,
-    ).then((val) {
+    )
+        .then((val) {
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => HomePage()));
+          context, MaterialPageRoute(builder: (context) => const HomePage()));
     });
   }
-
-
 }
 
 class ModuleExamCompletionStrategy implements ExamCompletionStrategy {
-  ModuleExamCompletionStrategy({required this.module, required this.course, required this.exam, required this.loggedInState}){
-    this.isModuleStarted= checkIfModuleStartedd();
-    print("CREATING STRTEGYYY ");
+  ModuleExamCompletionStrategy(
+      {required this.module,
+      required this.course,
+      required this.exam,
+      required this.loggedInState}) {
+    isModuleStarted = checkIfModuleStartedd();
+    debugPrint("CREATING STRTEGYYY ");
   }
 
   Course course;
@@ -76,38 +77,41 @@ class ModuleExamCompletionStrategy implements ExamCompletionStrategy {
   Module module;
   @override
   LoggedInState loggedInState;
-  bool isModuleStarted= false;
-
+  bool isModuleStarted = false;
 
   bool checkIfModuleStartedd() {
     bool flag = false;
-    loggedInState.loggedInUser.courses_started.forEach((course_started) {
-      if (course_started["modules_started"] !=null && course_started["course_name"] == course.name) {
-
-        course_started["modules_started"].forEach((module_completed) {
-          if (module_completed["module_name"] == module.title)
+    for (var courseStarted in loggedInState.loggedInUser.courses_started) {
+      if (courseStarted["modules_started"] != null &&
+          courseStarted["course_name"] == course.name) {
+        courseStarted["modules_started"].forEach((moduleCompleted) {
+          if (moduleCompleted["module_name"] == module.title) {
             flag = true;
+          }
         });
       }
-    });
+    }
     return flag;
   }
-  @override
-  Widget buildSumbitButton({required BuildContext context}){
 
-    if(isModuleStarted)
-    return ElevatedButton(
-      onPressed: () async {
-        handleExamCompletion(context: context);
-      },
-      child: Text(
-          "Mark Module as Done- completed ${exam.index}/${module.exams!.length}"),
-    );
-    else return ElevatedButton(
-      onPressed: (){},
-      child: Text("Study the module first"),
-    );
+  @override
+  Widget buildSumbitButton({required BuildContext context}) {
+    if (isModuleStarted) {
+      return ElevatedButton(
+        onPressed: () async {
+          handleExamCompletion(context: context);
+        },
+        child: Text(
+            "Mark Module as Done- completed ${exam.index}/${module.exams!.length}"),
+      );
+    } else {
+      return ElevatedButton(
+        onPressed: () {},
+        child: const Text("Study the module first"),
+      );
+    }
   }
+
   @override
   Future<void> handleExamCompletion({required BuildContext context}) async {
     final loggedInState = context.read<LoggedInState>();
@@ -120,11 +124,12 @@ class ModuleExamCompletionStrategy implements ExamCompletionStrategy {
         "course_modules_count": course.modulesCount
       },
       course: course,
-      module: module!,
+      module: module,
       coursesProvider: coursesProvider,
       examIndex: exam.index,
-    ).then((val){
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => HomePage()));});
+    ).then((val) {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => const HomePage()));
+    });
   }
 }

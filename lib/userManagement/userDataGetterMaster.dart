@@ -1,5 +1,8 @@
+// ignore_for_file: file_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:isms/adminManagement/createUserReferenceForAdmin.dart';
 import 'package:isms/models/customUser.dart';
 
@@ -12,7 +15,7 @@ class UserDataGetterMaster {
 
   static Future<void> createUserData(CustomUser customUser) async {
     Map<String, dynamic> userJson = customUser.toMap();
-    print("creating the user ${userJson}");
+    debugPrint("creating the user $userJson");
     await db.collection('users').doc(customUser.uid).set(userJson);
 
     //Also creating a reference to the user on Admin side
@@ -58,11 +61,10 @@ class UserDataGetterMaster {
 
   // fetch data from Firestore and store it in the app
   Future<void> fetchFromFirestore(User user) async {
-    _userRef =
-        FirebaseFirestore.instance.collection('users').doc(user.uid);
+    _userRef = FirebaseFirestore.instance.collection('users').doc(user.uid);
     DocumentSnapshot userSnapshot = await _userRef!.get();
     if (userSnapshot.exists) {
-      print('data fetched from Firestore for user ${user.email}');
+      debugPrint('data fetched from Firestore for user ${user.email}');
       _currentUserSnapshot = userSnapshot;
       Map<String, dynamic>? userData =
           userSnapshot.data() as Map<String, dynamic>?;
@@ -72,7 +74,7 @@ class UserDataGetterMaster {
       // in and can now access user data
       _currentUser = user;
     } else {
-      print('user ${user.email} not found in Firestore');
+      debugPrint('user ${user.email} not found in Firestore');
       // no data was found in Firestore for this user, so something went
       // wrong during the account creation and we cannot proceed with
       // the sign-in, therefore we sign out

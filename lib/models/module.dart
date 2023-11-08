@@ -33,7 +33,7 @@ class Module {
       'slides': slides,
       'exams': exams,
       'contentDescription': contentDescription,
-      'index': index ?? 0
+      'index': index
     };
   }
 }
