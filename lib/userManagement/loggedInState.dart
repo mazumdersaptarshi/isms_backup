@@ -31,7 +31,8 @@ class LoggedInState with ChangeNotifier {
         _userDataGetterMaster.clear();
         notifyListeners();
       } else {
-        print("auth state changed: ${user!.email} currently signed into Firebase");
+        print(
+            "auth state changed: ${user!.email} currently signed into Firebase");
         _userDataGetterMaster.fetchFromFirestore(user!).then((_value) {
           storeUserCoursesData(currentUserSnapshot!);
           notifyListeners();
@@ -70,8 +71,7 @@ class LoggedInState with ChangeNotifier {
 
   void storeUserCoursesData(DocumentSnapshot snapshot) {
     if (snapshot!.exists) {
-      Map<String, dynamic> mapData =
-        snapshot.data() as Map<String, dynamic>;
+      Map<String, dynamic> mapData = snapshot.data() as Map<String, dynamic>;
       UserCoursesDetails data = UserCoursesDetails.fromMap(mapData);
       allEnrolledCoursesGlobal = data.courses_started!;
       allCompletedCoursesGlobal = data.courses_completed!;
@@ -83,8 +83,7 @@ class LoggedInState with ChangeNotifier {
   //Getter function for all course related info from users collection, for the logged in User
   //Basically populates the two static global variables allEnrolledCoursesGlobal and allCompletedCoursesGlobal
   Future<void> refreshUserCoursesData() async {
-    print(
-        "Fetching fresh data");
+    print("Fetching fresh data");
 
     DocumentSnapshot? newCurrentUserDocumentSnapshot =
         await getNewCurrentUserDocumentSnapshot;
@@ -224,7 +223,6 @@ class LoggedInState with ChangeNotifier {
       required Course course,
       required Module module}) async {
     bool flag = false;
-    print("HERRRRRRRRRRREEEEEEE");
     if (loggedInUser.courses_started.isNotEmpty) {
       loggedInUser.courses_started.forEach((course) {
         try {
@@ -366,8 +364,8 @@ class LoggedInState with ChangeNotifier {
                       if (examFlag == false) {
                         started_module["exams_completed"].add(examIndex);
 
-                        List modules_started_copy = List.from(loggedInUser
-                            .courses_started[i]["modules_started"]);
+                        List modules_started_copy = List.from(
+                            loggedInUser.courses_started[i]["modules_started"]);
                         int modules_started_index = 0;
                         modules_started_copy.forEach((m) {
                           if (m["module_name"] ==
