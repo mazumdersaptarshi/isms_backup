@@ -8,6 +8,7 @@ import 'package:isms/screens/adminScreens/AdminConsole/adminConsolePage.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
 import 'package:isms/screens/reminderScreen.dart';
 import 'package:isms/screens/userInfo/userProfilePage.dart';
+import 'package:isms/sharedWidgets/bottomNavBar.dart';
 import 'package:isms/sharedWidgets/customAppBar.dart';
 import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
@@ -27,8 +28,6 @@ class _HomePageState extends State<HomePage> {
   late String userRole;
   DateTime? _expiryDate;
   String? initialLink;
-
-
 
   @override
   void initState() {
@@ -62,28 +61,37 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> homePageItems=[HomePageItem(
-      onTap: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>CoursesDisplayScreen()));
-      },
-      title: "All Courses",),
+    double homePageContainerHeight = 1300;
+    List<Widget> homePageItems = [
       HomePageItem(
-        onTap: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>AdminConsolePage()));
+        onTap: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => CoursesDisplayScreen()));
         },
-        title: "Admin Console",),
+        title: "All Courses",
+      ),
       HomePageItem(
-        onTap: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>AdminConsolePage()));
+        onTap: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => AdminConsolePage()));
         },
-        title: "Admin Console",),
+        title: "Admin Console",
+      ),
       HomePageItem(
-        onTap: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>AdminConsolePage()));
+        onTap: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => AdminConsolePage()));
         },
-        title: "Admin Console",),
+        title: "Admin Console",
+      ),
+      HomePageItem(
+        onTap: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => AdminConsolePage()));
+        },
+        title: "Admin Console",
+      ),
     ];
-
 
     final loggedInState = context.watch<LoggedInState>();
 
@@ -95,184 +103,137 @@ class _HomePageState extends State<HomePage> {
 
     return Consumer<CoursesProvider>(
         builder: (BuildContext context, CoursesProvider value, Widget? child) {
-
       return Scaffold(
-          backgroundColor: Colors.deepPurpleAccent.shade100,
           bottomNavigationBar: kIsWeb
               ? null
-              : Container(
-                  decoration: const BoxDecoration(
-                    //Here goes the same radius, u can put into a var or function
-                    borderRadius:
-                        BorderRadius.only(bottomLeft: Radius.circular(10)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color(0x14000000),
-                        spreadRadius: 0,
-                        blurRadius: 10,
-                      ),
-                    ],
-                  ),
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-                    ),
-                    child: BottomAppBar(
-                      shape: const CircularNotchedRectangle(),
-                      notchMargin: 6.0,
-                      child: BottomNavigationBar(
-                        items: const <BottomNavigationBarItem>[
-                          BottomNavigationBarItem(
-                            icon: Icon(Icons.home_outlined),
-                            label: 'Home',
-                          ),
-                          BottomNavigationBarItem(
-                            icon: Icon(Icons
-                                .account_circle_outlined), // Fallback icon if no image is available
-                            label: 'Account',
-                          ),
-                        ],
-                        currentIndex: 0,
-                        selectedItemColor: Colors.deepPurpleAccent,
-                        backgroundColor: Colors.white,
-                        type: BottomNavigationBarType.fixed,
-                        elevation: 5,
-                        onTap: (int index) {},
-                        selectedLabelStyle: const TextStyle(
-                          fontSize:
-                              12, // Adjust the font size here for selected label
-                        ),
-                        unselectedLabelStyle: const TextStyle(
-                          fontSize:
-                              12, // Adjust the font size here for unselected label
-                        ),
-
-// This will be set when a new tab is tapped
-                      ),
-                    ),
-                  ),
-                ),
+              : BottomNavBar(selectedIndex: 0, loggedInState: loggedInState),
           appBar: CustomAppBar(
             loggedInState: loggedInState,
           ),
           body: CustomScrollView(
             slivers: [
-              SliverAppBar(backgroundColor: Colors.deepPurpleAccent.shade100,
-              automaticallyImplyLeading: false,
-              expandedHeight: 250,
-              pinned: false,
-              flexibleSpace: FlexibleSpaceBar(
-                background: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(
-                      "Welcome back, \n${loggedInState.currentUserName}",
-                      style: customTheme.textTheme?.bodyMedium
-                          ?.copyWith(fontSize: 30, color: Colors.white),
-                    ),
-                    Flexible(
-                      flex:
-                      1, // The flex factor. You can adjust this number to take more or less space in the Row or Column.
-                      child: Container(
-                        width: MediaQuery.of(context).size.width *
-                            0.13, // 50% of screen width
+              SliverAppBar(
+                elevation: 10,
+                backgroundColor: primaryColor.shade100,
+                automaticallyImplyLeading: false,
+                expandedHeight: 200,
+                pinned: false,
+                flexibleSpace: FlexibleSpaceBar(
+                  background: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text(
+                        "Welcome back, \n${loggedInState.currentUserName}",
+                        style: customTheme.textTheme?.bodyMedium
+                            ?.copyWith(fontSize: 30, color: Colors.white),
+                      ),
+                      Flexible(
+                        flex:
+                            1, // The flex factor. You can adjust this number to take more or less space in the Row or Column.
+                        child: Container(
+                          width: MediaQuery.of(context).size.width *
+                              0.13, // 50% of screen width
 
-                        child: Image.asset(
-                          "assets/images/security.png",
-                          fit: BoxFit
-                              .cover, // This will cover the available space, you can change it to BoxFit.contain to prevent the image from being cropped.
+                          child: Image.asset(
+                            "assets/images/security.png",
+                            fit: BoxFit
+                                .cover, // This will cover the available space, you can change it to BoxFit.contain to prevent the image from being cropped.
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-            SliverToBoxAdapter(
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height-40,
-
-
-                  child: Stack(children: [
-                    Positioned(
-                      top: 100,
-                        child: Container(
-                          height: MediaQuery.of(context).size.height-40,
-                          width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(topLeft: Radius.circular(20))
-                      ),
-                    )),
-                    Positioned(
-                        top: 20,
-                        child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 10),
-                            child: HomePageItemsContainer(homePageItems: homePageItems)))])),
-            )
+              SliverToBoxAdapter(
+                child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: homePageContainerHeight,
+                    child: Stack(children: [
+                      Positioned(
+                          top: 0,
+                          child: Container(
+                            height: homePageContainerHeight,
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                              color: primaryColor.shade100,
+                            ),
+                          )),
+                      Positioned(
+                          top: 100,
+                          child: Container(
+                            height: homePageContainerHeight,
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(20))),
+                          )),
+                      Positioned(
+                          top: 20,
+                          child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              child: HomePageItemsContainer(
+                                  homePageItems: homePageItems)))
+                    ])),
+              )
             ],
-
           ));
     });
   }
 }
 
 class HomePageItemsContainer extends StatelessWidget {
-   HomePageItemsContainer({super.key, required this.homePageItems});
+  HomePageItemsContainer({super.key, required this.homePageItems});
   List<Widget> homePageItems;
   @override
   Widget build(BuildContext context) {
-    double itemContainerWidth=  MediaQuery.of(context).size.width*0.5;
-    return MediaQuery.of(context).size.width> 800?
-    Container(
-      width: MediaQuery.of(context).size.width,
-      height: 300,
-      child: Container(
-        margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.1),
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: homePageItems.length,
-
-          itemBuilder: (BuildContext contenxt, int index){
-            return homePageItems[index];
-          },
-
-        ),
-      ),
-    ):
-    Container(
-      width: MediaQuery.of(context).size.width*0.9,
-      margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.03),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: homePageItems,
-      ),
-    );
+    double itemContainerWidth = MediaQuery.of(context).size.width * 0.5;
+    return MediaQuery.of(context).size.width > 800
+        ? Container(
+            width: MediaQuery.of(context).size.width,
+            height: 300,
+            child: Container(
+              margin: EdgeInsets.only(
+                  left: MediaQuery.of(context).size.width * 0.1),
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: homePageItems.length,
+                itemBuilder: (BuildContext contenxt, int index) {
+                  return homePageItems[index];
+                },
+              ),
+            ),
+          )
+        : Container(
+            width: MediaQuery.of(context).size.width * 0.9,
+            margin:
+                EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.03),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: homePageItems,
+            ),
+          );
   }
 }
 
-
 class HomePageItem extends StatelessWidget {
-   HomePageItem({super.key, required this.onTap, required this.title});
+  HomePageItem({super.key, required this.onTap, required this.title});
   Function onTap;
   String title;
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 300,
-     constraints: BoxConstraints(
-       minWidth: 300
-     ),
+      constraints: BoxConstraints(minWidth: 300),
       child: GestureDetector(
-        onTap: (){
-          onTap();},
+        onTap: () {
+          onTap();
+        },
         child: Card(
           elevation: 10,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10))
-          ),
+              borderRadius: BorderRadius.all(Radius.circular(10))),
           child: Padding(
             padding: const EdgeInsets.all(20.0),
             child: Text(title),

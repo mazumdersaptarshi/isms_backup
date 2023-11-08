@@ -41,9 +41,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     }
 
     return AppBar(
-      automaticallyImplyLeading: kIsWeb? false: true,
+      automaticallyImplyLeading: kIsWeb ? false : true,
       title: Padding(
-        padding: const EdgeInsets.only(left: 16.0),
+        padding: const EdgeInsets.only(left: kIsWeb ? 16.0 : 0),
         child: Row(
           children: [
             Icon(Icons.severe_cold_rounded),
@@ -63,10 +63,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       actions: <Widget>[
-        appBarItem(Icons.explore, "Explore", navigateToCoursesPage),
-        appBarItem(Icons.lightbulb_outline, "My Learning", () {}),
-        appBarItem(Icons.account_circle, "Account", navigateToUserProfilePage),
-        if (loggedInState?.currentUserRole == 'admin')
+        if (kIsWeb) appBarItem(Icons.explore, "Explore", navigateToCoursesPage),
+        if (kIsWeb) appBarItem(Icons.lightbulb_outline, "My Learning", () {}),
+        if (kIsWeb)
+          appBarItem(
+              Icons.account_circle, "Account", navigateToUserProfilePage),
+        if (loggedInState?.currentUserRole == 'admin' && kIsWeb)
           appBarItem(Icons.admin_panel_settings_outlined, "Admin",
               navigateToAdminConsolePage),
         Padding(
@@ -75,11 +77,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             icon: Icon(Icons.logout),
             tooltip: 'Logout',
             onPressed: () async {
-              await LoggedInState.logout();
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => LoginPage()),
-              );
+              await LoggedInState.logout().then((value) {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginPage()),
+                );
+              });
             },
           ),
         ),
