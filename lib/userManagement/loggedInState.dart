@@ -32,11 +32,13 @@ class LoggedInState with ChangeNotifier {
   LoggedInState() {
     _auth.authStateChanges().listen((User? user) {
       if (user == null) {
-        debugPrint("auth state changed: no account currently signed into Firebase");
+        debugPrint(
+            "auth state changed: no account currently signed into Firebase");
         _userDataGetterMaster.clear();
         notifyListeners();
       } else {
-        debugPrint("auth state changed: ${user.email} currently signed into Firebase");
+        debugPrint(
+            "auth state changed: ${user.email} currently signed into Firebase");
         _userDataGetterMaster.fetchFromFirestore(user).then((value) {
           storeUserCoursesData(currentUserSnapshot!);
           notifyListeners();
@@ -75,8 +77,7 @@ class LoggedInState with ChangeNotifier {
 
   void storeUserCoursesData(DocumentSnapshot snapshot) {
     if (snapshot.exists) {
-      Map<String, dynamic> mapData =
-        snapshot.data() as Map<String, dynamic>;
+      Map<String, dynamic> mapData = snapshot.data() as Map<String, dynamic>;
       UserCoursesDetails data = UserCoursesDetails.fromMap(mapData);
       allEnrolledCoursesGlobal = data.courses_started!;
       allCompletedCoursesGlobal = data.courses_completed!;
@@ -88,8 +89,7 @@ class LoggedInState with ChangeNotifier {
   //Getter function for all course related info from users collection, for the logged in User
   //Basically populates the two static global variables allEnrolledCoursesGlobal and allCompletedCoursesGlobal
   Future<void> refreshUserCoursesData() async {
-    debugPrint(
-        "Fetching fresh data");
+    debugPrint("Fetching fresh data");
 
     DocumentSnapshot? newCurrentUserDocumentSnapshot =
         await getNewCurrentUserDocumentSnapshot;
@@ -172,7 +172,8 @@ class LoggedInState with ChangeNotifier {
           if (course['course_name'] == courseDetails['course_name']) {
             course['exams_completed'].forEach((examCompleted) {
               noOfExamsCompleted++;
-              debugPrint("INCREMENTING noOfExamsCompleted: $noOfExamsCompleted");
+              debugPrint(
+                  "INCREMENTING noOfExamsCompleted: $noOfExamsCompleted");
               if (examCompleted == examIndex) {
                 flag = true;
               }
@@ -190,8 +191,7 @@ class LoggedInState with ChangeNotifier {
         if (courseStarted['courseID'] == course.id) {
           if (courseStarted['exams_completed'] != null &&
               courseStarted['exams_completed'].isEmpty) {
-            courseStarted['exams_completed']
-                .add(course.exams[examIndex].index);
+            courseStarted['exams_completed'].add(course.exams[examIndex].index);
             debugPrint(
                 "COMPLETED EXAM was empty ${courseStarted['exams_completed']}");
           } else if (courseStarted['exams_completed'] != null) {
@@ -211,8 +211,7 @@ class LoggedInState with ChangeNotifier {
           } else {
             debugPrint("COMPLETED MODULE IS NULL< SO HERE");
             courseStarted['exams_completed'] = [];
-            courseStarted['exams_completed']
-                .add(course.exams[examIndex].index);
+            courseStarted['exams_completed'].add(course.exams[examIndex].index);
           }
         }
       });
@@ -300,7 +299,7 @@ class LoggedInState with ChangeNotifier {
         try {
           if (course['courseID'] == courseDetails['courseID']) {
             course["modules_started"].forEach((element) {
-              if (element["module_name"] == module.title) {
+              if (element == module.title) {
                 debugPrint("SETTING FLAG TRUE coz $element");
                 flag = true;
               }
@@ -315,14 +314,14 @@ class LoggedInState with ChangeNotifier {
       debugPrint("FLAG IS FALSE $courseDetails");
 
       _userDataGetterMaster.loggedInUser?.courses_started
-          .forEach(( courseStarted) {
+          .forEach((courseStarted) {
         if (courseStarted['courseID'] == course.id) {
           debugPrint("STARTED MODULEE ${courseStarted['modules_started']}");
           bool flag_2 = false;
           if (courseStarted['modules_started'] != null) {
             for (int i = 0; i < courseStarted['modules_started'].length; i++) {
-              var element = courseStarted['modules_started'][i];
-              if (element["module_name"] == module.title) {
+              String element = courseStarted['modules_started'][i];
+              if (element == module.title) {
                 flag_2 = true;
               }
             }
@@ -333,8 +332,7 @@ class LoggedInState with ChangeNotifier {
           } else {
             debugPrint("COMPLETED MODULE IS NULL< SO HERE");
             courseStarted['modules_started'] = [];
-            courseStarted['modules_started']
-                .add({"module_name": module.title});
+            courseStarted['modules_started'].add({"module_name": module.title});
           }
         }
       });
@@ -377,8 +375,7 @@ class LoggedInState with ChangeNotifier {
                         };
                       }
 
-                      startedModule["exams_completed"]
-                          .forEach((examCompleted) {
+                      startedModule["exams_completed"].forEach((examCompleted) {
                         if (examCompleted == examIndex) examFlag = true;
                         debugPrint(
                             "PPPPRINTTT ${startedModule["exams_completed"].length},,${module.exams?.length} ");
