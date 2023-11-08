@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:isms/screens/homePage.dart';
+import 'package:isms/sharedWidgets/navIndexTracker.dart';
 import 'package:isms/themes/common_theme.dart';
 
 import '../screens/adminScreens/AdminConsole/adminConsolePage.dart';
@@ -7,8 +9,8 @@ import '../screens/userInfo/userProfilePage.dart';
 import '../userManagement/loggedInState.dart';
 
 class BottomNavBar extends StatelessWidget {
-  BottomNavBar({super.key, required this.selectedIndex, this.loggedInState});
-  int selectedIndex;
+  BottomNavBar({super.key, this.loggedInState});
+  // int selectedIndex;
   LoggedInState? loggedInState;
   @override
   Widget build(BuildContext context) {
@@ -17,6 +19,11 @@ class BottomNavBar extends StatelessWidget {
         context,
         MaterialPageRoute(builder: (context) => UserProfilePage()),
       );
+    }
+
+    void navigateToHomePage() {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => HomePage()));
     }
 
     void navigateToCoursesPage() {
@@ -30,6 +37,15 @@ class BottomNavBar extends StatelessWidget {
     }
 
     void decideNavigation({required int index}) {
+      if (index == NavIndexTracker.currentIndex) {
+        // print(
+        //     "INDEX: $index, NAVINDEXTRACKER INDEX ${NavIndexTracker.currentIndex}");
+
+        return;
+      }
+      if (index == 0) {
+        navigateToHomePage();
+      }
       if (loggedInState?.currentUserRole == 'admin') {
         if (index == 1)
           navigateToUserProfilePage();
@@ -85,7 +101,7 @@ class BottomNavBar extends StatelessWidget {
             ),
           ],
 
-          currentIndex: selectedIndex,
+          // currentIndex: selectedIndex,
           selectedItemColor: Colors.white,
           backgroundColor: primaryColor.shade100,
           unselectedItemColor: Color.fromARGB(255, 234, 234, 234),

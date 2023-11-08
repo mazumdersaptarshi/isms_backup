@@ -6,8 +6,12 @@ class CourseTile extends StatelessWidget {
   final int index;
   final String title;
   Function? onPressed;
+  int modulesCount;
   CourseTile(
-      {required this.index, required this.title, required this.onPressed});
+      {required this.index,
+      required this.title,
+      required this.onPressed,
+      required this.modulesCount});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +21,6 @@ class CourseTile extends StatelessWidget {
         child: Card(
           surfaceTintColor: white,
           elevation: 4,
-          shadowColor: secondaryColor,
           shape: customCardShape,
           color: white,
           child: Padding(
@@ -27,22 +30,37 @@ class CourseTile extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
-                  child: Image.network(
-                    "https://www.shutterstock.com/image-vector/coding-vector-illustration-600w-687456625.jpg",
-                    height: 120,
-                    width: 120,
-                    fit: BoxFit.cover,
+                  child: Row(
+                    children: [
+                      Image.network(
+                        "https://www.shutterstock.com/image-vector/coding-vector-illustration-600w-687456625.jpg",
+                        height: 120,
+                        width: 120,
+                        fit: BoxFit.cover,
+                      ),
+                      SizedBox(width: 20),
+                    ],
                   ),
                 ),
                 Expanded(
-                  child: Row(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SizedBox(width: 20),
-                      Expanded(
-                          child: Text(title,
-                              style: commonTextStyle.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black))),
+                      Text(title,
+                          style: commonTextStyle.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black)),
+                      RichText(
+                          text: TextSpan(
+                              text: "Modules Count :",
+                              style: customTheme.textTheme.labelMedium!
+                                  .copyWith(color: Colors.grey, fontSize: 14),
+                              children: [
+                            TextSpan(
+                                text: " ${modulesCount!}",
+                                style: customTheme.textTheme.labelMedium)
+                          ]))
                     ],
                   ),
                 )

@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
@@ -8,6 +9,7 @@ import 'package:isms/screens/learningModuleScreens/examScreens/examListScreen.da
 import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/sharedWidgets/customAppBar.dart';
 import 'package:isms/userManagement/loggedInState.dart';
+import '../../../../sharedWidgets/bottomNavBar.dart';
 import 'sharedWidgets/moduleTile.dart';
 import 'package:isms/sharedWidgets/leaningModulesAppBar.dart';
 import 'package:provider/provider.dart';
@@ -59,7 +61,8 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
       {required LoggedInState loggedInState, required Module module}) {
     bool flag = false;
     loggedInState.loggedInUser.courses_started.forEach((course_started) {
-      if (course_started["course_name"] == widget.course.name &&  course_started["modules_completed"] !=null) {
+      if (course_started["course_name"] == widget.course.name &&
+          course_started["modules_completed"] != null) {
         course_started["modules_completed"].forEach((module_completed) {
           if (module_completed["module_name"] == module.title) flag = true;
         });
@@ -103,16 +106,19 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
 
     // compute the grid shape:
     // requirements
-    int tileMinWidth = 250;
+    int tileMinWidth = 300;
     double tileRatio = 16 / 9;
     // available width, in pixels
+    double horizontalMargin = MediaQuery.sizeOf(context).width > 900 ? 200 : 10;
     double screenWidth = MediaQuery.sizeOf(context).width;
     // number of tiles that can fit vertically on the screen
-    int maxColumns = max((screenWidth/tileMinWidth).floor(), 1);
+    int maxColumns =
+        max(((screenWidth - (horizontalMargin * 2)) / tileMinWidth).floor(), 1);
     // number of tiles that have to fit on the screen
-    int itemCount = widget.course.modulesCount?? 0;
+    int itemCount = widget.course.modulesCount ?? 0;
     // grid width, in tiles
-    int numberColumns = min(itemCount, maxColumns);
+    int numberColumns =
+        min(itemCount, maxColumns) > 0 ? min(itemCount, maxColumns) : 1;
     // grid width, in pixels
     double gridWidth = screenWidth * numberColumns / maxColumns;
 
@@ -120,47 +126,48 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
       appBar: CustomAppBar(
         loggedInState: loggedInState,
       ),
-
-      body: Container(
-        margin: EdgeInsets.only(top: 20),
-        //padding: const EdgeInsets.all(16.0),
-        child: isModulesFetched
-          ? Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    if (isALlModulesCompleted)
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ExamListScreen(
-                                course: widget.course,
-                                examtype: EXAMTYPE.courseExam,
-                              ),
+      bottomNavigationBar:
+          kIsWeb ? null : BottomNavBar(loggedInState: loggedInState),
+      body: isModulesFetched
+          ? Container(
+              margin: EdgeInsets.only(top: 20),
+              child: CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          if (isALlModulesCompleted)
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ExamListScreen(
+                                      course: widget.course,
+                                      examtype: EXAMTYPE.courseExam,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Text("View course exams"),
                             ),
-                          );
-                        },
-                        child: Text("View course exams"),
+                        ],
                       ),
-                  ],
-                ),
-                SizedBox(height: 20),
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: Container(
-                    width: gridWidth,
-                    child: GridView.builder(
-                      shrinkWrap: true,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: numberColumns,
-                        childAspectRatio: tileRatio,
-                      ),
-                      itemCount: itemCount,
-                      itemBuilder: (BuildContext context, int moduleIndex) {
-                        return ModuleTile(
+                    ),
+                  ),
+                  SliverGrid.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: numberColumns,
+                      childAspectRatio: tileRatio,
+                    ),
+                    itemCount: itemCount,
+                    itemBuilder: (BuildContext context, int moduleIndex) {
+                      return Container(
+                        margin:
+                            EdgeInsets.symmetric(horizontal: horizontalMargin),
+                        child: ModuleTile(
                           course: widget.course,
                           module: widget.course.modules[moduleIndex],
                           isModuleStarted: checkIfModuleStarted(
@@ -169,21 +176,23 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
                           isModuleCompleted: checkIfModuleCompleted(
                               loggedInState: loggedInState,
                               module: widget.course.modules[moduleIndex]),
-                        );
-                      },
-                    ),
+                        ),
+                      );
+                    },
                   ),
-                ),
-              ],
+                ],
+              ),
             )
-          : AlertDialog(
-              title: Text("Fetching modules"),
-              content: Align(
-                  alignment: Alignment.topCenter,
-                  child: CircularProgressIndicator()),
+          : Container(
+              width: MediaQuery.of(context).size.width,
+              height: 200,
+              child: const AlertDialog(
+                title: Text("Fetching Modules"),
+                content: Align(
+                    alignment: Alignment.topCenter,
+                    child: CircularProgressIndicator()),
+              ),
             ),
-      ),
-
       floatingActionButton: userRole == 'admin'
           ? FloatingActionButton(
               onPressed: () {
@@ -193,8 +202,6 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
                         builder: (context) =>
                             CreateModuleScreen(course: widget.course)));
               },
-              backgroundColor:
-                  customTheme.floatingActionButtonTheme.backgroundColor,
               child: Icon(Icons.add),
             )
           : null,

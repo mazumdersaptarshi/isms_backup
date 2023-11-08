@@ -10,6 +10,7 @@ import 'package:isms/screens/reminderScreen.dart';
 import 'package:isms/screens/userInfo/userProfilePage.dart';
 import 'package:isms/sharedWidgets/bottomNavBar.dart';
 import 'package:isms/sharedWidgets/customAppBar.dart';
+import 'package:isms/sharedWidgets/navIndexTracker.dart';
 import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
@@ -100,13 +101,14 @@ class _HomePageState extends State<HomePage> {
     }
 
     userRole = loggedInState.currentUserRole;
+    NavIndexTracker.setNavDestination(
+        navDestination: NavDestinations.HomePage, userRole: userRole);
 
     return Consumer<CoursesProvider>(
         builder: (BuildContext context, CoursesProvider value, Widget? child) {
       return Scaffold(
-          bottomNavigationBar: kIsWeb
-              ? null
-              : BottomNavBar(selectedIndex: 0, loggedInState: loggedInState),
+          bottomNavigationBar:
+              kIsWeb ? null : BottomNavBar(loggedInState: loggedInState),
           appBar: CustomAppBar(
             loggedInState: loggedInState,
           ),

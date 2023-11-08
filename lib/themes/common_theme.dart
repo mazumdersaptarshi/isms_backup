@@ -93,11 +93,9 @@ ShapeBorder customCardShape = RoundedRectangleBorder(
 // - remove as much colors as possible from everywhere else
 // - same for other aspects of theme (font size, etc)
 ThemeData customTheme = ThemeData(
-  
-floatingActionButtonTheme: FloatingActionButtonThemeData(
-      backgroundColor: secondaryColor,
+  floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: primaryColor.shade100,
       extendedTextStyle: TextStyle(color: white)),
-  
   textTheme: TextTheme(
     bodyLarge: TextStyle(fontFamily: "Poppins"),
     bodyMedium: TextStyle(fontFamily: "Poppins"),
@@ -107,7 +105,6 @@ floatingActionButtonTheme: FloatingActionButtonThemeData(
   ),
   colorScheme:
       ColorScheme.fromSeed(seedColor: Colors.white, background: Colors.white),
-
   buttonTheme: const ButtonThemeData(
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10)))),
@@ -116,12 +113,9 @@ floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: MaterialStateProperty.all(secondaryColor),
       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
         RoundedRectangleBorder(
-
-          borderRadius: BorderRadius.all(Radius.circular(5))
-        ),
+            borderRadius: BorderRadius.all(Radius.circular(5))),
       ),
       minimumSize: MaterialStateProperty.all(Size(150.0, 48.0)),
-
     ),
   ),
 );
