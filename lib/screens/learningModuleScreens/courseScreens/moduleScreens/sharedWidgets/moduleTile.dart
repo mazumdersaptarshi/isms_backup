@@ -27,7 +27,7 @@ class ModuleTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int imageIndex = module.index % 4;
+    int imageIndex = (module.index ?? 0) % 4;
     return Container(
       height: 150,
       child: GestureDetector(

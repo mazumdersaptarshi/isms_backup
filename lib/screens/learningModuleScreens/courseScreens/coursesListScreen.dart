@@ -29,7 +29,7 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
   Map<String, dynamic> getUserCourseData(
       {required LoggedInState loggedInState, required Course course}) {
     int courseCompPercent = 0;
-    DateTime courseCompletionDate;
+    //DateTime courseCompletionDate;
     DateTime courseStartDate;
 
     if (loggedInState.loggedInUser.courses_completed != null &&
@@ -37,7 +37,7 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
       loggedInState.loggedInUser.courses_completed.forEach((course_completed) {
         if (course_completed["courseID"] == course.id) {
           courseCompPercent = 100;
-          courseCompletionDate = course_completed["completed_at"] ?? "";
+          //courseCompletionDate = course_completed["completed_at"] ?? "";
         }
       });
     }

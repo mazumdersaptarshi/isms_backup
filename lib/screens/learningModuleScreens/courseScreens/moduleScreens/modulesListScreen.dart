@@ -205,10 +205,9 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
                     alignment: Alignment.topCenter,
                     child: CircularProgressIndicator()),
               ),
-            ;
+            );
           }
-          },
-        ),
+        },
       ),
 
       floatingActionButton: userRole == 'admin'
