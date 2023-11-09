@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
+import '../../utilityFunctions/csvDataHandler.dart';
 import 'courseExamsCompletedDropdownWidget.dart';
 import 'modulesDetailsDropdownWidget.dart';
 
@@ -8,9 +10,11 @@ class CourseDropdownWidget extends StatelessWidget {
   CourseDropdownWidget(
       {required this.courseItem,
       this.courseDetailsData,
-      required this.detailType});
+      required this.detailType,
+      this.completedModules});
 
   var courseItem;
+  List<Map<String, dynamic>>? completedModules = [];
   final Map<String, dynamic>? courseDetailsData;
   String detailType;
 
@@ -64,6 +68,125 @@ class CourseDropdownWidget extends StatelessWidget {
                       ),
                   ]),
               children: [
+                Column(
+                  children: [
+                    if (courseItem['courseID'] != null)
+                      Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.all(8),
+                        constraints: BoxConstraints(minHeight: 50),
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        'CourseID:  ',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                      Text(
+                                        '${courseItem['courseID']}',
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .tertiary),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5)),
+                                  color: Colors.grey.shade100,
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        'Completed at:  ',
+                                        style: TextStyle(fontSize: 12),
+                                      ),
+                                      (courseItem['started_at'] != null)
+                                          ? Text(
+                                              '${CSVDataHandler.timestampToReadableDate(courseItem['started_at'])}',
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .tertiary),
+                                            )
+                                          : Text('n/a',
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .tertiary)),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5)),
+                                  // color: Colors.grey.shade100,
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        'Started at:  ',
+                                        style: TextStyle(fontSize: 12),
+                                      ),
+                                      (courseItem['completed_at'] != null &&
+                                              courseItem['completed_at']
+                                                  is Timestamp)
+                                          ? Text(
+                                              '${CSVDataHandler.timestampToReadableDate(courseItem['completed_at'])}',
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .tertiary),
+                                            )
+                                          : Text('n/a',
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .tertiary)),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    if (courseItem["exams_completed"] != null)
+                      CourseExamsCompletedDropdownWidget(
+                          courseItem: courseItem,
+                          courseDetailsData: courseDetailsData),
+                    if (courseItem["modules_started"] != null)
+                      CourseModulesDropdownWidget(
+                          'Modules',
+                          courseItem["modules_started"] ?? [],
+                          courseItem["modules_completed"] ?? [],
+                          context),
+                  ],
+                ),
                 if (detailType == 'courses_enrolled')
                   Column(
                     children: [
@@ -71,12 +194,6 @@ class CourseDropdownWidget extends StatelessWidget {
                         CourseExamsCompletedDropdownWidget(
                             courseItem: courseItem,
                             courseDetailsData: courseDetailsData),
-                      // if (courseItem["modules_started"] != null)
-                      //   CourseModulesDetailsDropdownWidget('Modules Started',
-                      //       courseItem["modules_started"], context),
-                      // if (courseItem["modules_completed"] != null)
-                      //   CourseModulesDetailsDropdownWidget('Modules Completed',
-                      //       courseItem["modules_completed"], context),
                       if (courseItem["modules_started"] != null)
                         CourseModulesDropdownWidget(
                             'Modules',

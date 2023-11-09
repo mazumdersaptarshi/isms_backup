@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:isms/sharedWidgets/analyticsSharedWidgets/userCourseCompletedDetailsWidget.dart';
 import 'package:provider/provider.dart';
 
 import '../../../adminManagement/adminProvider.dart';
-// import '../../../screens/analyticsSharedWidgets/courseDropdownWidget.dart';
-// import '../../../screens/analyticsSharedWidgets/userCourseStartedDetailsWidget.dart';
-import '../../../sharedWidgets/analyticsSharedWidgets/courseDropdownWidget.dart';
 import '../../../sharedWidgets/analyticsSharedWidgets/userCourseStartedDetailsWidget.dart';
 import '../../courseManagement/coursesProvider.dart';
 
@@ -30,6 +28,24 @@ class AllUsersDropdown extends StatelessWidget {
               shrinkWrap: true,
               physics: ClampingScrollPhysics(),
               itemBuilder: (context, index) {
+                print('77777');
+                List<Map<String, dynamic>> completedCoursesForUser = [];
+                print(snapshot.data![index].username);
+                print(snapshot.data![index].courses_started);
+                print(snapshot.data![index].courses_completed);
+                for (var courseStartedItem
+                    in snapshot.data![index].courses_started) {
+                  for (var courseCompletedItem
+                      in snapshot.data![index].courses_completed) {
+                    if (courseCompletedItem['courseID'] ==
+                        courseStartedItem['courseID']) {
+                      courseStartedItem['completed_at'] =
+                          courseCompletedItem['completed_at'] ?? 'n/a';
+                      completedCoursesForUser.add(courseStartedItem);
+                    }
+                  }
+                }
+
                 return Card(
                   margin: EdgeInsets.all(4.0),
                   elevation: 4.0,
@@ -60,7 +76,8 @@ class AllUsersDropdown extends StatelessWidget {
                     children: [
                       _buildCoursesTile(
                           'Courses Completed',
-                          snapshot.data![index].courses_completed,
+                          // snapshot.data![index].courses_completed,
+                          completedCoursesForUser,
                           context,
                           index,
                           coursesProvider),
@@ -99,10 +116,10 @@ class AllUsersDropdown extends StatelessWidget {
       children: [
         if (title == 'Courses Completed')
           for (var courseItem in courses)
-            CourseDropdownWidget(
-              courseItem: courseItem,
-              detailType: 'courses_completed',
-            ),
+            UserCourseCompletedDetailsWidget(
+                courseItem: courseItem,
+                coursesProvider: coursesProvider,
+                index: index),
         if (title == 'Courses Enrolled')
           for (var courseItem in courses)
             UserCourseStartedDetailsWidget(

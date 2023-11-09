@@ -56,7 +56,7 @@ class AllCoursesDropdown extends StatelessWidget {
                   course: course,
                   courses: courses,
                   index: index,
-                  title: 'Started')
+                  title: 'Enrolled')
             ],
           ),
         );
@@ -98,9 +98,9 @@ class CourseDetailExpansionTile extends StatelessWidget {
               center: Text(
                   '${(courses[index].course_completed!.length / (adminProvider.userRefs.length) * 100).round()}%',
                   style: TextStyle(fontSize: 10)),
-              progressColor: Colors.green,
+              progressColor: Colors.lightGreen,
             )
-          : (title == 'Started')
+          : (title == 'Enrolled')
               ? CircularPercentIndicator(
                   radius: 20.0,
                   lineWidth: 5.0,
@@ -111,23 +111,150 @@ class CourseDetailExpansionTile extends StatelessWidget {
                     '${(courses[index].course_started!.length / (adminProvider.userRefs.length) * 100).round()}%',
                     style: TextStyle(fontSize: 10),
                   ),
-                  progressColor: Colors.yellow.shade900,
+                  progressColor: Colors.orangeAccent,
                 )
               : Text('n/a'),
       children: [
-        if (title == 'Completed')
-          for (var student in courses[index].course_completed!)
-            Text(
-              '${student['username']}',
-              style: TextStyle(color: Colors.green),
-            ),
-        if (title == 'Started')
-          for (var student in courses[index].course_started!)
-            Text(
-              '${student['username']}',
-              style: TextStyle(color: Colors.yellow.shade900),
-            ),
+        Container(
+          width: double.infinity,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (title == 'Enrolled')
+                CourseEnrolledUsersDropdown(
+                  studentsEnrolled: courses[index].course_started ?? [],
+                  studentsCompleted: courses[index].course_completed ?? [],
+                ),
+              if (title == 'Completed')
+                CourseCompletedUsersDropdown(
+                    students: courses[index].course_completed!),
+            ],
+          ),
+        ),
       ],
+    );
+  }
+}
+
+class CourseCompletedUsersDropdown extends StatelessWidget {
+  CourseCompletedUsersDropdown({required this.students});
+  List<dynamic> students;
+  int index = 0;
+  @override
+  Widget build(BuildContext context) {
+    List<CourseUserName> courseUserNames = [];
+    for (int i = 0; i < students.length; i++) {
+      Map<String, dynamic> student = students[i];
+      courseUserNames.add(CourseUserName(
+        student: student,
+        color: Colors.lightGreen,
+        index: i,
+      ));
+    }
+    return Container(
+      padding: EdgeInsets.all(4),
+      child: Column(
+        children: courseUserNames,
+      ),
+    );
+  }
+}
+
+class CourseEnrolledUsersDropdown extends StatelessWidget {
+  CourseEnrolledUsersDropdown({
+    required this.studentsEnrolled,
+    this.studentsCompleted,
+  });
+  List<dynamic> studentsEnrolled;
+  List<dynamic>? studentsCompleted;
+  List<String> studentsCompletedUIDs = [];
+
+  @override
+  Widget build(BuildContext context) {
+    for (var student in studentsCompleted!) {
+      studentsCompletedUIDs.add(student['uid']);
+    }
+    List<CourseUserName> courseUserNames = [];
+    for (int i = 0; i < studentsEnrolled.length; i++) {
+      Map<String, dynamic> student = studentsEnrolled[i];
+      studentsCompletedUIDs!.contains(student['uid'])
+          ? courseUserNames.add(CourseUserName(
+              student: student,
+              color: Colors.lightGreen,
+              index:
+                  i, // This is the index of the student within course_completed
+              title: 'enrolled',
+              status: 'completed',
+            ))
+          : courseUserNames.add(CourseUserName(
+              student: student,
+              color: Colors.orangeAccent,
+              index:
+                  i, // This is the index of the student within course_completed
+              title: 'enrolled',
+              status: 'pending',
+            ));
+    }
+
+    return Container(
+      padding: EdgeInsets.all(4),
+      child: Column(
+        children: courseUserNames,
+      ),
+    );
+  }
+}
+
+class CourseUserName extends StatelessWidget {
+  CourseUserName({
+    super.key,
+    required this.student,
+    this.color,
+    this.index,
+    this.title,
+    this.status,
+  });
+
+  Map<String, dynamic> student;
+  Color? color;
+  int? index;
+  String? title = '';
+  String? status = 'pending';
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: (index! % 2 == 1) ? Colors.grey.shade100 : Colors.transparent,
+        borderRadius: BorderRadius.all(Radius.circular(5)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 4, right: 4),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              '${student['username']}',
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.tertiary, fontSize: 12),
+            ),
+            if (title == 'enrolled')
+              (status == 'pending')
+                  ? Icon(
+                      Icons.pending_rounded,
+                      color: Colors.orangeAccent,
+                    )
+                  : (status == 'completed')
+                      ? Icon(
+                          Icons.check_circle_rounded,
+                          color: Colors.lightGreen,
+                        )
+                      : Text(''),
+          ],
+        ),
+      ),
     );
   }
 }

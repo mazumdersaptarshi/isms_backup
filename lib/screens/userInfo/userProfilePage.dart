@@ -243,22 +243,12 @@ class UserCompletedCoursesDropdown extends StatelessWidget {
                 physics: ClampingScrollPhysics(),
                 itemBuilder: (context, index) {
                   allCompletedCourses = loggedInState.allCompletedCoursesGlobal;
-
-                  // return ListTile(
-                  //   title: Row(
-                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //     children: [
-                  //       Text(
-                  //         '${allCompletedCourses![index]['course_name']} ',
-                  //         style: TextStyle(fontSize: 14),
-                  //       ),
-                  //       Icon(Icons.check_circle, color: Colors.green)
-                  //     ],
-                  //   ),
-                  // );
+                  print(
+                      'ALLCOMPLETEDCOURSESGLOBAL: ${loggedInState.allCompletedCoursesGlobal}');
                   return CourseDropdownWidget(
-                      courseItem: allCompletedCourses![index],
-                      detailType: 'courses_completed');
+                    courseItem: allCompletedCourses![index],
+                    detailType: 'courses_completed',
+                  );
                 },
               );
             } else {
