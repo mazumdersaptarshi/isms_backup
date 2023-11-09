@@ -11,6 +11,7 @@ import 'package:isms/sharedWidgets/leaningModulesAppBar.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 
+import '../../../models/course.dart';
 import '../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../sharedWidgets/bottomNavBar.dart';
 import '../../../sharedWidgets/navIndexTracker.dart';
@@ -25,6 +26,33 @@ class CoursesDisplayScreen extends StatefulWidget {
 }
 
 class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
+  Map<String, dynamic> getUserCourseData(
+      {required LoggedInState loggedInState, required Course course}) {
+    double courseCompPercent = 0;
+
+    if (loggedInState.loggedInUser.courses_completed != null &&
+        loggedInState.loggedInUser.courses_completed.isNotEmpty) {
+      loggedInState.loggedInUser.courses_completed.forEach((course_completed) {
+        if (course_completed["courseID"] == course.id) {
+          courseCompPercent = 100;
+        }
+      });
+    }
+
+    if (loggedInState.loggedInUser.courses_started != null &&
+        loggedInState.loggedInUser.courses_started.isNotEmpty) {
+      loggedInState.loggedInUser.courses_started.forEach((course_started) {
+        if (course_started["courseID"] == course.id) {
+          courseCompPercent = (course_started["modules_completed"].length /
+                  course.modulesCount) *
+              100.ceil();
+        }
+      });
+    }
+
+    return {"courseCompPercent": courseCompPercent};
+  }
+
   @override
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
@@ -62,7 +90,8 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
       bottomNavigationBar:
           kIsWeb ? null : BottomNavBar(loggedInState: loggedInState),
       body: Container(
-        margin: EdgeInsets.only(top: 20, left: horizontalMargin, right: horizontalMargin),
+        margin: EdgeInsets.only(
+            top: 20, left: horizontalMargin, right: horizontalMargin),
         child: CustomScrollView(
           slivers: [
             SliverGrid.builder(
@@ -79,6 +108,9 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
                       modulesCount: coursesProvider
                               .allCourses[courseIndex].modulesCount ??
                           0,
+                      courseData: getUserCourseData(
+                          loggedInState: loggedInState,
+                          course: coursesProvider.allCourses[courseIndex]),
                       onPressed: () {
                         Navigator.push(
                             context,
