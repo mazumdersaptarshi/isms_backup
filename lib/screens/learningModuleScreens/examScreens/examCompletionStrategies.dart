@@ -44,8 +44,7 @@ class CourseExamCompletionStrategy implements ExamCompletionStrategy {
     final loggedInState = context.read<LoggedInState>();
     final coursesProvider = context.read<CoursesProvider>();
 
-    await loggedInState
-        .setUserCourseExamCompleted(
+    await loggedInState.setUserCourseExamCompleted(
       coursesProvider: coursesProvider,
       course: course,
       courseDetails: {
@@ -54,11 +53,16 @@ class CourseExamCompletionStrategy implements ExamCompletionStrategy {
         "course_modules_count": course.modulesCount
       },
       examIndex: exam.index,
-    )
-        .then((val) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const HomePage()));
+    );
+
+    await loggedInState.setUserCourseCompleted(courseDetails: {
+      "courseID": course.id,
+      "course_name": course.name,
+      "course_modules_count": course.modulesCount
     });
+    if (!context.mounted) return;
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => const HomePage()));
   }
 }
 

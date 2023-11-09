@@ -7,8 +7,10 @@ import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 import 'package:isms/projectModules/notificationModules/initLinkHandler.dart';
 import 'package:isms/screens/adminScreens/AdminConsole/adminConsolePage.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
+import 'package:isms/screens/reminderScreen.dart';
 import 'package:isms/sharedWidgets/bottomNavBar.dart';
 import 'package:isms/sharedWidgets/customAppBar.dart';
+import 'package:isms/sharedWidgets/navIndexTracker.dart';
 import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +26,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late String userRole;
-  //DateTime? _expiryDate;
   String? initialLink;
 
   @override
@@ -85,9 +86,9 @@ class _HomePageState extends State<HomePage> {
       HomePageItem(
         onTap: () {
           Navigator.push(context,
-              MaterialPageRoute(builder: (context) => AdminConsolePage()));
+              MaterialPageRoute(builder: (context) => const ReminderScreen()));
         },
-        title: "Admin Console",
+        title: "Set Reminders",
       ),
       HomePageItem(
         onTap: () {
@@ -97,13 +98,19 @@ class _HomePageState extends State<HomePage> {
         title: "Admin Console",
       ),
     ];
+    if (loggedInState.currentUser == null) {
+      return const LoginPage();
+    }
+
+    userRole = loggedInState.currentUserRole;
+    NavIndexTracker.setNavDestination(
+        navDestination: NavDestinations.HomePage, userRole: userRole);
 
     return Consumer<CoursesProvider>(
         builder: (BuildContext context, CoursesProvider value, Widget? child) {
       return Scaffold(
-          bottomNavigationBar: kIsWeb
-              ? null
-              : BottomNavBar(selectedIndex: 0, loggedInState: loggedInState),
+          bottomNavigationBar:
+              kIsWeb ? null : BottomNavBar(loggedInState: loggedInState),
           appBar: CustomAppBar(
             loggedInState: loggedInState,
           ),
@@ -197,7 +204,7 @@ class HomePageItemsContainer extends StatelessWidget {
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: homePageItems.length,
-                itemBuilder: (BuildContext contenxt, int index) {
+                itemBuilder: (BuildContext context, int index) {
                   return homePageItems[index];
                 },
               ),

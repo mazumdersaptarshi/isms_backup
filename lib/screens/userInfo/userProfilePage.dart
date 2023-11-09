@@ -9,6 +9,9 @@ import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/userManagement/userprofileHeaderWidget.dart';
 import 'package:provider/provider.dart';
 
+import '../../sharedWidgets/customAppBar.dart';
+import '../analyticsSharedWidgets/userCourseStartedDetailsWidget.dart';
+
 List allEnrolledCourses = [];
 List allCompletedCourses = [];
 
@@ -51,37 +54,60 @@ class _UserProfilePageState extends State<UserProfilePage> {
     }
 
     return Scaffold(
+      backgroundColor: Colors.deepPurpleAccent.shade100,
+      appBar: CustomAppBar(loggedInState: loggedInState),
       body: CustomScrollView(
         slivers: [
-          const SliverAppBar(
-            expandedHeight: 240.0,
+          SliverAppBar(
+            backgroundColor: Colors.deepPurpleAccent.shade100,
+            expandedHeight: 280.0,
+            automaticallyImplyLeading: false,
             flexibleSpace:
-                FlexibleSpaceBar(background: UserProfileHeaderWidget()),
+                const FlexibleSpaceBar(background: UserProfileHeaderWidget()),
           ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                final action = userActions[index];
-                return ExpansionTile(
-                  leading: Icon(action.icon),
-                  title: Text(action.name!),
-                  onExpansionChanged: (expanded) async {
-                    if (expanded) {
-                      // await loggedInState
-                      //     .getUserCoursesData(action.actionId);
-                    }
-                  },
-                  children: [
-                    UserActionsDropdown(
-                      actionId: action.actionId!,
-                      loggedInState: loggedInState,
+          SliverToBoxAdapter(
+            child: Container(
+              constraints: BoxConstraints(
+                minHeight: MediaQuery.of(context).size.height,
+              ),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                ),
+              ),
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: List.generate(userActions.length, (index) {
+                  final action = userActions[index];
+                  return Container(
+                    constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width > 500
+                          ? MediaQuery.of(context).size.width * 0.5
+                          : MediaQuery.of(context).size.width,
                     ),
-                  ],
-                );
-              },
-              childCount: 4, // Change this count as needed
+                    child: ExpansionTile(
+                      leading: Icon(action.icon),
+                      title: Text(action.name!),
+                      onExpansionChanged: (expanded) async {
+                        if (expanded) {
+                          // await loggedInState
+                          //     .getUserCoursesData(action.actionId);
+                        }
+                      },
+                      children: [
+                        UserActionsDropdown(
+                          actionId: action.actionId!,
+                          loggedInState: loggedInState,
+                        ),
+                      ],
+                    ),
+                  );
+                }),
+              ),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -117,7 +143,8 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
   final String? actionId;
 
   final LoggedInState loggedInState;
-  const UserEnrolledCoursesDropdown({super.key, this.actionId, required this.loggedInState});
+  const UserEnrolledCoursesDropdown(
+      {super.key, this.actionId, required this.loggedInState});
 
   (bool, double, int) getCourseCompletedPercentage({
     required CoursesProvider coursesProvider,
@@ -189,70 +216,11 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
                 isValid = a;
                 noOfExams = c;
                 courseCompletionPercentage = b;
-                return Container(
-                  constraints: const BoxConstraints(minHeight: 50),
-                  child: Column(
-                    children: [
-                      ListTile(
-                        title: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              '${allEnrolledCourses[index]['course_name']} ',
-                              style: const TextStyle(fontSize: 14),
-                            ),
-                            if (isValid)
-                              Text(
-                                  "${(courseCompletionPercentage * 100).ceil().toString()} %")
-                          ],
-                        ),
-                        subtitle: Row(
-                          children: [
-                            if (allEnrolledCourses[index]
-                                    ["modules_completed"] !=
-                                null)
-                              Container(
-                                constraints: BoxConstraints(
-                                    minHeight: 40,
-                                    maxWidth:
-                                        MediaQuery.of(context).size.width - 40),
-                                child: Column(
-                                  children: List.generate(
-                                      allEnrolledCourses[index]
-                                              ["modules_completed"]
-                                          .length, (moduleIndex) {
-                                    return Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          '-> ${allEnrolledCourses[index]["modules_completed"][moduleIndex]}',
-                                          style: const TextStyle(fontSize: 14),
-                                        ),
-                                        const Icon(
-                                          Icons.check_circle_rounded,
-                                          color: Colors.green,
-                                        ),
-                                      ],
-                                    );
-                                  }),
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
-                      if (allEnrolledCourses[index]['exams_completed'] != null)
-                        Row(
-                          children: [
-                            const Text("Exams passed: "),
-                            Text(
-                              '${allEnrolledCourses[index]['exams_completed'].length} of $noOfExams',
-                              style: const TextStyle(fontSize: 14),
-                            ),
-                          ],
-                        ),
-                    ],
-                  ),
+
+                return UserCourseStartedDetailsWidget(
+                  courseItem: allEnrolledCourses[index],
+                  coursesProvider: coursesProvider,
+                  index: index,
                 );
               },
             );
