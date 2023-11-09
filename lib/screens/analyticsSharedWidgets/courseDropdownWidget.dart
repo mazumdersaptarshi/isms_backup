@@ -6,15 +6,15 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'modulesDetailsDropdownWidget.dart';
 
 class CourseDropdownWidget extends StatelessWidget {
-  CourseDropdownWidget(
+  const CourseDropdownWidget(
       {super.key,
       required this.courseItem,
       this.courseDetailsData,
       required this.detailType});
 
-  var courseItem;
+  final Map<String, dynamic> courseItem;
   final Map<String, dynamic>? courseDetailsData;
-  String detailType;
+  final String detailType;
 
   @override
   Widget build(BuildContext context) {

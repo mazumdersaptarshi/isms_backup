@@ -6,14 +6,14 @@ import '../../projectModules/courseManagement/coursesProvider.dart';
 import 'courseDropdownWidget.dart';
 
 class UserCourseStartedDetailsWidget extends StatelessWidget {
-  UserCourseStartedDetailsWidget(
+  const UserCourseStartedDetailsWidget(
       {super.key,
       required this.courseItem,
       required this.coursesProvider,
       required this.index});
-  var courseItem;
-  CoursesProvider coursesProvider;
-  int index;
+  final Map<String, dynamic> courseItem;
+  final CoursesProvider coursesProvider;
+  final int index;
   Map<String, dynamic> getCourseCompletedPercentage() {
     double courseCompletionPercentage = 0;
     int noOfExams = 0;

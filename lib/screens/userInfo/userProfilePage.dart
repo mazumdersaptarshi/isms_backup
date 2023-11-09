@@ -206,8 +206,11 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
               shrinkWrap: true,
               physics: const ClampingScrollPhysics(),
               itemBuilder: (context, index) {
+                // ignore: unused_local_variable
                 double courseCompletionPercentage = 0;
+                // ignore: unused_local_variable
                 bool isValid = false;
+                // ignore: unused_local_variable
                 int noOfExams = 0;
                 var (a, b, c) = getCourseCompletedPercentage(
                   coursesProvider: coursesProvider,

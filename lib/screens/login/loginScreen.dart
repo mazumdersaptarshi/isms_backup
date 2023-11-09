@@ -1,5 +1,6 @@
 // ignore_for_file: file_names, non_constant_identifier_names
 
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:isms/screens/homePage.dart';
@@ -99,7 +100,7 @@ class LoginPageState extends State<LoginPage> {
               try {
                 await LoggedInState.login();
               } catch (e) {
-                print(e);
+                log(e.toString());
               } finally {
                 _isLoading = false;
               }

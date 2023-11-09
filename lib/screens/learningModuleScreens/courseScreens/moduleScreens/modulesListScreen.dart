@@ -115,7 +115,7 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
     int numberColumns =
         min(itemCount, maxColumns) > 0 ? min(itemCount, maxColumns) : 1;
     // grid width, in pixels
-    double gridWidth = screenWidth * numberColumns / maxColumns;
+    //double gridWidth = screenWidth * numberColumns / maxColumns;
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -129,27 +129,25 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
               child: CustomScrollView(
                 slivers: [
                   SliverToBoxAdapter(
-                    child: Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          if (isALlModulesCompleted)
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ExamListScreen(
-                                      course: widget.course,
-                                      examtype: EXAMTYPE.courseExam,
-                                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        if (isALlModulesCompleted)
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ExamListScreen(
+                                    course: widget.course,
+                                    examtype: EXAMTYPE.courseExam,
                                   ),
-                                );
-                              },
-                              child: const Text("View course exams"),
-                            ),
-                        ],
-                      ),
+                                ),
+                              );
+                            },
+                            child: const Text("View course exams"),
+                          ),
+                      ],
                     ),
                   ),
                   SliverGrid.builder(
