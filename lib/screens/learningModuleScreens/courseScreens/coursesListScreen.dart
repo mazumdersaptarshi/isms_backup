@@ -54,7 +54,7 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
                       course.modulesCount) *
                   100)
               .ceil();
-          // courseStartDate = course_started["started_at"].toDate() ?? null;
+          courseStartDate = course_started["started_at"] ?? null;
         }
       });
     }
