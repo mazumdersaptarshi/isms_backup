@@ -9,7 +9,7 @@ import '../../../screens/analyticsSharedWidgets/userCourseStartedDetailsWidget.d
 import '../../courseManagement/coursesProvider.dart';
 
 class AllUsersDropdown extends StatelessWidget {
-  AllUsersDropdown({super.key, required this.adminProvider});
+  const AllUsersDropdown({super.key, required this.adminProvider});
 
   final AdminProvider adminProvider;
 
