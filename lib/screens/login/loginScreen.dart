@@ -1,29 +1,17 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:isms/screens/homePage.dart';
 import 'package:isms/userManagement/loggedInState.dart';
-import 'package:isms/userManagement/userDataGetterMaster.dart';
 import 'package:provider/provider.dart';
 
-import '../homePage.dart';
-
 class LoginPage extends StatefulWidget {
-  LoginPage({super.key});
+  const LoginPage({super.key});
 
   @override
   LoginPageState createState() => LoginPageState();
 }
 
 class LoginPageState extends State<LoginPage> {
-  Future<User?>? _signInFuture;
-  bool hasCheckedForChangedDependencies = false;
-  // UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
-
-  @override
-  void main() async {
-    super.initState();
-    // await Firebase.initializeApp(
-    //     options: DefaultFirebaseOptions.currentPlatform);
-  }
+  bool _isLoading = false; // Add this line to track loading state
 
   @override
   Widget build(BuildContext context) {
@@ -35,23 +23,35 @@ class LoginPageState extends State<LoginPage> {
 
     return Scaffold(
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ISMSText(),
-            const SizedBox(height: 40),
-            ElevatedButton(
-                onPressed: () async {
-                  try {
-                    await LoggedInState.login();
-                  } catch (e) {
-                    print(e);
-                  }
-                },
-                child: Text('Google Login ')),
-          ],
-        ),
+        child: _isLoading ? const CircularProgressIndicator() : buildLoginUI(),
       ),
+    );
+  }
+
+  Widget buildLoginUI() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ISMSText(),
+        const SizedBox(height: 40),
+        ElevatedButton(
+          onPressed: () async {
+            setState(() {
+              _isLoading = true; // Set loading to true when login starts
+            });
+            try {
+              await LoggedInState.login();
+            } catch (e) {
+              print(e);
+            } finally {
+              setState(() {
+                _isLoading = false; // Set loading to false when login ends
+              });
+            }
+          },
+          child: const Text('Google Login'),
+        ),
+      ],
     );
   }
 
