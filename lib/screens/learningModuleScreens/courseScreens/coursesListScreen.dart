@@ -28,7 +28,7 @@ class CoursesDisplayScreen extends StatefulWidget {
 class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
   Map<String, dynamic> getUserCourseData(
       {required LoggedInState loggedInState, required Course course}) {
-    double courseCompPercent = 0;
+    int courseCompPercent = 0;
 
     if (loggedInState.loggedInUser.courses_completed != null &&
         loggedInState.loggedInUser.courses_completed.isNotEmpty) {
@@ -42,15 +42,17 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
     if (loggedInState.loggedInUser.courses_started != null &&
         loggedInState.loggedInUser.courses_started.isNotEmpty) {
       loggedInState.loggedInUser.courses_started.forEach((course_started) {
-        if (course_started["courseID"] == course.id) {
-          courseCompPercent = (course_started["modules_completed"].length /
-                  course.modulesCount) *
-              100.ceil();
+        if (course_started["courseID"] == course.id &&
+            course_started["modules_completed"] != null) {
+          courseCompPercent = ((course_started["modules_completed"].length /
+                      course.modulesCount) *
+                  100)
+              .ceil();
         }
       });
     }
 
-    return {"courseCompPercent": courseCompPercent};
+    return {"courseCompPercent": double.parse(courseCompPercent.toString())};
   }
 
   @override

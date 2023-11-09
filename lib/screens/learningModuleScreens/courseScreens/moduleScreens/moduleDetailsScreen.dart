@@ -17,7 +17,11 @@ import '../../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../../themes/common_theme.dart';
 
 class ModuleDetails extends StatefulWidget {
-  ModuleDetails({super.key, required this.course, required this.module, required this.isModuleStarted});
+  ModuleDetails(
+      {super.key,
+      required this.course,
+      required this.module,
+      required this.isModuleStarted});
   Course course;
   Module module;
   bool isModuleStarted;
@@ -34,20 +38,6 @@ class _ModuleDetailsState extends State<ModuleDetails> {
     super.initState();
   }
 
-  //bool checkIfModuleCompleted(
-  //    {required LoggedInState loggedInState}) {
-  //  bool flag = false;
-  //  loggedInState.loggedInUser.courses_started.forEach((course_started) {
-  //    if (course_started["course_name"] == widget.course.name) {
-  //      course_started["modules_completed"].forEach((module_completed) {
-  //        if (module_completed["module_name"] == widget.module.title) flag = true;
-  //      });
-  //    }
-  //  });
-
-  //  return flag;
-  //}
-
   @override
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
@@ -63,11 +53,17 @@ class _ModuleDetailsState extends State<ModuleDetails> {
         course: widget.course,
         coursesProvider: coursesProvider,
         module: widget.module);
+
+    Map<String, dynamic> courseDetailsMap = {
+      "courseID": widget.course.id,
+      "course_name": widget.course.name,
+      "course_modules_count": widget.course.modulesCount,
+      // "start_date": DateTime.now()
+    };
     return Scaffold(
       appBar: CustomAppBar(
         loggedInState: loggedInState,
       ),
-
       body: Container(
         margin: EdgeInsets.only(top: 20),
         child: Column(
@@ -76,39 +72,28 @@ class _ModuleDetailsState extends State<ModuleDetails> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ModuleExamListScreen(
-                            course: widget.course,
-                            examtype: EXAMTYPE.moduleExam,
-                            module: widget.module,
-                          )
-                        )
-                      );
-                    },
-                    child: Text("View module exams"),
-                  ),
+                            builder: (context) => ModuleExamListScreen(
+                                  course: widget.course,
+                                  examtype: EXAMTYPE.moduleExam,
+                                  module: widget.module,
+                                )));
+                  },
+                  child: Text("View module exams"),
+                ),
                 ElevatedButton(
                   onPressed: () async {
                     await loggedInState.setUserCourseStarted(
-                      courseDetails: {
-                        "courseID": widget.course.id,
-                        "course_name": widget.course.name,
-                        "course_modules_count": widget.course.modulesCount
-                      });
+                        courseDetails: courseDetailsMap);
                     await loggedInState.setUserCourseModuleStarted(
-                      courseDetails: {
-                        "courseID": widget.course.id,
-                        "course_name": widget.course.name,
-                        "course_modules_count": widget.course.modulesCount
-                      },
-                      coursesProvider: coursesProvider,
-                      course: widget.course,
-                      module: widget.module);
+                        courseDetails: courseDetailsMap,
+                        coursesProvider: coursesProvider,
+                        course: widget.course,
+                        module: widget.module);
 
                     Navigator.push(
                       context,
@@ -137,7 +122,7 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                  "${widget.module.title}",
+                    "${widget.module.title}",
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onSecondaryContainer,
                       fontSize: 22,
@@ -154,7 +139,6 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                 ],
               ),
             ),
-
           ],
         ),
       ),

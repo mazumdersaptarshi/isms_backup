@@ -45,6 +45,11 @@ class CourseExamCompletionStrategy implements ExamCompletionStrategy {
     final loggedInState = context.read<LoggedInState>();
     final coursesProvider = context.read<CoursesProvider>();
 
+    Map<String, dynamic> courseDetailsMap = {
+      "courseID": course.id,
+      "course_name": course.name,
+      "course_modules_count": course.modulesCount
+    };
     await loggedInState.setUserCourseExamCompleted(
       coursesProvider: coursesProvider,
       course: course,

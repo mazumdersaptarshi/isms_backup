@@ -69,10 +69,16 @@ class CourseTile extends StatelessWidget {
                             TextSpan(
                                 text: " ${modulesCount!}",
                                 style: customTheme.textTheme.labelMedium),
-                            TextSpan(
-                                text: " - ${courseData["courseCompPercent"]!}%",
-                                style: customTheme.textTheme.labelMedium)
-                          ]))
+                          ])),
+                      SizedBox(height: 10),
+                      Container(
+                        width: 80,
+                        child: LinearProgressIndicator(
+                          backgroundColor: Colors.grey.shade100,
+                          color: primaryColor.shade100,
+                          value: courseData["courseCompPercent"] / 100,
+                        ),
+                      ),
                     ],
                   ),
                 )
