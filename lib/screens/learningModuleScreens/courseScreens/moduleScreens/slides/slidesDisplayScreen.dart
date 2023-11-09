@@ -8,7 +8,6 @@ import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/s
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:provider/provider.dart';
 import 'package:isms/userManagement/loggedInState.dart';
-import 'package:isms/screens/login/loginScreen.dart';
 import '../../../../../projectModules/courseManagement/coursesProvider.dart';
 import 'package:isms/projectModules/courseManagement/moduleManagement/slideManagement/slidesDataMaster.dart';
 
@@ -80,10 +79,6 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
   @override
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
-
-    if (loggedInState.currentUser == null) {
-      return const LoginPage();
-    }
 
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
 

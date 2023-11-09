@@ -60,6 +60,11 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     double homePageContainerHeight = 1300;
+    final loggedInState = context.watch<LoggedInState>();
+    if (loggedInState.currentUser == null) {
+      return const LoginPage();
+    }
+    userRole = loggedInState.currentUserRole;
     List<Widget> homePageItems = [
       HomePageItem(
         onTap: () {
@@ -92,14 +97,6 @@ class _HomePageState extends State<HomePage> {
         title: "Admin Console",
       ),
     ];
-
-    final loggedInState = context.watch<LoggedInState>();
-
-    if (loggedInState.currentUser == null) {
-      return const LoginPage();
-    }
-
-    userRole = loggedInState.currentUserRole;
 
     return Consumer<CoursesProvider>(
         builder: (BuildContext context, CoursesProvider value, Widget? child) {
@@ -172,7 +169,8 @@ class _HomePageState extends State<HomePage> {
                       Positioned(
                           top: 20,
                           child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
                               child: HomePageItemsContainer(
                                   homePageItems: homePageItems)))
                     ])),

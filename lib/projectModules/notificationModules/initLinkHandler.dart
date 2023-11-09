@@ -7,8 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:isms/projectModules/adminConsoleModules/adminActionDropdown.dart';
 import 'package:isms/screens/adminScreens/AdminInstructions/adminInstructionsCategories.dart';
-import 'package:isms/userManagement/loggedInState.dart';
-import 'package:provider/provider.dart';
 import 'package:uni_links/uni_links.dart';
 
 class InitLinkHandler {
@@ -63,14 +61,12 @@ class InitLinkHandler {
 
   static void _sendToInstructionsScreen(
       {required Uri uri, required BuildContext context}) {
-    LoggedInState loggedinstate =
-        Provider.of<LoggedInState>(context, listen: false);
     String? category = uri.queryParameters['category'];
     if (kDebugMode) {
       print(uri);
     }
     for (String key in categories.keys) {
-      if (key == category && loggedinstate.currentUser != null) {
+      if (key == category) {
         Navigator.push(
             context,
             MaterialPageRoute(

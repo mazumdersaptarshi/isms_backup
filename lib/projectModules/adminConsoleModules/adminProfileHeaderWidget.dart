@@ -14,7 +14,7 @@ class AdminInfoWidget extends StatelessWidget {
 
     return Column(
       children: [
-        if (loggedInState.currentUser?.photoURL != null)
+        if (loggedInState.currentUserPhotoURL != null)
           const Padding(
             padding: EdgeInsets.only(top: 25.0),
             child: CircleAvatar(

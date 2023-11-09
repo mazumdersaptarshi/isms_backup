@@ -6,7 +6,6 @@ import 'package:isms/models/course.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/createModuleScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examListScreen.dart';
-import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/sharedWidgets/customAppBar.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'sharedWidgets/moduleTile.dart';
@@ -44,10 +43,11 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
   bool checkIfModuleStarted(
       {required LoggedInState loggedInState, required Module module}) {
     bool flag = false;
-    for (var course_started in loggedInState.loggedInUser.courses_started) {
+    for (Map<String, dynamic> course_started
+        in loggedInState.loggedInUser.courses_started) {
       if (course_started["course_name"] == widget.course.name) {
         course_started["modules_started"].forEach((module_started) {
-          if (module_started["module_name"] == module.title) flag = true;
+          if (module_started == module.title) flag = true;
         });
       }
     }
@@ -91,10 +91,6 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
         checkIfAllModulesCompleted(loggedInState: loggedInState);
     moduleDataMaster = ModuleDataMaster(
         course: widget.course, coursesProvider: coursesProvider);
-
-    if (loggedInState.currentUser == null) {
-      return const LoginPage();
-    }
 
     if (isModulesFetched == false) {
       fetchCourseModules(coursesProvider: coursesProvider);

@@ -3,9 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
-import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/themes/common_theme.dart';
-import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/utilityFunctions/generateRandom.dart';
 import 'package:provider/provider.dart';
 
@@ -19,12 +17,6 @@ class CreateModuleScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    LoggedInState loggedInState = context.watch<LoggedInState>();
-
-    if (loggedInState.currentUser == null) {
-      return const LoginPage();
-    }
-
     return CourseModuleForm(course: course);
   }
 }

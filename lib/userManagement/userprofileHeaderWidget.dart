@@ -7,8 +7,6 @@ import 'package:provider/provider.dart';
 class UserProfileHeaderWidget extends StatelessWidget {
   const UserProfileHeaderWidget({super.key});
 
-  // UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
-  // LoggedInState loggedInState;
   @override
   Widget build(BuildContext context) {
     final loggedInState = context.watch<LoggedInState>();
@@ -17,10 +15,10 @@ class UserProfileHeaderWidget extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          if (loggedInState.currentUser?.photoURL != null)
+          if (loggedInState.currentUserPhotoURL != null)
             const Padding(
-              padding: EdgeInsets.only(
-                  top: 25.0), // Increased padding on the top
+              padding:
+                  EdgeInsets.only(top: 25.0), // Increased padding on the top
               child: CircleAvatar(
                 radius: 50,
                 //backgroundImage:

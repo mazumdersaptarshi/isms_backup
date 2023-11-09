@@ -6,7 +6,6 @@ import 'package:isms/projectModules/courseManagement/moduleManagement/slideManag
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleExamsListScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/slidesDisplayScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
-import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/sharedWidgets/customAppBar.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
@@ -53,10 +52,6 @@ class _ModuleDetailsState extends State<ModuleDetails> {
   @override
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
-
-    if (loggedInState.currentUser == null) {
-      return const LoginPage();
-    }
 
     userRole = loggedInState.currentUserRole;
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);

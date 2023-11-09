@@ -43,7 +43,9 @@ class CustomUser {
         courses_started: map['courses_started'] ?? [],
         courses_completed: map['courses_completed'] ?? [],
         uid: map["uid"]);
-    debugPrint('courses_completed: ${customUser.courses_completed}');
+    if (kDebugMode) {
+      print('courses_completed: ${customUser.courses_completed}');
+    }
     return customUser;
   }
 }

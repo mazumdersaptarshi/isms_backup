@@ -6,7 +6,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:isms/models/slide.dart';
-import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/utilityFunctions/generateRandom.dart';
 import 'package:provider/provider.dart';
@@ -18,16 +17,13 @@ import '../../../../../projectModules/courseManagement/moduleManagement/slideMan
 import '../../../../../projectModules/courseManagement/moduleManagement/slideManagement/slidesCreationProvider.dart';
 
 class CreateSlideScreen extends StatelessWidget {
-  const CreateSlideScreen({super.key, required this.course, required this.module});
+  const CreateSlideScreen(
+      {super.key, required this.course, required this.module});
   final Course course;
   final Module module;
   @override
   Widget build(BuildContext context) {
-    LoggedInState loggedInState = context.watch<LoggedInState>();
-
-    if (loggedInState.currentUser == null) {
-      return const LoginPage();
-    }
+    context.watch<LoggedInState>();
 
     return SlideFormContainer(
       course: course,
@@ -37,11 +33,12 @@ class CreateSlideScreen extends StatelessWidget {
 }
 
 class SlideFormContainer extends StatefulWidget {
-  const SlideFormContainer({super.key, required this.course, required this.module});
+  const SlideFormContainer(
+      {super.key, required this.course, required this.module});
 
   final Course course;
   final Module module;
-  
+
   @override
   State<SlideFormContainer> createState() => _SlideFormContainerState();
 }
@@ -259,7 +256,8 @@ class _SlideFormState extends State<SlideForm> {
                         }, onChangeCodeview: (String? changed) {
                           debugPrint('code changed to $changed');
                         }, onChangeSelection: (EditorSettings settings) {
-                          debugPrint('parent element is ${settings.parentElement}');
+                          debugPrint(
+                              'parent element is ${settings.parentElement}');
                           debugPrint('font name is ${settings.fontName}');
                         }, onDialogShown: () {
                           debugPrint('dialog shown');

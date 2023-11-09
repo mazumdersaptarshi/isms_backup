@@ -5,9 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:isms/models/enums.dart';
 import 'package:isms/models/newExam.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
-import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/themes/common_theme.dart';
-import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/utilityFunctions/generateRandom.dart';
 import 'package:isms/utilityWidgets/questionWidget.dart';
 import 'package:provider/provider.dart';
@@ -54,12 +52,6 @@ class ExamCreationState extends State<ExamCreation> {
 
   @override
   Widget build(BuildContext context) {
-    LoggedInState loggedInState = context.watch<LoggedInState>();
-
-    if (loggedInState.currentUser == null) {
-      return const LoginPage();
-    }
-
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
     examDataMaster =
         ExamDataMaster(course: widget.course, coursesProvider: coursesProvider);
