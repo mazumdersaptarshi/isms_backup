@@ -58,10 +58,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
         slivers: [
           SliverAppBar(
             backgroundColor: Colors.deepPurpleAccent.shade100,
-            expandedHeight: 280.0,
+            expandedHeight: 300.0,
             automaticallyImplyLeading: false,
-            flexibleSpace:
-                FlexibleSpaceBar(background: UserProfileHeaderWidget()),
+            flexibleSpace: FlexibleSpaceBar(
+                background: UserProfileHeaderWidget(
+              view: 'user',
+            )),
           ),
           SliverToBoxAdapter(
             child: Container(

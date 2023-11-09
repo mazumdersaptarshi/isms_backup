@@ -39,21 +39,29 @@ class AllCoursesDropdown extends StatelessWidget {
                 BorderRadius.circular(15.0), // Rounded edges for the card
           ),
           child: ExpansionTile(
-            title: Text(
-              '${index + 1}.  ${courses[index].course_name}',
-              style: TextStyle(fontSize: 14),
+            title: Row(
+              children: [
+                Text(
+                  '${index + 1}.  ',
+                  style: TextStyle(fontSize: 14),
+                ),
+                Icon(Icons.menu_book_rounded),
+                SizedBox(width: 10,),
+                Text('${courses[index].course_name}',
+                    style: TextStyle(fontSize: 14)),
+              ],
             ),
             children: [
               CourseDetailExpansionTile(
                 adminProvider: adminProvider,
-                course: course,
+                // course: course,
                 courses: courses,
                 index: index,
                 title: 'Completed',
               ),
               CourseDetailExpansionTile(
                   adminProvider: adminProvider,
-                  course: course,
+                  // course: course,
                   courses: courses,
                   index: index,
                   title: 'Enrolled')
@@ -69,14 +77,14 @@ class CourseDetailExpansionTile extends StatelessWidget {
   CourseDetailExpansionTile({
     super.key,
     required this.adminProvider,
-    required this.course,
+    // this.course,
     required this.courses,
     required this.index,
     required this.title,
   });
 
   final AdminProvider adminProvider;
-  final dynamic course;
+  // final dynamic course;
   List<dynamic> courses;
   int index;
   String title;

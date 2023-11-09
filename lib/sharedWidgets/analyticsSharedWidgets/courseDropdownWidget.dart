@@ -36,27 +36,38 @@ class CourseDropdownWidget extends StatelessWidget {
               title: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      '${courseItem["course_name"]}',
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.tertiary),
+                    Row(
+                      children: [
+                        Icon(Icons.menu_book_rounded),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          '${courseItem["course_name"]}',
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).colorScheme.tertiary),
+                        )
+                      ],
                     ),
                     if (detailType == 'courses_enrolled')
                       CircularPercentIndicator(
                         radius: 20.0,
                         lineWidth: 5.0,
-                        percent:
-                            courseDetailsData?["courseCompletionPercentage"]!,
+                        percent: (courseDetailsData?[
+                                    "courseCompletionPercentage"]) >
+                                1
+                            ? 1
+                            : courseDetailsData?["courseCompletionPercentage"]!,
                         center: Text(
-                          '${(courseDetailsData?["courseCompletionPercentage"] * 100).ceil()}%',
+                          '${(courseDetailsData?["courseCompletionPercentage"] * 100)}%',
                           style: TextStyle(fontSize: 10),
                         ),
                         progressColor:
                             ((courseDetailsData?["courseCompletionPercentage"] *
                                             100)
-                                        .ceil() >=
+                                        .floor() >=
                                     100)
                                 ? Colors.lightGreen
                                 : Colors.yellow.shade900,
@@ -187,21 +198,6 @@ class CourseDropdownWidget extends StatelessWidget {
                           context),
                   ],
                 ),
-                if (detailType == 'courses_enrolled')
-                  Column(
-                    children: [
-                      if (courseItem["exams_completed"] != null)
-                        CourseExamsCompletedDropdownWidget(
-                            courseItem: courseItem,
-                            courseDetailsData: courseDetailsData),
-                      if (courseItem["modules_started"] != null)
-                        CourseModulesDropdownWidget(
-                            'Modules',
-                            courseItem["modules_started"] ?? [],
-                            courseItem["modules_completed"] ?? [],
-                            context),
-                    ],
-                  ),
               ],
             ),
           ],

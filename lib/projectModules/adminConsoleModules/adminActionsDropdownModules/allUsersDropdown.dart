@@ -28,11 +28,8 @@ class AllUsersDropdown extends StatelessWidget {
               shrinkWrap: true,
               physics: ClampingScrollPhysics(),
               itemBuilder: (context, index) {
-                print('77777');
                 List<Map<String, dynamic>> completedCoursesForUser = [];
-                print(snapshot.data![index].username);
-                print(snapshot.data![index].courses_started);
-                print(snapshot.data![index].courses_completed);
+
                 for (var courseStartedItem
                     in snapshot.data![index].courses_started) {
                   for (var courseCompletedItem
@@ -57,11 +54,26 @@ class AllUsersDropdown extends StatelessWidget {
                     title: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          '${index + 1}. ${snapshot.data![index].username}',
-                          style: TextStyle(
-                            fontSize: 14,
-                          ),
+                        Row(
+                          children: [
+                            Text(
+                              '${index + 1}. ',
+                              style: TextStyle(
+                                fontSize: 14,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Icon(Icons.account_circle),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text('${snapshot.data![index].username}',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                )),
+                          ],
                         ),
                         Chip(
                           backgroundColor:
