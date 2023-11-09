@@ -24,44 +24,25 @@ class SlidesDisplayScreen extends StatefulWidget {
   SlidesDisplayScreen(
       {super.key,
       required this.module,
-      required this.course,
-      required this.slidesDataMaster});
+      required this.course});
   Course course;
   Module module;
-  SlidesDataMaster slidesDataMaster;
+  late SlidesDataMaster slidesDataMaster;
 
   @override
   _SlidesDisplayScreenState createState() => _SlidesDisplayScreenState();
 }
 
 class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
-  List<Map<String, dynamic>> cardItems = [];
   int currentIndex = 0;
   final PageController _pageController = PageController(initialPage: 0);
-  bool isSlidesFetched = false;
-  bool isSlidesListEmpty = false;
 
-  List<Map<String, dynamic>> _initializeCardItems() {
+  List<Map<String, dynamic>> _initializeCardItems(List<Slide> slides) {
     List<Map<String, dynamic>> slidesMap = [];
-    if (!isSlidesListEmpty) {
-      widget.module.slides!.forEach((element) {
-        slidesMap.add({'title': element.title, 'text': element.content});
-      });
-    }
-    return slidesMap;
-  }
-
-  fetchSlidesList({required CoursesProvider coursesProvider}) async {
-    await widget.slidesDataMaster!.fetchSlides();
-    cardItems = _initializeCardItems();
-    setState(() {
-      {
-        if (widget.module.slides == null || widget.module.slides == []) {
-          isSlidesListEmpty = true;
-        }
-        isSlidesFetched = true;
-      }
+    slides.forEach((element) {
+      slidesMap.add({'title': element.title, 'text': element.content});
     });
+    return slidesMap;
   }
 
   @override
@@ -93,9 +74,10 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
     CoursesProvider coursesProvider =
       Provider.of<CoursesProvider>(context);
 
-    if (isSlidesFetched == false) {
-      fetchSlidesList(coursesProvider: coursesProvider);
-    }
+    widget.slidesDataMaster = SlidesDataMaster(
+        course: widget.course,
+        coursesProvider: coursesProvider,
+        module: widget.module);
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -104,60 +86,83 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
 
       body: Container(
         margin: EdgeInsets.only(top: 20),
-        child: isSlidesFetched
-          ? Column(
-              children: [
-                SlidesContentWidget(
-                    pageController: _pageController,
-                    cardItems: cardItems,
-                    currentIndex: currentIndex),
-                SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Visibility(
-                      visible: currentIndex == cardItems.length - 1,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ModuleExamListScreen(
-                                        course: widget.course,
-                                        examtype: EXAMTYPE.moduleExam,
-                                        module: widget.module,
-                                      )));
-                        },
-                        child: Text(
-                          'Take exams',
+        child: FutureBuilder<List<Slide>>(
+          future: widget.slidesDataMaster.slides,
+          builder: (BuildContext context, AsyncSnapshot<List<Slide>> snapshot) {
+            if (snapshot.hasData) {
+              List<Slide> slides = snapshot.data!;
+              List<Map<String, dynamic>> cardItems =
+                _initializeCardItems(slides);
+
+              return Column(
+                children: [
+                  SlidesContentWidget(
+                      pageController: _pageController,
+                      cardItems: cardItems,
+                      currentIndex: currentIndex),
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Visibility(
+                        visible: currentIndex == cardItems.length - 1,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ModuleExamListScreen(
+                                          course: widget.course,
+                                          examtype: EXAMTYPE.moduleExam,
+                                          module: widget.module,
+                                        )));
+                          },
+                          child: Text(
+                            'Take exams',
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(width: 20),
-                    Visibility(
-                      visible: currentIndex == cardItems.length - 1,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => HomePage()));
-                        },
-                        child: Text(
-                          'Back to Home',
+                      SizedBox(width: 20),
+                      Visibility(
+                        visible: currentIndex == cardItems.length - 1,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HomePage()));
+                          },
+                          child: Text(
+                            'Back to Home',
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
-            )
-          : AlertDialog(
-              title: Text("Fetching slides"),
-              content: Align(
+                    ],
+                  ),
+                ],
+              );
+            } else if (snapshot.hasError) {
+              return AlertDialog(
+                title: Text("Error fetching module exams"),
+                content: Align(
                   alignment: Alignment.topCenter,
-                  child: CircularProgressIndicator()),
-            ),
+                  child: Icon(
+                    Icons.error_outline,
+                    color: Colors.red,
+                    size: 60,
+                  ),
+                ),
+              );
+            } else {
+              return AlertDialog(
+                title: Text("Fetching slides"),
+                content: Align(
+                    alignment: Alignment.topCenter,
+                    child: CircularProgressIndicator()),
+              );
+            }
+          },
+        ),
       ),
     );
   }

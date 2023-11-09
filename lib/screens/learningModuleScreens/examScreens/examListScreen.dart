@@ -29,17 +29,9 @@ class ExamListScreen extends StatefulWidget {
 }
 
 class _ExamListScreenState extends State<ExamListScreen> {
-  bool isExamsFetched = false;
   @override
   void initState() {
     super.initState();
-  }
-
-  fetchExamsList({required CoursesProvider coursesProvider}) async {
-    await widget.examDataMaster.fetchExams();
-    setState(() {
-      isExamsFetched = true;
-    });
   }
 
   @override
@@ -52,48 +44,67 @@ class _ExamListScreenState extends State<ExamListScreen> {
 
     CoursesProvider coursesProvider = context.watch<CoursesProvider>();
 
-    List<NewExam>? exams = [];
-    Module module;
-    if (widget.examtype == EXAMTYPE.moduleExam) {
-      module = widget.course.modules![widget.moduleIndex!];
-      exams = module.exams;
-    } else {
-      exams = widget.course.exams;
-    }
     widget.examDataMaster =
-        ExamDataMaster(course: widget.course, coursesProvider: coursesProvider);
-    if (isExamsFetched == false) {
-      fetchExamsList(coursesProvider: coursesProvider);
-    }
+      ExamDataMaster(
+          course: widget.course,
+          coursesProvider: coursesProvider);
 
-
-      return Scaffold(
-        appBar: LearningModulesAppBar(
-          leadingWidget: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pop(
-                context,
-              );
-            },
-          ),
-          title: "${widget.course!.name}/ Exams",
-
+    return Scaffold(
+      appBar: LearningModulesAppBar(
+        leadingWidget: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(
+              context,
+            );
+          },
         ),
-        body: isExamsFetched ?
-            ExamListContainer(exams:exams ?? [], course: widget.course, examtype: EXAMTYPE.courseExam, loggedInState: loggedInState)
+        title: "${widget.course!.name}/ Exams",
+      ),
 
-            : Container(
-          width: MediaQuery.of(context).size.width,
-          height: 200,
-          child: const AlertDialog(
-            title: Text("Fetching Exams"),
-            content: Align(
-                alignment: Alignment.topCenter,
-                child: CircularProgressIndicator()),
-          ),
-        ),
-      );
+      body: FutureBuilder<List<NewExam>>(
+        future: widget.examDataMaster.exams,
+        builder: (BuildContext context, AsyncSnapshot<List<NewExam>> snapshot) {
+          if (snapshot.hasData) {
+            List<NewExam> exams = snapshot.data!;
 
+            return ExamListContainer(
+              exams: exams,
+              course: widget.course,
+              examtype: EXAMTYPE.courseExam,
+              loggedInState: loggedInState,
+            );
+          } else if (snapshot.hasError) {
+            return Container(
+              width: MediaQuery.of(context).size.width,
+              height: 200,
+              child: const AlertDialog(
+                title: Text("Error fetching course exams"),
+                content: Align(
+                  alignment: Alignment.topCenter,
+                  child: Icon(
+                    Icons.error_outline,
+                    color: Colors.red,
+                    size: 60,
+                  ),
+                ),
+              ),
+            );
+          } else {
+            return Container(
+              width: MediaQuery.of(context).size.width,
+              height: 200,
+              child: const AlertDialog(
+                title: Text("Fetching Exams"),
+                content: Align(
+                  alignment: Alignment.topCenter,
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+            );
+          }
+        },
+      ),
+    );
   }
 }

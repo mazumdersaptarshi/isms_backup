@@ -28,15 +28,7 @@ class ModulesListScreen extends StatefulWidget {
 }
 
 class _ModulesListScreenState extends State<ModulesListScreen> {
-  bool isModulesFetched = false;
   late String userRole;
-
-  fetchCourseModules({required CoursesProvider coursesProvider}) async {
-    await widget.moduleDataMaster?.fetchModules();
-    setState(() {
-      isModulesFetched = true;
-    });
-  }
 
   @override
   void initState() {
@@ -98,37 +90,41 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
       return LoginPage();
     }
 
-    if (isModulesFetched == false) {
-      fetchCourseModules(coursesProvider: coursesProvider);
-    }
-
     userRole = loggedInState.currentUserRole;
 
-    // compute the grid shape:
-    // requirements
-    int tileMinWidth = 300;
-    double tileRatio = 16 / 9;
-    // available width, in pixels
     double horizontalMargin = MediaQuery.sizeOf(context).width > 900 ? 200 : 10;
-    double screenWidth = MediaQuery.sizeOf(context).width;
-    // number of tiles that can fit vertically on the screen
-    int maxColumns =
-        max(((screenWidth - (horizontalMargin * 2)) / tileMinWidth).floor(), 1);
-    // number of tiles that have to fit on the screen
-    int itemCount = widget.course.modulesCount ?? 0;
-    // grid width, in tiles
-    int numberColumns = max(1, min(itemCount, maxColumns));
-    // grid width, in pixels
-    double gridWidth = screenWidth * numberColumns / maxColumns;
 
     return Scaffold(
       appBar: CustomAppBar(
         loggedInState: loggedInState,
       ),
+
       bottomNavigationBar:
           kIsWeb ? null : BottomNavBar(loggedInState: loggedInState),
-      body: isModulesFetched
-          ? Container(
+
+      body: FutureBuilder<List<Module>>(
+        future: widget.moduleDataMaster!.modules,
+        builder: (BuildContext context, AsyncSnapshot<List<Module>> snapshot) {
+          if (snapshot.hasData) {
+            List<Module> modules = snapshot.data!;
+
+            // compute the grid shape
+            // TODO use SliverGridDelegateWithMaxCrossAxisExtent instead
+            // requirements
+            int tileMinWidth = 300;
+            double tileRatio = 16 / 9;
+            // available width, in pixels
+            double gridMaxWidth = MediaQuery.sizeOf(context).width - (horizontalMargin * 2);
+            // number of tiles that can fit vertically on the screen
+            int columnsMaxNumber = max((gridMaxWidth / tileMinWidth).floor(), 1);
+            // number of tiles that have to fit on the screen
+            int itemCount = widget.course.modulesCount;
+            // grid width, in tiles
+            int columnsNumber = max(1, min(itemCount, columnsMaxNumber));
+            // grid width, in pixels
+            //double gridWidth = gridMaxWidth * columnsNumber / columnsMaxNumber;
+
+            return Container(
               margin: EdgeInsets.only(top: 20, left: horizontalMargin, right: horizontalMargin),
               child: CustomScrollView(
                 slivers: [
@@ -158,31 +154,49 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
                   ),
                   SliverGrid.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: numberColumns,
+                      crossAxisCount: columnsNumber,
                       childAspectRatio: tileRatio,
                     ),
                     itemCount: itemCount,
                     itemBuilder: (BuildContext context, int moduleIndex) {
+                      Module module = modules[moduleIndex];
                       return Container(
                         // margin:
                         //     EdgeInsets.symmetric(horizontal: horizontalMargin),
                         child: ModuleTile(
                           course: widget.course,
-                          module: widget.course.modules[moduleIndex],
+                          module: module,
                           isModuleStarted: checkIfModuleStarted(
                               loggedInState: loggedInState,
-                              module: widget.course.modules[moduleIndex]),
+                              module: module),
                           isModuleCompleted: checkIfModuleCompleted(
                               loggedInState: loggedInState,
-                              module: widget.course.modules[moduleIndex]),
+                              module: module),
                         ),
                       );
                     },
                   ),
                 ],
               ),
-            )
-          : Container(
+            );
+          } else if (snapshot.hasError) {
+            return Container(
+              width: MediaQuery.of(context).size.width,
+              height: 200,
+              child: const AlertDialog(
+                title: Text("Error fetching modules"),
+                content: Align(
+                  alignment: Alignment.topCenter,
+                  child: Icon(
+                    Icons.error_outline,
+                    color: Colors.red,
+                    size: 60,
+                  ),
+                ),
+              ),
+            );
+          } else {
+            return Container(
               width: MediaQuery.of(context).size.width,
               height: 200,
               child: const AlertDialog(
@@ -191,7 +205,12 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
                     alignment: Alignment.topCenter,
                     child: CircularProgressIndicator()),
               ),
-            ),
+            ;
+          }
+          },
+        ),
+      ),
+
       floatingActionButton: userRole == 'admin'
           ? FloatingActionButton(
               onPressed: () {

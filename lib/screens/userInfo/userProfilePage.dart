@@ -157,8 +157,8 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
         var element = coursesProvider.allCourses[i];
 
         if (element.name == allEnrolledCourses![index]["course_name"]) {
-          modulesCount = element.modulesCount!;
-          noOfExams = element.examsCount!;
+          modulesCount = element.modulesCount;
+          noOfExams = element.examsCount;
           isValid = true;
         }
       }
