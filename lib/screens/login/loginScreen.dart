@@ -30,93 +30,111 @@ class LoginPageState extends State<LoginPage> {
   }
 
   Widget loadingWidget() {
-    Size size = MediaQuery.of(context).size;
-
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          "Loading",
-          style: TextStyle(
-            fontSize: size.width * 0.1,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
+    return Center(
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            "Loading",
+            style: TextStyle(
+              fontSize: 36,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
           ),
-        ),
-        SizedBox(
-          width: 100,
-          height: 100,
-          child: Lottie.asset('assets/images/loading_animation.json'),
-        ),
-      ],
+          SizedBox(
+            width: 100,
+            height: 100,
+            child: Lottie.asset('assets/images/loading_animation.json'),
+          ),
+        ],
+      ),
     );
   }
 
   Widget LoginPageUI() {
-    Size size = MediaQuery.of(context).size;
-    double paddingValue = size.width * 0.1;
-    double spacing = size.height * 0.02;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Define max width for better content management
+        const double maxWidthForContent = 600;
 
-    Color deepAccentPurple = Colors.deepPurpleAccent.shade100;
-    Color buttonColorDark = Colors.black87;
+        // Use a more consistent font size across different screen sizes
+        double titleFontSize = constraints.maxWidth > 600 ? 50 : 40;
+        double subTitleFontSize = constraints.maxWidth > 600 ? 20 : 16;
+        double buttonFontSize = constraints.maxWidth > 600 ? 24 : 18;
 
-    return Container(
-      color: deepAccentPurple,
-      padding: EdgeInsets.symmetric(horizontal: paddingValue),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Spacer(flex: 3),
-          Text(
-            'ISMS',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: size.width * 0.1,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-          SizedBox(height: spacing),
-          Text(
-            'One app to keep track of all your pending certifications',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.white70,
-              fontWeight: FontWeight.bold,
-              fontSize: size.width * 0.04,
-            ),
-          ),
-          const Spacer(flex: 8),
-          ElevatedButton(
-            onPressed: () async {
-              setState(() {
-                _isLoading = true;
-              });
-              try {
-                await LoggedInState.login();
-              } catch (e) {
-                print(e);
-              } finally {
-                _isLoading = false;
-              }
-            },
-            style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.white,
-              backgroundColor: buttonColorDark,
-              padding: EdgeInsets.symmetric(vertical: size.height * 0.02),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
+        // You can adjust these paddings/margins as per your UI design
+        double horizontalPadding = 40;
+        double verticalPadding = 20;
+
+        return Container(
+          color: Colors.deepPurpleAccent.shade100,
+          child: Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: maxWidthForContent),
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: horizontalPadding, vertical: verticalPadding),
+                child: Column(
+                  mainAxisSize: MainAxisSize
+                      .min, // Use MainAxisSize.min to fit content size
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'ISMS',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: titleFontSize,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0, bottom: 20.0),
+                      child: Text(
+                        'One app to keep track of all your pending certifications',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white70,
+                          fontWeight: FontWeight.bold,
+                          fontSize: subTitleFontSize,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 200),
+                    ElevatedButton(
+                      onPressed: () async {
+                        setState(() => _isLoading = true);
+                        try {
+                          await LoggedInState.login();
+                        } catch (e) {
+                          print(e);
+                        } finally {
+                          if (mounted) {
+                            setState(() => _isLoading = false);
+                          }
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.black87,
+                        padding: EdgeInsets.symmetric(vertical: 10),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                      ),
+                      child: Text(
+                        'LOGIN',
+                        style: TextStyle(fontSize: buttonFontSize),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-            child: Text(
-              'LOGIN',
-              style: TextStyle(fontSize: size.width * 0.045),
-            ),
           ),
-          const Spacer(flex: 2),
-        ],
-      ),
+        );
+      },
     );
   }
 }
