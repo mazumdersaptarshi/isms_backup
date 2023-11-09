@@ -18,9 +18,9 @@ import '../../examScreens/sharedWidgets/exam_tile.dart';
 class ModuleExamListScreen extends StatefulWidget {
   ModuleExamListScreen(
       {super.key,
-        required this.course,
-        required this.examtype,
-        required this.module});
+      required this.course,
+      required this.examtype,
+      required this.module});
   Course course;
   Module module;
   late ExamDataMaster examDataMaster;
@@ -68,24 +68,42 @@ class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
       fetchExamsList(coursesProvider: coursesProvider);
     }
 
-      return Scaffold(
-        appBar: CustomAppBar(
-          loggedInState: loggedInState,
-        ),
-        body: isExamsFetched?
-            ExamListContainer(exams: exams?? [], course: course, examtype: EXAMTYPE.moduleExam, module: module, loggedInState: loggedInState)
-
-            : Container(
-          width: MediaQuery.of(context).size.width,
-          height: 200,
-          child: const AlertDialog(
-            title: Text("Fetching Exams"),
-            content: Align(
-                alignment: Alignment.topCenter,
-                child: CircularProgressIndicator()),
-          ),
-        ),
-      );
-
+    return Scaffold(
+      appBar: CustomAppBar(
+        loggedInState: loggedInState,
+      ),
+      body: isExamsFetched
+          ? ExamListContainer(
+              exams: exams ?? [],
+              course: course,
+              examtype: EXAMTYPE.moduleExam,
+              module: module,
+              loggedInState: loggedInState)
+          : Container(
+              width: MediaQuery.of(context).size.width,
+              height: 200,
+              child: const AlertDialog(
+                title: Text("Fetching Exams"),
+                content: Align(
+                    alignment: Alignment.topCenter,
+                    child: CircularProgressIndicator()),
+              ),
+            ),
+      floatingActionButton: loggedInState.currentUserRole == "admin"
+          ? FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ExamCreation(
+                              course: widget.course,
+                              examtype: EXAMTYPE.moduleExam,
+                              module: widget.module,
+                            )));
+              },
+              child: Icon(Icons.add),
+            )
+          : null,
+    );
   }
 }

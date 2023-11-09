@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:isms/models/module.dart';
@@ -58,8 +59,8 @@ class ModuleTile extends StatelessWidget {
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                           child: SvgPicture.asset(
                             "assets/images/moduleIcons/ModuleIcon${imageIndex + 1}.svg",
-                            height: 150,
-                            width: 150,
+                            height: kIsWeb ? 180 : 150,
+                            width: kIsWeb ? 180 : 150,
                             fit: BoxFit.contain,
                           ),
                         ),
@@ -67,6 +68,7 @@ class ModuleTile extends StatelessWidget {
                     ),
                     Expanded(
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           SizedBox(width: 20),
                           Expanded(

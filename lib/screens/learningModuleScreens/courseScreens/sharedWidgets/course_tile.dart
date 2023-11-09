@@ -1,17 +1,23 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../themes/common_theme.dart';
+import '../../../../userManagement/loggedInState.dart';
 
 class CourseTile extends StatelessWidget {
   final int index;
   final String title;
   Function? onPressed;
   int modulesCount;
-  CourseTile(
-      {required this.index,
-      required this.title,
-      required this.onPressed,
-      required this.modulesCount});
+  Map<String, dynamic> courseData;
+  CourseTile({
+    required this.index,
+    required this.title,
+    required this.onPressed,
+    required this.modulesCount,
+    required this.courseData,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -33,18 +39,12 @@ class CourseTile extends StatelessWidget {
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                   child: Row(
                     children: [
-                      Image.asset(
-                        "assets/images/BookIcon${imageIndex}.png",
-                        height: 120,
-                        width: 120,
+                      SvgPicture.asset(
+                        "assets/images/courseIcons/courseIcon${imageIndex}.svg",
+                        height: kIsWeb ? 180 : 150,
+                        width: kIsWeb ? 180 : 150,
                         fit: BoxFit.contain,
                       ),
-                      // Image.network(
-                      //   "https://www.shutterstock.com/image-vector/coding-vector-illustration-600w-687456625.jpg",
-                      //   height: 120,
-                      //   width: 120,
-                      //   fit: BoxFit.cover,
-                      // ),
                       SizedBox(width: 20),
                     ],
                   ),
@@ -58,16 +58,27 @@ class CourseTile extends StatelessWidget {
                           style: commonTextStyle.copyWith(
                               fontWeight: FontWeight.bold,
                               color: Colors.black)),
+                      Container(width: 100, child: Divider()),
+                      SizedBox(height: 10),
                       RichText(
                           text: TextSpan(
-                              text: "Modules Count :",
+                              text: "Modules :",
                               style: customTheme.textTheme.labelMedium!
                                   .copyWith(color: Colors.grey, fontSize: 14),
                               children: [
                             TextSpan(
                                 text: " ${modulesCount!}",
-                                style: customTheme.textTheme.labelMedium)
-                          ]))
+                                style: customTheme.textTheme.labelMedium),
+                          ])),
+                      SizedBox(height: 10),
+                      Container(
+                        width: 80,
+                        child: LinearProgressIndicator(
+                          backgroundColor: Colors.grey.shade100,
+                          color: primaryColor.shade100,
+                          value: courseData["courseCompPercent"] / 100,
+                        ),
+                      ),
                     ],
                   ),
                 )

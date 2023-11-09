@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/takeExamScreen.dart';
 import 'package:provider/provider.dart';
@@ -44,23 +45,31 @@ class CourseExamCompletionStrategy implements ExamCompletionStrategy {
   Future<void> handleExamCompletion({required BuildContext context}) async {
     final loggedInState = context.read<LoggedInState>();
     final coursesProvider = context.read<CoursesProvider>();
-
+    var started_at;
+    if (loggedInState.loggedInUser.courses_started != null) {
+      loggedInState.loggedInUser.courses_started.forEach((courses_started) {
+        if (courses_started["courseID"] == course.id) {
+          print(
+              "PRINTING DATTTTEE ${courses_started["started_at"].runtimeType},, ${courses_started["started_at"]}");
+        }
+        started_at = courses_started["started_at"] ?? null;
+      });
+    }
+    Map<String, dynamic> courseDetailsMap = {
+      "courseID": course.id,
+      "course_name": course.name,
+      "course_modules_count": course.modulesCount,
+      "started_at": started_at,
+    };
     await loggedInState.setUserCourseExamCompleted(
       coursesProvider: coursesProvider,
       course: course,
-      courseDetails: {
-        "courseID": course.id,
-        "course_name": course.name,
-        "course_modules_count": course.modulesCount
-      },
+      courseDetails: courseDetailsMap,
       examIndex: exam.index,
     );
 
-    await loggedInState.setUserCourseCompleted(courseDetails: {
-      "courseID": course.id,
-      "course_name": course.name,
-      "course_modules_count": course.modulesCount
-    });
+    await loggedInState.setUserCourseCompleted(
+        courseDetails: {...courseDetailsMap, "completed_at": DateTime.now()});
 
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => HomePage()));

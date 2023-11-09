@@ -175,6 +175,10 @@ class LoggedInState with ChangeNotifier {
       examIndex--;
 
       loggedInUser.courses_started.forEach((course_started) {
+        Map<String, dynamic> examCompletedMap = {
+          "exam_name": course.exams![examIndex].title,
+          "exam_index": course.exams![examIndex].index,
+        };
         if (course_started['courseID'] == course.id) {
           if (course_started['exams_completed'] != null &&
               course_started['exams_completed'].isEmpty) {
@@ -191,16 +195,14 @@ class LoggedInState with ChangeNotifier {
               }
             }
             if (isExamPresentInList == false) {
-              course_started['exams_completed']
-                  .add(course.exams![examIndex].index);
+              course_started['exams_completed'].add(examCompletedMap);
               print("ADDING EXAM ${course.exams![examIndex].index}");
               print("COMPLETED EXAM ${course_started['exams_completed']}");
             }
           } else {
             print("COMPLETED MODULE IS NULL< SO HERE");
             course_started['exams_completed'] = [];
-            course_started['exams_completed']
-                .add(course.exams![examIndex].index);
+            course_started['exams_completed'].add(examCompletedMap);
           }
         }
       });
@@ -292,7 +294,10 @@ class LoggedInState with ChangeNotifier {
     }
     if (flag == false) {
       print("FLAG IS FALSE ${courseDetails}");
-
+      Map<String, dynamic> moduleStartedMap = {
+        "module_id": module.id,
+        "module_name": module.title
+      };
       _userDataGetterMaster.loggedInUser.courses_started
           .forEach((course_started) {
         if (course_started['courseID'] == course.id) {
@@ -306,14 +311,12 @@ class LoggedInState with ChangeNotifier {
               }
             }
             if (flag_2 == false) {
-              course_started['modules_started']
-                  .add({"module_name": module.title});
+              course_started['modules_started'].add(moduleStartedMap);
             }
           } else {
             print("COMPLETED MODULE IS NULL< SO HERE");
             course_started['modules_started'] = [];
-            course_started['modules_started']
-                .add({"module_name": module.title});
+            course_started['modules_started'].add(moduleStartedMap);
           }
         }
       });
