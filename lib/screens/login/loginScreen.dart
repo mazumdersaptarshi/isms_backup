@@ -110,9 +110,7 @@ class LoginPageState extends State<LoginPage> {
                         } catch (e) {
                           print(e);
                         } finally {
-                          if (mounted) {
-                            setState(() => _isLoading = false);
-                          }
+                          _isLoading = false;
                         }
                       },
                       style: ElevatedButton.styleFrom(
