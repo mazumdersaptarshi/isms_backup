@@ -6,7 +6,7 @@ class Slide {
 
   Slide(
       {required this.id,
-      this.index = 0,
+      required this.index,
       required this.title,
       required this.content});
 

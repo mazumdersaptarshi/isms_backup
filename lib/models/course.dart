@@ -1,36 +1,62 @@
-import 'package:isms/models/newExam.dart';
-
 import 'module.dart';
+import 'newExam.dart';
 
 class Course {
+  // these fields match Firestore fields
   String id;
   String name;
-  int? modulesCount = 0;
-  int? examsCount = 0;
-  List<Module> modules = [];
-  List<NewExam> exams = [];
+  int modulesCount;
+  int examsCount;
 
-  Course(
-      {required this.id,
-      required this.name,
-      this.modulesCount,
-      this.examsCount});
+  // these fields match Firestore subcollections,
+  // so they are nullable
+  List<Module>? modules;
+  List<NewExam>? exams;
 
+  // create a course locally
+  Course({
+    required this.id,
+    required this.name,
+    this.modulesCount = 0,
+    this.examsCount = 0,
+    this.modules = const [],
+    this.exams = const [],
+  });
+
+  // shallow-import a course from Firestore (skip subcollections)
   factory Course.fromMap(Map<String, dynamic> map) {
+    print("map: ${map}");
     return Course(
         id: map['id'],
         name: map['name'],
-        modulesCount: map["modulesCount"] ?? 0,
-        examsCount: map["examsCount"] ?? 0);
+        modulesCount: map["modulesCount"],
+        examsCount: map["examsCount"],
+        modules: null,
+        exams: null);
   }
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'name': name,
-      'exams': exams,
       'modulesCount': modulesCount,
       'examsCount': examsCount
     };
+  }
+
+  addModule(Module module) {
+    if (modules != null) {
+      modules!.add(module);
+    } else {
+      print("not adding the module locally, as there is no cache");
+    }
+  }
+
+  addExam(NewExam exam) {
+    if (exams != null) {
+      exams!.add(exam);
+    } else {
+      print("not adding the course exam locally, as there is no cache");
+    }
   }
 }
