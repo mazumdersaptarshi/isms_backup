@@ -130,7 +130,8 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
           kIsWeb ? null : BottomNavBar(loggedInState: loggedInState),
       body: isModulesFetched
           ? Container(
-              margin: EdgeInsets.only(top: 20, left: horizontalMargin, right: horizontalMargin),
+              margin: EdgeInsets.only(
+                  top: 20, left: horizontalMargin, right: horizontalMargin),
               child: CustomScrollView(
                 slivers: [
                   SliverToBoxAdapter(
@@ -153,6 +154,20 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
                               },
                               child: Text("View course exams"),
                             ),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ExamCreation(
+                                    course: widget.course,
+                                    examtype: EXAMTYPE.courseExam,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Text("Create exam for this course"),
+                          ),
                         ],
                       ),
                     ),

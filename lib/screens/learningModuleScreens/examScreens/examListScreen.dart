@@ -17,9 +17,9 @@ import '../../../sharedWidgets/leaningModulesAppBar.dart';
 class ExamListScreen extends StatefulWidget {
   ExamListScreen(
       {super.key,
-        required this.course,
-        required this.examtype,
-        this.moduleIndex});
+      required this.course,
+      required this.examtype,
+      this.moduleIndex});
   Course course;
   int? moduleIndex;
   late ExamDataMaster examDataMaster;
@@ -66,34 +66,47 @@ class _ExamListScreenState extends State<ExamListScreen> {
       fetchExamsList(coursesProvider: coursesProvider);
     }
 
-
-      return Scaffold(
-        appBar: LearningModulesAppBar(
-          leadingWidget: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pop(
-                context,
-              );
-            },
-          ),
-          title: "${widget.course!.name}/ Exams",
-
+    return Scaffold(
+      appBar: LearningModulesAppBar(
+        leadingWidget: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(
+              context,
+            );
+          },
         ),
-        body: isExamsFetched ?
-            ExamListContainer(exams:exams ?? [], course: widget.course, examtype: EXAMTYPE.courseExam, loggedInState: loggedInState)
-
-            : Container(
-          width: MediaQuery.of(context).size.width,
-          height: 200,
-          child: const AlertDialog(
-            title: Text("Fetching Exams"),
-            content: Align(
-                alignment: Alignment.topCenter,
-                child: CircularProgressIndicator()),
-          ),
-        ),
-      );
-
+        title: "${widget.course!.name}/ Exams",
+      ),
+      body: isExamsFetched
+          ? ExamListContainer(
+              exams: exams ?? [],
+              course: widget.course,
+              examtype: EXAMTYPE.courseExam,
+              loggedInState: loggedInState)
+          : Container(
+              width: MediaQuery.of(context).size.width,
+              height: 200,
+              child: const AlertDialog(
+                title: Text("Fetching Exams"),
+                content: Align(
+                    alignment: Alignment.topCenter,
+                    child: CircularProgressIndicator()),
+              ),
+            ),
+      floatingActionButton: loggedInState.currentUserRole == "admin"
+          ? FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ExamCreation(
+                            course: widget.course,
+                            examtype: EXAMTYPE.courseExam)));
+              },
+              child: Icon(Icons.add),
+            )
+          : null,
+    );
   }
 }

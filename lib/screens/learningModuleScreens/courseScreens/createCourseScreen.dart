@@ -97,9 +97,10 @@ class _CourseCreationFormState extends State<CourseCreationForm> {
                       Course course = Course(
                         id: generateRandomId(),
                         name: _nameController.text,
+                        description: _descriptionController.text,
                       );
                       bool isCourseCreated =
-                      await CoursesDataMaster.createCourse(course: course);
+                          await CoursesDataMaster.createCourse(course: course);
 
                       CoursesDetails coursesDetails = CoursesDetails(
                         course_id: generateRandomId(),
@@ -108,14 +109,17 @@ class _CourseCreationFormState extends State<CourseCreationForm> {
                         number_of_exams: 0,
                       );
                       bool isCourseAdminConsoleCreated =
-                      await CoursesDataMaster.createCourseAdminConsole(
-                          coursesDetails: coursesDetails);
+                          await CoursesDataMaster.createCourseAdminConsole(
+                              coursesDetails: coursesDetails);
                       if (isCourseCreated) {
                         Navigator.pop(context);
                       }
                     }
                   },
-                  child: Text('Submit',style: buttonText,),
+                  child: Text(
+                    'Submit',
+                    style: buttonText,
+                  ),
                 ),
               ),
             ],
