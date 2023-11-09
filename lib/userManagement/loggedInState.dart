@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
 import 'package:isms/userManagement/userDataGetterMaster.dart';
 
 import '../models/course.dart';
@@ -74,7 +73,14 @@ class LoggedInState with ChangeNotifier {
       Map<String, dynamic> mapData = snapshot.data() as Map<String, dynamic>;
       UserCoursesDetails data = UserCoursesDetails.fromMap(mapData);
       allEnrolledCoursesGlobal = data.courses_started!;
-      allCompletedCoursesGlobal = data.courses_completed!;
+      // allCompletedCoursesGlobal = data.courses_completed!;
+      for (var courseInStarted in data.courses_started!) {
+        for (var courseInCompleted in data.courses_completed!) {
+          if (courseInCompleted['courseID'] == courseInStarted['courseID']) {
+            allCompletedCoursesGlobal.add(courseInStarted);
+          }
+        }
+      }
     } else {
       print('user document was deleted');
     }

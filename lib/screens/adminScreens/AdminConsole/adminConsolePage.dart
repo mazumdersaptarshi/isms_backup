@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/sharedWidgets/customAppBar.dart';
 import 'package:isms/userManagement/loggedInState.dart';
+import 'package:isms/userManagement/userprofileHeaderWidget.dart';
 import 'package:provider/provider.dart';
 
 import '../../../adminManagement/adminProvider.dart';
 import '../../../models/adminConsoleModels/adminConsoleActions.dart';
 import '../../../projectModules/adminConsoleModules/adminActionsWidget.dart';
-import '../../../projectModules/adminConsoleModules/adminProfileHeaderWidget.dart';
 
 class AdminConsolePage extends StatelessWidget {
   final List<AdminActions> adminActions = [
@@ -39,7 +39,10 @@ class AdminConsolePage extends StatelessWidget {
             backgroundColor: Colors.deepPurpleAccent.shade100,
             expandedHeight: 250.0,
             automaticallyImplyLeading: false,
-            flexibleSpace: FlexibleSpaceBar(background: AdminInfoWidget()),
+            flexibleSpace: FlexibleSpaceBar(
+                background: UserProfileHeaderWidget(
+              view: 'admin',
+            )),
           ),
           SliverToBoxAdapter(
             child: Container(

@@ -23,7 +23,7 @@ class AdminInfoWidget extends StatelessWidget {
           Text(
             ' ${loggedInState.currentUserName}',
             style: const TextStyle(
-              color: Colors.black,
+              color: Colors.white,
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
@@ -31,14 +31,14 @@ class AdminInfoWidget extends StatelessWidget {
         Text(
           ' ${loggedInState.currentUserEmail}',
           style: const TextStyle(
-            color: Colors.black,
+            color: Colors.white,
             fontSize: 18,
           ),
         ),
         Text(
           'Role: ${loggedInState.currentUserRole}',
           style: const TextStyle(
-            color: Colors.black,
+            color: Colors.white,
             fontSize: 18,
           ),
         ),

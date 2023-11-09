@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:isms/models/UserActions.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
+// import 'package:isms/screens/analyticsSharedWidgets/courseDropdownWidget.dart';
 import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/userManagement/userprofileHeaderWidget.dart';
 import 'package:provider/provider.dart';
 
+import '../../sharedWidgets/analyticsSharedWidgets/courseDropdownWidget.dart';
+import '../../sharedWidgets/analyticsSharedWidgets/userCourseStartedDetailsWidget.dart';
 import '../../sharedWidgets/customAppBar.dart';
-import '../analyticsSharedWidgets/userCourseStartedDetailsWidget.dart';
+// import '../analyticsSharedWidgets/userCourseStartedDetailsWidget.dart';
 
 List allEnrolledCourses = [];
 List allCompletedCourses = [];
@@ -20,14 +23,14 @@ class UserProfilePage extends StatefulWidget {
 class _UserProfilePageState extends State<UserProfilePage> {
   bool hasCheckedForChangedDependencies = false;
   final List<UserActions> userActions = [
-    UserActions(
-        name: 'Dashboard', icon: Icons.dashboard, actionId: 'dashboard'),
-    UserActions(name: 'Reports', icon: Icons.description, actionId: 'reports'),
+    // UserActions(
+    // //     name: 'Dashboard', icon: Icons.dashboard, actionId: 'dashboard'),
+    // UserActions(name: 'Reports', icon: Icons.description, actionId: 'reports'),
     UserActions(
         name: 'Courses Enrolled', icon: Icons.school, actionId: 'crs_enrl'),
     UserActions(
         name: 'Courses Completed', icon: Icons.check, actionId: 'crs_compl'),
-    UserActions(name: 'Exams', icon: Icons.assignment, actionId: 'exms'),
+    // UserActions(name: 'Exams', icon: Icons.assignment, actionId: 'exms'),
     // UserActions(name: 'Logout', icon: Icons.exit_to_app, actionId: 'logout'),
   ];
 
@@ -55,10 +58,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
         slivers: [
           SliverAppBar(
             backgroundColor: Colors.deepPurpleAccent.shade100,
-            expandedHeight: 280.0,
+            expandedHeight: 300.0,
             automaticallyImplyLeading: false,
-            flexibleSpace:
-                FlexibleSpaceBar(background: UserProfileHeaderWidget()),
+            flexibleSpace: FlexibleSpaceBar(
+                background: UserProfileHeaderWidget(
+              view: 'user',
+            )),
           ),
           SliverToBoxAdapter(
             child: Container(
@@ -240,18 +245,11 @@ class UserCompletedCoursesDropdown extends StatelessWidget {
                 physics: ClampingScrollPhysics(),
                 itemBuilder: (context, index) {
                   allCompletedCourses = loggedInState.allCompletedCoursesGlobal;
-
-                  return ListTile(
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          '${allCompletedCourses![index]['course_name']} ',
-                          style: TextStyle(fontSize: 14),
-                        ),
-                        Icon(Icons.check_circle, color: Colors.green)
-                      ],
-                    ),
+                  print(
+                      'ALLCOMPLETEDCOURSESGLOBAL: ${loggedInState.allCompletedCoursesGlobal}');
+                  return CourseDropdownWidget(
+                    courseItem: allCompletedCourses![index],
+                    detailType: 'courses_completed',
                   );
                 },
               );
