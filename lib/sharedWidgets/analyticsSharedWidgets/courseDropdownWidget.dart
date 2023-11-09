@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
+import 'courseExamsCompletedDropdownWidget.dart';
 import 'modulesDetailsDropdownWidget.dart';
 
 class CourseDropdownWidget extends StatelessWidget {
@@ -48,11 +49,17 @@ class CourseDropdownWidget extends StatelessWidget {
                           '${(courseDetailsData?["courseCompletionPercentage"] * 100).ceil()}%',
                           style: TextStyle(fontSize: 10),
                         ),
-                        progressColor: Colors.yellow.shade900,
+                        progressColor:
+                            ((courseDetailsData?["courseCompletionPercentage"] *
+                                            100)
+                                        .ceil() >=
+                                    100)
+                                ? Colors.lightGreen
+                                : Colors.yellow.shade900,
                       ),
                     if (detailType == 'courses_completed')
                       Icon(
-                        Icons.check_circle_outline_rounded,
+                        Icons.check_circle_rounded,
                         color: Colors.lightGreen,
                       ),
                   ]),
@@ -61,19 +68,21 @@ class CourseDropdownWidget extends StatelessWidget {
                   Column(
                     children: [
                       if (courseItem["exams_completed"] != null)
-                        Text(
-                          'Exam completed: ${courseItem["exams_completed"].length} of ${courseDetailsData?["noOfExams"]}',
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                            fontSize: 12,
-                          ),
-                        ),
+                        CourseExamsCompletedDropdownWidget(
+                            courseItem: courseItem,
+                            courseDetailsData: courseDetailsData),
+                      // if (courseItem["modules_started"] != null)
+                      //   CourseModulesDetailsDropdownWidget('Modules Started',
+                      //       courseItem["modules_started"], context),
+                      // if (courseItem["modules_completed"] != null)
+                      //   CourseModulesDetailsDropdownWidget('Modules Completed',
+                      //       courseItem["modules_completed"], context),
                       if (courseItem["modules_started"] != null)
-                        CourseModulesDetailsDropdownWidget('Modules Started:',
-                            courseItem["modules_started"], context),
-                      if (courseItem["modules_completed"] != null)
-                        CourseModulesDetailsDropdownWidget('Modules Completed:',
-                            courseItem["modules_completed"], context),
+                        CourseModulesDropdownWidget(
+                            'Modules',
+                            courseItem["modules_started"] ?? [],
+                            courseItem["modules_completed"] ?? [],
+                            context),
                     ],
                   ),
               ],

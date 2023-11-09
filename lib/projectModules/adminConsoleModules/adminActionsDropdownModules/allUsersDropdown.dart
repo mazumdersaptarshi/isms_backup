@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../adminManagement/adminProvider.dart';
-import '../../../screens/analyticsSharedWidgets/courseDropdownWidget.dart';
-import '../../../screens/analyticsSharedWidgets/userCourseStartedDetailsWidget.dart';
+// import '../../../screens/analyticsSharedWidgets/courseDropdownWidget.dart';
+// import '../../../screens/analyticsSharedWidgets/userCourseStartedDetailsWidget.dart';
+import '../../../sharedWidgets/analyticsSharedWidgets/courseDropdownWidget.dart';
+import '../../../sharedWidgets/analyticsSharedWidgets/userCourseStartedDetailsWidget.dart';
 import '../../courseManagement/coursesProvider.dart';
 
 class AllUsersDropdown extends StatelessWidget {

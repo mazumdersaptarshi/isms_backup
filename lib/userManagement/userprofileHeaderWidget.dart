@@ -26,7 +26,7 @@ class UserProfileHeaderWidget extends StatelessWidget {
           Text(
             ' ${loggedInState.currentUserName}',
             style: TextStyle(
-              color: Colors.black,
+              color: Colors.white,
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
@@ -34,14 +34,14 @@ class UserProfileHeaderWidget extends StatelessWidget {
           Text(
             ' ${loggedInState.currentUserEmail}',
             style: TextStyle(
-              color: Colors.black,
+              color: Colors.white,
               fontSize: 18,
             ),
           ),
           Text(
             'Role: ${loggedInState.currentUserRole}',
             style: TextStyle(
-              color: Colors.black,
+              color: Colors.white,
               fontSize: 18,
             ),
           ),
