@@ -51,12 +51,11 @@ class CoursesDataMaster {
   }
 
   static Future<void> listenToCourseUpdates(CoursesProvider coursesProvider) async {
-
     Stream<QuerySnapshot> coursesStream = _coursesRef
         .orderBy("createdAt")
         .snapshots();
     coursesStream.listen((snapshot) async {
-      await Future.delayed(const Duration(milliseconds: 5000));
+      //await Future.delayed(const Duration(milliseconds: 5000));
       coursesProvider.allCourses.clear();
 
       snapshot.docs.forEach((element) {

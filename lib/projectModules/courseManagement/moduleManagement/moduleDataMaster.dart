@@ -47,7 +47,7 @@ class ModuleDataMaster extends CoursesDataMaster {
   }
 
   Future<List<Module>> _fetchModules() async {
-    await Future.delayed(const Duration(milliseconds: 1000));
+    //await Future.delayed(const Duration(milliseconds: 1000));
 
     QuerySnapshot modulesListSnapshot =
       await _modulesRef.orderBy("index").get();

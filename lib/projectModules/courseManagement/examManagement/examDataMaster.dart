@@ -42,7 +42,7 @@ class ExamDataMaster extends CoursesDataMaster {
   }
 
   Future<List<NewExam>> _fetchExams() async {
-    await Future.delayed(const Duration(milliseconds: 1000));
+    //await Future.delayed(const Duration(milliseconds: 1000));
 
     QuerySnapshot examsListSnapshot =
       await _examsRef.orderBy("index").get();

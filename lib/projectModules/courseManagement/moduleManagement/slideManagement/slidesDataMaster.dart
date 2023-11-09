@@ -50,7 +50,7 @@ class SlidesDataMaster extends ModuleDataMaster {
   //}
 
   Future<List<Slide>> _fetchSlides() async {
-    await Future.delayed(const Duration(milliseconds: 1000));
+    //await Future.delayed(const Duration(milliseconds: 1000));
 
     QuerySnapshot slidesListSnapshot =
       await _slidesRef.orderBy("index").get();
