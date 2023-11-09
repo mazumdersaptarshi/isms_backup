@@ -125,7 +125,10 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
             //double gridWidth = gridMaxWidth * columnsNumber / columnsMaxNumber;
 
             return Container(
-              margin: EdgeInsets.only(top: 20, left: horizontalMargin, right: horizontalMargin),
+              margin: EdgeInsets.only(
+                top: 20,
+                left: horizontalMargin,
+                right: horizontalMargin),
               child: CustomScrollView(
                 slivers: [
                   SliverToBoxAdapter(
@@ -148,6 +151,20 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
                               },
                               child: Text("View course exams"),
                             ),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ExamCreation(
+                                    course: widget.course,
+                                    examtype: EXAMTYPE.courseExam,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Text("Create exam for this course"),
+                          ),
                         ],
                       ),
                     ),

@@ -17,9 +17,9 @@ import '../../../sharedWidgets/leaningModulesAppBar.dart';
 class ExamListScreen extends StatefulWidget {
   ExamListScreen(
       {super.key,
-        required this.course,
-        required this.examtype,
-        this.moduleIndex});
+      required this.course,
+      required this.examtype,
+      this.moduleIndex});
   Course course;
   int? moduleIndex;
   late ExamDataMaster examDataMaster;
@@ -105,6 +105,20 @@ class _ExamListScreenState extends State<ExamListScreen> {
           }
         },
       ),
+
+      floatingActionButton: loggedInState.currentUserRole == "admin"
+          ? FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ExamCreation(
+                            course: widget.course,
+                            examtype: EXAMTYPE.courseExam)));
+              },
+              child: Icon(Icons.add),
+            )
+          : null,
     );
   }
 }

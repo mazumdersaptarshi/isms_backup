@@ -134,6 +134,18 @@ class _ModuleDetailsState extends State<ModuleDetails> {
           ],
         ),
       ),
+      floatingActionButton: loggedInState.currentUserRole == "admin"
+          ? FloatingActionButton(
+              onPressed: () {
+                //Navigator.push(
+                //    context,
+                //    MaterialPageRoute(
+                //        builder: (context) => CreateSlideScreen(
+                //            course: widget.course, module: widget.module)));
+              },
+              child: Icon(Icons.add),
+            )
+          : null,
     );
   }
 }

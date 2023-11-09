@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/takeExamScreen.dart';
 import 'package:provider/provider.dart';
@@ -44,10 +45,14 @@ class CourseExamCompletionStrategy implements ExamCompletionStrategy {
   Future<void> handleExamCompletion({required BuildContext context}) async {
     final loggedInState = context.read<LoggedInState>();
     final coursesProvider = context.read<CoursesProvider>();
-    DateTime started_at = DateTime.now();
+    var started_at;
     if (loggedInState.loggedInUser.courses_started != null) {
       loggedInState.loggedInUser.courses_started.forEach((courses_started) {
-        started_at = courses_started["started_at"].toDate() ?? DateTime.now();
+        if (courses_started["courseID"] == course.id) {
+          print(
+              "PRINTING DATTTTEE ${courses_started["started_at"].runtimeType},, ${courses_started["started_at"]}");
+        }
+        started_at = courses_started["started_at"] ?? null;
       });
     }
     Map<String, dynamic> courseDetailsMap = {

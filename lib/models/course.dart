@@ -7,6 +7,7 @@ class Course {
   String name;
   int modulesCount;
   int examsCount;
+  String description;
 
   // these fields match Firestore subcollections,
   // so they are nullable
@@ -19,6 +20,7 @@ class Course {
     required this.name,
     this.modulesCount = 0,
     this.examsCount = 0,
+    this.description = "",
     this.modules = const [],
     this.exams = const [],
   });
@@ -31,6 +33,7 @@ class Course {
         name: map['name'],
         modulesCount: map["modulesCount"],
         examsCount: map["examsCount"],
+        description: map['description'] ?? "",
         modules: null,
         exams: null);
   }
@@ -39,6 +42,7 @@ class Course {
     return {
       'id': id,
       'name': name,
+      'description': description,
       'modulesCount': modulesCount,
       'examsCount': examsCount
     };

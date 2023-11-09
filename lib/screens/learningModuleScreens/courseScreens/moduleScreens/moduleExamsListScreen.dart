@@ -19,9 +19,9 @@ import '../../examScreens/sharedWidgets/exam_tile.dart';
 class ModuleExamListScreen extends StatefulWidget {
   ModuleExamListScreen(
       {super.key,
-        required this.course,
-        required this.examtype,
-        required this.module});
+      required this.course,
+      required this.examtype,
+      required this.module});
   Course course;
   Module module;
   late ModuleExamDataMaster moduleExamDataMaster;
@@ -102,6 +102,22 @@ class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
           }
         },
       ),
+
+      floatingActionButton: loggedInState.currentUserRole == "admin"
+          ? FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ExamCreation(
+                              course: widget.course,
+                              examtype: EXAMTYPE.moduleExam,
+                              module: widget.module,
+                            )));
+              },
+              child: Icon(Icons.add),
+            )
+          : null,
     );
   }
 }
