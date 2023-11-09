@@ -23,11 +23,10 @@ function formatDate(timestamp) {
 
   const hours = String(date.getUTCHours() + 9).padStart(2, '0');
   const minutes = String(date.getUTCMinutes()).padStart(2, '0');
-  const ampm = date.getUTCHours() >= 12 ? 'PM' : 'AM';
+  const ampm = date.getUTCHours() >= 12 ? 'AM' : 'PM';
 
   return `${formattedDate.replace(/\d+/, dayWithSuffix)} at ${hours}:${minutes} ${ampm}`;
 }
-
 
 async function sendEmail(recipientEmail, name, expiredTime, certificationName) {
   if (!apiKey) {

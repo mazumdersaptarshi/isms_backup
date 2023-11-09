@@ -1,13 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 import 'package:isms/projectModules/notificationModules/initLinkHandler.dart';
 import 'package:isms/screens/adminScreens/AdminConsole/adminConsolePage.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
 import 'package:isms/screens/reminderScreen.dart';
-import 'package:isms/screens/userInfo/userProfilePage.dart';
 import 'package:isms/sharedWidgets/bottomNavBar.dart';
 import 'package:isms/sharedWidgets/customAppBar.dart';
 import 'package:isms/sharedWidgets/navIndexTracker.dart';
@@ -27,7 +25,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late String userRole;
-  DateTime? _expiryDate;
   String? initialLink;
 
   @override
@@ -81,9 +78,9 @@ class _HomePageState extends State<HomePage> {
       HomePageItem(
         onTap: () {
           Navigator.push(context,
-              MaterialPageRoute(builder: (context) => AdminConsolePage()));
+              MaterialPageRoute(builder: (context) => const ReminderScreen()));
         },
-        title: "Admin Console",
+        title: "Set Reminders",
       ),
       HomePageItem(
         onTap: () {
@@ -126,7 +123,7 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       Text(
                         "Welcome back, \n${loggedInState.currentUserName}",
-                        style: customTheme.textTheme?.bodyMedium
+                        style: customTheme.textTheme.bodyMedium
                             ?.copyWith(fontSize: 30, color: Colors.white),
                       ),
                       Flexible(
@@ -166,7 +163,7 @@ class _HomePageState extends State<HomePage> {
                           child: Container(
                             height: homePageContainerHeight,
                             width: MediaQuery.of(context).size.width,
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(20))),
@@ -174,7 +171,8 @@ class _HomePageState extends State<HomePage> {
                       Positioned(
                           top: 20,
                           child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
                               child: HomePageItemsContainer(
                                   homePageItems: homePageItems)))
                     ])),
@@ -201,7 +199,7 @@ class HomePageItemsContainer extends StatelessWidget {
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: homePageItems.length,
-                itemBuilder: (BuildContext contenxt, int index) {
+                itemBuilder: (BuildContext context, int index) {
                   return homePageItems[index];
                 },
               ),
@@ -227,14 +225,14 @@ class HomePageItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 300,
-      constraints: BoxConstraints(minWidth: 300),
+      constraints: const BoxConstraints(minWidth: 300),
       child: GestureDetector(
         onTap: () {
           onTap();
         },
         child: Card(
           elevation: 10,
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(10))),
           child: Padding(
             padding: const EdgeInsets.all(20.0),
