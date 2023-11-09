@@ -10,16 +10,16 @@ import 'package:isms/projectModules/courseManagement/moduleManagement/moduleData
 import '../../coursesProvider.dart';
 
 class SlidesDataMaster extends ModuleDataMaster {
-  SlidesDataMaster(
-      {required super.course,
-      required super.coursesProvider,
-      required this.module})
-      : super() {
-    _slidesRef = modulesRef!.doc(module.title).collection("slides");
+  SlidesDataMaster({
+    required super.coursesProvider,
+    required super.course,
+    required this.module,
+  }) : super() {
+    DocumentReference moduleRef = modulesRef.doc(module.title);
+    _slidesRef = moduleRef.collection("slides");
   }
-  Module module;
-  CollectionReference? _slidesRef;
-  CollectionReference? get slidesRef => _slidesRef;
+  final Module module;
+  late final CollectionReference _slidesRef;
 
   //Future<bool> createSlides({required List<Slide> slides}) async {
   //  List<Map<String, dynamic>> slidesMapList = [];
@@ -38,7 +38,7 @@ class SlidesDataMaster extends ModuleDataMaster {
   //      slidesMapList.add(slideMap);
   //    });
   //    slidesMapList.forEach((slideMap) async {
-  //      await slidesRef!.doc(slideMap['id']).set(slideMap);
+  //      await _slidesRef.doc(slideMap['id']).set(slideMap);
   //      print("Created slide ${slideMap}");
   //    });
   //    coursesProvider.addSlidesToModules(module, slides);
@@ -49,22 +49,36 @@ class SlidesDataMaster extends ModuleDataMaster {
   //  }
   //}
 
-  Future fetchSlides() async {
-    if (module.slides != null && module.slides!.isNotEmpty) {
-      print("Slides for $module already fetched! See ${module.slides}");
-      return;
-    } else {
-      QuerySnapshot slidesListSnapshot =
-          await slidesRef!.orderBy("index").get();
-      List<Slide> slides = [];
-      if (slidesListSnapshot.size == 0) return;
-      slidesListSnapshot.docs.forEach((element) {
-        Slide s = Slide.fromMap(element.data() as Map<String, dynamic>);
+  Future<List<Slide>> _fetchSlides() async {
+    await Future.delayed(const Duration(milliseconds: 1000));
 
-        slides.add(s);
-      });
-      coursesProvider.addSlidesToModules(module, slides);
-      print("FCN Slides for ${module.slides}, slides: ${module.slides}");
+    QuerySnapshot slidesListSnapshot =
+      await _slidesRef.orderBy("index").get();
+    if (module.slides == null)
+      module.slides = [];
+    else
+      module.slides!.clear();
+    slidesListSnapshot.docs.forEach((element) {
+      Slide slide = Slide.fromMap(element.data() as Map<String, dynamic>);
+      module.addSlide(slide);
+      coursesProvider.notifyListeners();
+    });
+    return module.slides!;
+  }
+
+  Future<List<Slide>> get slides async {
+    if (module.slides != null) {
+      print("slides in cache, no need to fetch them");
+      return module.slides!;
+    } else {
+      print("slides not in cache, trying to fetch them");
+      try {
+        return _fetchSlides();
+      } catch (e) {
+        print("error while fetching slides: ${e}");
+        module.slides = null;
+        return [];
+      }
     }
   }
 }

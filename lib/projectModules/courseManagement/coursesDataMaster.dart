@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:isms/models/adminConsoleModels/coursesDetails.dart';
 
 import 'package:isms/models/course.dart';
+import 'coursesProvider.dart';
 
 class CoursesDataMaster {
   static FirebaseFirestore db = FirebaseFirestore.instance;
@@ -22,7 +23,7 @@ class CoursesDataMaster {
 
       _courseMap['createdAt'] = DateTime.now();
 
-      await coursesRef.doc(course.name).set(_courseMap);
+      await _coursesRef.doc(course.name).set(_courseMap);
 
       print("Course creation successful");
       return true;
@@ -47,5 +48,25 @@ class CoursesDataMaster {
     } catch (e) {
       return false;
     }
+  }
+
+  static Future<void> listenToCourseUpdates(CoursesProvider coursesProvider) async {
+
+    Stream<QuerySnapshot> coursesStream = _coursesRef
+        .orderBy("createdAt")
+        .snapshots();
+    coursesStream.listen((snapshot) async {
+      await Future.delayed(const Duration(milliseconds: 5000));
+      coursesProvider.allCourses.clear();
+
+      snapshot.docs.forEach((element) {
+        Map<String, dynamic> elementMap =
+            element.data() as Map<String, dynamic>;
+        Course course = Course.fromMap(elementMap);
+        coursesProvider.addCourse(course);
+      });
+
+      coursesProvider.notifyListeners();
+    });
   }
 }
