@@ -58,7 +58,7 @@ class _ModuleDetailsState extends State<ModuleDetails> {
       "courseID": widget.course.id,
       "course_name": widget.course.name,
       "course_modules_count": widget.course.modulesCount,
-      // "start_date": DateTime.now()
+      "started_at": DateTime.now()
     };
     return Scaffold(
       appBar: CustomAppBar(
