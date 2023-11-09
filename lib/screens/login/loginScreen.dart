@@ -34,7 +34,7 @@ class LoginPageState extends State<LoginPage> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
+          const Text(
             "Loading",
             style: TextStyle(
               fontSize: 36,
@@ -71,7 +71,7 @@ class LoginPageState extends State<LoginPage> {
           color: Colors.deepPurpleAccent.shade100,
           child: Center(
             child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: maxWidthForContent),
+              constraints: const BoxConstraints(maxWidth: maxWidthForContent),
               child: Padding(
                 padding: EdgeInsets.symmetric(
                     horizontal: horizontalPadding, vertical: verticalPadding),
@@ -101,7 +101,7 @@ class LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 200),
+                    const SizedBox(height: 200),
                     ElevatedButton(
                       onPressed: () async {
                         setState(() => _isLoading = true);
@@ -118,7 +118,7 @@ class LoginPageState extends State<LoginPage> {
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.white,
                         backgroundColor: Colors.black87,
-                        padding: EdgeInsets.symmetric(vertical: 10),
+                        padding: const EdgeInsets.symmetric(vertical: 10),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.0),
                         ),
