@@ -1,4 +1,6 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:isms/models/newExam.dart';
 import 'package:isms/models/question.dart';
 import 'package:isms/screens/homePage.dart';
@@ -16,9 +18,9 @@ import '../../../projectModules/courseManagement/coursesProvider.dart';
 class TakeExamScreen extends StatefulWidget {
   TakeExamScreen(
       {required this.exam,
-        required this.course,
-        required this.examtype,
-        this.module,
+      required this.course,
+      required this.examtype,
+      this.module,
       required this.examCompletionStrategy});
   EXAMTYPE examtype;
   Course course;
@@ -110,7 +112,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
           _showScore ? 'Score' : 'Exam Module',
           style: TextStyle(color: white),
         ),
-        backgroundColor: secondaryColor,
+        backgroundColor: Colors.deepPurpleAccent.shade100,
       ),
       body: _showScore ? buildScoreWidget() : buildExamWidget(),
     );
@@ -129,48 +131,101 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
     }
 
     double percentageScore = (correctAnswers / _questions.length) * 100;
+    double failedScore = 100 - percentageScore;
 
     if (percentageScore < 75) {
       return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-                'Your Score is: $correctAnswers/${_questions.length}. You need to get 75% to pass.'),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () => setState(() {
-                shuffleQuestions();
-                _currentIndex = 0;
-                _selectedAnswers =
-                    List.generate(_questions.length, (index) => <int>{});
-                _showScore = false;
-              }),
-              child: Text('Retake Exam'),
-            )
-          ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 30.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                alignment: Alignment.center,
+                height: 250,
+                width: MediaQuery.of(context).size.width,
+                child: Text(
+                    'Your Score is: $correctAnswers/${_questions.length}. You need to get 75% to pass.'),
+              ),
+              Container(
+                height: 50,
+                width: 50,
+                child: PieChart(PieChartData(centerSpaceRadius: 40, sections: [
+                  PieChartSectionData(
+                    value: percentageScore,
+                    title: '${percentageScore.toStringAsFixed(1)}%',
+                    radius: 80,
+                    color: Colors.deepPurpleAccent.shade100,
+                  ),
+                  PieChartSectionData(
+                      value: failedScore,
+                      title: '${failedScore.toStringAsFixed(1)}%',
+                      color: const Color.fromARGB(255, 255, 167, 167),
+                      radius: 75),
+                ])),
+              ),
+              SizedBox(height: 150),
+              ElevatedButton(
+                onPressed: () => setState(() {
+                  shuffleQuestions();
+                  _currentIndex = 0;
+                  _selectedAnswers =
+                      List.generate(_questions.length, (index) => <int>{});
+                  _showScore = false;
+                }),
+                child: Text('Retake Exam'),
+              )
+            ],
+          ),
         ),
       );
     } else {
       return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-                'Congratulations! Your Score is: $correctAnswers/${_questions.length}'),
-            SizedBox(height: 20),
-            widget.examCompletionStrategy.buildSumbitButton(context: context),
-            ElevatedButton(
-              onPressed: () => setState(() {
-                shuffleQuestions();
-                _currentIndex = 0;
-                _selectedAnswers =
-                    List.generate(_questions.length, (index) => <int>{});
-                _showScore = false;
-              }),
-              child: Text('Retry for Fun!'),
-            ),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 30.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                alignment: Alignment.center,
+                height: 250,
+                width: MediaQuery.of(context).size.width,
+                child: Text(
+                  'Congratulations! Your Score is: $correctAnswers/${_questions.length}',
+                ),
+              ),
+              Container(
+                height: 50,
+                width: 50,
+                child: PieChart(PieChartData(centerSpaceRadius: 40, sections: [
+                  PieChartSectionData(
+                    value: percentageScore,
+                    title: '${percentageScore.toStringAsFixed(1)}%',
+                    radius: 80,
+                    color: Colors.deepPurpleAccent.shade100,
+                  ),
+                  PieChartSectionData(
+                      value: failedScore,
+                      title: '${failedScore.toStringAsFixed(1)}%',
+                      color: const Color.fromARGB(255, 255, 167, 167),
+                      radius: 75),
+                ])),
+              ),
+              SizedBox(height: 100),
+              widget.examCompletionStrategy.buildSumbitButton(context: context),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () => setState(() {
+                  shuffleQuestions();
+                  _currentIndex = 0;
+                  _selectedAnswers =
+                      List.generate(_questions.length, (index) => <int>{});
+                  _showScore = false;
+                }),
+                child: Text('Retry for Fun!'),
+              ),
+            ],
+          ),
         ),
       );
     }
@@ -182,12 +237,15 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
       child: Column(
         children: [
           Container(
+            decoration: BoxDecoration(
+                color: Colors.deepPurpleAccent.shade100,
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(25),
+                    bottomRight: Radius.circular(25))),
             width: MediaQuery.of(context).size.width,
-            height: 200,
-            color: secondaryColor,
             child: Padding(
               padding:
-              const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -211,51 +269,55 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
           ),
           SizedBox(height: 20),
           ...List.generate(_questions[_currentIndex].shuffledOptions.length,
-                  (index) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Card(
-                    surfaceTintColor: white,
-                    elevation: 4,
-                    shadowColor: secondaryColor,
-                    shape: customCardShape,
-                    child: ListTile(
-                      title: Text(_questions[_currentIndex].shuffledOptions[index]),
-                      leading: Checkbox(
-                        fillColor: MaterialStateProperty.resolveWith<Color>(
-                                (Set<MaterialState> states) {
-                              if (states.contains(MaterialState.disabled)) {
-                                return Colors.grey; // Fill color for the disabled state
-                              }
-                              if (states.contains(MaterialState.selected)) {
-                                return secondaryColor; // Fill color when the checkbox is checked
-                              }
-                              return white; // Fill color when the checkbox is unchecked
-                            }),
-                        value: _selectedAnswers[_currentIndex].contains(index),
-                        onChanged: (bool? value) {
-                          setState(() {
-                            if (value == true) {
-                              if (_selectedAnswers[_currentIndex].length <
-                                  _questions[_currentIndex].maxAllowedAnswers) {
-                                _selectedAnswers[_currentIndex].add(index);
-                              }
-                            } else {
-                              _selectedAnswers[_currentIndex].remove(index);
-                            }
-                          });
-                        },
-                      ),
-                    ),
+              (index) {
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Card(
+                surfaceTintColor: white,
+                elevation: 4,
+                shadowColor: secondaryColor,
+                shape: customCardShape,
+                child: ListTile(
+                  title: Text(_questions[_currentIndex].shuffledOptions[index]),
+                  leading: Checkbox(
+                    fillColor: MaterialStateProperty.resolveWith<Color>(
+                        (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.disabled)) {
+                        return Colors.grey; // Fill color for the disabled state
+                      }
+                      if (states.contains(MaterialState.selected)) {
+                        return secondaryColor; // Fill color when the checkbox is checked
+                      }
+                      return white; // Fill color when the checkbox is unchecked
+                    }),
+                    value: _selectedAnswers[_currentIndex].contains(index),
+                    onChanged: (bool? value) {
+                      setState(() {
+                        if (value == true) {
+                          if (_selectedAnswers[_currentIndex].length <
+                              _questions[_currentIndex].maxAllowedAnswers) {
+                            _selectedAnswers[_currentIndex].add(index);
+                          }
+                        } else {
+                          _selectedAnswers[_currentIndex].remove(index);
+                        }
+                      });
+                    },
                   ),
-                );
-              }),
-          SizedBox(height: 15,),
+                ),
+              ),
+            );
+          }),
+          SizedBox(
+            height: 15,
+          ),
           ElevatedButton(
             style: customElevatedButtonStyle(),
             onPressed: areAnswersSelected ? () => onButtonPress() : null,
-            child:
-            Text(_currentIndex < _questions.length - 1 ? 'Next' : 'Submit',style: TextStyle(color: white),),
+            child: Text(
+              _currentIndex < _questions.length - 1 ? 'Next' : 'Submit',
+              style: TextStyle(color: white),
+            ),
           )
         ],
       ),

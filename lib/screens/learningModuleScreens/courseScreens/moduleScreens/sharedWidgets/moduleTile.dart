@@ -52,21 +52,14 @@ class ModuleTile extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          child: SvgPicture.asset(
-                            "assets/images/moduleIcons/ModuleIcon${imageIndex + 1}.svg",
-                            height: kIsWeb ? 180 : 150,
-                            width: kIsWeb ? 180 : 150,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                      ],
+                    Expanded(
+                      flex: 1,
+                      child: SvgPicture.asset(
+                        "assets/images/moduleIcons/ModuleIcon${imageIndex + 1}.svg",
+                      ),
                     ),
                     Expanded(
+                      flex: 1,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

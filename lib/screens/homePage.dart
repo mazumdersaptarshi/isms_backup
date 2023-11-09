@@ -17,7 +17,9 @@ import 'package:isms/sharedWidgets/navIndexTracker.dart';
 import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter/gestures.dart';
+import 'homePageFunctions/getCoursesList.dart';
+import 'homePageWidgets/homePageItemsContainer.dart';
 import 'login/loginScreen.dart';
 
 class HomePage extends StatefulWidget {
@@ -66,37 +68,37 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     double homePageContainerHeight = 1300;
-    List<Widget> homePageItems = [
-      HomePageItem(
-        onTap: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => CoursesDisplayScreen()));
-        },
-        title: "All Courses",
-      ),
-      HomePageItem(
-        onTap: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => AdminConsolePage()));
-        },
-        title: "Admin Console",
-      ),
-      HomePageItem(
-        onTap: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => AdminConsolePage()));
-        },
-        title: "Admin Console",
-      ),
-      HomePageItem(
-        onTap: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => AdminConsolePage()));
-        },
-        title: "Admin Console",
-      ),
-    ];
-
+    // List<Widget> homePageItems = [
+    //   HomePageItem(
+    //     onTap: () {
+    //       Navigator.push(context,
+    //           MaterialPageRoute(builder: (context) => CoursesDisplayScreen()));
+    //     },
+    //     title: "All Courses",
+    //   ),
+    //   HomePageItem(
+    //     onTap: () {
+    //       Navigator.push(context,
+    //           MaterialPageRoute(builder: (context) => AdminConsolePage()));
+    //     },
+    //     title: "Admin Console",
+    //   ),
+    //   HomePageItem(
+    //     onTap: () {
+    //       Navigator.push(context,
+    //           MaterialPageRoute(builder: (context) => AdminConsolePage()));
+    //     },
+    //     title: "Admin Console",
+    //   ),
+    //   HomePageItem(
+    //     onTap: () {
+    //       Navigator.push(context,
+    //           MaterialPageRoute(builder: (context) => AdminConsolePage()));
+    //     },
+    //     title: "Admin Console",
+    //   ),
+    // ];
+    List<Widget> homePageItems = [];
     final loggedInState = context.watch<LoggedInState>();
 
     if (loggedInState.currentUser == null) {
@@ -107,8 +109,8 @@ class _HomePageState extends State<HomePage> {
     NavIndexTracker.setNavDestination(
         navDestination: NavDestinations.HomePage, userRole: userRole);
 
-    return Consumer<CoursesProvider>(
-        builder: (BuildContext context, CoursesProvider value, Widget? child) {
+    return Consumer<CoursesProvider>(builder:
+        (BuildContext context, CoursesProvider coursesProvider, Widget? child) {
       return Scaffold(
           bottomNavigationBar:
               kIsWeb ? null : BottomNavBar(loggedInState: loggedInState),
@@ -175,90 +177,40 @@ class _HomePageState extends State<HomePage> {
                                     topLeft: Radius.circular(20))),
                           )),
                       Positioned(
+                          top: 0,
+                          child: Container(
+                            margin: EdgeInsets.only(
+                                left: MediaQuery.of(context).size.width * 0.14),
+                            child: Text("Your courses...",
+                                style: customTheme.textTheme.labelMedium!
+                                    .copyWith(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white)),
+                          )),
+                      Positioned(
                           top: 20,
                           child: Container(
                               padding: EdgeInsets.symmetric(horizontal: 10),
-                              child: HomePageItemsContainer(
-                                  homePageItems: homePageItems)))
+                              child: FutureBuilder<List<Widget>>(
+                                future: getHomePageCoursesList(
+                                  context: context,
+                                  loggedInState: loggedInState,
+                                  coursesProvider: coursesProvider,
+                                ),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<List<Widget>>? snapshot) {
+                                  if (snapshot?.data == null)
+                                    return CircularProgressIndicator();
+                                  else
+                                    return HomePageItemsContainer(
+                                        homePageItems: snapshot?.data);
+                                },
+                              )))
                     ])),
               )
             ],
           ));
     });
-  }
-}
-
-class HomePageItemsContainer extends StatelessWidget {
-  HomePageItemsContainer({super.key, required this.homePageItems});
-  List<Widget> homePageItems;
-  @override
-  Widget build(BuildContext context) {
-    double itemContainerWidth = MediaQuery.of(context).size.width * 0.5;
-    return MediaQuery.of(context).size.width > 800
-        ? Container(
-            width: MediaQuery.of(context).size.width,
-            height: 300,
-            child: Container(
-              margin: EdgeInsets.only(
-                  left: MediaQuery.of(context).size.width * 0.1),
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: homePageItems.length,
-                itemBuilder: (BuildContext contenxt, int index) {
-                  return homePageItems[index];
-                },
-              ),
-            ),
-          )
-        : Container(
-            width: MediaQuery.of(context).size.width * 0.9,
-            margin:
-                EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.03),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: homePageItems,
-            ),
-          );
-  }
-}
-
-class HomePageItem extends StatelessWidget {
-  HomePageItem({super.key, required this.onTap, required this.title});
-  Function onTap;
-  String title;
-  int randIndex=  Random().nextInt(5);
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 300,
-      constraints: BoxConstraints(minWidth: 300),
-      child: GestureDetector(
-        onTap: () {
-          onTap();
-        },
-        child: Card(
-          elevation: 10,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10))),
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              children: [
-                SvgPicture.asset(
-                  "assets/images/courseIcons/courseIcon${randIndex}.svg",
-                  width: 200,
-                  height: 200,
-                  fit: BoxFit.contain,
-                ),
-                Text(title, style: customTheme.textTheme.labelMedium!.copyWith(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold
-                ),),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
   }
 }
