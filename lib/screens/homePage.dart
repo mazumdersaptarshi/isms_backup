@@ -1,13 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 import 'package:isms/projectModules/notificationModules/initLinkHandler.dart';
-import 'package:isms/sharedWidgets/bottomNavBar.dart';
 import 'package:isms/sharedWidgets/customAppBar.dart';
 import 'package:isms/sharedWidgets/navIndexTracker.dart';
 import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
+import 'package:isms/utilityFunctions/platformCheck.dart';
 import 'package:provider/provider.dart';
 
 import 'homePageFunctions/getCoursesList.dart';
@@ -73,11 +72,10 @@ class _HomePageState extends State<HomePage> {
     return Consumer<CoursesProvider>(builder:
         (BuildContext context, CoursesProvider coursesProvider, Widget? child) {
       return Scaffold(
-          bottomNavigationBar:
-              kIsWeb ? null : BottomNavBar(loggedInState: loggedInState),
           appBar: CustomAppBar(
             loggedInState: loggedInState,
           ),
+          bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState),
           body: CustomScrollView(
             physics: ClampingScrollPhysics(),
             shrinkWrap: true,
@@ -105,7 +103,7 @@ class _HomePageState extends State<HomePage> {
                               0.13, // 50% of screen width
 
                           child: Image.asset(
-                            "assets/images/security.png",
+                            "assets/images/security2.png",
                             fit: BoxFit
                                 .cover, // This will cover the available space, you can change it to BoxFit.contain to prevent the image from being cropped.
                           ),
