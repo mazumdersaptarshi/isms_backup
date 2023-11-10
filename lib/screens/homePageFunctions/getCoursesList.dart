@@ -12,7 +12,7 @@ Future<List<Widget>> getHomePageCoursesList(
     {required BuildContext context,
     required LoggedInState loggedInState,
     required CoursesProvider coursesProvider}) async {
-  List<Widget> homePageWidgets = [];
+  List<Widget> homePageWidgets = [Container(width: 100)];
   await loggedInState.getUserCoursesData('crs_enrl');
   await loggedInState.getUserCoursesData('crs_compl');
   List courses_started = loggedInState.loggedInUser.courses_started;
