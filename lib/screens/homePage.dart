@@ -1,21 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:footer/footer.dart';
 import 'package:footer/footer_view.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 import 'package:isms/projectModules/notificationModules/initLinkHandler.dart';
-import 'package:isms/sharedWidgets/bottomNavBar.dart';
-import 'package:isms/sharedWidgets/customAppBar.dart';
 import 'package:isms/sharedWidgets/navIndexTracker.dart';
 import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
+import 'package:isms/utilityFunctions/platformCheck.dart';
 import 'package:provider/provider.dart';
 
 import 'homePageFunctions/getCoursesList.dart';
 import 'homePageWidgets/homePageItemsContainer.dart';
 import 'learningModuleScreens/courseScreens/coursesListScreen.dart';
 import 'login/loginScreen.dart';
-import 'package:footer/footer.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -76,10 +74,9 @@ class _HomePageState extends State<HomePage> {
         (BuildContext context, CoursesProvider coursesProvider, Widget? child) {
       return Scaffold(
           backgroundColor: Colors.white,
-          bottomNavigationBar:
-              kIsWeb ? null : BottomNavBar(loggedInState: loggedInState),
-          appBar: CustomAppBar(
-            loggedInState: loggedInState,
+          bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState),
+          appBar: PlatformCheck.topNavBarWidget(
+            loggedInState,
           ),
           body: FooterView(
             children: [
