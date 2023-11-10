@@ -9,12 +9,13 @@ class CourseTile extends StatelessWidget {
   final Function? onPressed;
   final int modulesCount;
   // double tileHeight;
-  double tileWidth;
-  dynamic modulesCompleted;
-  dynamic latestModule;
-  Map<String, dynamic> courseData;
-  CourseTile(
-      {super.key, required this.index,
+  final double tileWidth;
+  final dynamic modulesCompleted;
+  final dynamic latestModule;
+  final Map<String, dynamic> courseData;
+  const CourseTile(
+      {super.key,
+      required this.index,
       required this.title,
       required this.onPressed,
       required this.modulesCount,

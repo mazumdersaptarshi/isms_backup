@@ -41,7 +41,7 @@ class InitLinkHandler {
     _platformChannel.setMethodCallHandler((call) async {
       if (call.method == 'handleIncomingLink') {
         String link = call.arguments;
-        print('Received link via method channel: $link');
+        debugPrint('Received link via method channel: $link');
         _handleLink(context, link);
       }
     });

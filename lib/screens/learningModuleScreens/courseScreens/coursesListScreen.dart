@@ -50,14 +50,6 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
     int numberColumns =
         min(itemCount, maxColumns) > 0 ? min(itemCount, maxColumns) : 1;
     // grid width, in pixels
-    double gridWidth = screenWidth * numberColumns / maxColumns;
-    String? getLatestModuleName(Map<String, dynamic> courseItem) {
-      int latestModuleIndex = (courseItem['modules_started'].length - 1) ?? 0;
-      String? latestModuleName = (courseItem['modules_started']
-              [latestModuleIndex]['module_name']) ??
-          '';
-      return latestModuleName ?? '';
-    }
 
     return Scaffold(
       appBar: PlatformCheck.topNavBarWidget(
@@ -75,31 +67,27 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
                     crossAxisCount: numberColumns, childAspectRatio: tileRatio),
                 itemCount: coursesProvider.allCourses.length,
                 itemBuilder: (context, courseIndex) {
-                  return Container(
-                    // margin: EdgeInsets.symmetric(horizontal: 10),
-
-                    child: CourseTile(
-                      index: courseIndex,
-                      title: coursesProvider.allCourses[courseIndex].name,
-                      modulesCount: coursesProvider
-                              .allCourses[courseIndex].modulesCount ??
-                          0,
-                      tileWidth: tileMinWidth,
-                      // tileHeight: tileMinimumheight,
-                      courseData: getUserCourseData(
-                          loggedInState: loggedInState,
-                          course: coursesProvider.allCourses[courseIndex]),
-                      latestModule: '',
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ModulesListScreen(
-                                      course: coursesProvider
-                                          .allCourses[courseIndex],
-                                    )));
-                      },
-                    ),
+                  return CourseTile(
+                    index: courseIndex,
+                    title: coursesProvider.allCourses[courseIndex].name,
+                    modulesCount:
+                        coursesProvider.allCourses[courseIndex].modulesCount ??
+                            0,
+                    tileWidth: tileMinWidth,
+                    // tileHeight: tileMinimumheight,
+                    courseData: getUserCourseData(
+                        loggedInState: loggedInState,
+                        course: coursesProvider.allCourses[courseIndex]),
+                    latestModule: '',
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ModulesListScreen(
+                                    course:
+                                        coursesProvider.allCourses[courseIndex],
+                                  )));
+                    },
                   );
                 })
           ],

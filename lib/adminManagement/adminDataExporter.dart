@@ -77,8 +77,7 @@ class DataExporter {
       String courseId = courseItem['course_id'] ?? '';
       String creationDate =
           CSVDataHandler.timestampToReadableDate(courseItem['createdAt'])
-                  .toString() ??
-              '';
+              .toString();
       List<String> courseCompletedUsers = [];
       List<String> courseStartedUsers = [];
 
@@ -378,7 +377,7 @@ class DataExporter {
       String moduleDescription = module['contentDescription'] ?? '';
       String moduleIndex = module['index'].toString();
 
-      String moduleId = module['id'].toString() ?? '';
+      String moduleId = module['id'].toString();
       String moduleCreationDate =
           CSVDataHandler.timestampToReadableDate(module['createdAt'])
               .toString();
@@ -392,8 +391,8 @@ class DataExporter {
             .replaceAll("<p>", "")
             .replaceAll("</p>", "")
             .replaceAll("<div><br></div>", ""); // Remove HTML tags
-        String slideIndex = slide['index'].toString() ?? '';
-        String slideId = slide['id'].toString() ?? '';
+        String slideIndex = slide['index'].toString();
+        String slideId = slide['id'].toString();
         String slideCreationDate =
             CSVDataHandler.timestampToReadableDate(slide['createdAt'])
                 .toString();
@@ -444,7 +443,7 @@ class DataExporter {
       String moduleDescription = module['contentDescription'] ?? '';
       String moduleIndex = module['index'].toString();
 
-      String moduleId = module['id'].toString() ?? '';
+      String moduleId = module['id'].toString();
       String moduleCreationDate =
           CSVDataHandler.timestampToReadableDate(module['createdAt'])
               .toString();

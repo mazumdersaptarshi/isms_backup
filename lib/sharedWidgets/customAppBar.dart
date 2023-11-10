@@ -14,7 +14,7 @@ import '../screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
 import '../screens/userInfo/userProfilePage.dart';
 
 mixin CustomAppBarMixin on StatelessWidget {
-  final Map<String, ValueNotifier<bool>> _hovering = {
+  final Map<String, ValueNotifier<bool>> hovering = {
     "Explore": ValueNotifier(false),
     "Reminders": ValueNotifier(false),
     "Account": ValueNotifier(false),
@@ -35,8 +35,8 @@ mixin CustomAppBarMixin on StatelessWidget {
   }
 
   void navigateToMyLearningPage(BuildContext context) {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => MyLearningScreen()));
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const MyLearningScreen()));
   }
 
   void navigateToRemindersPage(BuildContext context) {
@@ -45,8 +45,8 @@ mixin CustomAppBarMixin on StatelessWidget {
   }
 
   void navigateToAdminConsolePage(BuildContext context) {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => const AdminConsolePage()));
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const AdminConsolePage()));
   }
 
   Widget appBarItem(
@@ -111,7 +111,8 @@ mixin CustomAppBarMixin on StatelessWidget {
       onTap: () {
         Navigator.of(context).pushReplacement(
           PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) => const HomePage(),
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                const HomePage(),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
               return FadeTransition(

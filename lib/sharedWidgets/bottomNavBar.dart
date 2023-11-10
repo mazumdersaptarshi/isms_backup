@@ -36,8 +36,8 @@ class BottomNavBar extends StatelessWidget {
     }
 
     void navigateToAdminConsolePage() {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const AdminConsolePage()));
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const AdminConsolePage()));
     }
 
     void decideNavigation({required int index}) {

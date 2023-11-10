@@ -2,19 +2,20 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:footer/footer.dart';
 import 'package:footer/footer_view.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 import 'package:isms/projectModules/notificationModules/initLinkHandler.dart';
 import 'package:isms/sharedWidgets/navIndexTracker.dart';
 import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
+import 'package:isms/utilityFunctions/platformCheck.dart';
 import 'package:provider/provider.dart';
 
 import 'homePageFunctions/getCoursesList.dart';
 import 'homePageWidgets/homePageItemsContainer.dart';
 import 'learningModuleScreens/courseScreens/coursesListScreen.dart';
 import 'login/loginScreen.dart';
-import 'package:footer/footer.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -26,7 +27,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late String userRole;
   String? initialLink;
-
+  bool isUserInfoFetched = false;
   @override
   void initState() {
     super.initState();
@@ -74,79 +75,63 @@ class _HomePageState extends State<HomePage> {
         (BuildContext context, CoursesProvider coursesProvider, Widget? child) {
       return Scaffold(
           backgroundColor: Colors.white,
-          bottomNavigationBar:
-              kIsWeb ? null : BottomNavBar(loggedInState: loggedInState),
-          appBar: CustomAppBar(
-            loggedInState: loggedInState,
+          bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState),
+          appBar: PlatformCheck.topNavBarWidget(
+            loggedInState,
           ),
           body: FooterView(
             footer: Footer(
-              child: Container(
-                // margin: EdgeInsets.only(
-                //     left:
-                //         MediaQuery.of(context).size.width * 0.14),
-
-                child: MouseRegion(
-                  cursor: SystemMouseCursors.click,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
-                        children: [
-                          Text("Support ",
-                              style: customTheme.textTheme.labelMedium!
-                                  .copyWith(
-                                      fontSize: 12,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primary)),
-                          Icon(
-                            Icons.open_in_new_rounded,
-                            color: Theme.of(context).colorScheme.primary,
-                            size: 12,
-                          )
-                        ],
-                      ),
-                      const SizedBox(
-                        width: 50,
-                      ),
-                      Row(
-                        children: [
-                          Text("Terms and Conditions ",
-                              style: customTheme.textTheme.labelMedium!
-                                  .copyWith(
-                                      fontSize: 12,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primary)),
-                          Icon(
-                            Icons.open_in_new_rounded,
-                            color: Theme.of(context).colorScheme.primary,
-                            size: 12,
-                          )
-                        ],
-                      ),
-                      const SizedBox(
-                        width: 50,
-                      ),
-                      Row(
-                        children: [
-                          Text("Privacy Policy ",
-                              style: customTheme.textTheme.labelMedium!
-                                  .copyWith(
-                                      fontSize: 12,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primary)),
-                          Icon(
-                            Icons.open_in_new_rounded,
-                            color: Theme.of(context).colorScheme.primary,
-                            size: 12,
-                          )
-                        ],
-                      )
-                    ],
-                  ),
+              child: MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      children: [
+                        Text("Support ",
+                            style: customTheme.textTheme.labelMedium!.copyWith(
+                                fontSize: 12,
+                                color: Theme.of(context).colorScheme.primary)),
+                        Icon(
+                          Icons.open_in_new_rounded,
+                          color: Theme.of(context).colorScheme.primary,
+                          size: 12,
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      width: 50,
+                    ),
+                    Row(
+                      children: [
+                        Text("Terms and Conditions ",
+                            style: customTheme.textTheme.labelMedium!.copyWith(
+                                fontSize: 12,
+                                color: Theme.of(context).colorScheme.primary)),
+                        Icon(
+                          Icons.open_in_new_rounded,
+                          color: Theme.of(context).colorScheme.primary,
+                          size: 12,
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      width: 50,
+                    ),
+                    Row(
+                      children: [
+                        Text("Privacy Policy ",
+                            style: customTheme.textTheme.labelMedium!.copyWith(
+                                fontSize: 12,
+                                color: Theme.of(context).colorScheme.primary)),
+                        Icon(
+                          Icons.open_in_new_rounded,
+                          color: Theme.of(context).colorScheme.primary,
+                          size: 12,
+                        )
+                      ],
+                    )
+                  ],
                 ),
               ),
             ),
@@ -217,9 +202,7 @@ class _HomePageState extends State<HomePage> {
                               child: Column(
                                 // Align children to the start of the cross axis
                                 children: [
-                                  Container(
-                                      // padding: EdgeInsets.symmetric(horizontal: 10),
-                                      child: FutureBuilder<List<Widget>>(
+                                  FutureBuilder<List<Widget>>(
                                     future: getHomePageCoursesList(
                                       context: context,
                                       loggedInState: loggedInState,
@@ -234,7 +217,7 @@ class _HomePageState extends State<HomePage> {
                                             homePageItems: snapshot?.data);
                                       }
                                     },
-                                  )),
+                                  ),
                                 ],
                               )),
                           Positioned(
