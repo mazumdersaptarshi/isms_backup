@@ -120,7 +120,7 @@ ThemeData customTheme = ThemeData(
           borderRadius: BorderRadius.all(Radius.circular(10)))),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ButtonStyle(
-      backgroundColor: MaterialStateProperty.all(secondaryColor),
+      backgroundColor: MaterialStateProperty.all(primaryColor.shade100),
       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
         const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(5))),
