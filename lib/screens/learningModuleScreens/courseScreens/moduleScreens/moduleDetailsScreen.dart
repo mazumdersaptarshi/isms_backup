@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleExamsListScreen.dart';
@@ -61,8 +62,9 @@ class _ModuleDetailsState extends State<ModuleDetails> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                SizedBox(width: 20),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(
@@ -76,6 +78,7 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                   },
                   child: Text("View module exams"),
                 ),
+                SizedBox(width: 20),
                 ElevatedButton(
                   onPressed: () async {
                     await loggedInState.setUserCourseStarted(
@@ -110,10 +113,15 @@ class _ModuleDetailsState extends State<ModuleDetails> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "${widget.module.title}",
-                    style: customTheme.textTheme.bodyMedium!.copyWith(),
+                  Center(
+                    child: Text(
+                      "${widget.module.title}",
+                      style: customTheme.textTheme.bodyMedium!
+                          .copyWith(fontWeight: FontWeight.bold),
+                    ),
                   ),
+                  SizedBox(height: 20.0),
+                  Text("What you'll learn: "),
                   SizedBox(height: 20.0),
                   Text(
                     widget.module.contentDescription,
