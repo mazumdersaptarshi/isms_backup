@@ -1,22 +1,24 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 
 import '../../projectModules/courseManagement/coursesProvider.dart';
 import 'courseDropdownWidget.dart';
 
 class UserCourseStartedDetailsWidget extends StatelessWidget {
-  UserCourseStartedDetailsWidget(
+  const UserCourseStartedDetailsWidget(
       {super.key,
       required this.courseItem,
       required this.coursesProvider,
       required this.index});
-  var courseItem;
-  CoursesProvider coursesProvider;
-  int index;
+  final Map<String, dynamic> courseItem;
+  final CoursesProvider coursesProvider;
+  final int index;
   Map<String, dynamic> getCourseCompletedPercentage() {
     double courseCompletionPercentage = 0;
     int noOfExams = 0;
     bool isValid = false;
-    print('Enrolled CoursesDropdown');
+    debugPrint('Enrolled CoursesDropdown');
 
     int modulesCount = 0;
 

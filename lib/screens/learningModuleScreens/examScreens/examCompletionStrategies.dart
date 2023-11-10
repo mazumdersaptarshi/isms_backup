@@ -1,5 +1,6 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, non_constant_identifier_names
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -43,12 +44,12 @@ class CourseExamCompletionStrategy implements ExamCompletionStrategy {
   Future<void> handleExamCompletion({required BuildContext context}) async {
     final loggedInState = context.read<LoggedInState>();
     final coursesProvider = context.read<CoursesProvider>();
-    var startedAt;
+    DateTime startedAt = DateTime.now();
     for (var courses_started in loggedInState.loggedInUser.courses_started) {
       if (courses_started["courseID"] == course.id) {}
       startedAt = courses_started["started_at"];
     }
-      Map<String, dynamic> courseDetailsMap = {
+    Map<String, dynamic> courseDetailsMap = {
       "courseID": course.id,
       "course_name": course.name,
       "course_modules_count": course.modulesCount,
@@ -63,7 +64,7 @@ class CourseExamCompletionStrategy implements ExamCompletionStrategy {
 
     await loggedInState.setUserCourseCompleted(
         courseDetails: {...courseDetailsMap, "completed_at": DateTime.now()});
-
+    if (!context.mounted) return;
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => const HomePage()));
   }
@@ -91,9 +92,7 @@ class ModuleExamCompletionStrategy implements ExamCompletionStrategy {
       if (courseStarted["modules_started"] != null &&
           courseStarted["course_name"] == course.name) {
         courseStarted["modules_started"].forEach((moduleCompleted) {
-          if (moduleCompleted["module_name"] == module.title) {
-            flag = true;
-          }
+          if (moduleCompleted["module_name"] == module.title) flag = true;
         });
       }
     }

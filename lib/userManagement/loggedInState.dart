@@ -290,17 +290,19 @@ class _UserDataGetterMaster with ChangeNotifier {
     bool flag = false;
     debugPrint('rdcf: $loggedInUser');
     if (loggedInUser.courses_started.isNotEmpty) {
-      for (var course in loggedInUser.courses_started) {
+      for (Map<String, dynamic> course in loggedInUser.courses_started) {
         try {
           if (course['course_name'] == courseDetails['course_name']) {
-            course['exams_completed'].forEach((examCompleted) {
-              noOfExamsCompleted++;
-              debugPrint(
-                  "INCREMENTING noOfExamsCompleted: $noOfExamsCompleted");
-              if (examCompleted == examIndex) {
-                flag = true;
-              }
-            });
+            if (course.containsKey('exams_completed')) {
+              course['exams_completed'].forEach((examCompleted) {
+                noOfExamsCompleted++;
+                debugPrint(
+                    "INCREMENTING noOfExamsCompleted: $noOfExamsCompleted");
+                if (examCompleted == examIndex) {
+                  flag = true;
+                }
+              });
+            }
           }
         } catch (e) {
           log(e.toString());
@@ -337,7 +339,7 @@ class _UserDataGetterMaster with ChangeNotifier {
               }
             }
           } else {
-            print("COMPLETED MODULE IS NULL< SO HERE");
+            debugPrint("COMPLETED MODULE IS NULL< SO HERE");
             courseStarted['exams_completed'] = [];
             courseStarted['exams_completed'].add(examCompletedMap);
           }
@@ -365,16 +367,18 @@ class _UserDataGetterMaster with ChangeNotifier {
       required Module module}) async {
     bool flag = false;
     if (loggedInUser.courses_started.isNotEmpty) {
-      for (var course in loggedInUser.courses_started) {
+      for (Map<String, dynamic> course in loggedInUser.courses_started) {
         try {
           if (course['courseID'] == courseDetails['courseID']) {
-            course["modules_completed"].forEach((element) async {
-              if (element["module_name"] == module.title) {
-                debugPrint("SETTING FLAG TRUE coz $element");
-                flag = true;
-                await setUserData();
-              }
-            });
+            if (course.containsKey("modules_completed")) {
+              course["modules_completed"].forEach((element) async {
+                if (element["module_name"] == module.title) {
+                  debugPrint("SETTING FLAG TRUE coz $element");
+                  flag = true;
+                  await setUserData();
+                }
+              });
+            }
           }
         } catch (e) {
           log(e.toString());
@@ -424,12 +428,14 @@ class _UserDataGetterMaster with ChangeNotifier {
       for (Map<String, dynamic> course in loggedInUser.courses_started) {
         try {
           if (course['courseID'] == courseDetails['courseID']) {
-            course["modules_started"].forEach((element) {
-              if (element == module.title) {
-                debugPrint("SETTING FLAG TRUE coz $element");
-                flag = true;
-              }
-            });
+            if (course.containsKey("modules_started")) {
+              course["modules_started"].forEach((element) {
+                if (element == module.title) {
+                  debugPrint("SETTING FLAG TRUE coz $element");
+                  flag = true;
+                }
+              });
+            }
           }
         } catch (e) {
           log(e.toString());
@@ -448,8 +454,9 @@ class _UserDataGetterMaster with ChangeNotifier {
           bool flag_2 = false;
           if (courseStarted['modules_started'] != null) {
             for (int i = 0; i < courseStarted['modules_started'].length; i++) {
-              String element = courseStarted['modules_started'][i];
-              if (element == module.title) {
+              Map<String, dynamic> element =
+                  courseStarted['modules_started'][i];
+              if (element["module_name"] == module.title) {
                 flag_2 = true;
               }
             }
@@ -457,7 +464,7 @@ class _UserDataGetterMaster with ChangeNotifier {
               courseStarted['modules_started'].add(moduleStartedMap);
             }
           } else {
-            print("COMPLETED MODULE IS NULL< SO HERE");
+            debugPrint("COMPLETED MODULE IS NULL< SO HERE");
             courseStarted['modules_started'] = [];
             courseStarted['modules_started'].add(moduleStartedMap);
           }

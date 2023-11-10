@@ -1,8 +1,10 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 
 class HomePageItemsContainer extends StatelessWidget {
-  HomePageItemsContainer({super.key, this.homePageItems});
-  List<Widget>? homePageItems;
+  const HomePageItemsContainer({super.key, this.homePageItems});
+  final List<Widget>? homePageItems;
   @override
   Widget build(BuildContext context) {
     return MediaQuery.of(context).size.width > 800

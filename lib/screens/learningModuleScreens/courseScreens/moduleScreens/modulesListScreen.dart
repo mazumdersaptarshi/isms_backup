@@ -48,9 +48,11 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
     for (Map<String, dynamic> course_started
         in loggedInState.loggedInUser.courses_started) {
       if (course_started["course_name"] == widget.course.name) {
-        course_started["modules_started"].forEach((module_started) {
-          if (module_started == module.title) flag = true;
-        });
+        if (course_started.containsKey("modules_started")) {
+          course_started["modules_started"].forEach((module_started) {
+            if (module_started == module.title) flag = true;
+          });
+        }
       }
     }
 

@@ -1,6 +1,5 @@
 // ignore_for_file: file_names
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/projectModules/courseManagement/moduleManagement/slideManagement/slidesDataMaster.dart';
@@ -8,7 +7,6 @@ import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/m
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/createSlideScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/slidesDisplayScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
-import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/sharedWidgets/bottomNavBar.dart';
 import 'package:isms/sharedWidgets/customAppBar.dart';
 import 'package:isms/themes/common_theme.dart';
@@ -70,7 +68,7 @@ class _ModuleDetailsState extends State<ModuleDetails> {
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                SizedBox(width: 20),
+                const SizedBox(width: 20),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(
@@ -84,7 +82,7 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                   },
                   child: const Text("View module exams"),
                 ),
-                SizedBox(width: 20),
+                const SizedBox(width: 20),
                 ElevatedButton(
                   onPressed: () async {
                     await loggedInState.setUserCourseStarted(
@@ -123,14 +121,14 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                 children: [
                   Center(
                     child: Text(
-                      "${widget.module.title}",
+                      widget.module.title,
                       style: customTheme.textTheme.bodyMedium!
                           .copyWith(fontWeight: FontWeight.bold),
                     ),
                   ),
-                  SizedBox(height: 20.0),
-                  Text("What you'll learn: "),
-                  SizedBox(height: 20.0),
+                  const SizedBox(height: 20.0),
+                  const Text("What you'll learn: "),
+                  const SizedBox(height: 20.0),
                   Text(
                     widget.module.contentDescription,
                     style: const TextStyle(
@@ -155,7 +153,7 @@ class _ModuleDetailsState extends State<ModuleDetails> {
               child: const Icon(Icons.add),
             )
           : null,
-      bottomNavigationBar: BottomNavBar(),
+      bottomNavigationBar: const BottomNavBar(),
     );
   }
 }

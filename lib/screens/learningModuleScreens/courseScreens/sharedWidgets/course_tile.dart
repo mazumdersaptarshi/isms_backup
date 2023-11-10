@@ -6,13 +6,14 @@ import '../../../../themes/common_theme.dart';
 class CourseTile extends StatelessWidget {
   final int index;
   final String title;
-  Function? onPressed;
-  int modulesCount;
+  final Function? onPressed;
+  final int modulesCount;
   // double tileHeight;
-  double tileWidth;
-  Map<String, dynamic> courseData;
-  CourseTile(
-      {super.key, required this.index,
+  final double tileWidth;
+  final Map<String, dynamic> courseData;
+  const CourseTile(
+      {super.key,
+      required this.index,
       required this.title,
       required this.onPressed,
       required this.modulesCount,
@@ -22,9 +23,9 @@ class CourseTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int imageIndex = index % 4;
-    double imgWebWidth = 120;
-    double imgWebHeight = 120;
-    if (tileWidth > 300) imgWebWidth = 100;
+    //double imgWebWidth = 120;
+    //double imgWebHeight = 120;
+    //if (tileWidth > 300) imgWebWidth = 100;
     // if (tileHeight > 300) imgWebHeight = 500;
     double tileHeight = 200;
     return GestureDetector(
@@ -73,25 +74,23 @@ class CourseTile extends StatelessWidget {
                                 style: customTheme.textTheme.labelMedium),
                           ])),
                       const SizedBox(height: 10),
-                      Container(
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: LinearProgressIndicator(
-                                backgroundColor: Colors.grey.shade100,
-                                color: primaryColor.shade100,
-                                value: courseData["courseCompPercent"] / 100,
-                              ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: LinearProgressIndicator(
+                              backgroundColor: Colors.grey.shade100,
+                              color: primaryColor.shade100,
+                              value: courseData["courseCompPercent"] / 100,
                             ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                                child: Text(
-                              "${courseData['courseCompPercent']}%",
-                              style: customTheme.textTheme.labelMedium!
-                                  .copyWith(fontSize: 10),
-                            ))
-                          ],
-                        ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                              child: Text(
+                            "${courseData['courseCompPercent']}%",
+                            style: customTheme.textTheme.labelMedium!
+                                .copyWith(fontSize: 10),
+                          ))
+                        ],
                       ),
                     ],
                   ),

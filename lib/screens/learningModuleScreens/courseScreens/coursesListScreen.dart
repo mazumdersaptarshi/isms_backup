@@ -36,7 +36,7 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
 
     double tileMinWidth = 300;
-    double tileMinimumheight = 100;
+    //double tileMinimumheight = 100;
     double tileRatio = 16 / 9;
     // available width, in pixels
     double horizontalMargin = MediaQuery.sizeOf(context).width > 900 ? 200 : 10;
@@ -67,30 +67,26 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
                     crossAxisCount: numberColumns, childAspectRatio: tileRatio),
                 itemCount: coursesProvider.allCourses.length,
                 itemBuilder: (context, courseIndex) {
-                  return Container(
-                    // margin: EdgeInsets.symmetric(horizontal: 10),
-
-                    child: CourseTile(
-                      index: courseIndex,
-                      title: coursesProvider.allCourses[courseIndex].name,
-                      modulesCount: coursesProvider
-                              .allCourses[courseIndex].modulesCount ??
-                          0,
-                      tileWidth: tileMinWidth,
-                      // tileHeight: tileMinimumheight,
-                      courseData: getUserCourseData(
-                          loggedInState: loggedInState,
-                          course: coursesProvider.allCourses[courseIndex]),
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ModulesListScreen(
-                                      course: coursesProvider
-                                          .allCourses[courseIndex],
-                                    )));
-                      },
-                    ),
+                  return CourseTile(
+                    index: courseIndex,
+                    title: coursesProvider.allCourses[courseIndex].name,
+                    modulesCount:
+                        coursesProvider.allCourses[courseIndex].modulesCount ??
+                            0,
+                    tileWidth: tileMinWidth,
+                    // tileHeight: tileMinimumheight,
+                    courseData: getUserCourseData(
+                        loggedInState: loggedInState,
+                        course: coursesProvider.allCourses[courseIndex]),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ModulesListScreen(
+                                    course:
+                                        coursesProvider.allCourses[courseIndex],
+                                  )));
+                    },
                   );
                 })
           ],

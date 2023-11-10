@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/modulesListScreen.dart';
@@ -14,11 +16,11 @@ Future<List<Widget>> getHomePageCoursesList(
   await loggedInState.getUserCoursesData('crs_enrl');
   await loggedInState.getUserCoursesData('crs_compl');
   List coursesStarted = loggedInState.loggedInUser.courses_started;
-  print("TRY TO CREATE WIDGETSS       $coursesStarted");
+  debugPrint("TRY TO CREATE WIDGETSS       $coursesStarted");
 
   if (coursesStarted.isNotEmpty) {
     for (int i = coursesStarted.length - 1; i >= 0; i--) {
-      print("TRY TO CREATE WIDGETSS ${coursesProvider.allCourses}");
+      debugPrint("TRY TO CREATE WIDGETSS ${coursesProvider.allCourses}");
       Course course = coursesProvider.allCourses
           .where((element) => element.id == coursesStarted[i]["courseID"])
           .first;
@@ -55,29 +57,29 @@ Future<List<Widget>> getHomePageCoursesList(
 Map<String, dynamic> getUserCourseData(
     {required LoggedInState loggedInState, required Course course}) {
   int courseCompPercent = 0;
-  var courseCompletionDate;
-  var courseStartDate;
+  /*var courseCompletionDate;
+  var courseStartDate;*/
 
   if (loggedInState.loggedInUser.courses_completed.isNotEmpty) {
-    for (var course_completed in loggedInState.loggedInUser.courses_completed) {
-      if (course_completed["courseID"] == course.id) {
+    for (var courseCompleted in loggedInState.loggedInUser.courses_completed) {
+      if (courseCompleted["courseID"] == course.id) {
         courseCompPercent = 100;
-        print(
-            "COURSE COMPLETED DATE : ${course_completed["course_name"]}, ${course_completed["completed_at"].runtimeType}");
-        courseCompletionDate = course_completed["completed_at"];
+        debugPrint(
+            "COURSE COMPLETED DATE : ${courseCompleted["course_name"]}, ${courseCompleted["completed_at"].runtimeType}");
+        //courseCompletionDate = courseCompleted["completed_at"];
       }
     }
   }
 
   if (loggedInState.loggedInUser.courses_started.isNotEmpty) {
-    for (var course_started in loggedInState.loggedInUser.courses_started) {
-      if (course_started["courseID"] == course.id &&
-          course_started["modules_completed"] != null) {
-        courseCompPercent = ((course_started["modules_completed"].length /
-                    course.modulesCount) *
-                100)
-            .ceil();
-        courseStartDate = course_started["started_at"];
+    for (var courseStarted in loggedInState.loggedInUser.courses_started) {
+      if (courseStarted["courseID"] == course.id &&
+          courseStarted["modules_completed"] != null) {
+        courseCompPercent =
+            ((courseStarted["modules_completed"].length / course.modulesCount) *
+                    100)
+                .ceil();
+        //courseStartDate = courseStarted["started_at"];
       }
     }
   }

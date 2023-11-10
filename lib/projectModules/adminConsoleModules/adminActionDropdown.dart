@@ -64,7 +64,7 @@ class _AdminActionDropdownState extends State<AdminActionDropdown> {
                           isUsersLoading = false; // Set to false after download
                         });
                       },
-                      child: GestureDetectorCard(text: 'User Data')),
+                      child: const GestureDetectorCard(text: 'User Data')),
                 )
               : const CircularProgressIndicator(),
           !isCoursesLoading
@@ -83,7 +83,7 @@ class _AdminActionDropdownState extends State<AdminActionDropdown> {
                               false; // Set to false after download
                         });
                       },
-                      child: GestureDetectorCard(
+                      child: const GestureDetectorCard(
                         text: 'Courses Data',
                       )),
                 )
@@ -96,7 +96,7 @@ class _AdminActionDropdownState extends State<AdminActionDropdown> {
                       DataExporter(collectionDataToDownload: 'adminconsole');
                   await dataExporter.downloadCSV();
                 },
-                child: GestureDetectorCard(
+                child: const GestureDetectorCard(
                   text: 'Courses Progress Data',
                 )),
           )

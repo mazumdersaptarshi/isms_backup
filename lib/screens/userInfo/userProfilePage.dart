@@ -258,7 +258,7 @@ class UserCompletedCoursesDropdown extends StatelessWidget {
                 physics: const ClampingScrollPhysics(),
                 itemBuilder: (context, index) {
                   allCompletedCourses = loggedInState.allCompletedCoursesGlobal;
-                  print(
+                  debugPrint(
                       'ALLCOMPLETEDCOURSESGLOBAL: ${loggedInState.allCompletedCoursesGlobal}');
                   return CourseDropdownWidget(
                     courseItem: allCompletedCourses[index],

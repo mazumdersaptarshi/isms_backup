@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/screens/login/loginScreen.dart';
@@ -10,14 +12,8 @@ import '../screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
 import '../screens/userInfo/userProfilePage.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  CustomAppBar({super.key, this.loggedInState});
-  LoggedInState? loggedInState;
-  final Map<String, ValueNotifier<bool>> _hovering = {
-    "Explore": ValueNotifier(false),
-    "Reminders": ValueNotifier(false),
-    "Account": ValueNotifier(false),
-    "Admin": ValueNotifier(false),
-  };
+  const CustomAppBar({super.key, this.loggedInState});
+  final LoggedInState? loggedInState;
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
@@ -32,8 +28,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     }
 
     void navigateToCoursesPage() {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const CoursesDisplayScreen()));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => const CoursesDisplayScreen()));
     }
 
     void navigateToRemindersPage() {
@@ -42,8 +40,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     }
 
     void navigateToAdminConsolePage() {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const AdminConsolePage()));
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const AdminConsolePage()));
     }
 
     return AppBar(
@@ -112,17 +110,24 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   Widget appBarItem(IconData icon, String title, VoidCallback onTap) {
+    final Map<String, ValueNotifier<bool>> hovering = {
+      "Explore": ValueNotifier(false),
+      "Reminders": ValueNotifier(false),
+      "Account": ValueNotifier(false),
+      "Admin": ValueNotifier(false),
+    };
+
     return MouseRegion(
       cursor: SystemMouseCursors.click,
-      onEnter: (_) => _hovering[title]!.value = true,
-      onExit: (_) => _hovering[title]!.value = false,
+      onEnter: (_) => hovering[title]!.value = true,
+      onExit: (_) => hovering[title]!.value = false,
       child: GestureDetector(
         onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0)
               .copyWith(top: 4.0, bottom: 4.0),
           child: ValueListenableBuilder<bool>(
-            valueListenable: _hovering[title]!,
+            valueListenable: hovering[title]!,
             builder: (context, isHover, child) {
               return AnimatedContainer(
                 duration: const Duration(milliseconds: 250),
