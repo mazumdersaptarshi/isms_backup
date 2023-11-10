@@ -93,7 +93,7 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
         course: widget.course, coursesProvider: coursesProvider);
 
     if (loggedInState.currentUser == null) {
-      return LoginPage();
+      return const LoginPage();
     }
 
     if (isModulesFetched == false) {
@@ -150,7 +150,7 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
                                   ),
                                 );
                               },
-                              child: Text("View course exams"),
+                              child: const Text("View course exams"),
                             ),
                           ElevatedButton(
                             onPressed: () {
@@ -164,7 +164,7 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
                                 ),
                               );
                             },
-                            child: Text("Create exam for this course"),
+                            child: const Text("Create course exam"),
                           ),
                         ],
                       ),
@@ -215,7 +215,7 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
                         builder: (context) =>
                             CreateModuleScreen(course: widget.course)));
               },
-              child: Icon(Icons.add),
+              child: const Icon(Icons.add),
             )
           : null,
     );

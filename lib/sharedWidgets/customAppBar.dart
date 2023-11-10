@@ -1,25 +1,26 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:isms/screens/login/loginScreen.dart';
+import 'package:isms/screens/reminderScreen.dart';
 import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
-import 'package:isms/screens/login/loginScreen.dart';
 
 import '../screens/adminScreens/AdminConsole/adminConsolePage.dart';
 import '../screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
 import '../screens/userInfo/userProfilePage.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  CustomAppBar({this.loggedInState});
+  CustomAppBar({super.key, this.loggedInState});
   LoggedInState? loggedInState;
   final Map<String, ValueNotifier<bool>> _hovering = {
     "Explore": ValueNotifier(false),
-    "My Learning": ValueNotifier(false),
+    "Reminders": ValueNotifier(false),
     "Account": ValueNotifier(false),
     "Admin": ValueNotifier(false),
   };
 
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +36,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           MaterialPageRoute(builder: (context) => CoursesDisplayScreen()));
     }
 
+    void navigateToRemindersPage() {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const ReminderScreen()));
+    }
+
     void navigateToAdminConsolePage() {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => AdminConsolePage()));
@@ -42,8 +48,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
     return AppBar(
       automaticallyImplyLeading: kIsWeb ? false : true,
-      title: Padding(
-        padding: const EdgeInsets.only(left: kIsWeb ? 16.0 : 0),
+      title: const Padding(
+        padding: EdgeInsets.only(left: kIsWeb ? 16.0 : 0),
         child: Row(
           children: [
             Icon(Icons.severe_cold_rounded),
@@ -64,7 +70,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       actions: <Widget>[
         if (kIsWeb) appBarItem(Icons.explore, "Explore", navigateToCoursesPage),
-        if (kIsWeb) appBarItem(Icons.lightbulb_outline, "My Learning", () {}),
+        if (kIsWeb)
+          appBarItem(
+              Icons.lightbulb_outline, "Reminders", navigateToRemindersPage),
         if (kIsWeb)
           appBarItem(
               Icons.account_circle, "Account", navigateToUserProfilePage),
@@ -72,7 +80,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           appBarItem(Icons.admin_panel_settings_outlined, "Admin",
               navigateToAdminConsolePage),
         Container(
-          margin: EdgeInsets.symmetric(
+          margin: const EdgeInsets.symmetric(
               vertical: 8), // Adds space above and below the divider
 
           child: VerticalDivider(
@@ -85,13 +93,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         Padding(
           padding: const EdgeInsets.only(right: 16.0),
           child: IconButton(
-            icon: Icon(Icons.logout),
+            icon: const Icon(Icons.logout),
             tooltip: 'Logout',
             onPressed: () async {
               await LoggedInState.logout().then((value) {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => LoginPage()),
+                  MaterialPageRoute(builder: (context) => const LoginPage()),
                 );
               });
             },
@@ -130,11 +138,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                       size: 22, // Base size for the icon
                       color: Colors.white,
                     ),
-                    SizedBox(height: 4), // Consistent gap
+                    const SizedBox(height: 4), // Consistent gap
                     Flexible(
                       child: Text(title,
                           overflow: TextOverflow.ellipsis, // Prevent overflow
-                          style: customTheme.textTheme?.bodyMedium
+                          style: customTheme.textTheme.bodyMedium
                               ?.copyWith(fontSize: 10, color: Colors.white)),
                     ),
                     Visibility(
@@ -143,7 +151,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                       maintainSize: true,
                       visible: isHover,
                       child: Container(
-                        margin: EdgeInsets.only(top: 2), // Reduced margin
+                        margin: const EdgeInsets.only(top: 2), // Reduced margin
                         height: 2,
                         width: 30,
                         color: Colors.white,
