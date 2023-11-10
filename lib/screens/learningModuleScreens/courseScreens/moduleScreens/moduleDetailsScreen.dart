@@ -7,6 +7,7 @@ import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/s
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/slidesDisplayScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/screens/login/loginScreen.dart';
+import 'package:isms/sharedWidgets/bottomNavBar.dart';
 import 'package:isms/sharedWidgets/customAppBar.dart';
 import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
@@ -155,6 +156,7 @@ class _ModuleDetailsState extends State<ModuleDetails> {
               child: Icon(Icons.add),
             )
           : null,
+      bottomNavigationBar: BottomNavBar(),
     );
   }
 }
