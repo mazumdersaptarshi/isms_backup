@@ -90,7 +90,32 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
 
     userRole = loggedInState.currentUserRole;
 
+    // compute the grid shape:
+    // requirements
+    int tileMinWidth = 300;
+    int tileMinHeight = 200;
+    double tileRatio = 3 / 2;
+    // available width, in pixels
     double horizontalMargin = MediaQuery.sizeOf(context).width > 900 ? 200 : 10;
+    double screenWidth = MediaQuery.sizeOf(context).width;
+    // number of tiles that can fit vertically on the screen
+    int maxColumns =
+        max(((screenWidth - (horizontalMargin * 2)) / tileMinWidth).floor(), 1);
+    // number of tiles that have to fit on the screen
+    int itemCount = widget.course.modulesCount ?? 0;
+    // grid width, in tiles
+    int numberColumns = 1;
+    // min(itemCount, maxColumns) > 0 ? min(itemCount, maxColumns) : 1;
+    if (itemCount <= 0) {
+      numberColumns = 1;
+    } else if (itemCount < 3 && maxColumns >= 3) {
+      numberColumns = 3;
+    } else {
+      numberColumns =
+          min(itemCount, maxColumns) > 0 ? min(itemCount, maxColumns) : 1;
+    }
+    // grid width, in pixels
+    double gridWidth = screenWidth * numberColumns / maxColumns;
 
     return Scaffold(
       appBar: PlatformCheck.topNavBarWidget(
@@ -105,22 +130,6 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
         builder: (BuildContext context, AsyncSnapshot<List<Module>> snapshot) {
           if (snapshot.hasData) {
             List<Module> modules = snapshot.data!;
-
-            // compute the grid shape
-            // TODO use SliverGridDelegateWithMaxCrossAxisExtent instead
-            // requirements
-            int tileMinWidth = 300;
-            double tileRatio = 16 / 9;
-            // available width, in pixels
-            double gridMaxWidth = MediaQuery.sizeOf(context).width - (horizontalMargin * 2);
-            // number of tiles that can fit vertically on the screen
-            int columnsMaxNumber = max((gridMaxWidth / tileMinWidth).floor(), 1);
-            // number of tiles that have to fit on the screen
-            int itemCount = widget.course.modulesCount;
-            // grid width, in tiles
-            int columnsNumber = max(1, min(itemCount, columnsMaxNumber));
-            // grid width, in pixels
-            //double gridWidth = gridMaxWidth * columnsNumber / columnsMaxNumber;
 
             return Container(
               margin: EdgeInsets.only(

@@ -40,7 +40,7 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
 
     double tileMinWidth = 300;
     double tileMinimumheight = 100;
-    double tileRatio = 16 / 9;
+    double tileRatio = 3 / 2;
     // available width, in pixels
     double horizontalMargin = MediaQuery.sizeOf(context).width > 900 ? 200 : 10;
     double screenWidth = MediaQuery.sizeOf(context).width;
@@ -50,7 +50,16 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
     // number of tiles that have to fit on the screen
     int itemCount = coursesProvider.allCourses.length ?? 0;
     // grid width, in tiles
-    int numberColumns = max(1, min(itemCount, maxColumns));
+    int numberColumns = 1;
+    // min(itemCount, maxColumns) > 0 ? min(itemCount, maxColumns) : 1;
+    if (itemCount <= 0) {
+      numberColumns = 1;
+    } else if (itemCount < 3 && maxColumns >= 3) {
+      numberColumns = 3;
+    } else {
+      numberColumns =
+          min(itemCount, maxColumns) > 0 ? min(itemCount, maxColumns) : 1;
+    }
     // grid width, in pixels
     double gridWidth = screenWidth * numberColumns / maxColumns;
     String? getLatestModuleName(Map<String, dynamic> courseItem) {
