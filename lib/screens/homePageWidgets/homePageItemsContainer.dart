@@ -8,15 +8,15 @@ class HomePageItemsContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return MediaQuery.of(context).size.width > HOME_PAGE_WIDGETS_COLLAPSE_WIDTH
         ? Container(
-            width: MediaQuery.of(context).size.width * 0.9,
+            width: MediaQuery.of(context).size.width,
             height: 300,
             child: Container(
               decoration: BoxDecoration(
                   // color: Color.fromARGB(10, 0, 0, 0),
                   borderRadius: BorderRadius.all(Radius.circular(10))),
-              padding: EdgeInsets.all(10),
-              margin: EdgeInsets.only(
-                  left: MediaQuery.of(context).size.width * 0.1),
+              padding: EdgeInsets.symmetric(vertical: 10),
+              // margin: EdgeInsets.only(
+              //     left: MediaQuery.of(context).size.width * 0.1),
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 shrinkWrap: true,
@@ -28,12 +28,14 @@ class HomePageItemsContainer extends StatelessWidget {
             ),
           )
         : Container(
-            width: MediaQuery.of(context).size.width * 0.9,
-            margin: EdgeInsets.only(
-                left: MediaQuery.of(context).size.width * 0.03, top: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: homePageItems!,
+            width: MediaQuery.of(context).size.width,
+            margin: EdgeInsets.only(top: 10),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: homePageItems!,
+              ),
             ),
           );
   }
