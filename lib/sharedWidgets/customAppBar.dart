@@ -64,12 +64,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     child: child,
                   );
                 },
-                transitionDuration: Duration(milliseconds: 500),
+                transitionDuration: const Duration(milliseconds: 500),
               ),
             );
           },
-          child: Padding(
-            padding: const EdgeInsets.only(left: kIsWeb ? 16.0 : 0),
+          child: const Padding(
+            padding: EdgeInsets.only(left: kIsWeb ? 16.0 : 0),
             child: Row(
               children: [
                 Icon(Icons.severe_cold_rounded),
@@ -92,9 +92,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       actions: <Widget>[
         if (kIsWeb) appBarItem(Icons.explore, "Explore", navigateToCoursesPage),
-        if (loggedInState?.currentUserRole == 'admin' && kIsWeb)
-          appBarItem(
-              Icons.lightbulb_outline, "Reminders", navigateToRemindersPage),
+        if (loggedInState?.currentUserRole == 'admin')
+          appBarItem(Icons.notification_important, "Reminders",
+              navigateToRemindersPage),
         if (kIsWeb)
           appBarItem(
               Icons.account_circle, "Account", navigateToUserProfilePage),
@@ -122,7 +122,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 Navigator.of(context).pushReplacement(
                   PageRouteBuilder(
                     pageBuilder: (context, animation, secondaryAnimation) =>
-                        LoginPage(),
+                        const LoginPage(),
                     transitionsBuilder:
                         (context, animation, secondaryAnimation, child) {
                       return FadeTransition(
@@ -130,7 +130,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                         child: child,
                       );
                     },
-                    transitionDuration: Duration(milliseconds: 500),
+                    transitionDuration: const Duration(milliseconds: 500),
                   ),
                 );
               });
@@ -170,7 +170,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                       size: 22, // Base size for the icon
                       color: Colors.white,
                     ),
-                    const SizedBox(height: 4), // Consistent gap
+                    const SizedBox(height: 1), // Consistent gap
                     Flexible(
                       child: Text(title,
                           overflow: TextOverflow.ellipsis, // Prevent overflow
