@@ -164,7 +164,7 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
                                 ),
                               );
                             },
-                            child: Text("Create exam for this course"),
+                            child: Text("Create course exam"),
                           ),
                         ],
                       ),

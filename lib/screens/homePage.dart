@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    double homePageContainerHeight = 1300;
+    double homePageContainerHeight = 1000;
     final loggedInState = context.watch<LoggedInState>();
 
     if (loggedInState.currentUser == null) {
