@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 // Theme Constants
 const primaryColor = Colors.deepPurpleAccent;
 
-const secondaryColor = Colors.deepPurpleAccent;
+final secondaryColor = Colors.deepPurpleAccent.shade200;
 const bgColor = Colors.deepPurpleAccent;
 
 const white = Colors.white;
@@ -48,7 +48,7 @@ BoxDecoration customButtonTheme = BoxDecoration(
 
 BoxDecoration customBoxTheme = BoxDecoration(
   color: white,
-  boxShadow: const [
+  boxShadow: [
     BoxShadow(
       color: secondaryColor,
       offset: Offset(0, 2),
@@ -90,7 +90,6 @@ ShapeBorder customCardShape = RoundedRectangleBorder(
   borderRadius: BorderRadius.circular(10.0),
 );
 
-
 // TODO
 // - build a colorscheme (start with `fromSeed()`)
 // - remove as much colors as possible from everywhere else
@@ -112,7 +111,6 @@ ThemeData customTheme = ThemeData(
     secondary: Colors.grey.shade400,
     tertiary: Colors.grey.shade600,
   ),
-
   buttonTheme: const ButtonThemeData(
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10)))),
@@ -123,9 +121,7 @@ ThemeData customTheme = ThemeData(
         RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(5))),
       ),
-
       minimumSize: MaterialStateProperty.all(Size(150.0, 48.0)),
-
     ),
   ),
 );

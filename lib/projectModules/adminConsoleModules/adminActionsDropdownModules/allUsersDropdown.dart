@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:isms/sharedWidgets/analyticsSharedWidgets/userCourseCompletedDetailsWidget.dart';
 import 'package:provider/provider.dart';
 
 import '../../../adminManagement/adminProvider.dart';
-import '../../../screens/analyticsSharedWidgets/courseDropdownWidget.dart';
-import '../../../screens/analyticsSharedWidgets/userCourseStartedDetailsWidget.dart';
+import '../../../sharedWidgets/analyticsSharedWidgets/userCourseStartedDetailsWidget.dart';
 import '../../courseManagement/coursesProvider.dart';
 
 class AllUsersDropdown extends StatelessWidget {
@@ -28,6 +28,21 @@ class AllUsersDropdown extends StatelessWidget {
               shrinkWrap: true,
               physics: ClampingScrollPhysics(),
               itemBuilder: (context, index) {
+                List<Map<String, dynamic>> completedCoursesForUser = [];
+
+                for (var courseStartedItem
+                    in snapshot.data![index].courses_started) {
+                  for (var courseCompletedItem
+                      in snapshot.data![index].courses_completed) {
+                    if (courseCompletedItem['courseID'] ==
+                        courseStartedItem['courseID']) {
+                      courseStartedItem['completed_at'] =
+                          courseCompletedItem['completed_at'] ?? 'n/a';
+                      completedCoursesForUser.add(courseStartedItem);
+                    }
+                  }
+                }
+
                 return Card(
                   margin: EdgeInsets.all(4.0),
                   elevation: 4.0,
@@ -39,11 +54,26 @@ class AllUsersDropdown extends StatelessWidget {
                     title: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          '${index + 1}. ${snapshot.data![index].username}',
-                          style: TextStyle(
-                            fontSize: 14,
-                          ),
+                        Row(
+                          children: [
+                            Text(
+                              '${index + 1}. ',
+                              style: TextStyle(
+                                fontSize: 14,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Icon(Icons.account_circle),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text('${snapshot.data![index].username}',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                )),
+                          ],
                         ),
                         Chip(
                           backgroundColor:
@@ -58,7 +88,8 @@ class AllUsersDropdown extends StatelessWidget {
                     children: [
                       _buildCoursesTile(
                           'Courses Completed',
-                          snapshot.data![index].courses_completed,
+                          // snapshot.data![index].courses_completed,
+                          completedCoursesForUser,
                           context,
                           index,
                           coursesProvider),
@@ -97,10 +128,10 @@ class AllUsersDropdown extends StatelessWidget {
       children: [
         if (title == 'Courses Completed')
           for (var courseItem in courses)
-            CourseDropdownWidget(
-              courseItem: courseItem,
-              detailType: 'courses_completed',
-            ),
+            UserCourseCompletedDetailsWidget(
+                courseItem: courseItem,
+                coursesProvider: coursesProvider,
+                index: index),
         if (title == 'Courses Enrolled')
           for (var courseItem in courses)
             UserCourseStartedDetailsWidget(

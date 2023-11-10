@@ -48,10 +48,7 @@ class CourseExamCompletionStrategy implements ExamCompletionStrategy {
     var started_at;
     if (loggedInState.loggedInUser.courses_started != null) {
       loggedInState.loggedInUser.courses_started.forEach((courses_started) {
-        if (courses_started["courseID"] == course.id) {
-          print(
-              "PRINTING DATTTTEE ${courses_started["started_at"].runtimeType},, ${courses_started["started_at"]}");
-        }
+        if (courses_started["courseID"] == course.id) {}
         started_at = courses_started["started_at"] ?? null;
       });
     }
@@ -83,7 +80,6 @@ class ModuleExamCompletionStrategy implements ExamCompletionStrategy {
       required this.exam,
       required this.loggedInState}) {
     this.isModuleStarted = checkIfModuleStartedd();
-    print("CREATING STRTEGYYY ");
   }
 
   Course course;
