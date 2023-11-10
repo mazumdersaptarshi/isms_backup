@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text('CustomScrollView Example'),
+          title: const Text('CustomScrollView Example'),
         ),
         body: CustomScrollView(
           slivers: <Widget>[
-            SliverAppBar(
+            const SliverAppBar(
               expandedHeight: 200.0,
               flexibleSpace: FlexibleSpaceBar(
                 title: Text('CustomScrollView Example'),
@@ -31,7 +33,7 @@ class MyApp extends StatelessWidget {
                         shrinkWrap:
                             true, // Allow the inner list to take up minimum space
                         physics:
-                            ClampingScrollPhysics(), // Prevent inner list from scrolling
+                            const ClampingScrollPhysics(), // Prevent inner list from scrolling
                         itemBuilder: (BuildContext context, int innerIndex) {
                           // Replace this with your custom item widget
                           return ListTile(

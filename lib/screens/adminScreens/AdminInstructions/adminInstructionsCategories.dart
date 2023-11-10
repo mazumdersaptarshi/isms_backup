@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:isms/adminManagement/adminProvider.dart';
 import 'package:isms/screens/adminScreens/AdminInstructions/adminInstructionSlides.dart';
@@ -8,14 +10,14 @@ import 'package:provider/provider.dart';
 import '../../../utilityFunctions/platformCheck.dart';
 
 class AdminInstructionsCategories extends StatelessWidget {
-  AdminInstructionsCategories(
+  const AdminInstructionsCategories(
       {super.key, required this.category, required this.subCategories});
 
-  String category;
-  List<String>? subCategories;
-  LoggedInState? loggedInState;
+  final String category;
+  final List<String>? subCategories;
   @override
   Widget build(BuildContext context) {
+    LoggedInState? loggedInState;
     AdminProvider adminProvider = context.watch<AdminProvider>();
     return Scaffold(
       appBar: PlatformCheck.topNavBarWidget(loggedInState!),
@@ -23,7 +25,7 @@ class AdminInstructionsCategories extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Padding(
+            const Padding(
               padding: EdgeInsets.all(10.0),
             ),
             if (subCategories != null)
@@ -35,12 +37,13 @@ class AdminInstructionsCategories extends StatelessWidget {
                   var subCategory = subCategories![index];
                   return Card(
                     elevation: 4,
-                    margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.white,
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 30, vertical: 20),
                       ),
                       onPressed: () async {
                         Navigator.push(
@@ -53,7 +56,7 @@ class AdminInstructionsCategories extends StatelessWidget {
                                   )),
                         );
                       },
-                      child: Text('${subCategory}'),
+                      child: Text(subCategory),
                     ),
                   );
                 },
@@ -61,7 +64,7 @@ class AdminInstructionsCategories extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavBar(),
+      bottomNavigationBar: const BottomNavBar(),
     );
   }
 }

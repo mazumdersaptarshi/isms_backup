@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/screens/homePage.dart';
@@ -12,7 +14,7 @@ import '../screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
 import '../screens/userInfo/userProfilePage.dart';
 
 mixin CustomAppBarMixin on StatelessWidget {
-  final Map<String, ValueNotifier<bool>> _hovering = {
+  final Map<String, ValueNotifier<bool>> hovering = {
     "Explore": ValueNotifier(false),
     "Reminders": ValueNotifier(false),
     "Account": ValueNotifier(false),
@@ -23,18 +25,18 @@ mixin CustomAppBarMixin on StatelessWidget {
   void navigateToUserProfilePage(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => UserProfilePage()),
+      MaterialPageRoute(builder: (context) => const UserProfilePage()),
     );
   }
 
   void navigateToCoursesPage(BuildContext context) {
     Navigator.push(context,
-        MaterialPageRoute(builder: (context) => CoursesDisplayScreen()));
+        MaterialPageRoute(builder: (context) => const CoursesDisplayScreen()));
   }
 
   void navigateToMyLearningPage(BuildContext context) {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => MyLearningScreen()));
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const MyLearningScreen()));
   }
 
   void navigateToRemindersPage(BuildContext context) {
@@ -43,23 +45,23 @@ mixin CustomAppBarMixin on StatelessWidget {
   }
 
   void navigateToAdminConsolePage(BuildContext context) {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => AdminConsolePage()));
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const AdminConsolePage()));
   }
 
   Widget appBarItem(
       IconData icon, String title, VoidCallback onTap, double paddingValue) {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
-      onEnter: (_) => _hovering[title]!.value = true,
-      onExit: (_) => _hovering[title]!.value = false,
+      onEnter: (_) => hovering[title]!.value = true,
+      onExit: (_) => hovering[title]!.value = false,
       child: GestureDetector(
         onTap: onTap,
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: paddingValue)
               .copyWith(top: 4.0, bottom: 4.0),
           child: ValueListenableBuilder<bool>(
-            valueListenable: _hovering[title]!,
+            valueListenable: hovering[title]!,
             builder: (context, isHover, child) {
               return AnimatedContainer(
                 duration: const Duration(milliseconds: 250),
@@ -109,7 +111,8 @@ mixin CustomAppBarMixin on StatelessWidget {
       onTap: () {
         Navigator.of(context).pushReplacement(
           PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) => HomePage(),
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                const HomePage(),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
               return FadeTransition(
@@ -117,12 +120,12 @@ mixin CustomAppBarMixin on StatelessWidget {
                 child: child,
               );
             },
-            transitionDuration: Duration(milliseconds: 500),
+            transitionDuration: const Duration(milliseconds: 500),
           ),
         );
       },
-      child: Padding(
-        padding: const EdgeInsets.only(left: kIsWeb ? 16.0 : 0),
+      child: const Padding(
+        padding: EdgeInsets.only(left: kIsWeb ? 16.0 : 0),
         child: Row(
           children: [
             Icon(Icons.severe_cold_rounded),
@@ -169,7 +172,7 @@ mixin CustomAppBarMixin on StatelessWidget {
             Navigator.of(context).pushReplacement(
               PageRouteBuilder(
                 pageBuilder: (context, animation, secondaryAnimation) =>
-                    LoginPage(),
+                    const LoginPage(),
                 transitionsBuilder:
                     (context, animation, secondaryAnimation, child) {
                   return FadeTransition(
@@ -177,7 +180,7 @@ mixin CustomAppBarMixin on StatelessWidget {
                     child: child,
                   );
                 },
-                transitionDuration: Duration(milliseconds: 500),
+                transitionDuration: const Duration(milliseconds: 500),
               ),
             );
           });
@@ -192,7 +195,7 @@ class CustomAppBarWeb extends StatelessWidget
     implements PreferredSizeWidget {
   final LoggedInState? loggedInState;
   final double _paddingValue = 20;
-  CustomAppBarWeb({this.loggedInState});
+  CustomAppBarWeb({super.key, this.loggedInState});
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -232,7 +235,7 @@ class CustomAppBarMobile extends StatelessWidget
     implements PreferredSizeWidget {
   final LoggedInState? loggedInState;
   final double _paddingValue = 8;
-  CustomAppBarMobile({this.loggedInState});
+  CustomAppBarMobile({super.key, this.loggedInState});
   @override
   Widget build(BuildContext context) {
     return AppBar(

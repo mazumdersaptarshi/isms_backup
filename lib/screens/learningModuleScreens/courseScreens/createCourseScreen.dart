@@ -1,11 +1,10 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:isms/models/adminConsoleModels/coursesDetails.dart';
 import 'package:isms/models/course.dart';
-import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/themes/common_theme.dart';
-import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/utilityFunctions/generateRandom.dart';
-import 'package:provider/provider.dart';
 
 import '../../../projectModules/courseManagement/coursesDataMaster.dart';
 
@@ -14,12 +13,6 @@ class CreateCourseScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    LoggedInState loggedInState = context.watch<LoggedInState>();
-
-    if (loggedInState.currentUser == null) {
-      return LoginPage();
-    }
-
     return const CourseCreationForm();
   }
 }
@@ -28,7 +21,7 @@ class CourseCreationForm extends StatefulWidget {
   const CourseCreationForm({super.key});
 
   @override
-  _CourseCreationFormState createState() => _CourseCreationFormState();
+  State<CourseCreationForm> createState() => _CourseCreationFormState();
 }
 
 class _CourseCreationFormState extends State<CourseCreationForm> {
@@ -108,10 +101,11 @@ class _CourseCreationFormState extends State<CourseCreationForm> {
                         number_of_modules: 0,
                         number_of_exams: 0,
                       );
-                      bool isCourseAdminConsoleCreated =
-                          await CoursesDataMaster.createCourseAdminConsole(
-                              coursesDetails: coursesDetails);
+
+                      await CoursesDataMaster.createCourseAdminConsole(
+                          coursesDetails: coursesDetails);
                       if (isCourseCreated) {
+                        if (!context.mounted) return;
                         Navigator.pop(context);
                       }
                     }

@@ -6,15 +6,16 @@ import '../../../../themes/common_theme.dart';
 class CourseTile extends StatelessWidget {
   final int index;
   final String title;
-  Function? onPressed;
-  int modulesCount;
+  final Function? onPressed;
+  final int modulesCount;
   // double tileHeight;
-  double tileWidth;
-  dynamic? modulesCompleted;
-  dynamic? latestModule;
-  Map<String, dynamic> courseData;
-  CourseTile(
-      {required this.index,
+  final double tileWidth;
+  final dynamic modulesCompleted;
+  final dynamic latestModule;
+  final Map<String, dynamic> courseData;
+  const CourseTile(
+      {super.key,
+      required this.index,
       required this.title,
       required this.onPressed,
       required this.modulesCount,
@@ -26,9 +27,9 @@ class CourseTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int imageIndex = index % 4;
-    double imgWebWidth = 120;
-    double imgWebHeight = 120;
-    if (tileWidth > 300) imgWebWidth = 100;
+    //double imgWebWidth = 120;
+    //double imgWebHeight = 120;
+    //if (tileWidth > 300) imgWebWidth = 100;
     // if (tileHeight > 300) imgWebHeight = 500;
     double tileHeight = 200;
     return GestureDetector(
@@ -39,7 +40,7 @@ class CourseTile extends StatelessWidget {
         color: white,
         child: Padding(
           padding: const EdgeInsets.all(10),
-          child: Container(
+          child: SizedBox(
             height: tileHeight,
             width: tileWidth,
             child: Row(
@@ -50,7 +51,7 @@ class CourseTile extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: SvgPicture.asset(
-                      "assets/images/courseIcons/courseIcon${imageIndex}.svg",
+                      "assets/images/courseIcons/courseIcon$imageIndex.svg",
                       // height: kIsWeb ? imgWebHeight : 150,
                       // width: kIsWeb ? imgWebWidth : 150,
                       // fit: BoxFit.contain,
@@ -60,7 +61,7 @@ class CourseTile extends StatelessWidget {
                 Expanded(
                   flex: 1,
                   child: ClipRRect(
-                    borderRadius: BorderRadius.all(
+                    borderRadius: const BorderRadius.all(
                       Radius.circular(15),
                     ),
                     child: Container(
@@ -79,18 +80,18 @@ class CourseTile extends StatelessWidget {
                               style: commonTextStyle.copyWith(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black)),
-                          Container(width: 100, child: Divider()),
-                          SizedBox(height: 5),
+                          const SizedBox(width: 100, child: Divider()),
+                          const SizedBox(height: 5),
                           RichText(
                               text: TextSpan(
                                   // text: " ${modulesCount}",
-                                  text: "${latestModule}",
+                                  text: "$latestModule",
                                   style: TextStyle(
                                       color: Colors.grey.shade600,
                                       fontFamily: 'Poppins'))),
-                          SizedBox(height: 20),
+                          const SizedBox(height: 20),
                           Container(
-                            padding: EdgeInsets.only(right: 30),
+                            padding: const EdgeInsets.only(right: 30),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,7 +103,7 @@ class CourseTile extends StatelessWidget {
                                   color: primaryColor.shade100,
                                   value: courseData["courseCompPercent"] / 100,
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 5,
                                 ),
                                 Text(

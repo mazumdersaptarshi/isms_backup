@@ -1,28 +1,30 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 
 class ModuleExpandedItem extends StatefulWidget {
   final Map<String, dynamic> info;
-  Function? onPressed;
-  ModuleExpandedItem({required this.info, this.onPressed});
+  final Function? onPressed;
+  const ModuleExpandedItem({super.key, required this.info, this.onPressed});
 
   @override
-  _ModuleExpandedItemState createState() => _ModuleExpandedItemState();
+  State<ModuleExpandedItem> createState() => _ModuleExpandedItemState();
 }
 
 class _ModuleExpandedItemState extends State<ModuleExpandedItem> {
   bool completed = false;
 
-  void _toggleCompleted() {
+  /*void _toggleCompleted() {
     setState(() {
       completed = !completed;
     });
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(widget.info['info_title']),
-      trailing: SizedBox(
+      trailing: const SizedBox(
         width: 30,
         height: 30,
         child: SizedBox(

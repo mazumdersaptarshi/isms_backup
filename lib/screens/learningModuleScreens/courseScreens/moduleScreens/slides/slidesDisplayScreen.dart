@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/projectModules/courseManagement/moduleManagement/slideManagement/slidesDataMaster.dart';
@@ -5,7 +7,6 @@ import 'package:isms/screens/homePage.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleExamsListScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/sharedWidgets/slidesContentWidget.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
-import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 
@@ -14,17 +15,17 @@ import '../../../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../../../utilityFunctions/platformCheck.dart';
 
 class SlidesDisplayScreen extends StatefulWidget {
-  SlidesDisplayScreen(
+  const SlidesDisplayScreen(
       {super.key,
       required this.module,
       required this.course,
       required this.slidesDataMaster});
-  Course course;
-  Module module;
-  SlidesDataMaster slidesDataMaster;
+  final Course course;
+  final Module module;
+  final SlidesDataMaster slidesDataMaster;
 
   @override
-  _SlidesDisplayScreenState createState() => _SlidesDisplayScreenState();
+  State<SlidesDisplayScreen> createState() => _SlidesDisplayScreenState();
 }
 
 class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
@@ -37,15 +38,15 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
   List<Map<String, dynamic>> _initializeCardItems() {
     List<Map<String, dynamic>> slidesMap = [];
     if (!isSlidesListEmpty) {
-      widget.module.slides!.forEach((element) {
+      for (var element in widget.module.slides!) {
         slidesMap.add({'title': element.title, 'text': element.content});
-      });
+      }
     }
     return slidesMap;
   }
 
   fetchSlidesList({required CoursesProvider coursesProvider}) async {
-    await widget.slidesDataMaster!.fetchSlides();
+    await widget.slidesDataMaster.fetchSlides();
     cardItems = _initializeCardItems();
     setState(() {
       {
@@ -79,10 +80,6 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
 
-    if (loggedInState.currentUser == null) {
-      return LoginPage();
-    }
-
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
 
     if (isSlidesFetched == false) {
@@ -94,7 +91,7 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
         loggedInState,
       ),
       body: Container(
-        margin: EdgeInsets.only(top: 20),
+        margin: const EdgeInsets.only(top: 20),
         child: isSlidesFetched
             ? Column(
                 children: [
@@ -102,7 +99,7 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
                       pageController: _pageController,
                       cardItems: cardItems,
                       currentIndex: currentIndex),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -119,12 +116,12 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
                                           module: widget.module,
                                         )));
                           },
-                          child: Text(
+                          child: const Text(
                             'Take exams',
                           ),
                         ),
                       ),
-                      SizedBox(width: 20),
+                      const SizedBox(width: 20),
                       Visibility(
                         visible: currentIndex == cardItems.length - 1,
                         child: ElevatedButton(
@@ -132,9 +129,9 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => HomePage()));
+                                    builder: (context) => const HomePage()));
                           },
-                          child: Text(
+                          child: const Text(
                             'Back to Home',
                           ),
                         ),
@@ -143,7 +140,7 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
                   ),
                 ],
               )
-            : AlertDialog(
+            : const AlertDialog(
                 title: Text("Fetching slides"),
                 content: Align(
                     alignment: Alignment.topCenter,

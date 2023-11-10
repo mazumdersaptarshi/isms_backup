@@ -6,7 +6,7 @@ import 'package:isms/themes/common_theme.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  runApp(CourseDetailsPage(
+  runApp(const CourseDetailsPage(
     title: 'Courses ',
   ));
 }
@@ -14,7 +14,8 @@ void main() async {
 class CourseDetailsPage extends StatelessWidget {
   final String title;
 
-  CourseDetailsPage({
+  const CourseDetailsPage({
+    super.key,
     required this.title,
   });
 
@@ -34,9 +35,9 @@ class CourseDetailsPage extends StatelessWidget {
               shape: customCardShape,
               color: primaryColor,
               elevation: 4,
-              margin: EdgeInsets.all(8.0),
+              margin: const EdgeInsets.all(8.0),
               child: ListTile(
-                trailing: Icon(Icons.arrow_forward_ios),
+                trailing: const Icon(Icons.arrow_forward_ios),
                 title: Text('Module ${index + 1}', style: commonTextStyle),
                 // You can remove this onTap behavior if not needed
                 onTap: () {

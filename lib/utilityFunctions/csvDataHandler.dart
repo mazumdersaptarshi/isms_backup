@@ -1,4 +1,7 @@
+// ignore_for_file: file_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 
 class CSVDataHandler {
@@ -12,15 +15,15 @@ class CSVDataHandler {
         if (value is Timestamp) {
           // Convert Timestamp to DateTime and then to string
           DateTime date = value.toDate();
-          humanReadableText += "${indentation}$key: ${date.toLocal()}\n";
+          humanReadableText += "$indentation$key: ${date.toLocal()}\n";
         } else if (value is List) {
-          print('InsideThisIfBlock');
+          debugPrint('InsideThisIfBlock');
           // If value is a List<Map>, recursively convert it to string
           String nestedHumanReadableText =
               mapsToReadableStringConverter(value, depth + 1);
-          humanReadableText += "${indentation}$key: $nestedHumanReadableText\n";
+          humanReadableText += "$indentation$key: $nestedHumanReadableText\n";
         } else {
-          humanReadableText += "${indentation}$key: $value\n";
+          humanReadableText += "$indentation$key: $value\n";
         }
       });
     }
@@ -31,7 +34,7 @@ class CSVDataHandler {
     DateTime dateTime = timestamp.toDate();
 
     String formattedDate = DateFormat('yyyy-MM-dd – kk:mm:ss').format(dateTime);
-    print(formattedDate);
+    debugPrint(formattedDate);
     return formattedDate;
   }
 }

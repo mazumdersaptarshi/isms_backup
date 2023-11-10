@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:footer/footer.dart';
@@ -16,8 +18,7 @@ import 'learningModuleScreens/courseScreens/coursesListScreen.dart';
 import 'login/loginScreen.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key? key}) : super(key: key);
-  bool isUserInfoFetched = false;
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -26,7 +27,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late String userRole;
   String? initialLink;
-
+  bool isUserInfoFetched = false;
   @override
   void initState() {
     super.initState();
@@ -79,9 +80,64 @@ class _HomePageState extends State<HomePage> {
             loggedInState,
           ),
           body: FooterView(
+            footer: Footer(
+              child: MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      children: [
+                        Text("Support ",
+                            style: customTheme.textTheme.labelMedium!.copyWith(
+                                fontSize: 12,
+                                color: Theme.of(context).colorScheme.primary)),
+                        Icon(
+                          Icons.open_in_new_rounded,
+                          color: Theme.of(context).colorScheme.primary,
+                          size: 12,
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      width: 50,
+                    ),
+                    Row(
+                      children: [
+                        Text("Terms and Conditions ",
+                            style: customTheme.textTheme.labelMedium!.copyWith(
+                                fontSize: 12,
+                                color: Theme.of(context).colorScheme.primary)),
+                        Icon(
+                          Icons.open_in_new_rounded,
+                          color: Theme.of(context).colorScheme.primary,
+                          size: 12,
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      width: 50,
+                    ),
+                    Row(
+                      children: [
+                        Text("Privacy Policy ",
+                            style: customTheme.textTheme.labelMedium!.copyWith(
+                                fontSize: 12,
+                                color: Theme.of(context).colorScheme.primary)),
+                        Icon(
+                          Icons.open_in_new_rounded,
+                          color: Theme.of(context).colorScheme.primary,
+                          size: 12,
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
             children: [
               CustomScrollView(
-                physics: ClampingScrollPhysics(),
+                physics: const ClampingScrollPhysics(),
                 shrinkWrap: true,
                 slivers: [
                   SliverAppBar(
@@ -102,7 +158,7 @@ class _HomePageState extends State<HomePage> {
                           Flexible(
                             flex:
                                 1, // The flex factor. You can adjust this number to take more or less space in the Row or Column.
-                            child: Container(
+                            child: SizedBox(
                               width: MediaQuery.of(context).size.width *
                                   0.2, // 50% of screen width
 
@@ -118,7 +174,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   SliverToBoxAdapter(
-                    child: Container(
+                    child: SizedBox(
                         width: MediaQuery.of(context).size.width,
                         height: homePageContainerHeight,
                         child: Stack(children: [
@@ -146,9 +202,7 @@ class _HomePageState extends State<HomePage> {
                               child: Column(
                                 // Align children to the start of the cross axis
                                 children: [
-                                  Container(
-                                      // padding: EdgeInsets.symmetric(horizontal: 10),
-                                      child: FutureBuilder<List<Widget>>(
+                                  FutureBuilder<List<Widget>>(
                                     future: getHomePageCoursesList(
                                       context: context,
                                       loggedInState: loggedInState,
@@ -156,13 +210,14 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                     builder: (BuildContext context,
                                         AsyncSnapshot<List<Widget>>? snapshot) {
-                                      if (snapshot?.data == null)
-                                        return CircularProgressIndicator();
-                                      else
+                                      if (snapshot?.data == null) {
+                                        return const CircularProgressIndicator();
+                                      } else {
                                         return HomePageItemsContainer(
                                             homePageItems: snapshot?.data);
+                                      }
                                     },
-                                  )),
+                                  ),
                                 ],
                               )),
                           Positioned(
@@ -182,7 +237,7 @@ class _HomePageState extends State<HomePage> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  CoursesDisplayScreen()));
+                                                  const CoursesDisplayScreen()));
                                     },
                                     child: Row(
                                       children: [
@@ -208,76 +263,6 @@ class _HomePageState extends State<HomePage> {
                 ],
               )
             ],
-            footer: Footer(
-              child: Container(
-                // margin: EdgeInsets.only(
-                //     left:
-                //         MediaQuery.of(context).size.width * 0.14),
-
-                child: MouseRegion(
-                  cursor: SystemMouseCursors.click,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
-                        children: [
-                          Text("Support ",
-                              style: customTheme.textTheme.labelMedium!
-                                  .copyWith(
-                                      fontSize: 12,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primary)),
-                          Icon(
-                            Icons.open_in_new_rounded,
-                            color: Theme.of(context).colorScheme.primary,
-                            size: 12,
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        width: 50,
-                      ),
-                      Row(
-                        children: [
-                          Text("Terms and Conditions ",
-                              style: customTheme.textTheme.labelMedium!
-                                  .copyWith(
-                                      fontSize: 12,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primary)),
-                          Icon(
-                            Icons.open_in_new_rounded,
-                            color: Theme.of(context).colorScheme.primary,
-                            size: 12,
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        width: 50,
-                      ),
-                      Row(
-                        children: [
-                          Text("Privacy Policy ",
-                              style: customTheme.textTheme.labelMedium!
-                                  .copyWith(
-                                      fontSize: 12,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primary)),
-                          Icon(
-                            Icons.open_in_new_rounded,
-                            color: Theme.of(context).colorScheme.primary,
-                            size: 12,
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
           ));
     });
   }
