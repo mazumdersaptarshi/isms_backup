@@ -27,13 +27,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     void navigateToUserProfilePage() {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => UserProfilePage()),
+        MaterialPageRoute(builder: (context) => const UserProfilePage()),
       );
     }
 
     void navigateToCoursesPage() {
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => CoursesDisplayScreen()));
+          MaterialPageRoute(builder: (context) => const CoursesDisplayScreen()));
     }
 
     void navigateToRemindersPage() {
@@ -43,7 +43,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
     void navigateToAdminConsolePage() {
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => AdminConsolePage()));
+          context, MaterialPageRoute(builder: (context) => const AdminConsolePage()));
     }
 
     return AppBar(

@@ -6,8 +6,8 @@ import 'package:provider/provider.dart';
 class UserProfileHeaderWidget extends StatelessWidget {
   // UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
   // LoggedInState loggedInState;
-  UserProfileHeaderWidget({this.view});
-  String? view = 'user';
+  const UserProfileHeaderWidget({super.key, this.view = 'user'});
+  final String? view;
   @override
   Widget build(BuildContext context) {
     final loggedInState = context.watch<LoggedInState>();
@@ -26,7 +26,7 @@ class UserProfileHeaderWidget extends StatelessWidget {
                     NetworkImage(loggedInState.currentUser!.photoURL!),
               ),
             ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Text(
@@ -37,7 +37,7 @@ class UserProfileHeaderWidget extends StatelessWidget {
               fontWeight: FontWeight.bold,
               shadows: [
                 Shadow(
-                  offset: Offset(0, 1),
+                  offset: const Offset(0, 1),
                   blurRadius: 2,
                   color: Colors.black.withOpacity(0.5),
                 ),
@@ -46,19 +46,19 @@ class UserProfileHeaderWidget extends StatelessWidget {
           ),
           Text(
             ' ${loggedInState.currentUserEmail}',
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 18,
             ),
           ),
           Text(
-            '${loggedInState.currentUserRole}',
-            style: TextStyle(
+            loggedInState.currentUserRole,
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 18,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           if (view == 'user')
@@ -66,7 +66,7 @@ class UserProfileHeaderWidget extends StatelessWidget {
                 onPressed: () {
                   loggedInState.refreshUserCoursesData();
                 },
-                child: Row(
+                child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text("Refresh"),

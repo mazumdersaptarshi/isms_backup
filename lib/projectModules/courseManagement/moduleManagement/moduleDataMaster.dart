@@ -1,8 +1,8 @@
-import 'dart:typed_data';
+
+// ignore_for_file: file_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/projectModules/courseManagement/coursesDataMaster.dart';
@@ -22,7 +22,7 @@ class ModuleDataMaster extends CoursesDataMaster {
     try {
       int index = 1;
       try {
-        index = course.modules!.length + 1;
+        index = course.modules.length + 1;
       } catch (e) {
         index = 1;
       }
@@ -38,7 +38,7 @@ class ModuleDataMaster extends CoursesDataMaster {
           .doc(course.name)
           .update({'modulesCount': index});
       coursesProvider.addModulesToCourse(course, [module]);
-      print("Module creation successful");
+      debugPrint("Module creation successful");
       return true;
     } catch (e) {
       return false;
@@ -46,22 +46,22 @@ class ModuleDataMaster extends CoursesDataMaster {
   }
 
   Future fetchModules() async {
-    if (course.modules != null && course.modules!.isNotEmpty) {
-      print("NO NEEED  TO FETCH MODULESSS ${course.modules}");
+    if (course.modules.isNotEmpty) {
+      debugPrint("NO NEEED  TO FETCH MODULESSS ${course.modules}");
       return;
     } else {
       try {
-        print("TRY TO FETCH MODULESSS ${course.modules}");
+        debugPrint("TRY TO FETCH MODULESSS ${course.modules}");
         QuerySnapshot modulesListSnapshot =
             await modulesRef!.orderBy("index").get();
         course.modules = [];
-        modulesListSnapshot.docs.forEach((element) {
+        for (var element in modulesListSnapshot.docs) {
           Module m = Module.fromMap(element.data() as Map<String, dynamic>);
-          course.modules?.add(m);
-        });
+          course.modules.add(m);
+        }
         // coursesProvider.addModulesToCourse(courseIndex, course.modules!);
       } catch (e) {
-        print("FETCCHHH MODULESS ERRORR: ${e}");
+        debugPrint("FETCCHHH MODULESS ERRORR: $e");
       }
     }
   }

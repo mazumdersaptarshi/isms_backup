@@ -1,7 +1,9 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 
 class PopupDialog extends StatelessWidget {
-  PopupDialog({
+  const PopupDialog({
     super.key,
     this.onPressedOK,
     this.onPressedAction,
@@ -9,11 +11,11 @@ class PopupDialog extends StatelessWidget {
     this.description,
     this.actionText,
   });
-  Function? onPressedOK;
-  Function? onPressedAction;
-  String? actionText;
-  String? title;
-  String? description;
+  final Function? onPressedOK;
+  final Function? onPressedAction;
+  final String? actionText;
+  final String? title;
+  final String? description;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,7 @@ class PopupDialog extends StatelessWidget {
           ),
         TextButton(
           onPressed: () {
-            this.onPressedOK!();
+            onPressedOK!();
           },
           child: const Text('OK'),
         ),

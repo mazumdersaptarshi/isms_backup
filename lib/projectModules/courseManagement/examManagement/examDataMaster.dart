@@ -1,4 +1,7 @@
+// ignore_for_file: file_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/models/newExam.dart';
@@ -35,7 +38,7 @@ class ExamDataMaster extends CoursesDataMaster {
           .doc(course.name)
           .update({'examsCount': index});
 
-      print("Exam creation successful");
+      debugPrint("Exam creation successful");
       return true;
     } catch (e) {
       return false;
@@ -65,7 +68,7 @@ class ExamDataMaster extends CoursesDataMaster {
           .set(examMap);
 
       coursesProvider.addExamsToCourseModule(module, [exam]);
-      print("Module Exam creation successful");
+      debugPrint("Module Exam creation successful");
       return true;
     } catch (e) {
       return false;
@@ -73,19 +76,19 @@ class ExamDataMaster extends CoursesDataMaster {
   }
 
   Future fetchExams() async {
-    if (course.exams != null && course.exams!.isNotEmpty) {
+    if (course.exams.isNotEmpty) {
       return;
     } else {
       QuerySnapshot examsListSnapshot = await examsRef!.orderBy("index").get();
       course.exams = [];
-      examsListSnapshot.docs.forEach((element) {
-        // print(element.data());
+      for (var element in examsListSnapshot.docs) {
+        // debugPrint(element.data());
         NewExam exam = NewExam.fromMap(element.data() as Map<String, dynamic>);
 
-        course.exams?.add(exam);
-      });
+        course.exams.add(exam);
+      }
       // coursesProvider.fetchExamsToCourse(courseIndex, course.exams!);
-      print("FCN Courses ${course.hashCode}, has exams: ${course.exams}");
+      debugPrint("FCN Courses ${course.hashCode}, has exams: ${course.exams}");
     }
   }
 
@@ -101,15 +104,15 @@ class ExamDataMaster extends CoursesDataMaster {
           .orderBy("index")
           .get();
       module.exams = [];
-      examsListSnapshot.docs.forEach((element) {
-        // print(element.data());
+      for (var element in examsListSnapshot.docs) {
+        // debugPrint(element.data());
         NewExam exam = NewExam.fromMap(element.data() as Map<String, dynamic>);
 
         module.exams?.add(exam);
-      });
+      }
       // coursesProvider.addExamsToCourseModule(
       //     courseIndex, moduleIndex, module.exams!);
-      print("FCN Module ${module.hashCode}, has exams: ${module.exams}");
+      debugPrint("FCN Module ${module.hashCode}, has exams: ${module.exams}");
     }
   }
 }

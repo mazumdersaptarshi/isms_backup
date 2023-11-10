@@ -1,8 +1,6 @@
-import 'dart:math';
+// ignore_for_file: file_names
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:isms/screens/learningModuleScreens/examScreens/takeExamScreen.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/course.dart';
@@ -13,7 +11,7 @@ import '../../../userManagement/loggedInState.dart';
 import '../../homePage.dart';
 
 abstract class ExamCompletionStrategy {
-  ExamCompletionStrategy({required this.loggedInState}) {}
+  ExamCompletionStrategy({required this.loggedInState});
   LoggedInState loggedInState;
   Widget buildSumbitButton({required BuildContext context});
 
@@ -37,7 +35,7 @@ class CourseExamCompletionStrategy implements ExamCompletionStrategy {
         handleExamCompletion(context: context);
       },
       child: Text(
-          "Mark Exam as Done- completed ${exam.index}/${course.exams!.length}"),
+          "Mark Exam as Done- completed ${exam.index}/${course.exams.length}"),
     );
   }
 
@@ -45,18 +43,16 @@ class CourseExamCompletionStrategy implements ExamCompletionStrategy {
   Future<void> handleExamCompletion({required BuildContext context}) async {
     final loggedInState = context.read<LoggedInState>();
     final coursesProvider = context.read<CoursesProvider>();
-    var started_at;
-    if (loggedInState.loggedInUser.courses_started != null) {
-      loggedInState.loggedInUser.courses_started.forEach((courses_started) {
-        if (courses_started["courseID"] == course.id) {}
-        started_at = courses_started["started_at"] ?? null;
-      });
+    var startedAt;
+    for (var courses_started in loggedInState.loggedInUser.courses_started) {
+      if (courses_started["courseID"] == course.id) {}
+      startedAt = courses_started["started_at"];
     }
-    Map<String, dynamic> courseDetailsMap = {
+      Map<String, dynamic> courseDetailsMap = {
       "courseID": course.id,
       "course_name": course.name,
       "course_modules_count": course.modulesCount,
-      "started_at": started_at,
+      "started_at": startedAt,
     };
     await loggedInState.setUserCourseExamCompleted(
       coursesProvider: coursesProvider,
@@ -69,7 +65,7 @@ class CourseExamCompletionStrategy implements ExamCompletionStrategy {
         courseDetails: {...courseDetailsMap, "completed_at": DateTime.now()});
 
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => HomePage()));
+        context, MaterialPageRoute(builder: (context) => const HomePage()));
   }
 }
 
@@ -79,7 +75,7 @@ class ModuleExamCompletionStrategy implements ExamCompletionStrategy {
       required this.course,
       required this.exam,
       required this.loggedInState}) {
-    this.isModuleStarted = checkIfModuleStartedd();
+    isModuleStarted = checkIfModuleStartedd();
   }
 
   Course course;
@@ -91,20 +87,22 @@ class ModuleExamCompletionStrategy implements ExamCompletionStrategy {
 
   bool checkIfModuleStartedd() {
     bool flag = false;
-    loggedInState.loggedInUser.courses_started.forEach((course_started) {
-      if (course_started["modules_started"] != null &&
-          course_started["course_name"] == course.name) {
-        course_started["modules_started"].forEach((module_completed) {
-          if (module_completed["module_name"] == module.title) flag = true;
+    for (var courseStarted in loggedInState.loggedInUser.courses_started) {
+      if (courseStarted["modules_started"] != null &&
+          courseStarted["course_name"] == course.name) {
+        courseStarted["modules_started"].forEach((moduleCompleted) {
+          if (moduleCompleted["module_name"] == module.title) {
+            flag = true;
+          }
         });
       }
-    });
+    }
     return flag;
   }
 
   @override
   Widget buildSumbitButton({required BuildContext context}) {
-    if (isModuleStarted)
+    if (isModuleStarted) {
       return ElevatedButton(
         onPressed: () async {
           handleExamCompletion(context: context);
@@ -112,11 +110,12 @@ class ModuleExamCompletionStrategy implements ExamCompletionStrategy {
         child: Text(
             "Mark Module as Done- completed ${exam.index}/${module.exams!.length}"),
       );
-    else
+    } else {
       return ElevatedButton(
         onPressed: () {},
-        child: Text("Study the module first"),
+        child: const Text("Study the module first"),
       );
+    }
   }
 
   @override
@@ -131,12 +130,12 @@ class ModuleExamCompletionStrategy implements ExamCompletionStrategy {
         "course_modules_count": course.modulesCount
       },
       course: course,
-      module: module!,
+      module: module,
       coursesProvider: coursesProvider,
       examIndex: exam.index,
     ).then((val) {
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => HomePage()));
+          context, MaterialPageRoute(builder: (context) => const HomePage()));
     });
   }
 }

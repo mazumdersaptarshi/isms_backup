@@ -1,13 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'coursedetail.dart';
 
 void main() {
-  runApp(Sidebar());
+  runApp(const Sidebar());
 }
 
 class Sidebar extends StatelessWidget {
+  const Sidebar({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -18,18 +17,18 @@ class Sidebar extends StatelessWidget {
           padding: EdgeInsets.zero,
           children: <Widget>[
             DrawerHeader(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.transparent,
               ),
               child: Center(
                 child: Container(
                   width: 100.0,
                   height: 100.0,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.white,
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(
+                  child: const Icon(
                     Icons.account_circle,
                     size: 100.0,
                     color: Colors.orange,
@@ -63,7 +62,7 @@ class Sidebar extends StatelessWidget {
       ),
       title: Text(
         title,
-        style: TextStyle(color: Colors.orange, fontWeight: FontWeight.bold),
+        style: const TextStyle(color: Colors.orange, fontWeight: FontWeight.bold),
       ),
       onTap: () {
         // Handle the tap for each drawer item here.

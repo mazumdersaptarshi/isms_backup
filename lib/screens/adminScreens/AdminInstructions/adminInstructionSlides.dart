@@ -1,40 +1,42 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 
 import '../../../adminManagement/adminProvider.dart';
 
 class AdminInstructionSlides extends StatefulWidget {
-  AdminInstructionSlides(
+  const AdminInstructionSlides(
       {super.key,
       required this.adminProvider,
       required this.category,
       required this.subCategory});
-  List<dynamic>? slides;
-  String category;
-  String subCategory;
-  AdminProvider adminProvider;
+  final String category;
+  final String subCategory;
+  final AdminProvider adminProvider;
 
   @override
   State<AdminInstructionSlides> createState() => _AdminInstructionSlidesState();
 }
 
 class _AdminInstructionSlidesState extends State<AdminInstructionSlides> {
+  List<dynamic>? slides;
   final PageController _controller = PageController();
 
   Future<List?> fetchSlidesList(
       AdminProvider adminProvider, String category, String subCategory) async {
-    var slides = await adminProvider?.fetchAdminInstructionsFromFirestore(
-        category!, subCategory);
-    print('slidessdcd: ${slides}');
-    return slides ?? [];
+    var slides = await adminProvider.fetchAdminInstructionsFromFirestore(
+        category, subCategory);
+    debugPrint('slidessdcd: $slides');
+    return slides;
   }
 
   @override
   void initState() {
     super.initState();
-    fetchSlidesList(widget.adminProvider!, widget.category!, widget.subCategory)
+    fetchSlidesList(widget.adminProvider, widget.category, widget.subCategory)
         .then((value) {
       setState(() {
-        widget.slides = value!;
+        slides = value!;
       });
     });
   }
@@ -42,12 +44,12 @@ class _AdminInstructionSlidesState extends State<AdminInstructionSlides> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: widget.slides != null
+        body: slides != null
             ? Column(
                 children: [
                   Expanded(
                     child: SlideList(
-                      slides: widget.slides,
+                      slides: slides,
                       controller: _controller,
                     ),
                   ),
@@ -56,21 +58,21 @@ class _AdminInstructionSlidesState extends State<AdminInstructionSlides> {
                       ElevatedButton(
                         onPressed: () {
                           _controller.previousPage(
-                              duration: Duration(milliseconds: 300),
+                              duration: const Duration(milliseconds: 300),
                               curve: Curves.easeInOut);
                         },
-                        child: Text("Previous"),
+                        child: const Text("Previous"),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 16,
                       ),
                       ElevatedButton(
                         onPressed: () {
                           _controller.nextPage(
-                              duration: Duration(milliseconds: 300),
+                              duration: const Duration(milliseconds: 300),
                               curve: Curves.easeInOut);
                         },
-                        child: Text("Next"),
+                        child: const Text("Next"),
                       )
                     ],
                   )
@@ -81,14 +83,14 @@ class _AdminInstructionSlidesState extends State<AdminInstructionSlides> {
 }
 
 class SlideList extends StatelessWidget {
-  List<dynamic>? slides;
+  final List<dynamic>? slides;
   final PageController? controller;
 
-  SlideList({this.slides, this.controller});
+  const SlideList({super.key, this.slides, this.controller});
   @override
   Widget build(BuildContext context) {
     slides?.forEach((element) {
-      print('yyyhn: $element');
+      debugPrint('yyyhn: $element');
     });
     if (slides != null && slides!.isNotEmpty) {
       try {
@@ -107,11 +109,11 @@ class SlideList extends StatelessWidget {
           ],
         );
       } catch (e) {
-        return SafeArea(
+        return const SafeArea(
             child: Center(child: Text('No content currently available! >__<')));
       }
     } else {
-      return Text('No data available');
+      return const Text('No data available');
     }
   }
 }
@@ -121,7 +123,7 @@ class SlideItem extends StatelessWidget {
   final String? content;
   final Color? color;
 
-  SlideItem({this.title, this.color, this.content});
+  const SlideItem({super.key, this.title, this.color, this.content});
 
   @override
   Widget build(BuildContext context) {
@@ -133,14 +135,14 @@ class SlideItem extends StatelessWidget {
           children: [
             Text(
               title!,
-              style: TextStyle(fontSize: 24, color: Colors.white),
+              style: const TextStyle(fontSize: 24, color: Colors.white),
             ),
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
             Text(
               content ?? 'n/a',
-              style: TextStyle(fontSize: 18, color: Colors.white),
+              style: const TextStyle(fontSize: 18, color: Colors.white),
             ),
           ],
         ),

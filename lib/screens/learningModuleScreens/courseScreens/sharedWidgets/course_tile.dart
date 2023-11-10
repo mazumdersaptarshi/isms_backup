@@ -1,9 +1,7 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../themes/common_theme.dart';
-import '../../../../userManagement/loggedInState.dart';
 
 class CourseTile extends StatelessWidget {
   final int index;
@@ -14,7 +12,7 @@ class CourseTile extends StatelessWidget {
   double tileWidth;
   Map<String, dynamic> courseData;
   CourseTile(
-      {required this.index,
+      {super.key, required this.index,
       required this.title,
       required this.onPressed,
       required this.modulesCount,
@@ -37,7 +35,7 @@ class CourseTile extends StatelessWidget {
         color: white,
         child: Padding(
           padding: const EdgeInsets.all(10),
-          child: Container(
+          child: SizedBox(
             height: tileHeight,
             width: tileWidth,
             child: Row(
@@ -46,7 +44,7 @@ class CourseTile extends StatelessWidget {
                 Expanded(
                   flex: 1,
                   child: SvgPicture.asset(
-                    "assets/images/courseIcons/courseIcon${imageIndex}.svg",
+                    "assets/images/courseIcons/courseIcon$imageIndex.svg",
                     // height: kIsWeb ? imgWebHeight : 150,
                     // width: kIsWeb ? imgWebWidth : 150,
                     // fit: BoxFit.contain,
@@ -62,8 +60,8 @@ class CourseTile extends StatelessWidget {
                           style: commonTextStyle.copyWith(
                               fontWeight: FontWeight.bold,
                               color: Colors.black)),
-                      Container(width: 100, child: Divider()),
-                      SizedBox(height: 10),
+                      const SizedBox(width: 100, child: Divider()),
+                      const SizedBox(height: 10),
                       RichText(
                           text: TextSpan(
                               text: "Modules :",
@@ -71,10 +69,10 @@ class CourseTile extends StatelessWidget {
                                   .copyWith(color: Colors.grey, fontSize: 14),
                               children: [
                             TextSpan(
-                                text: " ${modulesCount!}",
+                                text: " $modulesCount",
                                 style: customTheme.textTheme.labelMedium),
                           ])),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Container(
                         child: Row(
                           children: [
@@ -85,7 +83,7 @@ class CourseTile extends StatelessWidget {
                                 value: courseData["courseCompPercent"] / 100,
                               ),
                             ),
-                            SizedBox(width: 10),
+                            const SizedBox(width: 10),
                             Expanded(
                                 child: Text(
                               "${courseData['courseCompPercent']}%",

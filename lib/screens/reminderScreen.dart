@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -56,14 +58,14 @@ class ReminderLine extends StatefulWidget {
   final String text;
   final Function(String, DateTime?) setExpiryDateForCertificate;
 
-  ReminderLine({
+  const ReminderLine({
     Key? key,
     required this.text,
     required this.setExpiryDateForCertificate,
   }) : super(key: key);
 
   @override
-  _ReminderLineState createState() => _ReminderLineState();
+  State<ReminderLine> createState() => _ReminderLineState();
 }
 
 class _ReminderLineState extends State<ReminderLine> {

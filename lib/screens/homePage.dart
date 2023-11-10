@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -15,8 +17,7 @@ import 'homePageWidgets/homePageItemsContainer.dart';
 import 'login/loginScreen.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key? key}) : super(key: key);
-  bool isUserInfoFetched = false;
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -97,7 +98,7 @@ class _HomePageState extends State<HomePage> {
                       Flexible(
                         flex:
                             1, // The flex factor. You can adjust this number to take more or less space in the Row or Column.
-                        child: Container(
+                        child: SizedBox(
                           width: MediaQuery.of(context).size.width *
                               0.13, // 50% of screen width
 
@@ -113,7 +114,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               SliverToBoxAdapter(
-                child: Container(
+                child: SizedBox(
                     width: MediaQuery.of(context).size.width,
                     height: homePageContainerHeight,
                     child: Stack(children: [

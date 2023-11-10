@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
@@ -5,39 +7,37 @@ import 'package:isms/models/newExam.dart';
 import 'package:isms/projectModules/courseManagement/examManagement/examDataMaster.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/sharedWidgets/examListContainer.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
-import 'package:isms/screens/learningModuleScreens/examScreens/takeExamScreen.dart';
-import 'package:isms/screens/login/loginScreen.dart';
-import 'package:isms/sharedWidgets/leaningModulesAppBar.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../../sharedWidgets/customAppBar.dart';
-import '../../examScreens/sharedWidgets/exam_tile.dart';
 
 class ModuleExamListScreen extends StatefulWidget {
-  ModuleExamListScreen(
+  const ModuleExamListScreen(
       {super.key,
       required this.course,
       required this.examtype,
       required this.module});
-  Course course;
-  Module module;
-  late ExamDataMaster examDataMaster;
-  EXAMTYPE examtype;
+  final Course course;
+  final Module module;
+  final EXAMTYPE examtype;
   @override
   State<ModuleExamListScreen> createState() => _ModuleExamListScreenState();
 }
 
 class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
   bool isExamsFetched = false;
+  late String userRole;
+  late ExamDataMaster examDataMaster;
+
   @override
   void initState() {
     super.initState();
   }
 
   fetchExamsList({required CoursesProvider coursesProvider}) async {
-    await widget.examDataMaster.fetchModuleExams(module: widget.module);
+    await examDataMaster.fetchModuleExams(module: widget.module);
     setState(() {
       isExamsFetched = true;
     });
@@ -46,10 +46,6 @@ class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
   @override
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
-
-    if (loggedInState.currentUser == null) {
-      return LoginPage();
-    }
 
     CoursesProvider coursesProvider = context.watch<CoursesProvider>();
 
@@ -62,7 +58,7 @@ class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
     } else {
       exams = widget.course.exams;
     }
-    widget.examDataMaster =
+    examDataMaster =
         ExamDataMaster(course: course, coursesProvider: coursesProvider);
     if (isExamsFetched == false) {
       fetchExamsList(coursesProvider: coursesProvider);
@@ -79,7 +75,7 @@ class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
               examtype: EXAMTYPE.moduleExam,
               module: module,
               loggedInState: loggedInState)
-          : Container(
+          : SizedBox(
               width: MediaQuery.of(context).size.width,
               height: 200,
               child: const AlertDialog(
@@ -101,7 +97,7 @@ class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
                               module: widget.module,
                             )));
               },
-              child: Icon(Icons.add),
+              child: const Icon(Icons.add),
             )
           : null,
     );

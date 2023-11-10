@@ -6,14 +6,14 @@ class HomePageItemsContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MediaQuery.of(context).size.width > 800
-        ? Container(
+        ? SizedBox(
             width: MediaQuery.of(context).size.width * 0.9,
             height: 300,
             child: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   color: Color.fromARGB(10, 0, 0, 0),
                   borderRadius: BorderRadius.all(Radius.circular(10))),
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               margin: EdgeInsets.only(
                   left: MediaQuery.of(context).size.width * 0.1),
               child: ListView.builder(

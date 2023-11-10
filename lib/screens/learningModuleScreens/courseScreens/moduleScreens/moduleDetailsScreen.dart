@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/projectModules/courseManagement/moduleManagement/slideManagement/slidesDataMaster.dart';
@@ -5,7 +7,6 @@ import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/m
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/createSlideScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/slidesDisplayScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
-import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/sharedWidgets/customAppBar.dart';
 import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
@@ -15,20 +16,20 @@ import '../../../../models/course.dart';
 import '../../../../projectModules/courseManagement/coursesProvider.dart';
 
 class ModuleDetails extends StatefulWidget {
-  ModuleDetails(
+  const ModuleDetails(
       {super.key,
       required this.course,
       required this.module,
       required this.isModuleStarted});
-  Course course;
-  Module module;
-  bool isModuleStarted;
-  SlidesDataMaster? slidesDataMaster;
+  final Course course;
+  final Module module;
+  final bool isModuleStarted;
   @override
   State<ModuleDetails> createState() => _ModuleDetailsState();
 }
 
 class _ModuleDetailsState extends State<ModuleDetails> {
+  SlidesDataMaster? slidesDataMaster;
   late String userRole;
 
   @override
@@ -40,14 +41,10 @@ class _ModuleDetailsState extends State<ModuleDetails> {
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
 
-    if (loggedInState.currentUser == null) {
-      return LoginPage();
-    }
-
     userRole = loggedInState.currentUserRole;
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
 
-    widget.slidesDataMaster = SlidesDataMaster(
+    slidesDataMaster = SlidesDataMaster(
         course: widget.course,
         coursesProvider: coursesProvider,
         module: widget.module);
@@ -63,7 +60,7 @@ class _ModuleDetailsState extends State<ModuleDetails> {
         loggedInState: loggedInState,
       ),
       body: Container(
-        margin: EdgeInsets.only(top: 20),
+        margin: const EdgeInsets.only(top: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -81,7 +78,7 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                                   module: widget.module,
                                 )));
                   },
-                  child: Text("View module exams"),
+                  child: const Text("View module exams"),
                 ),
                 ElevatedButton(
                   onPressed: () async {
@@ -93,25 +90,26 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                         course: widget.course,
                         module: widget.module);
 
+                    if (!context.mounted) return;
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => SlidesDisplayScreen(
                           course: widget.course,
                           module: widget.module,
-                          slidesDataMaster: widget.slidesDataMaster!,
+                          slidesDataMaster: slidesDataMaster!,
                         ),
                       ),
                     );
                   },
-                  child: Text('Study Module'),
+                  child: const Text('Study Module'),
                 ),
               ],
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 20.0),
-              padding: EdgeInsets.all(20.0),
+              margin: const EdgeInsets.symmetric(horizontal: 20.0),
+              padding: const EdgeInsets.all(20.0),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20.0),
               ),
@@ -119,13 +117,13 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "${widget.module.title}",
+                    widget.module.title,
                     style: customTheme.textTheme.bodyMedium!.copyWith(),
                   ),
-                  SizedBox(height: 20.0),
+                  const SizedBox(height: 20.0),
                   Text(
                     widget.module.contentDescription,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 18,
                     ),
                   ),
@@ -144,7 +142,7 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                         builder: (context) => CreateSlideScreen(
                             course: widget.course, module: widget.module)));
               },
-              child: Icon(Icons.add),
+              child: const Icon(Icons.add),
             )
           : null,
     );

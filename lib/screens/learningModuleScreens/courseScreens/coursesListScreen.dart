@@ -1,18 +1,15 @@
+// ignore_for_file: file_names
+
 import 'dart:math';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/sharedWidgets/course_tile.dart';
-import 'package:isms/screens/homePage.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/modulesListScreen.dart';
-import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/sharedWidgets/customAppBar.dart';
-import 'package:isms/sharedWidgets/leaningModulesAppBar.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 
-import '../../../models/course.dart';
 import '../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../sharedWidgets/bottomNavBar.dart';
 import '../../../sharedWidgets/navIndexTracker.dart';
@@ -21,24 +18,20 @@ import '../../homePageFunctions/getCoursesList.dart';
 import 'createCourseScreen.dart';
 
 class CoursesDisplayScreen extends StatefulWidget {
-  CoursesDisplayScreen({super.key});
-  String userRole = "user";
+  const CoursesDisplayScreen({super.key});
   @override
   State<CoursesDisplayScreen> createState() => _CoursesDisplayScreenState();
 }
 
 class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
+  String userRole = "user";
   @override
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
 
-    if (loggedInState.currentUser == null) {
-      return LoginPage();
-    }
-
-    widget.userRole = loggedInState.currentUserRole;
+    userRole = loggedInState.currentUserRole;
     NavIndexTracker.setNavDestination(
-        navDestination: NavDestinations.AllCoures, userRole: widget.userRole);
+        navDestination: NavDestinations.AllCoures, userRole: userRole);
 
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
 
@@ -52,12 +45,12 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
     int maxColumns =
         max(((screenWidth - (horizontalMargin * 2)) / tileMinWidth).floor(), 1);
     // number of tiles that have to fit on the screen
-    int itemCount = coursesProvider.allCourses.length ?? 0;
+    int itemCount = coursesProvider.allCourses.length;
     // grid width, in tiles
     int numberColumns =
         min(itemCount, maxColumns) > 0 ? min(itemCount, maxColumns) : 1;
     // grid width, in pixels
-    double gridWidth = screenWidth * numberColumns / maxColumns;
+    //double gridWidth = screenWidth * numberColumns / maxColumns;
     return Scaffold(
       appBar: CustomAppBar(
         loggedInState: loggedInState,
@@ -103,17 +96,17 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
           ],
         ),
       ),
-      floatingActionButton: widget.userRole == 'admin'
+      floatingActionButton: userRole == 'admin'
           ? FloatingActionButton(
               onPressed: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => CreateCourseScreen()));
+                        builder: (context) => const CreateCourseScreen()));
               },
               backgroundColor:
                   customTheme.floatingActionButtonTheme.backgroundColor,
-              child: Icon(Icons.add),
+              child: const Icon(Icons.add),
             )
           : null,
     );

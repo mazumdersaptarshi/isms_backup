@@ -1,13 +1,11 @@
-import 'dart:typed_data';
+
+// ignore_for_file: file_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/models/slide.dart';
 import 'package:isms/projectModules/courseManagement/moduleManagement/moduleDataMaster.dart';
-import '../../coursesProvider.dart';
 
 class SlidesDataMaster extends ModuleDataMaster {
   SlidesDataMaster(
@@ -31,21 +29,21 @@ class SlidesDataMaster extends ModuleDataMaster {
     }
 
     try {
-      slides.forEach((slideItem) {
+      for (var slideItem in slides) {
         startingIndex++;
         slideItem.index = startingIndex;
         Map<String, dynamic> slideMap = slideItem.toMap();
         slideMap['createdAt'] = DateTime.now();
         slidesMapList.add(slideMap);
-      });
+      }
 
-      slidesMapList.forEach((slideMap) async {
+      for(Map<String, dynamic> slideMap in slidesMapList) {
         await slidesRef!.doc(slideMap['id']).set(slideMap);
-        print("Created slide ${slideMap}");
-      });
+        debugPrint("Created slide $slideMap");
+      }
 
       coursesProvider.addSlidesToModules(module, slides);
-      print("Slides creation successful");
+      debugPrint("Slides creation successful");
       return true;
     } catch (e) {
       return false;
@@ -54,20 +52,20 @@ class SlidesDataMaster extends ModuleDataMaster {
 
   Future fetchSlides() async {
     if (module.slides != null && module.slides!.isNotEmpty) {
-      print("Slides for $module already fetched! See ${module.slides}");
+      debugPrint("Slides for $module already fetched! See ${module.slides}");
       return;
     } else {
       QuerySnapshot slidesListSnapshot =
           await slidesRef!.orderBy("index").get();
       List<Slide> slides = [];
       if (slidesListSnapshot.size == 0) return;
-      slidesListSnapshot.docs.forEach((element) {
+      for (var element in slidesListSnapshot.docs) {
         Slide s = Slide.fromMap(element.data() as Map<String, dynamic>);
 
         slides.add(s);
-      });
+      }
       coursesProvider.addSlidesToModules(module, slides);
-      print("FCN Slides for ${module.slides}, slides: ${module.slides}");
+      debugPrint("FCN Slides for ${module.slides}, slides: ${module.slides}");
     }
   }
 }

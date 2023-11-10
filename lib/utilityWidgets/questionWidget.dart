@@ -1,3 +1,8 @@
+// ignore_for_file: file_names
+
+import 'dart:developer';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/models/enums.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
@@ -6,11 +11,9 @@ import 'package:isms/utilityWidgets/optionTile.dart';
 import 'package:isms/utilityFunctions/generateRandom.dart';
 
 class QuestionWidget extends StatefulWidget {
-  QUESTIONTYPE questiontype;
+  final QUESTIONTYPE questiontype;
   final Function() onQuestionSaved;
-  List<Map<String, dynamic>> options = [];
-  List<bool> optionBools = List.generate(4, (index) => false);
-  QuestionWidget(
+  const QuestionWidget(
       {super.key, required this.onQuestionSaved, required this.questiontype});
 
   @override
@@ -18,28 +21,30 @@ class QuestionWidget extends StatefulWidget {
 }
 
 class _QuestionWidgetState extends State<QuestionWidget> {
+  List<Map<String, dynamic>> options = [];
+  List<bool> optionBools = List.generate(4, (index) => false);
   List<String> answers = [];
   final String qID = generateRandomId();
   final TextEditingController questionController = TextEditingController();
   final List<TextEditingController> optionControllers =
-  List.generate(4, (index) => TextEditingController());
+      List.generate(4, (index) => TextEditingController());
   List<OptionCreationProvider> optionCreationProviders =
-  List.generate(4, (index) => OptionCreationProvider());
+      List.generate(4, (index) => OptionCreationProvider());
 
   @override
   void dispose() {
     super.dispose();
     questionController.dispose();
-    optionControllers.forEach((optionController) {
+    for (var optionController in optionControllers) {
       optionController.dispose();
-    });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Form(
-        child: Container(
+        child: SizedBox(
           height: 500,
           child: Column(
             children: [
@@ -47,36 +52,38 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                 controller: questionController,
                 decoration: customInputDecoration(hintText: 'Enter Question'),
               ),
-              Container(
+              SizedBox(
                 height: 250,
                 child: ListView.builder(
                   itemCount: 4,
                   itemBuilder: (context, index) {
                     return OptionTile(
-                      controller: optionControllers[index]!,
+                      controller: optionControllers[index],
                       getTextValue: (optTextValue, optBoolValue) {
                         bool flag = false;
 
                         try {
-                          widget.options.forEach((element) {
+                          for (var element in options) {
                             if (element["optionID"] == index) {
                               element["option_value"] = optTextValue;
                               element["option_bool"] = optBoolValue;
 
-                              widget.optionBools[index] = optBoolValue;
+                              optionBools[index] = optBoolValue;
 
                               flag = true;
                             }
-                          });
-                        } catch (e) {}
+                          }
+                        } catch (e) {
+                          log(e.toString());
+                        }
                         if (flag == false) {
-                          widget.options.add({
+                          options.add({
                             "optionID": index,
                             "option_value": optTextValue,
                             "option_bool": optBoolValue,
                           });
 
-                          widget.optionBools.add(optBoolValue);
+                          optionBools.add(optBoolValue);
                         }
                       },
                       optionCreationProvider: optionCreationProviders[index],
@@ -84,7 +91,9 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                   },
                 ),
               ),
-              SizedBox(height: 20,),
+              const SizedBox(
+                height: 20,
+              ),
               SizedBox(
                 width: 200,
                 child: ElevatedButton(
@@ -95,21 +104,21 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                     for (final question in allQuestions) {
                       if (question["questionID"] == qID) {
                         questionExists = true;
-                        print("QUESTION EXISTSSSSS");
-                        if (newQuestionName != null && newQuestionName != "")
+                        debugPrint("QUESTION EXISTSSSSS");
+                        if (newQuestionName != "") {
                           question["questionName"] = newQuestionName;
+                        }
 
                         List<Map<String, dynamic>> tempOptions =
-                        question["options"];
+                            question["options"];
                         for (int i = 0; i < tempOptions.length; i++) {
                           var option = tempOptions[i];
-                          for (int j = 0; j < widget.options.length; j++) {
-                            if (option["optionID"] ==
-                                widget.options[j]["optionID"]) {
-                              if (widget.options[j]["option_value"] != null &&
-                                  widget.options[j]["option_value"] != "") {
-                                option = widget.options[j];
-                                question["options"][i] = widget.options[j];
+                          for (int j = 0; j < options.length; j++) {
+                            if (option["optionID"] == options[j]["optionID"]) {
+                              if (options[j]["option_value"] != null &&
+                                  options[j]["option_value"] != "") {
+                                option = options[j];
+                                question["options"][i] = options[j];
                               }
                             }
                           }
@@ -124,13 +133,18 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                         allQuestions.add({
                           "questionID": qID,
                           "questionName": newQuestionName,
-                          "options": widget.options,
+                          "options": options,
                         });
                       });
                     }
-                    print(allQuestions);
+                    if (kDebugMode) {
+                      print(allQuestions);
+                    }
                   },
-                  child: Text("Save Question",style: buttonText,),
+                  child: Text(
+                    "Save Question",
+                    style: buttonText,
+                  ),
                 ),
               ),
             ],

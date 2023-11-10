@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 
 import '../../adminManagement/adminDataExporter.dart';
@@ -13,7 +15,8 @@ final Map<String, dynamic> categories = {
 };
 
 class AdminActionDropdown extends StatefulWidget {
-  AdminActionDropdown({
+  const AdminActionDropdown({
+    super.key,
     required this.adminProvider,
     required this.actionId,
   });
@@ -63,7 +66,7 @@ class _AdminActionDropdownState extends State<AdminActionDropdown> {
                       },
                       child: GestureDetectorCard(text: 'User Data')),
                 )
-              : CircularProgressIndicator(),
+              : const CircularProgressIndicator(),
           !isCoursesLoading
               ? Padding(
                   padding: const EdgeInsets.all(4.0),
@@ -84,7 +87,7 @@ class _AdminActionDropdownState extends State<AdminActionDropdown> {
                         text: 'Courses Data',
                       )),
                 )
-              : CircularProgressIndicator(),
+              : const CircularProgressIndicator(),
           Padding(
             padding: const EdgeInsets.all(4.0),
             child: GestureDetector(
@@ -100,14 +103,14 @@ class _AdminActionDropdownState extends State<AdminActionDropdown> {
         ],
       );
     } else {
-      return Text('No data to show!');
+      return const Text('No data to show!');
     }
   }
 }
 
 class AdminInstructionsDropdown extends StatelessWidget {
-  AdminInstructionsDropdown({super.key, this.categories});
-  Map<String, dynamic>? categories;
+  const AdminInstructionsDropdown({super.key, this.categories});
+  final Map<String, dynamic>? categories;
   void navigateToAdminInstructionsCategories(
       BuildContext context, String category, List<String>? subCategories) {
     Navigator.push(
@@ -144,8 +147,8 @@ class AdminInstructionsDropdown extends StatelessWidget {
 }
 
 class GestureDetectorCard extends StatelessWidget {
-  GestureDetectorCard({super.key, this.text});
-  String? text;
+  const GestureDetectorCard({super.key, this.text});
+  final String? text;
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -155,7 +158,7 @@ class GestureDetectorCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(15.0), // Rounded edges for the card
       ),
       child: Container(
-        padding: EdgeInsets.all(12),
+        padding: const EdgeInsets.all(12),
         child: Text(
           text!,
           textAlign: TextAlign.center,

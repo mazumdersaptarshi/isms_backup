@@ -1,18 +1,22 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../userManagement/loggedInState.dart';
 
 class AdminInfoWidget extends StatelessWidget {
+  const AdminInfoWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     final loggedInState = context.watch<LoggedInState>();
 
     return Column(
       children: [
-        if (loggedInState.currentUser?.photoURL != null)
-          Padding(
-            padding: const EdgeInsets.only(top: 25.0),
+        if (loggedInState.currentUserPhotoURL != null)
+          const Padding(
+            padding: EdgeInsets.only(top: 25.0),
             child: CircleAvatar(
               radius: 50,
               //backgroundImage:
