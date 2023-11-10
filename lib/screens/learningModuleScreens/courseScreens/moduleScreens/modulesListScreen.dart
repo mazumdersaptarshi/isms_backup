@@ -105,7 +105,8 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
     // compute the grid shape:
     // requirements
     int tileMinWidth = 300;
-    double tileRatio = 16 / 9;
+    int tileMinHeight = 200;
+    double tileRatio = 3 / 2;
     // available width, in pixels
     double horizontalMargin = MediaQuery.sizeOf(context).width > 900 ? 200 : 10;
     double screenWidth = MediaQuery.sizeOf(context).width;
@@ -115,8 +116,16 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
     // number of tiles that have to fit on the screen
     int itemCount = widget.course.modulesCount ?? 0;
     // grid width, in tiles
-    int numberColumns =
-        min(itemCount, maxColumns) > 0 ? min(itemCount, maxColumns) : 1;
+    int numberColumns = 1;
+    // min(itemCount, maxColumns) > 0 ? min(itemCount, maxColumns) : 1;
+    if (itemCount <= 0) {
+      numberColumns = 1;
+    } else if (itemCount < 3 && maxColumns >= 3) {
+      numberColumns = 3;
+    } else {
+      numberColumns =
+          min(itemCount, maxColumns) > 0 ? min(itemCount, maxColumns) : 1;
+    }
     // grid width, in pixels
     double gridWidth = screenWidth * numberColumns / maxColumns;
 

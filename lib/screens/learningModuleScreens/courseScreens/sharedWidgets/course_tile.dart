@@ -75,22 +75,35 @@ class CourseTile extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(title,
-                              style: commonTextStyle.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black)),
-                          Container(width: 100, child: Divider()),
-                          SizedBox(height: 5),
-                          RichText(
-                              text: TextSpan(
-                                  // text: " ${modulesCount}",
-                                  text: "${latestModule}",
-                                  style: TextStyle(
-                                      color: Colors.grey.shade600,
-                                      fontFamily: 'Poppins'))),
-                          SizedBox(height: 20),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                title,
+                                style: commonTextStyle.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black),
+                                maxLines:
+                                    3, // Set the maximum number of lines before ellipsis
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              Container(width: 100, child: Divider()),
+                              SizedBox(height: 5),
+                              RichText(
+                                  text: TextSpan(
+                                      // text: " ${modulesCount}",
+                                      text: "${latestModule}",
+                                      style: TextStyle(
+                                          color: Colors.grey.shade600,
+                                          fontFamily: 'Poppins'))),
+                            ],
+                          ),
+                          // SizedBox(height: 20),
                           Container(
+                            height: 60,
+
                             padding: EdgeInsets.only(right: 30),
+                            // color: Colors.red,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
