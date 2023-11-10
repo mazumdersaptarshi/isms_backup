@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:footer/footer.dart';
 import 'package:footer/footer_view.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 import 'package:isms/projectModules/notificationModules/initLinkHandler.dart';
@@ -13,7 +14,6 @@ import 'homePageFunctions/getCoursesList.dart';
 import 'homePageWidgets/homePageItemsContainer.dart';
 import 'learningModuleScreens/courseScreens/coursesListScreen.dart';
 import 'login/loginScreen.dart';
-import 'package:footer/footer.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -73,12 +73,10 @@ class _HomePageState extends State<HomePage> {
     return Consumer<CoursesProvider>(builder:
         (BuildContext context, CoursesProvider coursesProvider, Widget? child) {
       return Scaffold(
-
           backgroundColor: Colors.white,
-          bottomNavigationBar:
-              kIsWeb ? null : BottomNavBar(loggedInState: loggedInState),
-          appBar: CustomAppBar(
-            loggedInState: loggedInState,
+          bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState),
+          appBar: PlatformCheck.topNavBarWidget(
+            loggedInState,
           ),
           body: FooterView(
             children: [
@@ -114,7 +112,6 @@ class _HomePageState extends State<HomePage> {
                                     .contain, // This will cover the available space, you can change it to BoxFit.contain to prevent the image from being cropped.
                               ),
                             ),
-
                           ),
                         ],
                       ),
