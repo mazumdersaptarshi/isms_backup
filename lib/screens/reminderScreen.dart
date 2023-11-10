@@ -1,13 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 
-// Utility function to set the expiry date for a certification
 Future<void> setExpiryDate(
   String uid,
   String certificateName,
-  DateTime expiryDate,
+  DateTime? expiryDate,
 ) async {
   DocumentReference adminDocRef = FirebaseFirestore.instance
       .collection('adminconsole')
@@ -17,7 +18,6 @@ Future<void> setExpiryDate(
 
   await adminDocRef.get().then((doc) async {
     if (doc.exists) {
-      // Existing admin document logic
       Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
       List certifications = data['certifications'] as List? ?? [];
       int existingIndex = certifications
@@ -25,7 +25,8 @@ Future<void> setExpiryDate(
 
       Map<String, dynamic> certificateDetails = {
         'certification_name': certificateName,
-        'expiredTime': Timestamp.fromDate(expiryDate),
+        'expiredTime':
+            expiryDate != null ? Timestamp.fromDate(expiryDate) : null,
         'reminderSent': false,
       };
 
@@ -37,12 +38,12 @@ Future<void> setExpiryDate(
 
       await adminDocRef.update({'certifications': certifications});
     } else {
-      // If the document does not exist, set the initial admin document
       await adminDocRef.set({
         'certifications': [
           {
             'certification_name': certificateName,
-            'expiredTime': Timestamp.fromDate(expiryDate),
+            'expiredTime':
+                expiryDate != null ? Timestamp.fromDate(expiryDate) : null,
             'reminderSent': false,
           },
         ],
@@ -51,58 +52,200 @@ Future<void> setExpiryDate(
   });
 }
 
-class ReminderLine extends StatelessWidget {
+class ReminderLine extends StatefulWidget {
   final String text;
-  final Function(String, DateTime) setExpiryDateForCertificate;
+  final Function(String, DateTime?) setExpiryDateForCertificate;
 
-  ReminderLine(
-      {super.key,
-      required this.text,
-      required this.setExpiryDateForCertificate});
+  ReminderLine({
+    Key? key,
+    required this.text,
+    required this.setExpiryDateForCertificate,
+  }) : super(key: key);
+
+  @override
+  _ReminderLineState createState() => _ReminderLineState();
+}
+
+class _ReminderLineState extends State<ReminderLine> {
+  late DateTime selectedDate;
+  DateTime? expiryDate;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedDate = DateTime.now();
+  }
 
   @override
   Widget build(BuildContext context) {
     final loggedInState = context.watch<LoggedInState>();
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Container(
+      margin: EdgeInsets.only(bottom: 10),
+      padding: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade200.withOpacity(0.35),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            text,
-            style: const TextStyle(fontSize: 18, color: Colors.black87),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              DateTime? pickedDate = await showDatePicker(
-                  context: context,
-                  initialDate: DateTime.now(),
-                  firstDate: DateTime.now(),
-                  lastDate: DateTime(2101));
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                widget.text,
+                style: const TextStyle(fontSize: 18, color: Colors.black87),
+              ),
+              CupertinoButton(
+                onPressed: () async {
+                  DateTime? pickedDate = await showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text("Select Date"),
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                        content: SizedBox(
+                          height: 200,
+                          child: CupertinoDatePicker(
+                            mode: CupertinoDatePickerMode.date,
+                            initialDateTime: selectedDate,
+                            minimumDate: DateTime(2023),
+                            maximumDate: DateTime(2050),
+                            onDateTimeChanged: (DateTime newDate) {
+                              setState(() {
+                                selectedDate = newDate;
+                              });
+                            },
+                          ),
+                        ),
+                        actions: [
+                          ElevatedButton(
+                            onPressed: () async {
+                              Navigator.of(context).pop();
+                              DateTime? pickedTime = await showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text("Select Time"),
+                                    contentPadding: EdgeInsets.symmetric(
+                                        horizontal: 24, vertical: 20),
+                                    content: SizedBox(
+                                      height: 200,
+                                      child: CupertinoDatePicker(
+                                        mode: CupertinoDatePickerMode.time,
+                                        initialDateTime: selectedDate,
+                                        onDateTimeChanged: (DateTime newDate) {
+                                          setState(() {
+                                            selectedDate = DateTime(
+                                              selectedDate.year,
+                                              selectedDate.month,
+                                              selectedDate.day,
+                                              newDate.hour,
+                                              newDate.minute,
+                                            );
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                    actions: [
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.of(context)
+                                              .pop(selectedDate);
+                                        },
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.access_time,
+                                              color: Colors.deepOrange,
+                                            ),
+                                            SizedBox(width: 10),
+                                            Text("Set time"),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
 
-              if (pickedDate != null) {
-                final TimeOfDay? pickedTime = await showTimePicker(
-                  context: context,
-                  initialTime: TimeOfDay.now(),
-                );
-
-                if (pickedTime != null) {
-                  DateTime expiryDate = DateTime(
-                      pickedDate.year,
-                      pickedDate.month,
-                      pickedDate.day,
-                      pickedTime.hour,
-                      pickedTime.minute);
-
-                  // Call the passed setExpiryDate function
-                  setExpiryDateForCertificate(
-                    loggedInState.currentUserUid!, // Assuming this is the UID
-                    expiryDate,
+                              if (pickedTime != null) {
+                                widget.setExpiryDateForCertificate(
+                                  loggedInState.currentUserUid!,
+                                  pickedTime,
+                                );
+                                setState(() {
+                                  expiryDate = pickedTime;
+                                });
+                              }
+                            },
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.access_time,
+                                  color: Colors.deepOrange,
+                                ),
+                                SizedBox(width: 10),
+                                Text(
+                                  "Set Date",
+                                  style: TextStyle(
+                                    color: Color.fromARGB(255, 255, 255, 254),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   );
-                }
-              }
-            },
-            child: const Text("Set Expiry Date"),
+
+                  if (pickedDate != null) {
+                    setState(() {
+                      selectedDate = pickedDate;
+                    });
+                  }
+                },
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.edit_calendar,
+                      color: Colors.deepOrange,
+                    ),
+                    SizedBox(width: 5),
+                    Text(
+                      "Set",
+                      style: TextStyle(
+                          color: Colors.deepOrange,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 5),
+          Row(
+            children: [
+              if (expiryDate != null)
+                Icon(
+                  Icons.check,
+                  color: Colors.grey,
+                ),
+              if (expiryDate == null)
+                Icon(
+                  Icons.error,
+                  color: Colors.grey,
+                ),
+              SizedBox(width: 5),
+              Text(
+                expiryDate != null
+                    ? 'Expiry date: ${DateFormat('yyyy/MM/dd').format(expiryDate!)} at ${DateFormat('hh:mm a').format(expiryDate!)}'
+                    : 'Expiry date: Not set',
+                style: TextStyle(fontSize: 12, color: Colors.black87),
+              ),
+            ],
           ),
         ],
       ),
@@ -129,7 +272,10 @@ class _ReminderScreenState extends State<ReminderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Reminder Screen')),
+      appBar: AppBar(
+        backgroundColor: Colors.deepPurpleAccent.shade100,
+        title: const Text('Set expiry date'),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(

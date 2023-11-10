@@ -28,7 +28,6 @@ function formatDate(timestamp) {
   return `${formattedDate.replace(/\d+/, dayWithSuffix)} at ${hours}:${minutes} ${ampm}`;
 }
 
-
 async function sendEmail(recipientEmail, name, expiredTime, certificationName) {
   if (!apiKey) {
     throw new Error("SENDGRID_API_KEY environment variable is not set");

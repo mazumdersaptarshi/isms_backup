@@ -10,46 +10,50 @@ class CourseTile extends StatelessWidget {
   final String title;
   Function? onPressed;
   int modulesCount;
+  double tileHeight;
+  double tileWidth;
   Map<String, dynamic> courseData;
-  CourseTile({
-    required this.index,
-    required this.title,
-    required this.onPressed,
-    required this.modulesCount,
-    required this.courseData,
-  });
+  CourseTile(
+      {required this.index,
+      required this.title,
+      required this.onPressed,
+      required this.modulesCount,
+      required this.courseData,
+      required this.tileHeight,
+      required this.tileWidth});
 
   @override
   Widget build(BuildContext context) {
     int imageIndex = index % 4;
-    return Container(
-      height: 150,
-      child: GestureDetector(
-        child: Card(
-          surfaceTintColor: white,
-          elevation: 4,
-          shape: customCardShape,
-          color: white,
-          child: Padding(
-            padding: const EdgeInsets.all(10),
+    double imgWebWidth = 120;
+    double imgWebHeight = 120;
+    if (tileWidth > 300) imgWebWidth = 100;
+    if (tileHeight > 300) imgWebHeight = 500;
+    return GestureDetector(
+      child: Card(
+        surfaceTintColor: white,
+        elevation: 4,
+        shape: customCardShape,
+        color: white,
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Container(
+            height: tileHeight,
+            width: tileWidth,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  child: Row(
-                    children: [
-                      SvgPicture.asset(
-                        "assets/images/courseIcons/courseIcon${imageIndex}.svg",
-                        height: kIsWeb ? 180 : 150,
-                        width: kIsWeb ? 180 : 150,
-                        fit: BoxFit.contain,
-                      ),
-                      SizedBox(width: 20),
-                    ],
+                Expanded(
+                  flex: 1,
+                  child: SvgPicture.asset(
+                    "assets/images/courseIcons/courseIcon${imageIndex}.svg",
+                    // height: kIsWeb ? imgWebHeight : 150,
+                    // width: kIsWeb ? imgWebWidth : 150,
+                    // fit: BoxFit.contain,
                   ),
                 ),
                 Expanded(
+                  flex: 1,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -72,11 +76,23 @@ class CourseTile extends StatelessWidget {
                           ])),
                       SizedBox(height: 10),
                       Container(
-                        width: 80,
-                        child: LinearProgressIndicator(
-                          backgroundColor: Colors.grey.shade100,
-                          color: primaryColor.shade100,
-                          value: courseData["courseCompPercent"] / 100,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: LinearProgressIndicator(
+                                backgroundColor: Colors.grey.shade100,
+                                color: primaryColor.shade100,
+                                value: courseData["courseCompPercent"] / 100,
+                              ),
+                            ),
+                            SizedBox(width: 10),
+                            Expanded(
+                                child: Text(
+                              "${courseData['courseCompPercent']}%",
+                              style: customTheme.textTheme.labelMedium!
+                                  .copyWith(fontSize: 10),
+                            ))
+                          ],
                         ),
                       ),
                     ],
@@ -86,10 +102,10 @@ class CourseTile extends StatelessWidget {
             ),
           ),
         ),
-        onTap: () {
-          onPressed!();
-        },
       ),
+      onTap: () {
+        onPressed!();
+      },
     );
   }
 }

@@ -1,23 +1,21 @@
 import 'dart:math';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
-import 'package:isms/screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/createModuleScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examListScreen.dart';
 import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/sharedWidgets/customAppBar.dart';
 import 'package:isms/userManagement/loggedInState.dart';
-import '../../../../sharedWidgets/bottomNavBar.dart';
-import 'sharedWidgets/moduleTile.dart';
-import 'package:isms/sharedWidgets/leaningModulesAppBar.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../models/module.dart';
 import '../../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../../projectModules/courseManagement/moduleManagement/moduleDataMaster.dart';
-import '../../../../themes/common_theme.dart';
+import '../../../../sharedWidgets/bottomNavBar.dart';
+import 'sharedWidgets/moduleTile.dart';
 
 class ModulesListScreen extends StatefulWidget {
   ModulesListScreen({super.key, required this.course});

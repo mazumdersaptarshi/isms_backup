@@ -44,44 +44,59 @@ class _AdminActionDropdownState extends State<AdminActionDropdown> {
       );
     } else if (widget.actionId == 'dwnld') {
       return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           !isUsersLoading
-              ? ElevatedButton(
-                  onPressed: () async {
-                    setState(() {
-                      isUsersLoading = true;
-                    });
-                    DataExporter dataExporter =
-                        DataExporter(collectionDataToDownload: 'users');
-                    await dataExporter.downloadCSV();
-                    setState(() {
-                      isUsersLoading = false; // Set to false after download
-                    });
-                  },
-                  child: Text('User Data'))
+              ? Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: GestureDetector(
+                      onTap: () async {
+                        setState(() {
+                          isUsersLoading = true;
+                        });
+                        DataExporter dataExporter =
+                            DataExporter(collectionDataToDownload: 'users');
+                        await dataExporter.downloadCSV();
+                        setState(() {
+                          isUsersLoading = false; // Set to false after download
+                        });
+                      },
+                      child: GestureDetectorCard(text: 'User Data')),
+                )
               : CircularProgressIndicator(),
           !isCoursesLoading
-              ? ElevatedButton(
-                  onPressed: () async {
-                    setState(() {
-                      isCoursesLoading = true;
-                    });
-                    DataExporter dataExporter =
-                        DataExporter(collectionDataToDownload: 'courses');
-                    await dataExporter.downloadCSV();
-                    setState(() {
-                      isCoursesLoading = false; // Set to false after download
-                    });
-                  },
-                  child: Text('Courses Data'))
+              ? Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: GestureDetector(
+                      onTap: () async {
+                        setState(() {
+                          isCoursesLoading = true;
+                        });
+                        DataExporter dataExporter =
+                            DataExporter(collectionDataToDownload: 'courses');
+                        await dataExporter.downloadCSV();
+                        setState(() {
+                          isCoursesLoading =
+                              false; // Set to false after download
+                        });
+                      },
+                      child: GestureDetectorCard(
+                        text: 'Courses Data',
+                      )),
+                )
               : CircularProgressIndicator(),
-          ElevatedButton(
-              onPressed: () async {
-                DataExporter dataExporter =
-                    DataExporter(collectionDataToDownload: 'adminconsole');
-                await dataExporter.downloadCSV();
-              },
-              child: Text('Courses Progress Data'))
+          Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: GestureDetector(
+                onTap: () async {
+                  DataExporter dataExporter =
+                      DataExporter(collectionDataToDownload: 'adminconsole');
+                  await dataExporter.downloadCSV();
+                },
+                child: GestureDetectorCard(
+                  text: 'Courses Progress Data',
+                )),
+          )
         ],
       );
     } else {
@@ -93,22 +108,59 @@ class _AdminActionDropdownState extends State<AdminActionDropdown> {
 class AdminInstructionsDropdown extends StatelessWidget {
   AdminInstructionsDropdown({super.key, this.categories});
   Map<String, dynamic>? categories;
+  void navigateToAdminInstructionsCategories(
+      BuildContext context, String category, List<String>? subCategories) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AdminInstructionsCategories(
+          category: category,
+          subCategories: subCategories,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         for (String key in categories!.keys)
-          ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => AdminInstructionsCategories(
-                            category: key, subCategories: categories?[key])));
-              },
-              child: Text('${key}')),
+          Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: GestureDetector(
+                onTap: () {
+                  navigateToAdminInstructionsCategories(
+                      context, key, categories?[key]);
+                },
+                child: GestureDetectorCard(
+                  text: key,
+                )),
+          ),
       ],
+    );
+  }
+}
+
+class GestureDetectorCard extends StatelessWidget {
+  GestureDetectorCard({super.key, this.text});
+  String? text;
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      // Add margin for spacing between cards
+      elevation: 4.0, // Adds shadow beneath the card
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15.0), // Rounded edges for the card
+      ),
+      child: Container(
+        padding: EdgeInsets.all(12),
+        child: Text(
+          text!,
+          textAlign: TextAlign.center,
+        ),
+      ),
     );
   }
 }

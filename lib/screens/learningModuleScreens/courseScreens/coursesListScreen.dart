@@ -17,6 +17,7 @@ import '../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../sharedWidgets/bottomNavBar.dart';
 import '../../../sharedWidgets/navIndexTracker.dart';
 import '../../../themes/common_theme.dart';
+import '../../homePageFunctions/getCoursesList.dart';
 import 'createCourseScreen.dart';
 
 class CoursesDisplayScreen extends StatefulWidget {
@@ -27,41 +28,6 @@ class CoursesDisplayScreen extends StatefulWidget {
 }
 
 class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
-  Map<String, dynamic> getUserCourseData(
-      {required LoggedInState loggedInState, required Course course}) {
-    int courseCompPercent = 0;
-    DateTime? courseCompletionDate;
-    DateTime? courseStartDate;
-
-    if (loggedInState.loggedInUser.courses_completed != null &&
-        loggedInState.loggedInUser.courses_completed.isNotEmpty) {
-      loggedInState.loggedInUser.courses_completed.forEach((course_completed) {
-        if (course_completed["courseID"] == course.id) {
-          courseCompPercent = 100;
-          print(
-              "COURSE COMPLETED DATE : ${course_completed["course_name"]}, ${course_completed["completed_at"].runtimeType}");
-          courseCompletionDate = course_completed["completed_at"] ?? null;
-        }
-      });
-    }
-
-    if (loggedInState.loggedInUser.courses_started != null &&
-        loggedInState.loggedInUser.courses_started.isNotEmpty) {
-      loggedInState.loggedInUser.courses_started.forEach((course_started) {
-        if (course_started["courseID"] == course.id &&
-            course_started["modules_completed"] != null) {
-          courseCompPercent = ((course_started["modules_completed"].length /
-                      course.modulesCount) *
-                  100)
-              .ceil();
-          courseStartDate = course_started["started_at"] ?? null;
-        }
-      });
-    }
-
-    return {"courseCompPercent": double.parse(courseCompPercent.toString())};
-  }
-
   @override
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
@@ -76,8 +42,8 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
 
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
 
-    int tileMinWidth = 300;
-    int tileMinheight = 300;
+    double tileMinWidth = 300;
+    double tileMinheight = 300;
     double tileRatio = 16 / 9;
     // available width, in pixels
     double horizontalMargin = MediaQuery.sizeOf(context).width > 900 ? 200 : 10;
@@ -116,6 +82,8 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
                       modulesCount: coursesProvider
                               .allCourses[courseIndex].modulesCount ??
                           0,
+                      tileWidth: tileMinWidth,
+                      tileHeight: tileMinheight,
                       courseData: getUserCourseData(
                           loggedInState: loggedInState,
                           course: coursesProvider.allCourses[courseIndex]),
