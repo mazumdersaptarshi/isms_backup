@@ -8,11 +8,18 @@ import 'package:isms/userManagement/loggedInState.dart';
 
 import '../../models/course.dart';
 
+String? getLatestModuleName(Map<String, dynamic> courseItem) {
+  int latestModuleIndex = (courseItem['modules_started'].length - 1) ?? 0;
+  String? latestModuleName =
+      (courseItem['modules_started'][latestModuleIndex]['module_name']) ?? '';
+  return latestModuleName ?? '';
+}
+
 Future<List<Widget>> getHomePageCoursesList(
     {required BuildContext context,
     required LoggedInState loggedInState,
     required CoursesProvider coursesProvider}) async {
-  List<Widget> homePageWidgets = [];
+  List<Widget> homePageWidgets = [Container(width: 100)];
   await loggedInState.getUserCoursesData('crs_enrl');
   await loggedInState.getUserCoursesData('crs_compl');
   List coursesStarted = loggedInState.loggedInUser.courses_started;
@@ -24,15 +31,7 @@ Future<List<Widget>> getHomePageCoursesList(
       Course course = coursesProvider.allCourses
           .where((element) => element.id == coursesStarted[i]["courseID"])
           .first;
-      // homePageWidgets.add(HomePageItem(
-      //   title: courses_started[i]["course_name"],
-      //   onTap: () {
-      //     Navigator.push(
-      //         context,
-      //         MaterialPageRoute(
-      //             builder: (context) => ModulesListScreen(course: course)));
-      //   },
-      // ));
+
       homePageWidgets.add(CourseTile(
         title: coursesStarted[i]["course_name"],
         onPressed: () {
@@ -46,6 +45,7 @@ Future<List<Widget>> getHomePageCoursesList(
         courseData:
             getUserCourseData(loggedInState: loggedInState, course: course),
         index: i,
+        latestModule: getLatestModuleName(courses_started[i]) ?? '',
         modulesCount: course.modulesCount ?? 0,
       ));
     }

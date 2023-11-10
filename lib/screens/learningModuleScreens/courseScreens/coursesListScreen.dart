@@ -4,10 +4,10 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:isms/screens/learningModuleScreens/courseScreens/sharedWidgets/course_tile.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/modulesListScreen.dart';
-import 'package:isms/sharedWidgets/customAppBar.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/sharedWidgets/course_tile.dart';
 import 'package:isms/userManagement/loggedInState.dart';
+import 'package:isms/utilityFunctions/platformCheck.dart';
 import 'package:provider/provider.dart';
 
 import '../../../projectModules/courseManagement/coursesProvider.dart';
@@ -50,10 +50,18 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
     int numberColumns =
         min(itemCount, maxColumns) > 0 ? min(itemCount, maxColumns) : 1;
     // grid width, in pixels
-    //double gridWidth = screenWidth * numberColumns / maxColumns;
+    double gridWidth = screenWidth * numberColumns / maxColumns;
+    String? getLatestModuleName(Map<String, dynamic> courseItem) {
+      int latestModuleIndex = (courseItem['modules_started'].length - 1) ?? 0;
+      String? latestModuleName = (courseItem['modules_started']
+              [latestModuleIndex]['module_name']) ??
+          '';
+      return latestModuleName ?? '';
+    }
+
     return Scaffold(
-      appBar: CustomAppBar(
-        loggedInState: loggedInState,
+      appBar: PlatformCheck.topNavBarWidget(
+        loggedInState,
       ),
       bottomNavigationBar:
           kIsWeb ? null : BottomNavBar(loggedInState: loggedInState),
@@ -67,26 +75,31 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
                     crossAxisCount: numberColumns, childAspectRatio: tileRatio),
                 itemCount: coursesProvider.allCourses.length,
                 itemBuilder: (context, courseIndex) {
-                  return CourseTile(
-                    index: courseIndex,
-                    title: coursesProvider.allCourses[courseIndex].name,
-                    modulesCount:
-                        coursesProvider.allCourses[courseIndex].modulesCount ??
-                            0,
-                    tileWidth: tileMinWidth,
-                    // tileHeight: tileMinimumheight,
-                    courseData: getUserCourseData(
-                        loggedInState: loggedInState,
-                        course: coursesProvider.allCourses[courseIndex]),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ModulesListScreen(
-                                    course:
-                                        coursesProvider.allCourses[courseIndex],
-                                  )));
-                    },
+                  return Container(
+                    // margin: EdgeInsets.symmetric(horizontal: 10),
+
+                    child: CourseTile(
+                      index: courseIndex,
+                      title: coursesProvider.allCourses[courseIndex].name,
+                      modulesCount: coursesProvider
+                              .allCourses[courseIndex].modulesCount ??
+                          0,
+                      tileWidth: tileMinWidth,
+                      // tileHeight: tileMinimumheight,
+                      courseData: getUserCourseData(
+                          loggedInState: loggedInState,
+                          course: coursesProvider.allCourses[courseIndex]),
+                      latestModule: '',
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ModulesListScreen(
+                                      course: coursesProvider
+                                          .allCourses[courseIndex],
+                                    )));
+                      },
+                    ),
                   );
                 })
           ],

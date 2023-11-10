@@ -8,13 +8,13 @@ import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/s
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/slidesDisplayScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/sharedWidgets/bottomNavBar.dart';
-import 'package:isms/sharedWidgets/customAppBar.dart';
 import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../models/course.dart';
 import '../../../../projectModules/courseManagement/coursesProvider.dart';
+import '../../../../utilityFunctions/platformCheck.dart';
 
 class ModuleDetails extends StatefulWidget {
   const ModuleDetails(
@@ -57,8 +57,8 @@ class _ModuleDetailsState extends State<ModuleDetails> {
       "started_at": DateTime.now()
     };
     return Scaffold(
-      appBar: CustomAppBar(
-        loggedInState: loggedInState,
+      appBar: PlatformCheck.topNavBarWidget(
+        loggedInState,
       ),
       body: Container(
         margin: const EdgeInsets.only(top: 20),

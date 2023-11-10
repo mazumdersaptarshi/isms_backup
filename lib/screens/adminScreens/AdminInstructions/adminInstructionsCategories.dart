@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:isms/adminManagement/adminProvider.dart';
 import 'package:isms/screens/adminScreens/AdminInstructions/adminInstructionSlides.dart';
 import 'package:isms/sharedWidgets/bottomNavBar.dart';
-import 'package:isms/sharedWidgets/customAppBar.dart';
+import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
+
+import '../../../utilityFunctions/platformCheck.dart';
 
 class AdminInstructionsCategories extends StatelessWidget {
   const AdminInstructionsCategories(
@@ -13,12 +15,12 @@ class AdminInstructionsCategories extends StatelessWidget {
 
   final String category;
   final List<String>? subCategories;
-
   @override
   Widget build(BuildContext context) {
+    LoggedInState? loggedInState;
     AdminProvider adminProvider = context.watch<AdminProvider>();
     return Scaffold(
-      appBar: const CustomAppBar(),
+      appBar: PlatformCheck.topNavBarWidget(loggedInState!),
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

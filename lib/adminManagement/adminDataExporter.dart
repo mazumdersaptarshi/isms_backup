@@ -18,7 +18,7 @@ class DataExporter {
 
   Future<void> downloadCSV() async {
     //Download Users data
-    List<List> csvData=[];
+    List<List> csvData = [];
     QuerySnapshot querySnapshot;
     querySnapshot = await FirebaseFirestore.instance
         .collection(collectionDataToDownload!)
@@ -75,7 +75,10 @@ class DataExporter {
       }
       String courseName = courseItem['course_name'] ?? '';
       String courseId = courseItem['course_id'] ?? '';
-      String creationDate = courseItem['createdAt'].toString();
+      String creationDate =
+          CSVDataHandler.timestampToReadableDate(courseItem['createdAt'])
+                  .toString() ??
+              '';
       List<String> courseCompletedUsers = [];
       List<String> courseStartedUsers = [];
 
@@ -329,12 +332,6 @@ class DataExporter {
 
   Future<void> exportCourseOverviewDetails(
       Map<String, dynamic> dataMap, String courseName) async {
-    // QuerySnapshot querySnapshot;
-    // querySnapshot = await FirebaseFirestore.instance
-    //     .collection(collectionDataToDownload!)
-    //     .get();
-    // final List<QueryDocumentSnapshot> allData = querySnapshot.docs;
-
     List<List<String>> csvData = [
       // Define the headers
       ['name', 'id', 'examsCount', 'modules', 'modulesCount', 'createdAt']
@@ -381,8 +378,10 @@ class DataExporter {
       String moduleDescription = module['contentDescription'] ?? '';
       String moduleIndex = module['index'].toString();
 
-      String moduleId = module['id'].toString();
-      String moduleCreationDate = module['createdAt'].toString();
+      String moduleId = module['id'].toString() ?? '';
+      String moduleCreationDate =
+          CSVDataHandler.timestampToReadableDate(module['createdAt'])
+              .toString();
 
       // Loop through each slide in the module
       var slides = module['slides'] ?? [];
@@ -393,9 +392,11 @@ class DataExporter {
             .replaceAll("<p>", "")
             .replaceAll("</p>", "")
             .replaceAll("<div><br></div>", ""); // Remove HTML tags
-        String slideIndex = slide['index'].toString();
-        String slideId = slide['id'].toString();
-        String slideCreationDate = slide['createdAt'].toString();
+        String slideIndex = slide['index'].toString() ?? '';
+        String slideId = slide['id'].toString() ?? '';
+        String slideCreationDate =
+            CSVDataHandler.timestampToReadableDate(slide['createdAt'])
+                .toString();
         String slidesCount = slides.length.toString();
 
         // Create the CSV row and add it to csvData
@@ -443,8 +444,10 @@ class DataExporter {
       String moduleDescription = module['contentDescription'] ?? '';
       String moduleIndex = module['index'].toString();
 
-      String moduleId = module['id'].toString();
-      String moduleCreationDate = module['createdAt'].toString();
+      String moduleId = module['id'].toString() ?? '';
+      String moduleCreationDate =
+          CSVDataHandler.timestampToReadableDate(module['createdAt'])
+              .toString();
       var exams = module['exams'] ?? [];
       for (var exam in exams) {
         String passingMarks = exam['passing_marks'].toString();

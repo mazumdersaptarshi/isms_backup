@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:isms/userManagement/loggedInState.dart';
+import 'package:isms/utilityFunctions/platformCheck.dart';
 import 'package:provider/provider.dart';
 
 Future<void> setExpiryDate(
@@ -274,10 +275,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.deepPurpleAccent.shade100,
-        title: const Text('Set expiry date'),
-      ),
+      appBar: PlatformCheck.topNavBarWidget(loggedInState),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(

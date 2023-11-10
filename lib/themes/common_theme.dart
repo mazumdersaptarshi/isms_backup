@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 
+const double HOME_PAGE_WIDGETS_COLLAPSE_WIDTH = 800;
+
 // Theme Constants
 const primaryColor = Colors.deepPurpleAccent;
 
@@ -115,6 +117,7 @@ ThemeData customTheme = ThemeData(
     secondary: Colors.grey.shade400,
     tertiary: Colors.grey.shade600,
   ),
+  primaryColor: primaryColor,
   buttonTheme: const ButtonThemeData(
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10)))),

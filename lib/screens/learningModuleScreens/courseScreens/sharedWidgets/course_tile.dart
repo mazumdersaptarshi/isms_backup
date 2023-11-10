@@ -9,16 +9,19 @@ class CourseTile extends StatelessWidget {
   final Function? onPressed;
   final int modulesCount;
   // double tileHeight;
-  final double tileWidth;
-  final Map<String, dynamic> courseData;
-  const CourseTile(
-      {super.key,
-      required this.index,
+  double tileWidth;
+  dynamic modulesCompleted;
+  dynamic latestModule;
+  Map<String, dynamic> courseData;
+  CourseTile(
+      {super.key, required this.index,
       required this.title,
       required this.onPressed,
       required this.modulesCount,
       required this.courseData,
-      required this.tileWidth});
+      required this.tileWidth,
+      this.modulesCompleted,
+      this.latestModule});
 
   @override
   Widget build(BuildContext context) {
@@ -44,55 +47,79 @@ class CourseTile extends StatelessWidget {
               children: [
                 Expanded(
                   flex: 1,
-                  child: SvgPicture.asset(
-                    "assets/images/courseIcons/courseIcon$imageIndex.svg",
-                    // height: kIsWeb ? imgWebHeight : 150,
-                    // width: kIsWeb ? imgWebWidth : 150,
-                    // fit: BoxFit.contain,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SvgPicture.asset(
+                      "assets/images/courseIcons/courseIcon$imageIndex.svg",
+                      // height: kIsWeb ? imgWebHeight : 150,
+                      // width: kIsWeb ? imgWebWidth : 150,
+                      // fit: BoxFit.contain,
+                    ),
                   ),
                 ),
                 Expanded(
                   flex: 1,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(title,
-                          style: commonTextStyle.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black)),
-                      const SizedBox(width: 100, child: Divider()),
-                      const SizedBox(height: 10),
-                      RichText(
-                          text: TextSpan(
-                              text: "Modules :",
-                              style: customTheme.textTheme.labelMedium!
-                                  .copyWith(color: Colors.grey, fontSize: 14),
-                              children: [
-                            TextSpan(
-                                text: " $modulesCount",
-                                style: customTheme.textTheme.labelMedium),
-                          ])),
-                      const SizedBox(height: 10),
-                      Row(
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(15),
+                    ),
+                    child: Container(
+                      padding: const EdgeInsets.only(left: 10),
+                      decoration: BoxDecoration(
+                        border: Border(
+                            left: BorderSide(
+                                color: Colors.grey.shade200, width: 2)),
+                        color: Colors.grey.shade50,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Expanded(
-                            child: LinearProgressIndicator(
-                              backgroundColor: Colors.grey.shade100,
-                              color: primaryColor.shade100,
-                              value: courseData["courseCompPercent"] / 100,
+                          Text(title,
+                              style: commonTextStyle.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black)),
+                          const SizedBox(width: 100, child: Divider()),
+                          const SizedBox(height: 5),
+                          RichText(
+                              text: TextSpan(
+                                  // text: " ${modulesCount}",
+                                  text: "$latestModule",
+                                  style: TextStyle(
+                                      color: Colors.grey.shade600,
+                                      fontFamily: 'Poppins'))),
+                          const SizedBox(height: 20),
+                          Container(
+                            padding: const EdgeInsets.only(right: 30),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                LinearProgressIndicator(
+                                  borderRadius: BorderRadius.circular(20),
+                                  minHeight: 15,
+                                  backgroundColor: Colors.grey.shade100,
+                                  color: primaryColor.shade100,
+                                  value: courseData["courseCompPercent"] / 100,
+                                ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  'Overall Progress ${courseData['courseCompPercent']}%',
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .tertiary,
+                                      fontFamily: 'Poppins'),
+                                )
+                              ],
                             ),
                           ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                              child: Text(
-                            "${courseData['courseCompPercent']}%",
-                            style: customTheme.textTheme.labelMedium!
-                                .copyWith(fontSize: 10),
-                          ))
                         ],
                       ),
-                    ],
+                    ),
                   ),
                 )
               ],

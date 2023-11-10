@@ -8,7 +8,6 @@ import 'package:isms/models/course.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/createModuleScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examListScreen.dart';
-import 'package:isms/sharedWidgets/customAppBar.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 
@@ -16,6 +15,7 @@ import '../../../../models/module.dart';
 import '../../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../../projectModules/courseManagement/moduleManagement/moduleDataMaster.dart';
 import '../../../../sharedWidgets/bottomNavBar.dart';
+import '../../../../utilityFunctions/platformCheck.dart';
 import 'sharedWidgets/moduleTile.dart';
 
 class ModulesListScreen extends StatefulWidget {
@@ -121,8 +121,8 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
     //double gridWidth = screenWidth * numberColumns / maxColumns;
 
     return Scaffold(
-      appBar: CustomAppBar(
-        loggedInState: loggedInState,
+      appBar: PlatformCheck.topNavBarWidget(
+        loggedInState,
       ),
       bottomNavigationBar:
           kIsWeb ? null : BottomNavBar(loggedInState: loggedInState),

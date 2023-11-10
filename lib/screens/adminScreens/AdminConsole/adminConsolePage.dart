@@ -1,9 +1,9 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:isms/sharedWidgets/customAppBar.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/userManagement/userprofileHeaderWidget.dart';
+import 'package:isms/utilityFunctions/platformCheck.dart';
 import 'package:provider/provider.dart';
 
 import '../../../adminManagement/adminProvider.dart';
@@ -29,7 +29,7 @@ class AdminConsolePage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.deepPurpleAccent.shade100,
-      appBar: CustomAppBar(loggedInState: loggedInState),
+      appBar: PlatformCheck.topNavBarWidget(loggedInState),
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
