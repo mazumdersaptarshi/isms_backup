@@ -10,7 +10,7 @@ class CourseTile extends StatelessWidget {
   final String title;
   Function? onPressed;
   int modulesCount;
-  double tileHeight;
+  // double tileHeight;
   double tileWidth;
   Map<String, dynamic> courseData;
   CourseTile(
@@ -19,7 +19,6 @@ class CourseTile extends StatelessWidget {
       required this.onPressed,
       required this.modulesCount,
       required this.courseData,
-      required this.tileHeight,
       required this.tileWidth});
 
   @override
@@ -28,7 +27,8 @@ class CourseTile extends StatelessWidget {
     double imgWebWidth = 120;
     double imgWebHeight = 120;
     if (tileWidth > 300) imgWebWidth = 100;
-    if (tileHeight > 300) imgWebHeight = 500;
+    // if (tileHeight > 300) imgWebHeight = 500;
+    double tileHeight = 200;
     return GestureDetector(
       child: Card(
         surfaceTintColor: white,
