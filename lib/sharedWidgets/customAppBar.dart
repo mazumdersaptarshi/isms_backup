@@ -70,7 +70,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       actions: <Widget>[
         if (kIsWeb) appBarItem(Icons.explore, "Explore", navigateToCoursesPage),
-        if (kIsWeb)
+        if (loggedInState?.currentUserRole == 'admin' && kIsWeb)
           appBarItem(
               Icons.lightbulb_outline, "Reminders", navigateToRemindersPage),
         if (kIsWeb)
