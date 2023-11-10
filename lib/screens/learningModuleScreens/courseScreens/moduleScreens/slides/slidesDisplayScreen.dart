@@ -1,24 +1,17 @@
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
-import 'package:isms/models/slide.dart';
+import 'package:isms/projectModules/courseManagement/moduleManagement/slideManagement/slidesDataMaster.dart';
 import 'package:isms/screens/homePage.dart';
-import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleDetailsScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleExamsListScreen.dart';
-import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/modulesListScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/sharedWidgets/slidesContentWidget.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
-import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/sharedWidgets/htmlSlideDisplay.dart';
-import 'package:isms/sharedWidgets/leaningModulesAppBar.dart';
-import 'package:isms/themes/common_theme.dart';
-import 'package:provider/provider.dart';
-import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/screens/login/loginScreen.dart';
-import '../../../../../projectModules/courseManagement/coursesProvider.dart';
-import 'package:isms/projectModules/courseManagement/moduleManagement/slideManagement/slidesDataMaster.dart';
+import 'package:isms/userManagement/loggedInState.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../../models/module.dart';
-import '../../../../../sharedWidgets/customAppBar.dart';
+import '../../../../../projectModules/courseManagement/coursesProvider.dart';
+import '../../../../../utilityFunctions/platformCheck.dart';
 
 class SlidesDisplayScreen extends StatefulWidget {
   SlidesDisplayScreen(
@@ -90,74 +83,72 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
       return LoginPage();
     }
 
-    CoursesProvider coursesProvider =
-      Provider.of<CoursesProvider>(context);
+    CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
 
     if (isSlidesFetched == false) {
       fetchSlidesList(coursesProvider: coursesProvider);
     }
 
     return Scaffold(
-      appBar: CustomAppBar(
-        loggedInState: loggedInState,
+      appBar: PlatformCheck.topNavBarWidget(
+        loggedInState,
       ),
-
       body: Container(
         margin: EdgeInsets.only(top: 20),
         child: isSlidesFetched
-          ? Column(
-              children: [
-                SlidesContentWidget(
-                    pageController: _pageController,
-                    cardItems: cardItems,
-                    currentIndex: currentIndex),
-                SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Visibility(
-                      visible: currentIndex == cardItems.length - 1,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ModuleExamListScreen(
-                                        course: widget.course,
-                                        examtype: EXAMTYPE.moduleExam,
-                                        module: widget.module,
-                                      )));
-                        },
-                        child: Text(
-                          'Take exams',
+            ? Column(
+                children: [
+                  SlidesContentWidget(
+                      pageController: _pageController,
+                      cardItems: cardItems,
+                      currentIndex: currentIndex),
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Visibility(
+                        visible: currentIndex == cardItems.length - 1,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ModuleExamListScreen(
+                                          course: widget.course,
+                                          examtype: EXAMTYPE.moduleExam,
+                                          module: widget.module,
+                                        )));
+                          },
+                          child: Text(
+                            'Take exams',
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(width: 20),
-                    Visibility(
-                      visible: currentIndex == cardItems.length - 1,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => HomePage()));
-                        },
-                        child: Text(
-                          'Back to Home',
+                      SizedBox(width: 20),
+                      Visibility(
+                        visible: currentIndex == cardItems.length - 1,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HomePage()));
+                          },
+                          child: Text(
+                            'Back to Home',
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
-            )
-          : AlertDialog(
-              title: Text("Fetching slides"),
-              content: Align(
-                  alignment: Alignment.topCenter,
-                  child: CircularProgressIndicator()),
-            ),
+                    ],
+                  ),
+                ],
+              )
+            : AlertDialog(
+                title: Text("Fetching slides"),
+                content: Align(
+                    alignment: Alignment.topCenter,
+                    child: CircularProgressIndicator()),
+              ),
       ),
     );
   }
