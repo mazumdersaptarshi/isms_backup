@@ -25,7 +25,7 @@ class AdminInstructionsCategories extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Padding(
+            const Padding(
               padding: EdgeInsets.all(10.0),
             ),
             if (subCategories != null)
@@ -37,12 +37,13 @@ class AdminInstructionsCategories extends StatelessWidget {
                   var subCategory = subCategories![index];
                   return Card(
                     elevation: 4,
-                    margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.white,
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 30, vertical: 20),
                       ),
                       onPressed: () async {
                         Navigator.push(
@@ -63,7 +64,7 @@ class AdminInstructionsCategories extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavBar(),
+      bottomNavigationBar: const BottomNavBar(),
     );
   }
 }

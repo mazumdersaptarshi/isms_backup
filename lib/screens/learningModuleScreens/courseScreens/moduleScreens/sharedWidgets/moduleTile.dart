@@ -56,7 +56,7 @@ class ModuleTile extends StatelessWidget {
                     Expanded(
                       flex: 1,
                       child: SvgPicture.asset(
-                        "assets/images/moduleIcons/ModuleIcon${imageIndex + 1}.svg",
+                        "assets/images/moduleIcons/ModuleIcon$imageIndex.svg",
                       ),
                     ),
                     Expanded(

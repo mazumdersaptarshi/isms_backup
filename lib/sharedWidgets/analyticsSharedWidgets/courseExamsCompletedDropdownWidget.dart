@@ -1,13 +1,15 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 
 class CourseExamsCompletedDropdownWidget extends StatelessWidget {
-  CourseExamsCompletedDropdownWidget({
+  const CourseExamsCompletedDropdownWidget({
     super.key,
     required this.courseItem,
     required this.courseDetailsData,
   });
 
-  var courseItem;
+  final Map<String, dynamic> courseItem;
   final Map<String, dynamic>? courseDetailsData;
   int ensureInt(dynamic value) {
     if (value is int) {
@@ -16,7 +18,7 @@ class CourseExamsCompletedDropdownWidget extends StatelessWidget {
       try {
         return int.parse(value.toString());
       } catch (e) {
-        print('Value cannot be converted to an int: $e');
+        debugPrint('Value cannot be converted to an int: $e');
         return 0; // Default value or handle as appropriate
       }
     }

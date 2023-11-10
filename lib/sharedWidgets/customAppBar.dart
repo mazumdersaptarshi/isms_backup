@@ -14,14 +14,6 @@ import '../screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
 import '../screens/userInfo/userProfilePage.dart';
 
 mixin CustomAppBarMixin on StatelessWidget {
-  final Map<String, ValueNotifier<bool>> _hovering = {
-    "Explore": ValueNotifier(false),
-    "Reminders": ValueNotifier(false),
-    "Account": ValueNotifier(false),
-    "Admin": ValueNotifier(false),
-    "My Learning": ValueNotifier(false),
-  };
-
   void navigateToUserProfilePage(BuildContext context) {
     Navigator.push(
       context,
@@ -51,17 +43,25 @@ mixin CustomAppBarMixin on StatelessWidget {
 
   Widget appBarItem(
       IconData icon, String title, VoidCallback onTap, double paddingValue) {
+    final Map<String, ValueNotifier<bool>> hovering = {
+      "Explore": ValueNotifier(false),
+      "Reminders": ValueNotifier(false),
+      "Account": ValueNotifier(false),
+      "Admin": ValueNotifier(false),
+      "My Learning": ValueNotifier(false),
+    };
+
     return MouseRegion(
       cursor: SystemMouseCursors.click,
-      onEnter: (_) => _hovering[title]!.value = true,
-      onExit: (_) => _hovering[title]!.value = false,
+      onEnter: (_) => hovering[title]!.value = true,
+      onExit: (_) => hovering[title]!.value = false,
       child: GestureDetector(
         onTap: onTap,
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: paddingValue)
               .copyWith(top: 4.0, bottom: 4.0),
           child: ValueListenableBuilder<bool>(
-            valueListenable: _hovering[title]!,
+            valueListenable: hovering[title]!,
             builder: (context, isHover, child) {
               return AnimatedContainer(
                 duration: const Duration(milliseconds: 250),

@@ -66,7 +66,7 @@ class _AdminActionDropdownState extends State<AdminActionDropdown> {
                                 false; // Set to false after download
                           });
                         },
-                        child: GestureDetectorCard(text: 'User Data')),
+                        child: const GestureDetectorCard(text: 'User Data')),
                   ),
                 )
               : Container(
@@ -91,7 +91,7 @@ class _AdminActionDropdownState extends State<AdminActionDropdown> {
                                 false; // Set to false after download
                           });
                         },
-                        child: GestureDetectorCard(
+                        child: const GestureDetectorCard(
                           text: 'Courses Data',
                         )),
                   ),
@@ -110,7 +110,7 @@ class _AdminActionDropdownState extends State<AdminActionDropdown> {
                         DataExporter(collectionDataToDownload: 'adminconsole');
                     await dataExporter.downloadCSV();
                   },
-                  child: GestureDetectorCard(
+                  child: const GestureDetectorCard(
                     text: 'Courses Progress Data',
                   )),
             ),
@@ -162,8 +162,8 @@ class AdminInstructionsDropdown extends StatelessWidget {
 }
 
 class GestureDetectorCard extends StatelessWidget {
-  GestureDetectorCard({super.key, this.text});
-  String? text;
+  const GestureDetectorCard({super.key, this.text});
+  final String? text;
   @override
   Widget build(BuildContext context) {
     return Card(

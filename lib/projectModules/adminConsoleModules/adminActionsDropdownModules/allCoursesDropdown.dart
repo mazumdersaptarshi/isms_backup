@@ -32,7 +32,6 @@ class AllCoursesDropdown extends StatelessWidget {
       shrinkWrap: true,
       physics: ClampingScrollPhysics(),
       itemBuilder: (context, index) {
-        final course = courses[index];
         return Card(
           margin: EdgeInsets.all(4.0), // Add margin for spacing between cards
           elevation: 4.0, // Adds shadow beneath the card
@@ -147,9 +146,9 @@ class CourseDetailExpansionTile extends StatelessWidget {
 }
 
 class CourseCompletedUsersDropdown extends StatelessWidget {
-  CourseCompletedUsersDropdown({required this.students});
-  List<dynamic> students;
-  int index = 0;
+  const CourseCompletedUsersDropdown({super.key, required this.students});
+  final List<dynamic> students;
+
   @override
   Widget build(BuildContext context) {
     List<CourseUserName> courseUserNames = [];
@@ -171,16 +170,17 @@ class CourseCompletedUsersDropdown extends StatelessWidget {
 }
 
 class CourseEnrolledUsersDropdown extends StatelessWidget {
-  CourseEnrolledUsersDropdown({
+  const CourseEnrolledUsersDropdown({
+    super.key,
     required this.studentsEnrolled,
     this.studentsCompleted,
   });
-  List<dynamic> studentsEnrolled;
-  List<dynamic>? studentsCompleted;
-  List<String> studentsCompletedUIDs = [];
+  final List<dynamic> studentsEnrolled;
+  final List<dynamic>? studentsCompleted;
 
   @override
   Widget build(BuildContext context) {
+    List<String> studentsCompletedUIDs = [];
     for (var student in studentsCompleted!) {
       studentsCompletedUIDs.add(student['uid']);
     }
@@ -216,20 +216,20 @@ class CourseEnrolledUsersDropdown extends StatelessWidget {
 }
 
 class CourseUserName extends StatelessWidget {
-  CourseUserName({
+  const CourseUserName({
     super.key,
     required this.student,
     this.color,
     this.index,
-    this.title,
-    this.status,
+    this.title = '',
+    this.status = 'pending',
   });
 
-  Map<String, dynamic> student;
-  Color? color;
-  int? index;
-  String? title = '';
-  String? status = 'pending';
+  final Map<String, dynamic> student;
+  final Color? color;
+  final int? index;
+  final String? title;
+  final String? status;
 
   @override
   Widget build(BuildContext context) {

@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, non_constant_identifier_names
+
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -45,18 +47,16 @@ class CourseExamCompletionStrategy implements ExamCompletionStrategy {
   Future<void> handleExamCompletion({required BuildContext context}) async {
     final loggedInState = context.read<LoggedInState>();
     final coursesProvider = context.read<CoursesProvider>();
-    var started_at;
-    if (loggedInState.loggedInUser.courses_started != null) {
-      loggedInState.loggedInUser.courses_started.forEach((courses_started) {
-        if (courses_started["courseID"] == course.id) {}
-        started_at = courses_started["started_at"] ?? null;
-      });
+    DateTime startedAt = DateTime.now();
+    for (var courses_started in loggedInState.loggedInUser.courses_started) {
+      if (courses_started["courseID"] == course.id) {}
+      startedAt = courses_started["started_at"];
     }
     Map<String, dynamic> courseDetailsMap = {
       "courseID": course.id,
       "course_name": course.name,
       "course_modules_count": course.modulesCount,
-      "started_at": started_at,
+      "started_at": startedAt,
     };
     await loggedInState.setUserCourseExamCompleted(
       coursesProvider: coursesProvider,
@@ -67,7 +67,7 @@ class CourseExamCompletionStrategy implements ExamCompletionStrategy {
 
     await loggedInState.setUserCourseCompleted(
         courseDetails: {...courseDetailsMap, "completed_at": DateTime.now()});
-
+    if (!context.mounted) return;
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => HomePage()));
   }
@@ -91,14 +91,14 @@ class ModuleExamCompletionStrategy implements ExamCompletionStrategy {
 
   bool checkIfModuleStartedd() {
     bool flag = false;
-    loggedInState.loggedInUser.courses_started.forEach((course_started) {
-      if (course_started["modules_started"] != null &&
-          course_started["course_name"] == course.name) {
-        course_started["modules_started"].forEach((module_completed) {
-          if (module_completed["module_name"] == module.title) flag = true;
+    for (var courseStarted in loggedInState.loggedInUser.courses_started) {
+      if (courseStarted["modules_started"] != null &&
+          courseStarted["course_name"] == course.name) {
+        courseStarted["modules_started"].forEach((moduleCompleted) {
+          if (moduleCompleted["module_name"] == module.title) flag = true;
         });
       }
-    });
+    }
     return flag;
   }
 

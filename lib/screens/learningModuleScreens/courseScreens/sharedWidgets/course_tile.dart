@@ -6,29 +6,30 @@ import '../../../../themes/common_theme.dart';
 class CourseTile extends StatelessWidget {
   final int index;
   final String title;
-  Function? onPressed;
-  int modulesCount;
+  final Function? onPressed;
+  final int modulesCount;
   // double tileHeight;
-  double tileWidth;
-  dynamic? modulesCompleted;
-  dynamic? latestModule;
-  Map<String, dynamic> courseData;
-  CourseTile(
-      {required this.index,
+  final double tileWidth;
+  //dynamic? modulesCompleted;
+  final String latestModule;
+  final Map<String, dynamic> courseData;
+  const CourseTile(
+      {super.key,
+      required this.index,
       required this.title,
       required this.onPressed,
       required this.modulesCount,
       required this.courseData,
       required this.tileWidth,
-      this.modulesCompleted,
-      this.latestModule});
+      //this.modulesCompleted,
+      this.latestModule = ''});
 
   @override
   Widget build(BuildContext context) {
     int imageIndex = index % 4;
-    double imgWebWidth = 120;
-    double imgWebHeight = 120;
-    if (tileWidth > 300) imgWebWidth = 100;
+    //double imgWebWidth = 120;
+    //double imgWebHeight = 120;
+    //if (tileWidth > 300) imgWebWidth = 100;
     // if (tileHeight > 300) imgWebHeight = 500;
     double tileHeight = 200;
     return GestureDetector(

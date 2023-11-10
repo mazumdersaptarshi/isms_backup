@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -6,12 +8,13 @@ import 'package:flutter_svg/svg.dart';
 import '../../themes/common_theme.dart';
 
 class HomePageItem extends StatelessWidget {
-  HomePageItem({super.key, required this.onTap, required this.title});
-  Function onTap;
-  String title;
-  int randIndex = Random().nextInt(5);
+  const HomePageItem({super.key, required this.onTap, required this.title});
+  final Function onTap;
+  final String title;
+
   @override
   Widget build(BuildContext context) {
+    int randIndex = Random().nextInt(5);
     return Container(
       height: 300,
       width: 300,
