@@ -2,19 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/projectModules/courseManagement/moduleManagement/slideManagement/slidesDataMaster.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleExamsListScreen.dart';
-import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/modulesListScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/createSlideScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/slidesDisplayScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/sharedWidgets/customAppBar.dart';
-import 'package:isms/sharedWidgets/leaningModulesAppBar.dart';
+import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../models/course.dart';
 import '../../../../projectModules/courseManagement/coursesProvider.dart';
-import '../../../../themes/common_theme.dart';
 
 class ModuleDetails extends StatefulWidget {
   ModuleDetails(
@@ -115,7 +113,6 @@ class _ModuleDetailsState extends State<ModuleDetails> {
               margin: EdgeInsets.symmetric(horizontal: 20.0),
               padding: EdgeInsets.all(20.0),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.secondaryContainer,
                 borderRadius: BorderRadius.circular(20.0),
               ),
               child: Column(
@@ -123,16 +120,12 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                 children: [
                   Text(
                     "${widget.module.title}",
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onSecondaryContainer,
-                      fontSize: 22,
-                    ),
+                    style: customTheme.textTheme.bodyMedium!.copyWith(),
                   ),
                   SizedBox(height: 20.0),
                   Text(
                     widget.module.contentDescription,
                     style: TextStyle(
-                      color: Theme.of(context).colorScheme.onSecondaryContainer,
                       fontSize: 18,
                     ),
                   ),
