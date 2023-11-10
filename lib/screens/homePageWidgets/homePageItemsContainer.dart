@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:isms/themes/common_theme.dart';
 
 class HomePageItemsContainer extends StatelessWidget {
   HomePageItemsContainer({super.key, this.homePageItems});
   List<Widget>? homePageItems;
   @override
   Widget build(BuildContext context) {
-    return MediaQuery.of(context).size.width > 800
+    return MediaQuery.of(context).size.width > HOME_PAGE_WIDGETS_COLLAPSE_WIDTH
         ? Container(
             width: MediaQuery.of(context).size.width * 0.9,
             height: 300,
@@ -28,8 +29,8 @@ class HomePageItemsContainer extends StatelessWidget {
           )
         : Container(
             width: MediaQuery.of(context).size.width * 0.9,
-            margin:
-                EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.03),
+            margin: EdgeInsets.only(
+                left: MediaQuery.of(context).size.width * 0.03, top: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: homePageItems!,
