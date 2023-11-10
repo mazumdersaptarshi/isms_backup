@@ -80,8 +80,8 @@ class _ReminderLineState extends State<ReminderLine> {
   Widget build(BuildContext context) {
     final loggedInState = context.watch<LoggedInState>();
     return Container(
-      margin: EdgeInsets.only(bottom: 10),
-      padding: EdgeInsets.all(10),
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.grey.shade200.withOpacity(0.35),
         borderRadius: BorderRadius.circular(10),
@@ -102,9 +102,9 @@ class _ReminderLineState extends State<ReminderLine> {
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        title: Text("Select Date"),
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                        title: const Text("Select Date"),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 20),
                         content: SizedBox(
                           height: 200,
                           child: CupertinoDatePicker(
@@ -127,8 +127,8 @@ class _ReminderLineState extends State<ReminderLine> {
                                 context: context,
                                 builder: (BuildContext context) {
                                   return AlertDialog(
-                                    title: Text("Select Time"),
-                                    contentPadding: EdgeInsets.symmetric(
+                                    title: const Text("Select Time"),
+                                    contentPadding: const EdgeInsets.symmetric(
                                         horizontal: 24, vertical: 20),
                                     content: SizedBox(
                                       height: 200,
@@ -154,7 +154,7 @@ class _ReminderLineState extends State<ReminderLine> {
                                           Navigator.of(context)
                                               .pop(selectedDate);
                                         },
-                                        child: Row(
+                                        child: const Row(
                                           children: [
                                             Icon(
                                               Icons.access_time,
@@ -180,7 +180,7 @@ class _ReminderLineState extends State<ReminderLine> {
                                 });
                               }
                             },
-                            child: Row(
+                            child: const Row(
                               children: [
                                 Icon(
                                   Icons.access_time,
@@ -207,7 +207,7 @@ class _ReminderLineState extends State<ReminderLine> {
                     });
                   }
                 },
-                child: Row(
+                child: const Row(
                   children: [
                     Icon(
                       Icons.edit_calendar,
@@ -225,25 +225,25 @@ class _ReminderLineState extends State<ReminderLine> {
               ),
             ],
           ),
-          SizedBox(height: 5),
+          const SizedBox(height: 5),
           Row(
             children: [
               if (expiryDate != null)
-                Icon(
+                const Icon(
                   Icons.check,
                   color: Colors.grey,
                 ),
               if (expiryDate == null)
-                Icon(
+                const Icon(
                   Icons.error,
                   color: Colors.grey,
                 ),
-              SizedBox(width: 5),
+              const SizedBox(width: 5),
               Text(
                 expiryDate != null
                     ? 'Expiry date: ${DateFormat('yyyy/MM/dd').format(expiryDate!)} at ${DateFormat('hh:mm a').format(expiryDate!)}'
                     : 'Expiry date: Not set',
-                style: TextStyle(fontSize: 12, color: Colors.black87),
+                style: const TextStyle(fontSize: 12, color: Colors.black87),
               ),
             ],
           ),

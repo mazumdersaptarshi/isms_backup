@@ -43,7 +43,7 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
 
     double tileMinWidth = 300;
-    double tileMinheight = 300;
+    double tileMinimumheight = 100;
     double tileRatio = 16 / 9;
     // available width, in pixels
     double horizontalMargin = MediaQuery.sizeOf(context).width > 900 ? 200 : 10;
@@ -83,7 +83,7 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
                               .allCourses[courseIndex].modulesCount ??
                           0,
                       tileWidth: tileMinWidth,
-                      tileHeight: tileMinheight,
+                      // tileHeight: tileMinimumheight,
                       courseData: getUserCourseData(
                           loggedInState: loggedInState,
                           course: coursesProvider.allCourses[courseIndex]),

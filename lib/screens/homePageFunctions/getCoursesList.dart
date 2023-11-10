@@ -41,7 +41,7 @@ Future<List<Widget>> getHomePageCoursesList(
               MaterialPageRoute(
                   builder: (context) => ModulesListScreen(course: course)));
         },
-        tileHeight: 300,
+        // tileHeight: 300,
         tileWidth: 400,
         courseData:
             getUserCourseData(loggedInState: loggedInState, course: course),

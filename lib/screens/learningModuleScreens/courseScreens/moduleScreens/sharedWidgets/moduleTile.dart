@@ -29,7 +29,6 @@ class ModuleTile extends StatelessWidget {
   Widget build(BuildContext context) {
     int imageIndex = (module.index ?? 0) % 4;
     return Container(
-      height: 150,
       child: GestureDetector(
         child: Card(
           surfaceTintColor: Colors.white,
