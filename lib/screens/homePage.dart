@@ -30,7 +30,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-
     InitLinkHandler.initLinks(context: context);
   }
 
@@ -79,7 +78,7 @@ class _HomePageState extends State<HomePage> {
             loggedInState: loggedInState,
           ),
           body: CustomScrollView(
-            physics: ClampingScrollPhysics(),
+            physics: const ClampingScrollPhysics(),
             shrinkWrap: true,
             slivers: [
               SliverAppBar(
@@ -145,7 +144,8 @@ class _HomePageState extends State<HomePage> {
                             // Align children to the start of the cross axis
                             children: [
                               Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 10),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
                                   child: FutureBuilder<List<Widget>>(
                                     future: getHomePageCoursesList(
                                       context: context,
@@ -154,11 +154,12 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                     builder: (BuildContext context,
                                         AsyncSnapshot<List<Widget>>? snapshot) {
-                                      if (snapshot?.data == null)
-                                        return CircularProgressIndicator();
-                                      else
+                                      if (snapshot?.data == null) {
+                                        return const CircularProgressIndicator();
+                                      } else {
                                         return HomePageItemsContainer(
                                             homePageItems: snapshot?.data);
+                                      }
                                     },
                                   )),
                             ],
@@ -231,7 +232,7 @@ class _HomePageState extends State<HomePage> {
                                         )
                                       ],
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 50,
                                     ),
                                     Row(
@@ -253,7 +254,7 @@ class _HomePageState extends State<HomePage> {
                                         )
                                       ],
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 50,
                                     ),
                                     Row(
