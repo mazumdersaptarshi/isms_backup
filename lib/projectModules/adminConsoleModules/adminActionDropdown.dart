@@ -44,58 +44,74 @@ class _AdminActionDropdownState extends State<AdminActionDropdown> {
       );
     } else if (widget.actionId == 'dwnld') {
       return Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        // crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           !isUsersLoading
               ? Padding(
                   padding: const EdgeInsets.all(4.0),
-                  child: GestureDetector(
-                      onTap: () async {
-                        setState(() {
-                          isUsersLoading = true;
-                        });
-                        DataExporter dataExporter =
-                            DataExporter(collectionDataToDownload: 'users');
-                        await dataExporter.downloadCSV();
-                        setState(() {
-                          isUsersLoading = false; // Set to false after download
-                        });
-                      },
-                      child: GestureDetectorCard(text: 'User Data')),
+                  child: Container(
+                    width: double.infinity,
+                    child: GestureDetector(
+                        onTap: () async {
+                          setState(() {
+                            isUsersLoading = true;
+                          });
+                          DataExporter dataExporter =
+                              DataExporter(collectionDataToDownload: 'users');
+                          await dataExporter.downloadCSV();
+                          setState(() {
+                            isUsersLoading =
+                                false; // Set to false after download
+                          });
+                        },
+                        child: GestureDetectorCard(text: 'User Data')),
+                  ),
                 )
-              : CircularProgressIndicator(),
+              : Container(
+                  width: 50, // Set the width
+                  height: 50, // Set the height
+                  child: CircularProgressIndicator()),
           !isCoursesLoading
               ? Padding(
                   padding: const EdgeInsets.all(4.0),
-                  child: GestureDetector(
-                      onTap: () async {
-                        setState(() {
-                          isCoursesLoading = true;
-                        });
-                        DataExporter dataExporter =
-                            DataExporter(collectionDataToDownload: 'courses');
-                        await dataExporter.downloadCSV();
-                        setState(() {
-                          isCoursesLoading =
-                              false; // Set to false after download
-                        });
-                      },
-                      child: GestureDetectorCard(
-                        text: 'Courses Data',
-                      )),
+                  child: Container(
+                    width: double.infinity,
+                    child: GestureDetector(
+                        onTap: () async {
+                          setState(() {
+                            isCoursesLoading = true;
+                          });
+                          DataExporter dataExporter =
+                              DataExporter(collectionDataToDownload: 'courses');
+                          await dataExporter.downloadCSV();
+                          setState(() {
+                            isCoursesLoading =
+                                false; // Set to false after download
+                          });
+                        },
+                        child: GestureDetectorCard(
+                          text: 'Courses Data',
+                        )),
+                  ),
                 )
-              : CircularProgressIndicator(),
+              : Container(
+                  width: 50, // Set the width
+                  height: 50, // Set the height
+                  child: CircularProgressIndicator()),
           Padding(
             padding: const EdgeInsets.all(4.0),
-            child: GestureDetector(
-                onTap: () async {
-                  DataExporter dataExporter =
-                      DataExporter(collectionDataToDownload: 'adminconsole');
-                  await dataExporter.downloadCSV();
-                },
-                child: GestureDetectorCard(
-                  text: 'Courses Progress Data',
-                )),
+            child: Container(
+              width: double.infinity,
+              child: GestureDetector(
+                  onTap: () async {
+                    DataExporter dataExporter =
+                        DataExporter(collectionDataToDownload: 'adminconsole');
+                    await dataExporter.downloadCSV();
+                  },
+                  child: GestureDetectorCard(
+                    text: 'Courses Progress Data',
+                  )),
+            ),
           )
         ],
       );

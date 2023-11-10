@@ -67,7 +67,10 @@ class DataExporter {
       print(courseItem);
       String courseName = courseItem['course_name'] ?? '';
       String courseId = courseItem['course_id'] ?? '';
-      String creationDate = courseItem['createdAt'].toString() ?? '';
+      String creationDate =
+          CSVDataHandler.timestampToReadableDate(courseItem['createdAt'])
+                  .toString() ??
+              '';
       List<String> course_completed_users = [];
       List<String> course_started_users = [];
 
@@ -381,7 +384,9 @@ class DataExporter {
             .replaceAll("<div><br></div>", ""); // Remove HTML tags
         String slideIndex = slide['index'].toString() ?? '';
         String slideId = slide['id'].toString() ?? '';
-        String slideCreationDate = slide['createdAt'].toString();
+        String slideCreationDate =
+            CSVDataHandler.timestampToReadableDate(slide['createdAt'])
+                .toString();
         String slidesCount = slides.length.toString();
 
         // Create the CSV row and add it to csvData
@@ -430,7 +435,9 @@ class DataExporter {
       String moduleIndex = module['index'].toString() ?? '';
 
       String moduleId = module['id'].toString() ?? '';
-      String moduleCreationDate = module['createdAt'].toString();
+      String moduleCreationDate =
+          CSVDataHandler.timestampToReadableDate(module['createdAt'])
+              .toString();
       var exams = module['exams'] ?? [];
       for (var exam in exams) {
         String passingMarks = exam['passing_marks'].toString() ?? '';
