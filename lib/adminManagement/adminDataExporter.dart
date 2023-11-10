@@ -318,12 +318,6 @@ class DataExporter {
 
   Future<void> exportCourseOverviewDetails(
       Map<String, dynamic> dataMap, String courseName) async {
-    // QuerySnapshot querySnapshot;
-    // querySnapshot = await FirebaseFirestore.instance
-    //     .collection(collectionDataToDownload!)
-    //     .get();
-    // final List<QueryDocumentSnapshot> allData = querySnapshot.docs;
-
     List<List<String>> csvData = [
       // Define the headers
       ['name', 'id', 'examsCount', 'modules', 'modulesCount', 'createdAt']
@@ -371,7 +365,9 @@ class DataExporter {
       String moduleIndex = module['index'].toString() ?? '';
 
       String moduleId = module['id'].toString() ?? '';
-      String moduleCreationDate = module['createdAt'].toString();
+      String moduleCreationDate =
+          CSVDataHandler.timestampToReadableDate(module['createdAt'])
+              .toString();
 
       // Loop through each slide in the module
       var slides = module['slides'] ?? [];

@@ -1,25 +1,18 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 import 'package:isms/projectModules/notificationModules/initLinkHandler.dart';
-import 'package:isms/screens/adminScreens/AdminConsole/adminConsolePage.dart';
-import 'package:isms/screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
-import 'package:isms/screens/reminderScreen.dart';
-import 'package:isms/screens/userInfo/userProfilePage.dart';
 import 'package:isms/sharedWidgets/bottomNavBar.dart';
 import 'package:isms/sharedWidgets/customAppBar.dart';
 import 'package:isms/sharedWidgets/navIndexTracker.dart';
 import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/gestures.dart';
+
 import 'homePageFunctions/getCoursesList.dart';
 import 'homePageWidgets/homePageItemsContainer.dart';
+import 'learningModuleScreens/courseScreens/coursesListScreen.dart';
 import 'login/loginScreen.dart';
 
 class HomePage extends StatefulWidget {
@@ -177,36 +170,141 @@ class _HomePageState extends State<HomePage> {
                                     topLeft: Radius.circular(20))),
                           )),
                       Positioned(
-                          top: 0,
+                          top: 20,
+                          child: Column(
+                            // Align children to the start of the cross axis
+                            children: [
+                              Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 10),
+                                  child: FutureBuilder<List<Widget>>(
+                                    future: getHomePageCoursesList(
+                                      context: context,
+                                      loggedInState: loggedInState,
+                                      coursesProvider: coursesProvider,
+                                    ),
+                                    builder: (BuildContext context,
+                                        AsyncSnapshot<List<Widget>>? snapshot) {
+                                      if (snapshot?.data == null)
+                                        return CircularProgressIndicator();
+                                      else
+                                        return HomePageItemsContainer(
+                                            homePageItems: snapshot?.data);
+                                    },
+                                  )),
+                            ],
+                          )),
+                      Positioned(
+                          top: 320,
                           child: Container(
                             margin: EdgeInsets.only(
                                 left: MediaQuery.of(context).size.width * 0.14),
-                            child: Text("Your courses...",
-                                style: customTheme.textTheme.labelMedium!
-                                    .copyWith(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white)),
+                            child: MouseRegion(
+                              cursor: SystemMouseCursors.click,
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              CoursesDisplayScreen()));
+                                },
+                                child: Row(
+                                  children: [
+                                    Text("Resume Learning ",
+                                        style: customTheme
+                                            .textTheme.labelMedium!
+                                            .copyWith(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary)),
+                                    Icon(
+                                      Icons.arrow_circle_right_outlined,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
                           )),
                       Positioned(
-                          top: 20,
+                          top: 600,
                           child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              child: FutureBuilder<List<Widget>>(
-                                future: getHomePageCoursesList(
-                                  context: context,
-                                  loggedInState: loggedInState,
-                                  coursesProvider: coursesProvider,
-                                ),
-                                builder: (BuildContext context,
-                                    AsyncSnapshot<List<Widget>>? snapshot) {
-                                  if (snapshot?.data == null)
-                                    return CircularProgressIndicator();
-                                  else
-                                    return HomePageItemsContainer(
-                                        homePageItems: snapshot?.data);
-                                },
-                              )))
+                            margin: EdgeInsets.only(
+                                left: MediaQuery.of(context).size.width * 0.14),
+                            child: MouseRegion(
+                              cursor: SystemMouseCursors.click,
+                              child: Row(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text("Support ",
+                                          style: customTheme
+                                              .textTheme.labelMedium!
+                                              .copyWith(
+                                                  fontSize: 12,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary)),
+                                      Icon(
+                                        Icons.open_in_new_rounded,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        size: 12,
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    width: 50,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text("Terms and Conditions ",
+                                          style: customTheme
+                                              .textTheme.labelMedium!
+                                              .copyWith(
+                                                  fontSize: 12,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary)),
+                                      Icon(
+                                        Icons.open_in_new_rounded,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        size: 12,
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    width: 50,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text("Privacy Policy ",
+                                          style: customTheme
+                                              .textTheme.labelMedium!
+                                              .copyWith(
+                                                  fontSize: 12,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary)),
+                                      Icon(
+                                        Icons.open_in_new_rounded,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        size: 12,
+                                      )
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                          )),
                     ])),
               )
             ],
