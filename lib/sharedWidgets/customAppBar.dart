@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/screens/homePage.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/myLearningScreen.dart';
 import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/screens/reminderScreen.dart';
 import 'package:isms/themes/common_theme.dart';
@@ -16,6 +17,7 @@ mixin CustomAppBarMixin on StatelessWidget {
     "Reminders": ValueNotifier(false),
     "Account": ValueNotifier(false),
     "Admin": ValueNotifier(false),
+    "My Learning": ValueNotifier(false),
   };
 
   void navigateToUserProfilePage(BuildContext context) {
@@ -30,6 +32,11 @@ mixin CustomAppBarMixin on StatelessWidget {
         MaterialPageRoute(builder: (context) => CoursesDisplayScreen()));
   }
 
+  void navigateToMyLearningPage(BuildContext context) {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => MyLearningScreen()));
+  }
+
   void navigateToRemindersPage(BuildContext context) {
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => const ReminderScreen()));
@@ -40,7 +47,8 @@ mixin CustomAppBarMixin on StatelessWidget {
         context, MaterialPageRoute(builder: (context) => AdminConsolePage()));
   }
 
-  Widget appBarItem(IconData icon, String title, VoidCallback onTap) {
+  Widget appBarItem(
+      IconData icon, String title, VoidCallback onTap, double paddingValue) {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       onEnter: (_) => _hovering[title]!.value = true,
@@ -48,7 +56,7 @@ mixin CustomAppBarMixin on StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0)
+          padding: EdgeInsets.symmetric(horizontal: paddingValue)
               .copyWith(top: 4.0, bottom: 4.0),
           child: ValueListenableBuilder<bool>(
             valueListenable: _hovering[title]!,
@@ -183,7 +191,7 @@ class CustomAppBarWeb extends StatelessWidget
     with CustomAppBarMixin
     implements PreferredSizeWidget {
   final LoggedInState? loggedInState;
-
+  final double _paddingValue = 20;
   CustomAppBarWeb({this.loggedInState});
   @override
   Widget build(BuildContext context) {
@@ -194,16 +202,18 @@ class CustomAppBarWeb extends StatelessWidget
         child: homeButtonItem(context),
       ),
       actions: <Widget>[
-        appBarItem(
-            Icons.explore, "Explore", () => navigateToCoursesPage(context)),
+        appBarItem(Icons.explore, "Explore",
+            () => navigateToCoursesPage(context), _paddingValue),
+        appBarItem(Icons.lightbulb, "My Learning",
+            () => navigateToMyLearningPage(context), _paddingValue),
         if (loggedInState?.currentUserRole == 'admin')
-          appBarItem(Icons.lightbulb_outline, "Reminders",
-              () => navigateToRemindersPage(context)),
+          appBarItem(Icons.notifications_active_rounded, "Reminders",
+              () => navigateToRemindersPage(context), _paddingValue),
         appBarItem(Icons.account_circle, "Account",
-            () => navigateToUserProfilePage(context)),
+            () => navigateToUserProfilePage(context), _paddingValue),
         if (loggedInState?.currentUserRole == 'admin')
           appBarItem(Icons.admin_panel_settings_outlined, "Admin",
-              () => navigateToAdminConsolePage(context)),
+              () => navigateToAdminConsolePage(context), _paddingValue),
         dividerItem(),
         logoutButtonItem(context),
       ],
@@ -221,7 +231,7 @@ class CustomAppBarMobile extends StatelessWidget
     with CustomAppBarMixin
     implements PreferredSizeWidget {
   final LoggedInState? loggedInState;
-
+  final double _paddingValue = 8;
   CustomAppBarMobile({this.loggedInState});
   @override
   Widget build(BuildContext context) {
@@ -232,12 +242,14 @@ class CustomAppBarMobile extends StatelessWidget
         child: homeButtonItem(context),
       ),
       actions: <Widget>[
+        appBarItem(Icons.lightbulb, "My Learning",
+            () => navigateToAdminConsolePage(context), _paddingValue),
         if (loggedInState?.currentUserRole == 'admin')
-          appBarItem(Icons.lightbulb_outline, "Reminders",
-              () => navigateToRemindersPage(context)),
+          appBarItem(Icons.notifications_active_rounded, "Reminders",
+              () => navigateToRemindersPage(context), _paddingValue),
         if (loggedInState?.currentUserRole == 'admin')
           appBarItem(Icons.admin_panel_settings_outlined, "Admin",
-              () => navigateToAdminConsolePage(context)),
+              () => navigateToAdminConsolePage(context), _paddingValue),
         dividerItem(),
         logoutButtonItem(context),
       ],

@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
-import 'package:isms/screens/homePage.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/modulesListScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/sharedWidgets/course_tile.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 
 import '../../models/course.dart';
-import '../homePageWidgets/homePageItem.dart';
+
+String? getLatestModuleName(Map<String, dynamic> courseItem) {
+  int latestModuleIndex = (courseItem['modules_started'].length - 1) ?? 0;
+  String? latestModuleName =
+      (courseItem['modules_started'][latestModuleIndex]['module_name']) ?? '';
+  return latestModuleName ?? '';
+}
 
 Future<List<Widget>> getHomePageCoursesList(
     {required BuildContext context,
@@ -24,15 +29,7 @@ Future<List<Widget>> getHomePageCoursesList(
       Course course = coursesProvider.allCourses
           .where((element) => element.id == courses_started[i]["courseID"])
           .first;
-      // homePageWidgets.add(HomePageItem(
-      //   title: courses_started[i]["course_name"],
-      //   onTap: () {
-      //     Navigator.push(
-      //         context,
-      //         MaterialPageRoute(
-      //             builder: (context) => ModulesListScreen(course: course)));
-      //   },
-      // ));
+
       homePageWidgets.add(CourseTile(
         title: courses_started[i]["course_name"],
         onPressed: () {
@@ -46,6 +43,7 @@ Future<List<Widget>> getHomePageCoursesList(
         courseData:
             getUserCourseData(loggedInState: loggedInState, course: course),
         index: i,
+        latestModule: getLatestModuleName(courses_started[i]) ?? '',
         modulesCount: course.modulesCount ?? 0,
       ));
     }
