@@ -32,7 +32,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-
     InitLinkHandler.initLinks(context: context);
   }
 
@@ -207,85 +206,6 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ),
                               )),
-                          // if (MediaQuery.of(context).size.width >
-                          //     HOME_PAGE_WIDGETS_COLLAPSE_WIDTH)
-                          //   Positioned(
-                          //       top: 600,
-                          //       child: Container(
-                          //         // margin: EdgeInsets.only(
-                          //         //     left:
-                          //         //         MediaQuery.of(context).size.width * 0.14),
-                          //         child: MouseRegion(
-                          //           cursor: SystemMouseCursors.click,
-                          //           child: Row(
-                          //             children: [
-                          //               Row(
-                          //                 children: [
-                          //                   Text("Support ",
-                          //                       style: customTheme
-                          //                           .textTheme.labelMedium!
-                          //                           .copyWith(
-                          //                               fontSize: 12,
-                          //                               color: Theme.of(context)
-                          //                                   .colorScheme
-                          //                                   .primary)),
-                          //                   Icon(
-                          //                     Icons.open_in_new_rounded,
-                          //                     color: Theme.of(context)
-                          //                         .colorScheme
-                          //                         .primary,
-                          //                     size: 12,
-                          //                   )
-                          //                 ],
-                          //               ),
-                          //               SizedBox(
-                          //                 width: 50,
-                          //               ),
-                          //               Row(
-                          //                 children: [
-                          //                   Text("Terms and Conditions ",
-                          //                       style: customTheme
-                          //                           .textTheme.labelMedium!
-                          //                           .copyWith(
-                          //                               fontSize: 12,
-                          //                               color: Theme.of(context)
-                          //                                   .colorScheme
-                          //                                   .primary)),
-                          //                   Icon(
-                          //                     Icons.open_in_new_rounded,
-                          //                     color: Theme.of(context)
-                          //                         .colorScheme
-                          //                         .primary,
-                          //                     size: 12,
-                          //                   )
-                          //                 ],
-                          //               ),
-                          //               SizedBox(
-                          //                 width: 50,
-                          //               ),
-                          //               Row(
-                          //                 children: [
-                          //                   Text("Privacy Policy ",
-                          //                       style: customTheme
-                          //                           .textTheme.labelMedium!
-                          //                           .copyWith(
-                          //                               fontSize: 12,
-                          //                               color: Theme.of(context)
-                          //                                   .colorScheme
-                          //                                   .primary)),
-                          //                   Icon(
-                          //                     Icons.open_in_new_rounded,
-                          //                     color: Theme.of(context)
-                          //                         .colorScheme
-                          //                         .primary,
-                          //                     size: 12,
-                          //                   )
-                          //                 ],
-                          //               )
-                          //             ],
-                          //           ),
-                          //         ),
-                          //       )),
                         ])),
                   )
                 ],
