@@ -18,14 +18,25 @@ class UserProfileHeaderWidget extends StatelessWidget {
         children: [
           if (loggedInState.currentUser?.photoURL != null)
             Padding(
-              padding: const EdgeInsets.only(
-                  top: 25.0), // Increased padding on the top
-              child: CircleAvatar(
-                radius: 50,
-                backgroundImage:
-                    NetworkImage(loggedInState.currentUser!.photoURL!),
-              ),
-            ),
+                padding: const EdgeInsets.only(
+                    top: 25.0), // Increased padding on the top
+                child: (view == 'admin')
+                    ? Icon(
+                        Icons.supervisor_account_rounded,
+                        size: 100,
+                        color: Colors.white,
+                      )
+                    : Icon(
+                        Icons.account_circle,
+                        size: 100,
+                        color: Colors.white,
+                      )
+                // CircleAvatar(
+                //   radius: 50,
+                //   backgroundImage:
+                //       NetworkImage(loggedInState.currentUser!.photoURL!),
+                // ),
+                ),
           SizedBox(
             height: 10,
           ),

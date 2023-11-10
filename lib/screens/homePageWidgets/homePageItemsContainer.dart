@@ -11,7 +11,7 @@ class HomePageItemsContainer extends StatelessWidget {
             height: 300,
             child: Container(
               decoration: BoxDecoration(
-                  color: Color.fromARGB(10, 0, 0, 0),
+                  // color: Color.fromARGB(10, 0, 0, 0),
                   borderRadius: BorderRadius.all(Radius.circular(10))),
               padding: EdgeInsets.all(10),
               margin: EdgeInsets.only(
