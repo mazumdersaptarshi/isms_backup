@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:isms/models/enums.dart';
 
 class NewExam {
@@ -67,7 +69,7 @@ class QuestionAnswerSet {
           .map((optionMap) => Option.fromMap(optionMap as Map<String, dynamic>))
           .toList(),
       type: EnumToString.fromString(QUESTIONTYPE.values, map['type']) ??
-          QUESTIONTYPE.Checkbox, // If you still want to keep the question type.
+          QUESTIONTYPE.checkbox, // If you still want to keep the question type.
     );
   }
 }

@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:isms/screens/homePage.dart';
 import 'package:isms/sharedWidgets/navIndexTracker.dart';
@@ -9,31 +11,33 @@ import '../screens/userInfo/userProfilePage.dart';
 import '../userManagement/loggedInState.dart';
 
 class BottomNavBar extends StatelessWidget {
-  BottomNavBar({super.key, this.loggedInState});
-  // int selectedIndex;
-  LoggedInState? loggedInState;
+  const BottomNavBar({super.key, this.loggedInState});
+  // final int selectedIndex;
+  final LoggedInState? loggedInState;
   @override
   Widget build(BuildContext context) {
     void navigateToUserProfilePage() {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => UserProfilePage()),
+        MaterialPageRoute(builder: (context) => const UserProfilePage()),
       );
     }
 
     void navigateToHomePage() {
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => HomePage()));
+          context, MaterialPageRoute(builder: (context) => const HomePage()));
     }
 
     void navigateToCoursesPage() {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => CoursesDisplayScreen()));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => const CoursesDisplayScreen()));
     }
 
     void navigateToAdminConsolePage() {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => AdminConsolePage()));
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const AdminConsolePage()));
     }
 
     void decideNavigation({required int index}) {
@@ -47,15 +51,19 @@ class BottomNavBar extends StatelessWidget {
         navigateToHomePage();
       }
       if (loggedInState?.currentUserRole == 'admin') {
-        if (index == 1)
+        if (index == 1) {
           navigateToUserProfilePage();
-        else if (index == 2)
+        } else if (index == 2) {
           navigateToAdminConsolePage();
-        else if (index == 3) navigateToCoursesPage();
+        } else if (index == 3) {
+          navigateToCoursesPage();
+        }
       } else {
-        if (index == 1)
+        if (index == 1) {
           navigateToUserProfilePage();
-        else if (index == 2) navigateToCoursesPage();
+        } else if (index == 2) {
+          navigateToCoursesPage();
+        }
       }
     }
 
@@ -104,7 +112,7 @@ class BottomNavBar extends StatelessWidget {
           // currentIndex: selectedIndex,
           selectedItemColor: Colors.white,
           backgroundColor: primaryColor.shade100,
-          unselectedItemColor: Color.fromARGB(255, 234, 234, 234),
+          unselectedItemColor: const Color.fromARGB(255, 234, 234, 234),
           type: BottomNavigationBarType.fixed,
           elevation: 5,
           onTap: (int index) {

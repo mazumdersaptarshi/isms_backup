@@ -1,24 +1,19 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleDetailsScreen.dart';
-import 'package:provider/provider.dart';
 import 'package:isms/models/course.dart';
-import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
-import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleExamsListScreen.dart';
-import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/themes/common_theme.dart';
-import 'package:isms/utilityWidgets/modulesList/moduleExpandedItem.dart';
 
 class ModuleTile extends StatelessWidget {
-  Course course;
-  Module module;
-  bool isModuleStarted;
-  bool isModuleCompleted;
+  final Course course;
+  final Module module;
+  final bool isModuleStarted;
+  final bool isModuleCompleted;
 
-  ModuleTile(
+  const ModuleTile(
       {super.key,
       required this.course,
       required this.module,
@@ -28,7 +23,7 @@ class ModuleTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int imageIndex = module.index % 4;
-    return Container(
+    return SizedBox(
       child: GestureDetector(
         child: Card(
           surfaceTintColor: Colors.white,
@@ -54,7 +49,7 @@ class ModuleTile extends StatelessWidget {
                     Expanded(
                       flex: 1,
                       child: SvgPicture.asset(
-                        "assets/images/moduleIcons/ModuleIcon${imageIndex + 1}.svg",
+                        "assets/images/moduleIcons/ModuleIcon$imageIndex.svg",
                       ),
                     ),
                     Expanded(
@@ -62,7 +57,7 @@ class ModuleTile extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SizedBox(width: 20),
+                          const SizedBox(width: 20),
                           Expanded(
                             child: RichText(
                               text: TextSpan(

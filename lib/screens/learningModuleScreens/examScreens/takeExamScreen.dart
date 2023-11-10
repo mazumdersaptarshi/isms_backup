@@ -1,38 +1,36 @@
+// ignore_for_file: file_names
+
+import 'package:flutter/foundation.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:isms/models/newExam.dart';
 import 'package:isms/models/question.dart';
-import 'package:isms/screens/homePage.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCompletionStrategies.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
-import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/themes/common_theme.dart';
-import 'package:isms/userManagement/loggedInState.dart';
-import 'package:provider/provider.dart';
 
 import '../../../models/course.dart';
 import '../../../models/module.dart';
-import '../../../projectModules/courseManagement/coursesProvider.dart';
 
 class TakeExamScreen extends StatefulWidget {
-  TakeExamScreen(
-      {required this.exam,
+  const TakeExamScreen(
+      {super.key,
+      required this.exam,
       required this.course,
       required this.examtype,
       this.module,
       required this.examCompletionStrategy});
-  EXAMTYPE examtype;
-  Course course;
-  Module? module;
-  NewExam exam;
-  ExamCompletionStrategy examCompletionStrategy;
+  final EXAMTYPE examtype;
+  final Course course;
+  final Module? module;
+  final NewExam exam;
+  final ExamCompletionStrategy examCompletionStrategy;
   @override
-  _TakeExamScreenState createState() => _TakeExamScreenState();
+  State<TakeExamScreen> createState() => _TakeExamScreenState();
 }
 
 class _TakeExamScreenState extends State<TakeExamScreen> {
-  List<NewQuestion> _questions = [];
+  final List<NewQuestion> _questions = [];
   int _currentIndex = 0;
   List<Set<int>> _selectedAnswers = [];
   bool _showScore = false;
@@ -43,12 +41,14 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
     loadQuestions();
     shuffleQuestions();
     _selectedAnswers = List.generate(_questions.length, (index) => <int>{});
-    print(widget.exam.questionAnswerSet);
+    if (kDebugMode) {
+      print(widget.exam.questionAnswerSet);
+    }
   }
 
   loadQuestions() {
-    print("LOADING QUESTIONS");
-    widget.exam.questionAnswerSet.forEach((element) {
+    debugPrint("LOADING QUESTIONS");
+    for (var element in widget.exam.questionAnswerSet) {
       List<String> options = [];
       List<int> correctAnswers = [];
       int index = 0;
@@ -62,7 +62,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
       NewQuestion newQuestion = NewQuestion(element['questionName'], options,
           correctAnswers, correctAnswers.length);
       _questions.add(newQuestion);
-    });
+    }
   }
 
   void shuffleQuestions() {
@@ -100,17 +100,11 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
 
   @override
   Widget build(BuildContext context) {
-    LoggedInState loggedInState = context.watch<LoggedInState>();
-
-    if (loggedInState.currentUser == null) {
-      return LoginPage();
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
           _showScore ? 'Score' : 'Exam Module',
-          style: TextStyle(color: white),
+          style: const TextStyle(color: white),
         ),
         backgroundColor: Colors.deepPurpleAccent.shade100,
       ),
@@ -119,8 +113,8 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
   }
 
   Widget buildScoreWidget() {
-    LoggedInState loggedInState = Provider.of<LoggedInState>(context);
-    CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
+    //LoggedInState loggedInState = Provider.of<LoggedInState>(context);
+    //CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
 
     int correctAnswers = 0;
     for (int i = 0; i < _questions.length; i++) {
@@ -147,7 +141,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
                 child: Text(
                     'Your Score is: $correctAnswers/${_questions.length}. You need to get 75% to pass.'),
               ),
-              Container(
+              SizedBox(
                 height: 50,
                 width: 50,
                 child: PieChart(PieChartData(centerSpaceRadius: 40, sections: [
@@ -164,7 +158,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
                       radius: 75),
                 ])),
               ),
-              SizedBox(height: 150),
+              const SizedBox(height: 150),
               ElevatedButton(
                 onPressed: () => setState(() {
                   shuffleQuestions();
@@ -173,7 +167,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
                       List.generate(_questions.length, (index) => <int>{});
                   _showScore = false;
                 }),
-                child: Text('Retake Exam'),
+                child: const Text('Retake Exam'),
               )
             ],
           ),
@@ -194,7 +188,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
                   'Congratulations! Your Score is: $correctAnswers/${_questions.length}',
                 ),
               ),
-              Container(
+              SizedBox(
                 height: 50,
                 width: 50,
                 child: PieChart(PieChartData(centerSpaceRadius: 40, sections: [
@@ -211,9 +205,9 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
                       radius: 75),
                 ])),
               ),
-              SizedBox(height: 100),
+              const SizedBox(height: 100),
               widget.examCompletionStrategy.buildSumbitButton(context: context),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () => setState(() {
                   shuffleQuestions();
@@ -222,7 +216,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
                       List.generate(_questions.length, (index) => <int>{});
                   _showScore = false;
                 }),
-                child: Text('Retry for Fun!'),
+                child: const Text('Retry for Fun!'),
               ),
             ],
           ),
@@ -239,7 +233,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
           Container(
             decoration: BoxDecoration(
                 color: Colors.deepPurpleAccent.shade100,
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                     bottomLeft: Radius.circular(25),
                     bottomRight: Radius.circular(25))),
             width: MediaQuery.of(context).size.width,
@@ -249,16 +243,16 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Text(
                     _questions[_currentIndex].question,
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 20, color: white),
+                    style: const TextStyle(fontSize: 20, color: white),
                   ),
-                  SizedBox(height: 50),
+                  const SizedBox(height: 50),
                   Text(
                     'Select ${_questions[_currentIndex].maxAllowedAnswers} answer(s)',
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
                         color: white),
@@ -267,7 +261,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
               ),
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           ...List.generate(_questions[_currentIndex].shuffledOptions.length,
               (index) {
             return Padding(
@@ -308,7 +302,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
               ),
             );
           }),
-          SizedBox(
+          const SizedBox(
             height: 15,
           ),
           ElevatedButton(
@@ -316,7 +310,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
             onPressed: areAnswersSelected ? () => onButtonPress() : null,
             child: Text(
               _currentIndex < _questions.length - 1 ? 'Next' : 'Submit',
-              style: TextStyle(color: white),
+              style: const TextStyle(color: white),
             ),
           )
         ],

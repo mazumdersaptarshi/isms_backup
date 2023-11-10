@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names, file_names
+
 enum NavDestinations { HomePage, UserProfile, AdminConsole, AllCoures }
 
 class NavIndexTracker {
@@ -6,9 +8,9 @@ class NavIndexTracker {
 
   static setNavDestination(
       {required NavDestinations navDestination, required String userRole}) {
-    if (navDestination == NavDestinations.HomePage)
+    if (navDestination == NavDestinations.HomePage) {
       currentIndex = 0;
-    else if (navDestination == NavDestinations.UserProfile) {
+    } else if (navDestination == NavDestinations.UserProfile) {
       currentIndex = 1;
     } else if (navDestination == NavDestinations.AdminConsole) {
       if (userRole == "admin") {
@@ -17,8 +19,9 @@ class NavIndexTracker {
     } else if (navDestination == NavDestinations.AllCoures) {
       if (userRole == "admin") {
         currentIndex = 3;
-      } else
+      } else {
         currentIndex = 2;
+      }
     }
   }
 }

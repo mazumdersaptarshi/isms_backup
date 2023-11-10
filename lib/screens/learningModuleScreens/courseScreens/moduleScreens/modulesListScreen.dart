@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, non_constant_identifier_names
+
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
@@ -6,7 +8,6 @@ import 'package:isms/models/course.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/createModuleScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examListScreen.dart';
-import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 
@@ -18,9 +19,8 @@ import '../../../../utilityFunctions/platformCheck.dart';
 import 'sharedWidgets/moduleTile.dart';
 
 class ModulesListScreen extends StatefulWidget {
-  ModulesListScreen({super.key, required this.course});
-  Course course;
-  ModuleDataMaster? moduleDataMaster;
+  const ModulesListScreen({super.key, required this.course});
+  final Course course;
   @override
   State<ModulesListScreen> createState() => _ModulesListScreenState();
 }
@@ -28,9 +28,10 @@ class ModulesListScreen extends StatefulWidget {
 class _ModulesListScreenState extends State<ModulesListScreen> {
   bool isModulesFetched = false;
   late String userRole;
+  ModuleDataMaster? moduleDataMaster;
 
   fetchCourseModules({required CoursesProvider coursesProvider}) async {
-    await widget.moduleDataMaster?.fetchModules();
+    await moduleDataMaster?.fetchModules();
     setState(() {
       isModulesFetched = true;
     });
@@ -44,13 +45,16 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
   bool checkIfModuleStarted(
       {required LoggedInState loggedInState, required Module module}) {
     bool flag = false;
-    loggedInState.loggedInUser.courses_started.forEach((course_started) {
+    for (Map<String, dynamic> course_started
+        in loggedInState.loggedInUser.courses_started) {
       if (course_started["course_name"] == widget.course.name) {
-        course_started["modules_started"].forEach((module_started) {
-          if (module_started["module_name"] == module.title) flag = true;
-        });
+        if (course_started.containsKey("modules_started")) {
+          course_started["modules_started"].forEach((module_started) {
+            if (module_started == module.title) flag = true;
+          });
+        }
       }
-    });
+    }
 
     return flag;
   }
@@ -58,14 +62,14 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
   bool checkIfModuleCompleted(
       {required LoggedInState loggedInState, required Module module}) {
     bool flag = false;
-    loggedInState.loggedInUser.courses_started.forEach((course_started) {
+    for (var course_started in loggedInState.loggedInUser.courses_started) {
       if (course_started["course_name"] == widget.course.name &&
           course_started["modules_completed"] != null) {
         course_started["modules_completed"].forEach((module_completed) {
           if (module_completed["module_name"] == module.title) flag = true;
         });
       }
-    });
+    }
 
     return flag;
   }
@@ -73,13 +77,13 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
   bool checkIfAllModulesCompleted({required LoggedInState loggedInState}) {
     bool flag = false;
 
-    loggedInState.loggedInUser.courses_started.forEach((course_started) {
+    for (var course_started in loggedInState.loggedInUser.courses_started) {
       if (course_started["course_name"] == widget.course.name) {
         if (course_started["modules_completed"] != null &&
             course_started["modules_completed"].length >=
                 widget.course.modulesCount) flag = true;
       }
-    });
+    }
     return flag;
   }
 
@@ -89,12 +93,8 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
     CoursesProvider coursesProvider = context.watch<CoursesProvider>();
     bool isALlModulesCompleted =
         checkIfAllModulesCompleted(loggedInState: loggedInState);
-    widget.moduleDataMaster = ModuleDataMaster(
+    moduleDataMaster = ModuleDataMaster(
         course: widget.course, coursesProvider: coursesProvider);
-
-    if (loggedInState.currentUser == null) {
-      return const LoginPage();
-    }
 
     if (isModulesFetched == false) {
       fetchCourseModules(coursesProvider: coursesProvider);
@@ -127,7 +127,7 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
           min(itemCount, maxColumns) > 0 ? min(itemCount, maxColumns) : 1;
     }
     // grid width, in pixels
-    double gridWidth = screenWidth * numberColumns / maxColumns;
+    //double gridWidth = screenWidth * numberColumns / maxColumns;
 
     return Scaffold(
       appBar: PlatformCheck.topNavBarWidget(
@@ -142,41 +142,39 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
               child: CustomScrollView(
                 slivers: [
                   SliverToBoxAdapter(
-                    child: Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          if (isALlModulesCompleted)
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ExamListScreen(
-                                      course: widget.course,
-                                      examtype: EXAMTYPE.courseExam,
-                                    ),
-                                  ),
-                                );
-                              },
-                              child: const Text("View course exams"),
-                            ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        if (isALlModulesCompleted)
                           ElevatedButton(
                             onPressed: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => ExamCreation(
+                                  builder: (context) => ExamListScreen(
                                     course: widget.course,
                                     examtype: EXAMTYPE.courseExam,
                                   ),
                                 ),
                               );
                             },
-                            child: const Text("Create course exam"),
+                            child: const Text("View course exams"),
                           ),
-                        ],
-                      ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ExamCreation(
+                                  course: widget.course,
+                                  examtype: EXAMTYPE.courseExam,
+                                ),
+                              ),
+                            );
+                          },
+                          child: const Text("Create course exam"),
+                        ),
+                      ],
                     ),
                   ),
                   SliverGrid.builder(
@@ -186,26 +184,22 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
                     ),
                     itemCount: itemCount,
                     itemBuilder: (BuildContext context, int moduleIndex) {
-                      return Container(
-                        // margin:
-                        //     EdgeInsets.symmetric(horizontal: horizontalMargin),
-                        child: ModuleTile(
-                          course: widget.course,
-                          module: widget.course.modules[moduleIndex],
-                          isModuleStarted: checkIfModuleStarted(
-                              loggedInState: loggedInState,
-                              module: widget.course.modules[moduleIndex]),
-                          isModuleCompleted: checkIfModuleCompleted(
-                              loggedInState: loggedInState,
-                              module: widget.course.modules[moduleIndex]),
-                        ),
+                      return ModuleTile(
+                        course: widget.course,
+                        module: widget.course.modules[moduleIndex],
+                        isModuleStarted: checkIfModuleStarted(
+                            loggedInState: loggedInState,
+                            module: widget.course.modules[moduleIndex]),
+                        isModuleCompleted: checkIfModuleCompleted(
+                            loggedInState: loggedInState,
+                            module: widget.course.modules[moduleIndex]),
                       );
                     },
                   ),
                 ],
               ),
             )
-          : Container(
+          : SizedBox(
               width: MediaQuery.of(context).size.width,
               height: 200,
               child: const AlertDialog(

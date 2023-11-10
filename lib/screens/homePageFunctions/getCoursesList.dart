@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/modulesListScreen.dart';
@@ -20,18 +22,18 @@ Future<List<Widget>> getHomePageCoursesList(
   List<Widget> homePageWidgets = [Container(width: 100)];
   await loggedInState.getUserCoursesData('crs_enrl');
   await loggedInState.getUserCoursesData('crs_compl');
-  List courses_started = loggedInState.loggedInUser.courses_started;
-  print("TRY TO CREATE WIDGETSS       ${courses_started}");
+  List coursesStarted = loggedInState.loggedInUser.courses_started;
+  debugPrint("TRY TO CREATE WIDGETSS       $coursesStarted");
 
-  if (courses_started != null && courses_started.isNotEmpty) {
-    for (int i = courses_started.length - 1; i >= 0; i--) {
-      print("TRY TO CREATE WIDGETSS ${coursesProvider.allCourses}");
+  if (coursesStarted.isNotEmpty) {
+    for (int i = coursesStarted.length - 1; i >= 0; i--) {
+      debugPrint("TRY TO CREATE WIDGETSS ${coursesProvider.allCourses}");
       Course course = coursesProvider.allCourses
-          .where((element) => element.id == courses_started[i]["courseID"])
+          .where((element) => element.id == coursesStarted[i]["courseID"])
           .first;
 
       homePageWidgets.add(CourseTile(
-        title: courses_started[i]["course_name"],
+        title: coursesStarted[i]["course_name"],
         onPressed: () {
           Navigator.push(
               context,
@@ -43,7 +45,7 @@ Future<List<Widget>> getHomePageCoursesList(
         courseData:
             getUserCourseData(loggedInState: loggedInState, course: course),
         index: i,
-        latestModule: getLatestModuleName(courses_started[i]) ?? '',
+        latestModule: getLatestModuleName(coursesStarted[i]) ?? '',
         modulesCount: course.modulesCount ?? 0,
       ));
     }
@@ -55,33 +57,31 @@ Future<List<Widget>> getHomePageCoursesList(
 Map<String, dynamic> getUserCourseData(
     {required LoggedInState loggedInState, required Course course}) {
   int courseCompPercent = 0;
-  var courseCompletionDate;
-  var courseStartDate;
+  /*var courseCompletionDate;
+  var courseStartDate;*/
 
-  if (loggedInState.loggedInUser.courses_completed != null &&
-      loggedInState.loggedInUser.courses_completed.isNotEmpty) {
-    loggedInState.loggedInUser.courses_completed.forEach((course_completed) {
-      if (course_completed["courseID"] == course.id) {
+  if (loggedInState.loggedInUser.courses_completed.isNotEmpty) {
+    for (var courseCompleted in loggedInState.loggedInUser.courses_completed) {
+      if (courseCompleted["courseID"] == course.id) {
         courseCompPercent = 100;
-        print(
-            "COURSE COMPLETED DATE : ${course_completed["course_name"]}, ${course_completed["completed_at"].runtimeType}");
-        courseCompletionDate = course_completed["completed_at"] ?? null;
+        debugPrint(
+            "COURSE COMPLETED DATE : ${courseCompleted["course_name"]}, ${courseCompleted["completed_at"].runtimeType}");
+        //courseCompletionDate = courseCompleted["completed_at"];
       }
-    });
+    }
   }
 
-  if (loggedInState.loggedInUser.courses_started != null &&
-      loggedInState.loggedInUser.courses_started.isNotEmpty) {
-    loggedInState.loggedInUser.courses_started.forEach((course_started) {
-      if (course_started["courseID"] == course.id &&
-          course_started["modules_completed"] != null) {
-        courseCompPercent = ((course_started["modules_completed"].length /
-                    course.modulesCount) *
-                100)
-            .ceil();
-        courseStartDate = course_started["started_at"] ?? null;
+  if (loggedInState.loggedInUser.courses_started.isNotEmpty) {
+    for (var courseStarted in loggedInState.loggedInUser.courses_started) {
+      if (courseStarted["courseID"] == course.id &&
+          courseStarted["modules_completed"] != null) {
+        courseCompPercent =
+            ((courseStarted["modules_completed"].length / course.modulesCount) *
+                    100)
+                .ceil();
+        //courseStartDate = courseStarted["started_at"];
       }
-    });
+    }
   }
 
   return {"courseCompPercent": double.parse(courseCompPercent.toString())};

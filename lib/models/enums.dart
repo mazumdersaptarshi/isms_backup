@@ -1,6 +1,6 @@
 enum QUESTIONTYPE {
-  MCQ, // Single correct answer
-  Checkbox, // Multiple correct answers
+  mcq, // Single correct answer
+  checkbox, // Multiple correct answers
 }
 
 class EnumToString {

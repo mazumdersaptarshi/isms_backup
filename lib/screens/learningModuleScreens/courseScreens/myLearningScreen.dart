@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
@@ -17,30 +19,30 @@ import 'createCourseScreen.dart';
 import 'moduleScreens/modulesListScreen.dart';
 
 class MyLearningScreen extends StatefulWidget {
-  MyLearningScreen({super.key});
-  String userRole = "user";
+  const MyLearningScreen({super.key});
+
   @override
   State<MyLearningScreen> createState() => _MyLearningScreenState();
 }
 
 class _MyLearningScreenState extends State<MyLearningScreen> {
+  String userRole = "user";
   @override
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
 
     if (loggedInState.currentUser == null) {
-      return LoginPage();
+      return const LoginPage();
     }
 
-    widget.userRole = loggedInState.currentUserRole;
+    userRole = loggedInState.currentUserRole;
     List<dynamic> userEnrolledCourses = loggedInState.allEnrolledCoursesGlobal;
     NavIndexTracker.setNavDestination(
-        navDestination: NavDestinations.AllCoures, userRole: widget.userRole);
+        navDestination: NavDestinations.AllCoures, userRole: userRole);
 
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
 
     double tileMinWidth = 400;
-    double tileMinimumheight = 100;
     double tileRatio = 16 / 9;
     // available width, in pixels
     double horizontalMargin = MediaQuery.sizeOf(context).width > 900 ? 200 : 10;
@@ -49,15 +51,12 @@ class _MyLearningScreenState extends State<MyLearningScreen> {
     int maxColumns =
         max(((screenWidth - (horizontalMargin * 2)) / tileMinWidth).floor(), 1);
     // number of tiles that have to fit on the screen
-    int itemCount = coursesProvider.allCourses.length ?? 0;
-    int? numberOfModules;
+    int itemCount = coursesProvider.allCourses.length;
     // grid width, in tiles
     int numberColumns =
         min(itemCount, maxColumns) > 0 ? min(itemCount, maxColumns) : 1;
     // grid width, in pixels
-    double gridWidth = screenWidth * numberColumns / maxColumns;
 
-    String? currentModule = '';
     String? getLatestModuleName(Map<String, dynamic> courseItem) {
       int latestModuleIndex = (courseItem['modules_started'].length - 1) ?? 0;
       String? latestModuleName = (courseItem['modules_started']
@@ -82,51 +81,47 @@ class _MyLearningScreenState extends State<MyLearningScreen> {
                     crossAxisCount: numberColumns, childAspectRatio: tileRatio),
                 itemCount: userEnrolledCourses.length,
                 itemBuilder: (context, courseIndex) {
-                  return Container(
-                    // margin: EdgeInsets.symmetric(horizontal: 10),
+                  return CourseTile(
+                    index: courseIndex,
+                    title: userEnrolledCourses[courseIndex]['course_name'],
+                    modulesCount: userEnrolledCourses[courseIndex]
+                            ['course_modules_count'] ??
+                        1,
 
-                    child: CourseTile(
-                      index: courseIndex,
-                      title: userEnrolledCourses[courseIndex]['course_name'],
-                      modulesCount: userEnrolledCourses[courseIndex]
-                              ['course_modules_count'] ??
-                          1,
+                    tileWidth: tileMinWidth,
+                    latestModule:
+                        getLatestModuleName(userEnrolledCourses[courseIndex]) ??
+                            '',
+                    // tileHeight: tileMinimumheight,
+                    courseData: getUserCourseData(
+                        loggedInState: loggedInState,
+                        course: coursesProvider.allCourses[courseIndex]),
 
-                      tileWidth: tileMinWidth,
-                      latestModule: getLatestModuleName(
-                              userEnrolledCourses[courseIndex]) ??
-                          '',
-                      // tileHeight: tileMinimumheight,
-                      courseData: getUserCourseData(
-                          loggedInState: loggedInState,
-                          course: coursesProvider.allCourses[courseIndex]),
-
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ModulesListScreen(
-                                      course: coursesProvider
-                                          .allCourses[courseIndex],
-                                    )));
-                      },
-                    ),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ModulesListScreen(
+                                    course:
+                                        coursesProvider.allCourses[courseIndex],
+                                  )));
+                    },
                   );
                 })
           ],
         ),
       ),
-      floatingActionButton: widget.userRole == 'admin'
+      floatingActionButton: userRole == 'admin'
           ? FloatingActionButton(
               onPressed: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => CreateCourseScreen()));
+                        builder: (context) => const CreateCourseScreen()));
               },
               backgroundColor:
                   customTheme.floatingActionButtonTheme.backgroundColor,
-              child: Icon(Icons.add),
+              child: const Icon(Icons.add),
             )
           : null,
     );
