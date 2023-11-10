@@ -1,14 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:footer/footer_view.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 import 'package:isms/projectModules/notificationModules/initLinkHandler.dart';
-import 'package:isms/sharedWidgets/bottomNavBar.dart';
-import 'package:isms/sharedWidgets/customAppBar.dart';
 import 'package:isms/sharedWidgets/navIndexTracker.dart';
 import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
+import 'package:isms/utilityFunctions/platformCheck.dart';
 import 'package:provider/provider.dart';
 
 import 'homePageFunctions/getCoursesList.dart';
@@ -75,6 +73,7 @@ class _HomePageState extends State<HomePage> {
     return Consumer<CoursesProvider>(builder:
         (BuildContext context, CoursesProvider coursesProvider, Widget? child) {
       return Scaffold(
+
           backgroundColor: Colors.white,
           bottomNavigationBar:
               kIsWeb ? null : BottomNavBar(loggedInState: loggedInState),
@@ -115,6 +114,7 @@ class _HomePageState extends State<HomePage> {
                                     .contain, // This will cover the available space, you can change it to BoxFit.contain to prevent the image from being cropped.
                               ),
                             ),
+
                           ),
                         ],
                       ),
