@@ -79,6 +79,8 @@ class _HomePageState extends State<HomePage> {
             loggedInState: loggedInState,
           ),
           body: CustomScrollView(
+            physics: ClampingScrollPhysics(),
+            shrinkWrap: true,
             slivers: [
               SliverAppBar(
                 elevation: 10,
@@ -162,7 +164,10 @@ class _HomePageState extends State<HomePage> {
                             ],
                           )),
                       Positioned(
-                          top: 320,
+                          top: MediaQuery.of(context).size.width >
+                                  HOME_PAGE_WIDGETS_COLLAPSE_WIDTH
+                              ? 320
+                              : 0,
                           child: Container(
                             margin: EdgeInsets.only(
                                 left: MediaQuery.of(context).size.width * 0.14),
@@ -184,95 +189,96 @@ class _HomePageState extends State<HomePage> {
                                             .copyWith(
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.bold,
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .primary)),
+                                                color:
+                                                    customTheme.primaryColor)),
                                     Icon(
                                       Icons.arrow_circle_right_outlined,
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
+                                      color: customTheme.primaryColor,
                                     )
                                   ],
                                 ),
                               ),
                             ),
                           )),
-                      Positioned(
-                          top: 600,
-                          child: Container(
-                            margin: EdgeInsets.only(
-                                left: MediaQuery.of(context).size.width * 0.14),
-                            child: MouseRegion(
-                              cursor: SystemMouseCursors.click,
-                              child: Row(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text("Support ",
-                                          style: customTheme
-                                              .textTheme.labelMedium!
-                                              .copyWith(
-                                                  fontSize: 12,
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .primary)),
-                                      Icon(
-                                        Icons.open_in_new_rounded,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                        size: 12,
-                                      )
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    width: 50,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text("Terms and Conditions ",
-                                          style: customTheme
-                                              .textTheme.labelMedium!
-                                              .copyWith(
-                                                  fontSize: 12,
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .primary)),
-                                      Icon(
-                                        Icons.open_in_new_rounded,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                        size: 12,
-                                      )
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    width: 50,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text("Privacy Policy ",
-                                          style: customTheme
-                                              .textTheme.labelMedium!
-                                              .copyWith(
-                                                  fontSize: 12,
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .primary)),
-                                      Icon(
-                                        Icons.open_in_new_rounded,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                        size: 12,
-                                      )
-                                    ],
-                                  )
-                                ],
+                      if (MediaQuery.of(context).size.width >
+                          HOME_PAGE_WIDGETS_COLLAPSE_WIDTH)
+                        Positioned(
+                            top: 600,
+                            child: Container(
+                              margin: EdgeInsets.only(
+                                  left:
+                                      MediaQuery.of(context).size.width * 0.14),
+                              child: MouseRegion(
+                                cursor: SystemMouseCursors.click,
+                                child: Row(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text("Support ",
+                                            style: customTheme
+                                                .textTheme.labelMedium!
+                                                .copyWith(
+                                                    fontSize: 12,
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .primary)),
+                                        Icon(
+                                          Icons.open_in_new_rounded,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          size: 12,
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      width: 50,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text("Terms and Conditions ",
+                                            style: customTheme
+                                                .textTheme.labelMedium!
+                                                .copyWith(
+                                                    fontSize: 12,
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .primary)),
+                                        Icon(
+                                          Icons.open_in_new_rounded,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          size: 12,
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      width: 50,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text("Privacy Policy ",
+                                            style: customTheme
+                                                .textTheme.labelMedium!
+                                                .copyWith(
+                                                    fontSize: 12,
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .primary)),
+                                        Icon(
+                                          Icons.open_in_new_rounded,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          size: 12,
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
-                          )),
+                            )),
                     ])),
               )
             ],
