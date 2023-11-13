@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:isms/userManagement/loggedInState.dart';
+import 'package:isms/utilityFunctions/platformCheck.dart';
 import 'package:provider/provider.dart';
 
 Future<void> setExpiryDate(
@@ -57,7 +58,7 @@ class ReminderLine extends StatefulWidget {
   final Function(String, DateTime?) setExpiryDateForCertificate;
   final DateTime? initialExpiryDate; // Added parameter
 
-  ReminderLine({
+  const ReminderLine({
     Key? key,
     required this.text,
     required this.setExpiryDateForCertificate,
@@ -83,8 +84,8 @@ class _ReminderLineState extends State<ReminderLine> {
   Widget build(BuildContext context) {
     final loggedInState = context.watch<LoggedInState>();
     return Container(
-      margin: EdgeInsets.only(bottom: 10),
-      padding: EdgeInsets.all(10),
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.grey.shade200.withOpacity(0.35),
         borderRadius: BorderRadius.circular(10),
@@ -105,9 +106,9 @@ class _ReminderLineState extends State<ReminderLine> {
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        title: Text("Select Date"),
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                        title: const Text("Select Date"),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 20),
                         content: SizedBox(
                           height: 300,
                           width: 500,
@@ -131,8 +132,8 @@ class _ReminderLineState extends State<ReminderLine> {
                                 context: context,
                                 builder: (BuildContext context) {
                                   return AlertDialog(
-                                    title: Text("Select Time"),
-                                    contentPadding: EdgeInsets.symmetric(
+                                    title: const Text("Select Time"),
+                                    contentPadding: const EdgeInsets.symmetric(
                                         horizontal: 24, vertical: 20),
                                     content: SizedBox(
                                       height: 300,
@@ -158,7 +159,7 @@ class _ReminderLineState extends State<ReminderLine> {
                                           Navigator.of(context)
                                               .pop(selectedDate);
                                         },
-                                        child: Row(
+                                        child: const Row(
                                           children: [
                                             Icon(
                                               Icons.access_time,
@@ -184,7 +185,7 @@ class _ReminderLineState extends State<ReminderLine> {
                                 });
                               }
                             },
-                            child: Row(
+                            child: const Row(
                               children: [
                                 Icon(
                                   Icons.access_time,
@@ -211,7 +212,7 @@ class _ReminderLineState extends State<ReminderLine> {
                     });
                   }
                 },
-                child: Row(
+                child: const Row(
                   children: [
                     Icon(
                       Icons.edit_calendar,
@@ -229,7 +230,7 @@ class _ReminderLineState extends State<ReminderLine> {
               ),
             ],
           ),
-          SizedBox(height: 5),
+          const SizedBox(height: 5),
           Row(
             children: [
               if (expiryDate != null)
@@ -243,18 +244,18 @@ class _ReminderLineState extends State<ReminderLine> {
                   color: Colors.deepPurpleAccent.shade100,
                 ),
               if (expiryDate == null && widget.initialExpiryDate == null)
-                Icon(
+                const Icon(
                   Icons.error,
                   color: Colors.grey,
                 ),
-              SizedBox(width: 5),
+              const SizedBox(width: 5),
               Text(
                 expiryDate != null
                     ? 'Expiry date: ${DateFormat('yyyy/MM/dd').format(expiryDate!)} at ${DateFormat('hh:mm a').format(expiryDate!)}'
                     : widget.initialExpiryDate != null
                         ? 'Expiry date: ${DateFormat('yyyy/MM/dd').format(widget.initialExpiryDate!)} at ${DateFormat('hh:mm a').format(widget.initialExpiryDate!)}'
                         : 'Expiry date: Not set',
-                style: TextStyle(fontSize: 12, color: Colors.black87),
+                style: const TextStyle(fontSize: 12, color: Colors.black87),
               ),
             ],
           ),
@@ -316,10 +317,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.deepPurpleAccent.shade100,
-        title: const Text('Set expiry date'),
-      ),
+      appBar: PlatformCheck.topNavBarWidget(loggedInState),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
