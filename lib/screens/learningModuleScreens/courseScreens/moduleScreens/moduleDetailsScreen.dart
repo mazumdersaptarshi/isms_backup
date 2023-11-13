@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleExamsListScreen.dart';
@@ -6,13 +5,14 @@ import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/s
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/slidesDisplayScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/screens/login/loginScreen.dart';
-import 'package:isms/sharedWidgets/customAppBar.dart';
+import 'package:isms/sharedWidgets/bottomNavBar.dart';
 import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../models/course.dart';
 import '../../../../projectModules/courseManagement/coursesProvider.dart';
+import '../../../../utilityFunctions/platformCheck.dart';
 
 class ModuleDetails extends StatefulWidget {
   ModuleDetails(
@@ -53,8 +53,8 @@ class _ModuleDetailsState extends State<ModuleDetails> {
       "started_at": DateTime.now()
     };
     return Scaffold(
-      appBar: CustomAppBar(
-        loggedInState: loggedInState,
+      appBar: PlatformCheck.topNavBarWidget(
+        loggedInState,
       ),
       body: Container(
         margin: EdgeInsets.only(top: 20),
@@ -147,6 +147,7 @@ class _ModuleDetailsState extends State<ModuleDetails> {
               child: Icon(Icons.add),
             )
           : null,
+      bottomNavigationBar: BottomNavBar(),
     );
   }
 }

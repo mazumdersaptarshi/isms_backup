@@ -5,11 +5,11 @@ import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/userManagement/userprofileHeaderWidget.dart';
+import 'package:isms/utilityFunctions/platformCheck.dart';
 import 'package:provider/provider.dart';
 
 import '../../sharedWidgets/analyticsSharedWidgets/courseDropdownWidget.dart';
 import '../../sharedWidgets/analyticsSharedWidgets/userCourseStartedDetailsWidget.dart';
-import '../../sharedWidgets/customAppBar.dart';
 // import '../analyticsSharedWidgets/userCourseStartedDetailsWidget.dart';
 
 List allEnrolledCourses = [];
@@ -53,7 +53,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
     return Scaffold(
       backgroundColor: Colors.deepPurpleAccent.shade100,
-      appBar: CustomAppBar(loggedInState: loggedInState),
+      appBar: PlatformCheck.topNavBarWidget(loggedInState),
       body: CustomScrollView(
         slivers: [
           SliverAppBar(

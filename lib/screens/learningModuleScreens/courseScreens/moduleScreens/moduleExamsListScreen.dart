@@ -2,19 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/models/newExam.dart';
-import 'package:isms/projectModules/courseManagement/examManagement/examDataMaster.dart';
 import 'package:isms/projectModules/courseManagement/moduleManagement/examManagement/examDataMaster.dart';
-import 'package:isms/screens/learningModuleScreens/examScreens/sharedWidgets/examListContainer.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
-import 'package:isms/screens/learningModuleScreens/examScreens/takeExamScreen.dart';
+import 'package:isms/screens/learningModuleScreens/examScreens/sharedWidgets/examListContainer.dart';
 import 'package:isms/screens/login/loginScreen.dart';
-import 'package:isms/sharedWidgets/leaningModulesAppBar.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../projectModules/courseManagement/coursesProvider.dart';
-import '../../../../sharedWidgets/customAppBar.dart';
-import '../../examScreens/sharedWidgets/exam_tile.dart';
+import '../../../../utilityFunctions/platformCheck.dart';
 
 class ModuleExamListScreen extends StatefulWidget {
   ModuleExamListScreen(
@@ -55,8 +51,8 @@ class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
           module: widget.module);
 
     return Scaffold(
-      appBar: CustomAppBar(
-        loggedInState: loggedInState,
+      appBar: PlatformCheck.topNavBarWidget(
+        loggedInState,
       ),
       body: FutureBuilder<List<NewExam>>(
         future: widget.moduleExamDataMaster.exams,

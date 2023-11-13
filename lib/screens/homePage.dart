@@ -1,13 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 import 'package:isms/projectModules/notificationModules/initLinkHandler.dart';
-import 'package:isms/sharedWidgets/bottomNavBar.dart';
-import 'package:isms/sharedWidgets/customAppBar.dart';
 import 'package:isms/sharedWidgets/navIndexTracker.dart';
 import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
+import 'package:isms/utilityFunctions/platformCheck.dart';
 import 'package:provider/provider.dart';
 
 import 'homePageFunctions/getCoursesList.dart';
@@ -73,12 +71,13 @@ class _HomePageState extends State<HomePage> {
     return Consumer<CoursesProvider>(builder:
         (BuildContext context, CoursesProvider coursesProvider, Widget? child) {
       return Scaffold(
-          bottomNavigationBar:
-              kIsWeb ? null : BottomNavBar(loggedInState: loggedInState),
-          appBar: CustomAppBar(
-            loggedInState: loggedInState,
+          appBar: PlatformCheck.topNavBarWidget(
+            loggedInState,
           ),
+          bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState),
           body: CustomScrollView(
+            physics: ClampingScrollPhysics(),
+            shrinkWrap: true,
             slivers: [
               SliverAppBar(
                 elevation: 10,
@@ -103,7 +102,7 @@ class _HomePageState extends State<HomePage> {
                               0.13, // 50% of screen width
 
                           child: Image.asset(
-                            "assets/images/security.png",
+                            "assets/images/security2.png",
                             fit: BoxFit
                                 .cover, // This will cover the available space, you can change it to BoxFit.contain to prevent the image from being cropped.
                           ),
@@ -162,7 +161,10 @@ class _HomePageState extends State<HomePage> {
                             ],
                           )),
                       Positioned(
-                          top: 320,
+                          top: MediaQuery.of(context).size.width >
+                                  HOME_PAGE_WIDGETS_COLLAPSE_WIDTH
+                              ? 320
+                              : 0,
                           child: Container(
                             margin: EdgeInsets.only(
                                 left: MediaQuery.of(context).size.width * 0.14),
@@ -184,95 +186,96 @@ class _HomePageState extends State<HomePage> {
                                             .copyWith(
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.bold,
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .primary)),
+                                                color:
+                                                    customTheme.primaryColor)),
                                     Icon(
                                       Icons.arrow_circle_right_outlined,
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
+                                      color: customTheme.primaryColor,
                                     )
                                   ],
                                 ),
                               ),
                             ),
                           )),
-                      Positioned(
-                          top: 600,
-                          child: Container(
-                            margin: EdgeInsets.only(
-                                left: MediaQuery.of(context).size.width * 0.14),
-                            child: MouseRegion(
-                              cursor: SystemMouseCursors.click,
-                              child: Row(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text("Support ",
-                                          style: customTheme
-                                              .textTheme.labelMedium!
-                                              .copyWith(
-                                                  fontSize: 12,
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .primary)),
-                                      Icon(
-                                        Icons.open_in_new_rounded,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                        size: 12,
-                                      )
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    width: 50,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text("Terms and Conditions ",
-                                          style: customTheme
-                                              .textTheme.labelMedium!
-                                              .copyWith(
-                                                  fontSize: 12,
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .primary)),
-                                      Icon(
-                                        Icons.open_in_new_rounded,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                        size: 12,
-                                      )
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    width: 50,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text("Privacy Policy ",
-                                          style: customTheme
-                                              .textTheme.labelMedium!
-                                              .copyWith(
-                                                  fontSize: 12,
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .primary)),
-                                      Icon(
-                                        Icons.open_in_new_rounded,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                        size: 12,
-                                      )
-                                    ],
-                                  )
-                                ],
+                      if (MediaQuery.of(context).size.width >
+                          HOME_PAGE_WIDGETS_COLLAPSE_WIDTH)
+                        Positioned(
+                            top: 600,
+                            child: Container(
+                              margin: EdgeInsets.only(
+                                  left:
+                                      MediaQuery.of(context).size.width * 0.14),
+                              child: MouseRegion(
+                                cursor: SystemMouseCursors.click,
+                                child: Row(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text("Support ",
+                                            style: customTheme
+                                                .textTheme.labelMedium!
+                                                .copyWith(
+                                                    fontSize: 12,
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .primary)),
+                                        Icon(
+                                          Icons.open_in_new_rounded,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          size: 12,
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      width: 50,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text("Terms and Conditions ",
+                                            style: customTheme
+                                                .textTheme.labelMedium!
+                                                .copyWith(
+                                                    fontSize: 12,
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .primary)),
+                                        Icon(
+                                          Icons.open_in_new_rounded,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          size: 12,
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      width: 50,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text("Privacy Policy ",
+                                            style: customTheme
+                                                .textTheme.labelMedium!
+                                                .copyWith(
+                                                    fontSize: 12,
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .primary)),
+                                        Icon(
+                                          Icons.open_in_new_rounded,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          size: 12,
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
-                          )),
+                            )),
                     ])),
               )
             ],

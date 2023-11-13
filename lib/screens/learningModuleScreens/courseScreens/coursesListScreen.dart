@@ -1,18 +1,14 @@
 import 'dart:math';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:isms/screens/learningModuleScreens/courseScreens/sharedWidgets/course_tile.dart';
-import 'package:isms/screens/homePage.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/modulesListScreen.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/sharedWidgets/course_tile.dart';
 import 'package:isms/screens/login/loginScreen.dart';
-import 'package:isms/sharedWidgets/customAppBar.dart';
-import 'package:isms/sharedWidgets/leaningModulesAppBar.dart';
 import 'package:isms/userManagement/loggedInState.dart';
+import 'package:isms/utilityFunctions/platformCheck.dart';
 import 'package:provider/provider.dart';
 
-import '../../../models/course.dart';
 import '../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../sharedWidgets/bottomNavBar.dart';
 import '../../../sharedWidgets/navIndexTracker.dart';
@@ -58,8 +54,8 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
     // grid width, in pixels
     double gridWidth = screenWidth * numberColumns / maxColumns;
     return Scaffold(
-      appBar: CustomAppBar(
-        loggedInState: loggedInState,
+      appBar: PlatformCheck.topNavBarWidget(
+        loggedInState,
       ),
       bottomNavigationBar:
           kIsWeb ? null : BottomNavBar(loggedInState: loggedInState),
