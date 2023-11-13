@@ -37,8 +37,6 @@ class _MyLearningScreenState extends State<MyLearningScreen> {
 
     userRole = loggedInState.currentUserRole;
     List<dynamic> userEnrolledCourses = loggedInState.allEnrolledCoursesGlobal;
-    NavIndexTracker.setNavDestination(
-        navDestination: NavDestinations.AllCoures, userRole: userRole);
 
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
 

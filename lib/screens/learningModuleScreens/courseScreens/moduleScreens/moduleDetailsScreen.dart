@@ -15,6 +15,8 @@ import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/utilityFunctions/platformCheck.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../sharedWidgets/navIndexTracker.dart';
+
 class ModuleDetails extends StatefulWidget {
   const ModuleDetails(
       {super.key,
@@ -39,9 +41,11 @@ class _ModuleDetailsState extends State<ModuleDetails> {
 
   @override
   Widget build(BuildContext context) {
+    NavIndexTracker.setNavDestination(navDestination: NavDestinations.other);
     LoggedInState loggedInState = context.watch<LoggedInState>();
 
     userRole = loggedInState.currentUserRole;
+
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
 
     slidesDataMaster = SlidesDataMaster(

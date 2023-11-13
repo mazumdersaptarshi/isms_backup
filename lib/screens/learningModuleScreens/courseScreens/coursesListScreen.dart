@@ -30,8 +30,6 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
     LoggedInState loggedInState = context.watch<LoggedInState>();
 
     userRole = loggedInState.currentUserRole;
-    NavIndexTracker.setNavDestination(
-        navDestination: NavDestinations.AllCoures, userRole: userRole);
 
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
 

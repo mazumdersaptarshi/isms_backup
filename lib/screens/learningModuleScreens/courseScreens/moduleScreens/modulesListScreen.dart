@@ -16,6 +16,7 @@ import '../../../../models/module.dart';
 import '../../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../../projectModules/courseManagement/moduleManagement/moduleDataMaster.dart';
 import '../../../../sharedWidgets/bottomNavBar.dart';
+import '../../../../sharedWidgets/navIndexTracker.dart';
 import '../../../../utilityFunctions/platformCheck.dart';
 import 'sharedWidgets/moduleTile.dart';
 
@@ -90,6 +91,8 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    NavIndexTracker.setNavDestination(navDestination: NavDestinations.other);
+
     LoggedInState loggedInState = context.watch<LoggedInState>();
     CoursesProvider coursesProvider = context.watch<CoursesProvider>();
     bool isALlModulesCompleted =

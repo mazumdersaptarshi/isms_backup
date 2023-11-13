@@ -11,6 +11,7 @@ import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../projectModules/courseManagement/coursesProvider.dart';
+import '../../../../sharedWidgets/navIndexTracker.dart';
 import '../../../../utilityFunctions/platformCheck.dart';
 
 class ModuleExamListScreen extends StatefulWidget {
@@ -45,6 +46,8 @@ class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    NavIndexTracker.setNavDestination(navDestination: NavDestinations.other);
+
     LoggedInState loggedInState = context.watch<LoggedInState>();
 
     CoursesProvider coursesProvider = context.watch<CoursesProvider>();
