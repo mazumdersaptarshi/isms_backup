@@ -90,9 +90,9 @@ class _HomePageState extends State<HomePage> {
                 slivers: [
                   SliverAppBar(
                     elevation: 10,
-                    backgroundColor: primaryColor.shade100,
+                    // backgroundColor: Colors.green,
                     automaticallyImplyLeading: false,
-                    expandedHeight: 200,
+                    expandedHeight: 350,
                     pinned: false,
                     flexibleSpace: FlexibleSpaceBar(
                       background: Row(
@@ -108,10 +108,10 @@ class _HomePageState extends State<HomePage> {
                                 1, // The flex factor. You can adjust this number to take more or less space in the Row or Column.
                             child: Container(
                               width: MediaQuery.of(context).size.width *
-                                  0.13, // 50% of screen width
+                                  0.2, // 50% of screen width
 
                               child: Image.asset(
-                                "assets/images/security.png",
+                                "assets/images/security2.png",
                                 fit: BoxFit
                                     .contain, // This will cover the available space, you can change it to BoxFit.contain to prevent the image from being cropped.
                               ),
