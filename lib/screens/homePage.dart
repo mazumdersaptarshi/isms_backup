@@ -1,4 +1,4 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, sort_child_properties_last
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
@@ -63,7 +63,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     double homePageContainerHeight =
-        MediaQuery.of(context).size.width < 800 ? 950 : 400;
+        MediaQuery.of(context).size.width < HOME_PAGE_WIDGETS_COLLAPSE_WIDTH
+            ? 1000
+            : 400;
     // 500;
     final loggedInState = context.watch<LoggedInState>();
 
@@ -91,7 +93,7 @@ class _HomePageState extends State<HomePage> {
                     elevation: 10,
                     // backgroundColor: Colors.green,
                     automaticallyImplyLeading: false,
-                    expandedHeight: 300,
+                    expandedHeight: 280,
                     pinned: false,
                     flexibleSpace: FlexibleSpaceBar(
                       background: Row(
