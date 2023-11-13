@@ -10,11 +10,12 @@ import 'package:uni_links/uni_links.dart';
 
 class InitLinkHandler {
   static StreamSubscription? _sub;
+  static const _platformChannel = MethodChannel('app/isms/deeplink');
 
   static Future<void> initLinks({required BuildContext context}) async {
     try {
+      _listenForIncomingLinksIOS(context);
       String? initialLink = await getInitialLink();
-
       print("Received initial link is $initialLink");
 
       if (initialLink != null) {
@@ -30,6 +31,16 @@ class InitLinkHandler {
     } catch (e) {
       print('Unexpected error: $e');
     }
+  }
+
+  static void _listenForIncomingLinksIOS(BuildContext context) {
+    _platformChannel.setMethodCallHandler((call) async {
+      if (call.method == 'handleIncomingLink') {
+        String link = call.arguments;
+        print('Received link via method channel: $link');
+        _handleLink(context, link);
+      }
+    });
   }
 
   static void startLinkListener(BuildContext context) {

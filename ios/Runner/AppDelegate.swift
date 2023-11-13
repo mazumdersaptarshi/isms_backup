@@ -8,6 +8,18 @@ import Flutter
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
     GeneratedPluginRegistrant.register(with: self)
+
+    // Listen for Universal Links
+    if let userActivityDict = launchOptions?[.userActivityDictionary] as? [AnyHashable: Any] {
+      for activity in userActivityDict.values where activity is NSUserActivity {
+        let userActivity = activity as! NSUserActivity
+        if userActivity.activityType == NSUserActivityTypeBrowsingWeb,
+           let incomingURL = userActivity.webpageURL {
+          self.handleIncomingLink(url: incomingURL)
+        }
+      }
+    }
+
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 
@@ -18,7 +30,6 @@ import Flutter
   ) -> Bool {
     if userActivity.activityType == NSUserActivityTypeBrowsingWeb,
        let incomingURL = userActivity.webpageURL {
-      // Send the URL to the Flutter engine
       self.handleIncomingLink(url: incomingURL)
       return true
     }
@@ -26,10 +37,8 @@ import Flutter
   }
 
   private func handleIncomingLink(url: URL) {
-    guard let controller = window?.rootViewController as? FlutterViewController else {
-      return
-    }
-    let channel = FlutterMethodChannel(name: "app/isms/deeplink", binaryMessenger: controller.binaryMessenger)
+    // Use the existing 'flutter' property from FlutterAppDelegate which is the FlutterEngine
+    let channel = FlutterMethodChannel(name: "app/isms/deeplink", binaryMessenger: flutter.binaryMessenger)
     channel.invokeMethod("handleIncomingLink", arguments: url.absoluteString)
   }
 }

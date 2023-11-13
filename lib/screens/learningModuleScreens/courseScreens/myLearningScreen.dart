@@ -2,28 +2,28 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/modulesListScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/sharedWidgets/course_tile.dart';
-import 'package:isms/screens/login/loginScreen.dart';
-import 'package:isms/userManagement/loggedInState.dart';
-import 'package:isms/utilityFunctions/platformCheck.dart';
 import 'package:provider/provider.dart';
 
 import '../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../sharedWidgets/bottomNavBar.dart';
 import '../../../sharedWidgets/navIndexTracker.dart';
 import '../../../themes/common_theme.dart';
+import '../../../userManagement/loggedInState.dart';
+import '../../../utilityFunctions/platformCheck.dart';
 import '../../homePageFunctions/getCoursesList.dart';
+import '../../login/loginScreen.dart';
 import 'createCourseScreen.dart';
+import 'moduleScreens/modulesListScreen.dart';
 
-class CoursesDisplayScreen extends StatefulWidget {
-  CoursesDisplayScreen({super.key});
+class MyLearningScreen extends StatefulWidget {
+  MyLearningScreen({super.key});
   String userRole = "user";
   @override
-  State<CoursesDisplayScreen> createState() => _CoursesDisplayScreenState();
+  State<MyLearningScreen> createState() => _MyLearningScreenState();
 }
 
-class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
+class _MyLearningScreenState extends State<MyLearningScreen> {
   @override
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
@@ -33,12 +33,13 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
     }
 
     widget.userRole = loggedInState.currentUserRole;
+    List<dynamic> userEnrolledCourses = loggedInState.allEnrolledCoursesGlobal;
     NavIndexTracker.setNavDestination(
         navDestination: NavDestinations.AllCoures, userRole: widget.userRole);
 
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
 
-    double tileMinWidth = 300;
+    double tileMinWidth = 400;
     double tileMinimumheight = 100;
     double tileRatio = 16 / 9;
     // available width, in pixels
@@ -49,10 +50,14 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
         max(((screenWidth - (horizontalMargin * 2)) / tileMinWidth).floor(), 1);
     // number of tiles that have to fit on the screen
     int itemCount = coursesProvider.allCourses.length ?? 0;
+    int? numberOfModules;
     // grid width, in tiles
-    int numberColumns = max(1, min(itemCount, maxColumns));
+    int numberColumns =
+        min(itemCount, maxColumns) > 0 ? min(itemCount, maxColumns) : 1;
     // grid width, in pixels
     double gridWidth = screenWidth * numberColumns / maxColumns;
+
+    String? currentModule = '';
     String? getLatestModuleName(Map<String, dynamic> courseItem) {
       int latestModuleIndex = (courseItem['modules_started'].length - 1) ?? 0;
       String? latestModuleName = (courseItem['modules_started']
@@ -75,23 +80,27 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
             SliverGrid.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: numberColumns, childAspectRatio: tileRatio),
-                itemCount: coursesProvider.allCourses.length,
+                itemCount: userEnrolledCourses.length,
                 itemBuilder: (context, courseIndex) {
                   return Container(
                     // margin: EdgeInsets.symmetric(horizontal: 10),
 
                     child: CourseTile(
                       index: courseIndex,
-                      title: coursesProvider.allCourses[courseIndex].name,
-                      modulesCount: coursesProvider
-                              .allCourses[courseIndex].modulesCount ??
-                          0,
+                      title: userEnrolledCourses[courseIndex]['course_name'],
+                      modulesCount: userEnrolledCourses[courseIndex]
+                              ['course_modules_count'] ??
+                          1,
+
                       tileWidth: tileMinWidth,
+                      latestModule: getLatestModuleName(
+                              userEnrolledCourses[courseIndex]) ??
+                          '',
                       // tileHeight: tileMinimumheight,
                       courseData: getUserCourseData(
                           loggedInState: loggedInState,
                           course: coursesProvider.allCourses[courseIndex]),
-                      latestModule: '',
+
                       onPressed: () {
                         Navigator.push(
                             context,

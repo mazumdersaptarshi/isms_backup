@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
+import 'package:isms/models/module.dart';
+import 'package:isms/models/slide.dart';
 import 'package:isms/projectModules/courseManagement/moduleManagement/slideManagement/slidesDataMaster.dart';
 import 'package:isms/screens/homePage.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleExamsListScreen.dart';
@@ -9,7 +11,6 @@ import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../../models/module.dart';
 import '../../../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../../../utilityFunctions/platformCheck.dart';
 

@@ -65,6 +65,7 @@ dependencies:
   fl_chart: ^0.64.0
   flutter_svg: ^2.0.9
   lottie: ^2.7.0
+  footer: ^0.0.4
 dev_dependencies:
   flutter_test:
     sdk: flutter
