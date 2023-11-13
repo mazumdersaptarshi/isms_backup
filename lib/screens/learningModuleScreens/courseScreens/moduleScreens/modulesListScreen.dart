@@ -16,6 +16,7 @@ import '../../../../models/module.dart';
 import '../../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../../projectModules/courseManagement/moduleManagement/moduleDataMaster.dart';
 import '../../../../sharedWidgets/bottomNavBar.dart';
+import '../../../../sharedWidgets/loadingScreenWidget.dart';
 import '../../../../sharedWidgets/navIndexTracker.dart';
 import '../../../../utilityFunctions/platformCheck.dart';
 import 'sharedWidgets/moduleTile.dart';
@@ -140,9 +141,7 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
     //double gridWidth = screenWidth * numberColumns / maxColumns;
 
     return Scaffold(
-      appBar: PlatformCheck.topNavBarWidget(
-        loggedInState,
-      ),
+      appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
       bottomNavigationBar:
           kIsWeb ? null : BottomNavBar(loggedInState: loggedInState),
       body: isModulesFetched
@@ -209,14 +208,18 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
                 ],
               ),
             )
-          : SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: 200,
-              child: const AlertDialog(
-                title: Text("Fetching Modules"),
+          : Container(
+              height: 300,
+              child: AlertDialog(
+                elevation: 4,
                 content: Align(
                     alignment: Alignment.topCenter,
-                    child: CircularProgressIndicator()),
+                    child: loadingWidget(
+                        textWidget: Text(
+                      "Loading modules ...",
+                      style: customTheme.textTheme.labelMedium!
+                          .copyWith(fontSize: 18, fontWeight: FontWeight.bold),
+                    ))),
               ),
             ),
       floatingActionButton: userRole == 'admin'

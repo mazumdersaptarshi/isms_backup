@@ -60,9 +60,7 @@ class _ModuleDetailsState extends State<ModuleDetails> {
       "started_at": DateTime.now()
     };
     return Scaffold(
-      appBar: PlatformCheck.topNavBarWidget(
-        loggedInState,
-      ),
+      appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
       body: Container(
         margin: const EdgeInsets.only(top: 20),
         child: Column(

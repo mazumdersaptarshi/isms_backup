@@ -20,7 +20,7 @@ class AdminInstructionsCategories extends StatelessWidget {
     LoggedInState? loggedInState;
     AdminProvider adminProvider = context.watch<AdminProvider>();
     return Scaffold(
-      appBar: PlatformCheck.topNavBarWidget(loggedInState!),
+      appBar: PlatformCheck.topNavBarWidget(loggedInState!, context: context),
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
