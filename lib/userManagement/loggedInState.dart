@@ -195,13 +195,11 @@ class _UserDataGetterMaster with ChangeNotifier {
     if (snapshot.exists) {
       Map<String, dynamic> mapData = snapshot.data() as Map<String, dynamic>;
       UserCoursesDetails data = UserCoursesDetails.fromMap(mapData);
-      allEnrolledCoursesGlobal = data.courses_started!;
-      // allCompletedCoursesGlobal = data.courses_completed!;
-      for (var courseInStarted in data.courses_started!) {
-        for (var courseInCompleted in data.courses_completed!) {
-          if (courseInCompleted['courseID'] == courseInStarted['courseID']) {
-            allCompletedCoursesGlobal.add(courseInStarted);
-          }
+      if (data.courses_completed != null && data.courses_started != null) {
+        for (var courseCompleted in data.courses_completed!) {
+          allCompletedCoursesGlobal.add(data.courses_started!.where(
+              (courseStarted) =>
+                  courseStarted["courseID"] == courseCompleted["courseID"]));
         }
       }
     } else {
@@ -423,59 +421,32 @@ class _UserDataGetterMaster with ChangeNotifier {
       required CoursesProvider coursesProvider,
       required Course course,
       required Module module}) async {
-    bool flag = false;
-    if (loggedInUser.courses_started.isNotEmpty) {
-      for (Map<String, dynamic> course in loggedInUser.courses_started) {
-        try {
-          if (course['courseID'] == courseDetails['courseID']) {
-            if (course.containsKey("modules_started")) {
-              course["modules_started"].forEach((element) {
-                if (element == module.title) {
-                  debugPrint("SETTING FLAG TRUE coz $element");
-                  flag = true;
-                }
-              });
-            }
-          }
-        } catch (e) {
-          log(e.toString());
-        }
+    int courseIndex = loggedInUser.courses_started.indexWhere((courseInList) =>
+        courseInList["courseID"] == courseDetails["courseID"]);
+    int moduleIndex = -1;
+    if (courseIndex > -1) {
+      if (!loggedInUser.courses_started[courseIndex]
+          .containsKey("modules_started")) {
+        loggedInUser.courses_started[courseIndex]["modules_started"] = [];
       }
-    }
-    if (flag == false) {
-      debugPrint("FLAG IS FALSE $courseDetails");
+      if (loggedInUser
+          .courses_started[courseIndex]["modules_started"].isNotEmpty) {
+        moduleIndex = loggedInUser.courses_started[courseIndex]
+                ["modules_started"]
+            .indexWhere(
+                (moduleStarted) => moduleStarted["module_id"] == module.id);
+      }
       Map<String, dynamic> moduleStartedMap = {
         "module_id": module.id,
         "module_name": module.title
       };
-      for (var courseStarted in loggedInUser.courses_started) {
-        if (courseStarted['courseID'] == course.id) {
-          debugPrint("STARTED MODULEE ${courseStarted['modules_started']}");
-          bool flag_2 = false;
-          if (courseStarted['modules_started'] != null) {
-            for (int i = 0; i < courseStarted['modules_started'].length; i++) {
-              Map<String, dynamic> element =
-                  courseStarted['modules_started'][i];
-              if (element["module_name"] == module.title) {
-                flag_2 = true;
-              }
-            }
-            if (flag_2 == false) {
-              courseStarted['modules_started'].add(moduleStartedMap);
-            }
-          } else {
-            debugPrint("COMPLETED MODULE IS NULL< SO HERE");
-            courseStarted['modules_started'] = [];
-            courseStarted['modules_started'].add(moduleStartedMap);
-          }
-        }
+      if (moduleIndex == -1) {
+        loggedInUser.courses_started[courseIndex]["modules_started"]
+            .add(moduleStartedMap);
+        await setUserData();
+        notifyListeners();
       }
-      if (kDebugMode) {
-        print(loggedInUser.courses_started);
-      }
-      await setUserData();
     }
-    notifyListeners();
   }
 
   setUserModuleExamCompleted(
@@ -484,82 +455,43 @@ class _UserDataGetterMaster with ChangeNotifier {
       required Course course,
       required Module module,
       required int examIndex}) async {
-    if (loggedInUser.courses_started.isNotEmpty) {
-      Map<String, dynamic> courseStarted;
-
-      for (int i = 0; i < loggedInUser.courses_started.length; i++) {
-        courseStarted = loggedInUser.courses_started[i];
-        try {
-          if (courseStarted['courseID'] == courseDetails['courseID']) {
-            courseStarted["modules_started"].forEach((courseModule) {
-              if (courseModule["module_name"] == module.title) {
-                if (courseStarted["modules_started"] != null) {
-                  //int moduleStartedIndex = 0;
-                  courseStarted["modules_started"]
-                      .forEach((startedModule) async {
-                    startedModule = startedModule as Map<String, dynamic>;
-
-                    if (startedModule["module_name"] == module.title) {
-                      bool examFlag = false;
-
-                      if (startedModule["exams_completed"] == null) {
-                        startedModule = {
-                          ...startedModule,
-                          ...{"exams_completed": []}
-                        };
-                      }
-
-                      startedModule["exams_completed"].forEach((examCompleted) {
-                        if (examCompleted == examIndex) examFlag = true;
-                        debugPrint(
-                            "PPPPRINTTT ${startedModule["exams_completed"].length},,${module.exams?.length} ");
-                      });
-
-                      if (examFlag == false) {
-                        startedModule["exams_completed"].add(examIndex);
-
-                        List modulesStartedCopy = List.from(
-                            loggedInUser.courses_started[i]["modules_started"]);
-                        int modulesStartedIndex = 0;
-                        for (var m in modulesStartedCopy) {
-                          if (m["module_name"] ==
-                              startedModule["module_name"]) {
-                            m = startedModule;
-                            loggedInUser.courses_started[i]["modules_started"]
-                                [modulesStartedIndex] = m;
-                            debugPrint("MMMMMMMM $m");
-                          }
-                          modulesStartedIndex++;
-                        }
-                      }
-                      await setUserData();
-                      if (startedModule["exams_completed"].length >=
-                          module.exams?.length) {
-                        await setUserCourseModuleCompleted(
-                            courseDetails: courseDetails,
-                            coursesProvider: coursesProvider,
-                            course: course,
-                            module: module);
-                      } else {
-                        debugPrint("PRINT BEFORE SET $courseStarted");
-                      }
-                    }
-                    //moduleStartedIndex++;
-                  });
-                } else {
-                  courseStarted["modules_started"] = [];
-                }
-              }
-            });
+    try {
+      int courseIndex = loggedInUser.courses_started.indexWhere(
+          (courseInList) =>
+              courseInList["courseID"] == courseDetails["courseID"]);
+      if (courseIndex > -1) {
+        int moduleIndex = loggedInUser.courses_started[courseIndex]
+                ["modules_started"]
+            .indexWhere(
+                (moduleInList) => moduleInList["module_name"] == module.title);
+        if (moduleIndex > -1) {
+          Map<String, dynamic> startedModule = loggedInUser
+              .courses_started[courseIndex]["modules_started"][moduleIndex];
+          if (!startedModule.containsKey("exams_completed")) {
+            startedModule.addAll({"exams_completed": []});
           }
-        } catch (e) {
-          log(e.toString());
+          if (!startedModule["exams_completed"].contains(examIndex)) {
+            startedModule["exams_completed"].add(examIndex);
+            loggedInUser.courses_started[courseIndex]["modules_started"]
+                [moduleIndex] = startedModule;
+            await setUserData();
+            if (startedModule["exams_completed"].length >=
+                module.exams?.length) {
+              await setUserCourseModuleCompleted(
+                  courseDetails: courseDetails,
+                  coursesProvider: coursesProvider,
+                  course: course,
+                  module: module);
+            }
+          }
         }
       }
+      //moduleStartedIndex++;*/
+    } catch (e) {
+      log(e.toString());
     }
-
-    notifyListeners();
   }
+  //notifyListeners();
 
   setAdminConsoleCourseMap(
       {required String courseName,
