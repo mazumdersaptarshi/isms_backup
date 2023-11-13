@@ -104,7 +104,7 @@ class _HomePageState extends State<HomePage> {
                           child: Image.asset(
                             "assets/images/security2.png",
                             fit: BoxFit
-                                .cover, // This will cover the available space, you can change it to BoxFit.contain to prevent the image from being cropped.
+                                .contain, // This will cover the available space, you can change it to BoxFit.contain to prevent the image from being cropped.
                           ),
                         ),
                       ),
@@ -142,22 +142,22 @@ class _HomePageState extends State<HomePage> {
                             // Align children to the start of the cross axis
                             children: [
                               Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 10),
+                                  // padding: EdgeInsets.symmetric(horizontal: 10),
                                   child: FutureBuilder<List<Widget>>(
-                                    future: getHomePageCoursesList(
-                                      context: context,
-                                      loggedInState: loggedInState,
-                                      coursesProvider: coursesProvider,
-                                    ),
-                                    builder: (BuildContext context,
-                                        AsyncSnapshot<List<Widget>>? snapshot) {
-                                      if (snapshot?.data == null)
-                                        return CircularProgressIndicator();
-                                      else
-                                        return HomePageItemsContainer(
-                                            homePageItems: snapshot?.data);
-                                    },
-                                  )),
+                                future: getHomePageCoursesList(
+                                  context: context,
+                                  loggedInState: loggedInState,
+                                  coursesProvider: coursesProvider,
+                                ),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<List<Widget>>? snapshot) {
+                                  if (snapshot?.data == null)
+                                    return CircularProgressIndicator();
+                                  else
+                                    return HomePageItemsContainer(
+                                        homePageItems: snapshot?.data);
+                                },
+                              )),
                             ],
                           )),
                       Positioned(
@@ -202,9 +202,9 @@ class _HomePageState extends State<HomePage> {
                         Positioned(
                             top: 600,
                             child: Container(
-                              margin: EdgeInsets.only(
-                                  left:
-                                      MediaQuery.of(context).size.width * 0.14),
+                              // margin: EdgeInsets.only(
+                              //     left:
+                              //         MediaQuery.of(context).size.width * 0.14),
                               child: MouseRegion(
                                 cursor: SystemMouseCursors.click,
                                 child: Row(
