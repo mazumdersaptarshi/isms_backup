@@ -58,7 +58,6 @@ class CourseDropdownWidget extends StatelessWidget {
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
                                 color: Theme.of(context).colorScheme.tertiary),
-                            // color: Colors.blue)
                           ),
                         )
                       ],

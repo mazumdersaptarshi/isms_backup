@@ -17,10 +17,11 @@ class AdminInstructionsCategories extends StatelessWidget {
   final List<String>? subCategories;
   @override
   Widget build(BuildContext context) {
-    LoggedInState? loggedInState;
+    LoggedInState? loggedInState = context.watch<LoggedInState>();
+
     AdminProvider adminProvider = context.watch<AdminProvider>();
     return Scaffold(
-      appBar: PlatformCheck.topNavBarWidget(loggedInState!),
+      appBar: PlatformCheck.topNavBarWidget(loggedInState!, context: context),
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

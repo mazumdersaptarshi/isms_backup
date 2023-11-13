@@ -9,6 +9,8 @@ import 'package:isms/screens/homePage.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleExamsListScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/sharedWidgets/slidesContentWidget.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
+import 'package:isms/sharedWidgets/loadingScreenWidget.dart';
+import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/utilityFunctions/platformCheck.dart';
 import 'package:provider/provider.dart';
@@ -86,9 +88,7 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
     }
 
     return Scaffold(
-      appBar: PlatformCheck.topNavBarWidget(
-        loggedInState,
-      ),
+      appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
       body: Container(
         margin: const EdgeInsets.only(top: 20),
         child: isSlidesFetched
@@ -139,11 +139,19 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
                   ),
                 ],
               )
-            : const AlertDialog(
-                title: Text("Fetching slides"),
-                content: Align(
-                    alignment: Alignment.topCenter,
-                    child: CircularProgressIndicator()),
+            : Container(
+                height: 300,
+                child: AlertDialog(
+                  elevation: 4,
+                  content: Align(
+                      alignment: Alignment.topCenter,
+                      child: loadingWidget(
+                          textWidget: Text(
+                        "Loading slides ...",
+                        style: customTheme.textTheme.labelMedium!.copyWith(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ))),
+                ),
               ),
       ),
     );

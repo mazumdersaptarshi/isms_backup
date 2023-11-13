@@ -30,8 +30,6 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
     LoggedInState loggedInState = context.watch<LoggedInState>();
 
     userRole = loggedInState.currentUserRole;
-    NavIndexTracker.setNavDestination(
-        navDestination: NavDestinations.AllCoures, userRole: userRole);
 
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
 
@@ -61,9 +59,7 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
     // grid width, in pixels
     print('uuupop: ${coursesProvider.allCourses}');
     return Scaffold(
-      appBar: PlatformCheck.topNavBarWidget(
-        loggedInState,
-      ),
+      appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
       bottomNavigationBar:
           kIsWeb ? null : BottomNavBar(loggedInState: loggedInState),
       body: Container(

@@ -119,6 +119,45 @@ class CourseTile extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+                                  if (dateValue != null && dateValue != '')
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.calendar_month_rounded,
+                                          size: 14,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .tertiary,
+                                        ),
+                                        SizedBox(
+                                          width: 4,
+                                        ),
+                                        // (pageView == 'explore')
+                                        //     ? Text(
+                                        //         'Created: ${dateValue}',
+                                        //         style: TextStyle(
+                                        //             fontSize: 12,
+                                        //             color: Theme.of(context)
+                                        //                 .colorScheme
+                                        //                 .tertiary),
+                                        //       )
+                                        //     : (pageView == 'mylearning')
+                                        //         ? Text('Started: ${dateValue}',
+                                        //             style: TextStyle(
+                                        //                 fontSize: 12,
+                                        //                 color: Theme.of(context)
+                                        //                     .colorScheme
+                                        //                     .tertiary))
+                                        //         : Text(''),
+
+                                        Text('Started: ${dateValue}',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .tertiary))
+                                      ],
+                                    ),
                                   SizedBox(
                                     height: 4,
                                   ),

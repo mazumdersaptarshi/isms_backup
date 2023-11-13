@@ -38,8 +38,6 @@ class _MyLearningScreenState extends State<MyLearningScreen> {
 
     userRole = loggedInState.currentUserRole;
     List<dynamic> userEnrolledCourses = loggedInState.allEnrolledCoursesGlobal;
-    NavIndexTracker.setNavDestination(
-        navDestination: NavDestinations.AllCoures, userRole: userRole);
 
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
 
@@ -76,9 +74,7 @@ class _MyLearningScreenState extends State<MyLearningScreen> {
     }
 
     return Scaffold(
-      appBar: PlatformCheck.topNavBarWidget(
-        loggedInState,
-      ),
+      appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
       bottomNavigationBar:
           kIsWeb ? null : BottomNavBar(loggedInState: loggedInState),
       body: Container(

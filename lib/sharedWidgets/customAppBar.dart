@@ -18,7 +18,7 @@ mixin CustomAppBarMixin on StatelessWidget {
     "Explore": ValueNotifier(false),
     "Reminders": ValueNotifier(false),
     "Account": ValueNotifier(false),
-    "Admin": ValueNotifier(false),
+    "Admin Console": ValueNotifier(false),
     "My Learning": ValueNotifier(false),
   };
 
@@ -106,7 +106,7 @@ mixin CustomAppBarMixin on StatelessWidget {
     );
   }
 
-  Widget homeButtonItem(BuildContext context) {
+  Widget homeButtonItem(BuildContext context, {bool displayText = true}) {
     return GestureDetector(
       onTap: () {
         Navigator.of(context).pushReplacement(
@@ -124,23 +124,25 @@ mixin CustomAppBarMixin on StatelessWidget {
           ),
         );
       },
-      child: const Padding(
+      child: Padding(
         padding: EdgeInsets.only(left: kIsWeb ? 16.0 : 0),
         child: Row(
           children: [
             Icon(Icons.severe_cold_rounded),
-            SizedBox(
-              width: 10,
-            ),
-            Text(
-              'ISMS',
-              style: TextStyle(
-                fontFamily: 'Montserrat',
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-                fontSize: 24,
+            if (displayText == true)
+              SizedBox(
+                width: 10,
               ),
-            ),
+            if (displayText == true)
+              Text(
+                'ISMS',
+                style: TextStyle(
+                  fontFamily: 'Montserrat',
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontSize: 24,
+                ),
+              ),
           ],
         ),
       ),
@@ -202,20 +204,24 @@ class CustomAppBarWeb extends StatelessWidget
       automaticallyImplyLeading: false,
       title: MouseRegion(
         cursor: SystemMouseCursors.click,
-        child: homeButtonItem(context),
+        child:
+            MediaQuery.of(context).size.width > HOME_PAGE_WIDGETS_COLLAPSE_WIDTH
+                ? homeButtonItem(context)
+                : homeButtonItem(context, displayText: false),
       ),
       actions: <Widget>[
         appBarItem(Icons.explore, "Explore",
             () => navigateToCoursesPage(context), _paddingValue),
-        appBarItem(Icons.lightbulb, "My Learning",
-            () => navigateToMyLearningPage(context), _paddingValue),
+        if (loggedInState?.currentUserRole == 'admin')
+          appBarItem(Icons.lightbulb, "My Learning",
+              () => navigateToMyLearningPage(context), _paddingValue),
         if (loggedInState?.currentUserRole == 'admin')
           appBarItem(Icons.notifications_active_rounded, "Reminders",
               () => navigateToRemindersPage(context), _paddingValue),
         appBarItem(Icons.account_circle, "Account",
             () => navigateToUserProfilePage(context), _paddingValue),
         if (loggedInState?.currentUserRole == 'admin')
-          appBarItem(Icons.admin_panel_settings_outlined, "Admin",
+          appBarItem(Icons.admin_panel_settings_outlined, "Admin Console",
               () => navigateToAdminConsolePage(context), _paddingValue),
         dividerItem(),
         logoutButtonItem(context),
@@ -242,11 +248,12 @@ class CustomAppBarMobile extends StatelessWidget
       automaticallyImplyLeading: true,
       title: MouseRegion(
         cursor: SystemMouseCursors.click,
-        child: homeButtonItem(context),
+        child: homeButtonItem(context, displayText: false),
       ),
       actions: <Widget>[
-        appBarItem(Icons.lightbulb, "My Learning",
-            () => navigateToMyLearningPage(context), _paddingValue),
+        if (loggedInState?.currentUserRole == 'admin')
+          appBarItem(Icons.admin_panel_settings_outlined, "Admin Console",
+              () => navigateToAdminConsolePage(context), _paddingValue),
         if (loggedInState?.currentUserRole == 'admin')
           appBarItem(Icons.notifications_active_rounded, "Reminders",
               () => navigateToRemindersPage(context), _paddingValue),

@@ -5,9 +5,9 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
-import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/createModuleScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/sharedWidgets/moduleTile.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/sharedWidgets/moduleTileWidget.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/createModuleScreenHTML.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examListScreen.dart';
 import 'package:isms/themes/common_theme.dart';
@@ -17,6 +17,8 @@ import 'package:provider/provider.dart';
 import '../../../../models/module.dart';
 import '../../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../../projectModules/courseManagement/moduleManagement/moduleDataMaster.dart';
+import '../../../../sharedWidgets/loadingScreenWidget.dart';
+import '../../../../sharedWidgets/navIndexTracker.dart';
 import '../../../../utilityFunctions/platformCheck.dart';
 
 class CoursePage extends StatefulWidget {
@@ -90,6 +92,8 @@ class _CoursePageState extends State<CoursePage> {
 
   @override
   Widget build(BuildContext context) {
+    NavIndexTracker.setNavDestination(navDestination: NavDestinations.other);
+
     LoggedInState loggedInState = context.watch<LoggedInState>();
     CoursesProvider coursesProvider = context.watch<CoursesProvider>();
     bool isALlModulesCompleted =
@@ -137,10 +141,9 @@ class _CoursePageState extends State<CoursePage> {
     //double gridWidth = screenWidth * numberColumns / maxColumns;
 
     return Scaffold(
-      appBar: PlatformCheck.topNavBarWidget(
-        loggedInState,
-      ),
-      bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState),
+      appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
+      bottomNavigationBar:
+          PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
       body: isModulesFetched
           ? Container(
               child: CustomScrollView(
@@ -269,14 +272,18 @@ class _CoursePageState extends State<CoursePage> {
                 ],
               ),
             )
-          : SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: 200,
-              child: const AlertDialog(
-                title: Text("Fetching Modules"),
+          : Container(
+              height: 300,
+              child: AlertDialog(
+                elevation: 4,
                 content: Align(
                     alignment: Alignment.topCenter,
-                    child: CircularProgressIndicator()),
+                    child: loadingWidget(
+                        textWidget: Text(
+                      "Loading modules ...",
+                      style: customTheme.textTheme.labelMedium!
+                          .copyWith(fontSize: 18, fontWeight: FontWeight.bold),
+                    ))),
               ),
             ),
       floatingActionButton: userRole == 'admin'
@@ -286,7 +293,8 @@ class _CoursePageState extends State<CoursePage> {
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            CreateModuleScreen(course: widget.course)));
+                            //CreateModuleScreen(course: widget.course)));
+                            CreateModuleScreenHTML(course: widget.course)));
               },
               child: const Icon(Icons.add),
             )
