@@ -216,7 +216,7 @@ class CustomAppBarWeb extends StatelessWidget
         appBarItem(Icons.account_circle, "Account",
             () => navigateToUserProfilePage(context), _paddingValue),
         if (loggedInState?.currentUserRole == 'admin')
-          appBarItem(Icons.admin_panel_settings_outlined, "Admin",
+          appBarItem(Icons.admin_panel_settings_outlined, "Admin Console",
               () => navigateToAdminConsolePage(context), _paddingValue),
         dividerItem(),
         logoutButtonItem(context),
