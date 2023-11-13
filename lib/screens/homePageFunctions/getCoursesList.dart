@@ -45,7 +45,7 @@ Future<List<Widget>> getHomePageCoursesList(
         courseData:
             getUserCourseData(loggedInState: loggedInState, course: course),
         index: i,
-        latestModule: getLatestModuleName(coursesStarted[i]) ?? '',
+        subTitle: getLatestModuleName(coursesStarted[i]) ?? '',
         modulesCount: course.modulesCount ?? 0,
       ));
     }

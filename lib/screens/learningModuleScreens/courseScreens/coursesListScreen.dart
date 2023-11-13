@@ -35,7 +35,7 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
 
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
 
-    double tileMinWidth = 300;
+    double tileMinWidth = 400;
     double tileMinimumheight = 100;
     double tileRatio = 3 / 2;
 
@@ -87,7 +87,10 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
                     courseData: getUserCourseData(
                         loggedInState: loggedInState,
                         course: coursesProvider.allCourses[courseIndex]),
-                    latestModule: '',
+                    subTitle:
+                        coursesProvider.allCourses[courseIndex].description ??
+                            '',
+                    pageView: 'explore',
                     onPressed: () {
                       Navigator.push(
                           context,

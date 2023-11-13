@@ -45,14 +45,25 @@ class AllCoursesDropdown extends StatelessWidget {
               children: [
                 Text(
                   '${index + 1}.  ',
-                  style: const TextStyle(fontSize: 14),
+                  style: TextStyle(
+                      fontSize: 12,
+                      color: Theme.of(context).colorScheme.tertiary),
                 ),
                 const Icon(Icons.menu_book_rounded),
                 const SizedBox(
                   width: 10,
                 ),
-                Text('${courses[index].course_name}',
-                    style: const TextStyle(fontSize: 14)),
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width * 0.6),
+                  child: Text(
+                    '${courses[index].course_name}',
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.tertiary),
+                  ),
+                ),
               ],
             ),
             children: [

@@ -199,7 +199,7 @@ class CustomAppBarWeb extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      automaticallyImplyLeading: kIsWeb ? false : true,
+      automaticallyImplyLeading: false,
       title: MouseRegion(
         cursor: SystemMouseCursors.click,
         child: homeButtonItem(context),
@@ -239,7 +239,7 @@ class CustomAppBarMobile extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      automaticallyImplyLeading: kIsWeb ? false : true,
+      automaticallyImplyLeading: true,
       title: MouseRegion(
         cursor: SystemMouseCursors.click,
         child: homeButtonItem(context),
