@@ -2,17 +2,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
+import 'package:isms/models/module.dart';
+import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 import 'package:isms/projectModules/courseManagement/moduleManagement/slideManagement/slidesDataMaster.dart';
 import 'package:isms/screens/homePage.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleExamsListScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/sharedWidgets/slidesContentWidget.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/userManagement/loggedInState.dart';
+import 'package:isms/utilityFunctions/platformCheck.dart';
 import 'package:provider/provider.dart';
-
-import '../../../../../models/module.dart';
-import '../../../../../projectModules/courseManagement/coursesProvider.dart';
-import '../../../../../utilityFunctions/platformCheck.dart';
 
 class SlidesDisplayScreen extends StatefulWidget {
   const SlidesDisplayScreen(
