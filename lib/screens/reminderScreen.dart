@@ -58,11 +58,13 @@ Future<void> setExpiryDate(
 class ReminderLine extends StatefulWidget {
   final String text;
   final Function(String, DateTime?) setExpiryDateForCertificate;
+  final DateTime? initialExpiryDate; // Added parameter
 
   const ReminderLine({
     Key? key,
     required this.text,
     required this.setExpiryDateForCertificate,
+    this.initialExpiryDate, // Updated constructor
   }) : super(key: key);
 
   @override
@@ -77,6 +79,7 @@ class _ReminderLineState extends State<ReminderLine> {
   void initState() {
     super.initState();
     selectedDate = DateTime.now();
+    expiryDate = widget.initialExpiryDate; // Set initial expiry date
   }
 
   @override
@@ -109,12 +112,13 @@ class _ReminderLineState extends State<ReminderLine> {
                         contentPadding: const EdgeInsets.symmetric(
                             horizontal: 10, vertical: 20),
                         content: SizedBox(
-                          height: 200,
+                          height: 300,
+                          width: 500,
                           child: CupertinoDatePicker(
                             mode: CupertinoDatePickerMode.date,
                             initialDateTime: selectedDate,
                             minimumDate: DateTime(2023),
-                            maximumDate: DateTime(2050),
+                            maximumDate: DateTime(2100),
                             onDateTimeChanged: (DateTime newDate) {
                               setState(() {
                                 selectedDate = newDate;
@@ -134,7 +138,7 @@ class _ReminderLineState extends State<ReminderLine> {
                                     contentPadding: const EdgeInsets.symmetric(
                                         horizontal: 24, vertical: 20),
                                     content: SizedBox(
-                                      height: 200,
+                                      height: 300,
                                       child: CupertinoDatePicker(
                                         mode: CupertinoDatePickerMode.time,
                                         initialDateTime: selectedDate,
@@ -232,11 +236,16 @@ class _ReminderLineState extends State<ReminderLine> {
           Row(
             children: [
               if (expiryDate != null)
-                const Icon(
+                Icon(
                   Icons.check,
-                  color: Colors.grey,
+                  color: Colors.deepPurpleAccent.shade100,
                 ),
-              if (expiryDate == null)
+              if (expiryDate == null && widget.initialExpiryDate != null)
+                Icon(
+                  Icons.check,
+                  color: Colors.deepPurpleAccent.shade100,
+                ),
+              if (expiryDate == null && widget.initialExpiryDate == null)
                 const Icon(
                   Icons.error,
                   color: Colors.grey,
@@ -245,7 +254,9 @@ class _ReminderLineState extends State<ReminderLine> {
               Text(
                 expiryDate != null
                     ? 'Expiry date: ${DateFormat('yyyy/MM/dd').format(expiryDate!)} at ${DateFormat('hh:mm a').format(expiryDate!)}'
-                    : 'Expiry date: Not set',
+                    : widget.initialExpiryDate != null
+                        ? 'Expiry date: ${DateFormat('yyyy/MM/dd').format(widget.initialExpiryDate!)} at ${DateFormat('hh:mm a').format(widget.initialExpiryDate!)}'
+                        : 'Expiry date: Not set',
                 style: const TextStyle(fontSize: 12, color: Colors.black87),
               ),
             ],
@@ -265,11 +276,44 @@ class ReminderScreen extends StatefulWidget {
 
 class _ReminderScreenState extends State<ReminderScreen> {
   late LoggedInState loggedInState;
+  DateTime? expiryDatePeople;
+  DateTime? expiryDatePlayers;
+  DateTime? expiryDateVendors;
 
   @override
-  void didChangeDependencies() {
+  void didChangeDependencies() async {
     super.didChangeDependencies();
     loggedInState = Provider.of<LoggedInState>(context);
+    await getExpiryDates();
+  }
+
+  Future<void> getExpiryDates() async {
+    DocumentSnapshot doc = await FirebaseFirestore.instance
+        .collection('adminconsole')
+        .doc('allAdmins')
+        .collection('admins')
+        .doc(loggedInState.currentUserUid!)
+        .get();
+
+    if (doc.exists) {
+      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+      List certifications = data['certifications'] as List? ?? [];
+      for (var cert in certifications) {
+        if (cert['certification_name'] == 'People') {
+          setState(() {
+            expiryDatePeople = cert['expiredTime']?.toDate();
+          });
+        } else if (cert['certification_name'] == 'Players') {
+          setState(() {
+            expiryDatePlayers = cert['expiredTime']?.toDate();
+          });
+        } else if (cert['certification_name'] == 'Vendors') {
+          setState(() {
+            expiryDateVendors = cert['expiredTime']?.toDate();
+          });
+        }
+      }
+    }
   }
 
   @override
@@ -284,16 +328,19 @@ class _ReminderScreenState extends State<ReminderScreen> {
               text: "People",
               setExpiryDateForCertificate: (uid, date) =>
                   setExpiryDate(uid, "People", date),
+              initialExpiryDate: expiryDatePeople, // Pass initial expiry date
             ),
             ReminderLine(
               text: "Players",
               setExpiryDateForCertificate: (uid, date) =>
                   setExpiryDate(uid, "Players", date),
+              initialExpiryDate: expiryDatePlayers, // Pass initial expiry date
             ),
             ReminderLine(
               text: "Vendors",
               setExpiryDateForCertificate: (uid, date) =>
                   setExpiryDate(uid, "Vendors", date),
+              initialExpiryDate: expiryDateVendors, // Pass initial expiry date
             ),
           ],
         ),

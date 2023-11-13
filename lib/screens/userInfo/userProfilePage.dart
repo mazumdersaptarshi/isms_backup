@@ -88,9 +88,11 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   final action = userActions[index];
                   return Container(
                     constraints: BoxConstraints(
-                      maxWidth: MediaQuery.of(context).size.width > 500
-                          ? MediaQuery.of(context).size.width * 0.5
-                          : MediaQuery.of(context).size.width,
+                      maxWidth: (MediaQuery.of(context).size.width > 1000
+                              ? MediaQuery.of(context).size.width * 0.5
+                              : MediaQuery.of(context).size.width) *
+                          0.98,
+                      // maxWidth: MediaQuery.of(context).size.width * 0.9,
                     ),
                     child: ExpansionTile(
                       leading: Icon(action.icon),
@@ -246,32 +248,37 @@ class UserCompletedCoursesDropdown extends StatelessWidget {
   Widget build(BuildContext context) {
     LoggedInState loggedInState =
         Provider.of<LoggedInState>(context, listen: false);
-    return Column(
-      children: [
-        FutureBuilder<List>(
-          future: loggedInState.getUserCoursesData('crs_compl'),
-          builder: (context, snapshot) {
-            if (loggedInState.allCompletedCoursesGlobal.isNotEmpty) {
-              return ListView.builder(
-                itemCount: loggedInState.allCompletedCoursesGlobal.length,
-                shrinkWrap: true,
-                physics: const ClampingScrollPhysics(),
-                itemBuilder: (context, index) {
-                  allCompletedCourses = loggedInState.allCompletedCoursesGlobal;
-                  debugPrint(
-                      'ALLCOMPLETEDCOURSESGLOBAL: ${loggedInState.allCompletedCoursesGlobal}');
-                  return CourseDropdownWidget(
-                    courseItem: allCompletedCourses[index],
-                    detailType: 'courses_completed',
-                  );
-                },
-              );
-            } else {
-              return const Text('No data available');
-            }
-          },
-        ),
-      ],
+    return SizedBox(
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          FutureBuilder<List>(
+            future: loggedInState.getUserCoursesData('crs_compl'),
+            builder: (context, snapshot) {
+              if (loggedInState.allCompletedCoursesGlobal.isNotEmpty) {
+                return ListView.builder(
+                  itemCount: loggedInState.allCompletedCoursesGlobal.length,
+                  shrinkWrap: true,
+                  physics: const ClampingScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    allCompletedCourses =
+                        loggedInState.allCompletedCoursesGlobal;
+                    debugPrint(
+                        'ALLCOMPLETEDCOURSESGLOBAL: ${loggedInState.allCompletedCoursesGlobal}');
+                    return CourseDropdownWidget(
+                      courseItem: allCompletedCourses[index],
+                      detailType: 'courses_completed',
+                    );
+                  },
+                );
+              } else {
+                return const Text('No data available');
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 }

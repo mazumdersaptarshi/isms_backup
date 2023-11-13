@@ -199,7 +199,7 @@ class CustomAppBarWeb extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      automaticallyImplyLeading: kIsWeb ? false : true,
+      automaticallyImplyLeading: false,
       title: MouseRegion(
         cursor: SystemMouseCursors.click,
         child: homeButtonItem(context),
@@ -239,20 +239,17 @@ class CustomAppBarMobile extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      automaticallyImplyLeading: kIsWeb ? false : true,
+      automaticallyImplyLeading: true,
       title: MouseRegion(
         cursor: SystemMouseCursors.click,
         child: homeButtonItem(context),
       ),
       actions: <Widget>[
         appBarItem(Icons.lightbulb, "My Learning",
-            () => navigateToAdminConsolePage(context), _paddingValue),
+            () => navigateToMyLearningPage(context), _paddingValue),
         if (loggedInState?.currentUserRole == 'admin')
           appBarItem(Icons.notifications_active_rounded, "Reminders",
               () => navigateToRemindersPage(context), _paddingValue),
-        if (loggedInState?.currentUserRole == 'admin')
-          appBarItem(Icons.admin_panel_settings_outlined, "Admin",
-              () => navigateToAdminConsolePage(context), _paddingValue),
         dividerItem(),
         logoutButtonItem(context),
       ],
