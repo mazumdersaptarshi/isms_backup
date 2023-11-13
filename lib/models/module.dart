@@ -5,6 +5,7 @@ class Module {
   String title;
   String id;
   String contentDescription;
+  String additionalInfo;
   int index;
   List<Slide>? slides;
   List<NewExam>? exams;
@@ -12,6 +13,7 @@ class Module {
       {required this.title,
       required this.id,
       required this.contentDescription,
+      required this.additionalInfo,
       this.slides,
       this.exams,
       this.index = 0});
@@ -22,6 +24,7 @@ class Module {
         index: map['index'] ?? 0,
         title: map['title'],
         contentDescription: map['contentDescription'],
+        additionalInfo: map['additionalInfo'],
         slides: map['slides'] ?? [],
         exams: map['exams'] ?? []);
   }
@@ -33,6 +36,7 @@ class Module {
       'slides': slides,
       'exams': exams,
       'contentDescription': contentDescription,
+      'additionalInfo': additionalInfo,
       'index': index
     };
   }
