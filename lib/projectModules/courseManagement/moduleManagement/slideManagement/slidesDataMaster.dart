@@ -1,9 +1,7 @@
-import 'dart:typed_data';
+// ignore_for_file: file_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/models/slide.dart';
 import 'package:isms/projectModules/courseManagement/moduleManagement/moduleDataMaster.dart';
@@ -39,10 +37,10 @@ class SlidesDataMaster extends ModuleDataMaster {
   //    });
   //    slidesMapList.forEach((slideMap) async {
   //      await _slidesRef.doc(slideMap['id']).set(slideMap);
-  //      print("Created slide ${slideMap}");
+  //      debugPrint("Created slide ${slideMap}");
   //    });
   //    coursesProvider.addSlidesToModules(module, slides);
-  //    print("Slides creation successful");
+  //    debugPrint("Slides creation successful");
   //    return true;
   //  } catch (e) {
   //    return false;
@@ -58,24 +56,24 @@ class SlidesDataMaster extends ModuleDataMaster {
       module.slides = [];
     else
       module.slides!.clear();
-    slidesListSnapshot.docs.forEach((element) {
+    for (var element in slidesListSnapshot.docs) {
       Slide slide = Slide.fromMap(element.data() as Map<String, dynamic>);
       module.addSlide(slide);
       coursesProvider.notifyListeners();
-    });
+    }
     return module.slides!;
   }
 
   Future<List<Slide>> get slides async {
     if (module.slides != null) {
-      print("slides in cache, no need to fetch them");
+      debugPrint("slides in cache, no need to fetch them");
       return module.slides!;
     } else {
-      print("slides not in cache, trying to fetch them");
+      debugPrint("slides not in cache, trying to fetch them");
       try {
         return _fetchSlides();
       } catch (e) {
-        print("error while fetching slides: ${e}");
+        debugPrint("error while fetching slides: ${e}");
         module.slides = null;
         return [];
       }

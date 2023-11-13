@@ -1,10 +1,9 @@
-import 'dart:io';
+// ignore_for_file: file_names
 
-import 'dart:typed_data';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/projectModules/courseManagement/coursesDataMaster.dart';
@@ -39,7 +38,7 @@ class ModuleDataMaster extends CoursesDataMaster {
       await _courseRef.update({'modulesCount': module.index});
       course.addModule(module);
       coursesProvider.notifyListeners();
-      print("Module creation successful");
+      debugPrint("Module creation successful");
       return true;
     } catch (e) {
       return false;
@@ -55,23 +54,23 @@ class ModuleDataMaster extends CoursesDataMaster {
       course.modules = [];
     else
       course.modules!.clear();
-    modulesListSnapshot.docs.forEach((element) {
+    for (var element in modulesListSnapshot.docs) {
       Module module = Module.fromMap(element.data() as Map<String, dynamic>);
       course.addModule(module);
-    });
+    }
     return course.modules!;
   }
 
   Future<List<Module>> get modules async {
     if (course.modules != null) {
-      print("modules in cache, no need to fetch them");
+      debugPrint("modules in cache, no need to fetch them");
       return course.modules!;
     } else {
-      print("modules not in cache, trying to fetch them");
+      debugPrint("modules not in cache, trying to fetch them");
       try {
         return _fetchModules();
       } catch (e) {
-        print("error while fetching modules: ${e}");
+        debugPrint("error while fetching modules: ${e}");
         course.modules = null;
         return [];
       }

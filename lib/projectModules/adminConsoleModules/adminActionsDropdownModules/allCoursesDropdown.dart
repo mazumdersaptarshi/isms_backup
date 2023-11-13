@@ -1,10 +1,12 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 import '../../../adminManagement/adminProvider.dart';
 
 class AllCoursesDropdown extends StatelessWidget {
-  AllCoursesDropdown({super.key, required this.adminProvider});
+  const AllCoursesDropdown({super.key, required this.adminProvider});
   final AdminProvider adminProvider;
 
   @override
@@ -13,7 +15,7 @@ class AllCoursesDropdown extends StatelessWidget {
       future: adminProvider.allCoursesDataFetcher(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else if (snapshot.hasData && snapshot.data != null) {

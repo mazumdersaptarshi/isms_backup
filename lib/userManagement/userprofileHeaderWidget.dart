@@ -1,13 +1,16 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 
 class UserProfileHeaderWidget extends StatelessWidget {
+  const UserProfileHeaderWidget({super.key, required this.view});
+
   // UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
   // LoggedInState loggedInState;
-  UserProfileHeaderWidget({this.view});
-  String? view = 'user';
+  final String view;
   @override
   Widget build(BuildContext context) {
     final loggedInState = context.watch<LoggedInState>();
@@ -37,7 +40,7 @@ class UserProfileHeaderWidget extends StatelessWidget {
                 //       NetworkImage(loggedInState.currentUser!.photoURL!),
                 // ),
                 ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Text(

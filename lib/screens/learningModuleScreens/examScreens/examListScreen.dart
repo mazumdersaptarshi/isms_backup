@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
@@ -15,20 +17,21 @@ import '../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../sharedWidgets/leaningModulesAppBar.dart';
 
 class ExamListScreen extends StatefulWidget {
-  ExamListScreen(
+  const ExamListScreen(
       {super.key,
       required this.course,
       required this.examtype,
       this.moduleIndex});
-  Course course;
-  int? moduleIndex;
-  late ExamDataMaster examDataMaster;
-  EXAMTYPE examtype;
+  final Course course;
+  final int? moduleIndex;
+  final EXAMTYPE examtype;
   @override
   State<ExamListScreen> createState() => _ExamListScreenState();
 }
 
 class _ExamListScreenState extends State<ExamListScreen> {
+  late ExamDataMaster examDataMaster;
+
   @override
   void initState() {
     super.initState();
@@ -39,12 +42,12 @@ class _ExamListScreenState extends State<ExamListScreen> {
     LoggedInState loggedInState = context.watch<LoggedInState>();
 
     if (loggedInState.currentUser == null) {
-      return LoginPage();
+      return const LoginPage();
     }
 
     CoursesProvider coursesProvider = context.watch<CoursesProvider>();
 
-    widget.examDataMaster =
+    examDataMaster =
       ExamDataMaster(
           course: widget.course,
           coursesProvider: coursesProvider);
@@ -63,7 +66,7 @@ class _ExamListScreenState extends State<ExamListScreen> {
       ),
 
       body: FutureBuilder<List<NewExam>>(
-        future: widget.examDataMaster.exams,
+        future: examDataMaster.exams,
         builder: (BuildContext context, AsyncSnapshot<List<NewExam>> snapshot) {
           if (snapshot.hasData) {
             List<NewExam> exams = snapshot.data!;
@@ -116,7 +119,7 @@ class _ExamListScreenState extends State<ExamListScreen> {
                             course: widget.course,
                             examtype: EXAMTYPE.courseExam)));
               },
-              child: Icon(Icons.add),
+              child: const Icon(Icons.add),
             )
           : null,
     );

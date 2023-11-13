@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 
 import '../../adminManagement/adminDataExporter.dart';
@@ -13,7 +15,7 @@ final Map<String, dynamic> categories = {
 };
 
 class AdminActionDropdown extends StatefulWidget {
-  AdminActionDropdown({
+  const AdminActionDropdown({super.key, 
     required this.adminProvider,
     required this.actionId,
   });
@@ -116,14 +118,14 @@ class _AdminActionDropdownState extends State<AdminActionDropdown> {
         ],
       );
     } else {
-      return Text('No data to show!');
+      return const Text('No data to show!');
     }
   }
 }
 
 class AdminInstructionsDropdown extends StatelessWidget {
-  AdminInstructionsDropdown({super.key, this.categories});
-  Map<String, dynamic>? categories;
+  const AdminInstructionsDropdown({super.key, this.categories});
+  final Map<String, dynamic>? categories;
   void navigateToAdminInstructionsCategories(
       BuildContext context, String category, List<String>? subCategories) {
     Navigator.push(

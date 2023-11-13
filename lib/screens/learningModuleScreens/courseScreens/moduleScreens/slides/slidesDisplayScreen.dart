@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
@@ -15,27 +17,27 @@ import '../../../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../../../utilityFunctions/platformCheck.dart';
 
 class SlidesDisplayScreen extends StatefulWidget {
-  SlidesDisplayScreen(
+  const SlidesDisplayScreen(
       {super.key,
       required this.module,
       required this.course});
-  Course course;
-  Module module;
-  late SlidesDataMaster slidesDataMaster;
+  final Course course;
+  final Module module;
 
   @override
   _SlidesDisplayScreenState createState() => _SlidesDisplayScreenState();
 }
 
 class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
+  late SlidesDataMaster slidesDataMaster;
   int currentIndex = 0;
   final PageController _pageController = PageController(initialPage: 0);
 
   List<Map<String, dynamic>> _initializeCardItems(List<Slide> slides) {
     List<Map<String, dynamic>> slidesMap = [];
-    slides.forEach((element) {
+    for (var element in slides) {
       slidesMap.add({'title': element.title, 'text': element.content});
-    });
+    }
     return slidesMap;
   }
 
@@ -62,12 +64,12 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
     LoggedInState loggedInState = context.watch<LoggedInState>();
 
     if (loggedInState.currentUser == null) {
-      return LoginPage();
+      return const LoginPage();
     }
 
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
 
-    widget.slidesDataMaster = SlidesDataMaster(
+    slidesDataMaster = SlidesDataMaster(
         course: widget.course,
         coursesProvider: coursesProvider,
         module: widget.module);
@@ -79,7 +81,7 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
       body: Container(
         margin: EdgeInsets.only(top: 20),
         child: FutureBuilder<List<Slide>>(
-          future: widget.slidesDataMaster.slides,
+          future: slidesDataMaster.slides,
           builder: (BuildContext context, AsyncSnapshot<List<Slide>> snapshot) {
             if (snapshot.hasData) {
               List<Slide> slides = snapshot.data!;
@@ -92,7 +94,7 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
                       pageController: _pageController,
                       cardItems: cardItems,
                       currentIndex: currentIndex),
-                  SizedBox(height: 20),
+              const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -109,12 +111,12 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
                                           module: widget.module,
                                         )));
                           },
-                          child: Text(
+                      child: const Text(
                             'Take exams',
                           ),
                         ),
                       ),
-                      SizedBox(width: 20),
+                  const SizedBox(width: 20),
                       Visibility(
                         visible: currentIndex == cardItems.length - 1,
                         child: ElevatedButton(
@@ -122,9 +124,9 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => HomePage()));
+                                builder: (context) => const HomePage()));
                           },
-                          child: Text(
+                      child: const Text(
                             'Back to Home',
                           ),
                         ),

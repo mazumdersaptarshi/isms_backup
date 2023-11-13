@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
@@ -13,21 +15,22 @@ import '../../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../../utilityFunctions/platformCheck.dart';
 
 class ModuleExamListScreen extends StatefulWidget {
-  ModuleExamListScreen(
+  const ModuleExamListScreen(
       {super.key,
       required this.course,
       required this.examtype,
       required this.module});
-  Course course;
-  Module module;
-  late ModuleExamDataMaster moduleExamDataMaster;
-  EXAMTYPE examtype;
+  final Course course;
+  final Module module;
+  final EXAMTYPE examtype;
 
   @override
   State<ModuleExamListScreen> createState() => _ModuleExamListScreenState();
 }
 
 class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
+  late ModuleExamDataMaster moduleExamDataMaster;
+
   @override
   void initState() {
     super.initState();
@@ -38,13 +41,13 @@ class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
     LoggedInState loggedInState = context.watch<LoggedInState>();
 
     if (loggedInState.currentUser == null) {
-      return LoginPage();
+      return const LoginPage();
     }
 
     CoursesProvider coursesProvider = context.watch<CoursesProvider>();
 
     List<NewExam>? exams = [];
-    widget.moduleExamDataMaster =
+    moduleExamDataMaster =
       ModuleExamDataMaster(
           course: widget.course,
           coursesProvider: coursesProvider,
@@ -55,7 +58,7 @@ class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
         loggedInState,
       ),
       body: FutureBuilder<List<NewExam>>(
-        future: widget.moduleExamDataMaster.exams,
+        future: moduleExamDataMaster.exams,
         builder: (BuildContext context, AsyncSnapshot<List<NewExam>> snapshot) {
           if (snapshot.hasData) {
             List<NewExam> exams = snapshot.data!;

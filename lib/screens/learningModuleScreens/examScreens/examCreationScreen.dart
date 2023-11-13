@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:isms/models/enums.dart';
 import 'package:isms/models/newExam.dart';
@@ -20,19 +22,19 @@ List<Map<String, dynamic>> allQuestions = [];
 enum EXAMTYPE { courseExam, moduleExam }
 
 class ExamCreation extends StatefulWidget {
-  ExamCreation(
+  const ExamCreation(
       {super.key, required this.course, required this.examtype, this.module});
-  int noOfQuestions = 1;
-  Course course;
-  EXAMTYPE examtype;
-  Module? module;
-  late ExamDataMaster examDataMaster;
-  late ModuleExamDataMaster moduleExamDataMaster;
+  final Course course;
+  final EXAMTYPE examtype;
+  final Module? module;
   @override
   ExamCreationState createState() => ExamCreationState();
 }
 
 class ExamCreationState extends State<ExamCreation> {
+  int noOfQuestions = 1;
+  late ExamDataMaster examDataMaster;
+  late ModuleExamDataMaster moduleExamDataMaster;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController titleController = TextEditingController();
   TextEditingController passingMarksController = TextEditingController();
@@ -47,7 +49,7 @@ class ExamCreationState extends State<ExamCreation> {
 
   void _addNewQuestion() {
     setState(() {
-      widget.noOfQuestions++;
+      noOfQuestions++;
     });
   }
 
@@ -56,16 +58,16 @@ class ExamCreationState extends State<ExamCreation> {
     LoggedInState loggedInState = context.watch<LoggedInState>();
 
     if (loggedInState.currentUser == null) {
-      return LoginPage();
+      return const LoginPage();
     }
 
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
-    widget.examDataMaster = ExamDataMaster(
+    examDataMaster = ExamDataMaster(
       course: widget.course,
       coursesProvider: coursesProvider,
     );
     if (widget.examtype == EXAMTYPE.moduleExam) {
-      widget.moduleExamDataMaster = ModuleExamDataMaster(
+      moduleExamDataMaster = ModuleExamDataMaster(
         course: widget.course,
         coursesProvider: coursesProvider,
         module: widget.module!,
@@ -109,7 +111,7 @@ class ExamCreationState extends State<ExamCreation> {
                     height: 460,
                     child: ListView.builder(
                       controller: _controller,
-                      itemCount: widget.noOfQuestions,
+                      itemCount: noOfQuestions,
                       itemBuilder: (context, index) => QuestionWidget(
                         onQuestionSaved: () {},
                         questiontype: QUESTIONTYPE.Checkbox,
@@ -141,10 +143,10 @@ class ExamCreationState extends State<ExamCreation> {
                           questionAnswerSet: allQuestions);
 
                       if (widget.examtype == EXAMTYPE.courseExam) {
-                        print("CREATE EXAMM ${widget.course.exams}");
-                        widget.examDataMaster.createCourseExam(exam: newExam);
+                        debugPrint("CREATE EXAMM ${widget.course.exams}");
+                        examDataMaster.createCourseExam(exam: newExam);
                       } else if (widget.examtype == EXAMTYPE.moduleExam) {
-                        widget.moduleExamDataMaster.createModuleExam(exam: newExam);
+                        moduleExamDataMaster.createModuleExam(exam: newExam);
                         allQuestions.clear();
                       }
 
@@ -152,7 +154,7 @@ class ExamCreationState extends State<ExamCreation> {
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => CoursesDisplayScreen()));
+                            builder: (context) => const CoursesDisplayScreen()));
                     },
                     child: Text('Submit',style: buttonText,),
                   ),

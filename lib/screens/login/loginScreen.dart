@@ -1,3 +1,7 @@
+// ignore_for_file: file_names, non_constant_identifier_names
+
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:isms/screens/homePage.dart';
 import 'package:isms/userManagement/loggedInState.dart';
@@ -19,7 +23,7 @@ class LoginPageState extends State<LoginPage> {
     LoggedInState loggedInState = context.watch<LoggedInState>();
 
     if (loggedInState.currentUser != null) {
-      return HomePage();
+      return const HomePage();
     }
 
     return Scaffold(

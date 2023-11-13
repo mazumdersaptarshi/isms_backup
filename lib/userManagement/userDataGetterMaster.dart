@@ -1,5 +1,8 @@
+// ignore_for_file: file_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:isms/adminManagement/createUserReferenceForAdmin.dart';
 import 'package:isms/models/customUser.dart';
 
@@ -12,7 +15,7 @@ class UserDataGetterMaster {
 
   static Future<void> createUserData(CustomUser customUser) async {
     Map<String, dynamic> userJson = customUser.toMap();
-    print("creating the user ${userJson}");
+    debugPrint("creating the user $userJson");
     await db.collection('users').doc(customUser.uid).set(userJson);
 
     //Also creating a reference to the user on Admin side
@@ -50,9 +53,6 @@ class UserDataGetterMaster {
     return _currentUserSnapshot;
   }
 
-  // TODO consider making this nullable again, using it as criterion for
-  // being signed-in, and pushing _currentUser inside as a non-nullable
-  // field
   CustomUser get loggedInUser => _customUserObject;
   String get currentUserRole => _customUserObject.role;
 
@@ -62,7 +62,7 @@ class UserDataGetterMaster {
         FirebaseFirestore.instance.collection('users').doc(user.uid);
     DocumentSnapshot userSnapshot = await _userRef!.get();
     if (userSnapshot.exists) {
-      print('data fetched from Firestore for user ${user.email}');
+      debugPrint('data fetched from Firestore for user ${user.email}');
       _currentUserSnapshot = userSnapshot;
       Map<String, dynamic>? userData =
           userSnapshot.data() as Map<String, dynamic>?;

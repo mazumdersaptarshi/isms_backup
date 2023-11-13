@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleExamsListScreen.dart';
@@ -15,14 +17,14 @@ import '../../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../../utilityFunctions/platformCheck.dart';
 
 class ModuleDetails extends StatefulWidget {
-  ModuleDetails(
+  const ModuleDetails(
       {super.key,
       required this.course,
       required this.module,
       required this.isModuleStarted});
-  Course course;
-  Module module;
-  bool isModuleStarted;
+  final Course course;
+  final Module module;
+  final bool isModuleStarted;
   @override
   State<ModuleDetails> createState() => _ModuleDetailsState();
 }
@@ -40,7 +42,7 @@ class _ModuleDetailsState extends State<ModuleDetails> {
     LoggedInState loggedInState = context.watch<LoggedInState>();
 
     if (loggedInState.currentUser == null) {
-      return LoginPage();
+      return const LoginPage();
     }
 
     userRole = loggedInState.currentUserRole;
@@ -76,7 +78,7 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                                   module: widget.module,
                                 )));
                   },
-                  child: Text("View module exams"),
+                  child: const Text("View module exams"),
                 ),
                 SizedBox(width: 20),
                 ElevatedButton(
@@ -88,7 +90,7 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                         coursesProvider: coursesProvider,
                         course: widget.course,
                         module: widget.module);
-
+                      if (!context.mounted) return;
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -99,11 +101,11 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                       ),
                     );
                   },
-                  child: Text('Study Module'),
+                  child: const Text('Study Module'),
                 ),
               ],
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             Container(
               margin: EdgeInsets.symmetric(horizontal: 20.0),
               padding: EdgeInsets.all(20.0),
@@ -120,9 +122,9 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                           .copyWith(fontWeight: FontWeight.bold),
                     ),
                   ),
-                  SizedBox(height: 20.0),
-                  Text("What you'll learn: "),
-                  SizedBox(height: 20.0),
+                  const SizedBox(height: 20.0),
+                  const Text("What you'll learn: "),
+                  const SizedBox(height: 20.0),
                   Text(
                     widget.module.contentDescription,
                     style: TextStyle(

@@ -1,13 +1,17 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 
 class SideNavigationBar extends StatefulWidget {
+  const SideNavigationBar({super.key});
+
   @override
   _SideNavigationBarState createState() => _SideNavigationBarState();
 }
 
 class _SideNavigationBarState extends State<SideNavigationBar> {
   int _selectedIndex = 0;
-  bool _extended = false;
+  final bool _extended = false;
 
   @override
   Widget build(BuildContext context) {

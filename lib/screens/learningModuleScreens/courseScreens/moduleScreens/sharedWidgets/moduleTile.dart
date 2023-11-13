@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -13,12 +15,12 @@ import 'package:isms/themes/common_theme.dart';
 import 'package:isms/utilityWidgets/modulesList/moduleExpandedItem.dart';
 
 class ModuleTile extends StatelessWidget {
-  Course course;
-  Module module;
-  bool isModuleStarted;
-  bool isModuleCompleted;
+  final Course course;
+  final Module module;
+  final bool isModuleStarted;
+  final bool isModuleCompleted;
 
-  ModuleTile(
+  const ModuleTile(
       {super.key,
       required this.course,
       required this.module,

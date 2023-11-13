@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, non_constant_identifier_names
+
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
@@ -18,14 +20,14 @@ import '../../../../utilityFunctions/platformCheck.dart';
 import 'sharedWidgets/moduleTile.dart';
 
 class ModulesListScreen extends StatefulWidget {
-  ModulesListScreen({super.key, required this.course});
-  Course course;
-  ModuleDataMaster? moduleDataMaster;
+  const ModulesListScreen({super.key, required this.course});
+  final Course course;
   @override
   State<ModulesListScreen> createState() => _ModulesListScreenState();
 }
 
 class _ModulesListScreenState extends State<ModulesListScreen> {
+  late ModuleDataMaster moduleDataMaster;
   late String userRole;
 
   @override
@@ -65,13 +67,13 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
   bool checkIfAllModulesCompleted({required LoggedInState loggedInState}) {
     bool flag = false;
 
-    loggedInState.loggedInUser.courses_started.forEach((course_started) {
+    for (var course_started in loggedInState.loggedInUser.courses_started) {
       if (course_started["course_name"] == widget.course.name) {
         if (course_started["modules_completed"] != null &&
             course_started["modules_completed"].length >=
                 widget.course.modulesCount) flag = true;
       }
-    });
+    }
     return flag;
   }
 
@@ -81,7 +83,7 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
     CoursesProvider coursesProvider = context.watch<CoursesProvider>();
     bool isALlModulesCompleted =
         checkIfAllModulesCompleted(loggedInState: loggedInState);
-    widget.moduleDataMaster = ModuleDataMaster(
+    moduleDataMaster = ModuleDataMaster(
         course: widget.course, coursesProvider: coursesProvider);
 
     if (loggedInState.currentUser == null) {
@@ -126,7 +128,7 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
           kIsWeb ? null : BottomNavBar(loggedInState: loggedInState),
 
       body: FutureBuilder<List<Module>>(
-        future: widget.moduleDataMaster!.modules,
+        future: moduleDataMaster.modules,
         builder: (BuildContext context, AsyncSnapshot<List<Module>> snapshot) {
           if (snapshot.hasData) {
             List<Module> modules = snapshot.data!;
@@ -178,7 +180,7 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
                   ),
                   SliverGrid.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: columnsNumber,
+                      crossAxisCount: numberColumns,
                       childAspectRatio: tileRatio,
                     ),
                     itemCount: itemCount,

@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:isms/models/adminConsoleModels/coursesDetails.dart';
 import 'package:isms/models/course.dart';
@@ -17,7 +19,7 @@ class CreateCourseScreen extends StatelessWidget {
     LoggedInState loggedInState = context.watch<LoggedInState>();
 
     if (loggedInState.currentUser == null) {
-      return LoginPage();
+      return const LoginPage();
     }
 
     return const CourseCreationForm();
@@ -28,7 +30,7 @@ class CourseCreationForm extends StatefulWidget {
   const CourseCreationForm({super.key});
 
   @override
-  _CourseCreationFormState createState() => _CourseCreationFormState();
+  State<CourseCreationForm> createState() => _CourseCreationFormState();
 }
 
 class _CourseCreationFormState extends State<CourseCreationForm> {

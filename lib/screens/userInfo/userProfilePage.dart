@@ -1,3 +1,6 @@
+// ignore_for_file: file_names
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/models/UserActions.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
@@ -16,6 +19,8 @@ List allEnrolledCourses = [];
 List allCompletedCourses = [];
 
 class UserProfilePage extends StatefulWidget {
+  const UserProfilePage({super.key});
+
   @override
   State<UserProfilePage> createState() => _UserProfilePageState();
 }
@@ -48,7 +53,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
     LoggedInState loggedInState = context.watch<LoggedInState>();
 
     if (loggedInState.currentUser == null) {
-      return LoginPage();
+      return const LoginPage();
     }
 
     return Scaffold(
@@ -115,13 +120,15 @@ class _UserProfilePageState extends State<UserProfilePage> {
 }
 
 class UserActionsDropdown extends StatelessWidget {
-  UserActionsDropdown(
+  const UserActionsDropdown(
       {super.key, required this.actionId, required this.loggedInState});
-  String actionId;
-  LoggedInState loggedInState;
+  final String actionId;
+  final LoggedInState loggedInState;
   @override
   Widget build(BuildContext context) {
-    print(actionId);
+    if (kDebugMode) {
+      print(actionId);
+    }
     if (actionId == 'crs_enrl') {
       return UserEnrolledCoursesDropdown(
         actionId: actionId,
@@ -132,16 +139,16 @@ class UserActionsDropdown extends StatelessWidget {
         actionId: actionId,
       );
     } else {
-      return Text('No Data to show!');
+      return const Text('No Data to show!');
     }
   }
 }
 
 class UserEnrolledCoursesDropdown extends StatelessWidget {
-  String? actionId;
+  final String? actionId;
 
-  LoggedInState loggedInState;
-  UserEnrolledCoursesDropdown({this.actionId, required this.loggedInState});
+  final LoggedInState loggedInState;
+  const UserEnrolledCoursesDropdown({super.key, this.actionId, required this.loggedInState});
 
   (bool, double, int) getCourseCompletedPercentage({
     required CoursesProvider coursesProvider,
@@ -150,12 +157,15 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
     double courseCompletionPercentage = 0;
     int noOfExams = 0;
     bool isValid = false;
-    print('Enrolled CoursesDropdown');
-    print(actionId);
+    debugPrint('Enrolled CoursesDropdown');
+    if (kDebugMode) {
+      print(actionId);
+    }
 
     allEnrolledCourses = loggedInState.allEnrolledCoursesGlobal;
 
-    allEnrolledCourses.forEach((course) {
+    // TODO check what this loop is for
+    for (var _ in allEnrolledCourses) {
       int modulesCount = 0;
 
       for (int i = 0; i < coursesProvider.allCourses.length; i++) {
@@ -175,7 +185,7 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
       if (isValid) {
         courseCompletionPercentage = modulesCompletedCount / modulesCount;
       }
-    });
+    }
     return (isValid, courseCompletionPercentage, noOfExams);
   }
 
@@ -191,15 +201,15 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
           future: loggedInState.getUserCoursesData('crs_enrl'),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator();
+              return const CircularProgressIndicator();
             }
             if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return Text('No data available');
+              return const Text('No data available');
             }
             return ListView.builder(
               itemCount: loggedInState.allEnrolledCoursesGlobal.length,
               shrinkWrap: true,
-              physics: ClampingScrollPhysics(),
+              physics: const ClampingScrollPhysics(),
               itemBuilder: (context, index) {
                 double courseCompletionPercentage = 0;
                 bool isValid = false;
@@ -227,8 +237,8 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
 }
 
 class UserCompletedCoursesDropdown extends StatelessWidget {
-  String? actionId;
-  UserCompletedCoursesDropdown({this.actionId});
+  final String? actionId;
+  const UserCompletedCoursesDropdown({super.key, this.actionId});
   @override
   Widget build(BuildContext context) {
     LoggedInState loggedInState =
@@ -242,10 +252,10 @@ class UserCompletedCoursesDropdown extends StatelessWidget {
               return ListView.builder(
                 itemCount: loggedInState.allCompletedCoursesGlobal.length,
                 shrinkWrap: true,
-                physics: ClampingScrollPhysics(),
+                physics: const ClampingScrollPhysics(),
                 itemBuilder: (context, index) {
                   allCompletedCourses = loggedInState.allCompletedCoursesGlobal;
-                  print(
+                  debugPrint(
                       'ALLCOMPLETEDCOURSESGLOBAL: ${loggedInState.allCompletedCoursesGlobal}');
                   return CourseDropdownWidget(
                     courseItem: allCompletedCourses![index],
@@ -254,7 +264,7 @@ class UserCompletedCoursesDropdown extends StatelessWidget {
                 },
               );
             } else {
-              return Text('No data available');
+              return const Text('No data available');
             }
           },
         ),

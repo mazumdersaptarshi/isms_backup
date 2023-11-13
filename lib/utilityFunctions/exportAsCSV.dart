@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 library to_csv;
 
 import 'dart:convert';
@@ -30,7 +32,7 @@ exportAsCSV(List<String> headerRow, List<List<String>> listOfListOfStrings,
     final anchor = html.document.createElement('a') as html.AnchorElement
       ..href = url
       ..style.display = 'none'
-      ..download = '${fileNamePrefix ?? 'csv_export'}_$formattedDate.csv';
+      ..download = '${fileNamePrefix}_$formattedDate.csv';
     html.document.body!.children.add(anchor);
     anchor.click();
     html.Url.revokeObjectUrl(url);
@@ -41,8 +43,8 @@ exportAsCSV(List<String> headerRow, List<List<String>> listOfListOfStrings,
     final bytes = utf8.encode(csvData);
     Uint8List bytes2 = Uint8List.fromList(bytes);
     MimeType type = MimeType.csv;
-    final xFile = await FileSaver.instance.saveAs(
-        name: '${fileNamePrefix ?? 'csv_export'}_$formattedDate.csv',
+    /*final xFile = */await FileSaver.instance.saveAs(
+        name: '${fileNamePrefix}_$formattedDate.csv',
         bytes: bytes2,
         ext: 'csv',
         mimeType: type);

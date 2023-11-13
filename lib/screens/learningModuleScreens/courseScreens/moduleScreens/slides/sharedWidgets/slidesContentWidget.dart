@@ -1,21 +1,25 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'htmlSlideDisplay.dart';
 
 class SlidesContentWidget extends StatelessWidget {
-  SlidesContentWidget(
+  const SlidesContentWidget(
       {super.key,
       required this.pageController,
       required this.cardItems,
       required this.currentIndex});
-  PageController pageController;
-  List<Map<String, dynamic>> cardItems;
-  int currentIndex;
+  final PageController pageController;
+  final List<Map<String, dynamic>> cardItems;
+  final int currentIndex;
   final isWeb = kIsWeb;
   @override
   Widget build(BuildContext context) {
-    print(cardItems);
+    if (kDebugMode) {
+      print(cardItems);
+    }
     return Card(
       surfaceTintColor: Colors.white,
       elevation: 4,
@@ -23,29 +27,29 @@ class SlidesContentWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
-              height: isWeb ? MediaQuery.of(context).size.height - 260 : 500,
+            SizedBox(
+              height: isWeb ? MediaQuery.of(context).size.height - 240 : 500,
               child: PageView(
                 controller: pageController,
                 children: cardItems.map((item) {
                   return Padding(
-                    padding: EdgeInsets.all(20),
-                    child: Container(
+                    padding: const EdgeInsets.all(20),
+                    child: SizedBox(
                       height: 400,
                       child: ListView(
                         children: [
                           Text(
                             '${item['title']}:',
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 25, fontWeight: FontWeight.bold),
                           ),
-                          SizedBox(height: 20),
-                          Divider(
+                          const SizedBox(height: 20),
+                          const Divider(
                             height: 2,
                             color: Colors.grey,
                             thickness: 2,
                           ),
-                          SizedBox(height: 20),
+                          const SizedBox(height: 20),
                           HTMLSlideDisplay(htmlString: item['text'])
                         ],
                       ),
@@ -60,31 +64,31 @@ class SlidesContentWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   IconButton(
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.arrow_left,
                       size: 30,
                     ),
                     onPressed: () {
                       if (currentIndex > 0) {
                         pageController.previousPage(
-                          duration: Duration(milliseconds: 300),
+                          duration: const Duration(milliseconds: 300),
                           curve: Curves.easeInOut,
                         );
                       }
                     },
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 30,
                   ),
                   IconButton(
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.arrow_right,
                       size: 30,
                     ),
                     onPressed: () {
                       if (currentIndex < cardItems.length - 1) {
                         pageController.nextPage(
-                          duration: Duration(milliseconds: 300),
+                          duration: const Duration(milliseconds: 300),
                           curve: Curves.easeInOut,
                         );
                       }
@@ -94,11 +98,11 @@ class SlidesContentWidget extends StatelessWidget {
               ),
             ],
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               alignment: Alignment.bottomCenter,
               child: Text(
                 'Slide ${currentIndex + 1} of ${cardItems.length}',
-                style: TextStyle(fontSize: 15, color: Colors.grey),
+                style: const TextStyle(fontSize: 15, color: Colors.grey),
               ),
             ),
           ],

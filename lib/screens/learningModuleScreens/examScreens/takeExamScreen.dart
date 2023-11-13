@@ -1,3 +1,6 @@
+// ignore_for_file: file_names
+
+import 'package:flutter/foundation.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -16,23 +19,24 @@ import '../../../models/module.dart';
 import '../../../projectModules/courseManagement/coursesProvider.dart';
 
 class TakeExamScreen extends StatefulWidget {
-  TakeExamScreen(
+  const TakeExamScreen(
       {required this.exam,
       required this.course,
       required this.examtype,
       this.module,
       required this.examCompletionStrategy});
-  EXAMTYPE examtype;
-  Course course;
-  Module? module;
-  NewExam exam;
-  ExamCompletionStrategy examCompletionStrategy;
+  final EXAMTYPE examtype;
+  final Course course;
+  final Module? module;
+  final NewExam exam;
+  final ExamCompletionStrategy examCompletionStrategy;
+
   @override
   _TakeExamScreenState createState() => _TakeExamScreenState();
 }
 
 class _TakeExamScreenState extends State<TakeExamScreen> {
-  List<NewQuestion> _questions = [];
+  final List<NewQuestion> _questions = [];
   int _currentIndex = 0;
   List<Set<int>> _selectedAnswers = [];
   bool _showScore = false;
@@ -43,12 +47,13 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
     loadQuestions();
     shuffleQuestions();
     _selectedAnswers = List.generate(_questions.length, (index) => <int>{});
-    print(widget.exam.questionAnswerSet);
+    if (kDebugMode) {
+      print(widget.exam.questionAnswerSet);
+    }
   }
 
   loadQuestions() {
-    print("LOADING QUESTIONS");
-    widget.exam.questionAnswerSet.forEach((element) {
+    for (var element in widget.exam.questionAnswerSet) {
       List<String> options = [];
       List<int> correctAnswers = [];
       int index = 0;
@@ -62,7 +67,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
       NewQuestion newQuestion = NewQuestion(element['questionName'], options,
           correctAnswers, correctAnswers.length);
       _questions.add(newQuestion);
-    });
+    }
   }
 
   void shuffleQuestions() {
@@ -103,7 +108,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
     LoggedInState loggedInState = context.watch<LoggedInState>();
 
     if (loggedInState.currentUser == null) {
-      return LoginPage();
+      return const LoginPage();
     }
 
     return Scaffold(
@@ -173,7 +178,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
                       List.generate(_questions.length, (index) => <int>{});
                   _showScore = false;
                 }),
-                child: Text('Retake Exam'),
+              child: const Text('Retake Exam'),
               )
             ],
           ),

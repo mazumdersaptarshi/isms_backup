@@ -1,4 +1,7 @@
+// ignore_for_file: file_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/models/newExam.dart';
@@ -34,7 +37,7 @@ class ExamDataMaster extends CoursesDataMaster {
 
       await _courseRef.update({'examsCount': index});
 
-      print("Exam creation successful");
+      debugPrint("Exam creation successful");
       return true;
     } catch (e) {
       return false;
@@ -50,23 +53,23 @@ class ExamDataMaster extends CoursesDataMaster {
       course.exams = [];
     else
       course.exams!.clear();
-    examsListSnapshot.docs.forEach((element) {
+    for (var element in examsListSnapshot.docs) {
       NewExam exam = NewExam.fromMap(element.data() as Map<String, dynamic>);
       course.addExam(exam);
-    });
+    }
     return course.exams!;
   }
 
   Future<List<NewExam>> get exams async {
     if (course.exams != null) {
-      print("course exams in cache, no need to fetch them");
+      debugPrint("course exams in cache, no need to fetch them");
       return course.exams!;
     } else {
-      print("course exams not in cache, trying to fetch them");
+      debugPrint("course exams not in cache, trying to fetch them");
       try {
         return _fetchExams();
       } catch (e) {
-        print("error while fetching course exams: ${e}");
+        debugPrint("error while fetching course exams: ${e}");
         course.exams = null;
         return [];
       }

@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:isms/sharedWidgets/analyticsSharedWidgets/userCourseCompletedDetailsWidget.dart';
 import 'package:provider/provider.dart';
@@ -7,8 +9,7 @@ import '../../../sharedWidgets/analyticsSharedWidgets/userCourseStartedDetailsWi
 import '../../courseManagement/coursesProvider.dart';
 
 class AllUsersDropdown extends StatelessWidget {
-  AllUsersDropdown({super.key, required this.adminProvider});
-
+  const AllUsersDropdown({super.key, required this.adminProvider});
   final AdminProvider adminProvider;
 
   @override
@@ -19,14 +20,14 @@ class AllUsersDropdown extends StatelessWidget {
       future: adminProvider.allUsersDataFetcher(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else if (snapshot.hasData && snapshot.data != null) {
           return ListView.builder(
               itemCount: snapshot.data!.length,
               shrinkWrap: true,
-              physics: ClampingScrollPhysics(),
+              physics: const ClampingScrollPhysics(),
               itemBuilder: (context, index) {
                 List<Map<String, dynamic>> completedCoursesForUser = [];
 

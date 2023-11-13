@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
@@ -17,24 +19,24 @@ import '../../homePageFunctions/getCoursesList.dart';
 import 'createCourseScreen.dart';
 
 class CoursesDisplayScreen extends StatefulWidget {
-  CoursesDisplayScreen({super.key});
-  String userRole = "user";
+  const CoursesDisplayScreen({super.key});
   @override
   State<CoursesDisplayScreen> createState() => _CoursesDisplayScreenState();
 }
 
 class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
+  String userRole = "user";
   @override
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
 
     if (loggedInState.currentUser == null) {
-      return LoginPage();
+      return const LoginPage();
     }
 
-    widget.userRole = loggedInState.currentUserRole;
+    userRole = loggedInState.currentUserRole;
     NavIndexTracker.setNavDestination(
-        navDestination: NavDestinations.AllCoures, userRole: widget.userRole);
+        navDestination: NavDestinations.AllCoures, userRole: userRole);
 
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
 
@@ -116,17 +118,17 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
           ],
         ),
       ),
-      floatingActionButton: widget.userRole == 'admin'
+      floatingActionButton: userRole == 'admin'
           ? FloatingActionButton(
               onPressed: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => CreateCourseScreen()));
+                        builder: (context) => const CreateCourseScreen()));
               },
               backgroundColor:
                   customTheme.floatingActionButtonTheme.backgroundColor,
-              child: Icon(Icons.add),
+              child: const Icon(Icons.add),
             )
           : null,
     );

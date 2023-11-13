@@ -1,5 +1,10 @@
+// ignore_for_file: file_names
+
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:isms/userManagement/userDataGetterMaster.dart';
@@ -13,7 +18,7 @@ import '../projectModules/courseManagement/coursesProvider.dart';
 class LoggedInState with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  UserDataGetterMaster _userDataGetterMaster = UserDataGetterMaster();
+  final UserDataGetterMaster _userDataGetterMaster = UserDataGetterMaster();
 
   // User? get user => _userDataGetterMaster.currentUser;
 
@@ -60,11 +65,11 @@ class LoggedInState with ChangeNotifier {
   void listenToChanges() {
     currentUserDocumentReference?.snapshots().listen((snapshot) {
       if (snapshot.exists) {
-        print('user document was modified: storing new content');
+        debugPrint('user document was modified: storing new content');
         storeUserCoursesData(snapshot);
         notifyListeners();
       } else {
-        print('user document was deleted');
+        debugPrint('user document was deleted');
       }
     });
   }
@@ -83,7 +88,7 @@ class LoggedInState with ChangeNotifier {
         }
       }
     } else {
-      print('user document was deleted');
+      debugPrint('user document was deleted');
     }
   }
 
@@ -96,7 +101,7 @@ class LoggedInState with ChangeNotifier {
         await getNewCurrentUserDocumentSnapshot;
 
     storeUserCoursesData(newCurrentUserDocumentSnapshot!);
-    print('890io: ${allEnrolledCoursesGlobal}');
+    debugPrint('890io: $allEnrolledCoursesGlobal');
   }
 
   Future<List> getUserCoursesData(String actionId) async {
@@ -112,13 +117,15 @@ class LoggedInState with ChangeNotifier {
   setUserCourseStarted({required Map<String, dynamic> courseDetails}) async {
     bool flag = false;
     if (loggedInUser.courses_started.isNotEmpty) {
-      loggedInUser.courses_started.forEach((course) {
+      for (var course in loggedInUser.courses_started) {
         try {
           if (course['courseID'] == courseDetails['courseID']) {
             flag = true;
           }
-        } catch (e) {}
-      });
+        } catch (e) {
+          log(e.toString());
+        }
+      }
     }
     if (flag == false) {
       loggedInUser.courses_started.add(courseDetails);
@@ -135,13 +142,15 @@ class LoggedInState with ChangeNotifier {
   setUserCourseCompleted({required Map<String, dynamic> courseDetails}) async {
     bool flag = false;
     if (loggedInUser.courses_completed.isNotEmpty) {
-      loggedInUser.courses_completed.forEach((course) {
+      for (var course in loggedInUser.courses_completed) {
         try {
           if (course['courseID'] == courseDetails['courseID']) {
             flag = true;
           }
-        } catch (e) {}
-      });
+        } catch (e) {
+          log(e.toString());
+        }
+      }
     }
     if (flag == false) {
       loggedInUser.courses_completed.add(courseDetails);
@@ -162,9 +171,9 @@ class LoggedInState with ChangeNotifier {
       required int examIndex}) async {
     int noOfExamsCompleted = 0;
     bool flag = false;
-    print('rdcf: ${loggedInUser}');
+    debugPrint('rdcf: $loggedInUser');
     if (loggedInUser.courses_started.isNotEmpty) {
-      loggedInUser.courses_started.forEach((course) {
+      for (var course in loggedInUser.courses_started) {
         try {
           if (course['course_name'] == courseDetails['course_name']) {
             course['exams_completed'].forEach((examCompleted) {
@@ -176,8 +185,10 @@ class LoggedInState with ChangeNotifier {
               }
             });
           }
-        } catch (e) {}
-      });
+        } catch (e) {
+          log(e.toString());
+        }
+      }
     }
     if (flag == false) {
       examIndex--;
@@ -214,12 +225,14 @@ class LoggedInState with ChangeNotifier {
           }
         }
       });
-      print(loggedInUser.courses_started);
+      if (kDebugMode) {
+        print(loggedInUser.courses_started);
+      }
       noOfExamsCompleted++;
       await _userDataGetterMaster.setUserData();
     }
     int noOfExams = course.exams!.length;
-    print("noOfExamsCompleted ${noOfExamsCompleted},, ${noOfExams}");
+    debugPrint("noOfExamsCompleted ${noOfExamsCompleted},, ${noOfExams}");
     // if (noOfExamsCompleted >= noOfExams) {
     //   await setUserCourseCompleted(courseDetails: courseDetails);
     // }
@@ -234,19 +247,21 @@ class LoggedInState with ChangeNotifier {
       required Module module}) async {
     bool flag = false;
     if (loggedInUser.courses_started.isNotEmpty) {
-      loggedInUser.courses_started.forEach((course) {
+      for (var course in loggedInUser.courses_started) {
         try {
           if (course['courseID'] == courseDetails['courseID']) {
             course["modules_completed"].forEach((element) async {
               if (element["module_name"] == module.title) {
-                print("SETTING FLAG TRUE coz ${element}");
+                debugPrint("SETTING FLAG TRUE coz $element");
                 flag = true;
                 await _userDataGetterMaster.setUserData();
               }
             });
           }
-        } catch (e) {}
-      });
+        } catch (e) {
+          log(e.toString());
+        }
+      }
     }
     if (flag == false) {
       _userDataGetterMaster.loggedInUser.courses_started
@@ -267,14 +282,16 @@ class LoggedInState with ChangeNotifier {
                   .add({"module_name": module.title, "module_id": module.id});
             }
           } else {
-            print("COMPLETED MODULE IS NULL< SO HERE");
+            debugPrint("COMPLETED MODULE IS NULL< SO HERE");
             courseStarted['modules_completed'] = [];
             courseStarted['modules_completed']
                 .add({"module_name": module.title, "module_id": module.id});
           }
         }
       });
-      print(_userDataGetterMaster.loggedInUser.courses_started);
+      if (kDebugMode) {
+        print(_userDataGetterMaster.loggedInUser.courses_started);
+      }
       await _userDataGetterMaster.setUserData();
     }
     notifyListeners();
@@ -287,7 +304,7 @@ class LoggedInState with ChangeNotifier {
       required Module module}) async {
     bool flag = false;
     if (loggedInUser.courses_started.isNotEmpty) {
-      loggedInUser.courses_started.forEach((course) {
+      for (var course in loggedInUser.courses_started) {
         try {
           if (course['courseID'] == courseDetails['courseID']) {
             course["modules_started"].forEach((element) {
@@ -297,8 +314,10 @@ class LoggedInState with ChangeNotifier {
               }
             });
           }
-        } catch (e) {}
-      });
+        } catch (e) {
+          log(e.toString());
+        }
+      }
     }
     if (flag == false) {
       debugPrint("FLAG IS FALSE $courseDetails");
@@ -329,7 +348,9 @@ class LoggedInState with ChangeNotifier {
           }
         }
       });
-      print(_userDataGetterMaster.loggedInUser.courses_started);
+      if (kDebugMode) {
+        print(_userDataGetterMaster.loggedInUser.courses_started);
+      }
       await _userDataGetterMaster.setUserData();
     }
     notifyListeners();
@@ -351,7 +372,7 @@ class LoggedInState with ChangeNotifier {
             courseStarted["modules_started"].forEach((course_module) {
               if (course_module["module_name"] == module.title) {
                 if (courseStarted["modules_started"] != null) {
-                  int moduleStartedIndex = 0;
+                  //int moduleStartedIndex = 0;
                   courseStarted["modules_started"]
                       .forEach((startedModule) async {
                     startedModule = startedModule as Map<String, dynamic>;
@@ -375,19 +396,19 @@ class LoggedInState with ChangeNotifier {
                       if (examFlag == false) {
                         startedModule["exams_completed"].add(examIndex);
 
-                        List modules_started_copy = List.from(
+                        List modulesStartedCopy = List.from(
                             loggedInUser.courses_started[i]["modules_started"]);
-                        int modules_started_index = 0;
-                        modules_started_copy.forEach((m) {
+                        int modulesStartedIndex = 0;
+                        for (var m in modulesStartedCopy) {
                           if (m["module_name"] ==
                               startedModule["module_name"]) {
                             m = startedModule;
                             loggedInUser.courses_started[i]["modules_started"]
-                                [modules_started_index] = m;
-                            print("MMMMMMMM ${m}");
+                                [modulesStartedIndex] = m;
+                            debugPrint("MMMMMMMM $m");
                           }
-                          modules_started_index++;
-                        });
+                          modulesStartedIndex++;
+                        }
                       }
                       await _userDataGetterMaster.setUserData();
                       if (startedModule["exams_completed"].length >=
@@ -397,17 +418,20 @@ class LoggedInState with ChangeNotifier {
                             coursesProvider: coursesProvider,
                             course: course,
                             module: module);
-                      } else
-                        print("PRINT BEFORE SET ${courseStarted}");
+                      } else {
+                        debugPrint("PRINT BEFORE SET $courseStarted");
+                      }
                     }
-                    moduleStartedIndex++;
+                    //moduleStartedIndex++;
                   });
                 } else
                   courseStarted["modules_started"] = [];
               }
             });
           }
-        } catch (e) {}
+        } catch (e) {
+          log(e.toString());
+        }
       }
     }
 
@@ -419,7 +443,7 @@ class LoggedInState with ChangeNotifier {
       required String username,
       required String uid,
       required String courseMapFieldToUpdate}) async {
-    print("ENTERED setAdminConsoleCourseMap");
+    debugPrint("ENTERED setAdminConsoleCourseMap");
     DocumentSnapshot courseSnapshot = await FirebaseFirestore.instance
         .collection("adminconsole")
         .doc("allcourses")
@@ -429,8 +453,9 @@ class LoggedInState with ChangeNotifier {
     if (courseSnapshot.exists) {
       Map<String, dynamic> courseMap =
           courseSnapshot.data() as Map<String, dynamic>;
-      if (courseMap[courseMapFieldToUpdate] == null)
+      if (courseMap[courseMapFieldToUpdate] == null) {
         courseMap[courseMapFieldToUpdate] = [];
+      }
       courseMap[courseMapFieldToUpdate].add({"username": username, "uid": uid});
       await FirebaseFirestore.instance
           .collection("adminconsole")
@@ -454,6 +479,7 @@ class LoggedInState with ChangeNotifier {
       accessToken: googleAuth?.accessToken,
     );
     // sign into the corresponding Firebase account
+    // ignore: unused_local_variable
     UserCredential userCredential =
         await FirebaseAuth.instance.signInWithCredential(credential);
 
