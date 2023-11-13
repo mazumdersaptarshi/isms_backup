@@ -30,12 +30,10 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
     LoggedInState loggedInState = context.watch<LoggedInState>();
 
     userRole = loggedInState.currentUserRole;
-    NavIndexTracker.setNavDestination(
-        navDestination: NavDestinations.AllCoures, userRole: userRole);
 
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
 
-    double tileMinWidth = 300;
+    double tileMinWidth = 400;
     double tileMinimumheight = 100;
     double tileRatio = 3 / 2;
 
@@ -59,7 +57,7 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
           min(itemCount, maxColumns) > 0 ? min(itemCount, maxColumns) : 1;
     }
     // grid width, in pixels
-
+    print('uuupop: ${coursesProvider.allCourses}');
     return Scaffold(
       appBar: PlatformCheck.topNavBarWidget(
         loggedInState,
@@ -87,7 +85,12 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
                     courseData: getUserCourseData(
                         loggedInState: loggedInState,
                         course: coursesProvider.allCourses[courseIndex]),
-                    latestModule: '',
+                    subTitle:
+                        coursesProvider.allCourses[courseIndex].description ??
+                            '',
+                    pageView: 'explore',
+                    dateValue:
+                        coursesProvider.allCourses[courseIndex].dateCreated,
                     onPressed: () {
                       Navigator.push(
                           context,

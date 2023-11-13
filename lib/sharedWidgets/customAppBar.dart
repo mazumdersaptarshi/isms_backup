@@ -18,7 +18,7 @@ mixin CustomAppBarMixin on StatelessWidget {
     "Explore": ValueNotifier(false),
     "Reminders": ValueNotifier(false),
     "Account": ValueNotifier(false),
-    "Admin": ValueNotifier(false),
+    "Admin Console": ValueNotifier(false),
     "My Learning": ValueNotifier(false),
   };
 
@@ -199,7 +199,7 @@ class CustomAppBarWeb extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      automaticallyImplyLeading: kIsWeb ? false : true,
+      automaticallyImplyLeading: false,
       title: MouseRegion(
         cursor: SystemMouseCursors.click,
         child: homeButtonItem(context),
@@ -207,8 +207,9 @@ class CustomAppBarWeb extends StatelessWidget
       actions: <Widget>[
         appBarItem(Icons.explore, "Explore",
             () => navigateToCoursesPage(context), _paddingValue),
-        appBarItem(Icons.lightbulb, "My Learning",
-            () => navigateToMyLearningPage(context), _paddingValue),
+        if (loggedInState?.currentUserRole == 'admin')
+          appBarItem(Icons.admin_panel_settings_outlined, "Admin Console",
+              () => navigateToAdminConsolePage(context), _paddingValue),
         if (loggedInState?.currentUserRole == 'admin')
           appBarItem(Icons.notifications_active_rounded, "Reminders",
               () => navigateToRemindersPage(context), _paddingValue),
@@ -239,14 +240,15 @@ class CustomAppBarMobile extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      automaticallyImplyLeading: kIsWeb ? false : true,
+      automaticallyImplyLeading: true,
       title: MouseRegion(
         cursor: SystemMouseCursors.click,
         child: homeButtonItem(context),
       ),
       actions: <Widget>[
-        appBarItem(Icons.lightbulb, "My Learning",
-            () => navigateToMyLearningPage(context), _paddingValue),
+        if (loggedInState?.currentUserRole == 'admin')
+          appBarItem(Icons.admin_panel_settings_outlined, "Admin Console",
+              () => navigateToAdminConsolePage(context), _paddingValue),
         if (loggedInState?.currentUserRole == 'admin')
           appBarItem(Icons.notifications_active_rounded, "Reminders",
               () => navigateToRemindersPage(context), _paddingValue),

@@ -37,4 +37,10 @@ class CSVDataHandler {
     debugPrint(formattedDate);
     return formattedDate;
   }
+
+  static String timestampToReadableDateInWords(Timestamp timestamp) {
+    DateTime dateTime = timestamp.toDate();
+    String formattedDate = DateFormat('d MMM, yyyy').format(dateTime);
+    return formattedDate;
+  }
 }

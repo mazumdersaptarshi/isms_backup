@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/sharedWidgets/course_tile.dart';
+import 'package:isms/utilityFunctions/csvDataHandler.dart';
 import 'package:provider/provider.dart';
 
 import '../../../projectModules/courseManagement/coursesProvider.dart';
@@ -37,8 +38,6 @@ class _MyLearningScreenState extends State<MyLearningScreen> {
 
     userRole = loggedInState.currentUserRole;
     List<dynamic> userEnrolledCourses = loggedInState.allEnrolledCoursesGlobal;
-    NavIndexTracker.setNavDestination(
-        navDestination: NavDestinations.AllCoures, userRole: userRole);
 
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
 
@@ -56,7 +55,7 @@ class _MyLearningScreenState extends State<MyLearningScreen> {
     int numberColumns =
         min(itemCount, maxColumns) > 0 ? min(itemCount, maxColumns) : 1;
     // grid width, in pixels
-
+    Future<List<Widget>> coursesWidgetList;
     String? getLatestModuleName(Map<String, dynamic> courseItem) {
       int latestModuleIndex = (courseItem['modules_started'].length - 1) ?? 0;
       String? latestModuleName = (courseItem['modules_started']
@@ -82,6 +81,7 @@ class _MyLearningScreenState extends State<MyLearningScreen> {
                 itemCount: userEnrolledCourses.length,
                 itemBuilder: (context, courseIndex) {
                   return CourseTile(
+                    pageView: 'mylearning',
                     index: courseIndex,
                     title: userEnrolledCourses[courseIndex]['course_name'],
                     modulesCount: userEnrolledCourses[courseIndex]
@@ -89,9 +89,14 @@ class _MyLearningScreenState extends State<MyLearningScreen> {
                         1,
 
                     tileWidth: tileMinWidth,
-                    latestModule:
+                    subTitle:
                         getLatestModuleName(userEnrolledCourses[courseIndex]) ??
                             '',
+                    dateValue:
+                        (userEnrolledCourses[courseIndex]['started_at'] != null)
+                            ? CSVDataHandler.timestampToReadableDateInWords(
+                                userEnrolledCourses[courseIndex]['started_at'])
+                            : '',
                     // tileHeight: tileMinimumheight,
                     courseData: getUserCourseData(
                         loggedInState: loggedInState,

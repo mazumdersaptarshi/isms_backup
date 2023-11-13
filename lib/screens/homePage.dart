@@ -72,8 +72,6 @@ class _HomePageState extends State<HomePage> {
     }
 
     userRole = loggedInState.currentUserRole;
-    NavIndexTracker.setNavDestination(
-        navDestination: NavDestinations.HomePage, userRole: userRole);
 
     return Consumer<CoursesProvider>(builder:
         (BuildContext context, CoursesProvider coursesProvider, Widget? child) {

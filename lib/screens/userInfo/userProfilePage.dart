@@ -6,6 +6,7 @@ import 'package:isms/models/UserActions.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 // import 'package:isms/screens/analyticsSharedWidgets/courseDropdownWidget.dart';
 import 'package:isms/screens/login/loginScreen.dart';
+import 'package:isms/sharedWidgets/bottomNavBar.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/userManagement/userprofileHeaderWidget.dart';
 import 'package:isms/utilityFunctions/platformCheck.dart';
@@ -91,7 +92,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       maxWidth: (MediaQuery.of(context).size.width > 1000
                               ? MediaQuery.of(context).size.width * 0.5
                               : MediaQuery.of(context).size.width) *
-                          0.95,
+                          0.98,
+                      // maxWidth: MediaQuery.of(context).size.width * 0.9,
                     ),
                     child: ExpansionTile(
                       leading: Icon(action.icon),
@@ -116,6 +118,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
           ),
         ],
       ),
+      bottomNavigationBar: kIsWeb ? Container() : BottomNavBar(),
     );
   }
 }
@@ -196,6 +199,7 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
         Provider.of<CoursesProvider>(context, listen: false);
     LoggedInState loggedInState =
         Provider.of<LoggedInState>(context, listen: false);
+
     return Column(
       children: [
         FutureBuilder<List>(
@@ -247,32 +251,37 @@ class UserCompletedCoursesDropdown extends StatelessWidget {
   Widget build(BuildContext context) {
     LoggedInState loggedInState =
         Provider.of<LoggedInState>(context, listen: false);
-    return Column(
-      children: [
-        FutureBuilder<List>(
-          future: loggedInState.getUserCoursesData('crs_compl'),
-          builder: (context, snapshot) {
-            if (loggedInState.allCompletedCoursesGlobal.isNotEmpty) {
-              return ListView.builder(
-                itemCount: loggedInState.allCompletedCoursesGlobal.length,
-                shrinkWrap: true,
-                physics: const ClampingScrollPhysics(),
-                itemBuilder: (context, index) {
-                  allCompletedCourses = loggedInState.allCompletedCoursesGlobal;
-                  debugPrint(
-                      'ALLCOMPLETEDCOURSESGLOBAL: ${loggedInState.allCompletedCoursesGlobal}');
-                  return CourseDropdownWidget(
-                    courseItem: allCompletedCourses[index],
-                    detailType: 'courses_completed',
-                  );
-                },
-              );
-            } else {
-              return const Text('No data available');
-            }
-          },
-        ),
-      ],
+    return Container(
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          FutureBuilder<List>(
+            future: loggedInState.getUserCoursesData('crs_compl'),
+            builder: (context, snapshot) {
+              if (loggedInState.allCompletedCoursesGlobal.isNotEmpty) {
+                return ListView.builder(
+                  itemCount: loggedInState.allCompletedCoursesGlobal.length,
+                  shrinkWrap: true,
+                  physics: const ClampingScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    allCompletedCourses =
+                        loggedInState.allCompletedCoursesGlobal;
+                    debugPrint(
+                        'ALLCOMPLETEDCOURSESGLOBAL: ${loggedInState.allCompletedCoursesGlobal}');
+                    return CourseDropdownWidget(
+                      courseItem: allCompletedCourses[index],
+                      detailType: 'courses_completed',
+                    );
+                  },
+                );
+              } else {
+                return const Text('No data available');
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 }

@@ -31,51 +31,44 @@ class ModuleTile extends StatelessWidget {
           shape: customCardShape,
           color: Colors.white,
           child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: Stack(children: [
-                Positioned(
-                  // will be positioned in the top right of the container
-                  top: 0,
-                  left: 0,
-                  child: Icon(
-                    isModuleCompleted
-                        ? Icons.check_circle
-                        : (isModuleStarted ? Icons.circle : Icons.unpublished),
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: SvgPicture.asset(
-                        "assets/images/moduleIcons/ModuleIcon$imageIndex.svg",
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const SizedBox(width: 20),
-                          Expanded(
-                            child: RichText(
-                              text: TextSpan(
-                                text: module.title,
-                                style: customTheme.textTheme.labelMedium!
-                                    .copyWith(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black),
-                              ),
-                            ),
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: RichText(
+                          text: TextSpan(
+                            text: module.title,
+                            style: customTheme.textTheme.labelMedium!.copyWith(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
                           ),
-                        ],
+                        ),
                       ),
-                    )
-                  ],
-                ),
-              ])),
+                      Icon(
+                        isModuleCompleted
+                            ? Icons.check_circle
+                            : (isModuleStarted
+                                ? Icons.circle
+                                : Icons.unpublished),
+                        color: isModuleCompleted
+                            ? Colors.green
+                            : Colors.orangeAccent,
+                      )
+                    ],
+                  ),
+                  Divider(thickness: 1, color: Colors.grey),
+                  Expanded(
+                      child: Text(
+                    module.contentDescription,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                  )),
+                ],
+              )),
         ),
         onTap: () {
           Navigator.push(

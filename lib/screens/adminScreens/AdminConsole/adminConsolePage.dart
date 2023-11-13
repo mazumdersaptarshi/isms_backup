@@ -59,9 +59,10 @@ class AdminConsolePage extends StatelessWidget {
                   final action = adminActions[index];
                   return Container(
                     constraints: BoxConstraints(
-                      maxWidth: MediaQuery.of(context).size.width > 500
-                          ? MediaQuery.of(context).size.width * 0.5
-                          : MediaQuery.of(context).size.width,
+                      maxWidth: (MediaQuery.of(context).size.width > 1000
+                              ? MediaQuery.of(context).size.width * 0.5
+                              : MediaQuery.of(context).size.width) *
+                          0.98,
                     ),
                     child: AdminActionsWidget(
                       action: action,
