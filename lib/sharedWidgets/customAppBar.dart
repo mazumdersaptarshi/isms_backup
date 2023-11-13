@@ -1,7 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/screens/reminderScreen.dart';
+import 'package:isms/screens/homePage.dart';
+import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 
@@ -48,24 +49,45 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
     return AppBar(
       automaticallyImplyLeading: kIsWeb ? false : true,
-      title: const Padding(
-        padding: EdgeInsets.only(left: kIsWeb ? 16.0 : 0),
-        child: Row(
-          children: [
-            Icon(Icons.severe_cold_rounded),
-            SizedBox(
-              width: 10,
-            ),
-            Text(
-              'ISMS',
-              style: TextStyle(
-                fontFamily: 'Montserrat',
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-                fontSize: 24,
+      title: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(
+          onTap: () {
+            Navigator.of(context).pushReplacement(
+              PageRouteBuilder(
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    const HomePage(),
+                transitionsBuilder:
+                    (context, animation, secondaryAnimation, child) {
+                  return FadeTransition(
+                    opacity: animation,
+                    child: child,
+                  );
+                },
+                transitionDuration: Duration(milliseconds: 500),
               ),
+            );
+          },
+          child: const Padding(
+            padding: const EdgeInsets.only(left: kIsWeb ? 16.0 : 0),
+            child: Row(
+              children: [
+                Icon(Icons.severe_cold_rounded),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  'ISMS',
+                  style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontSize: 24,
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
       actions: <Widget>[
@@ -97,9 +119,19 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             tooltip: 'Logout',
             onPressed: () async {
               await LoggedInState.logout().then((value) {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LoginPage()),
+                Navigator.of(context).pushReplacement(
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        const LoginPage(),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      return FadeTransition(
+                        opacity: animation,
+                        child: child,
+                      );
+                    },
+                    transitionDuration: Duration(milliseconds: 500),
+                  ),
                 );
               });
             },

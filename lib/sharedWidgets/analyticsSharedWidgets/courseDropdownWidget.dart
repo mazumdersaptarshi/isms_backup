@@ -61,7 +61,7 @@ class CourseDropdownWidget extends StatelessWidget {
                             ? 1
                             : courseDetailsData?["courseCompletionPercentage"]!,
                         center: Text(
-                          '${(courseDetailsData?["courseCompletionPercentage"] * 100)}%',
+                          '${(courseDetailsData?["courseCompletionPercentage"] * 100).floor()}%',
                           style: TextStyle(fontSize: 10),
                         ),
                         progressColor:
