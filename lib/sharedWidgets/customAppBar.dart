@@ -67,7 +67,7 @@ mixin CustomAppBarMixin on StatelessWidget {
                       size: 22, // Base size for the icon
                       color: Colors.white,
                     ),
-                    const SizedBox(height: 4), // Consistent gap
+                    const SizedBox(height: 1), // Consistent gap
                     Flexible(
                       child: Text(title,
                           overflow: TextOverflow.ellipsis, // Prevent overflow
