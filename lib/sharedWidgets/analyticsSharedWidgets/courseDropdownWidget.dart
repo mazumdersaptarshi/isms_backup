@@ -45,12 +45,17 @@ class CourseDropdownWidget extends StatelessWidget {
                         const SizedBox(
                           width: 10,
                         ),
-                        Text(
-                          '${courseItem["course_name"]}',
-                          style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).colorScheme.tertiary),
+                        ConstrainedBox(
+                          constraints: BoxConstraints(
+                              maxWidth:
+                                  MediaQuery.of(context).size.width * 0.55),
+                          child: Text(
+                            '${courseItem["course_name"]}',
+                            style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context).colorScheme.tertiary),
+                          ),
                         )
                       ],
                     ),

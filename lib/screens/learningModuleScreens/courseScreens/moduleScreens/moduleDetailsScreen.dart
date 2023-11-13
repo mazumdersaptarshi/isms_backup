@@ -1,5 +1,6 @@
 // ignore_for_file: file_names
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
@@ -7,10 +8,10 @@ import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 import 'package:isms/projectModules/courseManagement/moduleManagement/slideManagement/slidesDataMaster.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleExamsListScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/createSlideScreen.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/sharedWidgets/htmlSlideDisplay.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/slidesDisplayScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/sharedWidgets/bottomNavBar.dart';
-import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/utilityFunctions/platformCheck.dart';
 import 'package:provider/provider.dart';
@@ -31,6 +32,7 @@ class ModuleDetails extends StatefulWidget {
 class _ModuleDetailsState extends State<ModuleDetails> {
   SlidesDataMaster? slidesDataMaster;
   late String userRole;
+  final isWeb = kIsWeb;
 
   @override
   void initState() {
@@ -108,33 +110,33 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                 ),
               ],
             ),
-            const SizedBox(height: 20.0),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 20.0),
-              padding: const EdgeInsets.all(20.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20.0),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(
-                    child: Text(
-                      widget.module.title,
-                      style: customTheme.textTheme.bodyMedium!
-                          .copyWith(fontWeight: FontWeight.bold),
-                    ),
+            Card(
+              surfaceTintColor: Colors.white,
+              elevation: 4,
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: SizedBox(
+                  height:
+                      isWeb ? MediaQuery.of(context).size.height - 260 : 500,
+                  child: ListView(
+                    children: [
+                      Text(
+                        '${widget.module.title}:',
+                        style: const TextStyle(
+                            fontSize: 25, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 20),
+                      const Divider(
+                        height: 2,
+                        color: Colors.grey,
+                        thickness: 2,
+                      ),
+                      const SizedBox(height: 20),
+                      HTMLSlideDisplay(
+                          htmlString: widget.module.additionalInfo),
+                    ],
                   ),
-                  const SizedBox(height: 20.0),
-                  const Text("What you'll learn: "),
-                  const SizedBox(height: 20.0),
-                  Text(
-                    widget.module.contentDescription,
-                    style: const TextStyle(
-                      fontSize: 18,
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
           ],
