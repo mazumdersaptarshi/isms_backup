@@ -114,42 +114,11 @@ class CourseTile extends StatelessWidget {
                             ),
                             // SizedBox(height: 20),
                             Flexible(
-                              flex: 2,
+                              flex: 1,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.calendar_month_rounded,
-                                        size: 14,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .tertiary,
-                                      ),
-                                      SizedBox(
-                                        width: 4,
-                                      ),
-                                      (pageView == 'explore')
-                                          ? Text(
-                                              'Created: ${dateValue}',
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .tertiary),
-                                            )
-                                          : (pageView == 'mylearning')
-                                              ? Text('Started: ${dateValue}',
-                                                  style: TextStyle(
-                                                      fontSize: 12,
-                                                      color: Theme.of(context)
-                                                          .colorScheme
-                                                          .tertiary))
-                                              : Text(''),
-                                    ],
-                                  ),
                                   SizedBox(
                                     height: 4,
                                   ),

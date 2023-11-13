@@ -6,6 +6,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/createModuleScreen.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/sharedWidgets/moduleTile.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/sharedWidgets/moduleTileWidget.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examListScreen.dart';
 import 'package:isms/themes/common_theme.dart';
@@ -15,18 +17,16 @@ import 'package:provider/provider.dart';
 import '../../../../models/module.dart';
 import '../../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../../projectModules/courseManagement/moduleManagement/moduleDataMaster.dart';
-import '../../../../sharedWidgets/bottomNavBar.dart';
 import '../../../../utilityFunctions/platformCheck.dart';
-import 'sharedWidgets/moduleTile.dart';
 
-class ModulesListScreen extends StatefulWidget {
-  const ModulesListScreen({super.key, required this.course});
+class CoursePage extends StatefulWidget {
+  const CoursePage({super.key, required this.course});
   final Course course;
   @override
-  State<ModulesListScreen> createState() => _ModulesListScreenState();
+  State<CoursePage> createState() => _CoursePageState();
 }
 
-class _ModulesListScreenState extends State<ModulesListScreen> {
+class _CoursePageState extends State<CoursePage> {
   bool isModulesFetched = false;
   late String userRole;
   ModuleDataMaster? moduleDataMaster;
@@ -140,54 +140,107 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
       appBar: PlatformCheck.topNavBarWidget(
         loggedInState,
       ),
-      bottomNavigationBar:
-          kIsWeb ? null : BottomNavBar(loggedInState: loggedInState),
+      bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState),
       body: isModulesFetched
           ? Container(
-              margin: EdgeInsets.only(
-                  top: 20, left: horizontalMargin, right: horizontalMargin),
               child: CustomScrollView(
                 slivers: [
                   SliverToBoxAdapter(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        if (isALlModulesCompleted)
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ExamListScreen(
-                                    course: widget.course,
-                                    examtype: EXAMTYPE.courseExam,
-                                  ),
-                                ),
-                              );
-                            },
-                            child: const Text("View course exams"),
-                          ),
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ExamCreation(
-                                  course: widget.course,
-                                  examtype: EXAMTYPE.courseExam,
+                        Container(
+                          width: MediaQuery.of(context)
+                              .size
+                              .width, // Full width of the screen
+
+                          color: Theme.of(context)
+                              .colorScheme
+                              .primary, // Background color for the title and description
+                          padding:
+                              EdgeInsets.all(30), // Add padding for aesthetics
+                          child: Row(
+                            children: [
+                              Flexible(
+                                flex: 1,
+                                child: Container(),
+                              ),
+                              Flexible(
+                                flex: kIsWeb ? 5 : 10,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      height: 40,
+                                    ),
+                                    Text(
+                                      '${widget.course.name}',
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                          fontSize: 25,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white),
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(
+                                      '${widget.course.description}',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    if (isALlModulesCompleted)
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ExamListScreen(
+                                                course: widget.course,
+                                                examtype: EXAMTYPE.courseExam,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        child: const Text("View course exams"),
+                                      ),
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => ExamCreation(
+                                              course: widget.course,
+                                              examtype: EXAMTYPE.courseExam,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: const Text("Create course exam"),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            );
-                          },
-                          child: const Text("Create course exam"),
+                            ],
+                          ),
                         ),
+                        Container(
+                          child: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Text(
+                              'Course Content',
+                              textAlign: TextAlign.left,
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        )
                       ],
                     ),
                   ),
                   SliverGrid.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: numberColumns,
-                      childAspectRatio: tileRatio,
+                      crossAxisCount: 1,
+                      childAspectRatio: 5,
                     ),
                     itemCount: itemCount,
                     itemBuilder: (BuildContext context, int moduleIndex) {
@@ -201,6 +254,16 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
                             loggedInState: loggedInState,
                             module: widget.course.modules[moduleIndex]),
                       );
+                      print('ididid: ${itemCount}');
+                      return ModuleTileWidget(
+                          course: widget.course,
+                          module: widget.course.modules[moduleIndex],
+                          isModuleStarted: checkIfModuleStarted(
+                              loggedInState: loggedInState,
+                              module: widget.course.modules[moduleIndex]),
+                          isModuleCompleted: checkIfModuleCompleted(
+                              loggedInState: loggedInState,
+                              module: widget.course.modules[moduleIndex]));
                     },
                   ),
                 ],

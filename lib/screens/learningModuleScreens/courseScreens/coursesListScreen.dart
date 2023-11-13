@@ -97,7 +97,7 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => ModulesListScreen(
+                              builder: (context) => CoursePage(
                                     course:
                                         coursesProvider.allCourses[courseIndex],
                                   )));

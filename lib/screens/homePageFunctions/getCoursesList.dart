@@ -38,7 +38,7 @@ Future<List<Widget>> getHomePageCoursesList(
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => ModulesListScreen(course: course)));
+                  builder: (context) => CoursePage(course: course)));
         },
         // tileHeight: 300,
         tileWidth: 400,
