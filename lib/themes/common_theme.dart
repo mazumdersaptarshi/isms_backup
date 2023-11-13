@@ -30,12 +30,12 @@ ButtonStyle customElevatedButtonStyle() {
   );
 }
 
-TextStyle buttonText = TextStyle(
+TextStyle buttonText = const TextStyle(
   color: white,
   fontSize: defaultFontSize,
 );
 
-TextStyle optionButtonText = TextStyle(
+TextStyle optionButtonText = const TextStyle(
     color: white, fontSize: smallFontSize, fontWeight: FontWeight.bold);
 
 BoxDecoration customButtonTheme = BoxDecoration(
@@ -52,7 +52,7 @@ BoxDecoration customButtonTheme = BoxDecoration(
 
 BoxDecoration customBoxTheme = BoxDecoration(
   color: white,
-  boxShadow: [
+  boxShadow: const [
     BoxShadow(
       color: secondaryColor,
       offset: Offset(0, 2),
@@ -68,42 +68,39 @@ InputDecoration customInputDecoration({
 }) {
   return InputDecoration(
     hintText: hintText,
-    contentPadding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+    contentPadding:
+        const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
     enabledBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: transparent, width: 1.0),
+      borderSide: const BorderSide(color: transparent, width: 1.0),
       borderRadius: BorderRadius.circular(10.0),
     ),
     focusColor: secondaryColor,
     focusedBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: secondaryColor, width: 2.0),
+      borderSide: const BorderSide(color: secondaryColor, width: 2.0),
       borderRadius: BorderRadius.circular(10.0),
     ),
   );
 }
 
-TextStyle ModuleDescStyle =
-    TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: primaryColor);
+TextStyle ModuleDescStyle = const TextStyle(
+    fontSize: 20, fontWeight: FontWeight.bold, color: primaryColor);
 
-TextStyle commonTextStyle = TextStyle(fontSize: defaultFontSize, color: black);
+TextStyle commonTextStyle =
+    const TextStyle(fontSize: defaultFontSize, color: black);
 
-TextStyle commonTitleStyle = TextStyle(
+TextStyle commonTitleStyle = const TextStyle(
   fontSize: 17,
 );
 
 ShapeBorder customCardShape = RoundedRectangleBorder(
   borderRadius: BorderRadius.circular(10.0),
 );
-
-// TODO
-// - build a colorscheme (start with `fromSeed()`)
-// - remove as much colors as possible from everywhere else
-// - same for other aspects of theme (font size, etc)
 ThemeData customTheme = ThemeData(
   fontFamily: 'Poppins',
   floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: primaryColor.shade100,
       extendedTextStyle: TextStyle(color: white)),
-  textTheme: TextTheme(
+  textTheme: const TextTheme(
     bodyLarge: TextStyle(fontFamily: "Poppins"),
     bodyMedium: TextStyle(fontFamily: "Poppins"),
     labelMedium: TextStyle(fontFamily: "Poppins"),
@@ -123,10 +120,11 @@ ThemeData customTheme = ThemeData(
     style: ButtonStyle(
       backgroundColor: MaterialStateProperty.all(primaryColor.shade100),
       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-        RoundedRectangleBorder(
+        const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(5))),
       ),
-      minimumSize: MaterialStateProperty.all(Size(150.0, 48.0)),
+      minimumSize: MaterialStateProperty.all(const Size(
+          150.0, 48.0)), // You can customize other button properties here.
     ),
   ),
 );

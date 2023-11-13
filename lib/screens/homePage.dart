@@ -122,7 +122,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   SliverToBoxAdapter(
-                    child: Container(
+                child: SizedBox(
                         width: MediaQuery.of(context).size.width,
                         height: homePageContainerHeight,
                         child: Stack(children: [

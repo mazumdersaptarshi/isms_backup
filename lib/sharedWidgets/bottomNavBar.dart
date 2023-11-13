@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:isms/screens/homePage.dart';
 import 'package:isms/sharedWidgets/navIndexTracker.dart';
@@ -9,15 +11,16 @@ import '../screens/userInfo/userProfilePage.dart';
 import '../userManagement/loggedInState.dart';
 
 class BottomNavBar extends StatelessWidget {
-  BottomNavBar({super.key, this.loggedInState});
+  const BottomNavBar(
+      {super.key, this.loggedInState});
   // int selectedIndex;
-  LoggedInState? loggedInState;
+  final LoggedInState? loggedInState;
   @override
   Widget build(BuildContext context) {
     void navigateToUserProfilePage() {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => UserProfilePage()),
+        MaterialPageRoute(builder: (context) => const UserProfilePage()),
       );
     }
 
@@ -104,7 +107,7 @@ class BottomNavBar extends StatelessWidget {
           // currentIndex: selectedIndex,
           selectedItemColor: Colors.white,
           backgroundColor: primaryColor.shade100,
-          unselectedItemColor: Color.fromARGB(255, 234, 234, 234),
+          unselectedItemColor: const Color.fromARGB(255, 234, 234, 234),
           type: BottomNavigationBarType.fixed,
           elevation: 5,
           onTap: (int index) {
