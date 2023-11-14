@@ -12,6 +12,7 @@ import 'package:isms/themes/common_theme.dart';
 
 import '../../../models/course.dart';
 import '../../../models/module.dart';
+import '../../../sharedWidgets/navIndexTracker.dart';
 
 class TakeExamScreen extends StatefulWidget {
   const TakeExamScreen(
@@ -100,6 +101,8 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
 
   @override
   Widget build(BuildContext context) {
+    NavIndexTracker.setNavDestination(navDestination: NavDestinations.other);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(

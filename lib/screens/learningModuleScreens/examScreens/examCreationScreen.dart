@@ -14,6 +14,7 @@ import '../../../models/module.dart';
 import '../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../projectModules/courseManagement/examManagement/examDataMaster.dart';
 import '../../../projectModules/courseManagement/moduleManagement/examManagement/examDataMaster.dart';
+import '../../../sharedWidgets/navIndexTracker.dart';
 
 List<Map<String, dynamic>> allQuestions = [];
 
@@ -53,6 +54,7 @@ class ExamCreationState extends State<ExamCreation> {
 
   @override
   Widget build(BuildContext context) {
+    NavIndexTracker.setNavDestination(navDestination: NavDestinations.other);
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
     examDataMaster = ExamDataMaster(
       course: widget.course,

@@ -23,7 +23,7 @@ class Course {
     this.modulesCount = 0,
     this.examsCount = 0,
     this.description = "",
-    this.dateCreated = DateTime.now().toString(),
+    this.dateCreated = '',//DateTime.now().toString(),
     this.modules = const [],
     this.exams = const [],
   });
@@ -42,7 +42,7 @@ class Course {
         dateCreated:
             // TODO store a Timestamp
             CSVDataHandler.timestampToReadableDateInWords(map['createdAt']) ??
-                '');
+                '',
       );
   }
 

@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 
 import '../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../sharedWidgets/leaningModulesAppBar.dart';
+import '../../../sharedWidgets/navIndexTracker.dart';
 
 class ExamListScreen extends StatefulWidget {
   const ExamListScreen(
@@ -38,6 +39,8 @@ class _ExamListScreenState extends State<ExamListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    NavIndexTracker.setNavDestination(navDestination: NavDestinations.other);
+
     LoggedInState loggedInState = context.watch<LoggedInState>();
     CoursesProvider coursesProvider = context.watch<CoursesProvider>();
 

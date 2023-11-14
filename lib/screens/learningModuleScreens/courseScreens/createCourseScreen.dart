@@ -7,6 +7,7 @@ import 'package:isms/themes/common_theme.dart';
 import 'package:isms/utilityFunctions/generateRandom.dart';
 
 import '../../../projectModules/courseManagement/coursesDataMaster.dart';
+import '../../../sharedWidgets/navIndexTracker.dart';
 
 class CreateCourseScreen extends StatelessWidget {
   const CreateCourseScreen({super.key});
@@ -32,6 +33,8 @@ class _CourseCreationFormState extends State<CourseCreationForm> {
 
   @override
   Widget build(BuildContext context) {
+    NavIndexTracker.setNavDestination(navDestination: NavDestinations.other);
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(

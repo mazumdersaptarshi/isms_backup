@@ -47,7 +47,7 @@ mixin CustomAppBarMixin on StatelessWidget {
       "Explore": ValueNotifier(false),
       "Reminders": ValueNotifier(false),
       "Account": ValueNotifier(false),
-      "Admin": ValueNotifier(false),
+      "Admin Console": ValueNotifier(false),
       "My Learning": ValueNotifier(false),
     };
 
@@ -206,8 +206,9 @@ class CustomAppBarWeb extends StatelessWidget
       actions: <Widget>[
         appBarItem(Icons.explore, "Explore",
             () => navigateToCoursesPage(context), _paddingValue),
-        appBarItem(Icons.lightbulb, "My Learning",
-            () => navigateToMyLearningPage(context), _paddingValue),
+        if (loggedInState?.currentUserRole == 'admin')
+          appBarItem(Icons.admin_panel_settings_outlined, "Admin Console",
+              () => navigateToAdminConsolePage(context), _paddingValue),
         if (loggedInState?.currentUserRole == 'admin')
           appBarItem(Icons.notifications_active_rounded, "Reminders",
               () => navigateToRemindersPage(context), _paddingValue),
@@ -244,8 +245,9 @@ class CustomAppBarMobile extends StatelessWidget
         child: homeButtonItem(context),
       ),
       actions: <Widget>[
-        appBarItem(Icons.lightbulb, "My Learning",
-            () => navigateToMyLearningPage(context), _paddingValue),
+        if (loggedInState?.currentUserRole == 'admin')
+          appBarItem(Icons.admin_panel_settings_outlined, "Admin Console",
+              () => navigateToAdminConsolePage(context), _paddingValue),
         if (loggedInState?.currentUserRole == 'admin')
           appBarItem(Icons.notifications_active_rounded, "Reminders",
               () => navigateToRemindersPage(context), _paddingValue),
