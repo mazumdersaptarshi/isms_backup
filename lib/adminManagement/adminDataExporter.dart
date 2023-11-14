@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'dart:developer';
+
 // import 'dart:html' as html;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:csv/csv.dart';
@@ -58,11 +59,11 @@ class DataExporter {
 
     List<List<String>> csvData = [
       [
-        'course_name',
-        'course_id',
-        'creation_date',
-        'course_started',
-        'course_completed'
+        'Course Title',
+        'Course ID',
+        'Course Creation Date',
+        'Course Started',
+        'Course Completed'
       ],
     ];
     for (var courseItemDoc in allCourseItemsData.docs) {
@@ -117,6 +118,7 @@ class DataExporter {
       List<String> currentUserCoursesEnrolled = [];
       List<String> currentUserCoursesCompleted = [];
       List<String> currentUserCoursesCompletedIDs = [];
+      List<String> currentUserModulesCompletedIDs = [];
 
       Map<String, dynamic> dataMap = snapshot.data() as Map<String, dynamic>;
       CustomUser userInfo = CustomUser.fromMap(dataMap);
@@ -126,10 +128,10 @@ class DataExporter {
         [
           'username',
           'email',
-          'course_title',
-          'modules_started',
-          'is_course_completed',
-          'is_module_completed'
+          'Course Title',
+          'Modules Started',
+          'is Course completed',
+          'is Module Completed'
         ]
       ];
       for (var course in dataMap['courses_completed']) {
@@ -138,25 +140,60 @@ class DataExporter {
         currentUserCoursesCompleted.add(courseTitle);
         currentUserCoursesCompletedIDs.add(courseId);
       }
+      debugPrint(
+          'currentUserCoursesCompletedIDs: $currentUserCoursesCompletedIDs');
+
       for (var course in dataMap['courses_started']) {
         String courseTitle = course['course_name'] ?? '';
         //String courseId = course['courseID'] ?? '';
-
-        String courseCompleted = 'no';
-        if (currentUserCoursesCompletedIDs.contains(course['id'])) {
-          courseCompleted = 'yes';
+        if (course['modules_completed'] != null) {
+          debugPrint(course['modules_completed']);
+          for (var module in course['modules_completed']) {
+            try {
+              currentUserModulesCompletedIDs.add(module['module_id']);
+            } catch (e) {
+              log(e.toString());
+            }
+          }
         }
-        currentUserCoursesEnrolled.add(courseTitle);
+        String moduleCompleted = 'no';
+        if (course['modules_started'] != null) {
+          for (var module in course['modules_started']) {
+            if (kDebugMode) {
+              print('$module ${userInfo.username}');
+              print(currentUserModulesCompletedIDs);
+            }
 
-        List<String> row = [
-          userInfo.username,
-          userInfo.email,
-          courseTitle,
-          '',
-          courseCompleted,
-          ''
-        ];
-        userCsvData.add(row);
+            try {
+              if (currentUserModulesCompletedIDs
+                  .contains(module['module_id'])) {
+                moduleCompleted = 'yes';
+              }
+            } catch (e) {
+              log(e.toString());
+            }
+
+            String courseCompleted = 'no';
+            if (currentUserCoursesCompletedIDs.contains(course['courseID'])) {
+              courseCompleted = 'yes';
+            }
+            currentUserCoursesEnrolled.add(courseTitle);
+            debugPrint('ududud');
+            try {
+              List<String> row = [
+                userInfo.username,
+                userInfo.email,
+                courseTitle,
+                module['module_name'],
+                courseCompleted,
+                moduleCompleted
+              ];
+              userCsvData.add(row);
+            } catch (e) {
+              log(e.toString());
+            }
+          }
+        }
       }
       exportAsCSV(userCsvData[0], userCsvData.sublist(1), userInfo.username);
 
@@ -333,7 +370,14 @@ class DataExporter {
       Map<String, dynamic> dataMap, String courseName) async {
     List<List<String>> csvData = [
       // Define the headers
-      ['name', 'id', 'examsCount', 'modules', 'modulesCount', 'createdAt']
+      [
+        'Course Title',
+        'Course ID',
+        'Number of Course exams',
+        'Modules',
+        'Number of Modules',
+        'Creation Date'
+      ]
     ];
 
     // Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
@@ -356,18 +400,18 @@ class DataExporter {
     List<List<String>> csvData = [];
 
     List<String> headers = [
-      'moduleTitle',
-      'moduleDescription',
-      'moduleIndex',
-      'moduleId',
-      'moduleCreationDate',
-      'modulesCount',
-      'slideTitle',
-      'slideContent',
-      'slideIndex',
-      'slideId',
-      'slideCreationDate',
-      'slidesCount'
+      'Module Name',
+      'Module Description',
+      'Module Index',
+      'Module ID',
+      'Module Creation Date',
+      'Number of Modules',
+      'Slide Title',
+      'Slide Content',
+      'Slide Index',
+      'Slide Id',
+      'Slide Creation Date',
+      'Number of Slides'
     ];
     csvData.add(headers);
     int modulesCount = dataMap.length;
@@ -426,15 +470,15 @@ class DataExporter {
       [String? courseName]) async {
     List<List<String>> csvData = [];
     List<String> headers = [
-      'moduleTitle',
-      'moduleDescription',
-      'moduleIndex',
-      'moduleId',
-      'moduleCreationDate',
-      'questionId',
-      'questionText',
-      'options',
-      'passingMarks',
+      'Module Name',
+      'Module Description',
+      'Module Index',
+      'Module ID',
+      'Module Creation Date',
+      'Question ID',
+      'Question Text',
+      'Options',
+      'Passing Marks',
     ];
 
     csvData.add(headers);
@@ -481,13 +525,13 @@ class DataExporter {
       [String? courseName]) async {
     List<List<String>> csvData = [];
     List<String> headers = [
-      'examIndex',
-      'title',
-      'examId',
-      'questionId',
-      'question',
-      'options',
-      'passing_marks',
+      'Exam Index',
+      'Title',
+      'Exam ID',
+      'Question ID',
+      'Question',
+      'Options',
+      'Passing Marks',
     ];
     csvData.add(headers);
     for (var exam in dataMap) {

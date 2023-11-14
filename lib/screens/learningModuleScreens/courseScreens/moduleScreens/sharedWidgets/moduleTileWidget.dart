@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 
 import '../../../../../models/course.dart';
@@ -5,7 +7,8 @@ import '../../../../../models/module.dart';
 
 class ModuleTileWidget extends StatelessWidget {
   const ModuleTileWidget(
-      {super.key, required this.course,
+      {super.key,
+      required this.course,
       required this.module,
       this.isModuleStarted = false,
       this.isModuleCompleted = false});

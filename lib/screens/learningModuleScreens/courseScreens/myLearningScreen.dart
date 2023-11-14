@@ -60,15 +60,6 @@ class _MyLearningScreenState extends State<MyLearningScreen> {
       return latestModuleName ?? '';
     }
 
-    List<Widget> homePageWidgets = [Container(width: 100)];
-    void getInProgressCourses() async {
-      homePageWidgets = [Container(width: 100)];
-      homePageWidgets = await getHomePageCoursesList(
-          context: context,
-          coursesProvider: coursesProvider,
-          loggedInState: loggedInState);
-    }
-
     return Scaffold(
       appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
       bottomNavigationBar:
