@@ -112,7 +112,7 @@ class LoginPageState extends State<LoginPage> {
                         try {
                           await LoggedInState.login();
                         } catch (e) {
-                          print(e);
+                          log(e.toString());
                         } finally {
                           _isLoading = false;
                         }

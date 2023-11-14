@@ -113,7 +113,7 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
           min(itemCount, maxColumns) > 0 ? min(itemCount, maxColumns) : 1;
     }
     // grid width, in pixels
-    double gridWidth = screenWidth * numberColumns / maxColumns;
+    //double gridWidth = screenWidth * numberColumns / maxColumns;
 
     return Scaffold(
       appBar: PlatformCheck.topNavBarWidget(
@@ -137,41 +137,39 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
               child: CustomScrollView(
                 slivers: [
                   SliverToBoxAdapter(
-                    child: Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          if (isALlModulesCompleted)
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ExamListScreen(
-                                      course: widget.course,
-                                      examtype: EXAMTYPE.courseExam,
-                                    ),
-                                  ),
-                                );
-                              },
-                              child: const Text("View course exams"),
-                            ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        if (isALlModulesCompleted)
                           ElevatedButton(
                             onPressed: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => ExamCreation(
+                                  builder: (context) => ExamListScreen(
                                     course: widget.course,
                                     examtype: EXAMTYPE.courseExam,
                                   ),
                                 ),
                               );
                             },
-                            child: const Text("Create course exam"),
+                            child: const Text("View course exams"),
                           ),
-                        ],
-                      ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ExamCreation(
+                                  course: widget.course,
+                                  examtype: EXAMTYPE.courseExam,
+                                ),
+                              ),
+                            );
+                          },
+                          child: const Text("Create course exam"),
+                        ),
+                      ],
                     ),
                   ),
                   SliverGrid.builder(
@@ -202,7 +200,7 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
               ),
             );
           } else if (snapshot.hasError) {
-            return Container(
+            return SizedBox(
               width: MediaQuery.of(context).size.width,
               height: 200,
               child: const AlertDialog(
@@ -218,7 +216,7 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
               ),
             );
           } else {
-            return Container(
+            return SizedBox(
               width: MediaQuery.of(context).size.width,
               height: 200,
               child: const AlertDialog(
