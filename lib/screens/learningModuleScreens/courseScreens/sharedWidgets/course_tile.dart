@@ -13,7 +13,7 @@ class CourseTile extends StatelessWidget {
   final dynamic modulesCompleted;
   final dynamic subTitle;
   final Map<String, dynamic> courseData;
-  final String? dateValue;
+
   String? pageView = '';
   CourseTile(
       {super.key,
@@ -25,8 +25,7 @@ class CourseTile extends StatelessWidget {
       required this.courseData,
       required this.tileWidth,
       this.modulesCompleted,
-      this.pageView,
-      this.dateValue});
+      this.pageView});
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +82,7 @@ class CourseTile extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           // mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Flexible(
+                            Expanded(
                               flex: 5,
                               child: Padding(
                                 padding: const EdgeInsets.only(top: 16.0),
@@ -94,6 +93,7 @@ class CourseTile extends StatelessWidget {
                                       title,
                                       style: commonTextStyle.copyWith(
                                           fontWeight: FontWeight.bold,
+                                          fontSize: 13,
                                           color: Colors.black),
                                       maxLines:
                                           3, // Set the maximum number of lines before ellipsis
@@ -101,63 +101,43 @@ class CourseTile extends StatelessWidget {
                                     ),
                                     Container(width: 100, child: Divider()),
                                     SizedBox(height: 5),
-                                    (pageView != 'explore')
-                                        ? Text("${subTitle}",
-                                            style: TextStyle(
-                                                color: Colors.grey.shade600,
-                                                fontFamily: 'Poppins',
-                                                fontSize: 12))
-                                        : Text('${subTitle}'),
+                                    if (pageView != 'explore')
+                                      Expanded(
+                                        child: Text(
+                                          "${subTitle}",
+                                          style: customTheme
+                                              .textTheme.labelSmall!
+                                              .copyWith(
+                                            fontSize: 12,
+                                          ),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      )
+                                    else
+                                      Expanded(
+                                        child: Text(
+                                          '${subTitle}',
+                                          style: customTheme
+                                              .textTheme.labelSmall!
+                                              .copyWith(
+                                            fontSize: 12,
+                                          ),
+                                          maxLines: 3,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
                                   ],
                                 ),
                               ),
                             ),
                             // SizedBox(height: 20),
-                            Flexible(
-                              flex: 1,
+                            Expanded(
+                              flex: 2,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  if (dateValue != null && dateValue != '')
-                                    Row(
-                                      children: [
-                                        Icon(
-                                          Icons.calendar_month_rounded,
-                                          size: 14,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .tertiary,
-                                        ),
-                                        SizedBox(
-                                          width: 4,
-                                        ),
-                                        // (pageView == 'explore')
-                                        //     ? Text(
-                                        //         'Created: ${dateValue}',
-                                        //         style: TextStyle(
-                                        //             fontSize: 12,
-                                        //             color: Theme.of(context)
-                                        //                 .colorScheme
-                                        //                 .tertiary),
-                                        //       )
-                                        //     : (pageView == 'mylearning')
-                                        //         ? Text('Started: ${dateValue}',
-                                        //             style: TextStyle(
-                                        //                 fontSize: 12,
-                                        //                 color: Theme.of(context)
-                                        //                     .colorScheme
-                                        //                     .tertiary))
-                                        //         : Text(''),
-
-                                        Text('Started: ${dateValue}',
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .tertiary))
-                                      ],
-                                    ),
                                   SizedBox(
                                     height: 4,
                                   ),

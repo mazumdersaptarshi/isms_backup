@@ -76,7 +76,7 @@ class _MyLearningScreenState extends State<MyLearningScreen> {
     return Scaffold(
       appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
       bottomNavigationBar:
-          kIsWeb ? null : BottomNavBar(loggedInState: loggedInState),
+          PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
       body: Container(
         margin: EdgeInsets.only(
             top: 20, left: horizontalMargin, right: horizontalMargin),
@@ -99,11 +99,11 @@ class _MyLearningScreenState extends State<MyLearningScreen> {
                     subTitle:
                         getLatestModuleName(userEnrolledCourses[courseIndex]) ??
                             '',
-                    dateValue:
-                        (userEnrolledCourses[courseIndex]['started_at'] != null)
-                            ? CSVDataHandler.timestampToReadableDateInWords(
-                                userEnrolledCourses[courseIndex]['started_at'])
-                            : '',
+                    // dateValue:
+                    //     (userEnrolledCourses[courseIndex]['started_at'] != null)
+                    //         ? CSVDataHandler.timestampToReadableDateInWords(
+                    //             userEnrolledCourses[courseIndex]['started_at'])
+                    //         : '',
                     // tileHeight: tileMinimumheight,
                     courseData: getUserCourseData(
                         loggedInState: loggedInState,

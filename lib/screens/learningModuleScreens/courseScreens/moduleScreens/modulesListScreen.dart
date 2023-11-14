@@ -118,25 +118,25 @@ class _CoursePageState extends State<CoursePage> {
     // available width, in pixels
     double horizontalMargin =
         MediaQuery.sizeOf(context).width > HOME_PAGE_WIDGETS_COLLAPSE_WIDTH
-            ? 200
+            ? MediaQuery.of(context).size.width * 0.2
             : 10;
     double screenWidth = MediaQuery.sizeOf(context).width;
-    // number of tiles that can fit vertically on the screen
-    int maxColumns =
-        max(((screenWidth - (horizontalMargin * 2)) / tileMinWidth).floor(), 1);
+
+    // int maxColumns =
+    //     max(((screenWidth - (horizontalMargin * 2)) / tileMinWidth).floor(), 1);
     // number of tiles that have to fit on the screen
     int itemCount = widget.course.modulesCount ?? 0;
     // grid width, in tiles
     int numberColumns = 1;
     // min(itemCount, maxColumns) > 0 ? min(itemCount, maxColumns) : 1;
-    if (itemCount <= 0) {
-      numberColumns = 1;
-    } else if (itemCount < 3 && maxColumns >= 3) {
-      numberColumns = 3;
-    } else {
-      numberColumns =
-          min(itemCount, maxColumns) > 0 ? min(itemCount, maxColumns) : 1;
-    }
+    // if (itemCount <= 0) {
+    //   numberColumns = 1;
+    // } else if (itemCount < 3 && maxColumns >= 3) {
+    //   numberColumns = 3;
+    // } else {
+    //   numberColumns =
+    //       min(itemCount, maxColumns) > 0 ? min(itemCount, maxColumns) : 1;
+    // }
     // grid width, in pixels
     //double gridWidth = screenWidth * numberColumns / maxColumns;
 
@@ -146,130 +146,132 @@ class _CoursePageState extends State<CoursePage> {
           PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
       body: isModulesFetched
           ? Container(
-              child: CustomScrollView(
-                slivers: [
+              // margin: EdgeInsets.only(
+              //     left: horizontalMargin, right: horizontalMargin),
+              child: NestedScrollView(
+                headerSliverBuilder: (context, innerBoxIsScrolled) => [
                   SliverToBoxAdapter(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: MediaQuery.of(context)
-                              .size
-                              .width, // Full width of the screen
-
-                          color: Theme.of(context)
-                              .colorScheme
-                              .primary, // Background color for the title and description
-                          padding:
-                              EdgeInsets.all(30), // Add padding for aesthetics
-                          child: Row(
-                            children: [
-                              Flexible(
-                                flex: 1,
-                                child: Container(),
+                    child: Container(
+                      // margin: EdgeInsets.symmetric(horizontal: 20),
+                      decoration: BoxDecoration(
+                        color: primaryColor.shade100,
+                        // borderRadius:
+                        //     const BorderRadius.all(Radius.circular(20)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 20),
+                            child: SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    widget.course.name.toString(),
+                                    style: customTheme.textTheme.labelLarge!
+                                        .copyWith(
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
+                                  ),
+                                  SizedBox(height: 20),
+                                  Text(
+                                    widget.course.description.toString(),
+                                    style: customTheme.textTheme.labelLarge!
+                                        .copyWith(color: Colors.white),
+                                  ),
+                                ],
                               ),
-                              Flexible(
-                                flex: kIsWeb ? 5 : 10,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      height: 40,
-                                    ),
-                                    Text(
-                                      '${widget.course.name}',
-                                      textAlign: TextAlign.left,
-                                      style: TextStyle(
-                                          fontSize: 25,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white),
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      '${widget.course.description}',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                    if (isALlModulesCompleted)
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  ExamListScreen(
-                                                course: widget.course,
-                                                examtype: EXAMTYPE.courseExam,
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                        child: const Text("View course exams"),
-                                      ),
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => ExamCreation(
-                                              course: widget.course,
-                                              examtype: EXAMTYPE.courseExam,
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      child: const Text("Create course exam"),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          child: Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: Text(
-                              'Course Content',
-                              textAlign: TextAlign.left,
-                              style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ),
-                        )
-                      ],
+                          Container(
+                            margin: EdgeInsets.only(left: 20, bottom: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                if (isALlModulesCompleted)
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => ExamListScreen(
+                                            course: widget.course,
+                                            examtype: EXAMTYPE.courseExam,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: const Text("View course exams",
+                                        style: TextStyle(color: primaryColor)),
+                                    style: customTheme
+                                        .elevatedButtonTheme.style!
+                                        .copyWith(
+                                            backgroundColor:
+                                                MaterialStateProperty.all<
+                                                    Color>(Colors.white)),
+                                  ),
+                                if (isALlModulesCompleted) SizedBox(width: 20),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ExamCreation(
+                                          course: widget.course,
+                                          examtype: EXAMTYPE.courseExam,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: const Text(
+                                    "Create course exam",
+                                    style: TextStyle(color: primaryColor),
+                                  ),
+                                  style: customTheme.elevatedButtonTheme.style!
+                                      .copyWith(
+                                          backgroundColor:
+                                              MaterialStateProperty.all<Color>(
+                                                  Colors.white)),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  SliverGrid.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 1,
-                      childAspectRatio: 5,
-                    ),
-                    itemCount: itemCount,
-                    itemBuilder: (BuildContext context, int moduleIndex) {
-                      return ModuleTile(
-                        course: widget.course,
-                        module: widget.course.modules[moduleIndex],
-                        isModuleStarted: checkIfModuleStarted(
-                            loggedInState: loggedInState,
-                            module: widget.course.modules[moduleIndex]),
-                        isModuleCompleted: checkIfModuleCompleted(
-                            loggedInState: loggedInState,
-                            module: widget.course.modules[moduleIndex]),
-                      );
-                      print('ididid: ${itemCount}');
-                      return ModuleTileWidget(
-                          course: widget.course,
-                          module: widget.course.modules[moduleIndex],
-                          isModuleStarted: checkIfModuleStarted(
-                              loggedInState: loggedInState,
-                              module: widget.course.modules[moduleIndex]),
-                          isModuleCompleted: checkIfModuleCompleted(
-                              loggedInState: loggedInState,
-                              module: widget.course.modules[moduleIndex]));
-                    },
                   ),
                 ],
+                body: Container(
+                    height: MediaQuery.of(context).size.height,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: List.generate(
+                            itemCount,
+                            (moduleIndex) => Container(
+                                  height: 200,
+                                  width: MediaQuery.of(context).size.width >
+                                          HOME_PAGE_WIDGETS_COLLAPSE_WIDTH
+                                      ? MediaQuery.of(context).size.width * 0.5
+                                      : MediaQuery.of(context).size.width,
+                                  child: ModuleTile(
+                                    course: widget.course,
+                                    module: widget.course.modules[moduleIndex],
+                                    isModuleStarted: checkIfModuleStarted(
+                                        loggedInState: loggedInState,
+                                        module:
+                                            widget.course.modules[moduleIndex]),
+                                    isModuleCompleted: checkIfModuleCompleted(
+                                        loggedInState: loggedInState,
+                                        module:
+                                            widget.course.modules[moduleIndex]),
+                                  ),
+                                )),
+                      ),
+                    )),
               ),
             )
           : Container(
