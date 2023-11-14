@@ -1,10 +1,10 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:isms/adminManagement/adminDataExporter.dart';
+import 'package:isms/adminManagement/adminProvider.dart';
+import 'package:isms/screens/adminScreens/AdminInstructions/test.dart';
 
-import '../../adminManagement/adminDataExporter.dart';
-import '../../adminManagement/adminProvider.dart';
-import '../../screens/adminScreens/AdminInstructions/adminInstructionsCategories.dart';
 import 'adminActionsDropdownModules/allCoursesDropdown.dart';
 import 'adminActionsDropdownModules/allUsersDropdown.dart';
 
@@ -132,7 +132,7 @@ class AdminInstructionsDropdown extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => AdminInstructionsCategories(
+        builder: (context) => TestName(
           category: category,
           subCategories: subCategories,
         ),
