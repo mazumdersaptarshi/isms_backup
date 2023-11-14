@@ -317,32 +317,35 @@ class _ReminderScreenState extends State<ReminderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            ReminderLine(
-              text: "People",
-              setExpiryDateForCertificate: (uid, date) =>
-                  setExpiryDate(uid, "People", date),
-              initialExpiryDate: expiryDatePeople, // Pass initial expiry date
-            ),
-            ReminderLine(
-              text: "Players",
-              setExpiryDateForCertificate: (uid, date) =>
-                  setExpiryDate(uid, "Players", date),
-              initialExpiryDate: expiryDatePlayers, // Pass initial expiry date
-            ),
-            ReminderLine(
-              text: "Vendors",
-              setExpiryDateForCertificate: (uid, date) =>
-                  setExpiryDate(uid, "Vendors", date),
-              initialExpiryDate: expiryDateVendors, // Pass initial expiry date
-            ),
-          ],
+        appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
+        body: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            children: [
+              ReminderLine(
+                text: "People",
+                setExpiryDateForCertificate: (uid, date) =>
+                    setExpiryDate(uid, "People", date),
+                initialExpiryDate: expiryDatePeople, // Pass initial expiry date
+              ),
+              ReminderLine(
+                text: "Players",
+                setExpiryDateForCertificate: (uid, date) =>
+                    setExpiryDate(uid, "Players", date),
+                initialExpiryDate:
+                    expiryDatePlayers, // Pass initial expiry date
+              ),
+              ReminderLine(
+                text: "Vendors",
+                setExpiryDateForCertificate: (uid, date) =>
+                    setExpiryDate(uid, "Vendors", date),
+                initialExpiryDate:
+                    expiryDateVendors, // Pass initial expiry date
+              ),
+            ],
+          ),
         ),
-      ),
-    );
+        bottomNavigationBar:
+            PlatformCheck.bottomNavBarWidget(loggedInState, context: context));
   }
 }

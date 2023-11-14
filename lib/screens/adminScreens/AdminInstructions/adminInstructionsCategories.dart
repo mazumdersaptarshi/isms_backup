@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:isms/adminManagement/adminProvider.dart';
-import 'package:isms/screens/adminScreens/AdminInstructions/adminInstructionSlides.dart';
+import 'package:isms/screens/adminScreens/AdminInstructions/adminInstructionsSlidesHTML.dart';
 import 'package:isms/sharedWidgets/bottomNavBar.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +21,7 @@ class AdminInstructionsCategories extends StatelessWidget {
 
     AdminProvider adminProvider = context.watch<AdminProvider>();
     return Scaffold(
-      appBar: PlatformCheck.topNavBarWidget(loggedInState!, context: context),
+      appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -50,7 +50,7 @@ class AdminInstructionsCategories extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => AdminInstructionSlides(
+                              builder: (context) => AdminInstructionSlidesHTML(
                                     adminProvider: adminProvider,
                                     category: category,
                                     subCategory: subCategory,
