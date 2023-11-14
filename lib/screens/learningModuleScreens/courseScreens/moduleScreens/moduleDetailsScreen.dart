@@ -147,7 +147,12 @@ class _ModuleDetailsState extends State<ModuleDetails> {
               child: const Icon(Icons.add),
             )
           : null,
-      bottomNavigationBar: const BottomNavBar(),
+      bottomNavigationBar: isWeb
+          ? Container(
+              height: 0,
+              width: 0,
+            )
+          : BottomNavBar(),
     );
   }
 }
