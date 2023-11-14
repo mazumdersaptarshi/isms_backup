@@ -321,60 +321,66 @@
 //                        child: Row(
 //                          mainAxisAlignment: MainAxisAlignment.center,
 //                          children: <Widget>[
-//                            ElevatedButton(
-//                              style: customElevatedButtonStyle(),
-//                              onPressed: () {
-//                                controller.undo();
-//                              },
-//                              child: const Text('Undo',
-//                                  style: TextStyle(color: Colors.white)),
+//                            Flexible(
+//                              child: ElevatedButton(
+//                                style: customElevatedButtonStyle(),
+//                                onPressed: () {
+//                                  controller.undo();
+//                                },
+//                                child: const Text('Undo',
+//                                    style: TextStyle(color: Colors.white)),
+//                              ),
 //                            ),
 //                            const SizedBox(
 //                              width: 20,
 //                            ),
-//                            ElevatedButton(
-//                              style: customElevatedButtonStyle(),
-//                              onPressed: () {
-//                                controller.clear();
-//                              },
-//                              child: const Text('Reset',
-//                                  style: TextStyle(color: Colors.white)),
+//                            Flexible(
+//                              child: ElevatedButton(
+//                                style: customElevatedButtonStyle(),
+//                                onPressed: () {
+//                                  controller.clear();
+//                                },
+//                                child: const Text('Reset',
+//                                    style: TextStyle(color: Colors.white)),
+//                              ),
 //                            ),
 //                            const SizedBox(
 //                              width: 20,
 //                            ),
-//                            ElevatedButton(
-//                              style: customElevatedButtonStyle(),
-//                              onPressed: () async {
-//                                var txt = await controller.getText();
+//                            Flexible(
+//                              child: ElevatedButton(
+//                                style: customElevatedButtonStyle(),
+//                                onPressed: () async {
+//                                  var txt = await controller.getText();
 //
-//                                setState(() {
-//                                  result = txt;
-//                                  // widget.setFinalHTMLBody(result);
-//                                  // saveToFirebase(result);
-//                                });
-//                                if (_formKey.currentState!.validate()) {
-//                                  Slide slide = Slide(
-//                                    id: generateRandomId(),
-//                                    title: _titleController.text,
-//                                    content: result,
-//                                  );
 //                                  setState(() {
-//                                    if (isSlideAdded == false) {
-//                                      widget.slidesCreationProvider
-//                                          .addSlideToList(slide);
-//                                      debugPrint(
-//                                          "${widget.slidesCreationProvider.slidesList},,, $isSlideAdded");
-//                                      isSlideAdded = true;
-//                                    }
-//                                    widget.slidesCreationProvider
-//                                        .incrementFormNo();
+//                                    result = txt;
+//                                    // widget.setFinalHTMLBody(result);
+//                                    // saveToFirebase(result);
 //                                  });
-//                                }
-//                              },
-//                              child: const Text(
-//                                'Save slide',
-//                                style: TextStyle(color: Colors.white),
+//                                  if (_formKey.currentState!.validate()) {
+//                                    Slide slide = Slide(
+//                                      id: generateRandomId(),
+//                                      title: _titleController.text,
+//                                      content: result,
+//                                    );
+//                                    setState(() {
+//                                      if (isSlideAdded == false) {
+//                                        widget.slidesCreationProvider
+//                                            .addSlideToList(slide);
+//                                        debugPrint(
+//                                            "${widget.slidesCreationProvider.slidesList},,, $isSlideAdded");
+//                                        isSlideAdded = true;
+//                                      }
+//                                      widget.slidesCreationProvider
+//                                          .incrementFormNo();
+//                                    });
+//                                  }
+//                                },
+//                                child: const Text(
+//                                  'Save slide',
+//                                  style: TextStyle(color: Colors.white),
+//                                ),
 //                              ),
 //                            ),
 //                            const SizedBox(
