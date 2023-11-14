@@ -7,8 +7,8 @@ import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/utilityFunctions/platformCheck.dart';
 import 'package:provider/provider.dart';
 
-class AdminInstructionSlidesHTML extends StatefulWidget {
-  const AdminInstructionSlidesHTML(
+class AdminInstructionSlides extends StatefulWidget {
+  const AdminInstructionSlides(
       {super.key,
       required this.adminProvider,
       required this.category,
@@ -18,12 +18,10 @@ class AdminInstructionSlidesHTML extends StatefulWidget {
   final AdminProvider adminProvider;
 
   @override
-  State<AdminInstructionSlidesHTML> createState() =>
-      _AdminInstructionSlidesHTMLState();
+  State<AdminInstructionSlides> createState() => _AdminInstructionSlidesState();
 }
 
-class _AdminInstructionSlidesHTMLState
-    extends State<AdminInstructionSlidesHTML> {
+class _AdminInstructionSlidesState extends State<AdminInstructionSlides> {
   List<dynamic>? slides; // Declare the slides variable here
   List<Map<String, dynamic>> cardItems = [];
   int currentIndex = 0;
