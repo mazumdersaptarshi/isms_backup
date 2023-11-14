@@ -6,6 +6,7 @@ import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/userManagement/userprofileHeaderWidget.dart';
+import 'package:isms/utilityFunctions/getCourseCompletedPercentage.dart';
 import 'package:isms/utilityFunctions/platformCheck.dart';
 import 'package:provider/provider.dart';
 
@@ -235,6 +236,8 @@ class UserCompletedCoursesDropdown extends StatelessWidget {
   Widget build(BuildContext context) {
     LoggedInState loggedInState =
         Provider.of<LoggedInState>(context, listen: false);
+    CoursesProvider coursesProvider =
+        Provider.of<CoursesProvider>(context, listen: false);
     return Column(
       children: [
         FutureBuilder<List>(
@@ -249,8 +252,11 @@ class UserCompletedCoursesDropdown extends StatelessWidget {
                   allCompletedCourses = loggedInState.allCompletedCoursesGlobal;
                   print(
                       'ALLCOMPLETEDCOURSESGLOBAL: ${loggedInState.allCompletedCoursesGlobal}');
+
                   return CourseDropdownWidget(
                     courseItem: allCompletedCourses![index],
+                    courseDetailsData: getCourseCompletedPercentage(
+                        allCompletedCourses![index], coursesProvider, index),
                     detailType: 'courses_completed',
                   );
                 },
