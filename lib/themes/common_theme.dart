@@ -7,7 +7,7 @@ const double HOME_PAGE_WIDGETS_COLLAPSE_WIDTH = 800;
 // Theme Constants
 const primaryColor = Colors.deepPurpleAccent;
 
-final secondaryColor = Colors.deepPurpleAccent.shade200;
+final secondaryColor = Colors.deepPurpleAccent.shade100;
 const bgColor = Colors.deepPurpleAccent;
 
 const white = Colors.white;

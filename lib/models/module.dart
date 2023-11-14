@@ -5,6 +5,7 @@ class Module {
   String title;
   String id;
   String contentDescription;
+  String additionalInfo;
   int? index;
   List<Slide>? slides;
   List<NewExam>? exams;
@@ -13,6 +14,7 @@ class Module {
       {required this.title,
       required this.id,
       required this.contentDescription,
+      required this.additionalInfo,
       this.slides,
       this.exams,
       this.index});
@@ -22,7 +24,9 @@ class Module {
         id: map['id'],
         index: map['index'],
         title: map['title'],
-        contentDescription: map['contentDescription']);
+        contentDescription: map['contentDescription'],
+        additionalInfo: map['additionalInfo'],
+      );
   }
 
   Map<String, dynamic> toMap() {
@@ -30,6 +34,7 @@ class Module {
       'id': id,
       'title': title,
       'contentDescription': contentDescription,
+      'additionalInfo': additionalInfo,
       'index': index,
     };
   }

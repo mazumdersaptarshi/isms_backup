@@ -5,7 +5,7 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
-import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/createModuleScreen.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/createModuleScreenHTML.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examListScreen.dart';
 import 'package:isms/themes/common_theme.dart';
@@ -251,7 +251,8 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            CreateModuleScreen(course: widget.course)));
+                            //CreateModuleScreen(course: widget.course)));
+                            CreateModuleScreenHTML(course: widget.course)));
               },
               child: const Icon(Icons.add),
             )

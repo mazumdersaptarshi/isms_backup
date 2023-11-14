@@ -93,8 +93,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       maxWidth: (MediaQuery.of(context).size.width > 1000
                               ? MediaQuery.of(context).size.width * 0.5
                               : MediaQuery.of(context).size.width) *
-                          0.98,
-                      // maxWidth: MediaQuery.of(context).size.width * 0.9,
+                          0.95,
                     ),
                     child: ExpansionTile(
                       leading: Icon(action.icon),
