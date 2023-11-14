@@ -64,9 +64,7 @@ class _MyLearningScreenState extends State<MyLearningScreen> {
     }
 
     return Scaffold(
-      appBar: PlatformCheck.topNavBarWidget(
-        loggedInState,
-      ),
+      appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
       bottomNavigationBar:
           kIsWeb ? null : BottomNavBar(loggedInState: loggedInState),
       body: Container(

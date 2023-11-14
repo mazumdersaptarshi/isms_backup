@@ -317,7 +317,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PlatformCheck.topNavBarWidget(loggedInState),
+      appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(

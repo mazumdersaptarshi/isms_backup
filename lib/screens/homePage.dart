@@ -77,10 +77,10 @@ class _HomePageState extends State<HomePage> {
         builder: (BuildContext context, CoursesProvider coursesProvider, Widget? child) {
       return Scaffold(
           backgroundColor: Colors.white,
-          bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState),
-          appBar: PlatformCheck.topNavBarWidget(
-            loggedInState,
-          ),
+          bottomNavigationBar:
+              PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
+          appBar:
+              PlatformCheck.topNavBarWidget(loggedInState, context: context),
           body: FooterView(
             children: [
               CustomScrollView(

@@ -14,7 +14,10 @@ import 'package:provider/provider.dart';
 
 import '../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../sharedWidgets/leaningModulesAppBar.dart';
+import '../../../sharedWidgets/loadingScreenWidget.dart';
 import '../../../sharedWidgets/navIndexTracker.dart';
+import '../../../themes/common_theme.dart';
+import '../../../utilityFunctions/platformCheck.dart';
 
 class ExamListScreen extends StatefulWidget {
   const ExamListScreen(
@@ -50,17 +53,7 @@ class _ExamListScreenState extends State<ExamListScreen> {
           coursesProvider: coursesProvider);
 
     return Scaffold(
-      appBar: LearningModulesAppBar(
-        leadingWidget: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(
-              context,
-            );
-          },
-        ),
-        title: "${widget.course!.name}/ Exams",
-      ),
+      appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
 
       body: FutureBuilder<List<NewExam>>(
         future: examDataMaster.exams,
@@ -76,30 +69,32 @@ class _ExamListScreenState extends State<ExamListScreen> {
             );
           } else if (snapshot.hasError) {
             return Container(
-              width: MediaQuery.of(context).size.width,
-              height: 200,
-              child: const AlertDialog(
-                title: Text("Error fetching course exams"),
+              height: 300,
+              child: AlertDialog(
+                elevation: 4,
                 content: Align(
-                  alignment: Alignment.topCenter,
-                  child: Icon(
-                    Icons.error_outline,
-                    color: Colors.red,
-                    size: 60,
-                  ),
-                ),
+                    alignment: Alignment.topCenter,
+                    child: loadingErrorWidget(
+                        textWidget: Text(
+                      "Error loading exams ...",
+                      style: customTheme.textTheme.labelMedium!
+                          .copyWith(fontSize: 18, fontWeight: FontWeight.bold),
+                    ))),
               ),
             );
           } else {
             return Container(
-              width: MediaQuery.of(context).size.width,
-              height: 200,
-              child: const AlertDialog(
-                title: Text("Fetching Exams"),
+              height: 300,
+              child: AlertDialog(
+                elevation: 4,
                 content: Align(
-                  alignment: Alignment.topCenter,
-                  child: CircularProgressIndicator(),
-                ),
+                    alignment: Alignment.topCenter,
+                    child: loadingWidget(
+                        textWidget: Text(
+                      "Loading exams ...",
+                      style: customTheme.textTheme.labelMedium!
+                          .copyWith(fontSize: 18, fontWeight: FontWeight.bold),
+                    ))),
               ),
             );
           }
