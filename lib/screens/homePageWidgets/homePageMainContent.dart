@@ -16,6 +16,7 @@ class HomePageMainContent extends StatelessWidget {
   double homePageContainerHeight;
   LoggedInState loggedInState;
   CoursesProvider coursesProvider;
+  bool hasEnrolledCourses = false;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -45,61 +46,77 @@ class HomePageMainContent extends StatelessWidget {
               )),
           Positioned(
               top: 20,
-              child: Column(
-                // Align children to the start of the cross axis
-                children: [
-                  FutureBuilder<List<Widget>>(
-                    future: getHomePageCoursesList(
-                      context: context,
-                      loggedInState: loggedInState,
-                      coursesProvider: coursesProvider,
-                    ),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<List<Widget>>? snapshot) {
-                      if (snapshot?.data == null) {
-                        return const CircularProgressIndicator();
-                      } else {
-                        return HomePageItemsContainer(
-                            homePageItems: snapshot?.data);
-                      }
-                    },
-                  ),
-                ],
-              )),
-          Positioned(
-              top: MediaQuery.of(context).size.width >
-                      HOME_PAGE_WIDGETS_COLLAPSE_WIDTH
-                  ? 320
-                  : 0,
               child: Container(
-                margin: EdgeInsets.only(
-                    left: MediaQuery.of(context).size.width * 0.14),
-                child: MouseRegion(
-                  cursor: SystemMouseCursors.click,
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  const CoursesDisplayScreen()));
-                    },
-                    child: Row(
-                      children: [
-                        Text("Resume Learning ",
-                            style: customTheme.textTheme.labelMedium!.copyWith(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: customTheme.primaryColor)),
-                        Icon(
-                          Icons.arrow_circle_right_outlined,
-                          color: customTheme.primaryColor,
-                        )
-                      ],
-                    ),
+                child: FutureBuilder<Map<String, dynamic>>(
+                  future: getCoursesListForUser(
+                    context: context,
+                    loggedInState: loggedInState,
+                    coursesProvider: coursesProvider,
                   ),
+                  builder:
+                      (BuildContext context, AsyncSnapshot<Map>? snapshot) {
+                    if (snapshot?.data == null) {
+                      return const CircularProgressIndicator();
+                    } else {
+                      hasEnrolledCourses =
+                          snapshot?.data!["hasEnrolledCourses"];
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (MediaQuery.of(context).size.width <=
+                              SCREEN_COLLAPSE_WIDTH)
+                            HomePageLabel(
+                                hasEnrolledCourses: hasEnrolledCourses),
+                          HomePageItemsContainer(
+                              homePageItems: snapshot?.data!["widgetsList"]),
+                          if (MediaQuery.of(context).size.width >
+                              SCREEN_COLLAPSE_WIDTH)
+                            HomePageLabel(
+                                hasEnrolledCourses: hasEnrolledCourses)
+                        ],
+                      );
+                    }
+                  },
                 ),
               )),
         ]));
+  }
+}
+
+class HomePageLabel extends StatelessWidget {
+  HomePageLabel({super.key, required this.hasEnrolledCourses});
+  bool hasEnrolledCourses;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.14),
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const CoursesDisplayScreen()));
+          },
+          child: Row(
+            children: [
+              Text(
+                  hasEnrolledCourses == true
+                      ? "Resume Learning "
+                      : "Recommended Courses",
+                  style: customTheme.textTheme.labelMedium!.copyWith(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: customTheme.primaryColor)),
+              Icon(
+                Icons.arrow_circle_right_outlined,
+                color: customTheme.primaryColor,
+              )
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

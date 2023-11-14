@@ -112,12 +112,10 @@ class _CoursePageState extends State<CoursePage> {
     int tileMinWidth = 300;
     int tileMinHeight = 200;
     double tileRatio =
-        MediaQuery.sizeOf(context).width > HOME_PAGE_WIDGETS_COLLAPSE_WIDTH
-            ? 2
-            : 2.5;
+        MediaQuery.sizeOf(context).width > SCREEN_COLLAPSE_WIDTH ? 2 : 2.5;
     // available width, in pixels
     double horizontalMargin =
-        MediaQuery.sizeOf(context).width > HOME_PAGE_WIDGETS_COLLAPSE_WIDTH
+        MediaQuery.sizeOf(context).width > SCREEN_COLLAPSE_WIDTH
             ? MediaQuery.of(context).size.width * 0.2
             : 10;
     double screenWidth = MediaQuery.sizeOf(context).width;
@@ -254,7 +252,7 @@ class _CoursePageState extends State<CoursePage> {
                             (moduleIndex) => Container(
                                   height: 200,
                                   width: MediaQuery.of(context).size.width >
-                                          HOME_PAGE_WIDGETS_COLLAPSE_WIDTH
+                                          SCREEN_COLLAPSE_WIDTH
                                       ? MediaQuery.of(context).size.width * 0.5
                                       : MediaQuery.of(context).size.width,
                                   child: ModuleTile(

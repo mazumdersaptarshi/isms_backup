@@ -15,13 +15,35 @@ String? getLatestModuleName(Map<String, dynamic> courseItem) {
   return latestModuleName ?? '';
 }
 
-Future<List<Widget>> getHomePageCoursesList(
+Future<Map<String, dynamic>> getCoursesListForUser(
     {required BuildContext context,
     required LoggedInState loggedInState,
     required CoursesProvider coursesProvider}) async {
-  List<Widget> homePageWidgets = [Container(width: 100)];
   await loggedInState.getUserCoursesData('crs_enrl');
   await loggedInState.getUserCoursesData('crs_compl');
+
+  if (loggedInState.loggedInUser.courses_started == null ||
+      loggedInState.loggedInUser.courses_started.length == 0) {
+    List<Widget> recommendedCoursesList = await getRecommendedCoursesList(
+        context: context,
+        loggedInState: loggedInState,
+        coursesProvider: coursesProvider);
+    return {"hasEnrolledCourses": false, "widgetsList": recommendedCoursesList};
+  } else {
+    List<Widget> enrolledCoursesList = await getEnrolledCoursesList(
+        context: context,
+        loggedInState: loggedInState,
+        coursesProvider: coursesProvider);
+    return {"hasEnrolledCourses": true, "widgetsList": enrolledCoursesList};
+  }
+}
+
+Future<List<Widget>> getEnrolledCoursesList(
+    {required BuildContext context,
+    required LoggedInState loggedInState,
+    required CoursesProvider coursesProvider}) async {
+  List<Widget> enrolledCoursesDisplayWidgets = [Container(width: 100)];
+
   List coursesStarted = loggedInState.loggedInUser.courses_started;
   debugPrint("TRY TO CREATE WIDGETSS       $coursesStarted");
 
@@ -32,7 +54,7 @@ Future<List<Widget>> getHomePageCoursesList(
           .where((element) => element.id == coursesStarted[i]["courseID"])
           .first;
 
-      homePageWidgets.add(CourseTile(
+      enrolledCoursesDisplayWidgets.add(CourseTile(
         title: coursesStarted[i]["course_name"],
         onPressed: () {
           Navigator.push(
@@ -52,7 +74,41 @@ Future<List<Widget>> getHomePageCoursesList(
     }
   }
 
-  return homePageWidgets;
+  return enrolledCoursesDisplayWidgets;
+}
+
+Future<List<Widget>> getRecommendedCoursesList(
+    {required BuildContext context,
+    required LoggedInState loggedInState,
+    required CoursesProvider coursesProvider}) async {
+  await loggedInState.getUserCoursesData('crs_enrl');
+  List<Widget> recommenedCoursesDisplayWidgets = [Container(width: 100)];
+  List<Course> coursesToRecommend = coursesProvider.allCourses.length < 4
+      ? coursesProvider.allCourses
+          .take(coursesProvider.allCourses.length)
+          .toList()
+      : coursesProvider.allCourses.take(4).toList();
+
+  for (int i = 0; i < coursesToRecommend.length; i++) {
+    Course courseToRecommend = coursesToRecommend[i];
+    recommenedCoursesDisplayWidgets.add(CourseTile(
+      title: courseToRecommend.name,
+      onPressed: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CoursePage(course: courseToRecommend)));
+      },
+      // tileHeight: 300,
+      tileWidth: 400,
+      courseData: null,
+      index: i,
+      subTitle: courseToRecommend.description,
+      modulesCount: courseToRecommend.modulesCount ?? 0,
+      // dateValue: course.dateCreated,
+    ));
+  }
+  return recommenedCoursesDisplayWidgets;
 }
 
 Map<String, dynamic> getUserCourseData(

@@ -75,7 +75,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
           SliverToBoxAdapter(
             child: Container(
               constraints: BoxConstraints(
-                minHeight: MediaQuery.of(context).size.height,
+                minHeight: 500,
               ),
               decoration: const BoxDecoration(
                 color: Colors.white,

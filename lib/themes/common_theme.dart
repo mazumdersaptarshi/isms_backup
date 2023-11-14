@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 
-const double HOME_PAGE_WIDGETS_COLLAPSE_WIDTH = 800;
+const double SCREEN_COLLAPSE_WIDTH = 800;
 
 // Theme Constants
 const primaryColor = Colors.deepPurpleAccent;
