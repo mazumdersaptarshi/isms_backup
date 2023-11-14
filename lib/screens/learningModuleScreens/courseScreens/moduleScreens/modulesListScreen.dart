@@ -106,25 +106,25 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
     // available width, in pixels
     double horizontalMargin =
         MediaQuery.sizeOf(context).width > HOME_PAGE_WIDGETS_COLLAPSE_WIDTH
-            ? 200
+            ? MediaQuery.of(context).size.width * 0.2
             : 10;
     double screenWidth = MediaQuery.sizeOf(context).width;
-    // number of tiles that can fit vertically on the screen
-    int maxColumns =
-        max(((screenWidth - (horizontalMargin * 2)) / tileMinWidth).floor(), 1);
+
+    // int maxColumns =
+    //     max(((screenWidth - (horizontalMargin * 2)) / tileMinWidth).floor(), 1);
     // number of tiles that have to fit on the screen
     int itemCount = widget.course.modulesCount ?? 0;
     // grid width, in tiles
     int numberColumns = 1;
     // min(itemCount, maxColumns) > 0 ? min(itemCount, maxColumns) : 1;
-    if (itemCount <= 0) {
-      numberColumns = 1;
-    } else if (itemCount < 3 && maxColumns >= 3) {
-      numberColumns = 3;
-    } else {
-      numberColumns =
-          min(itemCount, maxColumns) > 0 ? min(itemCount, maxColumns) : 1;
-    }
+    // if (itemCount <= 0) {
+    //   numberColumns = 1;
+    // } else if (itemCount < 3 && maxColumns >= 3) {
+    //   numberColumns = 3;
+    // } else {
+    //   numberColumns =
+    //       min(itemCount, maxColumns) > 0 ? min(itemCount, maxColumns) : 1;
+    // }
     // grid width, in pixels
     //double gridWidth = screenWidth * numberColumns / maxColumns;
 
@@ -132,8 +132,7 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
       appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
 
       bottomNavigationBar:
-          kIsWeb ? null : BottomNavBar(loggedInState: loggedInState),
-
+          PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
       body: FutureBuilder<List<Module>>(
         future: moduleDataMaster.modules,
         builder: (BuildContext context, AsyncSnapshot<List<Module>> snapshot) {
@@ -142,58 +141,163 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
 
             return Container(
               margin: EdgeInsets.only(
-                top: 20,
-                left: horizontalMargin,
-                right: horizontalMargin),
+                  left: horizontalMargin, right: horizontalMargin),
               child: CustomScrollView(
                 slivers: [
-                  SliverToBoxAdapter(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        if (isALlModulesCompleted)
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ExamListScreen(
-                                    course: widget.course,
-                                    examtype: EXAMTYPE.courseExam,
-                                  ),
-                                ),
-                              );
-                            },
-                            child: const Text("View course exams"),
-                          ),
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ExamCreation(
-                                  course: widget.course,
-                                  examtype: EXAMTYPE.courseExam,
+                  SliverAppBar(
+                    backgroundColor: Colors.white,
+                    expandedHeight: 300.0,
+                    automaticallyImplyLeading: false,
+                    flexibleSpace: FlexibleSpaceBar(
+                        background: Container(
+                      constraints: BoxConstraints(minHeight: 300),
+                      margin: EdgeInsets.symmetric(vertical: 20),
+                      decoration: BoxDecoration(
+                          color: primaryColor.shade100,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(20))),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Container(
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 20),
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      widget.course.name.toString(),
+                                      style: customTheme.textTheme.labelLarge!
+                                          .copyWith(
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold),
+                                    ),
+                                    SizedBox(height: 20),
+                                    Text(
+                                      widget.course.description.toString(),
+                                      style: customTheme.textTheme.labelLarge!
+                                          .copyWith(color: Colors.white),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            );
-                          },
-                          child: const Text("Create course exam"),
-                        ),
-                      ],
-                    ),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(left: 20, bottom: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                if (isALlModulesCompleted)
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => ExamListScreen(
+                                            course: widget.course,
+                                            examtype: EXAMTYPE.courseExam,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: const Text("View course exams",
+                                        style: TextStyle(color: primaryColor)),
+                                    style: customTheme
+                                        .elevatedButtonTheme.style!
+                                        .copyWith(
+                                            backgroundColor:
+                                                MaterialStateProperty.all<
+                                                    Color>(Colors.white)),
+                                  ),
+                                if (isALlModulesCompleted) SizedBox(width: 20),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ExamCreation(
+                                          course: widget.course,
+                                          examtype: EXAMTYPE.courseExam,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: const Text(
+                                    "Create course exam",
+                                    style: TextStyle(color: primaryColor),
+                                  ),
+                                  style: customTheme.elevatedButtonTheme.style!
+                                      .copyWith(
+                                          backgroundColor:
+                                              MaterialStateProperty.all<Color>(
+                                                  Colors.white)),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    )),
                   ),
-                  SliverGrid.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: numberColumns,
-                      childAspectRatio: tileRatio,
-                    ),
-                    itemCount: itemCount,
-                    itemBuilder: (BuildContext context, int moduleIndex) {
+                  // SliverToBoxAdapter(
+                  //   child: Container(
+                  //     height: 200,
+                  //     decoration: BoxDecoration(
+                  //       color: primaryColor.shade100,
+                  //     ),
+                  //     child: Column(
+                  //       children: [
+                  //         Text(widget.course.description.toString()),
+                  //         Row(
+                  //           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  //           children: [
+                  //             if (isALlModulesCompleted)
+                  //               ElevatedButton(
+                  //                 onPressed: () {
+                  //                   Navigator.push(
+                  //                     context,
+                  //                     MaterialPageRoute(
+                  //                       builder: (context) => ExamListScreen(
+                  //                         course: widget.course,
+                  //                         examtype: EXAMTYPE.courseExam,
+                  //                       ),
+                  //                     ),
+                  //                   );
+                  //                 },
+                  //                 child: const Text("View course exams"),
+                  //               ),
+                  //             ElevatedButton(
+                  //               onPressed: () {
+                  //                 Navigator.push(
+                  //                   context,
+                  //                   MaterialPageRoute(
+                  //                     builder: (context) => ExamCreation(
+                  //                       course: widget.course,
+                  //                       examtype: EXAMTYPE.courseExam,
+                  //                     ),
+                  //                   ),
+                  //                 );
+                  //               },
+                  //               child: const Text("Create course exam"),
+                  //             ),
+                  //           ],
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
+                  SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                    childCount: itemCount,
+                    (BuildContext context, int moduleIndex) {
                       Module module = modules[moduleIndex];
                       return Container(
-                        // margin:
-                        //     EdgeInsets.symmetric(horizontal: horizontalMargin),
+                        height: 200,
                         child: ModuleTile(
                           course: widget.course,
                           module: module,
@@ -206,7 +310,7 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
                         ),
                       );
                     },
-                  ),
+                  )),
                 ],
               ),
             );

@@ -54,7 +54,8 @@ class _ExamListScreenState extends State<ExamListScreen> {
 
     return Scaffold(
       appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
-
+      bottomNavigationBar:
+          PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
       body: FutureBuilder<List<NewExam>>(
         future: examDataMaster.exams,
         builder: (BuildContext context, AsyncSnapshot<List<NewExam>> snapshot) {

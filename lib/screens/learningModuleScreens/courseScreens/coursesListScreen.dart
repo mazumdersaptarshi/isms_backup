@@ -60,7 +60,7 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
     return Scaffold(
       appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
       bottomNavigationBar:
-          kIsWeb ? null : BottomNavBar(loggedInState: loggedInState),
+          PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
       body: Container(
         margin: EdgeInsets.only(
             top: 20, left: horizontalMargin, right: horizontalMargin),
@@ -86,8 +86,6 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
                         coursesProvider.allCourses[courseIndex].description ??
                             '',
                     pageView: 'explore',
-                    dateValue:
-                        coursesProvider.allCourses[courseIndex].dateCreated,
                     onPressed: () {
                       Navigator.push(
                           context,

@@ -12,7 +12,6 @@ class CourseTile extends StatelessWidget {
   final double tileWidth;
   //dynamic? modulesCompleted;
   final String subTitle;
-  final String dateValue;
   final String pageView;
   final Map<String, dynamic> courseData;
   CourseTile(
@@ -25,7 +24,6 @@ class CourseTile extends StatelessWidget {
       required this.tileWidth,
       //this.modulesCompleted,
       this.subTitle = '',
-      this.dateValue = '',
       this.pageView = ''});
 
   @override
@@ -101,12 +99,26 @@ class CourseTile extends StatelessWidget {
                                     Container(width: 100, child: Divider()),
                                     SizedBox(height: 5),
                                     (pageView != 'explore')
-                                        ? Text("${subTitle}",
-                                            style: TextStyle(
-                                                color: Colors.grey.shade600,
-                                                fontFamily: 'Poppins',
-                                                fontSize: 12))
-                                        : Text('${subTitle}'),
+                                        ? Text(
+                                            "${subTitle}",
+                                            style: customTheme
+                                                .textTheme.labelSmall!
+                                                .copyWith(
+                                              fontSize: 12,
+                                            ),
+                                            maxLines: 3,
+                                            overflow: TextOverflow.ellipsis,
+                                          )
+                                        : Text(
+                                            '${subTitle}',
+                                            style: customTheme
+                                                .textTheme.labelSmall!
+                                                .copyWith(
+                                              fontSize: 12,
+                                            ),
+                                            maxLines: 3,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
                                   ],
                                 ),
                               ),
@@ -118,45 +130,6 @@ class CourseTile extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  if (dateValue != null && dateValue != '')
-                                    Row(
-                                      children: [
-                                        Icon(
-                                          Icons.calendar_month_rounded,
-                                          size: 14,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .tertiary,
-                                        ),
-                                        SizedBox(
-                                          width: 4,
-                                        ),
-                                        // (pageView == 'explore')
-                                        //     ? Text(
-                                        //         'Created: ${dateValue}',
-                                        //         style: TextStyle(
-                                        //             fontSize: 12,
-                                        //             color: Theme.of(context)
-                                        //                 .colorScheme
-                                        //                 .tertiary),
-                                        //       )
-                                        //     : (pageView == 'mylearning')
-                                        //         ? Text('Started: ${dateValue}',
-                                        //             style: TextStyle(
-                                        //                 fontSize: 12,
-                                        //                 color: Theme.of(context)
-                                        //                     .colorScheme
-                                        //                     .tertiary))
-                                        //         : Text(''),
-
-                                        Text('Started: ${dateValue}',
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .tertiary))
-                                      ],
-                                    ),
                                   SizedBox(
                                     height: 4,
                                   ),

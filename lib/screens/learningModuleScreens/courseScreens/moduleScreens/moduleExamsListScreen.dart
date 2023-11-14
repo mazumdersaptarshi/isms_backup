@@ -55,6 +55,8 @@ class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
 
     return Scaffold(
       appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
+      bottomNavigationBar:
+          PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
       body: FutureBuilder<List<NewExam>>(
         future: moduleExamDataMaster.exams,
         builder: (BuildContext context, AsyncSnapshot<List<NewExam>> snapshot) {

@@ -9,10 +9,13 @@ import 'package:isms/models/question.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCompletionStrategies.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/themes/common_theme.dart';
+import 'package:isms/userManagement/loggedInState.dart';
+import 'package:provider/provider.dart';
 
 import '../../../models/course.dart';
 import '../../../models/module.dart';
 import '../../../sharedWidgets/navIndexTracker.dart';
+import '../../../utilityFunctions/platformCheck.dart';
 
 class TakeExamScreen extends StatefulWidget {
   const TakeExamScreen(
@@ -102,7 +105,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
   @override
   Widget build(BuildContext context) {
     NavIndexTracker.setNavDestination(navDestination: NavDestinations.other);
-
+    LoggedInState loggedInState = context.watch<LoggedInState>();
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -111,6 +114,8 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
         ),
         backgroundColor: Colors.deepPurpleAccent.shade100,
       ),
+      bottomNavigationBar:
+          PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
       body: _showScore ? buildScoreWidget() : buildExamWidget(),
     );
   }
