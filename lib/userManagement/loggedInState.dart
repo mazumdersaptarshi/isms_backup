@@ -35,15 +35,16 @@ class LoggedInState extends _UserDataGetterMaster {
       if (user == null) {
         debugPrint(
             "auth state changed: no account currently signed into Firebase");
+        notifyListeners();
         clear();
       } else {
         debugPrint(
             "auth state changed: ${user.email} currently signed into Firebase");
         _fetchFromFirestore(user).then((value) {
           storeUserCoursesData(currentUserSnapshot!);
+          notifyListeners();
         });
       }
-      notifyListeners();
     });
     listenToChanges();
   }

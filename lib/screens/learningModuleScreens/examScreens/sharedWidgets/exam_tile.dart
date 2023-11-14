@@ -15,12 +15,11 @@ class ExamTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 150,
+      height: 70,
       child: GestureDetector(
         child: Card(
           surfaceTintColor: white,
           elevation: 4,
-          shadowColor: secondaryColor,
           shape: customCardShape,
           color: white,
           child: Padding(
