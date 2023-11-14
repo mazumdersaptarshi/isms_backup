@@ -38,7 +38,7 @@ Future<List<Widget>> getHomePageCoursesList(
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => ModulesListScreen(course: course)));
+                  builder: (context) => CoursePage(course: course)));
         },
         // tileHeight: 300,
         tileWidth: 400,
@@ -47,6 +47,7 @@ Future<List<Widget>> getHomePageCoursesList(
         index: i,
         subTitle: getLatestModuleName(coursesStarted[i]) ?? '',
         modulesCount: course.modulesCount ?? 0,
+        // dateValue: course.dateCreated,
       ));
     }
   }

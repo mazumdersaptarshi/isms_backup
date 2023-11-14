@@ -11,7 +11,10 @@ import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 
 import '../../../projectModules/courseManagement/coursesProvider.dart';
-import '../../../sharedWidgets/leaningModulesAppBar.dart';
+import '../../../sharedWidgets/loadingScreenWidget.dart';
+import '../../../sharedWidgets/navIndexTracker.dart';
+import '../../../themes/common_theme.dart';
+import '../../../utilityFunctions/platformCheck.dart';
 
 class ExamListScreen extends StatefulWidget {
   const ExamListScreen(
@@ -45,6 +48,8 @@ class _ExamListScreenState extends State<ExamListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    NavIndexTracker.setNavDestination(navDestination: NavDestinations.other);
+
     LoggedInState loggedInState = context.watch<LoggedInState>();
     CoursesProvider coursesProvider = context.watch<CoursesProvider>();
 
@@ -63,17 +68,9 @@ class _ExamListScreenState extends State<ExamListScreen> {
     }
 
     return Scaffold(
-      appBar: LearningModulesAppBar(
-        leadingWidget: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(
-              context,
-            );
-          },
-        ),
-        title: "${widget.course.name}/ Exams",
-      ),
+      appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
+      bottomNavigationBar:
+          PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
       body: isExamsFetched
           ? ExamListContainer(
               exams: exams ?? [],
@@ -81,13 +78,17 @@ class _ExamListScreenState extends State<ExamListScreen> {
               examtype: EXAMTYPE.courseExam,
               loggedInState: loggedInState)
           : SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: 200,
-              child: const AlertDialog(
-                title: Text("Fetching Exams"),
+              height: 300,
+              child: AlertDialog(
+                elevation: 4,
                 content: Align(
                     alignment: Alignment.topCenter,
-                    child: CircularProgressIndicator()),
+                    child: loadingWidget(
+                        textWidget: Text(
+                      "Loading exams ...",
+                      style: customTheme.textTheme.labelMedium!
+                          .copyWith(fontSize: 18, fontWeight: FontWeight.bold),
+                    ))),
               ),
             ),
       floatingActionButton: loggedInState.currentUserRole == "admin"

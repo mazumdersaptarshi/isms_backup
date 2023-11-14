@@ -2,15 +2,11 @@
 
 import 'dart:math';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/sharedWidgets/course_tile.dart';
-import 'package:isms/utilityFunctions/csvDataHandler.dart';
 import 'package:provider/provider.dart';
 
 import '../../../projectModules/courseManagement/coursesProvider.dart';
-import '../../../sharedWidgets/bottomNavBar.dart';
-import '../../../sharedWidgets/navIndexTracker.dart';
 import '../../../themes/common_theme.dart';
 import '../../../userManagement/loggedInState.dart';
 import '../../../utilityFunctions/platformCheck.dart';
@@ -38,8 +34,6 @@ class _MyLearningScreenState extends State<MyLearningScreen> {
 
     userRole = loggedInState.currentUserRole;
     List<dynamic> userEnrolledCourses = loggedInState.allEnrolledCoursesGlobal;
-    NavIndexTracker.setNavDestination(
-        navDestination: NavDestinations.AllCoures, userRole: userRole);
 
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
 
@@ -57,6 +51,7 @@ class _MyLearningScreenState extends State<MyLearningScreen> {
     int numberColumns =
         min(itemCount, maxColumns) > 0 ? min(itemCount, maxColumns) : 1;
     // grid width, in pixels
+
     String? getLatestModuleName(Map<String, dynamic> courseItem) {
       int latestModuleIndex = (courseItem['modules_started'].length - 1) ?? 0;
       String? latestModuleName = (courseItem['modules_started']
@@ -65,12 +60,19 @@ class _MyLearningScreenState extends State<MyLearningScreen> {
       return latestModuleName ?? '';
     }
 
+    List<Widget> homePageWidgets = [Container(width: 100)];
+    void getInProgressCourses() async {
+      homePageWidgets = [Container(width: 100)];
+      homePageWidgets = await getHomePageCoursesList(
+          context: context,
+          coursesProvider: coursesProvider,
+          loggedInState: loggedInState);
+    }
+
     return Scaffold(
-      appBar: PlatformCheck.topNavBarWidget(
-        loggedInState,
-      ),
+      appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
       bottomNavigationBar:
-          kIsWeb ? null : BottomNavBar(loggedInState: loggedInState),
+          PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
       body: Container(
         margin: EdgeInsets.only(
             top: 20, left: horizontalMargin, right: horizontalMargin),
@@ -93,11 +95,11 @@ class _MyLearningScreenState extends State<MyLearningScreen> {
                     subTitle:
                         getLatestModuleName(userEnrolledCourses[courseIndex]) ??
                             '',
-                    dateValue:
-                        (userEnrolledCourses[courseIndex]['started_at'] != null)
-                            ? CSVDataHandler.timestampToReadableDateInWords(
-                                userEnrolledCourses[courseIndex]['started_at'])
-                            : '',
+                    // dateValue:
+                    //     (userEnrolledCourses[courseIndex]['started_at'] != null)
+                    //         ? CSVDataHandler.timestampToReadableDateInWords(
+                    //             userEnrolledCourses[courseIndex]['started_at'])
+                    //         : '',
                     // tileHeight: tileMinimumheight,
                     courseData: getUserCourseData(
                         loggedInState: loggedInState,
@@ -107,7 +109,7 @@ class _MyLearningScreenState extends State<MyLearningScreen> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => ModulesListScreen(
+                              builder: (context) => CoursePage(
                                     course:
                                         coursesProvider.allCourses[courseIndex],
                                   )));

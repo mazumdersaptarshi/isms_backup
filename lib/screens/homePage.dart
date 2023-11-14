@@ -1,4 +1,4 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, sort_child_properties_last
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
@@ -9,7 +9,6 @@ import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 import 'package:isms/projectModules/notificationModules/initLinkHandler.dart';
 import 'package:isms/screens/homePageWidgets/homePageMainContent.dart';
 import 'package:isms/sharedWidgets/appFooter.dart';
-import 'package:isms/sharedWidgets/navIndexTracker.dart';
 import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/utilityFunctions/platformCheck.dart';
@@ -60,7 +59,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     double homePageContainerHeight =
-        MediaQuery.of(context).size.width < 800 ? 950 : 400;
+        MediaQuery.of(context).size.width < HOME_PAGE_WIDGETS_COLLAPSE_WIDTH
+            ? 1000
+            : 400;
     // 500;
     final loggedInState = context.watch<LoggedInState>();
 
@@ -69,17 +70,15 @@ class _HomePageState extends State<HomePage> {
     }
 
     userRole = loggedInState.currentUserRole;
-    NavIndexTracker.setNavDestination(
-        navDestination: NavDestinations.HomePage, userRole: userRole);
 
     return Consumer<CoursesProvider>(builder:
         (BuildContext context, CoursesProvider coursesProvider, Widget? child) {
       return Scaffold(
           backgroundColor: Colors.white,
-          bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState),
-          appBar: PlatformCheck.topNavBarWidget(
-            loggedInState,
-          ),
+          bottomNavigationBar:
+              PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
+          appBar:
+              PlatformCheck.topNavBarWidget(loggedInState, context: context),
           body: FooterView(
             footer: kIsWeb
                 ? Footer(
@@ -96,7 +95,7 @@ class _HomePageState extends State<HomePage> {
                     elevation: 10,
                     // backgroundColor: Colors.green,
                     automaticallyImplyLeading: false,
-                    expandedHeight: 300,
+                    expandedHeight: 280,
                     pinned: false,
                     flexibleSpace: FlexibleSpaceBar(
                       background: Row(

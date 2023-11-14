@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:isms/screens/homePage.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/myLearningScreen.dart';
 import 'package:isms/sharedWidgets/navIndexTracker.dart';
 import 'package:isms/themes/common_theme.dart';
 
@@ -35,6 +36,11 @@ class BottomNavBar extends StatelessWidget {
               builder: (context) => const CoursesDisplayScreen()));
     }
 
+    void NavigateToMyLearningPage() {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => const MyLearningScreen()));
+    }
+
     void navigateToAdminConsolePage() {
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => const AdminConsolePage()));
@@ -42,28 +48,26 @@ class BottomNavBar extends StatelessWidget {
 
     void decideNavigation({required int index}) {
       if (index == NavIndexTracker.currentIndex) {
-        // print(
-        //     "INDEX: $index, NAVINDEXTRACKER INDEX ${NavIndexTracker.currentIndex}");
-
         return;
       }
       if (index == 0) {
+        NavIndexTracker.setNavDestination(
+            navDestination: NavDestinations.HomePage);
         navigateToHomePage();
       }
-      if (loggedInState?.currentUserRole == 'admin') {
-        if (index == 1) {
-          navigateToUserProfilePage();
-        } else if (index == 2) {
-          navigateToAdminConsolePage();
-        } else if (index == 3) {
-          navigateToCoursesPage();
-        }
-      } else {
-        if (index == 1) {
-          navigateToUserProfilePage();
-        } else if (index == 2) {
-          navigateToCoursesPage();
-        }
+
+      if (index == 1) {
+        NavIndexTracker.setNavDestination(
+            navDestination: NavDestinations.UserProfile);
+        navigateToUserProfilePage();
+      } else if (index == 2) {
+        NavIndexTracker.setNavDestination(
+            navDestination: NavDestinations.MyLearning);
+        NavigateToMyLearningPage();
+      } else if (index == 3) {
+        NavIndexTracker.setNavDestination(
+            navDestination: NavDestinations.AllCourses);
+        navigateToCoursesPage();
       }
     }
 
@@ -81,28 +85,27 @@ class BottomNavBar extends StatelessWidget {
         // ],
       ),
       child: ClipRRect(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
-        ),
+        // borderRadius: const BorderRadius.only(
+        //   topLeft: Radius.circular(20),
+        //   topRight: Radius.circular(20),
+        // ),
         child: BottomNavigationBar(
-          items: <BottomNavigationBarItem>[
-            const BottomNavigationBarItem(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
               icon: Icon(Icons.home_outlined),
               label: 'Home',
             ),
-            const BottomNavigationBarItem(
+            BottomNavigationBarItem(
               icon: Icon(Icons
                   .account_circle_outlined), // Fallback icon if no image is available
               label: 'Account',
             ),
-            if (loggedInState?.currentUserRole == 'admin')
-              const BottomNavigationBarItem(
-                icon: Icon(Icons
-                    .admin_panel_settings_outlined), // Fallback icon if no image is available
-                label: 'Admin Console',
-              ),
-            const BottomNavigationBarItem(
+            BottomNavigationBarItem(
+              icon: Icon(
+                  Icons.lightbulb), // Fallback icon if no image is available
+              label: 'My learning',
+            ),
+            BottomNavigationBarItem(
               icon:
                   Icon(Icons.explore), // Fallback icon if no image is available
               label: 'Explore',
@@ -111,6 +114,7 @@ class BottomNavBar extends StatelessWidget {
 
           // currentIndex: selectedIndex,
           selectedItemColor: Colors.white,
+
           backgroundColor: primaryColor.shade100,
           unselectedItemColor: const Color.fromARGB(255, 234, 234, 234),
           type: BottomNavigationBarType.fixed,

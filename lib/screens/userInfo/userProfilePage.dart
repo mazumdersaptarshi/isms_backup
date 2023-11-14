@@ -6,6 +6,7 @@ import 'package:isms/models/UserActions.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 // import 'package:isms/screens/analyticsSharedWidgets/courseDropdownWidget.dart';
 import 'package:isms/screens/login/loginScreen.dart';
+import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/userManagement/userprofileHeaderWidget.dart';
 import 'package:isms/utilityFunctions/platformCheck.dart';
@@ -57,8 +58,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
     }
 
     return Scaffold(
-      backgroundColor: Colors.deepPurpleAccent.shade100,
-      appBar: PlatformCheck.topNavBarWidget(loggedInState),
+      backgroundColor: primaryColor.shade100,
+      appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
@@ -117,6 +118,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
           ),
         ],
       ),
+      bottomNavigationBar:
+          PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
     );
   }
 }
@@ -197,6 +200,7 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
         Provider.of<CoursesProvider>(context, listen: false);
     LoggedInState loggedInState =
         Provider.of<LoggedInState>(context, listen: false);
+
     return Column(
       children: [
         FutureBuilder<List>(

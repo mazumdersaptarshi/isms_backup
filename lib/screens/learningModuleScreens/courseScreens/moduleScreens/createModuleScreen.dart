@@ -1,15 +1,14 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
+import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
+import 'package:isms/projectModules/courseManagement/moduleManagement/moduleDataMaster.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
 import 'package:isms/themes/common_theme.dart';
 import 'package:isms/utilityFunctions/generateRandom.dart';
 import 'package:provider/provider.dart';
-
-import '../../../../models/course.dart';
-import '../../../../projectModules/courseManagement/coursesProvider.dart';
-import '../../../../projectModules/courseManagement/moduleManagement/moduleDataMaster.dart';
 
 class CreateModuleScreen extends StatelessWidget {
   const CreateModuleScreen({super.key, required this.course});
@@ -32,7 +31,6 @@ class _CourseModuleFormState extends State<CourseModuleForm> {
   late ModuleDataMaster moduleDataMaster;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
 
@@ -100,6 +98,7 @@ class _CourseModuleFormState extends State<CourseModuleForm> {
                         id: generateRandomId(),
                         title: _titleController.text,
                         contentDescription: _descriptionController.text,
+                        additionalInfo: '',
                       );
                       bool isModuleCreated =
                           await moduleDataMaster.createModule(module: module);

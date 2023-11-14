@@ -5,16 +5,16 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
+import 'package:isms/models/course.dart';
+import 'package:isms/models/module.dart';
 import 'package:isms/models/slide.dart';
+import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
+import 'package:isms/projectModules/courseManagement/moduleManagement/slideManagement/slidesCreationProvider.dart';
+import 'package:isms/projectModules/courseManagement/moduleManagement/slideManagement/slidesDataMaster.dart';
+import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/utilityFunctions/generateRandom.dart';
 import 'package:provider/provider.dart';
-
-import '../../../../../models/course.dart';
-import '../../../../../models/module.dart';
-import '../../../../../projectModules/courseManagement/coursesProvider.dart';
-import '../../../../../projectModules/courseManagement/moduleManagement/slideManagement/slidesDataMaster.dart';
-import '../../../../../projectModules/courseManagement/moduleManagement/slideManagement/slidesCreationProvider.dart';
 
 class CreateSlideScreen extends StatelessWidget {
   const CreateSlideScreen(
@@ -56,7 +56,6 @@ class _SlideFormContainerState extends State<SlideFormContainer> {
     setState(() {});
   }
 
-  // try GPT??
   @override
   Widget build(BuildContext context) {
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
@@ -96,7 +95,8 @@ class _SlideFormContainerState extends State<SlideFormContainer> {
                           },
                         )),
                   ),
-                  FilledButton(
+                  ElevatedButton(
+                      style: customElevatedButtonStyle(),
                       onPressed: () async {
                         await slidesDataMaster?.createSlides(
                             slides: slidesCreationProvider.slidesList);
@@ -141,9 +141,9 @@ class _SlideFormState extends State<SlideForm> {
     return SingleChildScrollView(
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        width: MediaQuery.of(context).size.width - 50,
+        width: MediaQuery.of(context).size.width - 30,
         decoration: const BoxDecoration(
-            color: Color.fromRGBO(190, 213, 207, 100),
+            color: Colors.white,
             borderRadius: BorderRadius.all(Radius.circular(20))),
         child: Padding(
           padding: const EdgeInsets.all(10),
@@ -152,7 +152,7 @@ class _SlideFormState extends State<SlideForm> {
             child: Column(
               children: <Widget>[
                 SizedBox(
-                  height: 100,
+                  height: 50,
                   child: TextFormField(
                     controller: _titleController,
                     decoration: const InputDecoration(labelText: 'Title'),
@@ -165,19 +165,6 @@ class _SlideFormState extends State<SlideForm> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                // Expanded(
-                //   child: TextFormField(
-                //     controller: _descriptionController,
-                //     decoration: InputDecoration(labelText: 'Content'),
-                //     maxLines: 4,
-                //     validator: (value) {
-                //       if (value == null || value.isEmpty) {
-                //         return 'Please enter slide content';
-                //       }
-                //       return null;
-                //     },
-                //   ),
-                // ),
                 GestureDetector(
                   onTap: () {
                     if (!kIsWeb) {
@@ -247,7 +234,7 @@ class _SlideFormState extends State<SlideForm> {
                             return false;
                           },
                         ),
-                        otherOptions: const OtherOptions(height: 550),
+                        otherOptions: const OtherOptions(height: 700),
                         callbacks: Callbacks(
                             onBeforeCommand: (String? currentHtml) {
                           debugPrint('html before change is $currentHtml');
@@ -330,67 +317,70 @@ class _SlideFormState extends State<SlideForm> {
                         ],
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(10.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            TextButton(
-                              style: TextButton.styleFrom(
-                                  backgroundColor: Colors.blueGrey),
-                              onPressed: () {
-                                controller.undo();
-                              },
-                              child: const Text('Undo',
-                                  style: TextStyle(color: Colors.white)),
+                            Flexible(
+                              child: ElevatedButton(
+                                style: customElevatedButtonStyle(),
+                                onPressed: () {
+                                  controller.undo();
+                                },
+                                child: const Text('Undo',
+                                    style: TextStyle(color: Colors.white)),
+                              ),
                             ),
                             const SizedBox(
-                              width: 16,
+                              width: 20,
                             ),
-                            TextButton(
-                              style: TextButton.styleFrom(
-                                  backgroundColor: Colors.blueGrey),
-                              onPressed: () {
-                                controller.clear();
-                              },
-                              child: const Text('Reset',
-                                  style: TextStyle(color: Colors.white)),
+                            Flexible(
+                              child: ElevatedButton(
+                                style: customElevatedButtonStyle(),
+                                onPressed: () {
+                                  controller.clear();
+                                },
+                                child: const Text('Reset',
+                                    style: TextStyle(color: Colors.white)),
+                              ),
                             ),
                             const SizedBox(
-                              width: 16,
+                              width: 20,
                             ),
-                            TextButton(
-                              style: TextButton.styleFrom(
-                                  backgroundColor: Colors.green),
-                              onPressed: () async {
-                                var txt = await controller.getText();
+                            Flexible(
+                              child: ElevatedButton(
+                                style: customElevatedButtonStyle(),
+                                onPressed: () async {
+                                  var txt = await controller.getText();
 
-                                setState(() {
-                                  result = txt;
-                                  // widget.setFinalHTMLBody(result);
-                                  // saveToFirebase(result);
-                                });
-                                if (_formKey.currentState!.validate()) {
-                                  Slide slide = Slide(
-                                    id: generateRandomId(),
-                                    title: _titleController.text,
-                                    content: result,
-                                  );
                                   setState(() {
-                                    if (isSlideAdded == false) {
-                                      widget.slidesCreationProvider
-                                          .addSlideToList(slide);
-                                      debugPrint(
-                                          "${widget.slidesCreationProvider.slidesList},,, $isSlideAdded");
-                                      isSlideAdded = true;
-                                    }
-                                    widget.slidesCreationProvider
-                                        .incrementFormNo();
+                                    result = txt;
+                                    // widget.setFinalHTMLBody(result);
+                                    // saveToFirebase(result);
                                   });
-                                }
-                              },
-                              child: const Text(
-                                'Save slide',
-                                style: TextStyle(color: Colors.white),
+                                  if (_formKey.currentState!.validate()) {
+                                    Slide slide = Slide(
+                                      id: generateRandomId(),
+                                      title: _titleController.text,
+                                      content: result,
+                                    );
+                                    setState(() {
+                                      if (isSlideAdded == false) {
+                                        widget.slidesCreationProvider
+                                            .addSlideToList(slide);
+                                        debugPrint(
+                                            "${widget.slidesCreationProvider.slidesList},,, $isSlideAdded");
+                                        isSlideAdded = true;
+                                      }
+                                      widget.slidesCreationProvider
+                                          .incrementFormNo();
+                                    });
+                                  }
+                                },
+                                child: const Text(
+                                  'Save slide',
+                                  style: TextStyle(color: Colors.white),
+                                ),
                               ),
                             ),
                             const SizedBox(
@@ -402,29 +392,27 @@ class _SlideFormState extends State<SlideForm> {
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        Slide slide = Slide(
-                          id: generateRandomId(),
-                          title: _titleController.text,
-                          content: _descriptionController.text,
-                        );
-                        setState(() {
-                          if (isSlideAdded == false) {
-                            widget.slidesCreationProvider.addSlideToList(slide);
-                            isSlideAdded = true;
-                            if (kDebugMode) {
-                              print(widget.slidesCreationProvider.slidesList);
-                            }
+                ElevatedButton(
+                  style: customElevatedButtonStyle(),
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      Slide slide = Slide(
+                        id: generateRandomId(),
+                        title: _titleController.text,
+                        content: _descriptionController.text,
+                      );
+                      setState(() {
+                        if (isSlideAdded == false) {
+                          widget.slidesCreationProvider.addSlideToList(slide);
+                          isSlideAdded = true;
+                          if (kDebugMode) {
+                            print(widget.slidesCreationProvider.slidesList);
                           }
-                        });
-                      }
-                    },
-                    child: const Text('Add empty slide'),
-                  ),
+                        }
+                      });
+                    }
+                  },
+                  child: const Text('Add new slide'),
                 ),
                 // Container(
                 //   height: 50,

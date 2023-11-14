@@ -11,8 +11,6 @@ import 'package:isms/utilityFunctions/platformCheck.dart';
 import 'package:provider/provider.dart';
 
 import '../../../projectModules/courseManagement/coursesProvider.dart';
-import '../../../sharedWidgets/bottomNavBar.dart';
-import '../../../sharedWidgets/navIndexTracker.dart';
 import '../../../themes/common_theme.dart';
 import '../../homePageFunctions/getCoursesList.dart';
 import 'createCourseScreen.dart';
@@ -30,8 +28,6 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
     LoggedInState loggedInState = context.watch<LoggedInState>();
 
     userRole = loggedInState.currentUserRole;
-    NavIndexTracker.setNavDestination(
-        navDestination: NavDestinations.AllCoures, userRole: userRole);
 
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
 
@@ -62,11 +58,9 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
       print('uuupop: ${coursesProvider.allCourses}');
     }
     return Scaffold(
-      appBar: PlatformCheck.topNavBarWidget(
-        loggedInState,
-      ),
+      appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
       bottomNavigationBar:
-          kIsWeb ? null : BottomNavBar(loggedInState: loggedInState),
+          PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
       body: Container(
         margin: EdgeInsets.only(
             top: 20, left: horizontalMargin, right: horizontalMargin),
@@ -92,13 +86,11 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
                         coursesProvider.allCourses[courseIndex].description ??
                             '',
                     pageView: 'explore',
-                    dateValue:
-                        coursesProvider.allCourses[courseIndex].dateCreated,
                     onPressed: () {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => ModulesListScreen(
+                              builder: (context) => CoursePage(
                                     course:
                                         coursesProvider.allCourses[courseIndex],
                                   )));
