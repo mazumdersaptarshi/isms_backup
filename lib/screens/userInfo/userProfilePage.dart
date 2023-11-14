@@ -6,14 +6,13 @@ import 'package:isms/models/UserActions.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 // import 'package:isms/screens/analyticsSharedWidgets/courseDropdownWidget.dart';
 import 'package:isms/screens/login/loginScreen.dart';
-import 'package:isms/sharedWidgets/bottomNavBar.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/userManagement/userprofileHeaderWidget.dart';
-import 'package:isms/utilityFunctions/platformCheck.dart';
 import 'package:provider/provider.dart';
 
 import '../../sharedWidgets/analyticsSharedWidgets/courseDropdownWidget.dart';
 import '../../sharedWidgets/analyticsSharedWidgets/userCourseStartedDetailsWidget.dart';
+import '../../utilityFunctions/platformCheck.dart';
 // import '../analyticsSharedWidgets/userCourseStartedDetailsWidget.dart';
 
 List allEnrolledCourses = [];
@@ -58,68 +57,68 @@ class _UserProfilePageState extends State<UserProfilePage> {
     }
 
     return Scaffold(
-      backgroundColor: Colors.deepPurpleAccent.shade100,
-      appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            backgroundColor: Colors.deepPurpleAccent.shade100,
-            expandedHeight: 300.0,
-            automaticallyImplyLeading: false,
-            flexibleSpace: const FlexibleSpaceBar(
-                background: UserProfileHeaderWidget(
-              view: 'user',
-            )),
-          ),
-          SliverToBoxAdapter(
-            child: Container(
-              constraints: BoxConstraints(
-                minHeight: MediaQuery.of(context).size.height,
-              ),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30),
+        backgroundColor: Colors.deepPurpleAccent.shade100,
+        appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
+        body: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              backgroundColor: Colors.deepPurpleAccent.shade100,
+              expandedHeight: 300.0,
+              automaticallyImplyLeading: false,
+              flexibleSpace: const FlexibleSpaceBar(
+                  background: UserProfileHeaderWidget(
+                view: 'user',
+              )),
+            ),
+            SliverToBoxAdapter(
+              child: Container(
+                constraints: BoxConstraints(
+                  minHeight: MediaQuery.of(context).size.height,
+                ),
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                  ),
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: List.generate(userActions.length, (index) {
+                    final action = userActions[index];
+                    return Container(
+                      constraints: BoxConstraints(
+                        maxWidth: (MediaQuery.of(context).size.width > 1000
+                                ? MediaQuery.of(context).size.width * 0.5
+                                : MediaQuery.of(context).size.width) *
+                            0.98,
+                        // maxWidth: MediaQuery.of(context).size.width * 0.9,
+                      ),
+                      child: ExpansionTile(
+                        leading: Icon(action.icon),
+                        title: Text(action.name!),
+                        onExpansionChanged: (expanded) async {
+                          if (expanded) {
+                            // await loggedInState
+                            //     .getUserCoursesData(action.actionId);
+                          }
+                        },
+                        children: [
+                          UserActionsDropdown(
+                            actionId: action.actionId!,
+                            loggedInState: loggedInState,
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
                 ),
               ),
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: List.generate(userActions.length, (index) {
-                  final action = userActions[index];
-                  return Container(
-                    constraints: BoxConstraints(
-                      maxWidth: (MediaQuery.of(context).size.width > 1000
-                              ? MediaQuery.of(context).size.width * 0.5
-                              : MediaQuery.of(context).size.width) *
-                          0.98,
-                      // maxWidth: MediaQuery.of(context).size.width * 0.9,
-                    ),
-                    child: ExpansionTile(
-                      leading: Icon(action.icon),
-                      title: Text(action.name!),
-                      onExpansionChanged: (expanded) async {
-                        if (expanded) {
-                          // await loggedInState
-                          //     .getUserCoursesData(action.actionId);
-                        }
-                      },
-                      children: [
-                        UserActionsDropdown(
-                          actionId: action.actionId!,
-                          loggedInState: loggedInState,
-                        ),
-                      ],
-                    ),
-                  );
-                }),
-              ),
             ),
-          ),
-        ],
-      ),
-      bottomNavigationBar: kIsWeb ? Container() : BottomNavBar(),
-    );
+          ],
+        ),
+        bottomNavigationBar:
+            PlatformCheck.bottomNavBarWidget(loggedInState, context: context));
   }
 }
 
