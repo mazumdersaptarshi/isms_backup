@@ -8,6 +8,7 @@ import 'package:isms/models/course.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/createModuleScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examListScreen.dart';
+import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 
@@ -94,9 +95,15 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
     // requirements
     int tileMinWidth = 300;
     int tileMinHeight = 200;
-    double tileRatio = 3 / 2;
+    double tileRatio =
+        MediaQuery.sizeOf(context).width > HOME_PAGE_WIDGETS_COLLAPSE_WIDTH
+            ? 2
+            : 2.5;
     // available width, in pixels
-    double horizontalMargin = MediaQuery.sizeOf(context).width > 900 ? 200 : 10;
+    double horizontalMargin =
+        MediaQuery.sizeOf(context).width > HOME_PAGE_WIDGETS_COLLAPSE_WIDTH
+            ? 200
+            : 10;
     double screenWidth = MediaQuery.sizeOf(context).width;
     // number of tiles that can fit vertically on the screen
     int maxColumns =
