@@ -14,6 +14,7 @@ import 'package:isms/projectModules/courseManagement/moduleManagement/slideManag
 import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/utilityFunctions/generateRandom.dart';
+import 'package:isms/utilityFunctions/platformCheck.dart';
 import 'package:provider/provider.dart';
 
 class CreateSlideScreen extends StatelessWidget {
@@ -67,17 +68,12 @@ class _SlideFormContainerState extends State<SlideFormContainer> {
     return Consumer<SlidesCreationProvider>(
       builder: (BuildContext context,
           SlidesCreationProvider slidesCreationProvider, Widget? child) {
+        LoggedInState loggedInState = context.watch<LoggedInState>();
         return Scaffold(
-            appBar: AppBar(
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () {
-                  slidesCreationProvider.clearSlidesList();
-                  Navigator.pop(context);
-                },
-              ),
-              title: const Text('Create New Slide'),
-            ),
+            appBar:
+                PlatformCheck.topNavBarWidget(loggedInState, context: context),
+            bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState,
+                context: context),
             body: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
