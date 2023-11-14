@@ -23,67 +23,64 @@ class ModuleTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int imageIndex = module.index % 4;
-    return Container(
-      width: 100,
-      child: GestureDetector(
-        child: Card(
-          surfaceTintColor: Colors.white,
-          elevation: 4,
-          shape: customCardShape,
-          color: Colors.white,
-          child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: RichText(
-                          text: TextSpan(
-                            text: module.title,
-                            style: customTheme.textTheme.labelMedium!.copyWith(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black),
-                          ),
+    return GestureDetector(
+      child: Card(
+        surfaceTintColor: Colors.white,
+        elevation: 4,
+        shape: customCardShape,
+        color: Colors.white,
+        child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: RichText(
+                        text: TextSpan(
+                          text: module.title,
+                          style: customTheme.textTheme.labelMedium!.copyWith(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
                         ),
                       ),
-                      Icon(
-                        isModuleCompleted
-                            ? Icons.check_circle
-                            : (isModuleStarted
-                                ? Icons.circle
-                                : Icons.unpublished),
-                        color: isModuleCompleted
-                            ? Colors.green
-                            : Colors.orangeAccent,
-                      )
-                    ],
-                  ),
-                  Divider(thickness: 1, color: Colors.grey),
-                  Expanded(
-                      child: Text(
-                    module.contentDescription,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                  )),
-                ],
-              )),
-        ),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ModuleDetails(
-                course: course,
-                module: module,
-                isModuleStarted: isModuleStarted,
-              ),
-            ),
-          );
-        },
+                    ),
+                    Icon(
+                      isModuleCompleted
+                          ? Icons.check_circle
+                          : (isModuleStarted
+                              ? Icons.circle
+                              : Icons.unpublished),
+                      color: isModuleCompleted
+                          ? Colors.green
+                          : Colors.orangeAccent,
+                    )
+                  ],
+                ),
+                Divider(thickness: 1, color: Colors.grey),
+                Expanded(
+                    child: Text(
+                  module.contentDescription,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                )),
+              ],
+            )),
       ),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ModuleDetails(
+              course: course,
+              module: module,
+              isModuleStarted: isModuleStarted,
+            ),
+          ),
+        );
+      },
     );
   }
 }

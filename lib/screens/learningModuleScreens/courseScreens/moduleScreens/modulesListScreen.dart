@@ -146,50 +146,44 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
           PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
       body: isModulesFetched
           ? Container(
-              margin: EdgeInsets.only(
-                  left: horizontalMargin, right: horizontalMargin),
-              child: CustomScrollView(
-                slivers: [
-                  SliverAppBar(
-                    backgroundColor: Colors.white,
-                    expandedHeight: 300.0,
-                    automaticallyImplyLeading: false,
-                    flexibleSpace: FlexibleSpaceBar(
-                        background: Container(
-                      constraints: BoxConstraints(minHeight: 300),
-                      margin: EdgeInsets.symmetric(vertical: 20),
+              // margin: EdgeInsets.only(
+              //     left: horizontalMargin, right: horizontalMargin),
+              child: NestedScrollView(
+                headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                  SliverToBoxAdapter(
+                    child: Container(
+                      // margin: EdgeInsets.symmetric(horizontal: 20),
                       decoration: BoxDecoration(
-                          color: primaryColor.shade100,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(20))),
+                        color: primaryColor.shade100,
+                        // borderRadius:
+                        //     const BorderRadius.all(Radius.circular(20)),
+                      ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Expanded(
-                            child: Container(
-                              margin: EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 20),
-                              child: SingleChildScrollView(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      widget.course.name.toString(),
-                                      style: customTheme.textTheme.labelLarge!
-                                          .copyWith(
-                                              color: Colors.white,
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold),
-                                    ),
-                                    SizedBox(height: 20),
-                                    Text(
-                                      widget.course.description.toString(),
-                                      style: customTheme.textTheme.labelLarge!
-                                          .copyWith(color: Colors.white),
-                                    ),
-                                  ],
-                                ),
+                          Container(
+                            margin: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 20),
+                            child: SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    widget.course.name.toString(),
+                                    style: customTheme.textTheme.labelLarge!
+                                        .copyWith(
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
+                                  ),
+                                  SizedBox(height: 20),
+                                  Text(
+                                    widget.course.description.toString(),
+                                    style: customTheme.textTheme.labelLarge!
+                                        .copyWith(color: Colors.white),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
@@ -248,75 +242,36 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
                           ),
                         ],
                       ),
-                    )),
+                    ),
                   ),
-                  // SliverToBoxAdapter(
-                  //   child: Container(
-                  //     height: 200,
-                  //     decoration: BoxDecoration(
-                  //       color: primaryColor.shade100,
-                  //     ),
-                  //     child: Column(
-                  //       children: [
-                  //         Text(widget.course.description.toString()),
-                  //         Row(
-                  //           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  //           children: [
-                  //             if (isALlModulesCompleted)
-                  //               ElevatedButton(
-                  //                 onPressed: () {
-                  //                   Navigator.push(
-                  //                     context,
-                  //                     MaterialPageRoute(
-                  //                       builder: (context) => ExamListScreen(
-                  //                         course: widget.course,
-                  //                         examtype: EXAMTYPE.courseExam,
-                  //                       ),
-                  //                     ),
-                  //                   );
-                  //                 },
-                  //                 child: const Text("View course exams"),
-                  //               ),
-                  //             ElevatedButton(
-                  //               onPressed: () {
-                  //                 Navigator.push(
-                  //                   context,
-                  //                   MaterialPageRoute(
-                  //                     builder: (context) => ExamCreation(
-                  //                       course: widget.course,
-                  //                       examtype: EXAMTYPE.courseExam,
-                  //                     ),
-                  //                   ),
-                  //                 );
-                  //               },
-                  //               child: const Text("Create course exam"),
-                  //             ),
-                  //           ],
-                  //         ),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
-                  SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                    childCount: itemCount,
-                    (BuildContext context, int moduleIndex) {
-                      return Container(
-                        height: 200,
-                        child: ModuleTile(
-                          course: widget.course,
-                          module: widget.course.modules[moduleIndex],
-                          isModuleStarted: checkIfModuleStarted(
-                              loggedInState: loggedInState,
-                              module: widget.course.modules[moduleIndex]),
-                          isModuleCompleted: checkIfModuleCompleted(
-                              loggedInState: loggedInState,
-                              module: widget.course.modules[moduleIndex]),
-                        ),
-                      );
-                    },
-                  )),
                 ],
+                body: Container(
+                    height: MediaQuery.of(context).size.height,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: List.generate(
+                            itemCount,
+                            (moduleIndex) => Container(
+                                  height: 200,
+                                  width: MediaQuery.of(context).size.width >
+                                          HOME_PAGE_WIDGETS_COLLAPSE_WIDTH
+                                      ? MediaQuery.of(context).size.width * 0.5
+                                      : MediaQuery.of(context).size.width,
+                                  child: ModuleTile(
+                                    course: widget.course,
+                                    module: widget.course.modules[moduleIndex],
+                                    isModuleStarted: checkIfModuleStarted(
+                                        loggedInState: loggedInState,
+                                        module:
+                                            widget.course.modules[moduleIndex]),
+                                    isModuleCompleted: checkIfModuleCompleted(
+                                        loggedInState: loggedInState,
+                                        module:
+                                            widget.course.modules[moduleIndex]),
+                                  ),
+                                )),
+                      ),
+                    )),
               ),
             )
           : Container(
