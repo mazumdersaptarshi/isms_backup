@@ -299,7 +299,7 @@ class _UserDataGetterMaster with ChangeNotifier {
                 noOfExamsCompleted++;
                 debugPrint(
                     "INCREMENTING noOfExamsCompleted: $noOfExamsCompleted");
-                if (examCompleted == examIndex) {
+                if (examCompleted["exam_index"] == examIndex) {
                   flag = true;
                 }
               });

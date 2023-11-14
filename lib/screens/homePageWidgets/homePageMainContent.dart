@@ -60,6 +60,8 @@ class HomePageMainContent extends StatelessWidget {
                     } else {
                       hasEnrolledCourses =
                           snapshot?.data!["hasEnrolledCourses"];
+                      snapshot?.data!["widgetsList"]
+                          .insert(0, Container(width: 100));
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
