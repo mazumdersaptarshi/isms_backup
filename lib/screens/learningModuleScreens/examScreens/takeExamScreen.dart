@@ -1,7 +1,7 @@
 // ignore_for_file: file_names
 
-import 'package:flutter/foundation.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/models/newExam.dart';
 import 'package:isms/models/question.dart';
@@ -11,10 +11,10 @@ import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/utilityFunctions/platformCheck.dart';
 import 'package:provider/provider.dart';
+
 import '../../../models/course.dart';
 import '../../../models/module.dart';
 import '../../../sharedWidgets/navIndexTracker.dart';
-import '../../../utilityFunctions/platformCheck.dart';
 
 class TakeExamScreen extends StatefulWidget {
   const TakeExamScreen(
@@ -109,8 +109,8 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
     return Scaffold(
       appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
       bottomNavigationBar:
-      PlatformCheck.bottomNavBarWidget(loggedInState, context: context),      
-    body: _showScore ? buildScoreWidget() : buildExamWidget(),
+          PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
+      body: _showScore ? buildScoreWidget() : buildExamWidget(),
     );
   }
 
@@ -314,7 +314,8 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
             onPressed: areAnswersSelected ? () => onButtonPress() : null,
             child: Text(
               _currentIndex < _questions.length - 1 ? 'Next' : 'Submit',
-              style: const TextStyle(color: black),
+              style: customTheme.textTheme.bodyMedium!
+                  .copyWith(color: Colors.white),
             ),
           )
         ],

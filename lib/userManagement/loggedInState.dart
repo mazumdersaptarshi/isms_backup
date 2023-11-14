@@ -6,14 +6,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:isms/adminManagement/createUserReferenceForAdmin.dart';
+import 'package:isms/screens/userInfo/userProfilePage.dart';
 
 import '../models/course.dart';
 import '../models/customUser.dart';
 import '../models/module.dart';
 import '../models/userCoursesDetails.dart';
 import '../projectModules/courseManagement/coursesProvider.dart';
-
-import 'package:isms/adminManagement/createUserReferenceForAdmin.dart';
 
 /// This class handles user connections
 /// It extends the private class _UserDataGetterMaster so all
@@ -196,6 +196,8 @@ class _UserDataGetterMaster with ChangeNotifier {
     if (snapshot.exists) {
       Map<String, dynamic> mapData = snapshot.data() as Map<String, dynamic>;
       UserCoursesDetails data = UserCoursesDetails.fromMap(mapData);
+      allEnrolledCoursesGlobal.clear();
+      allCompletedCourses.clear();
       allEnrolledCoursesGlobal = data.courses_started!;
       // allCompletedCoursesGlobal = data.courses_completed!;
       for (var courseInStarted in data.courses_started!) {
