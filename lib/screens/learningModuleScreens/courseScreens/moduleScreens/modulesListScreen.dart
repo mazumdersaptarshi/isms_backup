@@ -1,13 +1,9 @@
 // ignore_for_file: file_names, non_constant_identifier_names
 
-import 'dart:math';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/createModuleScreenHTML.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/sharedWidgets/moduleTile.dart';
-import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/sharedWidgets/moduleTileWidget.dart';
-import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/createModuleScreenHTML.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examListScreen.dart';
 import 'package:isms/themes/common_theme.dart';
@@ -108,6 +104,7 @@ class _CoursePageState extends State<CoursePage> {
     userRole = loggedInState.currentUserRole;
 
     // compute the grid shape:
+    // requirements
     // requirements
     int tileMinWidth = 300;
     int tileMinHeight = 200;
