@@ -83,7 +83,8 @@ class _HomePageState extends State<HomePage> {
           body: FooterView(
             footer: kIsWeb
                 ? Footer(
-                    backgroundColor: Colors.transparent, child: const AppFooter())
+                    backgroundColor: Colors.transparent,
+                    child: const AppFooter())
                 : Footer(
                     backgroundColor: Colors.transparent, child: Container()),
             children: [
@@ -127,7 +128,7 @@ class _HomePageState extends State<HomePage> {
                   SliverToBoxAdapter(
                     child: HomePageMainContent(
                       coursesProvider: coursesProvider,
-                      loggedInState: loggedInState,
+                      //loggedInState: loggedInState,
                       homePageContainerHeight: homePageContainerHeight,
                     ),
                   )

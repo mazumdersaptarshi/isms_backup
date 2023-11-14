@@ -106,7 +106,6 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
     // compute the grid shape:
     // requirements
     int tileMinWidth = 300;
-    int tileMinHeight = 200;
     double tileRatio =
         MediaQuery.sizeOf(context).width > HOME_PAGE_WIDGETS_COLLAPSE_WIDTH
             ? 2

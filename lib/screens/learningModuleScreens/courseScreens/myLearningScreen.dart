@@ -57,7 +57,6 @@ class _MyLearningScreenState extends State<MyLearningScreen> {
     int numberColumns =
         min(itemCount, maxColumns) > 0 ? min(itemCount, maxColumns) : 1;
     // grid width, in pixels
-    Future<List<Widget>> coursesWidgetList;
     String? getLatestModuleName(Map<String, dynamic> courseItem) {
       int latestModuleIndex = (courseItem['modules_started'].length - 1) ?? 0;
       String? latestModuleName = (courseItem['modules_started']
