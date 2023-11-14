@@ -6,6 +6,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/createModuleScreenHTML.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/createModuleScreen.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/sharedWidgets/moduleTile.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/sharedWidgets/moduleTileWidget.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examListScreen.dart';
 import 'package:isms/themes/common_theme.dart';
@@ -21,14 +24,14 @@ import '../../../../sharedWidgets/navIndexTracker.dart';
 import '../../../../utilityFunctions/platformCheck.dart';
 import 'sharedWidgets/moduleTile.dart';
 
-class ModulesListScreen extends StatefulWidget {
-  const ModulesListScreen({super.key, required this.course});
+class CoursePage extends StatefulWidget {
+  const CoursePage({super.key, required this.course});
   final Course course;
   @override
-  State<ModulesListScreen> createState() => _ModulesListScreenState();
+  State<CoursePage> createState() => _CoursePageState();
 }
 
-class _ModulesListScreenState extends State<ModulesListScreen> {
+class _CoursePageState extends State<CoursePage> {
   late ModuleDataMaster moduleDataMaster;
   late String userRole;
 
@@ -130,7 +133,6 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
 
     return Scaffold(
       appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
-
       bottomNavigationBar:
           PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
       body: FutureBuilder<List<Module>>(
@@ -244,53 +246,6 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
                       ),
                     )),
                   ),
-                  // SliverToBoxAdapter(
-                  //   child: Container(
-                  //     height: 200,
-                  //     decoration: BoxDecoration(
-                  //       color: primaryColor.shade100,
-                  //     ),
-                  //     child: Column(
-                  //       children: [
-                  //         Text(widget.course.description.toString()),
-                  //         Row(
-                  //           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  //           children: [
-                  //             if (isALlModulesCompleted)
-                  //               ElevatedButton(
-                  //                 onPressed: () {
-                  //                   Navigator.push(
-                  //                     context,
-                  //                     MaterialPageRoute(
-                  //                       builder: (context) => ExamListScreen(
-                  //                         course: widget.course,
-                  //                         examtype: EXAMTYPE.courseExam,
-                  //                       ),
-                  //                     ),
-                  //                   );
-                  //                 },
-                  //                 child: const Text("View course exams"),
-                  //               ),
-                  //             ElevatedButton(
-                  //               onPressed: () {
-                  //                 Navigator.push(
-                  //                   context,
-                  //                   MaterialPageRoute(
-                  //                     builder: (context) => ExamCreation(
-                  //                       course: widget.course,
-                  //                       examtype: EXAMTYPE.courseExam,
-                  //                     ),
-                  //                   ),
-                  //                 );
-                  //               },
-                  //               child: const Text("Create course exam"),
-                  //             ),
-                  //           ],
-                  //         ),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
                   SliverList(
                       delegate: SliverChildBuilderDelegate(
                     childCount: itemCount,

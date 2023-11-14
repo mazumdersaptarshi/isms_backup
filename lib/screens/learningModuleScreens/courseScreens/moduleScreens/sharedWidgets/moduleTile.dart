@@ -3,14 +3,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleDetailsScreen.dart';
 import 'package:provider/provider.dart';
-import 'package:isms/models/course.dart';
-import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
-import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleExamsListScreen.dart';
-import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/themes/common_theme.dart';
 import 'package:isms/utilityWidgets/modulesList/moduleExpandedItem.dart';
 
