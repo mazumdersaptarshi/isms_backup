@@ -67,7 +67,7 @@ class _MyLearningScreenState extends State<MyLearningScreen> {
     List<Widget> homePageWidgets = [Container(width: 100)];
     void getInProgressCourses() async {
       homePageWidgets = [Container(width: 100)];
-      homePageWidgets = await getHomePageCoursesList(
+      homePageWidgets = await getEnrolledCoursesList(
           context: context,
           coursesProvider: coursesProvider,
           loggedInState: loggedInState);
@@ -94,21 +94,13 @@ class _MyLearningScreenState extends State<MyLearningScreen> {
                     modulesCount: userEnrolledCourses[courseIndex]
                             ['course_modules_count'] ??
                         1,
-
                     tileWidth: tileMinWidth,
                     subTitle:
                         getLatestModuleName(userEnrolledCourses[courseIndex]) ??
                             '',
-                    // dateValue:
-                    //     (userEnrolledCourses[courseIndex]['started_at'] != null)
-                    //         ? CSVDataHandler.timestampToReadableDateInWords(
-                    //             userEnrolledCourses[courseIndex]['started_at'])
-                    //         : '',
-                    // tileHeight: tileMinimumheight,
                     courseData: getUserCourseData(
                         loggedInState: loggedInState,
                         course: coursesProvider.allCourses[courseIndex]),
-
                     onPressed: () {
                       Navigator.push(
                           context,

@@ -204,10 +204,9 @@ class CustomAppBarWeb extends StatelessWidget
       automaticallyImplyLeading: false,
       title: MouseRegion(
         cursor: SystemMouseCursors.click,
-        child:
-            MediaQuery.of(context).size.width > HOME_PAGE_WIDGETS_COLLAPSE_WIDTH
-                ? homeButtonItem(context)
-                : homeButtonItem(context, displayText: false),
+        child: MediaQuery.of(context).size.width > SCREEN_COLLAPSE_WIDTH
+            ? homeButtonItem(context)
+            : homeButtonItem(context, displayText: false),
       ),
       actions: <Widget>[
         appBarItem(Icons.explore, "Explore",

@@ -46,7 +46,7 @@ class CourseExamCompletionStrategy implements ExamCompletionStrategy {
     DateTime startedAt = DateTime.now();
     for (var courses_started in loggedInState.loggedInUser.courses_started) {
       if (courses_started["courseID"] == course.id) {}
-      startedAt = courses_started["started_at"];
+      startedAt = courses_started["started_at"].toDate();
     }
     Map<String, dynamic> courseDetailsMap = {
       "courseID": course.id,
