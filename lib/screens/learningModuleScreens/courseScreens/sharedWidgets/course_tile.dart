@@ -127,7 +127,7 @@ class CourseTile extends StatelessWidget {
                             ),
                             // SizedBox(height: 20),
                             Flexible(
-                              flex: 2,
+                              flex: 1,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,

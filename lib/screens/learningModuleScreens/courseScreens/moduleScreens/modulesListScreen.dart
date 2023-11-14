@@ -5,6 +5,8 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/sharedWidgets/moduleTile.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/sharedWidgets/moduleTileWidget.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/createModuleScreenHTML.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examListScreen.dart';
@@ -15,20 +17,18 @@ import 'package:provider/provider.dart';
 import '../../../../models/module.dart';
 import '../../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../../projectModules/courseManagement/moduleManagement/moduleDataMaster.dart';
-import '../../../../sharedWidgets/bottomNavBar.dart';
 import '../../../../sharedWidgets/loadingScreenWidget.dart';
 import '../../../../sharedWidgets/navIndexTracker.dart';
 import '../../../../utilityFunctions/platformCheck.dart';
-import 'sharedWidgets/moduleTile.dart';
 
-class ModulesListScreen extends StatefulWidget {
-  const ModulesListScreen({super.key, required this.course});
+class CoursePage extends StatefulWidget {
+  const CoursePage({super.key, required this.course});
   final Course course;
   @override
-  State<ModulesListScreen> createState() => _ModulesListScreenState();
+  State<CoursePage> createState() => _CoursePageState();
 }
 
-class _ModulesListScreenState extends State<ModulesListScreen> {
+class _CoursePageState extends State<CoursePage> {
   bool isModulesFetched = false;
   late String userRole;
   ModuleDataMaster? moduleDataMaster;
