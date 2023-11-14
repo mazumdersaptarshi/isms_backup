@@ -82,7 +82,7 @@ class InitLinkHandler {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => AdminInstructionsCategories(
+                builder: (context) => AdminInstructionCategories(
                       category: category!,
                       subCategories: categories[key],
                     )));

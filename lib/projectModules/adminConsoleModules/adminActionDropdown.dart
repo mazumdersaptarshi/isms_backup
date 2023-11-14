@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:isms/adminManagement/adminDataExporter.dart';
 import 'package:isms/adminManagement/adminProvider.dart';
-import 'package:isms/screens/adminScreens/AdminInstructions/test.dart';
+import 'package:isms/screens/adminScreens/AdminInstructions/adminInstructionsCategories.dart';
 
 import 'adminActionsDropdownModules/allCoursesDropdown.dart';
 import 'adminActionsDropdownModules/allUsersDropdown.dart';
@@ -132,7 +132,7 @@ class AdminInstructionsDropdown extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => TestName(
+        builder: (context) => AdminInstructionCategories(
           category: category,
           subCategories: subCategories,
         ),
