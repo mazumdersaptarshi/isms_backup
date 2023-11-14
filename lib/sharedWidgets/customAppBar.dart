@@ -125,16 +125,16 @@ mixin CustomAppBarMixin on StatelessWidget {
         );
       },
       child: Padding(
-        padding: EdgeInsets.only(left: kIsWeb ? 16.0 : 0),
+        padding: const EdgeInsets.only(left: kIsWeb ? 16.0 : 0),
         child: Row(
           children: [
-            Icon(Icons.severe_cold_rounded),
+            const Icon(Icons.severe_cold_rounded),
             if (displayText == true)
-              SizedBox(
+              const SizedBox(
                 width: 10,
               ),
             if (displayText == true)
-              Text(
+              const Text(
                 'ISMS',
                 style: TextStyle(
                   fontFamily: 'Montserrat',
