@@ -34,7 +34,11 @@ class CourseExamCompletionStrategy implements ExamCompletionStrategy {
   Widget buildSumbitButton({required BuildContext context}) {
     return ElevatedButton(
       onPressed: () async {
-        handleExamCompletion(context: context);
+        await handleExamCompletion(context: context);
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CoursePage(course: course)));
       },
       child: Text(
           "Mark Exam as Done- completed ${exam.index}/${course.exams.length}"),

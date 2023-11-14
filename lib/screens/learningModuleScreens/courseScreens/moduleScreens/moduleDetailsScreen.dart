@@ -7,6 +7,7 @@ import 'package:isms/models/module.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 import 'package:isms/projectModules/courseManagement/moduleManagement/slideManagement/slidesDataMaster.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleExamsListScreen.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/modulesListScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/createSlideScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/sharedWidgets/htmlSlideDisplay.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/slidesDisplayScreen.dart';
@@ -74,20 +75,6 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                 children: [
                   const SizedBox(width: 20),
                   ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ModuleExamListScreen(
-                                    course: widget.course,
-                                    examtype: EXAMTYPE.moduleExam,
-                                    module: widget.module,
-                                  )));
-                    },
-                    child: const Text("View module exams"),
-                  ),
-                  const SizedBox(width: 20),
-                  ElevatedButton(
                     onPressed: () async {
                       await loggedInState.setUserCourseStarted(
                           courseDetails: courseDetailsMap);
@@ -110,6 +97,31 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                       );
                     },
                     child: const Text('Study Module'),
+                  ),
+                  const SizedBox(width: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ModuleExamListScreen(
+                                    course: widget.course,
+                                    examtype: EXAMTYPE.moduleExam,
+                                    module: widget.module,
+                                  )));
+                    },
+                    child: const Text("View module exams"),
+                  ),
+                  const SizedBox(width: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  CoursePage(course: widget.course)));
+                    },
+                    child: const Text("Back to Course page"),
                   ),
                 ],
               ),
