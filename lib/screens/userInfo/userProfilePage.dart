@@ -1,6 +1,3 @@
-// ignore_for_file: file_names
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/models/UserActions.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
@@ -8,20 +5,17 @@ import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/userManagement/userprofileHeaderWidget.dart';
+import 'package:isms/utilityFunctions/platformCheck.dart';
 import 'package:provider/provider.dart';
 
 import '../../sharedWidgets/analyticsSharedWidgets/courseDropdownWidget.dart';
 import '../../sharedWidgets/analyticsSharedWidgets/userCourseStartedDetailsWidget.dart';
-import '../../themes/common_theme.dart';
-import '../../utilityFunctions/platformCheck.dart';
 // import '../analyticsSharedWidgets/userCourseStartedDetailsWidget.dart';
 
 List allEnrolledCourses = [];
 List allCompletedCourses = [];
 
 class UserProfilePage extends StatefulWidget {
-  const UserProfilePage({super.key});
-
   @override
   State<UserProfilePage> createState() => _UserProfilePageState();
 }
@@ -54,11 +48,11 @@ class _UserProfilePageState extends State<UserProfilePage> {
     LoggedInState loggedInState = context.watch<LoggedInState>();
 
     if (loggedInState.currentUser == null) {
-      return const LoginPage();
+      return LoginPage();
     }
 
     return Scaffold(
-      backgroundColor: primaryColor.shade100,
+      backgroundColor: Colors.deepPurpleAccent.shade100,
       appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
       body: CustomScrollView(
         slivers: [
@@ -66,7 +60,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
             backgroundColor: Colors.deepPurpleAccent.shade100,
             expandedHeight: 300.0,
             automaticallyImplyLeading: false,
-            flexibleSpace: const FlexibleSpaceBar(
+            flexibleSpace: FlexibleSpaceBar(
                 background: UserProfileHeaderWidget(
               view: 'user',
             )),
@@ -76,32 +70,58 @@ class _UserProfilePageState extends State<UserProfilePage> {
               constraints: BoxConstraints(
                 minHeight: MediaQuery.of(context).size.height,
               ),
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(30),
                 ),
               ),
+              padding: EdgeInsets.symmetric(vertical: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: List.generate(userActions.length, (index) {
+                  final action = userActions[index];
+                  return Container(
+                    constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width > 500
+                          ? MediaQuery.of(context).size.width * 0.5
+                          : MediaQuery.of(context).size.width,
+                    ),
+                    child: ExpansionTile(
+                      leading: Icon(action.icon),
+                      title: Text(action.name!),
+                      onExpansionChanged: (expanded) async {
+                        if (expanded) {
+                          // await loggedInState
+                          //     .getUserCoursesData(action.actionId);
+                        }
+                      },
+                      children: [
+                        UserActionsDropdown(
+                          actionId: action.actionId!,
+                          loggedInState: loggedInState,
+                        ),
+                      ],
+                    ),
+                  );
+                }),
+              ),
             ),
           ),
         ],
       ),
-      bottomNavigationBar:
-          PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
     );
   }
 }
 
 class UserActionsDropdown extends StatelessWidget {
-  const UserActionsDropdown(
+  UserActionsDropdown(
       {super.key, required this.actionId, required this.loggedInState});
-  final String actionId;
-  final LoggedInState loggedInState;
+  String actionId;
+  LoggedInState loggedInState;
   @override
   Widget build(BuildContext context) {
-    if (kDebugMode) {
-      print(actionId);
-    }
+    print(actionId);
     if (actionId == 'crs_enrl') {
       return UserEnrolledCoursesDropdown(
         actionId: actionId,
@@ -112,17 +132,16 @@ class UserActionsDropdown extends StatelessWidget {
         actionId: actionId,
       );
     } else {
-      return const Text('No Data to show!');
+      return Text('No Data to show!');
     }
   }
 }
 
 class UserEnrolledCoursesDropdown extends StatelessWidget {
-  final String? actionId;
+  String? actionId;
 
-  final LoggedInState loggedInState;
-  const UserEnrolledCoursesDropdown(
-      {super.key, this.actionId, required this.loggedInState});
+  LoggedInState loggedInState;
+  UserEnrolledCoursesDropdown({this.actionId, required this.loggedInState});
 
   (bool, double, int) getCourseCompletedPercentage({
     required CoursesProvider coursesProvider,
@@ -131,20 +150,18 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
     double courseCompletionPercentage = 0;
     int noOfExams = 0;
     bool isValid = false;
-    debugPrint('Enrolled CoursesDropdown');
-    if (kDebugMode) {
-      print(actionId);
-    }
+    print('Enrolled CoursesDropdown');
+    print(actionId);
 
     allEnrolledCourses = loggedInState.allEnrolledCoursesGlobal;
 
-    for (var _ in allEnrolledCourses) {
+    allEnrolledCourses.forEach((course) {
       int modulesCount = 0;
 
       for (int i = 0; i < coursesProvider.allCourses.length; i++) {
         var element = coursesProvider.allCourses[i];
 
-        if (element.name == allEnrolledCourses[index]["course_name"]) {
+        if (element.name == allEnrolledCourses![index]["course_name"]) {
           modulesCount = element.modulesCount!;
           noOfExams = element.examsCount!;
           isValid = true;
@@ -152,13 +169,13 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
       }
 
       int modulesCompletedCount =
-          allEnrolledCourses[index]["modules_completed"] != null
-              ? allEnrolledCourses[index]["modules_completed"].length
+          allEnrolledCourses![index]["modules_completed"] != null
+              ? allEnrolledCourses![index]["modules_completed"].length
               : 0;
       if (isValid) {
         courseCompletionPercentage = modulesCompletedCount / modulesCount;
       }
-    }
+    });
     return (isValid, courseCompletionPercentage, noOfExams);
   }
 
@@ -168,28 +185,24 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
         Provider.of<CoursesProvider>(context, listen: false);
     LoggedInState loggedInState =
         Provider.of<LoggedInState>(context, listen: false);
-
     return Column(
       children: [
         FutureBuilder<List>(
           future: loggedInState.getUserCoursesData('crs_enrl'),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
+              return CircularProgressIndicator();
             }
             if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return const Text('No data available');
+              return Text('No data available');
             }
             return ListView.builder(
               itemCount: loggedInState.allEnrolledCoursesGlobal.length,
               shrinkWrap: true,
-              physics: const ClampingScrollPhysics(),
+              physics: ClampingScrollPhysics(),
               itemBuilder: (context, index) {
-                // ignore: unused_local_variable
                 double courseCompletionPercentage = 0;
-                // ignore: unused_local_variable
                 bool isValid = false;
-                // ignore: unused_local_variable
                 int noOfExams = 0;
                 var (a, b, c) = getCourseCompletedPercentage(
                   coursesProvider: coursesProvider,
@@ -200,7 +213,7 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
                 courseCompletionPercentage = b;
 
                 return UserCourseStartedDetailsWidget(
-                  courseItem: allEnrolledCourses[index],
+                  courseItem: allEnrolledCourses![index],
                   coursesProvider: coursesProvider,
                   index: index,
                 );
@@ -214,43 +227,38 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
 }
 
 class UserCompletedCoursesDropdown extends StatelessWidget {
-  final String? actionId;
-  const UserCompletedCoursesDropdown({super.key, this.actionId});
+  String? actionId;
+  UserCompletedCoursesDropdown({this.actionId});
   @override
   Widget build(BuildContext context) {
     LoggedInState loggedInState =
         Provider.of<LoggedInState>(context, listen: false);
-    return Container(
-      width: double.infinity,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          FutureBuilder<List>(
-            future: loggedInState.getUserCoursesData('crs_compl'),
-            builder: (context, snapshot) {
-              if (loggedInState.allCompletedCoursesGlobal.isNotEmpty) {
-                return ListView.builder(
-                  itemCount: loggedInState.allCompletedCoursesGlobal.length,
-                  shrinkWrap: true,
-                  physics: const ClampingScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    allCompletedCourses =
-                        loggedInState.allCompletedCoursesGlobal;
-                    debugPrint(
-                        'ALLCOMPLETEDCOURSESGLOBAL: ${loggedInState.allCompletedCoursesGlobal}');
-                    return CourseDropdownWidget(
-                      courseItem: allCompletedCourses[index],
-                      detailType: 'courses_completed',
-                    );
-                  },
-                );
-              } else {
-                return const Text('No data available');
-              }
-            },
-          ),
-        ],
-      ),
+    return Column(
+      children: [
+        FutureBuilder<List>(
+          future: loggedInState.getUserCoursesData('crs_compl'),
+          builder: (context, snapshot) {
+            if (loggedInState.allCompletedCoursesGlobal.length > 0) {
+              return ListView.builder(
+                itemCount: loggedInState.allCompletedCoursesGlobal.length,
+                shrinkWrap: true,
+                physics: ClampingScrollPhysics(),
+                itemBuilder: (context, index) {
+                  allCompletedCourses = loggedInState.allCompletedCoursesGlobal;
+                  print(
+                      'ALLCOMPLETEDCOURSESGLOBAL: ${loggedInState.allCompletedCoursesGlobal}');
+                  return CourseDropdownWidget(
+                    courseItem: allCompletedCourses![index],
+                    detailType: 'courses_completed',
+                  );
+                },
+              );
+            } else {
+              return Text('No data available');
+            }
+          },
+        ),
+      ],
     );
   }
 }

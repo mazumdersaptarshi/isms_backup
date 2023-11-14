@@ -1,12 +1,8 @@
 // ignore_for_file: file_names, non_constant_identifier_names
 
-import 'dart:math';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/sharedWidgets/moduleTile.dart';
-import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/sharedWidgets/moduleTileWidget.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/createModuleScreenHTML.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examListScreen.dart';
@@ -128,17 +124,6 @@ class _CoursePageState extends State<CoursePage> {
     int itemCount = widget.course.modulesCount ?? 0;
     // grid width, in tiles
     int numberColumns = 1;
-    // min(itemCount, maxColumns) > 0 ? min(itemCount, maxColumns) : 1;
-    // if (itemCount <= 0) {
-    //   numberColumns = 1;
-    // } else if (itemCount < 3 && maxColumns >= 3) {
-    //   numberColumns = 3;
-    // } else {
-    //   numberColumns =
-    //       min(itemCount, maxColumns) > 0 ? min(itemCount, maxColumns) : 1;
-    // }
-    // grid width, in pixels
-    //double gridWidth = screenWidth * numberColumns / maxColumns;
 
     return Scaffold(
       appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
@@ -162,83 +147,169 @@ class _CoursePageState extends State<CoursePage> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Container(
-                            margin: EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 20),
-                            child: SingleChildScrollView(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    widget.course.name.toString(),
-                                    style: customTheme.textTheme.labelLarge!
-                                        .copyWith(
-                                            color: Colors.white,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold),
-                                  ),
-                                  SizedBox(height: 20),
-                                  Text(
-                                    widget.course.description.toString(),
-                                    style: customTheme.textTheme.labelLarge!
-                                        .copyWith(color: Colors.white),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(left: 20, bottom: 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                if (isALlModulesCompleted)
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => ExamListScreen(
-                                            course: widget.course,
-                                            examtype: EXAMTYPE.courseExam,
+                          Row(
+                            children: [
+                              Flexible(flex: 1, child: Container()),
+                              Flexible(
+                                flex: 8,
+                                child: Container(
+                                  margin: EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 20),
+                                  child: Padding(
+                                    padding: EdgeInsets.only(right: 10.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.school_rounded,
+                                              size: 30,
+                                              color: Colors.white,
+                                            ),
+                                            SizedBox(
+                                              width: 30,
+                                            ),
+                                            Text(
+                                              widget.course.name.toString(),
+                                              style: customTheme
+                                                  .textTheme.labelLarge!
+                                                  .copyWith(
+                                                      color: Colors.white,
+                                                      fontSize: 30,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 20),
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.calendar_month_rounded,
+                                              color: Colors.white,
+                                              size: 12,
+                                            ),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
+                                            Text(
+                                              'Created ',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 12),
+                                            ),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            Text(
+                                              '${widget.course.dateCreated}',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 12),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 20,
+                                        ),
+                                        Text('What you\'ll learn',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold)),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Text(
+                                          widget.course.description.toString(),
+                                          style: customTheme
+                                              .textTheme.labelLarge!
+                                              .copyWith(color: Colors.white),
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.only(
+                                              left: 20, bottom: 10),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 20.0),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                if (isALlModulesCompleted)
+                                                  ElevatedButton(
+                                                    onPressed: () {
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              ExamListScreen(
+                                                            course:
+                                                                widget.course,
+                                                            examtype: EXAMTYPE
+                                                                .courseExam,
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                    child: const Text(
+                                                        "View course exams",
+                                                        style: TextStyle(
+                                                            color:
+                                                                primaryColor)),
+                                                    style: customTheme
+                                                        .elevatedButtonTheme
+                                                        .style!
+                                                        .copyWith(
+                                                            backgroundColor:
+                                                                MaterialStateProperty
+                                                                    .all<Color>(
+                                                                        Colors
+                                                                            .white)),
+                                                  ),
+                                                if (isALlModulesCompleted)
+                                                  SizedBox(width: 20),
+                                                ElevatedButton(
+                                                  onPressed: () {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            ExamCreation(
+                                                          course: widget.course,
+                                                          examtype: EXAMTYPE
+                                                              .courseExam,
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                  child: const Text(
+                                                    "Create course exam",
+                                                    style: TextStyle(
+                                                        color: primaryColor),
+                                                  ),
+                                                  style: customTheme
+                                                      .elevatedButtonTheme
+                                                      .style!
+                                                      .copyWith(
+                                                          backgroundColor:
+                                                              MaterialStateProperty
+                                                                  .all<Color>(
+                                                                      Colors
+                                                                          .white)),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                      );
-                                    },
-                                    child: const Text("View course exams",
-                                        style: TextStyle(color: primaryColor)),
-                                    style: customTheme
-                                        .elevatedButtonTheme.style!
-                                        .copyWith(
-                                            backgroundColor:
-                                                MaterialStateProperty.all<
-                                                    Color>(Colors.white)),
+                                      ],
+                                    ),
                                   ),
-                                if (isALlModulesCompleted) SizedBox(width: 20),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => ExamCreation(
-                                          course: widget.course,
-                                          examtype: EXAMTYPE.courseExam,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  child: const Text(
-                                    "Create course exam",
-                                    style: TextStyle(color: primaryColor),
-                                  ),
-                                  style: customTheme.elevatedButtonTheme.style!
-                                      .copyWith(
-                                          backgroundColor:
-                                              MaterialStateProperty.all<Color>(
-                                                  Colors.white)),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -249,27 +320,49 @@ class _CoursePageState extends State<CoursePage> {
                     height: MediaQuery.of(context).size.height,
                     child: SingleChildScrollView(
                       child: Column(
-                        children: List.generate(
-                            itemCount,
-                            (moduleIndex) => Container(
-                                  height: 200,
-                                  width: MediaQuery.of(context).size.width >
-                                          HOME_PAGE_WIDGETS_COLLAPSE_WIDTH
-                                      ? MediaQuery.of(context).size.width * 0.5
-                                      : MediaQuery.of(context).size.width,
-                                  child: ModuleTile(
-                                    course: widget.course,
-                                    module: widget.course.modules[moduleIndex],
-                                    isModuleStarted: checkIfModuleStarted(
-                                        loggedInState: loggedInState,
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width >
+                                    HOME_PAGE_WIDGETS_COLLAPSE_WIDTH
+                                ? MediaQuery.of(context).size.width * 0.5
+                                : MediaQuery.of(context).size.width,
+                            child: Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: Text(
+                                'Course Content',
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
+                              ),
+                            ),
+                          ),
+                          Column(
+                            children: List.generate(
+                                itemCount,
+                                (moduleIndex) => Container(
+                                      // height: 200,
+                                      width: MediaQuery.of(context).size.width >
+                                              HOME_PAGE_WIDGETS_COLLAPSE_WIDTH
+                                          ? MediaQuery.of(context).size.width *
+                                              0.5
+                                          : MediaQuery.of(context).size.width,
+                                      child: ModuleTile(
+                                        course: widget.course,
                                         module:
-                                            widget.course.modules[moduleIndex]),
-                                    isModuleCompleted: checkIfModuleCompleted(
-                                        loggedInState: loggedInState,
-                                        module:
-                                            widget.course.modules[moduleIndex]),
-                                  ),
-                                )),
+                                            widget.course.modules[moduleIndex],
+                                        isModuleStarted: checkIfModuleStarted(
+                                            loggedInState: loggedInState,
+                                            module: widget
+                                                .course.modules[moduleIndex]),
+                                        isModuleCompleted:
+                                            checkIfModuleCompleted(
+                                                loggedInState: loggedInState,
+                                                module: widget.course
+                                                    .modules[moduleIndex]),
+                                      ),
+                                    )),
+                          )
+                        ],
                       ),
                     )),
               ),

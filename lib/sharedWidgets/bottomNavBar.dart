@@ -20,7 +20,7 @@ class BottomNavBar extends StatelessWidget {
     void navigateToUserProfilePage() {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const UserProfilePage()),
+        MaterialPageRoute(builder: (context) => UserProfilePage()),
       );
     }
 
