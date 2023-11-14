@@ -245,13 +245,10 @@ class CustomAppBarMobile extends StatelessWidget
       ),
       actions: <Widget>[
         appBarItem(Icons.lightbulb, "My Learning",
-            () => navigateToAdminConsolePage(context), _paddingValue),
+            () => navigateToMyLearningPage(context), _paddingValue),
         if (loggedInState?.currentUserRole == 'admin')
           appBarItem(Icons.notifications_active_rounded, "Reminders",
               () => navigateToRemindersPage(context), _paddingValue),
-        if (loggedInState?.currentUserRole == 'admin')
-          appBarItem(Icons.admin_panel_settings_outlined, "Admin",
-              () => navigateToAdminConsolePage(context), _paddingValue),
         dividerItem(),
         logoutButtonItem(context),
       ],
