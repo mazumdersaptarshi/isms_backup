@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:isms/models/enums.dart';
 import 'package:isms/models/newExam.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
+import 'package:isms/screens/learningModuleScreens/examScreens/sharedWidgets/questionWidget.dart';
 import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/utilityFunctions/generateRandom.dart';
-import 'package:isms/screens/learningModuleScreens/examScreens/sharedWidgets/questionWidget.dart';
 import 'package:isms/utilityFunctions/platformCheck.dart';
 import 'package:provider/provider.dart';
 
@@ -64,7 +64,8 @@ class ExamCreationState extends State<ExamCreation> {
     return Scaffold(
       appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
       bottomNavigationBar:
-      PlatformCheck.bottomNavBarWidget(loggedInState, context: context), body: Padding(
+          PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
+      body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
