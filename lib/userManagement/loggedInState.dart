@@ -197,7 +197,7 @@ class _UserDataGetterMaster with ChangeNotifier {
       Map<String, dynamic> mapData = snapshot.data() as Map<String, dynamic>;
       UserCoursesDetails data = UserCoursesDetails.fromMap(mapData);
       allEnrolledCoursesGlobal.clear();
-      allCompletedCourses.clear();
+      allCompletedCoursesGlobal.clear();
       allEnrolledCoursesGlobal = data.courses_started!;
       // allCompletedCoursesGlobal = data.courses_completed!;
       for (var courseInStarted in data.courses_started!) {

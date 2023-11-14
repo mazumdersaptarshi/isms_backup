@@ -1,6 +1,8 @@
 // ignore_for_file: file_names, non_constant_identifier_names
 
 import 'package:flutter/material.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleDetailsScreen.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/modulesListScreen.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/course.dart';
@@ -103,14 +105,30 @@ class ModuleExamCompletionStrategy implements ExamCompletionStrategy {
     if (isModuleStarted) {
       return ElevatedButton(
         onPressed: () async {
-          handleExamCompletion(context: context);
+          handleExamCompletion(context: context).then((value) {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ModuleDetails(
+                        course: course,
+                        module: module,
+                        isModuleStarted: isModuleStarted)));
+          });
         },
         child: Text(
             "Mark Module as Done- completed ${exam.index}/${module.exams!.length}"),
       );
     } else {
       return ElevatedButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ModuleDetails(
+                      course: course,
+                      module: module,
+                      isModuleStarted: isModuleStarted)));
+        },
         child: const Text("Study the module first"),
       );
     }
