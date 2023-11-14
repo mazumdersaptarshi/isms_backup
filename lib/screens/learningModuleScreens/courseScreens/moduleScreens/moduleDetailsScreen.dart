@@ -58,81 +58,84 @@ class _ModuleDetailsState extends State<ModuleDetails> {
       appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
       body: Container(
         margin: const EdgeInsets.only(top: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const SizedBox(width: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const SizedBox(width: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ModuleExamListScreen(
+                                    course: widget.course,
+                                    examtype: EXAMTYPE.moduleExam,
+                                    module: widget.module,
+                                  )));
+                    },
+                    child: const Text("View module exams"),
+                  ),
+                  const SizedBox(width: 20),
+                  ElevatedButton(
+                    onPressed: () async {
+                      await loggedInState.setUserCourseStarted(
+                          courseDetails: courseDetailsMap);
+                      await loggedInState.setUserCourseModuleStarted(
+                          courseDetails: courseDetailsMap,
+                          coursesProvider: coursesProvider,
+                          course: widget.course,
+                          module: widget.module);
+
+                      if (!context.mounted) return;
+                      Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ModuleExamListScreen(
-                                  course: widget.course,
-                                  examtype: EXAMTYPE.moduleExam,
-                                  module: widget.module,
-                                )));
-                  },
-                  child: const Text("View module exams"),
-                ),
-                const SizedBox(width: 20),
-                ElevatedButton(
-                  onPressed: () async {
-                    await loggedInState.setUserCourseStarted(
-                        courseDetails: courseDetailsMap);
-                    await loggedInState.setUserCourseModuleStarted(
-                        courseDetails: courseDetailsMap,
-                        coursesProvider: coursesProvider,
-                        course: widget.course,
-                        module: widget.module);
-                      if (!context.mounted) return;
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SlidesDisplayScreen(
-                          course: widget.course,
-                          module: widget.module,
+                          builder: (context) => SlidesDisplayScreen(
+                            course: widget.course,
+                            module: widget.module,
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                  child: const Text('Study Module'),
-                ),
-              ],
-            ),
-            Card(
-              surfaceTintColor: Colors.white,
-              elevation: 4,
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: SizedBox(
-                  height:
-                      isWeb ? MediaQuery.of(context).size.height - 260 : 500,
-                  child: ListView(
-                    children: [
-                      Text(
-                        '${widget.module.title}:',
-                        style: const TextStyle(
-                            fontSize: 25, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 20),
-                      const Divider(
-                        height: 2,
-                        color: Colors.grey,
-                        thickness: 2,
-                      ),
-                      const SizedBox(height: 20),
-                      HTMLSlideDisplay(
-                          htmlString: widget.module.additionalInfo),
-                    ],
+                      );
+                    },
+                    child: const Text('Study Module'),
+                  ),
+                ],
+              ),
+              Card(
+                surfaceTintColor: Colors.white,
+                elevation: 4,
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: SizedBox(
+                    height:
+                        isWeb ? MediaQuery.of(context).size.height - 260 : 500,
+                    child: ListView(
+                      children: [
+                        Text(
+                          '${widget.module.title}:',
+                          style: const TextStyle(
+                              fontSize: 25, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 20),
+                        const Divider(
+                          height: 2,
+                          color: Colors.grey,
+                          thickness: 2,
+                        ),
+                        const SizedBox(height: 20),
+                        HTMLSlideDisplay(
+                            htmlString: widget.module.additionalInfo),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       floatingActionButton: loggedInState.currentUserRole == "admin"

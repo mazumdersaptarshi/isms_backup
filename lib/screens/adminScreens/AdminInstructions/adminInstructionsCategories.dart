@@ -15,9 +15,9 @@ class AdminInstructionsCategories extends StatelessWidget {
 
   final String category;
   final List<String>? subCategories;
-  LoggedInState? loggedInState;
   @override
   Widget build(BuildContext context) {
+    LoggedInState? loggedInState = context.watch<LoggedInState>();
     AdminProvider adminProvider = context.watch<AdminProvider>();
     return Scaffold(
       appBar: PlatformCheck.topNavBarWidget(loggedInState!, context: context),

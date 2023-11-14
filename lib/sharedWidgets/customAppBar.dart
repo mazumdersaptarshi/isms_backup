@@ -212,8 +212,8 @@ class CustomAppBarWeb extends StatelessWidget
         appBarItem(Icons.explore, "Explore",
             () => navigateToCoursesPage(context), _paddingValue),
         if (loggedInState?.currentUserRole == 'admin')
-          appBarItem(Icons.admin_panel_settings_outlined, "Admin Console",
-              () => navigateToAdminConsolePage(context), _paddingValue),
+          appBarItem(Icons.lightbulb, "My Learning",
+              () => navigateToMyLearningPage(context), _paddingValue),
         if (loggedInState?.currentUserRole == 'admin')
           appBarItem(Icons.notifications_active_rounded, "Reminders",
               () => navigateToRemindersPage(context), _paddingValue),

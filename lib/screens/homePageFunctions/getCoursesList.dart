@@ -47,6 +47,7 @@ Future<List<Widget>> getHomePageCoursesList(
         index: i,
         subTitle: getLatestModuleName(coursesStarted[i]) ?? '',
         modulesCount: course.modulesCount ?? 0,
+        // dateValue: course.dateCreated,
       ));
     }
   }
