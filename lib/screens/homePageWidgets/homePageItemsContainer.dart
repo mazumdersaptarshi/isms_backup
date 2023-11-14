@@ -8,7 +8,7 @@ class HomePageItemsContainer extends StatelessWidget {
   final List<Widget>? homePageItems;
   @override
   Widget build(BuildContext context) {
-    return MediaQuery.of(context).size.width > HOME_PAGE_WIDGETS_COLLAPSE_WIDTH
+    return MediaQuery.of(context).size.width > SCREEN_COLLAPSE_WIDTH
         ? SizedBox(
             width: MediaQuery.of(context).size.width,
             height: 300,

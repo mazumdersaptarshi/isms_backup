@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/createModuleScreenHTML.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/sharedWidgets/moduleTile.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/createModuleScreenHTML.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
@@ -105,15 +106,14 @@ class _CoursePageState extends State<CoursePage> {
 
     // compute the grid shape:
     // requirements
+    // requirements
     int tileMinWidth = 300;
     int tileMinHeight = 200;
     double tileRatio =
-        MediaQuery.sizeOf(context).width > HOME_PAGE_WIDGETS_COLLAPSE_WIDTH
-            ? 2
-            : 2.5;
+        MediaQuery.sizeOf(context).width > SCREEN_COLLAPSE_WIDTH ? 2 : 2.5;
     // available width, in pixels
     double horizontalMargin =
-        MediaQuery.sizeOf(context).width > HOME_PAGE_WIDGETS_COLLAPSE_WIDTH
+        MediaQuery.sizeOf(context).width > SCREEN_COLLAPSE_WIDTH
             ? MediaQuery.of(context).size.width * 0.2
             : 10;
     double screenWidth = MediaQuery.sizeOf(context).width;
@@ -323,7 +323,7 @@ class _CoursePageState extends State<CoursePage> {
                         children: [
                           Container(
                             width: MediaQuery.of(context).size.width >
-                                    HOME_PAGE_WIDGETS_COLLAPSE_WIDTH
+                                    SCREEN_COLLAPSE_WIDTH
                                 ? MediaQuery.of(context).size.width * 0.5
                                 : MediaQuery.of(context).size.width,
                             child: Padding(
@@ -342,7 +342,7 @@ class _CoursePageState extends State<CoursePage> {
                                 (moduleIndex) => Container(
                                       // height: 200,
                                       width: MediaQuery.of(context).size.width >
-                                              HOME_PAGE_WIDGETS_COLLAPSE_WIDTH
+                                              SCREEN_COLLAPSE_WIDTH
                                           ? MediaQuery.of(context).size.width *
                                               0.5
                                           : MediaQuery.of(context).size.width,

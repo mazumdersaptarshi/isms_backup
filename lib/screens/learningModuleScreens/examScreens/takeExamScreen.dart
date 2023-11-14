@@ -1,7 +1,7 @@
 // ignore_for_file: file_names
 
-import 'package:flutter/foundation.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/models/newExam.dart';
 import 'package:isms/models/question.dart';
@@ -9,12 +9,12 @@ import 'package:isms/screens/learningModuleScreens/examScreens/examCompletionStr
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
+import 'package:isms/utilityFunctions/platformCheck.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/course.dart';
 import '../../../models/module.dart';
 import '../../../sharedWidgets/navIndexTracker.dart';
-import '../../../utilityFunctions/platformCheck.dart';
 
 class TakeExamScreen extends StatefulWidget {
   const TakeExamScreen(
@@ -107,13 +107,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
     NavIndexTracker.setNavDestination(navDestination: NavDestinations.other);
     LoggedInState loggedInState = context.watch<LoggedInState>();
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          _showScore ? 'Score' : 'Exam Module',
-          style: const TextStyle(color: white),
-        ),
-        backgroundColor: Colors.deepPurpleAccent.shade100,
-      ),
+      appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
       bottomNavigationBar:
           PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
       body: _showScore ? buildScoreWidget() : buildExamWidget(),
@@ -272,12 +266,14 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
           const SizedBox(height: 20),
           ...List.generate(_questions[_currentIndex].shuffledOptions.length,
               (index) {
-            return Padding(
+            return Container(
               padding: const EdgeInsets.all(8.0),
+              width: MediaQuery.of(context).size.width > SCREEN_COLLAPSE_WIDTH
+                  ? MediaQuery.of(context).size.width * 0.3
+                  : MediaQuery.of(context).size.width,
               child: Card(
                 surfaceTintColor: white,
                 elevation: 4,
-                shadowColor: secondaryColor,
                 shape: customCardShape,
                 child: ListTile(
                   title: Text(_questions[_currentIndex].shuffledOptions[index]),
@@ -318,7 +314,8 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
             onPressed: areAnswersSelected ? () => onButtonPress() : null,
             child: Text(
               _currentIndex < _questions.length - 1 ? 'Next' : 'Submit',
-              style: const TextStyle(color: white),
+              style: customTheme.textTheme.bodyMedium!
+                  .copyWith(color: Colors.white),
             ),
           )
         ],

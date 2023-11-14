@@ -125,16 +125,16 @@ mixin CustomAppBarMixin on StatelessWidget {
         );
       },
       child: Padding(
-        padding: EdgeInsets.only(left: kIsWeb ? 16.0 : 0),
+        padding: const EdgeInsets.only(left: kIsWeb ? 16.0 : 0),
         child: Row(
           children: [
-            Icon(Icons.severe_cold_rounded),
+            const Icon(Icons.severe_cold_rounded),
             if (displayText == true)
-              SizedBox(
+              const SizedBox(
                 width: 10,
               ),
             if (displayText == true)
-              Text(
+              const Text(
                 'ISMS',
                 style: TextStyle(
                   fontFamily: 'Montserrat',
@@ -204,10 +204,9 @@ class CustomAppBarWeb extends StatelessWidget
       automaticallyImplyLeading: false,
       title: MouseRegion(
         cursor: SystemMouseCursors.click,
-        child:
-            MediaQuery.of(context).size.width > HOME_PAGE_WIDGETS_COLLAPSE_WIDTH
-                ? homeButtonItem(context)
-                : homeButtonItem(context, displayText: false),
+        child: MediaQuery.of(context).size.width > SCREEN_COLLAPSE_WIDTH
+            ? homeButtonItem(context)
+            : homeButtonItem(context, displayText: false),
       ),
       actions: <Widget>[
         appBarItem(Icons.explore, "Explore",

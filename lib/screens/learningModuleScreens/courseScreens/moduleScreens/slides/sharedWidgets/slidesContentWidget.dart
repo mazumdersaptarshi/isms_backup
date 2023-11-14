@@ -28,7 +28,7 @@ class SlidesContentWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(
-              height: MediaQuery.of(context).size.height - 220,
+              height: MediaQuery.of(context).size.height - 300,
               child: PageView(
                 controller: pageController,
                 children: cardItems.map((item) {

@@ -3,6 +3,7 @@ import 'package:isms/models/UserActions.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 // import 'package:isms/screens/analyticsSharedWidgets/courseDropdownWidget.dart';
 import 'package:isms/screens/login/loginScreen.dart';
+import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/userManagement/userprofileHeaderWidget.dart';
 import 'package:isms/utilityFunctions/platformCheck.dart';
@@ -76,14 +77,15 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   topLeft: Radius.circular(30),
                 ),
               ),
-              padding: EdgeInsets.symmetric(vertical: 20),
+              padding: const EdgeInsets.symmetric(vertical: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: List.generate(userActions.length, (index) {
                   final action = userActions[index];
                   return Container(
                     constraints: BoxConstraints(
-                      maxWidth: MediaQuery.of(context).size.width > 500
+                      maxWidth: MediaQuery.of(context).size.width >
+                              SCREEN_COLLAPSE_WIDTH
                           ? MediaQuery.of(context).size.width * 0.5
                           : MediaQuery.of(context).size.width,
                     ),
