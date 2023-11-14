@@ -25,7 +25,7 @@ class Module {
         index: map['index'],
         title: map['title'],
         contentDescription: map['contentDescription'],
-        additionalInfo: map['additionalInfo'],
+        additionalInfo: map['additionalInfo'] ?? '',
       );
   }
 
