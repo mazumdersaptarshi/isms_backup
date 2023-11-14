@@ -3,11 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:isms/models/adminConsoleModels/coursesDetails.dart';
 import 'package:isms/models/course.dart';
-import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/themes/common_theme.dart';
-import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/utilityFunctions/generateRandom.dart';
-import 'package:provider/provider.dart';
 
 import '../../../projectModules/courseManagement/coursesDataMaster.dart';
 
@@ -16,12 +13,6 @@ class CreateCourseScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    LoggedInState loggedInState = context.watch<LoggedInState>();
-
-    if (loggedInState.currentUser == null) {
-      return const LoginPage();
-    }
-
     return const CourseCreationForm();
   }
 }

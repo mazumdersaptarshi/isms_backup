@@ -74,8 +74,8 @@ class _HomePageState extends State<HomePage> {
     NavIndexTracker.setNavDestination(
         navDestination: NavDestinations.HomePage, userRole: userRole);
 
-    return Consumer<CoursesProvider>(builder:
-        (BuildContext context, CoursesProvider coursesProvider, Widget? child) {
+    return Consumer<CoursesProvider>(
+        builder: (BuildContext context, CoursesProvider coursesProvider, Widget? child) {
       return Scaffold(
           backgroundColor: Colors.white,
           bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState),

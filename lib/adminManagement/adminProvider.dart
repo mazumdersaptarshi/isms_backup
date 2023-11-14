@@ -1,7 +1,6 @@
 // ignore_for_file: file_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:isms/models/adminConsoleModels/coursesDetails.dart';
 import 'package:isms/userManagement/loggedInState.dart';
@@ -92,7 +91,8 @@ class AdminProvider extends ChangeNotifier {
         .doc('allusers')
         .collection('userRefs')
         .get();
-    for ( QueryDocumentSnapshot<Object?> documentSnapshot in userRefsQuerySnapshot.docs) {
+    for (QueryDocumentSnapshot<Object?> documentSnapshot
+        in userRefsQuerySnapshot.docs) {
       if (documentSnapshot.exists) {
         if (!userRefs.contains(documentSnapshot.id)) {
           userRefs.add(documentSnapshot.id);
@@ -120,7 +120,8 @@ class AdminProvider extends ChangeNotifier {
           .collection('userRefs')
           .get();
 
-      for ( QueryDocumentSnapshot<Object?> documentSnapshot in querySnapshot.docs) {
+      for (QueryDocumentSnapshot<Object?> documentSnapshot
+          in querySnapshot.docs) {
         if (documentSnapshot.exists) {
           if (!userRefs.contains(documentSnapshot.id)) {
             userRefs.add(documentSnapshot.id);
@@ -146,8 +147,9 @@ class AdminProvider extends ChangeNotifier {
 
           allUsers.add(userInfo);
           for (var element in allUsers) {
-            print('adminUsersView: ${element.courses_completed}');
-            print('adminUsersView: ${element.courses_started}');
+            if (kDebugMode) {
+              print(element.courses_completed);
+            }
           }
         } catch (e) {
           debugPrint(
@@ -177,10 +179,7 @@ class AdminProvider extends ChangeNotifier {
         .get(); //this makes it QuerySnapshot<Map<String, dynamic>>
 
     for (var document in ref1.docs) {
-      final ref = collectionRef
-          .doc(document.id)
-          .collection(subCategory)
-          .get();
+      final ref = collectionRef.doc(document.id).collection(subCategory).get();
       debugPrint('ref: $ref');
 
       QuerySnapshot<Map<String, dynamic>> querySnapshot = await ref;

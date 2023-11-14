@@ -1,7 +1,6 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/userManagement/userprofileHeaderWidget.dart';
 import 'package:isms/utilityFunctions/platformCheck.dart';
@@ -25,11 +24,6 @@ class AdminConsolePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
-
-    if (loggedInState.currentUser == null) {
-      return const LoginPage();
-    }
-
     AdminProvider adminConsoleProvider = Provider.of<AdminProvider>(context);
 
     return Scaffold(

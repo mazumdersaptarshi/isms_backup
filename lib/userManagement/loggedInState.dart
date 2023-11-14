@@ -7,7 +7,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:isms/userManagement/userDataGetterMaster.dart';
 
 import '../models/course.dart';
 import '../models/customUser.dart';
@@ -15,31 +14,39 @@ import '../models/module.dart';
 import '../models/userCoursesDetails.dart';
 import '../projectModules/courseManagement/coursesProvider.dart';
 
-class LoggedInState with ChangeNotifier {
+import 'package:isms/adminManagement/createUserReferenceForAdmin.dart';
+
+/// This class handles user connections
+/// It extends the private class _UserDataGetterMaster so all
+/// connections to user data are done with an authentified customer
+
+class LoggedInState extends _UserDataGetterMaster {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  final UserDataGetterMaster _userDataGetterMaster = UserDataGetterMaster();
-
-  // User? get user => _userDataGetterMaster.currentUser;
-
-  List<dynamic> allEnrolledCoursesGlobal =
-      []; //Global List to hold all enrolled courses for User
-
-  List<dynamic> allCompletedCoursesGlobal =
-      []; //Global List to hold all completed courses for User
-
+  /// Constructor of the class LoggedInState.
+  /// This constructor sets a listener that fires immediately, then each
+  /// time a user connects or disconnects
+  /// If a user disconnects, the user data in memory is cleared and the
+  /// user is sent back to the connection screen by a signal sent to the home
+  /// page
+  /// Input : None
   LoggedInState() {
+    // for testing purposes
+    //_auth.setPersistence(Persistence.NONE);
     _auth.authStateChanges().listen((User? user) {
       if (user == null) {
         debugPrint(
             "auth state changed: no account currently signed into Firebase");
-        _userDataGetterMaster.clear();
+        clear();
         notifyListeners();
       } else {
         debugPrint(
             "auth state changed: ${user.email} currently signed into Firebase");
-        _userDataGetterMaster.fetchFromFirestore(user).then((value) {
+        _fetchFromFirestore(user).then((value) {
           storeUserCoursesData(currentUserSnapshot!);
+          // this needs to be called n `then()`, because we should only
+          // refresh the fisplay after `storeUserCoursesData()` has
+          // completed, 
           notifyListeners();
         });
       }
@@ -47,20 +54,130 @@ class LoggedInState with ChangeNotifier {
     listenToChanges();
   }
 
-  //Getters from the State management provider, all classes can get the data about logged in User using these getters
-  User? get currentUser => _userDataGetterMaster.currentUser;
-  String? get currentUserName => _userDataGetterMaster.currentUserName;
-  String? get currentUserEmail => _userDataGetterMaster.currentUserEmail;
-  String get currentUserRole => _userDataGetterMaster.currentUserRole;
-  String? get currentUserUid => _userDataGetterMaster.currentUserUid;
-  CustomUser get loggedInUser => _userDataGetterMaster.loggedInUser;
-  DocumentReference? get currentUserDocumentReference =>
-      _userDataGetterMaster.currentUserDocumentReference;
-  DocumentSnapshot? get currentUserSnapshot =>
-      _userDataGetterMaster.currentUserSnapshot;
-  Future<DocumentSnapshot<Object?>?>
-      get getNewCurrentUserDocumentSnapshot async =>
-          await _userDataGetterMaster.newCurrentUserSnapshot;
+  static Future<void> login() async {
+    // get a signed-into Google account (authentication),
+    // and sign it into the app (authorisation)
+    GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+    // only provide accessToken (the result of authorisation),
+    // as idToken is the result of authentication and is null in data
+    // returned by GoogleSignIn
+    AuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+    );
+    // sign into the corresponding Firebase account
+    // ignore: unused_local_variable
+    UserCredential userCredential =
+        await FirebaseAuth.instance.signInWithCredential(credential);
+
+    // ensure the app has a user entry for this account
+    _UserDataGetterMaster.ensureUserDataExists(
+        FirebaseAuth.instance.currentUser);
+  }
+
+  static Future<void> logout() async {
+    // sign the Firebase account out of the Firebase app
+    await FirebaseAuth.instance.signOut();
+    // sign the Google account out of the underlying GCP app
+    await GoogleSignIn().signOut();
+  }
+}
+
+class _UserDataGetterMaster with ChangeNotifier {
+  static FirebaseFirestore db = FirebaseFirestore.instance;
+  static User? _currentUser;
+  static DocumentReference? _userRef;
+  static DocumentSnapshot? _currentUserSnapshot;
+  static CustomUser? _customUserObject;
+  List<dynamic> allEnrolledCoursesGlobal =
+      []; //Global List to hold all enrolled courses for User
+
+  List<dynamic> allCompletedCoursesGlobal =
+      []; //Global List to hold all completed courses for User
+
+  static Future<void> createUserData(CustomUser customUser) async {
+    Map<String, dynamic> userJson = customUser.toMap();
+    debugPrint("creating the user $userJson");
+    await db.collection('users').doc(customUser.uid).set(userJson);
+
+    //Also creating a reference to the user on Admin side
+    CreateUserReferenceForAdmin userRefForAdmin = CreateUserReferenceForAdmin();
+    userRefForAdmin.createUserRef(customUser.uid);
+  }
+
+  static Future<void> ensureUserDataExists(User? user) async {
+    if (user == null) return;
+
+    final DocumentSnapshot userSnapshot =
+        await db.collection('users').doc(user.uid).get();
+
+    if (!userSnapshot.exists) {
+      await createUserData(CustomUser(
+          username: user.displayName!,
+          email: user.email!,
+          role: 'user',
+          courses_started: [],
+          courses_completed: [],
+          uid: user.uid));
+    }
+  }
+
+  //Getters
+  User? get currentUser => _currentUser;
+  String? get currentUserName => _currentUser?.displayName;
+  String? get currentUserEmail => _currentUser?.email;
+  String? get currentUserUid => _currentUser?.uid;
+  DocumentReference? get currentUserDocumentReference => _userRef;
+  DocumentSnapshot? get currentUserSnapshot => _currentUserSnapshot;
+  String? get currentUserPhotoURL => currentUser?.photoURL;
+
+  Future<DocumentSnapshot<Object?>?> get newCurrentUserSnapshot async {
+    _currentUserSnapshot = await _userRef!.get();
+    return _currentUserSnapshot;
+  }
+
+  // TODO consider making this nullable again, using it as criterion for
+  // being signed-in, and pushing _currentUser inside as a non-nullable
+  // field
+  CustomUser get loggedInUser => _customUserObject!;
+  String get currentUserRole =>
+      _customUserObject != null ? _customUserObject!.role : "";
+
+  // fetch data from Firestore and store it in the app
+  Future<void> _fetchFromFirestore(User user) async {
+    _userRef =
+        FirebaseFirestore.instance.collection('users').doc(user.uid);
+    DocumentSnapshot userSnapshot = await _userRef!.get();
+    if (userSnapshot.exists) {
+      debugPrint('data fetched from Firestore for user ${user.email}');
+      _currentUserSnapshot = userSnapshot;
+      Map<String, dynamic>? userData =
+          userSnapshot.data() as Map<String, dynamic>?;
+      _customUserObject = CustomUser.fromMap(userData!);
+
+      // last step: now that the user data is available, allow the app
+      // to access it by setting _currentUser
+      _currentUser = user;
+    } else {
+      debugPrint('user ${user.email} not found in Firestore');
+      // no data was found in Firestore for this user, so something went
+      // wrong during the account creation and we cannot proceed with
+      // the sign-in, therefore we sign out
+      clear();
+
+      // NOTE: if the user is siging in for the first time, the creation
+      // of the user record in Firestore might be ongoing; in this case
+      // we could consider a retry strategy
+    }
+  }
+
+  // clear user data upon sign-out
+  void clear() {
+    // first step: unset _currentUser, so the app knows it is signed out
+    // and won't attempt to read any user data
+    _currentUser = null;
+  }
 
   void listenToChanges() {
     currentUserDocumentReference?.snapshots().listen((snapshot) {
@@ -72,6 +189,13 @@ class LoggedInState with ChangeNotifier {
         debugPrint('user document was deleted');
       }
     });
+  }
+
+  setUserData() async {
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(loggedInUser.uid)
+        .set(loggedInUser.toMap());
   }
 
   void storeUserCoursesData(DocumentSnapshot snapshot) {
@@ -98,7 +222,7 @@ class LoggedInState with ChangeNotifier {
     debugPrint("Fetching fresh data");
 
     DocumentSnapshot? newCurrentUserDocumentSnapshot =
-        await getNewCurrentUserDocumentSnapshot;
+        await newCurrentUserSnapshot;
 
     storeUserCoursesData(newCurrentUserDocumentSnapshot!);
     debugPrint('890io: $allEnrolledCoursesGlobal');
@@ -129,12 +253,12 @@ class LoggedInState with ChangeNotifier {
     }
     if (flag == false) {
       loggedInUser.courses_started.add(courseDetails);
-      await _userDataGetterMaster.setUserData();
+      await setUserData();
       await setAdminConsoleCourseMap(
           courseName: courseDetails["course_name"],
           courseMapFieldToUpdate: "course_started",
           username: loggedInUser.username,
-          uid: loggedInUser.uid!);
+          uid: loggedInUser.uid);
     }
     notifyListeners();
   }
@@ -154,12 +278,12 @@ class LoggedInState with ChangeNotifier {
     }
     if (flag == false) {
       loggedInUser.courses_completed.add(courseDetails);
-      await _userDataGetterMaster.setUserData();
+      await setUserData();
       await setAdminConsoleCourseMap(
           courseName: courseDetails["course_name"],
           courseMapFieldToUpdate: "course_completed",
           username: loggedInUser.username,
-          uid: loggedInUser.uid!);
+          uid: loggedInUser.uid);
     }
     notifyListeners();
   }
@@ -193,7 +317,7 @@ class LoggedInState with ChangeNotifier {
     if (flag == false) {
       examIndex--;
 
-      loggedInUser?.courses_started.forEach((courseStarted) {
+      for (var courseStarted in loggedInUser.courses_started) {
         Map<String, dynamic> examCompletedMap = {
           "exam_name": course.exams![examIndex].title,
           "exam_index": course.exams![examIndex].index,
@@ -224,15 +348,15 @@ class LoggedInState with ChangeNotifier {
             courseStarted['exams_completed'].add(examCompletedMap);
           }
         }
-      });
+      }
       if (kDebugMode) {
         print(loggedInUser.courses_started);
       }
       noOfExamsCompleted++;
-      await _userDataGetterMaster.setUserData();
+      await setUserData();
     }
     int noOfExams = course.exams!.length;
-    debugPrint("noOfExamsCompleted ${noOfExamsCompleted},, ${noOfExams}");
+    debugPrint("noOfExamsCompleted $noOfExamsCompleted,, $noOfExams");
     // if (noOfExamsCompleted >= noOfExams) {
     //   await setUserCourseCompleted(courseDetails: courseDetails);
     // }
@@ -254,7 +378,7 @@ class LoggedInState with ChangeNotifier {
               if (element["module_name"] == module.title) {
                 debugPrint("SETTING FLAG TRUE coz $element");
                 flag = true;
-                await _userDataGetterMaster.setUserData();
+                await setUserData();
               }
             });
           }
@@ -264,8 +388,7 @@ class LoggedInState with ChangeNotifier {
       }
     }
     if (flag == false) {
-      _userDataGetterMaster.loggedInUser.courses_started
-          .forEach((courseStarted) {
+      for (var courseStarted in loggedInUser.courses_started) {
         if (courseStarted['courseID'] == course.id) {
           bool flag = false;
           if (courseStarted['modules_completed'] != null) {
@@ -288,11 +411,11 @@ class LoggedInState with ChangeNotifier {
                 .add({"module_name": module.title, "module_id": module.id});
           }
         }
-      });
-      if (kDebugMode) {
-        print(_userDataGetterMaster.loggedInUser.courses_started);
       }
-      await _userDataGetterMaster.setUserData();
+      if (kDebugMode) {
+        print(loggedInUser.courses_started);
+      }
+      await setUserData();
     }
     notifyListeners();
   }
@@ -304,7 +427,7 @@ class LoggedInState with ChangeNotifier {
       required Module module}) async {
     bool flag = false;
     if (loggedInUser.courses_started.isNotEmpty) {
-      for (var course in loggedInUser.courses_started) {
+      for (Map<String, dynamic> course in loggedInUser.courses_started) {
         try {
           if (course['courseID'] == courseDetails['courseID']) {
             course["modules_started"].forEach((element) {
@@ -326,8 +449,7 @@ class LoggedInState with ChangeNotifier {
         "module_id": module.id,
         "module_name": module.title
       };
-      _userDataGetterMaster.loggedInUser?.courses_started
-          .forEach((courseStarted) {
+      for (var courseStarted in loggedInUser.courses_started) {
         if (courseStarted['courseID'] == course.id) {
           debugPrint("STARTED MODULEE ${courseStarted['modules_started']}");
           bool flag_2 = false;
@@ -347,11 +469,11 @@ class LoggedInState with ChangeNotifier {
             courseStarted['modules_started'].add(moduleStartedMap);
           }
         }
-      });
-      if (kDebugMode) {
-        print(_userDataGetterMaster.loggedInUser.courses_started);
       }
-      await _userDataGetterMaster.setUserData();
+      if (kDebugMode) {
+        print(loggedInUser.courses_started);
+      }
+      await setUserData();
     }
     notifyListeners();
   }
@@ -363,14 +485,14 @@ class LoggedInState with ChangeNotifier {
       required Module module,
       required int examIndex}) async {
     if (loggedInUser.courses_started.isNotEmpty) {
-      var courseStarted;
+      Map<String, dynamic> courseStarted;
 
       for (int i = 0; i < loggedInUser.courses_started.length; i++) {
         courseStarted = loggedInUser.courses_started[i];
         try {
           if (courseStarted['courseID'] == courseDetails['courseID']) {
-            courseStarted["modules_started"].forEach((course_module) {
-              if (course_module["module_name"] == module.title) {
+            courseStarted["modules_started"].forEach((courseModule) {
+              if (courseModule["module_name"] == module.title) {
                 if (courseStarted["modules_started"] != null) {
                   //int moduleStartedIndex = 0;
                   courseStarted["modules_started"]
@@ -410,7 +532,7 @@ class LoggedInState with ChangeNotifier {
                           modulesStartedIndex++;
                         }
                       }
-                      await _userDataGetterMaster.setUserData();
+                      await setUserData();
                       if (startedModule["exams_completed"].length >=
                           module.exams?.length) {
                         await setUserCourseModuleCompleted(
@@ -424,8 +546,9 @@ class LoggedInState with ChangeNotifier {
                     }
                     //moduleStartedIndex++;
                   });
-                } else
+                } else {
                   courseStarted["modules_started"] = [];
+                }
               }
             });
           }
@@ -464,34 +587,5 @@ class LoggedInState with ChangeNotifier {
           .doc(courseName)
           .set(courseMap);
     }
-  }
-
-  static Future<void> login() async {
-    // get a signed-into Google account (authentication),
-    // and sign it into the app (authorisation)
-    GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-    GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
-    // only provide accessToken (the result of authorisation),
-    // as idToken is the result of authentication and is null in data
-    // returned by GoogleSignIn
-    AuthCredential credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-    );
-    // sign into the corresponding Firebase account
-    // ignore: unused_local_variable
-    UserCredential userCredential =
-        await FirebaseAuth.instance.signInWithCredential(credential);
-
-    // ensure the app has a user entry for this account
-    UserDataGetterMaster.ensureUserDataExists(
-        FirebaseAuth.instance.currentUser);
-  }
-
-  static Future<void> logout() async {
-    // sign the Firebase account out of the Firebase app
-    await FirebaseAuth.instance.signOut();
-    // sign the Google account out of the underlying GCP app
-    await GoogleSignIn().signOut();
   }
 }

@@ -6,17 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:isms/models/newExam.dart';
 import 'package:isms/models/question.dart';
-import 'package:isms/screens/homePage.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCompletionStrategies.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
-import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/themes/common_theme.dart';
-import 'package:isms/userManagement/loggedInState.dart';
-import 'package:provider/provider.dart';
 
 import '../../../models/course.dart';
 import '../../../models/module.dart';
-import '../../../projectModules/courseManagement/coursesProvider.dart';
 
 class TakeExamScreen extends StatefulWidget {
   const TakeExamScreen(
@@ -105,12 +100,6 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
 
   @override
   Widget build(BuildContext context) {
-    LoggedInState loggedInState = context.watch<LoggedInState>();
-
-    if (loggedInState.currentUser == null) {
-      return const LoginPage();
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -124,9 +113,6 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
   }
 
   Widget buildScoreWidget() {
-    LoggedInState loggedInState = Provider.of<LoggedInState>(context);
-    CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
-
     int correctAnswers = 0;
     for (int i = 0; i < _questions.length; i++) {
       if (Set.from(_questions[i].shuffledCorrectAnswers)

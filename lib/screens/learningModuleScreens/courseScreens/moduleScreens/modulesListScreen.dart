@@ -8,7 +8,6 @@ import 'package:isms/models/course.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/createModuleScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examListScreen.dart';
-import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 
@@ -38,13 +37,14 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
   bool checkIfModuleStarted(
       {required LoggedInState loggedInState, required Module module}) {
     bool flag = false;
-    loggedInState.loggedInUser.courses_started.forEach((course_started) {
+    for (Map<String, dynamic> course_started
+        in loggedInState.loggedInUser.courses_started) {
       if (course_started["course_name"] == widget.course.name) {
         course_started["modules_started"].forEach((module_started) {
-          if (module_started["module_name"] == module.title) flag = true;
+          if (module_started == module.title) flag = true;
         });
       }
-    });
+    }
 
     return flag;
   }
@@ -52,14 +52,14 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
   bool checkIfModuleCompleted(
       {required LoggedInState loggedInState, required Module module}) {
     bool flag = false;
-    loggedInState.loggedInUser.courses_started.forEach((course_started) {
+    for (var course_started in loggedInState.loggedInUser.courses_started) {
       if (course_started["course_name"] == widget.course.name &&
           course_started["modules_completed"] != null) {
         course_started["modules_completed"].forEach((module_completed) {
           if (module_completed["module_name"] == module.title) flag = true;
         });
       }
-    });
+    }
 
     return flag;
   }
@@ -85,10 +85,6 @@ class _ModulesListScreenState extends State<ModulesListScreen> {
         checkIfAllModulesCompleted(loggedInState: loggedInState);
     moduleDataMaster = ModuleDataMaster(
         course: widget.course, coursesProvider: coursesProvider);
-
-    if (loggedInState.currentUser == null) {
-      return const LoginPage();
-    }
 
     userRole = loggedInState.currentUserRole;
 

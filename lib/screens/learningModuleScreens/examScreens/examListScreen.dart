@@ -9,7 +9,6 @@ import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScree
 import 'package:isms/screens/learningModuleScreens/examScreens/sharedWidgets/examListContainer.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/sharedWidgets/exam_tile.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/takeExamScreen.dart';
-import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 
@@ -40,11 +39,6 @@ class _ExamListScreenState extends State<ExamListScreen> {
   @override
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
-
-    if (loggedInState.currentUser == null) {
-      return const LoginPage();
-    }
-
     CoursesProvider coursesProvider = context.watch<CoursesProvider>();
 
     examDataMaster =

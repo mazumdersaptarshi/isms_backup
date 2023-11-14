@@ -9,7 +9,8 @@ import '../screens/login/loginScreen.dart';
 
 class LearningModulesAppBar extends StatelessWidget
     implements PreferredSizeWidget {
-  const LearningModulesAppBar({super.key, required this.leadingWidget, this.title = "ISMS"});
+  const LearningModulesAppBar(
+      {super.key, required this.leadingWidget, this.title = "ISMS"});
   final String title;
   final Widget leadingWidget;
 
@@ -50,7 +51,7 @@ class LearningModulesAppBar extends StatelessWidget
     return IconButton(
       padding: const EdgeInsets.only(right: 5.0),
       onPressed: () {},
-      icon: loggedInState.currentUser?.photoURL != null
+      icon: loggedInState.currentUserPhotoURL != null
           ? const CircleAvatar(
               radius: 18,
               //backgroundImage:
