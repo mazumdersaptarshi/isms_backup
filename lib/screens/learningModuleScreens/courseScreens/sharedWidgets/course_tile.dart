@@ -12,6 +12,7 @@ class CourseTile extends StatelessWidget {
   final double tileWidth;
   //dynamic? modulesCompleted;
   final String subTitle;
+  final String dateValue;
   final String pageView;
   final Map<String, dynamic> courseData;
   CourseTile(
@@ -24,6 +25,7 @@ class CourseTile extends StatelessWidget {
       required this.tileWidth,
       //this.modulesCompleted,
       this.subTitle = '',
+      this.dateValue = '',
       this.pageView = ''});
 
   @override
@@ -81,7 +83,7 @@ class CourseTile extends StatelessWidget {
                           // mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Flexible(
-                              flex: 3,
+                              flex: 5,
                               child: Padding(
                                 padding: const EdgeInsets.only(top: 16.0),
                                 child: Column(
@@ -111,11 +113,45 @@ class CourseTile extends StatelessWidget {
                             ),
                             // SizedBox(height: 20),
                             Flexible(
-                              flex: 1,
+                              flex: 2,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.calendar_month_rounded,
+                                        size: 14,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .tertiary,
+                                      ),
+                                      SizedBox(
+                                        width: 4,
+                                      ),
+                                      (pageView == 'explore')
+                                          ? Text(
+                                              'Created: ${dateValue}',
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .tertiary),
+                                            )
+                                          : (pageView == 'mylearning')
+                                              ? Text('Started: ${dateValue}',
+                                                  style: TextStyle(
+                                                      fontSize: 12,
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .tertiary))
+                                              : Text(''),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 4,
+                                  ),
                                   LinearProgressIndicator(
                                     borderRadius: BorderRadius.circular(20),
                                     minHeight: 15,

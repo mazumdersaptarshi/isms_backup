@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/sharedWidgets/course_tile.dart';
+import 'package:isms/utilityFunctions/csvDataHandler.dart';
 import 'package:provider/provider.dart';
 
 import '../../../projectModules/courseManagement/coursesProvider.dart';
@@ -54,10 +55,8 @@ class _MyLearningScreenState extends State<MyLearningScreen> {
     // grid width, in tiles
     int numberColumns =
         min(itemCount, maxColumns) > 0 ? min(itemCount, maxColumns) : 1;
-    // grid width, in pixels
-    double gridWidth = screenWidth * numberColumns / maxColumns;
 
-    String? currentModule = '';
+    //Future<List<Widget>> coursesWidgetList;
     String? getLatestModuleName(Map<String, dynamic> courseItem) {
       int latestModuleIndex = (courseItem['modules_started'].length - 1) ?? 0;
       String? latestModuleName = (courseItem['modules_started']
@@ -82,35 +81,37 @@ class _MyLearningScreenState extends State<MyLearningScreen> {
                     crossAxisCount: numberColumns, childAspectRatio: tileRatio),
                 itemCount: userEnrolledCourses.length,
                 itemBuilder: (context, courseIndex) {
-                  return Container(
-                    // margin: EdgeInsets.symmetric(horizontal: 10),
+                  return CourseTile(
+                    pageView: 'mylearning',
+                    index: courseIndex,
+                    title: userEnrolledCourses[courseIndex]['course_name'],
+                    modulesCount: userEnrolledCourses[courseIndex]
+                            ['course_modules_count'] ??
+                        1,
 
-                    child: CourseTile(
-                      index: courseIndex,
-                      title: userEnrolledCourses[courseIndex]['course_name'],
-                      modulesCount: userEnrolledCourses[courseIndex]
-                              ['course_modules_count'] ??
-                          1,
+                    tileWidth: tileMinWidth,
+                    subTitle:
+                        getLatestModuleName(userEnrolledCourses[courseIndex]) ??
+                            '',
+                    dateValue:
+                        (userEnrolledCourses[courseIndex]['started_at'] != null)
+                            ? CSVDataHandler.timestampToReadableDateInWords(
+                                userEnrolledCourses[courseIndex]['started_at'])
+                            : '',
+                    // tileHeight: tileMinimumheight,
+                    courseData: getUserCourseData(
+                        loggedInState: loggedInState,
+                        course: coursesProvider.allCourses[courseIndex]),
 
-                      tileWidth: tileMinWidth,
-                      subTitle:
-                          getLatestModuleName(userEnrolledCourses[courseIndex]) ??
-                              '',
-                      // tileHeight: tileMinimumheight,
-                      courseData: getUserCourseData(
-                          loggedInState: loggedInState,
-                          course: coursesProvider.allCourses[courseIndex]),
-
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ModulesListScreen(
-                                      course: coursesProvider
-                                          .allCourses[courseIndex],
-                                    )));
-                      },
-                    ),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ModulesListScreen(
+                                    course: coursesProvider
+                                        .allCourses[courseIndex],
+                                  )));
+                    },
                   );
                 })
           ],

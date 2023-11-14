@@ -1,5 +1,6 @@
-import 'module.dart';
-import 'newExam.dart';
+import 'package:isms/models/module.dart';
+import 'package:isms/models/newExam.dart';
+import 'package:isms/utilityFunctions/csvDataHandler.dart';
 
 class Course {
   // these fields match Firestore fields
@@ -8,6 +9,7 @@ class Course {
   int modulesCount;
   int examsCount;
   String description;
+  String dateCreated; // TODO make this a DateTime
 
   // these fields match Firestore subcollections,
   // so they are nullable
@@ -21,6 +23,7 @@ class Course {
     this.modulesCount = 0,
     this.examsCount = 0,
     this.description = "",
+    this.dateCreated = DateTime.now().toString(),
     this.modules = const [],
     this.exams = const [],
   });
@@ -35,7 +38,12 @@ class Course {
         examsCount: map["examsCount"],
         description: map['description'] ?? "",
         modules: null,
-        exams: null);
+        exams: null,
+        dateCreated:
+            // TODO store a Timestamp
+            CSVDataHandler.timestampToReadableDateInWords(map['createdAt']) ??
+                '');
+      );
   }
 
   Map<String, dynamic> toMap() {
@@ -44,7 +52,8 @@ class Course {
       'name': name,
       'description': description,
       'modulesCount': modulesCount,
-      'examsCount': examsCount
+      'examsCount': examsCount,
+      'createdAt': dateCreated,
     };
   }
 

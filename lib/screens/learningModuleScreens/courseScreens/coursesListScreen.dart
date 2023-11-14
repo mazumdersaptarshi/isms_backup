@@ -57,16 +57,8 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
       numberColumns =
           min(itemCount, maxColumns) > 0 ? min(itemCount, maxColumns) : 1;
     }
-    // grid width, in pixels
-    double gridWidth = screenWidth * numberColumns / maxColumns;
-    String? getLatestModuleName(Map<String, dynamic> courseItem) {
-      int latestModuleIndex = (courseItem['modules_started'].length - 1) ?? 0;
-      String? latestModuleName = (courseItem['modules_started']
-              [latestModuleIndex]['module_name']) ??
-          '';
-      return latestModuleName ?? '';
-    }
 
+    print('uuupop: ${coursesProvider.allCourses}');
     return Scaffold(
       appBar: PlatformCheck.topNavBarWidget(
         loggedInState,
@@ -98,6 +90,8 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
                         coursesProvider.allCourses[courseIndex].description ??
                             '',
                     pageView: 'explore',
+                    dateValue:
+                        coursesProvider.allCourses[courseIndex].dateCreated,
                     onPressed: () {
                       Navigator.push(
                           context,
