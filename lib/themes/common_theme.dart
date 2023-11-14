@@ -52,7 +52,7 @@ BoxDecoration customButtonTheme = BoxDecoration(
 
 BoxDecoration customBoxTheme = BoxDecoration(
   color: white,
-  boxShadow: const [
+  boxShadow: [
     BoxShadow(
       color: secondaryColor,
       offset: Offset(0, 2),
@@ -76,7 +76,7 @@ InputDecoration customInputDecoration({
     ),
     focusColor: secondaryColor,
     focusedBorder: OutlineInputBorder(
-      borderSide: const BorderSide(color: secondaryColor, width: 2.0),
+      borderSide: BorderSide(color: secondaryColor, width: 2.0),
       borderRadius: BorderRadius.circular(10.0),
     ),
   );

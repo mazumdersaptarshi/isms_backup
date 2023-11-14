@@ -59,14 +59,14 @@ class _ModuleDetailsState extends State<ModuleDetails> {
         loggedInState,
       ),
       body: Container(
-        margin: EdgeInsets.only(top: 20),
+        margin: const EdgeInsets.only(top: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                SizedBox(width: 20),
+                const SizedBox(width: 20),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(
@@ -80,7 +80,7 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                   },
                   child: const Text("View module exams"),
                 ),
-                SizedBox(width: 20),
+                const SizedBox(width: 20),
                 ElevatedButton(
                   onPressed: () async {
                     await loggedInState.setUserCourseStarted(
@@ -107,8 +107,8 @@ class _ModuleDetailsState extends State<ModuleDetails> {
             ),
             const SizedBox(height: 20.0),
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 20.0),
-              padding: EdgeInsets.all(20.0),
+              margin: const EdgeInsets.symmetric(horizontal: 20.0),
+              padding: const EdgeInsets.all(20.0),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20.0),
               ),
@@ -117,7 +117,7 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                 children: [
                   Center(
                     child: Text(
-                      "${widget.module.title}",
+                      widget.module.title,
                       style: customTheme.textTheme.bodyMedium!
                           .copyWith(fontWeight: FontWeight.bold),
                     ),
@@ -127,7 +127,7 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                   const SizedBox(height: 20.0),
                   Text(
                     widget.module.contentDescription,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 18,
                     ),
                   ),
@@ -146,10 +146,10 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                 //        builder: (context) => CreateSlideScreen(
                 //            course: widget.course, module: widget.module)));
               },
-              child: Icon(Icons.add),
+              child: const Icon(Icons.add),
             )
           : null,
-      bottomNavigationBar: BottomNavBar(),
+      bottomNavigationBar: const BottomNavBar(),
     );
   }
 }

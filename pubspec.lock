@@ -458,10 +458,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_deck
-      sha256: e24152bbc59de17286ab9a4350fbfed4f5f033f7eae30a69d2e83d3ec513499a
+      sha256: "546610a92e2d7511ee67d8ec0b47a9907c5429206847f2c31c861d485623ee8a"
       url: "https://pub.dev"
     source: hosted
-    version: "0.6.1"
+    version: "0.8.0"
   flutter_highlight:
     dependency: transitive
     description:
@@ -567,10 +567,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_quill
-      sha256: "4831630c44b38c0daf9f13a62710e7611e2781248336a43f1cb7e4c0a38101c0"
+      sha256: "775233a9e073099b77cf30b72cefcb6e7365f473e8b245b898f923ee30d8fdfe"
       url: "https://pub.dev"
     source: hosted
-    version: "7.10.2"
+    version: "8.5.1"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -593,18 +593,18 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_widget_from_html
-      sha256: "8d2a9a7979a9c1a5d866d1f4134d2ec2cca78716c112c76803d6a552281405cc"
+      sha256: "6f2578397aa8efed3267cd4243b68acfc2e38c51d7381fc31a6860ea6eef4e1e"
       url: "https://pub.dev"
     source: hosted
-    version: "0.10.6"
+    version: "0.14.6"
   flutter_widget_from_html_core:
     dependency: transitive
     description:
       name: flutter_widget_from_html_core
-      sha256: "22140caa191cb4bba0fe4d5e4ad875c7e8a9ba47d61517f56d733019cf76396d"
+      sha256: dd585321db498911414a9b08659b8aa965f8f0375b39856429220fbcacdf59bd
       url: "https://pub.dev"
     source: hosted
-    version: "0.10.6"
+    version: "0.14.6"
   fluttertoast:
     dependency: transitive
     description:
@@ -625,26 +625,26 @@ packages:
     dependency: transitive
     description:
       name: fwfh_cached_network_image
-      sha256: "3de22aa3a6943c968e0d9fbcba4463b3dbbf7103171d62c84b6c672fb83eebdf"
+      sha256: "952aea958a5fda7d616cc297ba4bc08427e381459e75526fa375d6d8345630d3"
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.0+7"
+    version: "0.14.2"
   fwfh_chewie:
     dependency: transitive
     description:
       name: fwfh_chewie
-      sha256: "0b51a1c976bb74da5e8e45d545c74cb54a7168ad3938dd77103a7aee485f55fa"
+      sha256: b74673d1b2f8710df5addd0ceb82c148f28b9fca9fe619048eebc734d055d55b
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.1+4"
+    version: "0.14.2"
   fwfh_just_audio:
     dependency: transitive
     description:
       name: fwfh_just_audio
-      sha256: "237b93a4cb9f0495a4b51940f361adda2a5abd57231dd44f07459db00144a6cd"
+      sha256: "4962bc59cf8bbb0a77a55ff56a7b925612b0d8263bc2ede3636b9c86113cb493"
       url: "https://pub.dev"
     source: hosted
-    version: "0.9.0+3"
+    version: "0.14.2"
   fwfh_svg:
     dependency: transitive
     description:
@@ -665,10 +665,10 @@ packages:
     dependency: transitive
     description:
       name: fwfh_webview
-      sha256: "90a8dda0695403cf57abd7e8b83f6fb1f1a12933930a0bf9cac7cafb06e06a18"
+      sha256: "86531afae48a5838d2dce9719dfc6d46c3179237dacf47ea2b2c068243b2e88f"
       url: "https://pub.dev"
     source: hosted
-    version: "0.9.0+2"
+    version: "0.14.2"
   glob:
     dependency: transitive
     description:
@@ -681,10 +681,10 @@ packages:
     dependency: transitive
     description:
       name: go_router
-      sha256: "2ccd74480706e0a70a0e0dfa9543dede41bc11d0fe3b146a6ad7b7686f6b4407"
+      sha256: c247a4f76071c3b97bb5ae8912968870d5565644801c5e09f3bc961b4d874895
       url: "https://pub.dev"
     source: hosted
-    version: "11.1.4"
+    version: "12.1.1"
   google_fonts:
     dependency: "direct main"
     description:
@@ -789,14 +789,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.2"
-  i18n_extension:
-    dependency: transitive
-    description:
-      name: i18n_extension
-      sha256: db45cd88cf3114f5b9368d975aebebe4ac37fa634fbc5643634289cdfd4d3631
-      url: "https://pub.dev"
-    source: hosted
-    version: "9.0.2"
   image_size_getter:
     dependency: transitive
     description:
@@ -1667,5 +1659,5 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
-  dart: ">=3.1.0 <4.0.0"
+  dart: ">=3.1.5 <4.0.0"
   flutter: ">=3.13.0"
