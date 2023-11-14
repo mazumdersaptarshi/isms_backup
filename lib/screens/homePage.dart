@@ -7,8 +7,8 @@ import 'package:footer/footer.dart';
 import 'package:footer/footer_view.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 import 'package:isms/projectModules/notificationModules/initLinkHandler.dart';
-import 'package:isms/sharedWidgets/customAppBar.dart';
-import 'package:isms/sharedWidgets/bottomNavBar.dart';
+import 'package:isms/screens/homePageWidgets/homePageMainContent.dart';
+import 'package:isms/sharedWidgets/appFooter.dart';
 import 'package:isms/sharedWidgets/navIndexTracker.dart';
 import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
@@ -63,7 +63,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     double homePageContainerHeight =
-        MediaQuery.of(context).size.width < 800 ? 1000 : 500;
+        MediaQuery.of(context).size.width < 800 ? 950 : 400;
+    // 500;
     final loggedInState = context.watch<LoggedInState>();
 
     if (loggedInState.currentUser == null) {
@@ -92,7 +93,7 @@ class _HomePageState extends State<HomePage> {
                     elevation: 10,
                     // backgroundColor: Colors.green,
                     automaticallyImplyLeading: false,
-                    expandedHeight: 350,
+                    expandedHeight: 300,
                     pinned: false,
                     flexibleSpace: FlexibleSpaceBar(
                       background: Row(
@@ -122,166 +123,20 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   SliverToBoxAdapter(
-                child: SizedBox(
-                        width: MediaQuery.of(context).size.width,
-                        height: homePageContainerHeight,
-                        child: Stack(children: [
-                          Positioned(
-                              top: 0,
-                              child: Container(
-                                height: homePageContainerHeight,
-                                width: MediaQuery.of(context).size.width,
-                                decoration: BoxDecoration(
-                                  color: primaryColor.shade100,
-                                ),
-                              )),
-                          Positioned(
-                              top: 100,
-                              child: Container(
-                                height: homePageContainerHeight,
-                                width: MediaQuery.of(context).size.width,
-                                decoration: const BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(20))),
-                              )),
-                          Positioned(
-                              top: 20,
-                              child: Column(
-                                // Align children to the start of the cross axis
-                                children: [
-                                  Container(
-                                      // padding: EdgeInsets.symmetric(horizontal: 10),
-                                      child: FutureBuilder<List<Widget>>(
-                                    future: getHomePageCoursesList(
-                                      context: context,
-                                      loggedInState: loggedInState,
-                                      coursesProvider: coursesProvider,
-                                    ),
-                                    builder: (BuildContext context,
-                                        AsyncSnapshot<List<Widget>>? snapshot) {
-                                      if (snapshot?.data == null)
-                                        return CircularProgressIndicator();
-                                      else
-                                        return HomePageItemsContainer(
-                                            homePageItems: snapshot?.data);
-                                    },
-                                  )),
-                                ],
-                              )),
-                          Positioned(
-                              top: MediaQuery.of(context).size.width >
-                                      HOME_PAGE_WIDGETS_COLLAPSE_WIDTH
-                                  ? 320
-                                  : 0,
-                              child: Container(
-                                margin: EdgeInsets.only(
-                                    left: MediaQuery.of(context).size.width *
-                                        0.14),
-                                child: MouseRegion(
-                                  cursor: SystemMouseCursors.click,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  CoursesDisplayScreen()));
-                                    },
-                                    child: Row(
-                                      children: [
-                                        Text("Resume Learning ",
-                                            style: customTheme
-                                                .textTheme.labelMedium!
-                                                .copyWith(
-                                                    fontSize: 20,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: customTheme
-                                                        .primaryColor)),
-                                        Icon(
-                                          Icons.arrow_circle_right_outlined,
-                                          color: customTheme.primaryColor,
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              )),
-                        ])),
+                    child: HomePageMainContent(
+                      coursesProvider: coursesProvider,
+                      loggedInState: loggedInState,
+                      homePageContainerHeight: homePageContainerHeight,
+                    ),
                   )
                 ],
               )
             ],
-            footer: Footer(
-              child: Container(
-                // margin: EdgeInsets.only(
-                //     left:
-                //         MediaQuery.of(context).size.width * 0.14),
-
-                child: MouseRegion(
-                  cursor: SystemMouseCursors.click,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
-                        children: [
-                          Text("Support ",
-                              style: customTheme.textTheme.labelMedium!
-                                  .copyWith(
-                                      fontSize: 12,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primary)),
-                          Icon(
-                            Icons.open_in_new_rounded,
-                            color: Theme.of(context).colorScheme.primary,
-                            size: 12,
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        width: 50,
-                      ),
-                      Row(
-                        children: [
-                          Text("Terms and Conditions ",
-                              style: customTheme.textTheme.labelMedium!
-                                  .copyWith(
-                                      fontSize: 12,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primary)),
-                          Icon(
-                            Icons.open_in_new_rounded,
-                            color: Theme.of(context).colorScheme.primary,
-                            size: 12,
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        width: 50,
-                      ),
-                      Row(
-                        children: [
-                          Text("Privacy Policy ",
-                              style: customTheme.textTheme.labelMedium!
-                                  .copyWith(
-                                      fontSize: 12,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primary)),
-                          Icon(
-                            Icons.open_in_new_rounded,
-                            color: Theme.of(context).colorScheme.primary,
-                            size: 12,
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            footer: kIsWeb
+                ? Footer(
+                    backgroundColor: Colors.transparent, child: AppFooter())
+                : Footer(
+                    backgroundColor: Colors.transparent, child: Container()),
           ));
     });
   }

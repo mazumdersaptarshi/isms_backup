@@ -13,7 +13,8 @@ class HomePageItemsContainer extends StatelessWidget {
             width: MediaQuery.of(context).size.width,
             height: 300,
             child: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
+
                   // color: Color.fromARGB(10, 0, 0, 0),
                   borderRadius: BorderRadius.all(Radius.circular(10))),
               padding: EdgeInsets.symmetric(vertical: 10),
