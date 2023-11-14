@@ -93,9 +93,9 @@ class _MyLearningScreenState extends State<MyLearningScreen> {
                           1,
 
                       tileWidth: tileMinWidth,
-                      latestModule: getLatestModuleName(
-                              userEnrolledCourses[courseIndex]) ??
-                          '',
+                      subTitle:
+                          getLatestModuleName(userEnrolledCourses[courseIndex]) ??
+                              '',
                       // tileHeight: tileMinimumheight,
                       courseData: getUserCourseData(
                           loggedInState: loggedInState,

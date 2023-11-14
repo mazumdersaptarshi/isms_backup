@@ -30,7 +30,8 @@ class CourseDropdownWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(12.0),
       ),
       child: Container(
-        constraints: BoxConstraints(minHeight: 50),
+        constraints: BoxConstraints(
+            minHeight: 50, maxWidth: MediaQuery.of(context).size.width * 0.6),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment
               .start, // Align children to the start of the cross axis
@@ -45,12 +46,20 @@ class CourseDropdownWidget extends StatelessWidget {
                         SizedBox(
                           width: 10,
                         ),
-                        Text(
-                          '${courseItem["course_name"]}',
-                          style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).colorScheme.tertiary),
+                        ConstrainedBox(
+                          constraints: BoxConstraints(
+                              maxWidth:
+                                  MediaQuery.of(context).size.width * 0.5),
+                          child: Text(
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            '${courseItem["course_name"]}',
+                            style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context).colorScheme.tertiary),
+                            // color: Colors.blue)
+                          ),
                         )
                       ],
                     ),
