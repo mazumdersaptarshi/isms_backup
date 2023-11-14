@@ -23,7 +23,8 @@ class ModuleTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int imageIndex = module.index % 4;
-    return SizedBox(
+    return Container(
+      width: 100,
       child: GestureDetector(
         child: Card(
           surfaceTintColor: Colors.white,

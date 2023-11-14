@@ -71,6 +71,8 @@ class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
 
     return Scaffold(
       appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
+      bottomNavigationBar:
+          PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
       body: isExamsFetched
           ? ExamListContainer(
               exams: exams ?? [],

@@ -7,6 +7,7 @@ import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 // import 'package:isms/screens/analyticsSharedWidgets/courseDropdownWidget.dart';
 import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/sharedWidgets/bottomNavBar.dart';
+import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/userManagement/userprofileHeaderWidget.dart';
 import 'package:isms/utilityFunctions/platformCheck.dart';
@@ -58,7 +59,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
     }
 
     return Scaffold(
-      backgroundColor: Colors.deepPurpleAccent.shade100,
+      backgroundColor: primaryColor.shade100,
       appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
       body: CustomScrollView(
         slivers: [
@@ -118,7 +119,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
           ),
         ],
       ),
-      bottomNavigationBar: kIsWeb ? Container() : BottomNavBar(),
+      bottomNavigationBar:
+          PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
     );
   }
 }
