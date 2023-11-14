@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/sharedWidgets/course_tile.dart';
+import 'package:isms/sharedWidgets/loadingScreenWidget.dart';
 import 'package:provider/provider.dart';
 
 import '../../../projectModules/courseManagement/coursesProvider.dart';
@@ -65,13 +66,6 @@ class _MyLearningScreenState extends State<MyLearningScreen> {
     }
 
     List<Widget> homePageWidgets = [Container(width: 100)];
-    void getInProgressCourses() async {
-      homePageWidgets = [Container(width: 100)];
-      homePageWidgets = await getEnrolledCoursesList(
-          context: context,
-          coursesProvider: coursesProvider,
-          loggedInState: loggedInState);
-    }
 
     return Scaffold(
       appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
@@ -80,39 +74,29 @@ class _MyLearningScreenState extends State<MyLearningScreen> {
       body: Container(
         margin: EdgeInsets.only(
             top: 20, left: horizontalMargin, right: horizontalMargin),
-        child: CustomScrollView(
-          slivers: [
-            SliverGrid.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: numberColumns, childAspectRatio: tileRatio),
-                itemCount: userEnrolledCourses.length,
-                itemBuilder: (context, courseIndex) {
-                  return CourseTile(
-                    pageView: 'mylearning',
-                    index: courseIndex,
-                    title: userEnrolledCourses[courseIndex]['course_name'],
-                    modulesCount: userEnrolledCourses[courseIndex]
-                            ['course_modules_count'] ??
-                        1,
-                    tileWidth: tileMinWidth,
-                    subTitle:
-                        getLatestModuleName(userEnrolledCourses[courseIndex]) ??
-                            '',
-                    courseData: getUserCourseData(
-                        loggedInState: loggedInState,
-                        course: coursesProvider.allCourses[courseIndex]),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CoursePage(
-                                    course:
-                                        coursesProvider.allCourses[courseIndex],
-                                  )));
-                    },
-                  );
-                })
-          ],
+        child: FutureBuilder<Map<String, dynamic>>(
+          future: getCoursesListForUser(
+              context: context,
+              loggedInState: loggedInState,
+              coursesProvider: coursesProvider),
+          builder: (context, snapshot) {
+            if (snapshot.data != null) {
+              return CustomScrollView(
+                slivers: [
+                  SliverGrid.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: numberColumns,
+                          childAspectRatio: tileRatio),
+                      itemCount: snapshot.data!["widgetsList"].length,
+                      itemBuilder: (context, courseIndex) {
+                        return snapshot.data!["widgetsList"][courseIndex];
+                      })
+                ],
+              );
+            } else {
+              return loadingWidget();
+            }
+          },
         ),
       ),
       floatingActionButton: userRole == 'admin'
