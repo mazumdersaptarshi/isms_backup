@@ -172,6 +172,7 @@ class _ReminderLineState extends State<ReminderLine> {
                                         child: CupertinoDatePicker(
                                           mode: CupertinoDatePickerMode.time,
                                           initialDateTime: selectedDate,
+                                          use24hFormat: true,
                                           onDateTimeChanged:
                                               (DateTime newDate) {
                                             setState(() {
