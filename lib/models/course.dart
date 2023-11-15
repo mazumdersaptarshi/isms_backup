@@ -29,8 +29,7 @@ class Course {
         modulesCount: map["modulesCount"] ?? 0,
         examsCount: map["examsCount"] ?? 0,
         dateCreated:
-            CSVDataHandler.timestampToReadableDateInWords(map['createdAt']) ??
-                '');
+            CSVDataHandler.timestampToReadableDateInWords(map['createdAt']));
   }
 
   Map<String, dynamic> toMap() {

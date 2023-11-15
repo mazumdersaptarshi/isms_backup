@@ -1,4 +1,4 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, non_constant_identifier_names, unused_element
 
 import 'package:flutter/material.dart';
 import 'package:isms/screens/homePage.dart';
@@ -20,7 +20,7 @@ class BottomNavBar extends StatelessWidget {
     void navigateToUserProfilePage() {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => UserProfilePage()),
+        MaterialPageRoute(builder: (context) => const UserProfilePage()),
       );
     }
 
@@ -37,8 +37,8 @@ class BottomNavBar extends StatelessWidget {
     }
 
     void NavigateToMyLearningPage() {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => MyLearningScreen()));
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const MyLearningScreen()));
     }
 
     void navigateToAdminConsolePage() {
@@ -90,22 +90,22 @@ class BottomNavBar extends StatelessWidget {
         //   topRight: Radius.circular(20),
         // ),
         child: BottomNavigationBar(
-          items: <BottomNavigationBarItem>[
-            const BottomNavigationBarItem(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
               icon: Icon(Icons.home_outlined),
               label: 'Home',
             ),
-            const BottomNavigationBarItem(
+            BottomNavigationBarItem(
               icon: Icon(Icons
                   .account_circle_outlined), // Fallback icon if no image is available
               label: 'Account',
             ),
-            const BottomNavigationBarItem(
+            BottomNavigationBarItem(
               icon: Icon(
                   Icons.lightbulb), // Fallback icon if no image is available
               label: 'My learning',
             ),
-            const BottomNavigationBarItem(
+            BottomNavigationBarItem(
               icon:
                   Icon(Icons.explore), // Fallback icon if no image is available
               label: 'Explore',

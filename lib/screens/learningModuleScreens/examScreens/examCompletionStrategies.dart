@@ -2,8 +2,10 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:isms/projectModules/courseManagement/moduleManagement/slideManagement/slidesDataMaster.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleDetailsScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/modulesListScreen.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/slidesDisplayScreen.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/course.dart';
@@ -36,6 +38,7 @@ class CourseExamCompletionStrategy implements ExamCompletionStrategy {
     return ElevatedButton(
       onPressed: () async {
         await handleExamCompletion(context: context);
+        if (!context.mounted) return;
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -133,20 +136,41 @@ class ModuleExamCompletionStrategy implements ExamCompletionStrategy {
             "Mark Module as Done- completed ${exam.index}/${module.exams!.length}"),
       );
     } else {
+      CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
+      Map<String, dynamic> courseDetailsMap = {
+        "courseID": course.id,
+        "course_name": course.name,
+        "course_modules_count": course.modulesCount,
+        "started_at": DateTime.now()
+      };
+      SlidesDataMaster? slidesDataMaster = SlidesDataMaster(
+          course: course, coursesProvider: coursesProvider, module: module);
       return ElevatedButton(
-        onPressed: () {
-          Navigator.push(
+        onPressed: () async {
+          await loggedInState.setUserCourseStarted(
+              courseDetails: courseDetailsMap);
+          await loggedInState.setUserCourseModuleStarted(
+              courseDetails: courseDetailsMap,
+              coursesProvider: coursesProvider,
+              course: course,
+              module: module);
+
+          if (!context.mounted) return;
+          Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) => ModuleDetails(
-                      course: course,
-                      module: module,
-                      isModuleStarted: isModuleStarted)));
+                  builder: (context) => SlidesDisplayScreen(
+                        course: course,
+                        module: module,
+                        slidesDataMaster: slidesDataMaster,
+                      )));
         },
         child: const Text("Study the module first"),
       );
     }
   }
+
+  void redirect(BuildContext context, Module module) {}
 
   @override
   Future<void> handleExamCompletion({required BuildContext context}) async {

@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -6,9 +8,8 @@ Widget loadingWidget({Widget? textWidget}) {
     child: Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        textWidget == null
-            ? Expanded(
-                child: const Text(
+        textWidget ?? const Expanded(
+                child: Text(
                   "Loading",
                   style: TextStyle(
                     fontSize: 36,
@@ -16,8 +17,7 @@ Widget loadingWidget({Widget? textWidget}) {
                     color: Colors.black,
                   ),
                 ),
-              )
-            : textWidget,
+              ),
         Expanded(
           child: SizedBox(
             width: 100,

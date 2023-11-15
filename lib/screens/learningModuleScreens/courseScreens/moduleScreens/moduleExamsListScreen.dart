@@ -80,7 +80,7 @@ class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
               examtype: EXAMTYPE.moduleExam,
               module: module,
               loggedInState: loggedInState)
-          : Container(
+          : SizedBox(
               height: 300,
               child: AlertDialog(
                 elevation: 4,
