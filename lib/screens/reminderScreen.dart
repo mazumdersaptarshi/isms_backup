@@ -53,6 +53,28 @@ Future<void> setExpiryDate(
   });
 }
 
+Future<void> checkAndCreateUserDocument(
+  String uid,
+  String currentUserEmail,
+  String currentUserName,
+) async {
+  DocumentReference adminDocRef = FirebaseFirestore.instance
+      .collection('adminconsole')
+      .doc('allAdmins')
+      .collection('admins')
+      .doc(uid);
+
+  bool docExists = await adminDocRef.get().then((doc) => doc.exists);
+
+  if (!docExists) {
+    await adminDocRef.set({
+      'email': currentUserEmail,
+      'name': currentUserName,
+      'certifications': [],
+    });
+  }
+}
+
 class ReminderLine extends StatefulWidget {
   final String text;
   final Function(String, DateTime?) setExpiryDateForCertificate;
@@ -77,7 +99,7 @@ class _ReminderLineState extends State<ReminderLine> {
   void initState() {
     super.initState();
     selectedDate = DateTime.now();
-    expiryDate = widget.initialExpiryDate; // Set initial expiry date
+    expiryDate = widget.initialExpiryDate;
   }
 
   @override
@@ -273,24 +295,22 @@ class ReminderScreen extends StatefulWidget {
 }
 
 class _ReminderScreenState extends State<ReminderScreen> {
-  late LoggedInState loggedInState;
+  String? userRole;
   DateTime? expiryDatePeople;
   DateTime? expiryDatePlayers;
   DateTime? expiryDateVendors;
 
   @override
-  void didChangeDependencies() async {
-    super.didChangeDependencies();
-    loggedInState = Provider.of<LoggedInState>(context);
-    await getExpiryDates();
+  void initState() {
+    super.initState();
   }
 
-  Future<void> getExpiryDates() async {
+  Future<void> getExpiryDates(String uid) async {
     DocumentSnapshot doc = await FirebaseFirestore.instance
         .collection('adminconsole')
         .doc('allAdmins')
         .collection('admins')
-        .doc(loggedInState.currentUserUid!)
+        .doc(uid)
         .get();
 
     if (doc.exists) {
@@ -316,6 +336,9 @@ class _ReminderScreenState extends State<ReminderScreen> {
 
   @override
   Widget build(BuildContext context) {
+    LoggedInState loggedInState = context.watch<LoggedInState>();
+
+    getExpiryDates(loggedInState.currentUserUid!);
     return Scaffold(
         appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
         body: Padding(
