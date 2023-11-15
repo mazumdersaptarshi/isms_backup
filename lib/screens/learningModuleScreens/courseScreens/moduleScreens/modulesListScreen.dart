@@ -162,15 +162,17 @@ class _CoursePageState extends State<CoursePage> {
                                             SizedBox(
                                               width: 30,
                                             ),
-                                            Text(
-                                              widget.course.name.toString(),
-                                              style: customTheme
-                                                  .textTheme.labelLarge!
-                                                  .copyWith(
-                                                      color: Colors.white,
-                                                      fontSize: 30,
-                                                      fontWeight:
-                                                          FontWeight.bold),
+                                            Expanded(
+                                              child: Text(
+                                                widget.course.name.toString(),
+                                                style: customTheme
+                                                    .textTheme.labelLarge!
+                                                    .copyWith(
+                                                        color: Colors.white,
+                                                        fontSize: 30,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                              ),
                                             ),
                                           ],
                                         ),
@@ -220,8 +222,6 @@ class _CoursePageState extends State<CoursePage> {
                                               .copyWith(color: Colors.white),
                                         ),
                                         Container(
-                                          margin: EdgeInsets.only(
-                                              left: 20, bottom: 10),
                                           child: Padding(
                                             padding: const EdgeInsets.only(
                                                 top: 20.0),
