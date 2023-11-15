@@ -38,7 +38,7 @@ class AdminConsolePage extends StatelessWidget {
             backgroundColor: Colors.deepPurpleAccent.shade100,
             expandedHeight: 250.0,
             automaticallyImplyLeading: false,
-            flexibleSpace: const FlexibleSpaceBar(
+            flexibleSpace: FlexibleSpaceBar(
                 background: UserProfileHeaderWidget(
               view: 'admin',
             )),

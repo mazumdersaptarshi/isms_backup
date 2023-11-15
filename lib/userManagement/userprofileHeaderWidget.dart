@@ -8,8 +8,10 @@ import 'package:provider/provider.dart';
 class UserProfileHeaderWidget extends StatelessWidget {
   // UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
   // LoggedInState loggedInState;
-  const UserProfileHeaderWidget({super.key, this.view = 'user'});
+  UserProfileHeaderWidget(
+      {super.key, this.view = 'user', this.refreshCallback});
   final String? view;
+  Function? refreshCallback;
   @override
   Widget build(BuildContext context) {
     final loggedInState = context.watch<LoggedInState>();
@@ -76,8 +78,10 @@ class UserProfileHeaderWidget extends StatelessWidget {
           ),
           if (view == 'user')
             ElevatedButton(
-                onPressed: () {
-                  loggedInState.refreshUserCoursesData();
+                onPressed: () async {
+                  loggedInState.refreshUserCoursesData().then((value) {
+                    if (refreshCallback != null) refreshCallback!();
+                  });
                 },
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,

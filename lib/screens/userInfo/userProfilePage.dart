@@ -43,6 +43,11 @@ class _UserProfilePageState extends State<UserProfilePage> {
     allCompletedCourses = [];
   }
 
+  refreshCallback() {
+    setState(() {
+      print("Refresshhhh ");
+    });
+  }
   // UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
 
   @override
@@ -67,6 +72,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
             flexibleSpace: FlexibleSpaceBar(
                 background: UserProfileHeaderWidget(
               view: 'user',
+              refreshCallback: refreshCallback(),
             )),
           ),
           SliverToBoxAdapter(
