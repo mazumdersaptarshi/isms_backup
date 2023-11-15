@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:isms/models/enums.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/themes/common_theme.dart';
-import 'package:isms/utilityWidgets/optionTile.dart';
+import 'package:isms/screens/learningModuleScreens/examScreens/sharedWidgets/optionTile.dart';
 import 'package:isms/utilityFunctions/generateRandom.dart';
 
 class QuestionWidget extends StatefulWidget {
@@ -42,15 +42,29 @@ class _QuestionWidgetState extends State<QuestionWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    return Container(
+        decoration: BoxDecoration(
+        color: Colors.deepPurpleAccent[100],
+          borderRadius: BorderRadius.circular(30.0),
+          // Set border radius
+        ), // Set the background color here
+        child: SingleChildScrollView(
       child: Form(
         child: SizedBox(
-          height: 500,
+          height: 450,
           child: Column(
-            children: [
+              children: [
+          Container(
+          margin: EdgeInsets.all(10.0), // Add margin for spacing
+          decoration: BoxDecoration(
+            color: Colors.white, // Set white background color
+            borderRadius: BorderRadius.circular(8.0), // Rounded corners
+          ),
+            child:
               TextFormField(
                 controller: questionController,
                 decoration: customInputDecoration(hintText: 'Enter Question'),
+              ),
               ),
               SizedBox(
                 height: 250,
@@ -91,9 +105,12 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                   },
                 ),
               ),
-              const SizedBox(height: 20,),
-              SizedBox(
-                width: 200,
+              const SizedBox(
+                height: 20,
+              ),
+        Container(
+          width: double.infinity, // Expand to full width
+          padding: EdgeInsets.symmetric(horizontal: 20.0),
                 child: ElevatedButton(
                   style: customElevatedButtonStyle(),
                   onPressed: () {
@@ -147,6 +164,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
           ),
         ),
       ),
+        ),
     );
   }
 }
