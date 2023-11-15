@@ -29,6 +29,8 @@ class AdminConsolePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.deepPurpleAccent.shade100,
       appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
+      bottomNavigationBar:
+          PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
