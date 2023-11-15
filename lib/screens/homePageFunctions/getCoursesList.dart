@@ -42,33 +42,35 @@ Future<List<Widget>> getEnrolledCoursesList(
     {required BuildContext context,
     required LoggedInState loggedInState,
     required CoursesProvider coursesProvider}) async {
-  List<Widget> enrolledCoursesDisplayWidgets = [Container(width: 100)];
+  List<Widget> enrolledCoursesDisplayWidgets = [];
 
   List coursesStarted = loggedInState.loggedInUser.courses_started;
-  debugPrint("TRY TO CREATE WIDGETSS       $coursesStarted");
 
   if (coursesStarted.isNotEmpty) {
     for (int i = coursesStarted.length - 1; i >= 0; i--) {
-      debugPrint("TRY TO CREATE WIDGETSS ${coursesProvider.allCourses}");
-      Course course = coursesProvider.allCourses
-          .where((element) => element.id == coursesStarted[i]["courseID"])
-          .first;
+      Course? course;
+
+      coursesProvider.allCourses.forEach((element) {
+        if (element.id == coursesStarted[i]["courseID"]) course = element;
+      });
 
       enrolledCoursesDisplayWidgets.add(CourseTile(
         title: coursesStarted[i]["course_name"],
         onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => CoursePage(course: course)));
+          if (course != null)
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => CoursePage(course: course!)));
         },
         // tileHeight: 300,
         tileWidth: 400,
-        courseData:
-            getUserCourseData(loggedInState: loggedInState, course: course),
+        courseData: course != null
+            ? getUserCourseData(loggedInState: loggedInState, course: course!)
+            : null,
         index: i,
         subTitle: getLatestModuleName(coursesStarted[i]) ?? '',
-        modulesCount: course.modulesCount ?? 0,
+        modulesCount: course != null ? (course?.modulesCount ?? 0) : 0,
         // dateValue: course.dateCreated,
       ));
     }
@@ -82,7 +84,7 @@ Future<List<Widget>> getRecommendedCoursesList(
     required LoggedInState loggedInState,
     required CoursesProvider coursesProvider}) async {
   await loggedInState.getUserCoursesData('crs_enrl');
-  List<Widget> recommenedCoursesDisplayWidgets = [Container(width: 100)];
+  List<Widget> recommenedCoursesDisplayWidgets = [];
   List<Course> coursesToRecommend = coursesProvider.allCourses.length < 4
       ? coursesProvider.allCourses
           .take(coursesProvider.allCourses.length)

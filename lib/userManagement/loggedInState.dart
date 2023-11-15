@@ -308,9 +308,11 @@ class _UserDataGetterMaster with ChangeNotifier {
         int examPassed = -1;
         if (courseStarted["exams_completed"].isNotEmpty) {
           examPassed = courseStarted["exams_completed"]
-              .indexWhere((element) => element == examIndex);
+              .indexWhere((element) => element["exam_index"] == examIndex);
         }
         if (examPassed == -1) {
+          // FIXME: we should add an exam with this index, not just the
+          // index
           courseStarted["exams_completed"].add(examIndex);
           loggedInUser.courses_started[courseIndex] = courseStarted;
           await setUserData();
