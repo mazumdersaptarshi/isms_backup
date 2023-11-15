@@ -1,16 +1,14 @@
+// ignore_for_file: file_names
+
 import 'dart:math';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/sharedWidgets/course_tile.dart';
 import 'package:provider/provider.dart';
 
 import '../../../projectModules/courseManagement/coursesProvider.dart';
-import '../../../sharedWidgets/bottomNavBar.dart';
-import '../../../sharedWidgets/navIndexTracker.dart';
 import '../../../themes/common_theme.dart';
 import '../../../userManagement/loggedInState.dart';
-import '../../../utilityFunctions/csvDataHandler.dart';
 import '../../../utilityFunctions/platformCheck.dart';
 import '../../homePageFunctions/getCoursesList.dart';
 import '../../login/loginScreen.dart';
@@ -18,28 +16,28 @@ import 'createCourseScreen.dart';
 import 'moduleScreens/modulesListScreen.dart';
 
 class MyLearningScreen extends StatefulWidget {
-  MyLearningScreen({super.key});
-  String userRole = "user";
+  const MyLearningScreen({super.key});
+
   @override
   State<MyLearningScreen> createState() => _MyLearningScreenState();
 }
 
 class _MyLearningScreenState extends State<MyLearningScreen> {
+  String userRole = "user";
   @override
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
 
     if (loggedInState.currentUser == null) {
-      return LoginPage();
+      return const LoginPage();
     }
 
-    widget.userRole = loggedInState.currentUserRole;
+    userRole = loggedInState.currentUserRole;
     List<dynamic> userEnrolledCourses = loggedInState.allEnrolledCoursesGlobal;
 
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
 
     double tileMinWidth = 400;
-    double tileMinimumheight = 100;
     double tileRatio = 16 / 9;
     // available width, in pixels
     double horizontalMargin = MediaQuery.sizeOf(context).width > 900 ? 200 : 10;
@@ -48,8 +46,7 @@ class _MyLearningScreenState extends State<MyLearningScreen> {
     int maxColumns =
         max(((screenWidth - (horizontalMargin * 2)) / tileMinWidth).floor(), 1);
     // number of tiles that have to fit on the screen
-    int itemCount = coursesProvider.allCourses.length ?? 0;
-    int? numberOfModules;
+    int itemCount = coursesProvider.allCourses.length;
     // grid width, in tiles
     int numberColumns =
         min(itemCount, maxColumns) > 0 ? min(itemCount, maxColumns) : 1;
@@ -121,17 +118,17 @@ class _MyLearningScreenState extends State<MyLearningScreen> {
           ],
         ),
       ),
-      floatingActionButton: widget.userRole == 'admin'
+      floatingActionButton: userRole == 'admin'
           ? FloatingActionButton(
               onPressed: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => CreateCourseScreen()));
+                        builder: (context) => const CreateCourseScreen()));
               },
               backgroundColor:
                   customTheme.floatingActionButtonTheme.backgroundColor,
-              child: Icon(Icons.add),
+              child: const Icon(Icons.add),
             )
           : null,
     );

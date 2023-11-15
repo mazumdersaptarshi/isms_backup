@@ -97,8 +97,7 @@ class CourseTile extends StatelessWidget {
                                           3, // Set the maximum number of lines before ellipsis
                                       overflow: TextOverflow.ellipsis,
                                     ),
-                                    const SizedBox(
-                                        width: 100, child: Divider()),
+                                    const SizedBox(width: 100, child: Divider()),
                                     const SizedBox(height: 5),
                                     if (pageView != 'explore')
                                       Expanded(

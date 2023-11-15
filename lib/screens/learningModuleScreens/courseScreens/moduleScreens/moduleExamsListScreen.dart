@@ -71,7 +71,7 @@ class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
               loggedInState: loggedInState,
             );
           } else if (snapshot.hasError) {
-            return Container(
+            return SizedBox(
               height: 300,
               child: AlertDialog(
                 elevation: 4,
@@ -86,7 +86,7 @@ class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
               ),
             );
           } else {
-            return Container(
+            return SizedBox(
               height: 300,
               child: AlertDialog(
                 elevation: 4,

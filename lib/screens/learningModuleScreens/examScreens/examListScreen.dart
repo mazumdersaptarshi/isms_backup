@@ -13,7 +13,6 @@ import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 
 import '../../../projectModules/courseManagement/coursesProvider.dart';
-import '../../../sharedWidgets/leaningModulesAppBar.dart';
 import '../../../sharedWidgets/loadingScreenWidget.dart';
 import '../../../sharedWidgets/navIndexTracker.dart';
 import '../../../themes/common_theme.dart';
@@ -69,7 +68,7 @@ class _ExamListScreenState extends State<ExamListScreen> {
               loggedInState: loggedInState,
             );
           } else if (snapshot.hasError) {
-            return Container(
+            return SizedBox(
               height: 300,
               child: AlertDialog(
                 elevation: 4,
@@ -84,7 +83,7 @@ class _ExamListScreenState extends State<ExamListScreen> {
               ),
             );
           } else {
-            return Container(
+            return SizedBox(
               height: 300,
               child: AlertDialog(
                 elevation: 4,

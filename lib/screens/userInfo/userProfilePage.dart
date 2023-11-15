@@ -6,13 +6,13 @@ import 'package:isms/models/UserActions.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 // import 'package:isms/screens/analyticsSharedWidgets/courseDropdownWidget.dart';
 import 'package:isms/screens/login/loginScreen.dart';
+import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/userManagement/userprofileHeaderWidget.dart';
 import 'package:provider/provider.dart';
 
 import '../../sharedWidgets/analyticsSharedWidgets/courseDropdownWidget.dart';
 import '../../sharedWidgets/analyticsSharedWidgets/userCourseStartedDetailsWidget.dart';
-import '../../themes/common_theme.dart';
 import '../../utilityFunctions/platformCheck.dart';
 // import '../analyticsSharedWidgets/userCourseStartedDetailsWidget.dart';
 

@@ -130,7 +130,7 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
                 ],
               );
             } else if (snapshot.hasError) {
-              return Container(
+              return SizedBox(
                 height: 300,
                 child: AlertDialog(
                   elevation: 4,
@@ -145,7 +145,7 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
                 ),
               );
             } else {
-              return Container(
+              return SizedBox(
                 height: 300,
                 child: AlertDialog(
                   elevation: 4,

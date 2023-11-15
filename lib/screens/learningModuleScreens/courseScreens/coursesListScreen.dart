@@ -11,8 +11,6 @@ import 'package:isms/utilityFunctions/platformCheck.dart';
 import 'package:provider/provider.dart';
 
 import '../../../projectModules/courseManagement/coursesProvider.dart';
-import '../../../sharedWidgets/bottomNavBar.dart';
-import '../../../sharedWidgets/navIndexTracker.dart';
 import '../../../themes/common_theme.dart';
 import '../../homePageFunctions/getCoursesList.dart';
 import 'createCourseScreen.dart';

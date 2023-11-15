@@ -1,12 +1,9 @@
 // ignore_for_file: file_names, non_constant_identifier_names
 
-import 'dart:math';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/sharedWidgets/moduleTile.dart';
-import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/sharedWidgets/moduleTileWidget.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/createModuleScreenHTML.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examListScreen.dart';
@@ -156,7 +153,7 @@ class _CoursePageState extends State<CoursePage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Container(
-                            margin: EdgeInsets.symmetric(
+                            margin: const EdgeInsets.symmetric(
                                 horizontal: 20, vertical: 20),
                             child: SingleChildScrollView(
                               child: Column(
@@ -170,7 +167,7 @@ class _CoursePageState extends State<CoursePage> {
                                             fontSize: 20,
                                             fontWeight: FontWeight.bold),
                                   ),
-                                  SizedBox(height: 20),
+                                  const SizedBox(height: 20),
                                   Text(
                                     widget.course.description.toString(),
                                     style: customTheme.textTheme.labelLarge!
@@ -181,7 +178,7 @@ class _CoursePageState extends State<CoursePage> {
                             ),
                           ),
                           Container(
-                            margin: EdgeInsets.only(left: 20, bottom: 10),
+                            margin: const EdgeInsets.only(left: 20, bottom: 10),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
@@ -198,16 +195,16 @@ class _CoursePageState extends State<CoursePage> {
                                         ),
                                       );
                                     },
-                                    child: const Text("View course exams",
-                                        style: TextStyle(color: primaryColor)),
                                     style: customTheme
                                         .elevatedButtonTheme.style!
                                         .copyWith(
                                             backgroundColor:
                                                 MaterialStateProperty.all<
                                                     Color>(Colors.white)),
+                                    child: const Text("View course exams",
+                                        style: TextStyle(color: primaryColor)),
                                   ),
-                                if (isALlModulesCompleted) SizedBox(width: 20),
+                                if (isALlModulesCompleted) const SizedBox(width: 20),
                                 ElevatedButton(
                                   onPressed: () {
                                     Navigator.push(
@@ -220,15 +217,15 @@ class _CoursePageState extends State<CoursePage> {
                                       ),
                                     );
                                   },
-                                  child: const Text(
-                                    "Create course exam",
-                                    style: TextStyle(color: primaryColor),
-                                  ),
                                   style: customTheme.elevatedButtonTheme.style!
                                       .copyWith(
                                           backgroundColor:
                                               MaterialStateProperty.all<Color>(
                                                   Colors.white)),
+                                  child: const Text(
+                                    "Create course exam",
+                                    style: TextStyle(color: primaryColor),
+                                  ),
                                 ),
                               ],
                             ),
@@ -238,7 +235,7 @@ class _CoursePageState extends State<CoursePage> {
                     ),
                   ),
                 ],
-                body: Container(
+                body: SizedBox(
                     height: MediaQuery.of(context).size.height,
                     child: SingleChildScrollView(
                       child: Column(
@@ -246,7 +243,7 @@ class _CoursePageState extends State<CoursePage> {
                             itemCount,
                             (moduleIndex) {
                                 Module module = modules[moduleIndex];
-                                return Container(
+                                return SizedBox(
                                   height: 200,
                                   width: MediaQuery.of(context).size.width >
                                           HOME_PAGE_WIDGETS_COLLAPSE_WIDTH
@@ -269,7 +266,7 @@ class _CoursePageState extends State<CoursePage> {
               ),
             );
           } else if (snapshot.hasError) {
-            return Container(
+            return SizedBox(
               height: 300,
               child: AlertDialog(
                 elevation: 4,
@@ -284,7 +281,7 @@ class _CoursePageState extends State<CoursePage> {
               ),
             );
           } else {
-            return Container(
+            return SizedBox(
               height: 300,
               child: AlertDialog(
                 elevation: 4,

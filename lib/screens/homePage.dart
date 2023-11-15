@@ -9,7 +9,6 @@ import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 import 'package:isms/projectModules/notificationModules/initLinkHandler.dart';
 import 'package:isms/screens/homePageWidgets/homePageMainContent.dart';
 import 'package:isms/sharedWidgets/appFooter.dart';
-import 'package:isms/sharedWidgets/navIndexTracker.dart';
 import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/utilityFunctions/platformCheck.dart';
