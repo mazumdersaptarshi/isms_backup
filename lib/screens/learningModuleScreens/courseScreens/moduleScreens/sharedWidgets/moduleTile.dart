@@ -61,7 +61,7 @@ class ModuleTile extends StatelessWidget {
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(10.0),
-                      child: Container(
+                      child: SizedBox(
                         width: double.infinity,
                         child: Text(
                           module.contentDescription,

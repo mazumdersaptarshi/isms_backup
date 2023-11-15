@@ -1,4 +1,4 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, non_constant_identifier_names, unused_element
 
 import 'package:flutter/material.dart';
 import 'package:isms/screens/homePage.dart';
@@ -36,8 +36,8 @@ class BottomNavBar extends StatelessWidget {
     }
 
     void NavigateToMyLearningPage() {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const MyLearningScreen()));
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const MyLearningScreen()));
     }
 
     void navigateToAdminConsolePage() {

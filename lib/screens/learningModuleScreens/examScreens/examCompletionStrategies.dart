@@ -4,9 +4,9 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/slidesDisplayScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleDetailsScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/modulesListScreen.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/slidesDisplayScreen.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/course.dart';
@@ -39,6 +39,7 @@ class CourseExamCompletionStrategy implements ExamCompletionStrategy {
     return ElevatedButton(
       onPressed: () async {
         await handleExamCompletion(context: context);
+        if (!context.mounted) return;
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(

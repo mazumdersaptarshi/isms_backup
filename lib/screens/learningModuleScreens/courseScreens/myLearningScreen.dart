@@ -3,7 +3,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:isms/screens/learningModuleScreens/courseScreens/sharedWidgets/course_tile.dart';
 import 'package:isms/sharedWidgets/loadingScreenWidget.dart';
 import 'package:provider/provider.dart';
 
@@ -14,7 +13,6 @@ import '../../../utilityFunctions/platformCheck.dart';
 import '../../homePageFunctions/getCoursesList.dart';
 import '../../login/loginScreen.dart';
 import 'createCourseScreen.dart';
-import 'moduleScreens/modulesListScreen.dart';
 
 class MyLearningScreen extends StatefulWidget {
   const MyLearningScreen({super.key});
@@ -34,7 +32,7 @@ class _MyLearningScreenState extends State<MyLearningScreen> {
     }
 
     userRole = loggedInState.currentUserRole;
-    List<dynamic> userEnrolledCourses = loggedInState.allEnrolledCoursesGlobal;
+    //List<dynamic> userEnrolledCourses = loggedInState.allEnrolledCoursesGlobal;
 
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
 
@@ -52,13 +50,13 @@ class _MyLearningScreenState extends State<MyLearningScreen> {
     int numberColumns =
         min(itemCount, maxColumns) > 0 ? min(itemCount, maxColumns) : 1;
 
-    String? getLatestModuleName(Map<String, dynamic> courseItem) {
+    /*String? getLatestModuleName(Map<String, dynamic> courseItem) {
       int latestModuleIndex = (courseItem['modules_started'].length - 1) ?? 0;
       String? latestModuleName = (courseItem['modules_started']
               [latestModuleIndex]['module_name']) ??
           '';
       return latestModuleName ?? '';
-    }
+    }*/
 
     //List<Widget> homePageWidgets = [Container(width: 100)];
 

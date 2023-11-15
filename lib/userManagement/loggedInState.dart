@@ -7,9 +7,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:isms/models/newExam.dart';
 import 'package:isms/adminManagement/createUserReferenceForAdmin.dart';
-import 'package:isms/screens/userInfo/userProfilePage.dart';
+import 'package:isms/models/newExam.dart';
 
 import '../models/course.dart';
 import '../models/customUser.dart';
@@ -206,13 +205,17 @@ class _UserDataGetterMaster with ChangeNotifier {
     if (snapshot.exists) {
       Map<String, dynamic> mapData = snapshot.data() as Map<String, dynamic>;
       UserCoursesDetails data = UserCoursesDetails.fromMap(mapData);
-      allEnrolledCoursesGlobal = data.courses_started!;
+      // TODO check why this is cleared then set
+      allEnrolledCoursesGlobal.clear();
       allCompletedCoursesGlobal.clear();
-      if (data.courses_completed != null && data.courses_started != null) {
-        for (var courseCompleted in data.courses_completed!) {
-          allCompletedCoursesGlobal.add(data.courses_started!.where(
-              (courseStarted) =>
-                  courseStarted["courseID"] == courseCompleted["courseID"]));
+      allEnrolledCoursesGlobal = data.courses_started!;
+      // allCompletedCoursesGlobal = data.courses_completed!;
+      // TODO check first that these lists aren't null
+      for (var courseInStarted in data.courses_started!) {
+        for (var courseInCompleted in data.courses_completed!) {
+          if (courseInCompleted['courseID'] == courseInStarted['courseID']) {
+            allCompletedCoursesGlobal.add(courseInStarted);
+          }
         }
       }
     } else {

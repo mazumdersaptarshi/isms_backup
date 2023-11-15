@@ -30,7 +30,7 @@ class LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: Center(
         child: _isLoading
-            ? Container(
+            ? SizedBox(
                 height: 200,
                 width: MediaQuery.of(context).size.width > SCREEN_COLLAPSE_WIDTH
                     ? 300

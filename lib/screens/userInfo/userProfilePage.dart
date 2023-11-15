@@ -153,7 +153,8 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
   final String? actionId;
 
   final LoggedInState loggedInState;
-  const UserEnrolledCoursesDropdown({super.key, this.actionId, required this.loggedInState});
+  const UserEnrolledCoursesDropdown(
+      {super.key, this.actionId, required this.loggedInState});
 
   (bool, double, int) getCourseCompletedPercentage({
     required CoursesProvider coursesProvider,
@@ -162,8 +163,8 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
     double courseCompletionPercentage = 0;
     int noOfExams = 0;
     bool isValid = false;
-    debugPrint('Enrolled CoursesDropdown');
     if (kDebugMode) {
+      print('Enrolled CoursesDropdown');
       print(actionId);
     }
 
@@ -176,7 +177,7 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
       for (int i = 0; i < coursesProvider.allCourses.length; i++) {
         var element = coursesProvider.allCourses[i];
 
-        if (element.name == allEnrolledCourses![index]["course_name"]) {
+        if (element.name == allEnrolledCourses[index]["course_name"]) {
           modulesCount = element.modulesCount;
           noOfExams = element.examsCount;
           isValid = true;
@@ -184,8 +185,8 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
       }
 
       int modulesCompletedCount =
-          allEnrolledCourses![index]["modules_completed"] != null
-              ? allEnrolledCourses![index]["modules_completed"].length
+          allEnrolledCourses[index]["modules_completed"] != null
+              ? allEnrolledCourses[index]["modules_completed"].length
               : 0;
       if (isValid) {
         courseCompletionPercentage = modulesCompletedCount / modulesCount;
@@ -217,22 +218,13 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
               shrinkWrap: true,
               physics: const ClampingScrollPhysics(),
               itemBuilder: (context, index) {
-                // ignore: unused_local_variable
-                double courseCompletionPercentage = 0;
-                // ignore: unused_local_variable
-                bool isValid = false;
-                // ignore: unused_local_variable
-                int noOfExams = 0;
-                var (a, b, c) = getCourseCompletedPercentage(
+                var (_, _, _) = getCourseCompletedPercentage(
                   coursesProvider: coursesProvider,
                   index: index,
                 );
-                isValid = a;
-                noOfExams = c;
-                courseCompletionPercentage = b;
 
                 return UserCourseStartedDetailsWidget(
-                  courseItem: allEnrolledCourses![index],
+                  courseItem: allEnrolledCourses[index],
                   coursesProvider: coursesProvider,
                   index: index,
                 );

@@ -119,7 +119,6 @@ class DataExporter {
       List<String> currentUserCoursesEnrolled = [];
       List<String> currentUserCoursesCompleted = [];
       List<String> currentUserCoursesCompletedIDs = [];
-      List<String> currentUserModulesStarted = [];
       List<String> currentUserModulesCompletedIDs = [];
 
       Map<String, dynamic> dataMap = snapshot.data() as Map<String, dynamic>;
@@ -142,37 +141,45 @@ class DataExporter {
         currentUserCoursesCompleted.add(courseTitle);
         currentUserCoursesCompletedIDs.add(courseId);
       }
-      print('currentUserCoursesCompletedIDs: $currentUserCoursesCompletedIDs');
+      debugPrint(
+          'currentUserCoursesCompletedIDs: $currentUserCoursesCompletedIDs');
 
       for (var course in dataMap['courses_started']) {
         String courseTitle = course['course_name'] ?? '';
         //String courseId = course['courseID'] ?? '';
         if (course['modules_completed'] != null) {
-          print(course['modules_completed']);
+          debugPrint(course['modules_completed']);
           for (var module in course['modules_completed']) {
             try {
               currentUserModulesCompletedIDs.add(module['module_id']);
-            } catch (e) {}
+            } catch (e) {
+              log(e.toString());
+            }
           }
         }
         String moduleCompleted = 'no';
         if (course['modules_started'] != null) {
           for (var module in course['modules_started']) {
-            print('${module} ${userInfo.username}');
-            print(currentUserModulesCompletedIDs);
+            if (kDebugMode) {
+              print('$module ${userInfo.username}');
+              print(currentUserModulesCompletedIDs);
+            }
+
             try {
               if (currentUserModulesCompletedIDs
                   .contains(module['module_id'])) {
                 moduleCompleted = 'yes';
               }
-            } catch (e) {}
+            } catch (e) {
+              log(e.toString());
+            }
 
             String courseCompleted = 'no';
             if (currentUserCoursesCompletedIDs.contains(course['courseID'])) {
               courseCompleted = 'yes';
             }
             currentUserCoursesEnrolled.add(courseTitle);
-            print('ududud');
+            debugPrint('ududud');
             try {
               List<String> row = [
                 userInfo.username,
@@ -183,7 +190,9 @@ class DataExporter {
                 moduleCompleted
               ];
               userCsvData.add(row);
-            } catch (e) {}
+            } catch (e) {
+              log(e.toString());
+            }
           }
         }
       }

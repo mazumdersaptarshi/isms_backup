@@ -17,7 +17,7 @@ mixin CustomAppBarMixin on StatelessWidget {
   void navigateToUserProfilePage(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => UserProfilePage()),
+      MaterialPageRoute(builder: (context) => const UserProfilePage()),
     );
   }
 

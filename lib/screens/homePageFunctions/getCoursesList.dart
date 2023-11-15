@@ -21,9 +21,8 @@ Future<Map<String, dynamic>> getCoursesListForUser(
     required CoursesProvider coursesProvider}) async {
   await loggedInState.getUserCoursesData('crs_enrl');
   await loggedInState.getUserCoursesData('crs_compl');
-
-  if (loggedInState.loggedInUser.courses_started == null ||
-      loggedInState.loggedInUser.courses_started.length == 0) {
+  if (!context.mounted) return {};
+  if (loggedInState.loggedInUser.courses_started.isEmpty) {
     List<Widget> recommendedCoursesList = await getRecommendedCoursesList(
         context: context,
         loggedInState: loggedInState,
@@ -50,27 +49,28 @@ Future<List<Widget>> getEnrolledCoursesList(
     for (int i = coursesStarted.length - 1; i >= 0; i--) {
       Course? course;
 
-      coursesProvider.allCourses.forEach((element) {
+      for (var element in coursesProvider.allCourses) {
         if (element.id == coursesStarted[i]["courseID"]) course = element;
-      });
+      }
 
       enrolledCoursesDisplayWidgets.add(CourseTile(
         title: coursesStarted[i]["course_name"],
         onPressed: () {
-          if (course != null)
+          if (course != null) {
             Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => CoursePage(course: course!)));
+          }
         },
         // tileHeight: 300,
         tileWidth: 400,
         courseData: course != null
-            ? getUserCourseData(loggedInState: loggedInState, course: course!)
+            ? getUserCourseData(loggedInState: loggedInState, course: course)
             : null,
         index: i,
         subTitle: getLatestModuleName(coursesStarted[i]) ?? '',
-        modulesCount: course != null ? (course?.modulesCount ?? 0) : 0,
+        modulesCount: course != null ? (course.modulesCount ?? 0) : 0,
         // dateValue: course.dateCreated,
       ));
     }
