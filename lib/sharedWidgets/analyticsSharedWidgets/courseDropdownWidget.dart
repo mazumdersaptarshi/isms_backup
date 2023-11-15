@@ -31,8 +31,7 @@ class CourseDropdownWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(12.0),
       ),
       child: Container(
-        constraints: BoxConstraints(
-            minHeight: 50, maxWidth: MediaQuery.of(context).size.width * 0.6),
+        constraints: BoxConstraints(minHeight: 50),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment
               .start, // Align children to the start of the cross axis
