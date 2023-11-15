@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 
 import '../../projectModules/courseManagement/coursesProvider.dart';
+import '../../utilityFunctions/getCourseCompletedPercentage.dart';
 import 'courseDropdownWidget.dart';
 
 class UserCourseCompletedDetailsWidget extends StatelessWidget {
@@ -17,8 +18,11 @@ class UserCourseCompletedDetailsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Map<String, dynamic>? courseDetailsData =
+        getCourseCompletedPercentage(courseItem, coursesProvider, index);
     return CourseDropdownWidget(
       courseItem: courseItem,
+      courseDetailsData: courseDetailsData,
       detailType: 'courses_completed',
     );
   }
