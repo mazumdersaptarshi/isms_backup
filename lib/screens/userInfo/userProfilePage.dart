@@ -220,7 +220,7 @@ class UserCompletedCoursesDropdown extends StatelessWidget {
   Widget build(BuildContext context) {
     LoggedInState loggedInState =
         Provider.of<LoggedInState>(context, listen: false);
-    return Container(
+    return SizedBox(
       width: double.infinity,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

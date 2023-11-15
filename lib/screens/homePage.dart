@@ -15,9 +15,6 @@ import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/utilityFunctions/platformCheck.dart';
 import 'package:provider/provider.dart';
 
-import 'homePageFunctions/getCoursesList.dart';
-import 'homePageWidgets/homePageItemsContainer.dart';
-import 'learningModuleScreens/courseScreens/coursesListScreen.dart';
 import 'login/loginScreen.dart';
 
 class HomePage extends StatefulWidget {
@@ -84,6 +81,11 @@ class _HomePageState extends State<HomePage> {
           appBar:
               PlatformCheck.topNavBarWidget(loggedInState, context: context),
           body: FooterView(
+            footer: kIsWeb
+                ? Footer(
+                    backgroundColor: Colors.transparent, child: const AppFooter())
+                : Footer(
+                    backgroundColor: Colors.transparent, child: Container()),
             children: [
               CustomScrollView(
                 physics: ClampingScrollPhysics(),
@@ -132,11 +134,6 @@ class _HomePageState extends State<HomePage> {
                 ],
               )
             ],
-            footer: kIsWeb
-                ? Footer(
-                    backgroundColor: Colors.transparent, child: AppFooter())
-                : Footer(
-                    backgroundColor: Colors.transparent, child: Container()),
           ));
     });
   }

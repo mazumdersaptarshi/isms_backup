@@ -12,9 +12,9 @@ class CourseTile extends StatelessWidget {
   final double tileWidth;
   //dynamic? modulesCompleted;
   final String subTitle;
-  final String pageView;
   final Map<String, dynamic> courseData;
-  CourseTile(
+  final String pageView;
+  const CourseTile(
       {super.key,
       required this.index,
       required this.title,
@@ -35,7 +35,7 @@ class CourseTile extends StatelessWidget {
     // if (tileHeight > 300) imgWebHeight = 500;
     double tileHeight = 200;
     return Container(
-      margin: EdgeInsets.all(8),
+      margin: const EdgeInsets.all(8),
       child: GestureDetector(
         child: Card(
           surfaceTintColor: white,
@@ -97,12 +97,13 @@ class CourseTile extends StatelessWidget {
                                           3, // Set the maximum number of lines before ellipsis
                                       overflow: TextOverflow.ellipsis,
                                     ),
-                                    Container(width: 100, child: Divider()),
-                                    SizedBox(height: 5),
+                                    const SizedBox(
+                                        width: 100, child: Divider()),
+                                    const SizedBox(height: 5),
                                     if (pageView != 'explore')
                                       Expanded(
                                         child: Text(
-                                          "${subTitle}",
+                                          "$subTitle",
                                           style: customTheme
                                               .textTheme.labelSmall!
                                               .copyWith(
@@ -115,7 +116,7 @@ class CourseTile extends StatelessWidget {
                                     else
                                       Expanded(
                                         child: Text(
-                                          '${subTitle}',
+                                          '$subTitle',
                                           style: customTheme
                                               .textTheme.labelSmall!
                                               .copyWith(
@@ -136,7 +137,7 @@ class CourseTile extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 4,
                                   ),
                                   LinearProgressIndicator(

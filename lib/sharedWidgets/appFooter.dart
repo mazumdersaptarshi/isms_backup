@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:footer/footer.dart';
 
 import '../themes/common_theme.dart';
 
@@ -13,7 +12,7 @@ class AppFooter extends StatelessWidget {
         child: Container(
           color: Colors.grey.shade100,
           height: 50,
-          padding: EdgeInsets.only(top: 10),
+          padding: const EdgeInsets.only(top: 10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,

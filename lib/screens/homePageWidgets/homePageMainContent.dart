@@ -8,17 +8,17 @@ import '../learningModuleScreens/courseScreens/coursesListScreen.dart';
 import 'homePageItemsContainer.dart';
 
 class HomePageMainContent extends StatelessWidget {
-  HomePageMainContent(
+  const HomePageMainContent(
       {super.key,
       required this.homePageContainerHeight,
       required this.loggedInState,
       required this.coursesProvider});
-  double homePageContainerHeight;
-  LoggedInState loggedInState;
-  CoursesProvider coursesProvider;
+  final double homePageContainerHeight;
+  final LoggedInState loggedInState;
+  final CoursesProvider coursesProvider;
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
         width: MediaQuery.of(context).size.width,
         height: homePageContainerHeight,
 

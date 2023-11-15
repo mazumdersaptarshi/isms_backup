@@ -41,8 +41,7 @@ class Course {
         exams: null,
         dateCreated:
             // TODO store a Timestamp
-            CSVDataHandler.timestampToReadableDateInWords(map['createdAt']) ??
-                '',
+            CSVDataHandler.timestampToReadableDateInWords(map['createdAt']),
       );
   }
 

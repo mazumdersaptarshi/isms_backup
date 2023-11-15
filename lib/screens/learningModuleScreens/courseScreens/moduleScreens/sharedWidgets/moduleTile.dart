@@ -62,7 +62,7 @@ class ModuleTile extends StatelessWidget {
                     )
                   ],
                 ),
-                Divider(thickness: 1, color: Colors.grey),
+                const Divider(thickness: 1, color: Colors.grey),
                 Expanded(
                     child: Text(
                   module.contentDescription,
