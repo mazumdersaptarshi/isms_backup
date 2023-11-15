@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:isms/screens/homePage.dart';
 import 'package:isms/sharedWidgets/loadingScreenWidget.dart';
+import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 
@@ -28,7 +29,14 @@ class LoginPageState extends State<LoginPage> {
 
     return Scaffold(
       body: Center(
-        child: _isLoading ? loadingWidget() : LoginPageUI(),
+        child: _isLoading
+            ? SizedBox(
+                height: 200,
+                width: MediaQuery.of(context).size.width > SCREEN_COLLAPSE_WIDTH
+                    ? 300
+                    : MediaQuery.of(context).size.width,
+                child: loadingWidget())
+            : LoginPageUI(),
       ),
     );
   }

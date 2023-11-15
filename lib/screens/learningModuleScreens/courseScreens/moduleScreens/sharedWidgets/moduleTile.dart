@@ -27,45 +27,63 @@ class ModuleTile extends StatelessWidget {
         elevation: 4,
         shape: customCardShape,
         color: Colors.white,
-        child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
               children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: RichText(
-                        text: TextSpan(
-                          text: module.title,
+                Expanded(
+                    child: ExpansionTile(
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(module.title,
                           style: customTheme.textTheme.labelMedium!.copyWith(
-                              fontSize: 15,
+                              fontSize: 14,
                               fontWeight: FontWeight.bold,
-                              color: Colors.black),
+                              color: Theme.of(context).colorScheme.tertiary)),
+                      Icon(
+                        isModuleCompleted
+                            ? Icons.check_circle
+                            : (isModuleStarted
+                                ? Icons.circle
+                                : Icons.unpublished),
+                        color: isModuleCompleted
+                            ? Colors.green
+                            : Colors.orangeAccent,
+                      )
+                    ],
+                  ),
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: Text(
+                          module.contentDescription,
+                          maxLines: 3,
+                          textAlign: TextAlign.left,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ),
-                    Icon(
-                      isModuleCompleted
-                          ? Icons.check_circle
-                          : (isModuleStarted
-                              ? Icons.circle
-                              : Icons.unpublished),
-                      color: isModuleCompleted
-                          ? Colors.green
-                          : Colors.orangeAccent,
-                    )
+                    // Column(
+                    //   children: [
+                    //     ListView.builder(
+                    //         shrinkWrap: true,
+                    //         itemCount: 1,
+                    //         itemBuilder: (BuildContext context, int index) {
+                    //           print(module.slides);
+                    //           return Text('${module.slides?[0].title}');
+                    //         })
+                    //   ],
+                    // )
                   ],
-                ),
-                const Divider(thickness: 1, color: Colors.grey),
-                Expanded(
-                    child: Text(
-                  module.contentDescription,
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
                 )),
               ],
-            )),
+            ),
+          ],
+        ),
       ),
       onTap: () {
         Navigator.push(

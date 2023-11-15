@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:isms/models/enums.dart';
 import 'package:isms/models/newExam.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
+import 'package:isms/screens/learningModuleScreens/examScreens/sharedWidgets/questionWidget.dart';
 import 'package:isms/themes/common_theme.dart';
+import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/utilityFunctions/generateRandom.dart';
-import 'package:isms/utilityWidgets/questionWidget.dart';
+import 'package:isms/utilityFunctions/platformCheck.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/course.dart';
@@ -57,10 +59,12 @@ class ExamCreationState extends State<ExamCreation> {
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
     examDataMaster =
         ExamDataMaster(course: widget.course, coursesProvider: coursesProvider);
+    double screenWidth = MediaQuery.of(context).size.width;
+    LoggedInState loggedInState = context.watch<LoggedInState>();
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Create Exam'),
-      ),
+      appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
+      bottomNavigationBar:
+          PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -69,7 +73,7 @@ class ExamCreationState extends State<ExamCreation> {
             child: Column(
               children: [
                 Container(
-                  width: 500,
+                  width: screenWidth,
                   decoration: customBoxTheme,
                   child: TextFormField(
                     controller: titleController,
@@ -81,7 +85,7 @@ class ExamCreationState extends State<ExamCreation> {
                   height: 15,
                 ),
                 Container(
-                  width: 500,
+                  width: screenWidth,
                   decoration: customBoxTheme,
                   child: TextFormField(
                     controller: passingMarksController,

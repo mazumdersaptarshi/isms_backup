@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:isms/adminManagement/createUserReferenceForAdmin.dart';
 import 'package:isms/models/newExam.dart';
 
 import '../models/course.dart';
@@ -13,8 +14,6 @@ import '../models/customUser.dart';
 import '../models/module.dart';
 import '../models/userCoursesDetails.dart';
 import '../projectModules/courseManagement/coursesProvider.dart';
-
-import 'package:isms/adminManagement/createUserReferenceForAdmin.dart';
 
 /// This class handles user connections
 /// It extends the private class _UserDataGetterMaster so all
@@ -36,15 +35,16 @@ class LoggedInState extends _UserDataGetterMaster {
       if (user == null) {
         debugPrint(
             "auth state changed: no account currently signed into Firebase");
+        notifyListeners();
         clear();
       } else {
         debugPrint(
             "auth state changed: ${user.email} currently signed into Firebase");
         _fetchFromFirestore(user).then((value) {
           storeUserCoursesData(currentUserSnapshot!);
+          notifyListeners();
         });
       }
-      notifyListeners();
     });
     listenToChanges();
   }
@@ -196,11 +196,15 @@ class _UserDataGetterMaster with ChangeNotifier {
     if (snapshot.exists) {
       Map<String, dynamic> mapData = snapshot.data() as Map<String, dynamic>;
       UserCoursesDetails data = UserCoursesDetails.fromMap(mapData);
-      if (data.courses_completed != null && data.courses_started != null) {
-        for (var courseCompleted in data.courses_completed!) {
-          allCompletedCoursesGlobal.add(data.courses_started!.where(
-              (courseStarted) =>
-                  courseStarted["courseID"] == courseCompleted["courseID"]));
+      allEnrolledCoursesGlobal.clear();
+      allCompletedCoursesGlobal.clear();
+      allEnrolledCoursesGlobal = data.courses_started!;
+      // allCompletedCoursesGlobal = data.courses_completed!;
+      for (var courseInStarted in data.courses_started!) {
+        for (var courseInCompleted in data.courses_completed!) {
+          if (courseInCompleted['courseID'] == courseInStarted['courseID']) {
+            allCompletedCoursesGlobal.add(courseInStarted);
+          }
         }
       }
     } else {

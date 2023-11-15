@@ -12,7 +12,7 @@ class CourseTile extends StatelessWidget {
   final double tileWidth;
   final dynamic modulesCompleted;
   final dynamic subTitle;
-  final Map<String, dynamic> courseData;
+  final Map<String, dynamic>? courseData;
 
   final String? pageView;
   const CourseTile(
@@ -35,7 +35,7 @@ class CourseTile extends StatelessWidget {
     //if (tileWidth > 300) imgWebWidth = 100;
     // if (tileHeight > 300) imgWebHeight = 500;
     double tileHeight = 200;
-
+    int courseDescriptionMaxLines = courseData != null ? 3 : 10;
     return Container(
       margin: const EdgeInsets.all(8),
       child: GestureDetector(
@@ -99,7 +99,8 @@ class CourseTile extends StatelessWidget {
                                           3, // Set the maximum number of lines before ellipsis
                                       overflow: TextOverflow.ellipsis,
                                     ),
-                                    const SizedBox(width: 100, child: Divider()),
+                                    const SizedBox(
+                                        width: 100, child: Divider()),
                                     const SizedBox(height: 5),
                                     if (pageView != 'explore')
                                       Expanded(
@@ -110,7 +111,7 @@ class CourseTile extends StatelessWidget {
                                               .copyWith(
                                             fontSize: 12,
                                           ),
-                                          maxLines: 2,
+                                          maxLines: courseDescriptionMaxLines,
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       )
@@ -132,38 +133,39 @@ class CourseTile extends StatelessWidget {
                               ),
                             ),
                             // SizedBox(height: 20),
-                            Expanded(
-                              flex: 2,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const SizedBox(
-                                    height: 4,
-                                  ),
-                                  LinearProgressIndicator(
-                                    borderRadius: BorderRadius.circular(20),
-                                    minHeight: 15,
-                                    backgroundColor: Colors.grey.shade100,
-                                    color: primaryColor.shade100,
-                                    value:
-                                        courseData["courseCompPercent"] / 100,
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  Text(
-                                    'Overall Progress ${courseData['courseCompPercent']}%',
-                                    style: TextStyle(
-                                        fontSize: 10,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .tertiary,
-                                        fontFamily: 'Poppins'),
-                                  )
-                                ],
+                            if (courseData != null)
+                              Expanded(
+                                flex: 2,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const SizedBox(
+                                      height: 4,
+                                    ),
+                                    LinearProgressIndicator(
+                                      borderRadius: BorderRadius.circular(20),
+                                      minHeight: 15,
+                                      backgroundColor: Colors.grey.shade100,
+                                      color: primaryColor.shade100,
+                                      value: courseData!["courseCompPercent"] /
+                                          100,
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      'Overall Progress ${courseData!['courseCompPercent']}%',
+                                      style: TextStyle(
+                                          fontSize: 10,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .tertiary,
+                                          fontFamily: 'Poppins'),
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
                           ],
                         ),
                       ),

@@ -3,7 +3,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:isms/screens/learningModuleScreens/courseScreens/sharedWidgets/course_tile.dart';
+import 'package:isms/sharedWidgets/loadingScreenWidget.dart';
 import 'package:provider/provider.dart';
 
 import '../../../projectModules/courseManagement/coursesProvider.dart';
@@ -13,7 +13,6 @@ import '../../../utilityFunctions/platformCheck.dart';
 import '../../homePageFunctions/getCoursesList.dart';
 import '../../login/loginScreen.dart';
 import 'createCourseScreen.dart';
-import 'moduleScreens/modulesListScreen.dart';
 
 class MyLearningScreen extends StatefulWidget {
   const MyLearningScreen({super.key});
@@ -33,7 +32,7 @@ class _MyLearningScreenState extends State<MyLearningScreen> {
     }
 
     userRole = loggedInState.currentUserRole;
-    List<dynamic> userEnrolledCourses = loggedInState.allEnrolledCoursesGlobal;
+    //List<dynamic> userEnrolledCourses = loggedInState.allEnrolledCoursesGlobal;
 
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
 
@@ -52,13 +51,15 @@ class _MyLearningScreenState extends State<MyLearningScreen> {
         min(itemCount, maxColumns) > 0 ? min(itemCount, maxColumns) : 1;
     // grid width, in pixels
 
-    String? getLatestModuleName(Map<String, dynamic> courseItem) {
+    /*String? getLatestModuleName(Map<String, dynamic> courseItem) {
       int latestModuleIndex = (courseItem['modules_started'].length - 1) ?? 0;
       String? latestModuleName = (courseItem['modules_started']
               [latestModuleIndex]['module_name']) ??
           '';
       return latestModuleName ?? '';
-    }
+    }*/
+
+    //List<Widget> homePageWidgets = [Container(width: 100)];
 
     return Scaffold(
       appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
@@ -67,47 +68,29 @@ class _MyLearningScreenState extends State<MyLearningScreen> {
       body: Container(
         margin: EdgeInsets.only(
             top: 20, left: horizontalMargin, right: horizontalMargin),
-        child: CustomScrollView(
-          slivers: [
-            SliverGrid.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: numberColumns, childAspectRatio: tileRatio),
-                itemCount: userEnrolledCourses.length,
-                itemBuilder: (context, courseIndex) {
-                  return CourseTile(
-                    pageView: 'mylearning',
-                    index: courseIndex,
-                    title: userEnrolledCourses[courseIndex]['course_name'],
-                    modulesCount: userEnrolledCourses[courseIndex]
-                            ['course_modules_count'] ??
-                        1,
-
-                    tileWidth: tileMinWidth,
-                    subTitle:
-                        getLatestModuleName(userEnrolledCourses[courseIndex]) ??
-                            '',
-                    // dateValue:
-                    //     (userEnrolledCourses[courseIndex]['started_at'] != null)
-                    //         ? CSVDataHandler.timestampToReadableDateInWords(
-                    //             userEnrolledCourses[courseIndex]['started_at'])
-                    //         : '',
-                    // tileHeight: tileMinimumheight,
-                    courseData: getUserCourseData(
-                        loggedInState: loggedInState,
-                        course: coursesProvider.allCourses[courseIndex]),
-
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CoursePage(
-                                    course:
-                                        coursesProvider.allCourses[courseIndex],
-                                  )));
-                    },
-                  );
-                })
-          ],
+        child: FutureBuilder<Map<String, dynamic>>(
+          future: getCoursesListForUser(
+              context: context,
+              loggedInState: loggedInState,
+              coursesProvider: coursesProvider),
+          builder: (context, snapshot) {
+            if (snapshot.data != null) {
+              return CustomScrollView(
+                slivers: [
+                  SliverGrid.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: numberColumns,
+                          childAspectRatio: tileRatio),
+                      itemCount: snapshot.data!["widgetsList"].length,
+                      itemBuilder: (context, courseIndex) {
+                        return snapshot.data!["widgetsList"][courseIndex];
+                      })
+                ],
+              );
+            } else {
+              return loadingWidget();
+            }
+          },
         ),
       ),
       floatingActionButton: userRole == 'admin'

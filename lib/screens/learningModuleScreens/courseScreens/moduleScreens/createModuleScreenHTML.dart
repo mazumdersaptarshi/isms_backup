@@ -12,7 +12,9 @@ import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 import 'package:isms/projectModules/courseManagement/moduleManagement/moduleDataMaster.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
 import 'package:isms/themes/common_theme.dart';
+import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/utilityFunctions/generateRandom.dart';
+import 'package:isms/utilityFunctions/platformCheck.dart';
 import 'package:provider/provider.dart';
 
 class CreateModuleScreenHTML extends StatelessWidget {
@@ -43,22 +45,15 @@ class _CourseModuleFormHTMLState extends State<_CourseModuleFormHTML> {
 
   @override
   Widget build(BuildContext context) {
+    LoggedInState loggedInState = context.watch<LoggedInState>();
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
     moduleDataMaster = ModuleDataMaster(
         course: widget.course, coursesProvider: coursesProvider);
 
-    // Use MediaQuery to get the screen width
-
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        title: const Text('Create New Module'),
-      ),
+      appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
+      bottomNavigationBar:
+          PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -72,9 +67,7 @@ class _CourseModuleFormHTMLState extends State<_CourseModuleFormHTML> {
                     cursorColor: secondaryColor,
                     controller: _titleController,
                     decoration: InputDecoration(
-                      hintText: 'Title',
-                      labelText:
-                          'Module Title', // Adds a label above the input field
+                      labelText: 'Title', // Adds a label above the input field
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8.0),
                       ),
@@ -100,9 +93,8 @@ class _CourseModuleFormHTMLState extends State<_CourseModuleFormHTML> {
                     cursorColor: secondaryColor,
                     controller: _contentController,
                     decoration: InputDecoration(
-                      hintText: 'Short Description',
                       labelText:
-                          'Module Content', // Adds a label above the input field
+                          'Short Description', // Adds a label above the input field
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8.0),
                       ),

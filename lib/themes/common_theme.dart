@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 
-const double HOME_PAGE_WIDGETS_COLLAPSE_WIDTH = 800;
+const double SCREEN_COLLAPSE_WIDTH = 800;
 
 // Theme Constants
 const primaryColor = Colors.deepPurpleAccent;
@@ -67,11 +67,11 @@ InputDecoration customInputDecoration({
   Icon? prefixIcon,
 }) {
   return InputDecoration(
-    hintText: hintText,
+    labelText: hintText,
     contentPadding:
         const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
     enabledBorder: OutlineInputBorder(
-      borderSide: const BorderSide(color: transparent, width: 1.0),
+      borderSide: const BorderSide(color: primaryColor, width: 1.0),
       borderRadius: BorderRadius.circular(10.0),
     ),
     focusColor: secondaryColor,

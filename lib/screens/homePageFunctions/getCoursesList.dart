@@ -15,44 +15,102 @@ String? getLatestModuleName(Map<String, dynamic> courseItem) {
   return latestModuleName ?? '';
 }
 
-Future<List<Widget>> getHomePageCoursesList(
+Future<Map<String, dynamic>> getCoursesListForUser(
     {required BuildContext context,
     required LoggedInState loggedInState,
     required CoursesProvider coursesProvider}) async {
-  List<Widget> homePageWidgets = [Container(width: 100)];
   await loggedInState.getUserCoursesData('crs_enrl');
   await loggedInState.getUserCoursesData('crs_compl');
+  if (!context.mounted) return {};
+  if (loggedInState.loggedInUser.courses_started.isEmpty) {
+    List<Widget> recommendedCoursesList = await getRecommendedCoursesList(
+        context: context,
+        loggedInState: loggedInState,
+        coursesProvider: coursesProvider);
+    return {"hasEnrolledCourses": false, "widgetsList": recommendedCoursesList};
+  } else {
+    List<Widget> enrolledCoursesList = await getEnrolledCoursesList(
+        context: context,
+        loggedInState: loggedInState,
+        coursesProvider: coursesProvider);
+    return {"hasEnrolledCourses": true, "widgetsList": enrolledCoursesList};
+  }
+}
+
+Future<List<Widget>> getEnrolledCoursesList(
+    {required BuildContext context,
+    required LoggedInState loggedInState,
+    required CoursesProvider coursesProvider}) async {
+  List<Widget> enrolledCoursesDisplayWidgets = [];
+
   List coursesStarted = loggedInState.loggedInUser.courses_started;
-  debugPrint("TRY TO CREATE WIDGETSS       $coursesStarted");
 
   if (coursesStarted.isNotEmpty) {
     for (int i = coursesStarted.length - 1; i >= 0; i--) {
-      debugPrint("TRY TO CREATE WIDGETSS ${coursesProvider.allCourses}");
-      Course course = coursesProvider.allCourses
-          .where((element) => element.id == coursesStarted[i]["courseID"])
-          .first;
+      Course? course;
 
-      homePageWidgets.add(CourseTile(
+      for (var element in coursesProvider.allCourses) {
+        if (element.id == coursesStarted[i]["courseID"]) course = element;
+      }
+
+      enrolledCoursesDisplayWidgets.add(CourseTile(
         title: coursesStarted[i]["course_name"],
         onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => CoursePage(course: course)));
+          if (course != null) {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => CoursePage(course: course!)));
+          }
         },
         // tileHeight: 300,
         tileWidth: 400,
-        courseData:
-            getUserCourseData(loggedInState: loggedInState, course: course),
+        courseData: course != null
+            ? getUserCourseData(loggedInState: loggedInState, course: course)
+            : null,
         index: i,
         subTitle: getLatestModuleName(coursesStarted[i]) ?? '',
-        modulesCount: course.modulesCount ?? 0,
+        modulesCount: course != null ? (course.modulesCount ?? 0) : 0,
         // dateValue: course.dateCreated,
       ));
     }
   }
 
-  return homePageWidgets;
+  return enrolledCoursesDisplayWidgets;
+}
+
+Future<List<Widget>> getRecommendedCoursesList(
+    {required BuildContext context,
+    required LoggedInState loggedInState,
+    required CoursesProvider coursesProvider}) async {
+  await loggedInState.getUserCoursesData('crs_enrl');
+  List<Widget> recommenedCoursesDisplayWidgets = [];
+  List<Course> coursesToRecommend = coursesProvider.allCourses.length < 4
+      ? coursesProvider.allCourses
+          .take(coursesProvider.allCourses.length)
+          .toList()
+      : coursesProvider.allCourses.take(4).toList();
+
+  for (int i = 0; i < coursesToRecommend.length; i++) {
+    Course courseToRecommend = coursesToRecommend[i];
+    recommenedCoursesDisplayWidgets.add(CourseTile(
+      title: courseToRecommend.name,
+      onPressed: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CoursePage(course: courseToRecommend)));
+      },
+      // tileHeight: 300,
+      tileWidth: 400,
+      courseData: null,
+      index: i,
+      subTitle: courseToRecommend.description,
+      modulesCount: courseToRecommend.modulesCount ?? 0,
+      // dateValue: course.dateCreated,
+    ));
+  }
+  return recommenedCoursesDisplayWidgets;
 }
 
 Map<String, dynamic> getUserCourseData(

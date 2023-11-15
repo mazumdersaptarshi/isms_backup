@@ -11,7 +11,7 @@ class PlatformCheck {
   static Widget bottomNavBarWidget(LoggedInState? loggedInState,
       {required BuildContext context}) {
     if (kIsWeb) {
-      if (MediaQuery.of(context).size.width > HOME_PAGE_WIDGETS_COLLAPSE_WIDTH) {
+      if (MediaQuery.of(context).size.width > SCREEN_COLLAPSE_WIDTH) {
         return Container(height: 1.0);
       } else {
         return BottomNavBar(
@@ -28,8 +28,7 @@ class PlatformCheck {
   static PreferredSizeWidget topNavBarWidget(LoggedInState loggedInState,
       {required BuildContext context}) {
     if (kIsWeb) {
-      if (MediaQuery.of(context).size.width >
-          HOME_PAGE_WIDGETS_COLLAPSE_WIDTH) {
+      if (MediaQuery.of(context).size.width > SCREEN_COLLAPSE_WIDTH) {
         return CustomAppBarWeb(
           loggedInState: loggedInState,
         );

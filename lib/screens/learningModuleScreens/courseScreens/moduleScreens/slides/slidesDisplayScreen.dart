@@ -89,6 +89,8 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
 
     return Scaffold(
       appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
+      bottomNavigationBar:
+          PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
       body: Container(
         margin: const EdgeInsets.only(top: 20),
         child: isSlidesFetched
