@@ -41,15 +41,15 @@ class _OptionTileState extends State<OptionTile> {
         children: [
           Checkbox(
               fillColor: MaterialStateProperty.resolveWith<Color>(
-                      (Set<MaterialState> states) {
-                    if (states.contains(MaterialState.disabled)) {
-                      return Colors.grey; // Fill color for the disabled state
-                    }
-                    if (states.contains(MaterialState.selected)) {
-                      return secondaryColor; // Fill color when the checkbox is checked
-                    }
-                    return white; // Fill color when the checkbox is unchecked
-                  }),
+                  (Set<MaterialState> states) {
+                if (states.contains(MaterialState.disabled)) {
+                  return Colors.grey; // Fill color for the disabled state
+                }
+                if (states.contains(MaterialState.selected)) {
+                  return primaryColor; // Fill color when the checkbox is checked
+                }
+                return white; // Fill color when the checkbox is unchecked
+              }),
               value: isChecked,
               onChanged: (value) {
                 setState(() {
@@ -58,7 +58,7 @@ class _OptionTileState extends State<OptionTile> {
                   widget.optionCreationProvider.updateIsOptionChecked(value);
                 });
               }),
-          Expanded(
+           Expanded(
               child: TextFormField(
                 decoration: customInputDecoration(hintText: 'Enter Option'),
                 controller: widget.controller,
@@ -75,6 +75,7 @@ class _OptionTileState extends State<OptionTile> {
                 SizedBox(
                   width: 10,
                 ),
+
                 SizedBox(
                   width: 80,
                   child: ElevatedButton(
