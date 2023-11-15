@@ -1,5 +1,8 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:isms/userManagement/loggedInState.dart';
+import 'package:provider/provider.dart';
 
 import '../../projectModules/courseManagement/coursesProvider.dart';
 import '../../themes/common_theme.dart';
@@ -8,18 +11,18 @@ import '../learningModuleScreens/courseScreens/coursesListScreen.dart';
 import 'homePageItemsContainer.dart';
 
 class HomePageMainContent extends StatelessWidget {
-  HomePageMainContent(
+  const HomePageMainContent(
       {super.key,
       required this.homePageContainerHeight,
-      required this.loggedInState,
+      //required this.loggedInState,
       required this.coursesProvider});
-  double homePageContainerHeight;
-  LoggedInState loggedInState;
-  CoursesProvider coursesProvider;
-  bool hasEnrolledCourses = false;
+  final double homePageContainerHeight;
+  final CoursesProvider coursesProvider;
   @override
   Widget build(BuildContext context) {
-    return Container(
+    bool hasEnrolledCourses = false;
+    final loggedInState = context.watch<LoggedInState>();
+    return SizedBox(
         width: MediaQuery.of(context).size.width,
         height: homePageContainerHeight,
 
@@ -46,48 +49,42 @@ class HomePageMainContent extends StatelessWidget {
               )),
           Positioned(
               top: 20,
-              child: Container(
-                child: FutureBuilder<Map<String, dynamic>>(
-                  future: getCoursesListForUser(
-                    context: context,
-                    loggedInState: loggedInState,
-                    coursesProvider: coursesProvider,
-                  ),
-                  builder:
-                      (BuildContext context, AsyncSnapshot<Map>? snapshot) {
-                    if (snapshot?.data == null) {
-                      return const CircularProgressIndicator();
-                    } else {
-                      hasEnrolledCourses =
-                          snapshot?.data!["hasEnrolledCourses"];
-                      snapshot?.data!["widgetsList"]
-                          .insert(0, Container(width: 100));
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if (MediaQuery.of(context).size.width <=
-                              SCREEN_COLLAPSE_WIDTH)
-                            HomePageLabel(
-                                hasEnrolledCourses: hasEnrolledCourses),
-                          HomePageItemsContainer(
-                              homePageItems: snapshot?.data!["widgetsList"]),
-                          if (MediaQuery.of(context).size.width >
-                              SCREEN_COLLAPSE_WIDTH)
-                            HomePageLabel(
-                                hasEnrolledCourses: hasEnrolledCourses)
-                        ],
-                      );
-                    }
-                  },
+              child: FutureBuilder<Map<String, dynamic>>(
+                future: getCoursesListForUser(
+                  context: context,
+                  loggedInState: loggedInState,
+                  coursesProvider: coursesProvider,
                 ),
+                builder: (BuildContext context, AsyncSnapshot<Map>? snapshot) {
+                  if (snapshot?.data == null) {
+                    return const CircularProgressIndicator();
+                  } else {
+                    hasEnrolledCourses = snapshot?.data!["hasEnrolledCourses"];
+                    snapshot?.data!["widgetsList"]
+                        .insert(0, Container(width: 100));
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (MediaQuery.of(context).size.width <=
+                            SCREEN_COLLAPSE_WIDTH)
+                          HomePageLabel(hasEnrolledCourses: hasEnrolledCourses),
+                        HomePageItemsContainer(
+                            homePageItems: snapshot?.data!["widgetsList"]),
+                        if (MediaQuery.of(context).size.width >
+                            SCREEN_COLLAPSE_WIDTH)
+                          HomePageLabel(hasEnrolledCourses: hasEnrolledCourses)
+                      ],
+                    );
+                  }
+                },
               )),
         ]));
   }
 }
 
 class HomePageLabel extends StatelessWidget {
-  HomePageLabel({super.key, required this.hasEnrolledCourses});
-  bool hasEnrolledCourses;
+  const HomePageLabel({super.key, required this.hasEnrolledCourses});
+  final bool hasEnrolledCourses;
   @override
   Widget build(BuildContext context) {
     return Container(

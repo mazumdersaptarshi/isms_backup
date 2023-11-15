@@ -25,7 +25,7 @@ mixin CustomAppBarMixin on StatelessWidget {
   void navigateToUserProfilePage(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => UserProfilePage()),
+      MaterialPageRoute(builder: (context) => const UserProfilePage()),
     );
   }
 
@@ -220,9 +220,8 @@ class CustomAppBarWeb extends StatelessWidget
       actions: <Widget>[
         appBarItem(Icons.explore, "Explore",
             () => navigateToCoursesPage(context), _paddingValue),
-        if (loggedInState?.currentUserRole == 'admin')
-          appBarItem(Icons.lightbulb, "My Learning",
-              () => navigateToMyLearningPage(context), _paddingValue),
+        appBarItem(Icons.lightbulb, "My Learning",
+            () => navigateToMyLearningPage(context), _paddingValue),
         if (loggedInState?.currentUserRole == 'admin')
           appBarItem(
               Icons.notifications_active_rounded,

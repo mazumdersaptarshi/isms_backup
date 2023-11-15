@@ -36,7 +36,7 @@ class Module {
       'slides': slides,
       'exams': exams,
       'contentDescription': contentDescription,
-      'additionalInfo': additionalInfo ?? '',
+      'additionalInfo': additionalInfo,
       'index': index
     };
   }

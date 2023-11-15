@@ -9,15 +9,11 @@ import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 import 'package:isms/projectModules/notificationModules/initLinkHandler.dart';
 import 'package:isms/screens/homePageWidgets/homePageMainContent.dart';
 import 'package:isms/sharedWidgets/appFooter.dart';
-import 'package:isms/sharedWidgets/navIndexTracker.dart';
 import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/utilityFunctions/platformCheck.dart';
 import 'package:provider/provider.dart';
 
-import 'homePageFunctions/getCoursesList.dart';
-import 'homePageWidgets/homePageItemsContainer.dart';
-import 'learningModuleScreens/courseScreens/coursesListScreen.dart';
 import 'login/loginScreen.dart';
 
 class HomePage extends StatefulWidget {
@@ -83,6 +79,12 @@ class _HomePageState extends State<HomePage> {
           appBar:
               PlatformCheck.topNavBarWidget(loggedInState, context: context),
           body: FooterView(
+            footer: kIsWeb
+                ? Footer(
+                    backgroundColor: Colors.transparent,
+                    child: const AppFooter())
+                : Footer(
+                    backgroundColor: Colors.transparent, child: Container()),
             children: [
               CustomScrollView(
                 physics: const ClampingScrollPhysics(),
@@ -124,18 +126,13 @@ class _HomePageState extends State<HomePage> {
                   SliverToBoxAdapter(
                     child: HomePageMainContent(
                       coursesProvider: coursesProvider,
-                      loggedInState: loggedInState,
+                      //loggedInState: loggedInState,
                       homePageContainerHeight: homePageContainerHeight,
                     ),
                   )
                 ],
               )
             ],
-            footer: kIsWeb
-                ? Footer(
-                    backgroundColor: Colors.transparent, child: AppFooter())
-                : Footer(
-                    backgroundColor: Colors.transparent, child: Container()),
           ));
     });
   }

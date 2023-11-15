@@ -1,11 +1,14 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 
 import '../../../../../models/course.dart';
 import '../../../../../models/module.dart';
 
 class ModuleTileWidget extends StatelessWidget {
-  ModuleTileWidget(
-      {required this.course,
+  const ModuleTileWidget(
+      {super.key,
+      required this.course,
       required this.module,
       this.isModuleStarted = false,
       this.isModuleCompleted = false});
@@ -15,6 +18,6 @@ class ModuleTileWidget extends StatelessWidget {
   final bool isModuleCompleted;
   @override
   Widget build(BuildContext context) {
-    return Column(children: [Text('${module.title}')]);
+    return Column(children: [Text(module.title)]);
   }
 }

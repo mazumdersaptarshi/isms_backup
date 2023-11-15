@@ -141,7 +141,7 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
                   ),
                 ],
               )
-            : Container(
+            : SizedBox(
                 height: 300,
                 child: AlertDialog(
                   elevation: 4,

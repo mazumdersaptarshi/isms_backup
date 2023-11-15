@@ -55,7 +55,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
             child: Column(
               children: [
                 Container(
-                  margin: EdgeInsets.all(10.0), // Add margin for spacing
+                  margin: const EdgeInsets.all(10.0), // Add margin for spacing
                   decoration: BoxDecoration(
                     color: Colors.white, // Set white background color
                     borderRadius: BorderRadius.circular(8.0), // Rounded corners
@@ -110,7 +110,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                 ),
                 Container(
                   width: double.infinity, // Expand to full width
-                  padding: EdgeInsets.symmetric(horizontal: 20.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: ElevatedButton(
                     style: customElevatedButtonStyle(),
                     onPressed: () {

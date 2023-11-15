@@ -11,7 +11,6 @@ import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 
 import '../../../projectModules/courseManagement/coursesProvider.dart';
-import '../../../sharedWidgets/leaningModulesAppBar.dart';
 import '../../../sharedWidgets/loadingScreenWidget.dart';
 import '../../../sharedWidgets/navIndexTracker.dart';
 import '../../../themes/common_theme.dart';
@@ -78,7 +77,7 @@ class _ExamListScreenState extends State<ExamListScreen> {
               course: widget.course,
               examtype: EXAMTYPE.courseExam,
               loggedInState: loggedInState)
-          : Container(
+          : SizedBox(
               height: 300,
               child: AlertDialog(
                 elevation: 4,

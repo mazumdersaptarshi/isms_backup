@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, non_constant_identifier_names
+
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -28,7 +30,7 @@ class LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: Center(
         child: _isLoading
-            ? Container(
+            ? SizedBox(
                 height: 200,
                 width: MediaQuery.of(context).size.width > SCREEN_COLLAPSE_WIDTH
                     ? 300
