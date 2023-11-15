@@ -6,9 +6,10 @@ import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 
 class UserProfileHeaderWidget extends StatelessWidget {
-  const UserProfileHeaderWidget({super.key, required this.view});
-
+  UserProfileHeaderWidget(
+      {super.key, this.view = 'user', this.refreshCallback});
   final String view;
+  Function? refreshCallback;
 
   @override
   Widget build(BuildContext context) {
@@ -76,8 +77,10 @@ class UserProfileHeaderWidget extends StatelessWidget {
           ),
           if (view == 'user')
             ElevatedButton(
-                onPressed: () {
-                  loggedInState.refreshUserCoursesData();
+                onPressed: () async {
+                  loggedInState.refreshUserCoursesData().then((value) {
+                    if (refreshCallback != null) refreshCallback!();
+                  });
                 },
                 child: Row(
                   mainAxisSize: MainAxisSize.min,

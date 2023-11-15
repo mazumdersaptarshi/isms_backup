@@ -48,6 +48,11 @@ class _UserProfilePageState extends State<UserProfilePage> {
     allCompletedCourses = [];
   }
 
+  refreshCallback() {
+    setState(() {
+      print("Refresshhhh ");
+    });
+  }
   // UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
 
   @override
@@ -69,9 +74,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
             backgroundColor: Colors.deepPurpleAccent.shade100,
             expandedHeight: 300.0,
             automaticallyImplyLeading: false,
-            flexibleSpace: const FlexibleSpaceBar(
+            flexibleSpace: FlexibleSpaceBar(
                 background: UserProfileHeaderWidget(
               view: 'user',
+              refreshCallback: refreshCallback(),
             )),
           ),
           SliverToBoxAdapter(

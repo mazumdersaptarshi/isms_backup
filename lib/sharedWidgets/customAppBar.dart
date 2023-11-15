@@ -31,7 +31,16 @@ mixin CustomAppBarMixin on StatelessWidget {
         context, MaterialPageRoute(builder: (context) => MyLearningScreen()));
   }
 
-  void navigateToRemindersPage(BuildContext context) {
+  void navigateToRemindersPage(
+      BuildContext context, LoggedInState loggedInState) async {
+    String userRole = loggedInState.currentUserRole;
+    if (userRole == "admin") {
+      await checkAndCreateUserDocument(
+        loggedInState.currentUserUid!,
+        loggedInState.currentUserEmail!,
+        loggedInState.currentUserName!,
+      );
+    }
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => const ReminderScreen()));
   }
@@ -213,8 +222,11 @@ class CustomAppBarWeb extends StatelessWidget
         appBarItem(Icons.lightbulb, "My Learning",
             () => navigateToMyLearningPage(context), _paddingValue),
         if (loggedInState?.currentUserRole == 'admin')
-          appBarItem(Icons.notifications_active_rounded, "Reminders",
-              () => navigateToRemindersPage(context), _paddingValue),
+          appBarItem(
+              Icons.notifications_active_rounded,
+              "Reminders",
+              () => navigateToRemindersPage(context, loggedInState!),
+              _paddingValue),
         appBarItem(Icons.account_circle, "Account",
             () => navigateToUserProfilePage(context), _paddingValue),
         if (loggedInState?.currentUserRole == 'admin')
@@ -252,8 +264,11 @@ class CustomAppBarMobile extends StatelessWidget
           appBarItem(Icons.admin_panel_settings_outlined, "Admin Console",
               () => navigateToAdminConsolePage(context), _paddingValue),
         if (loggedInState?.currentUserRole == 'admin')
-          appBarItem(Icons.notifications_active_rounded, "Reminders",
-              () => navigateToRemindersPage(context), _paddingValue),
+          appBarItem(
+              Icons.notifications_active_rounded,
+              "Reminders",
+              () => navigateToRemindersPage(context, loggedInState!),
+              _paddingValue),
         dividerItem(),
         logoutButtonItem(context),
       ],

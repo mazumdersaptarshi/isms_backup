@@ -1,7 +1,5 @@
 // ignore_for_file: file_names, non_constant_identifier_names
 
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleDetailsScreen.dart';
@@ -54,10 +52,19 @@ class CourseExamCompletionStrategy implements ExamCompletionStrategy {
   Future<void> handleExamCompletion({required BuildContext context}) async {
     final loggedInState = context.read<LoggedInState>();
     final coursesProvider = context.read<CoursesProvider>();
-    DateTime startedAt = DateTime.now();
+    DateTime? startedAt;
     for (var courses_started in loggedInState.loggedInUser.courses_started) {
-      if (courses_started["courseID"] == course.id) {}
-      startedAt = courses_started["started_at"].toDate();
+      if (courses_started["courseID"] == course.id &&
+          courses_started.containsKey("started_at")) {
+        if (courses_started["started_at"] != null) {
+          try {
+            startedAt = courses_started["started_at"].toDate();
+          } catch (e) {
+            // startedAt = DateTime.now();
+          }
+        } else
+          startedAt = DateTime.now();
+      }
     }
     Map<String, dynamic> courseDetailsMap = {
       "courseID": course.id,
