@@ -8,14 +8,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:isms/models/newExam.dart';
+import 'package:isms/adminManagement/createUserReferenceForAdmin.dart';
+import 'package:isms/screens/userInfo/userProfilePage.dart';
 
 import '../models/course.dart';
 import '../models/customUser.dart';
 import '../models/module.dart';
 import '../models/userCoursesDetails.dart';
 import '../projectModules/courseManagement/coursesProvider.dart';
-
-import 'package:isms/adminManagement/createUserReferenceForAdmin.dart';
 
 /// This class handles user connections
 /// It extends the private class _UserDataGetterMaster so all
@@ -206,6 +206,8 @@ class _UserDataGetterMaster with ChangeNotifier {
     if (snapshot.exists) {
       Map<String, dynamic> mapData = snapshot.data() as Map<String, dynamic>;
       UserCoursesDetails data = UserCoursesDetails.fromMap(mapData);
+      allEnrolledCoursesGlobal = data.courses_started!;
+      allCompletedCoursesGlobal.clear();
       if (data.courses_completed != null && data.courses_started != null) {
         for (var courseCompleted in data.courses_completed!) {
           allCompletedCoursesGlobal.add(data.courses_started!.where(
