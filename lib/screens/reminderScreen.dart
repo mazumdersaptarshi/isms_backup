@@ -240,9 +240,14 @@ class _ReminderLineState extends State<ReminderLine> {
                     );
 
                     if (pickedDate != null) {
-                      setState(() {
-                        selectedDate = pickedDate;
-                      });
+                      String? currentUserUid = loggedInState.currentUserUid;
+                      if (currentUserUid != null) {
+                        widget.setExpiryDateForCertificate(
+                            currentUserUid, pickedDate);
+                        setState(() {
+                          expiryDate = pickedDate;
+                        });
+                      } else {}
                     }
                   },
                   child: const Row(
@@ -266,12 +271,41 @@ class _ReminderLineState extends State<ReminderLine> {
             const SizedBox(height: 5),
             Row(
               children: [
-                if (expiryDate != null)
+                if (widget.initialExpiryDate != null &&
+                    DateTime.now().isAfter(widget.initialExpiryDate!))
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.error,
+                        color: Colors.grey,
+                      ),
+                      const SizedBox(width: 5),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Certification expired on',
+                            style:
+                                TextStyle(fontSize: 12, color: Colors.black87),
+                          ),
+                          Text(
+                            '${DateFormat('yyyy/MM/dd').format(widget.initialExpiryDate!)} at ${DateFormat('HH:mm').format(widget.initialExpiryDate!)}',
+                            style: const TextStyle(
+                                fontSize: 12, color: Colors.black87),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                if (expiryDate != null &&
+                    !DateTime.now().isAfter(widget.initialExpiryDate!))
                   Icon(
                     Icons.check,
                     color: Colors.deepPurpleAccent.shade100,
                   ),
-                if (expiryDate == null && widget.initialExpiryDate != null)
+                if (expiryDate == null &&
+                    widget.initialExpiryDate != null &&
+                    !DateTime.now().isAfter(widget.initialExpiryDate!))
                   Icon(
                     Icons.check,
                     color: Colors.deepPurpleAccent.shade100,
@@ -282,14 +316,16 @@ class _ReminderLineState extends State<ReminderLine> {
                     color: Colors.grey,
                   ),
                 const SizedBox(width: 5),
-                Text(
-                  expiryDate != null
-                      ? 'Expiry date: ${DateFormat('yyyy/MM/dd').format(expiryDate!)} at ${DateFormat('hh:mm a').format(expiryDate!)}'
-                      : widget.initialExpiryDate != null
-                          ? 'Expiry date: ${DateFormat('yyyy/MM/dd').format(widget.initialExpiryDate!)} at ${DateFormat('hh:mm a').format(widget.initialExpiryDate!)}'
-                          : 'Expiry date: Not set',
-                  style: const TextStyle(fontSize: 12, color: Colors.black87),
-                ),
+                if (!(widget.initialExpiryDate != null &&
+                    DateTime.now().isAfter(widget.initialExpiryDate!)))
+                  Text(
+                    expiryDate != null
+                        ? 'Expiry date: ${DateFormat('yyyy/MM/dd').format(expiryDate!)} at ${DateFormat('HH:mm').format(expiryDate!)}'
+                        : widget.initialExpiryDate != null
+                            ? 'Expiry date: ${DateFormat('yyyy/MM/dd').format(widget.initialExpiryDate!)} at ${DateFormat('HH:mm').format(widget.initialExpiryDate!)}'
+                            : 'Expiry date: Not set',
+                    style: const TextStyle(fontSize: 12, color: Colors.black87),
+                  ),
               ],
             ),
           ],
@@ -326,21 +362,36 @@ class _ReminderScreenState extends State<ReminderScreen> {
         .get();
 
     if (doc.exists && mounted) {
-      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-      List certifications = data['certifications'] as List? ?? [];
-      for (var cert in certifications) {
-        if (cert['certification_name'] == 'People') {
-          setState(() {
-            expiryDatePeople = cert['expiredTime']?.toDate();
-          });
-        } else if (cert['certification_name'] == 'Players') {
-          setState(() {
-            expiryDatePlayers = cert['expiredTime']?.toDate();
-          });
-        } else if (cert['certification_name'] == 'Vendors') {
-          setState(() {
-            expiryDateVendors = cert['expiredTime']?.toDate();
-          });
+      Map<String, dynamic>? data = doc.data() as Map<String, dynamic>?;
+
+      if (data != null && data.containsKey('certifications')) {
+        List certifications = data['certifications'] as List? ?? [];
+
+        for (var cert in certifications) {
+          if (cert is Map<String, dynamic>) {
+            DateTime? expiryTime = cert['expiredTime']?.toDate();
+            String? certName = cert['certification_name'] as String?;
+
+            if (certName != null) {
+              switch (certName) {
+                case 'People':
+                  setState(() {
+                    expiryDatePeople = expiryTime;
+                  });
+                  break;
+                case 'Players':
+                  setState(() {
+                    expiryDatePlayers = expiryTime;
+                  });
+                  break;
+                case 'Vendors':
+                  setState(() {
+                    expiryDateVendors = expiryTime;
+                  });
+                  break;
+              }
+            }
+          }
         }
       }
     }
