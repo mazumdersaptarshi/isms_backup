@@ -34,7 +34,6 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
 
     double tileMinWidth = 400;
-    //double tileMinimumheight = 100;
     double tileRatio = 3 / 2;
     // available width, in pixels
     double horizontalMargin = MediaQuery.sizeOf(context).width > 900 ? 200 : 10;
@@ -56,7 +55,9 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
           min(itemCount, maxColumns) > 0 ? min(itemCount, maxColumns) : 1;
     }
 
-    print('uuupop: ${coursesProvider.allCourses}');
+    if (kDebugMode) {
+      print('uuupop: ${coursesProvider.allCourses}');
+    }
     return Scaffold(
       appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
       bottomNavigationBar:

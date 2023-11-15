@@ -1,5 +1,8 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:isms/userManagement/loggedInState.dart';
+import 'package:provider/provider.dart';
 
 import '../../projectModules/courseManagement/coursesProvider.dart';
 import '../../themes/common_theme.dart';
@@ -11,13 +14,14 @@ class HomePageMainContent extends StatelessWidget {
   const HomePageMainContent(
       {super.key,
       required this.homePageContainerHeight,
-      required this.loggedInState,
+      //required this.loggedInState,
       required this.coursesProvider});
   final double homePageContainerHeight;
-  final LoggedInState loggedInState;
+  //final LoggedInState loggedInState;
   final CoursesProvider coursesProvider;
   @override
   Widget build(BuildContext context) {
+    final loggedInState = context.watch<LoggedInState>();
     return SizedBox(
         width: MediaQuery.of(context).size.width,
         height: homePageContainerHeight,

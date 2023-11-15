@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:isms/models/newExam.dart';
 
 import '../models/course.dart';
 import '../models/customUser.dart';
@@ -291,77 +292,35 @@ class _UserDataGetterMaster with ChangeNotifier {
       required CoursesProvider coursesProvider,
       required Course course,
       required int examIndex}) async {
-    int noOfExamsCompleted = 0;
-    bool flag = false;
-    debugPrint('rdcf: $loggedInUser');
+    bool courseExamCompleted = false;
     if (loggedInUser.courses_started.isNotEmpty) {
-      for (Map<String, dynamic> course in loggedInUser.courses_started) {
-        try {
-          if (course['course_name'] == courseDetails['course_name']) {
-            if (course.containsKey('exams_completed')) {
-              course['exams_completed'].forEach((examCompleted) {
-                noOfExamsCompleted++;
-                debugPrint(
-                    "INCREMENTING noOfExamsCompleted: $noOfExamsCompleted");
-                if (examCompleted == examIndex) {
-                  flag = true;
-                }
-              });
-            }
-          }
-        } catch (e) {
-          log(e.toString());
+      int courseIndex = loggedInUser.courses_started
+          .indexWhere((element) => element['courseID'] == course.id);
+      if (courseIndex > -1) {
+        Map<String, dynamic> courseStarted =
+            loggedInUser.courses_started[courseIndex];
+        if (!courseStarted.containsKey('exams_completed')) {
+          courseStarted["exams_completed"] = [];
         }
+        int examPassed = -1;
+        if (courseStarted["exams_completed"].isNotEmpty) {
+          examPassed = courseStarted["exams_completed"]
+              .indexWhere((element) => element == examIndex);
+        }
+        if (examPassed == -1) {
+          courseStarted["exams_completed"].add(examIndex);
+          loggedInUser.courses_started[courseIndex] = courseStarted;
+          await setUserData();
+          notifyListeners();
+        }
+        // TODO make sure the exams are feched
+        List<NewExam> remainingExams = List.from(course.exams!);
+        courseStarted["exams_completed"].forEach((examIndex) =>
+            {remainingExams.removeWhere((exam) => exam.index == examIndex)});
+        courseExamCompleted = remainingExams.isEmpty;
       }
     }
-    if (flag == false) {
-      examIndex--;
-
-      for (var courseStarted in loggedInUser.courses_started) {
-        Map<String, dynamic> examCompletedMap = {
-          "exam_name": course.exams![examIndex].title,
-          "exam_index": course.exams![examIndex].index,
-        };
-        if (courseStarted['courseID'] == course.id) {
-          if (courseStarted['exams_completed'] != null &&
-              courseStarted['exams_completed'].isEmpty) {
-            courseStarted['exams_completed']
-                .add(course.exams![examIndex].index);
-            debugPrint(
-                "COMPLETED EXAM was empty ${courseStarted['exams_completed']}");
-          } else if (courseStarted['exams_completed'] != null) {
-            bool isExamPresentInList = false;
-            for (int i = 0; i < courseStarted['exams_completed'].length; i++) {
-              var element = courseStarted['exams_completed'][i];
-              if (element == course.exams![examIndex].index) {
-                isExamPresentInList = true;
-              }
-            }
-            if (isExamPresentInList == false) {
-              courseStarted['exams_completed'].add(examCompletedMap);
-              print("ADDING EXAM ${course.exams![examIndex].index}");
-              print("COMPLETED EXAM ${courseStarted['exams_completed']}");
-            }
-          } else {
-            debugPrint("COMPLETED MODULE IS NULL< SO HERE");
-            courseStarted['exams_completed'] = [];
-            courseStarted['exams_completed'].add(examCompletedMap);
-          }
-        }
-      }
-      if (kDebugMode) {
-        print(loggedInUser.courses_started);
-      }
-      noOfExamsCompleted++;
-      await setUserData();
-    }
-    int noOfExams = course.exams!.length;
-    debugPrint("noOfExamsCompleted $noOfExamsCompleted,, $noOfExams");
-    // if (noOfExamsCompleted >= noOfExams) {
-    //   await setUserCourseCompleted(courseDetails: courseDetails);
-    // }
-    notifyListeners();
-    return noOfExamsCompleted >= noOfExams;
+    return courseExamCompleted;
   }
 
   setUserCourseModuleCompleted(
@@ -369,57 +328,30 @@ class _UserDataGetterMaster with ChangeNotifier {
       required CoursesProvider coursesProvider,
       required Course course,
       required Module module}) async {
-    bool flag = false;
     if (loggedInUser.courses_started.isNotEmpty) {
-      for (Map<String, dynamic> course in loggedInUser.courses_started) {
-        try {
-          if (course['courseID'] == courseDetails['courseID']) {
-            if (course.containsKey("modules_completed")) {
-              course["modules_completed"].forEach((element) async {
-                if (element["module_name"] == module.title) {
-                  debugPrint("SETTING FLAG TRUE coz $element");
-                  flag = true;
-                  await setUserData();
-                }
-              });
-            }
-          }
-        } catch (e) {
-          log(e.toString());
+      int courseIndex = loggedInUser.courses_started
+          .indexWhere((element) => element['courseID'] == course.id);
+      if (courseIndex > -1) {
+        Map<String, dynamic> courseStarted =
+            loggedInUser.courses_started[courseIndex];
+        if (!courseStarted.containsKey('modules_completed')) {
+          courseStarted['modules_completed'] =
+              courseStarted['modules_completed'] = [];
+        }
+        int moduleIndex = -1;
+        if (courseStarted['modules_completed'].isNotEmpty) {
+          courseStarted['modules_completed']
+              .indexWhere((element) => element['module_id'] == module.id);
+        }
+        if (moduleIndex == -1) {
+          courseStarted['modules_completed']
+              .add({"module_name": module.title, "module_id": module.id});
+          loggedInUser.courses_started[courseIndex] = courseStarted;
+          await setUserData();
+          notifyListeners();
         }
       }
     }
-    if (flag == false) {
-      for (var courseStarted in loggedInUser.courses_started) {
-        if (courseStarted['courseID'] == course.id) {
-          bool flag = false;
-          if (courseStarted['modules_completed'] != null) {
-            for (int i = 0;
-                i < courseStarted['modules_completed'].length;
-                i++) {
-              var element = courseStarted['modules_completed'][i];
-              if (element == module.title) {
-                flag = true;
-              }
-            }
-            if (flag == false) {
-              courseStarted['modules_completed']
-                  .add({"module_name": module.title, "module_id": module.id});
-            }
-          } else {
-            debugPrint("COMPLETED MODULE IS NULL< SO HERE");
-            courseStarted['modules_completed'] = [];
-            courseStarted['modules_completed']
-                .add({"module_name": module.title, "module_id": module.id});
-          }
-        }
-      }
-      if (kDebugMode) {
-        print(loggedInUser.courses_started);
-      }
-      await setUserData();
-    }
-    notifyListeners();
   }
 
   setUserCourseModuleStarted(
