@@ -10,8 +10,8 @@ import 'package:isms/screens/learningModuleScreens/examScreens/examCompletionStr
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
+import 'package:isms/utilityFunctions/platformCheck.dart';
 import 'package:provider/provider.dart';
-
 import '../../../models/course.dart';
 import '../../../models/module.dart';
 import '../../../sharedWidgets/navIndexTracker.dart';
@@ -107,16 +107,10 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
     NavIndexTracker.setNavDestination(navDestination: NavDestinations.other);
     LoggedInState loggedInState = context.watch<LoggedInState>();
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          _showScore ? 'Score' : 'Exam Module',
-          style: TextStyle(color: white),
-        ),
-        backgroundColor: Colors.deepPurpleAccent.shade100,
-      ),
+      appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
       bottomNavigationBar:
-          PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
-      body: _showScore ? buildScoreWidget() : buildExamWidget(),
+      PlatformCheck.bottomNavBarWidget(loggedInState, context: context),      
+    body: _showScore ? buildScoreWidget() : buildExamWidget(),
     );
   }
 
@@ -317,7 +311,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
             onPressed: areAnswersSelected ? () => onButtonPress() : null,
             child: Text(
               _currentIndex < _questions.length - 1 ? 'Next' : 'Submit',
-              style: TextStyle(color: white),
+              style: const TextStyle(color: black),
             ),
           )
         ],
