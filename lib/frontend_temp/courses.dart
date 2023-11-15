@@ -14,7 +14,8 @@ void main() async {
 class CourseDetailsPage extends StatelessWidget {
   final String title;
 
-  const CourseDetailsPage({super.key, 
+  const CourseDetailsPage({
+    super.key,
     required this.title,
   });
 
@@ -36,7 +37,7 @@ class CourseDetailsPage extends StatelessWidget {
               elevation: 4,
               margin: const EdgeInsets.all(8.0),
               child: ListTile(
-                trailing: const Icon(Icons.arrow_forward_ios, color: textColor),
+                trailing: const Icon(Icons.arrow_forward_ios),
                 title: Text('Module ${index + 1}', style: commonTextStyle),
                 // You can remove this onTap behavior if not needed
                 onTap: () {

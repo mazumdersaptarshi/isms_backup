@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, constant_identifier_names
 
 import 'package:flutter/material.dart';
 
@@ -55,7 +55,7 @@ BoxDecoration customBoxTheme = BoxDecoration(
   boxShadow: [
     BoxShadow(
       color: secondaryColor,
-      offset: Offset(0, 2),
+      offset: const Offset(0, 2),
       blurRadius: 1,
     )
   ],
@@ -99,7 +99,7 @@ ThemeData customTheme = ThemeData(
   fontFamily: 'Poppins',
   floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: primaryColor.shade100,
-      extendedTextStyle: TextStyle(color: white)),
+      extendedTextStyle: const TextStyle(color: white)),
   textTheme: const TextTheme(
     bodyLarge: TextStyle(fontFamily: "Poppins"),
     bodyMedium: TextStyle(fontFamily: "Poppins"),

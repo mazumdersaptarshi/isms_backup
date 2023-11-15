@@ -19,17 +19,17 @@ class UserProfileHeaderWidget extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          if (loggedInState.currentUserPhotoURL != null)
+          if (loggedInState.currentUser?.photoURL != null)
             Padding(
                 padding: const EdgeInsets.only(
                     top: 25.0), // Increased padding on the top
                 child: (view == 'admin')
-                    ? Icon(
+                    ? const Icon(
                         Icons.supervisor_account_rounded,
                         size: 100,
                         color: Colors.white,
                       )
-                    : Icon(
+                    : const Icon(
                         Icons.account_circle,
                         size: 100,
                         color: Colors.white,
@@ -51,7 +51,7 @@ class UserProfileHeaderWidget extends StatelessWidget {
               fontWeight: FontWeight.bold,
               shadows: [
                 Shadow(
-                  offset: Offset(0, 1),
+                  offset: const Offset(0, 1),
                   blurRadius: 2,
                   color: Colors.black.withOpacity(0.5),
                 ),
@@ -60,19 +60,19 @@ class UserProfileHeaderWidget extends StatelessWidget {
           ),
           Text(
             ' ${loggedInState.currentUserEmail}',
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 18,
             ),
           ),
           Text(
-            '${loggedInState.currentUserRole}',
-            style: TextStyle(
+            loggedInState.currentUserRole,
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 18,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           if (view == 'user')
@@ -82,7 +82,7 @@ class UserProfileHeaderWidget extends StatelessWidget {
                     if (refreshCallback != null) refreshCallback!();
                   });
                 },
-                child: Row(
+                child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text("Refresh"),

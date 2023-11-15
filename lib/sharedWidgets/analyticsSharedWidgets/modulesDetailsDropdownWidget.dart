@@ -11,16 +11,16 @@ Widget CourseModulesDropdownWidget(String title, List<dynamic>? modulesStarted,
 
   // print('${title}: ${modules}');
   return Container(
-    padding: EdgeInsets.all(8),
-    constraints: BoxConstraints(minHeight: 50),
+    padding: const EdgeInsets.all(8),
+    constraints: const BoxConstraints(minHeight: 50),
     child: Padding(
       padding: const EdgeInsets.only(top: 8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '${title}:',
-            style: TextStyle(
+            '$title:',
+            style: const TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.bold,
             ),
@@ -28,7 +28,7 @@ Widget CourseModulesDropdownWidget(String title, List<dynamic>? modulesStarted,
           for (int i = 0; i < modulesStarted!.length; i++)
             Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(5)),
+                borderRadius: const BorderRadius.all(Radius.circular(5)),
                 color: i % 2 == 1 ? Colors.grey.shade100 : Colors.transparent,
               ),
               width: double.infinity,
@@ -39,7 +39,7 @@ Widget CourseModulesDropdownWidget(String title, List<dynamic>? modulesStarted,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            '${modulesStarted?[i]['module_name'].toString()!}',
+                            modulesStarted[i]['module_name'].toString(),
                             style: TextStyle(
                               fontSize: 12,
                               color: Theme.of(context).colorScheme.tertiary,
@@ -47,17 +47,17 @@ Widget CourseModulesDropdownWidget(String title, List<dynamic>? modulesStarted,
                           ),
                           modulesCompletedList
                                   .contains(modulesStarted[i]['module_name'])
-                              ? Icon(
+                              ? const Icon(
                                   Icons.check_circle_rounded,
                                   color: Colors.lightGreen,
                                 )
-                              : Icon(
+                              : const Icon(
                                   Icons.pending_rounded,
                                   color: Colors.orangeAccent,
                                 )
                         ],
                       )
-                    : Text(''),
+                    : const Text(''),
               ),
             )
         ],

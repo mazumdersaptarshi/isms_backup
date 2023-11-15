@@ -14,6 +14,14 @@ import '../screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
 import '../screens/userInfo/userProfilePage.dart';
 
 mixin CustomAppBarMixin on StatelessWidget {
+  final Map<String, ValueNotifier<bool>> hovering = {
+    "Explore": ValueNotifier(false),
+    "Reminders": ValueNotifier(false),
+    "Account": ValueNotifier(false),
+    "Admin Console": ValueNotifier(false),
+    "My Learning": ValueNotifier(false),
+  };
+
   void navigateToUserProfilePage(BuildContext context) {
     Navigator.push(
       context,
@@ -23,12 +31,12 @@ mixin CustomAppBarMixin on StatelessWidget {
 
   void navigateToCoursesPage(BuildContext context) {
     Navigator.push(context,
-        MaterialPageRoute(builder: (context) => CoursesDisplayScreen()));
+        MaterialPageRoute(builder: (context) => const CoursesDisplayScreen()));
   }
 
   void navigateToMyLearningPage(BuildContext context) {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => MyLearningScreen()));
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const MyLearningScreen()));
   }
 
   void navigateToRemindersPage(
@@ -46,20 +54,12 @@ mixin CustomAppBarMixin on StatelessWidget {
   }
 
   void navigateToAdminConsolePage(BuildContext context) {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => AdminConsolePage()));
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const AdminConsolePage()));
   }
 
   Widget appBarItem(
       IconData icon, String title, VoidCallback onTap, double paddingValue) {
-    final Map<String, ValueNotifier<bool>> hovering = {
-      "Explore": ValueNotifier(false),
-      "Reminders": ValueNotifier(false),
-      "Account": ValueNotifier(false),
-      "Admin Console": ValueNotifier(false),
-      "My Learning": ValueNotifier(false),
-    };
-
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       onEnter: (_) => hovering[title]!.value = true,
@@ -120,7 +120,8 @@ mixin CustomAppBarMixin on StatelessWidget {
       onTap: () {
         Navigator.of(context).pushReplacement(
           PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) => HomePage(),
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                const HomePage(),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
               return FadeTransition(
@@ -128,7 +129,7 @@ mixin CustomAppBarMixin on StatelessWidget {
                 child: child,
               );
             },
-            transitionDuration: Duration(milliseconds: 500),
+            transitionDuration: const Duration(milliseconds: 500),
           ),
         );
       },
@@ -182,7 +183,7 @@ mixin CustomAppBarMixin on StatelessWidget {
             Navigator.of(context).pushReplacement(
               PageRouteBuilder(
                 pageBuilder: (context, animation, secondaryAnimation) =>
-                    LoginPage(),
+                    const LoginPage(),
                 transitionsBuilder:
                     (context, animation, secondaryAnimation, child) {
                   return FadeTransition(
@@ -190,7 +191,7 @@ mixin CustomAppBarMixin on StatelessWidget {
                     child: child,
                   );
                 },
-                transitionDuration: Duration(milliseconds: 500),
+                transitionDuration: const Duration(milliseconds: 500),
               ),
             );
           });
@@ -205,7 +206,7 @@ class CustomAppBarWeb extends StatelessWidget
     implements PreferredSizeWidget {
   final LoggedInState? loggedInState;
   final double _paddingValue = 20;
-  CustomAppBarWeb({this.loggedInState});
+  CustomAppBarWeb({super.key, this.loggedInState});
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -250,7 +251,7 @@ class CustomAppBarMobile extends StatelessWidget
     implements PreferredSizeWidget {
   final LoggedInState? loggedInState;
   final double _paddingValue = 8;
-  CustomAppBarMobile({this.loggedInState});
+  CustomAppBarMobile({super.key, this.loggedInState});
   @override
   Widget build(BuildContext context) {
     return AppBar(

@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 
 import '../../projectModules/courseManagement/coursesProvider.dart';
@@ -5,7 +7,7 @@ import '../../utilityFunctions/getCourseCompletedPercentage.dart';
 import 'courseDropdownWidget.dart';
 
 class UserCourseStartedDetailsWidget extends StatelessWidget {
-  UserCourseStartedDetailsWidget(
+  const UserCourseStartedDetailsWidget(
       {super.key,
       required this.courseItem,
       required this.coursesProvider,

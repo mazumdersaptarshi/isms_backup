@@ -1,5 +1,6 @@
 // ignore_for_file: file_names
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/models/enums.dart';
 import 'package:isms/models/newExam.dart';
@@ -91,7 +92,7 @@ class ExamCreationState extends State<ExamCreation> {
                     customInputDecoration(hintText: "Enter title for exam"),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 Container(
@@ -104,7 +105,7 @@ class ExamCreationState extends State<ExamCreation> {
                   ),
                 ),
                 const SizedBox(height: 20.0),
-                Container(
+                SizedBox(
                     width: 500,
                     height: 460,
                     child: ListView.builder(
@@ -123,16 +124,23 @@ class ExamCreationState extends State<ExamCreation> {
                       _addNewQuestion();
                       _controller.jumpTo(_controller.position.maxScrollExtent);
                     },
-                    child: Text('Add a question',style: buttonText,),
+                    child: Text(
+                      'Add a question',
+                      style: buttonText,
                   ),
                 ),
-                SizedBox(height: 10,),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
                 SizedBox(
                   width: 200,
                   child: ElevatedButton(
                     style: customElevatedButtonStyle(),
                     onPressed: () {
-                      print(allQuestions);
+                      if (kDebugMode) {
+                        print(allQuestions);
+                      }
 
                       NewExam newExam = NewExam(
                           examID: generateRandomId(),
@@ -152,9 +160,13 @@ class ExamCreationState extends State<ExamCreation> {
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const CoursesDisplayScreen()));
+                              builder: (context) =>
+                                  const CoursesDisplayScreen()));
                     },
-                    child: Text('Submit',style: buttonText,),
+                    child: Text(
+                      'Submit',
+                      style: buttonText,
+                    ),
                   ),
                 ),
               ],

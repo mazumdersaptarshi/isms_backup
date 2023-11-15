@@ -64,7 +64,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
     }
 
     return Scaffold(
-      backgroundColor: primaryColor.shade100,
+      backgroundColor: Colors.deepPurpleAccent.shade100,
       appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
       bottomNavigationBar:
           PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
@@ -207,7 +207,6 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
         Provider.of<CoursesProvider>(context, listen: false);
     LoggedInState loggedInState =
         Provider.of<LoggedInState>(context, listen: false);
-
     return Column(
       children: [
         FutureBuilder<List>(

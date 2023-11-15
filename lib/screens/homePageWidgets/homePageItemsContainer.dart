@@ -17,7 +17,7 @@ class HomePageItemsContainer extends StatelessWidget {
 
                   // color: Color.fromARGB(10, 0, 0, 0),
                   borderRadius: BorderRadius.all(Radius.circular(10))),
-              padding: EdgeInsets.symmetric(vertical: 10),
+              padding: const EdgeInsets.symmetric(vertical: 10),
               // margin: EdgeInsets.only(
               //     left: MediaQuery.of(context).size.width * 0.1),
               child: ListView.builder(
@@ -32,9 +32,9 @@ class HomePageItemsContainer extends StatelessWidget {
           )
         : Container(
             width: MediaQuery.of(context).size.width,
-            margin: EdgeInsets.only(top: 10),
+            margin: const EdgeInsets.only(top: 10),
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: homePageItems!,

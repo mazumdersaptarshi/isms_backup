@@ -87,7 +87,7 @@ class _HomePageState extends State<HomePage> {
                     backgroundColor: Colors.transparent, child: Container()),
             children: [
               CustomScrollView(
-                physics: ClampingScrollPhysics(),
+                physics: const ClampingScrollPhysics(),
                 shrinkWrap: true,
                 slivers: [
                   SliverAppBar(
@@ -108,7 +108,7 @@ class _HomePageState extends State<HomePage> {
                           Flexible(
                             flex:
                                 1, // The flex factor. You can adjust this number to take more or less space in the Row or Column.
-                            child: Container(
+                            child: SizedBox(
                               width: MediaQuery.of(context).size.width *
                                   0.2, // 50% of screen width
 

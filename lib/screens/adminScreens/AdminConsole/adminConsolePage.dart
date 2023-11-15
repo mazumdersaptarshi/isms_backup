@@ -11,6 +11,11 @@ import '../../../models/adminConsoleModels/adminConsoleActions.dart';
 import '../../../projectModules/adminConsoleModules/adminActionsWidget.dart';
 
 class AdminConsolePage extends StatelessWidget {
+  const AdminConsolePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    LoggedInState loggedInState = context.watch<LoggedInState>();
   final List<AdminActions> adminActions = [
     AdminActions(
         name: 'User Management', icon: Icons.group, actionId: 'user_mgmt'),
@@ -20,10 +25,6 @@ class AdminConsolePage extends StatelessWidget {
     AdminActions(
         name: 'Download Data', icon: Icons.download, actionId: 'dwnld'),
   ];
-
-  @override
-  Widget build(BuildContext context) {
-    LoggedInState loggedInState = context.watch<LoggedInState>();
     AdminProvider adminConsoleProvider = Provider.of<AdminProvider>(context);
 
     return Scaffold(
@@ -47,13 +48,13 @@ class AdminConsolePage extends StatelessWidget {
               constraints: BoxConstraints(
                 minHeight: MediaQuery.of(context).size.height,
               ),
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(30),
                 ),
               ),
-              padding: EdgeInsets.symmetric(vertical: 20),
+              padding: const EdgeInsets.symmetric(vertical: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: List.generate(adminActions.length, (index) {

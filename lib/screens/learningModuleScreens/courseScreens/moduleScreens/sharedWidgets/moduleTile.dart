@@ -1,14 +1,10 @@
 // ignore_for_file: file_names
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleDetailsScreen.dart';
-import 'package:provider/provider.dart';
 import 'package:isms/themes/common_theme.dart';
-import 'package:isms/utilityWidgets/modulesList/moduleExpandedItem.dart';
 
 class ModuleTile extends StatelessWidget {
   final Course course;

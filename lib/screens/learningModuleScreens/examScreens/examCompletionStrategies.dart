@@ -15,7 +15,7 @@ import '../../../userManagement/loggedInState.dart';
 import '../../homePage.dart';
 
 abstract class ExamCompletionStrategy {
-  ExamCompletionStrategy({required this.loggedInState}) {}
+  ExamCompletionStrategy({required this.loggedInState});
   LoggedInState loggedInState;
   Widget buildSumbitButton({required BuildContext context});
 
@@ -83,7 +83,7 @@ class CourseExamCompletionStrategy implements ExamCompletionStrategy {
         courseDetails: {...courseDetailsMap, "completed_at": DateTime.now()});
     if (!context.mounted) return;
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => HomePage()));
+        context, MaterialPageRoute(builder: (context) => const HomePage()));
   }
 }
 
@@ -93,7 +93,7 @@ class ModuleExamCompletionStrategy implements ExamCompletionStrategy {
       required this.course,
       required this.exam,
       required this.loggedInState}) {
-    this.isModuleStarted = checkIfModuleStartedd();
+    isModuleStarted = checkIfModuleStartedd();
   }
 
   Course course;
@@ -180,12 +180,12 @@ class ModuleExamCompletionStrategy implements ExamCompletionStrategy {
         "course_modules_count": course.modulesCount
       },
       course: course,
-      module: module!,
+      module: module,
       coursesProvider: coursesProvider,
       examIndex: exam.index,
     ).then((val) {
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => HomePage()));
+          context, MaterialPageRoute(builder: (context) => const HomePage()));
     });
   }
 }

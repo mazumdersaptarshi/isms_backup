@@ -3,7 +3,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:isms/models/newExam.dart';
 import 'package:isms/models/question.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCompletionStrategies.dart';
@@ -19,7 +18,8 @@ import '../../../sharedWidgets/navIndexTracker.dart';
 
 class TakeExamScreen extends StatefulWidget {
   const TakeExamScreen(
-      {required this.exam,
+      {super.key,
+      required this.exam,
       required this.course,
       required this.examtype,
       this.module,
@@ -29,9 +29,8 @@ class TakeExamScreen extends StatefulWidget {
   final Module? module;
   final NewExam exam;
   final ExamCompletionStrategy examCompletionStrategy;
-
   @override
-  _TakeExamScreenState createState() => _TakeExamScreenState();
+  State<TakeExamScreen> createState() => _TakeExamScreenState();
 }
 
 class _TakeExamScreenState extends State<TakeExamScreen> {
@@ -52,6 +51,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
   }
 
   loadQuestions() {
+    debugPrint("LOADING QUESTIONS");
     for (var element in widget.exam.questionAnswerSet) {
       List<String> options = [];
       List<int> correctAnswers = [];
@@ -115,6 +115,9 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
   }
 
   Widget buildScoreWidget() {
+    //LoggedInState loggedInState = Provider.of<LoggedInState>(context);
+    //CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
+
     int correctAnswers = 0;
     for (int i = 0; i < _questions.length; i++) {
       if (Set.from(_questions[i].shuffledCorrectAnswers)
@@ -140,7 +143,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
                 child: Text(
                     'Your Score is: $correctAnswers/${_questions.length}. You need to get 75% to pass.'),
               ),
-              Container(
+              SizedBox(
                 height: 50,
                 width: 50,
                 child: PieChart(PieChartData(centerSpaceRadius: 40, sections: [
@@ -157,7 +160,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
                       radius: 75),
                 ])),
               ),
-              SizedBox(height: 150),
+              const SizedBox(height: 150),
               ElevatedButton(
                 onPressed: () => setState(() {
                   shuffleQuestions();
@@ -187,7 +190,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
                   'Congratulations! Your Score is: $correctAnswers/${_questions.length}',
                 ),
               ),
-              Container(
+              SizedBox(
                 height: 50,
                 width: 50,
                 child: PieChart(PieChartData(centerSpaceRadius: 40, sections: [
@@ -204,9 +207,9 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
                       radius: 75),
                 ])),
               ),
-              SizedBox(height: 100),
+              const SizedBox(height: 100),
               widget.examCompletionStrategy.buildSumbitButton(context: context),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () => setState(() {
                   shuffleQuestions();
@@ -215,7 +218,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
                       List.generate(_questions.length, (index) => <int>{});
                   _showScore = false;
                 }),
-                child: Text('Retry for Fun!'),
+                child: const Text('Retry for Fun!'),
               ),
             ],
           ),
@@ -232,7 +235,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
           Container(
             decoration: BoxDecoration(
                 color: Colors.deepPurpleAccent.shade100,
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                     bottomLeft: Radius.circular(25),
                     bottomRight: Radius.circular(25))),
             width: MediaQuery.of(context).size.width,
@@ -242,16 +245,16 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Text(
                     _questions[_currentIndex].question,
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 20, color: white),
+                    style: const TextStyle(fontSize: 20, color: white),
                   ),
-                  SizedBox(height: 50),
+                  const SizedBox(height: 50),
                   Text(
                     'Select ${_questions[_currentIndex].maxAllowedAnswers} answer(s)',
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
                         color: white),
@@ -260,7 +263,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
               ),
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           ...List.generate(_questions[_currentIndex].shuffledOptions.length,
               (index) {
             return Container(
@@ -303,7 +306,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
               ),
             );
           }),
-          SizedBox(
+          const SizedBox(
             height: 15,
           ),
           ElevatedButton(

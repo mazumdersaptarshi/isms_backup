@@ -33,6 +33,7 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
 
     double tileMinWidth = 400;
     double tileRatio = 3 / 2;
+
     // available width, in pixels
     double horizontalMargin = MediaQuery.sizeOf(context).width > 900 ? 200 : 10;
     double screenWidth = MediaQuery.sizeOf(context).width;
@@ -40,7 +41,7 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
     int maxColumns =
         max(((screenWidth - (horizontalMargin * 2)) / tileMinWidth).floor(), 1);
     // number of tiles that have to fit on the screen
-    int itemCount = coursesProvider.allCourses.length ?? 0;
+    int itemCount = coursesProvider.allCourses.length;
     // grid width, in tiles
     int numberColumns = 1;
     // min(itemCount, maxColumns) > 0 ? min(itemCount, maxColumns) : 1;
@@ -73,8 +74,8 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
                   return CourseTile(
                     index: courseIndex,
                     title: coursesProvider.allCourses[courseIndex].name,
-                    modulesCount: coursesProvider
-                            .allCourses[courseIndex].modulesCount ??
+                    modulesCount:
+                        coursesProvider.allCourses[courseIndex].modulesCount ??
                         0,
                     tileWidth: tileMinWidth,
                     // tileHeight: tileMinimumheight,

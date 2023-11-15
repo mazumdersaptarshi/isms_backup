@@ -15,7 +15,8 @@ final Map<String, dynamic> categories = {
 };
 
 class AdminActionDropdown extends StatefulWidget {
-  const AdminActionDropdown({super.key, 
+  const AdminActionDropdown({
+    super.key,
     required this.adminProvider,
     required this.actionId,
   });
@@ -51,7 +52,7 @@ class _AdminActionDropdownState extends State<AdminActionDropdown> {
           !isUsersLoading
               ? Padding(
                   padding: const EdgeInsets.all(4.0),
-                  child: Container(
+                  child: SizedBox(
                     width: double.infinity,
                     child: GestureDetector(
                         onTap: () async {
@@ -69,14 +70,14 @@ class _AdminActionDropdownState extends State<AdminActionDropdown> {
                         child: const GestureDetectorCard(text: 'User Data')),
                   ),
                 )
-              : Container(
+              : const SizedBox(
                   width: 50, // Set the width
                   height: 50, // Set the height
                   child: CircularProgressIndicator()),
           !isCoursesLoading
               ? Padding(
                   padding: const EdgeInsets.all(4.0),
-                  child: Container(
+                  child: SizedBox(
                     width: double.infinity,
                     child: GestureDetector(
                         onTap: () async {
@@ -96,13 +97,13 @@ class _AdminActionDropdownState extends State<AdminActionDropdown> {
                         )),
                   ),
                 )
-              : Container(
+              : const SizedBox(
                   width: 50, // Set the width
                   height: 50, // Set the height
                   child: CircularProgressIndicator()),
           Padding(
             padding: const EdgeInsets.all(4.0),
-            child: Container(
+            child: SizedBox(
               width: double.infinity,
               child: GestureDetector(
                   onTap: () async {
@@ -173,7 +174,7 @@ class GestureDetectorCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(15.0), // Rounded edges for the card
       ),
       child: Container(
-        padding: EdgeInsets.all(12),
+        padding: const EdgeInsets.all(12),
         child: Text(
           text!,
           textAlign: TextAlign.center,

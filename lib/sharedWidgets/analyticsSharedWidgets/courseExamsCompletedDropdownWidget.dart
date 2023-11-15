@@ -31,7 +31,7 @@ class CourseExamsCompletedDropdownWidget extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.all(8),
+      padding: const EdgeInsets.all(8),
       child: Padding(
         padding: const EdgeInsets.only(top: 8.0),
         child: Row(
@@ -39,7 +39,7 @@ class CourseExamsCompletedDropdownWidget extends StatelessWidget {
           children: [
             Row(
               children: [
-                Text(
+                const Text(
                   'Exam completed: ',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
@@ -48,20 +48,20 @@ class CourseExamsCompletedDropdownWidget extends StatelessWidget {
                 ),
                 Text(
                   '${courseItem["exams_completed"].length} of ${courseDetailsData?["noOfExams"]}',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 12,
                   ),
                 ),
               ],
             ),
             Padding(
-              padding: EdgeInsets.only(right: 4),
+              padding: const EdgeInsets.only(right: 4),
               child: (examsCompletedCount < noOfExams)
-                  ? Icon(
+                  ? const Icon(
                       Icons.pending_rounded,
                       color: Colors.orangeAccent,
                     )
-                  : Icon(
+                  : const Icon(
                       Icons.check_circle_rounded,
                       color: Colors.lightGreen,
                     ),

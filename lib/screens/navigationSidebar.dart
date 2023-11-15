@@ -6,7 +6,7 @@ class SideNavigationBar extends StatefulWidget {
   const SideNavigationBar({super.key});
 
   @override
-  _SideNavigationBarState createState() => _SideNavigationBarState();
+  State<SideNavigationBar> createState() => _SideNavigationBarState();
 }
 
 class _SideNavigationBarState extends State<SideNavigationBar> {
@@ -28,7 +28,7 @@ class _SideNavigationBarState extends State<SideNavigationBar> {
             labelType: _extended
                 ? NavigationRailLabelType.none
                 : NavigationRailLabelType.selected,
-            destinations: [
+            destinations: const [
               NavigationRailDestination(
                 icon: Icon(Icons.favorite_border),
                 selectedIcon: Icon(Icons.favorite),
@@ -48,7 +48,7 @@ class _SideNavigationBarState extends State<SideNavigationBar> {
             ],
             extended: _extended,
           ),
-          VerticalDivider(thickness: 1, width: 1),
+          const VerticalDivider(thickness: 1, width: 1),
           // This is the main content area
           Expanded(
             child: Center(

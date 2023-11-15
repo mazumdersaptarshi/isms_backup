@@ -10,6 +10,7 @@ import '../../courseManagement/coursesProvider.dart';
 
 class AllUsersDropdown extends StatelessWidget {
   const AllUsersDropdown({super.key, required this.adminProvider});
+
   final AdminProvider adminProvider;
 
   @override
@@ -45,7 +46,7 @@ class AllUsersDropdown extends StatelessWidget {
                 }
 
                 return Card(
-                  margin: EdgeInsets.all(4.0),
+                  margin: const EdgeInsets.all(4.0),
                   elevation: 4.0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(
@@ -59,19 +60,19 @@ class AllUsersDropdown extends StatelessWidget {
                           children: [
                             Text(
                               '${index + 1}. ',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 14,
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 10,
                             ),
-                            Icon(Icons.account_circle),
-                            SizedBox(
+                            const Icon(Icons.account_circle),
+                            const SizedBox(
                               width: 10,
                             ),
                             Text('${snapshot.data![index].username}',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 14,
                                 )),
                           ],
@@ -81,7 +82,7 @@ class AllUsersDropdown extends StatelessWidget {
                               Theme.of(context).colorScheme.secondary,
                           label: Text(
                             '${snapshot.data![index].role}',
-                            style: TextStyle(color: Colors.white),
+                            style: const TextStyle(color: Colors.white),
                           ),
                         ),
                       ],
@@ -105,7 +106,7 @@ class AllUsersDropdown extends StatelessWidget {
                 );
               });
         } else {
-          return Text('No data to return, unexpected error');
+          return const Text('No data to return, unexpected error');
         }
       },
     );
@@ -117,14 +118,14 @@ class AllUsersDropdown extends StatelessWidget {
       backgroundColor: Colors.grey.shade100,
       title: Text(
         title,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 12,
           // Use theme color for consistency
         ),
       ),
       trailing: Text(
         '${courses.length}',
-        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
       ),
       children: [
         if (title == 'Courses Completed')

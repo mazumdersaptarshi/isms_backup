@@ -104,9 +104,8 @@ class _CourseCreationFormState extends State<CourseCreationForm> {
                             number_of_modules: 0,
                             number_of_exams: 0,
                           );
-                          bool _isCourseAdminConsoleCreated =
-                              await CoursesDataMaster.createCourseAdminConsole(
-                                  coursesDetails: coursesDetails);
+                          await CoursesDataMaster.createCourseAdminConsole(
+                              coursesDetails: coursesDetails);
                           if (isCourseCreated) {
                             if (!context.mounted) return;
                             Navigator.pop(context);

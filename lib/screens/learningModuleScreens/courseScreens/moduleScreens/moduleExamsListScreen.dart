@@ -5,8 +5,8 @@ import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/models/newExam.dart';
 import 'package:isms/projectModules/courseManagement/moduleManagement/examManagement/examDataMaster.dart';
-import 'package:isms/screens/learningModuleScreens/examScreens/sharedWidgets/examListContainer.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
+import 'package:isms/screens/learningModuleScreens/examScreens/sharedWidgets/examListContainer.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 
@@ -116,7 +116,7 @@ class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
                               module: widget.module,
                             )));
               },
-              child: Icon(Icons.add),
+              child: const Icon(Icons.add),
             )
           : null,
     );

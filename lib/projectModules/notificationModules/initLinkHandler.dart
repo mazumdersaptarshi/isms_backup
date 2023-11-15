@@ -17,6 +17,7 @@ class InitLinkHandler {
     try {
       _listenForIncomingLinksIOS(context);
       String? initialLink = await getInitialLink();
+
       debugPrint("Received initial link is $initialLink");
 
       if (initialLink != null) {
@@ -74,7 +75,7 @@ class InitLinkHandler {
       {required Uri uri, required BuildContext context}) {
     String? category = uri.queryParameters['category'];
     if (kDebugMode) {
-      debugPrint(uri.toString());
+      print(uri.toString());
     }
     for (String key in categories.keys) {
       if (key == category) {

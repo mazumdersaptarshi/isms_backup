@@ -21,7 +21,7 @@ class AllCoursesDropdown extends StatelessWidget {
         } else if (snapshot.hasData && snapshot.data != null) {
           return _buildCourseList(snapshot.data!);
         }
-        return Text('Could not load data, unforseen error!');
+        return const Text('Could not load data, unforseen error!');
       },
     );
   }
@@ -30,10 +30,11 @@ class AllCoursesDropdown extends StatelessWidget {
     return ListView.builder(
       itemCount: courses.length,
       shrinkWrap: true,
-      physics: ClampingScrollPhysics(),
+      physics: const ClampingScrollPhysics(),
       itemBuilder: (context, index) {
         return Card(
-          margin: EdgeInsets.all(4.0), // Add margin for spacing between cards
+          margin:
+              const EdgeInsets.all(4.0), // Add margin for spacing between cards
           elevation: 4.0, // Adds shadow beneath the card
           shape: RoundedRectangleBorder(
             borderRadius:
@@ -88,7 +89,7 @@ class AllCoursesDropdown extends StatelessWidget {
 }
 
 class CourseDetailExpansionTile extends StatelessWidget {
-  CourseDetailExpansionTile({
+  const CourseDetailExpansionTile({
     super.key,
     required this.adminProvider,
     // this.course,
@@ -99,16 +100,16 @@ class CourseDetailExpansionTile extends StatelessWidget {
 
   final AdminProvider adminProvider;
   // final dynamic course;
-  List<dynamic> courses;
-  int index;
-  String title;
+  final List<dynamic> courses;
+  final int index;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
       title: Text(
         title,
-        style: TextStyle(fontSize: 12),
+        style: const TextStyle(fontSize: 12),
       ),
       trailing: (title == 'Completed')
           ? CircularPercentIndicator(
@@ -119,7 +120,7 @@ class CourseDetailExpansionTile extends StatelessWidget {
                   0,
               center: Text(
                   '${(courses[index].course_completed!.length / (adminProvider.userRefs.length) * 100).round()}%',
-                  style: TextStyle(fontSize: 10)),
+                  style: const TextStyle(fontSize: 10)),
               progressColor: Colors.lightGreen,
             )
           : (title == 'Enrolled')
@@ -131,13 +132,13 @@ class CourseDetailExpansionTile extends StatelessWidget {
                       0,
                   center: Text(
                     '${(courses[index].course_started!.length / (adminProvider.userRefs.length) * 100).round()}%',
-                    style: TextStyle(fontSize: 10),
+                    style: const TextStyle(fontSize: 10),
                   ),
                   progressColor: Colors.orangeAccent,
                 )
-              : Text('n/a'),
+              : const Text('n/a'),
       children: [
-        Container(
+        SizedBox(
           width: double.infinity,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -174,7 +175,7 @@ class CourseCompletedUsersDropdown extends StatelessWidget {
       ));
     }
     return Container(
-      padding: EdgeInsets.all(4),
+      padding: const EdgeInsets.all(4),
       child: Column(
         children: courseUserNames,
       ),
@@ -200,7 +201,7 @@ class CourseEnrolledUsersDropdown extends StatelessWidget {
     List<CourseUserName> courseUserNames = [];
     for (int i = 0; i < studentsEnrolled.length; i++) {
       Map<String, dynamic> student = studentsEnrolled[i];
-      studentsCompletedUIDs!.contains(student['uid'])
+      studentsCompletedUIDs.contains(student['uid'])
           ? courseUserNames.add(CourseUserName(
               student: student,
               color: Colors.lightGreen,
@@ -220,7 +221,7 @@ class CourseEnrolledUsersDropdown extends StatelessWidget {
     }
 
     return Container(
-      padding: EdgeInsets.all(4),
+      padding: const EdgeInsets.all(4),
       child: Column(
         children: courseUserNames,
       ),
@@ -248,10 +249,10 @@ class CourseUserName extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.all(4),
+      padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
         color: (index! % 2 == 1) ? Colors.grey.shade100 : Colors.transparent,
-        borderRadius: BorderRadius.all(Radius.circular(5)),
+        borderRadius: const BorderRadius.all(Radius.circular(5)),
       ),
       child: Padding(
         padding: const EdgeInsets.only(left: 4, right: 4),
@@ -265,16 +266,16 @@ class CourseUserName extends StatelessWidget {
             ),
             if (title == 'enrolled')
               (status == 'pending')
-                  ? Icon(
+                  ? const Icon(
                       Icons.pending_rounded,
                       color: Colors.orangeAccent,
                     )
                   : (status == 'completed')
-                      ? Icon(
+                      ? const Icon(
                           Icons.check_circle_rounded,
                           color: Colors.lightGreen,
                         )
-                      : Text(''),
+                      : const Text(''),
           ],
         ),
       ),

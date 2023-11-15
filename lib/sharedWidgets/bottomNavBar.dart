@@ -12,9 +12,8 @@ import '../screens/userInfo/userProfilePage.dart';
 import '../userManagement/loggedInState.dart';
 
 class BottomNavBar extends StatelessWidget {
-  const BottomNavBar(
-      {super.key, this.loggedInState});
-  // int selectedIndex;
+  const BottomNavBar({super.key, this.loggedInState});
+  // final int selectedIndex;
   final LoggedInState? loggedInState;
   @override
   Widget build(BuildContext context) {
@@ -27,12 +26,14 @@ class BottomNavBar extends StatelessWidget {
 
     void navigateToHomePage() {
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => HomePage()));
+          context, MaterialPageRoute(builder: (context) => const HomePage()));
     }
 
     void navigateToCoursesPage() {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => CoursesDisplayScreen()));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => const CoursesDisplayScreen()));
     }
 
     void NavigateToMyLearningPage() {
@@ -41,8 +42,8 @@ class BottomNavBar extends StatelessWidget {
     }
 
     void navigateToAdminConsolePage() {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => AdminConsolePage()));
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const AdminConsolePage()));
     }
 
     void decideNavigation({required int index}) {

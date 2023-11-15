@@ -16,7 +16,6 @@ import '../../../../projectModules/courseManagement/moduleManagement/moduleDataM
 import '../../../../sharedWidgets/loadingScreenWidget.dart';
 import '../../../../sharedWidgets/navIndexTracker.dart';
 import '../../../../utilityFunctions/platformCheck.dart';
-import 'sharedWidgets/moduleTile.dart';
 
 class CoursePage extends StatefulWidget {
   const CoursePage({super.key, required this.course});

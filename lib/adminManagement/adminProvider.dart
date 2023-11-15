@@ -148,7 +148,8 @@ class AdminProvider extends ChangeNotifier {
           allUsers.add(userInfo);
           for (var element in allUsers) {
             if (kDebugMode) {
-              print(element.courses_completed);
+              print('adminUsersView: ${element.courses_completed}');
+              print('adminUsersView: ${element.courses_started}');
             }
           }
         } catch (e) {

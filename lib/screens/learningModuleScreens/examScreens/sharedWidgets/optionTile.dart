@@ -72,7 +72,7 @@ class _OptionTileState extends State<OptionTile> {
           if (isOptionSaved == false)
             Row(
               children: [
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
 

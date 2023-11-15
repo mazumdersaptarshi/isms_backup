@@ -19,7 +19,7 @@ class DataExporter {
 
   Future<void> downloadCSV() async {
     //Download Users data
-    List<List> csvData=[];
+    List<List> csvData = [];
     QuerySnapshot querySnapshot;
     querySnapshot = await FirebaseFirestore.instance
         .collection(collectionDataToDownload!)
@@ -78,8 +78,7 @@ class DataExporter {
       String courseId = courseItem['course_id'] ?? '';
       String creationDate =
           CSVDataHandler.timestampToReadableDate(courseItem['createdAt'])
-                  .toString() ??
-              '';
+              .toString();
       List<String> courseCompletedUsers = [];
       List<String> courseStartedUsers = [];
 

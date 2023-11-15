@@ -5,8 +5,12 @@ import '../../../../themes/common_theme.dart';
 class ExamTile extends StatelessWidget {
   final String title;
   final int questionCount;
-  Function? onPressed;
-  ExamTile({ required this.title, required this.onPressed,required this.questionCount});
+  final Function? onPressed;
+  const ExamTile(
+      {super.key,
+      required this.title,
+      required this.onPressed,
+      required this.questionCount});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +30,7 @@ class ExamTile extends StatelessWidget {
                 Expanded(
                   child: Row(
                     children: [
-                      SizedBox(width: 20),
+                      const SizedBox(width: 20),
                       Expanded(
                           child: Text(title,
                               style: commonTextStyle.copyWith(
@@ -34,10 +38,20 @@ class ExamTile extends StatelessWidget {
                     ],
                   ),
                 ),
-                Icon(Icons.question_answer,color: secondaryColor,size: 15,),
-                SizedBox(width: 8,),
-                Text("Total questions: ${questionCount.toString()}",
-                  style: TextStyle(fontSize: 12, color: secondaryColor,fontWeight: FontWeight.bold),
+                Icon(
+                  Icons.question_answer,
+                  color: secondaryColor,
+                  size: 15,
+                ),
+                const SizedBox(
+                  width: 8,
+                ),
+                Text(
+                  "Total questions: ${questionCount.toString()}",
+                  style: TextStyle(
+                      fontSize: 12,
+                      color: secondaryColor,
+                      fontWeight: FontWeight.bold),
                 ),
               ],
             ),

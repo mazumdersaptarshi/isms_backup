@@ -25,7 +25,7 @@ class CourseDropdownWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     debugPrint('iolk: $courseDetailsData');
     return Card(
-      margin: EdgeInsets.all(4.0),
+      margin: const EdgeInsets.all(4.0),
       elevation: 4.0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12.0),
@@ -43,15 +43,17 @@ class CourseDropdownWidget extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Icon(Icons.menu_book_rounded),
-                        SizedBox(
+                        const Icon(Icons.menu_book_rounded),
+                        const SizedBox(
                           width: 10,
                         ),
                         ConstrainedBox(
                           constraints: BoxConstraints(
                               maxWidth:
-                                  MediaQuery.of(context).size.width * 0.55),
+                                  MediaQuery.of(context).size.width * 0.5),
                           child: Text(
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                             '${courseItem["course_name"]}',
                             style: TextStyle(
                                 fontSize: 12,
@@ -72,7 +74,7 @@ class CourseDropdownWidget extends StatelessWidget {
                             : courseDetailsData?["courseCompletionPercentage"]!,
                         center: Text(
                           '${(courseDetailsData?["courseCompletionPercentage"] * 100).floor()}%',
-                          style: TextStyle(fontSize: 10),
+                          style: const TextStyle(fontSize: 10),
                         ),
                         progressColor:
                             ((courseDetailsData?["courseCompletionPercentage"] *
@@ -83,7 +85,7 @@ class CourseDropdownWidget extends StatelessWidget {
                                 : Colors.yellow.shade900,
                       ),
                     if (detailType == 'courses_completed')
-                      Icon(
+                      const Icon(
                         Icons.check_circle_rounded,
                         color: Colors.lightGreen,
                       ),
@@ -94,8 +96,8 @@ class CourseDropdownWidget extends StatelessWidget {
                     if (courseItem['courseID'] != null)
                       Container(
                         width: double.infinity,
-                        padding: EdgeInsets.all(8),
-                        constraints: BoxConstraints(minHeight: 50),
+                        padding: const EdgeInsets.all(8),
+                        constraints: const BoxConstraints(minHeight: 50),
                         child: Padding(
                           padding: const EdgeInsets.only(top: 8.0),
                           child: Column(
@@ -132,7 +134,7 @@ class CourseDropdownWidget extends StatelessWidget {
                                   padding: const EdgeInsets.all(4.0),
                                   child: Row(
                                     children: [
-                                      Text(
+                                      const Text(
                                         'Completed at:  ',
                                         style: TextStyle(fontSize: 12),
                                       ),
@@ -158,7 +160,7 @@ class CourseDropdownWidget extends StatelessWidget {
                                 ),
                               ),
                               Container(
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(5)),
                                   // color: Colors.grey.shade100,
@@ -167,7 +169,7 @@ class CourseDropdownWidget extends StatelessWidget {
                                   padding: const EdgeInsets.all(4.0),
                                   child: Row(
                                     children: [
-                                      Text(
+                                      const Text(
                                         'Started at:  ',
                                         style: TextStyle(fontSize: 12),
                                       ),
