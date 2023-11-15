@@ -325,7 +325,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
         .doc(uid)
         .get();
 
-    if (doc.exists) {
+    if (doc.exists && mounted) {
       Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
       List certifications = data['certifications'] as List? ?? [];
       for (var cert in certifications) {
