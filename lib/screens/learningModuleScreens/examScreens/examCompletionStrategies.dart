@@ -4,8 +4,9 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:isms/projectModules/courseManagement/moduleManagement/slideManagement/slidesDataMaster.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/slidesDisplayScreen.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleDetailsScreen.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/modulesListScreen.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/course.dart';
@@ -108,7 +109,15 @@ class ModuleExamCompletionStrategy implements ExamCompletionStrategy {
     if (isModuleStarted) {
       return ElevatedButton(
         onPressed: () async {
-          handleExamCompletion(context: context);
+          handleExamCompletion(context: context).then((value) {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ModuleDetails(
+                        course: course,
+                        module: module,
+                        isModuleStarted: isModuleStarted)));
+          });
         },
         child: Text(
             "Mark Module as Done- completed ${exam.index}/${module.exams!.length}"),

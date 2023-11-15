@@ -6,7 +6,6 @@ import 'package:isms/models/UserActions.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 // import 'package:isms/screens/analyticsSharedWidgets/courseDropdownWidget.dart';
 import 'package:isms/screens/login/loginScreen.dart';
-import 'package:isms/sharedWidgets/bottomNavBar.dart';
 import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/userManagement/userprofileHeaderWidget.dart';
@@ -90,11 +89,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   final action = userActions[index];
                   return Container(
                     constraints: BoxConstraints(
-                      maxWidth: (MediaQuery.of(context).size.width > 1000
-                              ? MediaQuery.of(context).size.width * 0.5
-                              : MediaQuery.of(context).size.width) *
-                          0.98,
-                      // maxWidth: MediaQuery.of(context).size.width * 0.9,
+                      maxWidth: MediaQuery.of(context).size.width >
+                              SCREEN_COLLAPSE_WIDTH
+                          ? MediaQuery.of(context).size.width * 0.5
+                          : MediaQuery.of(context).size.width,
                     ),
                     child: ExpansionTile(
                       leading: Icon(action.icon),
