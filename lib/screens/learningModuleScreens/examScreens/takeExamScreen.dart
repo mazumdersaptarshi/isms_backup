@@ -269,12 +269,14 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
           SizedBox(height: 20),
           ...List.generate(_questions[_currentIndex].shuffledOptions.length,
               (index) {
-            return Padding(
+            return Container(
               padding: const EdgeInsets.all(8.0),
+              width: MediaQuery.of(context).size.width > SCREEN_COLLAPSE_WIDTH
+                  ? MediaQuery.of(context).size.width * 0.3
+                  : MediaQuery.of(context).size.width,
               child: Card(
                 surfaceTintColor: white,
                 elevation: 4,
-                shadowColor: secondaryColor,
                 shape: customCardShape,
                 child: ListTile(
                   title: Text(_questions[_currentIndex].shuffledOptions[index]),

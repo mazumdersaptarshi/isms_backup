@@ -39,13 +39,16 @@ class LoggedInState extends _UserDataGetterMaster {
         debugPrint(
             "auth state changed: no account currently signed into Firebase");
         clear();
+        // this needs to be called at the end og this branch, because we
+        // should only refresh the fisplay after `clear()` has
+        // completed, 
         notifyListeners();
       } else {
         debugPrint(
             "auth state changed: ${user.email} currently signed into Firebase");
         _fetchFromFirestore(user).then((value) {
           storeUserCoursesData(currentUserSnapshot!);
-          // this needs to be called n `then()`, because we should only
+          // this needs to be called in `then()`, because we should only
           // refresh the fisplay after `storeUserCoursesData()` has
           // completed, 
           notifyListeners();
