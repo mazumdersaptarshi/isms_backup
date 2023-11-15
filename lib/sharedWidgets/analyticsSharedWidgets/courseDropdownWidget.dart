@@ -23,6 +23,7 @@ class CourseDropdownWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('iolk: ${courseDetailsData}');
     return Card(
       margin: EdgeInsets.all(4.0),
       elevation: 4.0,
