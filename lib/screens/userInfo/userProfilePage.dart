@@ -9,11 +9,11 @@ import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/userManagement/userprofileHeaderWidget.dart';
+import 'package:isms/utilityFunctions/platformCheck.dart';
 import 'package:provider/provider.dart';
 
 import '../../sharedWidgets/analyticsSharedWidgets/courseDropdownWidget.dart';
 import '../../sharedWidgets/analyticsSharedWidgets/userCourseStartedDetailsWidget.dart';
-import '../../utilityFunctions/platformCheck.dart';
 // import '../analyticsSharedWidgets/userCourseStartedDetailsWidget.dart';
 
 List allEnrolledCourses = [];
@@ -82,12 +82,40 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   topLeft: Radius.circular(30),
                 ),
               ),
+              padding: EdgeInsets.symmetric(vertical: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: List.generate(userActions.length, (index) {
+                  final action = userActions[index];
+                  return Container(
+                    constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width > 500
+                          ? MediaQuery.of(context).size.width * 0.5
+                          : MediaQuery.of(context).size.width,
+                    ),
+                    child: ExpansionTile(
+                      leading: Icon(action.icon),
+                      title: Text(action.name!),
+                      onExpansionChanged: (expanded) async {
+                        if (expanded) {
+                          // await loggedInState
+                          //     .getUserCoursesData(action.actionId);
+                        }
+                      },
+                      children: [
+                        UserActionsDropdown(
+                          actionId: action.actionId!,
+                          loggedInState: loggedInState,
+                        ),
+                      ],
+                    ),
+                  );
+                }),
+              ),
             ),
           ),
         ],
       ),
-      bottomNavigationBar:
-          PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
     );
   }
 }
@@ -220,37 +248,33 @@ class UserCompletedCoursesDropdown extends StatelessWidget {
   Widget build(BuildContext context) {
     LoggedInState loggedInState =
         Provider.of<LoggedInState>(context, listen: false);
-    return SizedBox(
-      width: double.infinity,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          FutureBuilder<List>(
-            future: loggedInState.getUserCoursesData('crs_compl'),
-            builder: (context, snapshot) {
-              if (loggedInState.allCompletedCoursesGlobal.isNotEmpty) {
-                return ListView.builder(
-                  itemCount: loggedInState.allCompletedCoursesGlobal.length,
-                  shrinkWrap: true,
-                  physics: const ClampingScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    allCompletedCourses =
-                        loggedInState.allCompletedCoursesGlobal;
-                    debugPrint(
-                        'ALLCOMPLETEDCOURSESGLOBAL: ${loggedInState.allCompletedCoursesGlobal}');
-                    return CourseDropdownWidget(
-                      courseItem: allCompletedCourses[index],
-                      detailType: 'courses_completed',
-                    );
-                  },
-                );
-              } else {
-                return const Text('No data available');
-              }
-            },
-          ),
-        ],
-      ),
+    return Column(
+      children: [
+        FutureBuilder<List>(
+          future: loggedInState.getUserCoursesData('crs_compl'),
+          builder: (context, snapshot) {
+            if (loggedInState.allCompletedCoursesGlobal.isNotEmpty) {
+              return ListView.builder(
+                itemCount: loggedInState.allCompletedCoursesGlobal.length,
+                shrinkWrap: true,
+                physics: const ClampingScrollPhysics(),
+                itemBuilder: (context, index) {
+                  allCompletedCourses =
+                      loggedInState.allCompletedCoursesGlobal;
+                  debugPrint(
+                      'ALLCOMPLETEDCOURSESGLOBAL: ${loggedInState.allCompletedCoursesGlobal}');
+                  return CourseDropdownWidget(
+                    courseItem: allCompletedCourses[index],
+                    detailType: 'courses_completed',
+                  );
+                },
+              );
+            } else {
+              return const Text('No data available');
+            }
+          },
+        ),
+      ],
     );
   }
 }
