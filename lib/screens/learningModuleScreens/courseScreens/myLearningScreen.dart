@@ -62,7 +62,7 @@ class _MyLearningScreenState extends State<MyLearningScreen> {
     //List<Widget> homePageWidgets = [Container(width: 100)];
     //void getInProgressCourses() async {
     //  homePageWidgets = [Container(width: 100)];
-    //  homePageWidgets = await getHomePageCoursesList(
+    //  homePageWidgets = await getEnrolledCoursesList(
     //      context: context,
     //      coursesProvider: coursesProvider,
     //      loggedInState: loggedInState);
@@ -94,12 +94,6 @@ class _MyLearningScreenState extends State<MyLearningScreen> {
                     subTitle:
                         getLatestModuleName(userEnrolledCourses[courseIndex]) ??
                             '',
-                    // dateValue:
-                    //     (userEnrolledCourses[courseIndex]['started_at'] != null)
-                    //         ? CSVDataHandler.timestampToReadableDateInWords(
-                    //             userEnrolledCourses[courseIndex]['started_at'])
-                    //         : '',
-                    // tileHeight: tileMinimumheight,
                     courseData: getUserCourseData(
                         loggedInState: loggedInState,
                         course: coursesProvider.allCourses[courseIndex]),

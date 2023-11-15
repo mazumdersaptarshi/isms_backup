@@ -30,6 +30,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+
     InitLinkHandler.initLinks(context: context);
   }
 
@@ -59,9 +60,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     double homePageContainerHeight =
-        MediaQuery.of(context).size.width < HOME_PAGE_WIDGETS_COLLAPSE_WIDTH
-            ? 1000
-            : 400;
+        MediaQuery.of(context).size.width < SCREEN_COLLAPSE_WIDTH ? 1050 : 400;
     // 500;
     final loggedInState = context.watch<LoggedInState>();
 
@@ -127,7 +126,6 @@ class _HomePageState extends State<HomePage> {
                   SliverToBoxAdapter(
                     child: HomePageMainContent(
                       coursesProvider: coursesProvider,
-                      //loggedInState: loggedInState,
                       homePageContainerHeight: homePageContainerHeight,
                     ),
                   )
