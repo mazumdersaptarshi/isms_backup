@@ -107,183 +107,193 @@ class _ReminderLineState extends State<ReminderLine> {
   @override
   Widget build(BuildContext context) {
     final loggedInState = context.watch<LoggedInState>();
-    return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: Colors.grey.shade200.withOpacity(0.35),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                widget.text,
-                style: const TextStyle(fontSize: 18, color: Colors.black87),
-              ),
-              CupertinoButton(
-                onPressed: () async {
-                  DateTime? pickedDate = await showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: const Text("Select Date"),
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 20),
-                        content: SizedBox(
-                          height: 300,
-                          width: 500,
-                          child: CupertinoDatePicker(
-                            mode: CupertinoDatePickerMode.date,
-                            initialDateTime: selectedDate,
-                            minimumDate: DateTime(2023),
-                            maximumDate: DateTime(2100),
-                            onDateTimeChanged: (DateTime newDate) {
-                              setState(() {
-                                selectedDate = newDate;
-                              });
-                            },
-                          ),
-                        ),
-                        actions: [
-                          ElevatedButton(
-                            onPressed: () async {
-                              Navigator.of(context).pop();
-                              DateTime? pickedTime = await showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: const Text("Select Time"),
-                                    contentPadding: const EdgeInsets.symmetric(
-                                        horizontal: 24, vertical: 20),
-                                    content: SizedBox(
-                                      height: 300,
-                                      child: CupertinoDatePicker(
-                                        mode: CupertinoDatePickerMode.time,
-                                        initialDateTime: selectedDate,
-                                        onDateTimeChanged: (DateTime newDate) {
-                                          setState(() {
-                                            selectedDate = DateTime(
-                                              selectedDate.year,
-                                              selectedDate.month,
-                                              selectedDate.day,
-                                              newDate.hour,
-                                              newDate.minute,
-                                            );
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                    actions: [
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          Navigator.of(context)
-                                              .pop(selectedDate);
-                                        },
-                                        child: const Row(
-                                          children: [
-                                            Icon(
-                                              Icons.access_time,
-                                              color: Colors.deepOrange,
-                                            ),
-                                            SizedBox(width: 10),
-                                            Text("Set time"),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-
-                              if (pickedTime != null) {
-                                widget.setExpiryDateForCertificate(
-                                  loggedInState.currentUserUid!,
-                                  pickedTime,
-                                );
+    return Center(
+      child: Container(
+        constraints: BoxConstraints(
+          maxWidth: (MediaQuery.of(context).size.width > 1000
+                  ? MediaQuery.of(context).size.width * 0.5
+                  : MediaQuery.of(context).size.width) *
+              0.8,
+        ),
+        margin: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: Colors.grey.shade200.withOpacity(0.35),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  widget.text,
+                  style: const TextStyle(fontSize: 18, color: Colors.black87),
+                ),
+                CupertinoButton(
+                  onPressed: () async {
+                    DateTime? pickedDate = await showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text("Select Date"),
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 20),
+                          content: SizedBox(
+                            height: 300,
+                            width: 500,
+                            child: CupertinoDatePicker(
+                              mode: CupertinoDatePickerMode.date,
+                              initialDateTime: selectedDate,
+                              minimumDate: DateTime(2023),
+                              maximumDate: DateTime(2100),
+                              onDateTimeChanged: (DateTime newDate) {
                                 setState(() {
-                                  expiryDate = pickedTime;
+                                  selectedDate = newDate;
                                 });
-                              }
-                            },
-                            child: const Row(
-                              children: [
-                                Icon(
-                                  Icons.access_time,
-                                  color: Colors.deepOrange,
-                                ),
-                                SizedBox(width: 10),
-                                Text(
-                                  "Set Date",
-                                  style: TextStyle(
-                                    color: Color.fromARGB(255, 255, 255, 254),
-                                  ),
-                                ),
-                              ],
+                              },
                             ),
                           ),
-                        ],
-                      );
-                    },
-                  );
+                          actions: [
+                            ElevatedButton(
+                              onPressed: () async {
+                                Navigator.of(context).pop();
+                                DateTime? pickedTime = await showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: const Text("Select Time"),
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 24, vertical: 20),
+                                      content: SizedBox(
+                                        height: 300,
+                                        child: CupertinoDatePicker(
+                                          mode: CupertinoDatePickerMode.time,
+                                          initialDateTime: selectedDate,
+                                          onDateTimeChanged:
+                                              (DateTime newDate) {
+                                            setState(() {
+                                              selectedDate = DateTime(
+                                                selectedDate.year,
+                                                selectedDate.month,
+                                                selectedDate.day,
+                                                newDate.hour,
+                                                newDate.minute,
+                                              );
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                      actions: [
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            Navigator.of(context)
+                                                .pop(selectedDate);
+                                          },
+                                          child: const Row(
+                                            children: [
+                                              Icon(
+                                                Icons.access_time,
+                                                color: Colors.deepOrange,
+                                              ),
+                                              SizedBox(width: 10),
+                                              Text("Set time"),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
 
-                  if (pickedDate != null) {
-                    setState(() {
-                      selectedDate = pickedDate;
-                    });
-                  }
-                },
-                child: const Row(
-                  children: [
-                    Icon(
-                      Icons.edit_calendar,
-                      color: Colors.deepOrange,
-                    ),
-                    SizedBox(width: 5),
-                    Text(
-                      "Set",
-                      style: TextStyle(
-                          color: Colors.deepOrange,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ],
+                                if (pickedTime != null) {
+                                  widget.setExpiryDateForCertificate(
+                                    loggedInState.currentUserUid!,
+                                    pickedTime,
+                                  );
+                                  setState(() {
+                                    expiryDate = pickedTime;
+                                  });
+                                }
+                              },
+                              child: const Row(
+                                children: [
+                                  Icon(
+                                    Icons.access_time,
+                                    color: Colors.deepOrange,
+                                  ),
+                                  SizedBox(width: 10),
+                                  Text(
+                                    "Set Date",
+                                    style: TextStyle(
+                                      color: Color.fromARGB(255, 255, 255, 254),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+
+                    if (pickedDate != null) {
+                      setState(() {
+                        selectedDate = pickedDate;
+                      });
+                    }
+                  },
+                  child: const Row(
+                    children: [
+                      Icon(
+                        Icons.edit_calendar,
+                        color: Colors.deepOrange,
+                      ),
+                      SizedBox(width: 5),
+                      Text(
+                        "Set",
+                        style: TextStyle(
+                            color: Colors.deepOrange,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 5),
-          Row(
-            children: [
-              if (expiryDate != null)
-                Icon(
-                  Icons.check,
-                  color: Colors.deepPurpleAccent.shade100,
+              ],
+            ),
+            const SizedBox(height: 5),
+            Row(
+              children: [
+                if (expiryDate != null)
+                  Icon(
+                    Icons.check,
+                    color: Colors.deepPurpleAccent.shade100,
+                  ),
+                if (expiryDate == null && widget.initialExpiryDate != null)
+                  Icon(
+                    Icons.check,
+                    color: Colors.deepPurpleAccent.shade100,
+                  ),
+                if (expiryDate == null && widget.initialExpiryDate == null)
+                  const Icon(
+                    Icons.error,
+                    color: Colors.grey,
+                  ),
+                const SizedBox(width: 5),
+                Text(
+                  expiryDate != null
+                      ? 'Expiry date: ${DateFormat('yyyy/MM/dd').format(expiryDate!)} at ${DateFormat('hh:mm a').format(expiryDate!)}'
+                      : widget.initialExpiryDate != null
+                          ? 'Expiry date: ${DateFormat('yyyy/MM/dd').format(widget.initialExpiryDate!)} at ${DateFormat('hh:mm a').format(widget.initialExpiryDate!)}'
+                          : 'Expiry date: Not set',
+                  style: const TextStyle(fontSize: 12, color: Colors.black87),
                 ),
-              if (expiryDate == null && widget.initialExpiryDate != null)
-                Icon(
-                  Icons.check,
-                  color: Colors.deepPurpleAccent.shade100,
-                ),
-              if (expiryDate == null && widget.initialExpiryDate == null)
-                const Icon(
-                  Icons.error,
-                  color: Colors.grey,
-                ),
-              const SizedBox(width: 5),
-              Text(
-                expiryDate != null
-                    ? 'Expiry date: ${DateFormat('yyyy/MM/dd').format(expiryDate!)} at ${DateFormat('hh:mm a').format(expiryDate!)}'
-                    : widget.initialExpiryDate != null
-                        ? 'Expiry date: ${DateFormat('yyyy/MM/dd').format(widget.initialExpiryDate!)} at ${DateFormat('hh:mm a').format(widget.initialExpiryDate!)}'
-                        : 'Expiry date: Not set',
-                style: const TextStyle(fontSize: 12, color: Colors.black87),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
