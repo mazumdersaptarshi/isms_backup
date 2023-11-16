@@ -17,9 +17,6 @@ class SlidesContentWidget extends StatelessWidget {
   final isWeb = kIsWeb;
   @override
   Widget build(BuildContext context) {
-    if (kDebugMode) {
-      print(cardItems);
-    }
     return Card(
       surfaceTintColor: Colors.white,
       elevation: 4,

@@ -129,9 +129,6 @@ Map<String, dynamic> getUserCourseData(
     for (var courseCompleted in loggedInState.loggedInUser.courses_completed) {
       if (courseCompleted["courseID"] == course.id) {
         courseCompPercent = 100;
-        debugPrint(
-            "COURSE COMPLETED DATE : ${courseCompleted["course_name"]}, ${courseCompleted["completed_at"].runtimeType}");
-        //courseCompletionDate = courseCompleted["completed_at"];
       }
     }
   }

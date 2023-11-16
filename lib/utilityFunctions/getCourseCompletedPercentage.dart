@@ -1,6 +1,5 @@
 // ignore_for_file: file_names
 
-import 'package:flutter/material.dart';
 
 import '../projectModules/courseManagement/coursesProvider.dart';
 
@@ -9,7 +8,6 @@ Map<String, dynamic> getCourseCompletedPercentage(
   double courseCompletionPercentage = 0;
   int noOfExams = 0;
   bool isValid = false;
-  debugPrint('Enrolled CoursesDropdown');
 
   int modulesCount = 0;
 

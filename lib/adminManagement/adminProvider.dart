@@ -1,5 +1,7 @@
 // ignore_for_file: file_names
 
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:isms/models/adminConsoleModels/coursesDetails.dart';
@@ -20,7 +22,6 @@ class AdminProvider extends ChangeNotifier {
   Map<String, dynamic> snapshotData = {};
   LoggedInState loggedInState = LoggedInState();
   AdminProvider() {
-    debugPrint('provider invoked');
     listenToCoursesChanges();
     listenToUsersChanges();
   }
@@ -47,7 +48,6 @@ class AdminProvider extends ChangeNotifier {
         .snapshots()
         .listen((snapshot) {
       if (snapshot.docs.isNotEmpty) {
-        debugPrint('User added or removed');
         _hasNewUsersData = true;
         notifyListeners();
       }
@@ -59,7 +59,6 @@ class AdminProvider extends ChangeNotifier {
         .listen((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         _hasNewUsersData = true;
-        debugPrint('There was a chnage in user data');
         notifyListeners();
       }
     });
@@ -67,7 +66,6 @@ class AdminProvider extends ChangeNotifier {
 
   Future<List> allCoursesDataFetcher() async {
     if (!_hasNewCoursesData && allCourses.isNotEmpty) {
-      debugPrint('No changes, fetching saved data');
       return allCourses;
     }
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
@@ -75,14 +73,12 @@ class AdminProvider extends ChangeNotifier {
         .doc('allcourses')
         .collection('allCourseItems')
         .get();
-    debugPrint('AllCoursesAdmin:');
     allCourses.clear();
     for (var documentSnapshot in querySnapshot.docs) {
       if (documentSnapshot.exists) {
         Map<String, dynamic> elementMap =
             documentSnapshot.data() as Map<String, dynamic>;
         CoursesDetails courseItem = CoursesDetails.fromMap(elementMap);
-        debugPrint('coursDetais: ${courseItem.course_name}');
         allCourses.add(courseItem);
       }
     }
@@ -101,7 +97,6 @@ class AdminProvider extends ChangeNotifier {
     }
 
     _hasNewCoursesData = false;
-    debugPrint('Changes detected, returning updated data');
 
     return allCourses;
   }
@@ -111,8 +106,6 @@ class AdminProvider extends ChangeNotifier {
       //Clearing old data if there is new data available
       allUsers.clear();
       userRefs.clear();
-      debugPrint(
-          'Fething new data from firestore as authStateChanged: $_authStateChanged and _hasNewUsersData: $_hasNewUsersData');
 
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('adminconsole')
@@ -135,7 +128,6 @@ class AdminProvider extends ChangeNotifier {
         try {
           Map<String, dynamic> userData =
               userSnapshot.data() as Map<String, dynamic>;
-          debugPrint('raw user data: $userData');
           userData["uid"] = userSnapshot.id;
 
           // localUserDataList.add({
@@ -146,31 +138,20 @@ class AdminProvider extends ChangeNotifier {
           CustomUser userInfo = CustomUser.fromMap(userData);
 
           allUsers.add(userInfo);
-          for (var element in allUsers) {
-            if (kDebugMode) {
-              print('adminUsersView: ${element.courses_completed}');
-              print('adminUsersView: ${element.courses_started}');
-            }
-          }
         } catch (e) {
-          debugPrint(
-              'There was an issue with user Data; Could not fetch user data. Reason for error: $e');
+          log('There was an issue with user Data; Could not fetch user data. Reason for error: $e');
         }
       }
       _hasNewUsersData = false;
       _authStateChanged = false;
       return allUsers;
     } else {
-      debugPrint(
-          'Fetching cached data since no changes detected, authStateChanged: $_authStateChanged and _hasNewUsersData: $_hasNewUsersData');
       return allUsers;
     }
   }
 
   Future<Map<String, dynamic>?> fetchAdminInstructions(
       String category, String subCategory) async {
-    debugPrint(category);
-
     //getting a reference of the collection, returns Future<QuerySnapshot<Map<String, dynamic>>>
     var collectionRef = FirebaseFirestore.instance
         .collection('adminconsole')
@@ -181,7 +162,6 @@ class AdminProvider extends ChangeNotifier {
 
     for (var document in ref1.docs) {
       final ref = collectionRef.doc(document.id).collection(subCategory).get();
-      debugPrint('ref: $ref');
 
       QuerySnapshot<Map<String, dynamic>> querySnapshot = await ref;
       for (QueryDocumentSnapshot<Map<String, dynamic>> doc
@@ -209,7 +189,6 @@ class AdminProvider extends ChangeNotifier {
       var slides = data['slides'];
       return slides;
     } else {
-      debugPrint('Document does not exist');
       return [];
     }
   }

@@ -2,7 +2,6 @@
 
 import 'dart:math';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/modulesListScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/sharedWidgets/course_tile.dart';
@@ -54,9 +53,6 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
           min(itemCount, maxColumns) > 0 ? min(itemCount, maxColumns) : 1;
     }
 
-    if (kDebugMode) {
-      print('uuupop: ${coursesProvider.allCourses}');
-    }
     return Scaffold(
       appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
       bottomNavigationBar:

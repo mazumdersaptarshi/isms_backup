@@ -1,7 +1,6 @@
 // ignore_for_file: file_names
 
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/models/newExam.dart';
 import 'package:isms/models/question.dart';
@@ -45,13 +44,9 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
     loadQuestions();
     shuffleQuestions();
     _selectedAnswers = List.generate(_questions.length, (index) => <int>{});
-    if (kDebugMode) {
-      print(widget.exam.questionAnswerSet);
-    }
   }
 
   loadQuestions() {
-    debugPrint("LOADING QUESTIONS");
     for (var element in widget.exam.questionAnswerSet) {
       List<String> options = [];
       List<int> correctAnswers = [];
@@ -169,7 +164,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
                       List.generate(_questions.length, (index) => <int>{});
                   _showScore = false;
                 }),
-              child: const Text('Retake Exam'),
+                child: const Text('Retake Exam'),
               )
             ],
           ),

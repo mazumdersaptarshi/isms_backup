@@ -9,7 +9,6 @@ Widget CourseModulesDropdownWidget(String title, List<dynamic>? modulesStarted,
     modulesCompletedList.add(module['module_name']);
   }
 
-  // print('${title}: ${modules}');
   return Container(
     padding: const EdgeInsets.all(8),
     constraints: const BoxConstraints(minHeight: 50),

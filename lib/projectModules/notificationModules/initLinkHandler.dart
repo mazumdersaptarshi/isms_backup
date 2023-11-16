@@ -1,8 +1,8 @@
 // ignore_for_file: file_names
 
 import 'dart:async';
+import 'dart:developer';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:isms/projectModules/adminConsoleModules/adminActionDropdown.dart';
@@ -18,8 +18,6 @@ class InitLinkHandler {
       _listenForIncomingLinksIOS(context);
       String? initialLink = await getInitialLink();
 
-      debugPrint("Received initial link is $initialLink");
-
       if (initialLink != null) {
         if (!context.mounted) return;
         _handleLink(context, initialLink);
@@ -31,9 +29,9 @@ class InitLinkHandler {
         startLinkListener(context);
       }
     } on PlatformException catch (e) {
-      debugPrint('PlatformException: ${e.message}');
+      log('PlatformException: ${e.message}');
     } catch (e) {
-      debugPrint('Unexpected error: $e');
+      log('Unexpected error: $e');
     }
   }
 
@@ -41,7 +39,6 @@ class InitLinkHandler {
     _platformChannel.setMethodCallHandler((call) async {
       if (call.method == 'handleIncomingLink') {
         String link = call.arguments;
-        debugPrint('Received link via method channel: $link');
         _handleLink(context, link);
       }
     });
@@ -50,19 +47,15 @@ class InitLinkHandler {
   static void startLinkListener(BuildContext context) {
     _sub = linkStream.listen((String? link) {
       if (link != null) {
-        debugPrint("Received dynamic link: $link");
         _handleLink(context, link);
-      } else {
-        debugPrint("Received null link");
       }
     }, onError: (err) {
-      debugPrint('Error on link stream: $err');
+      log('Error on link stream: $err');
     });
   }
 
   static void _handleLink(BuildContext context, String link) {
     Uri uri = Uri.parse(link);
-    debugPrint("Parsed link is $uri");
 
     if (uri.pathSegments.isEmpty) return;
     String parameter = uri.pathSegments[0];
@@ -74,9 +67,6 @@ class InitLinkHandler {
   static void _sendToInstructionsScreen(
       {required Uri uri, required BuildContext context}) {
     String? category = uri.queryParameters['category'];
-    if (kDebugMode) {
-      print(uri.toString());
-    }
     for (String key in categories.keys) {
       if (key == category) {
         Navigator.push(

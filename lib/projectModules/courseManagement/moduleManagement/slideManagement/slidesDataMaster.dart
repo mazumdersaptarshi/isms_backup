@@ -1,7 +1,6 @@
 // ignore_for_file: file_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/models/slide.dart';
 import 'package:isms/projectModules/courseManagement/moduleManagement/moduleDataMaster.dart';
@@ -41,8 +40,6 @@ class SlidesDataMaster extends ModuleDataMaster {
       module.addSlides(slides);
       //module.slidesCount = index;
 
-      debugPrint("Slides creation successful");
-
       coursesProvider.notifyListeners();
       return true;
     } catch (e) {
@@ -54,8 +51,7 @@ class SlidesDataMaster extends ModuleDataMaster {
     // this delay can be enabled to test the loading code
     //await Future.delayed(const Duration(milliseconds: 1000));
 
-    QuerySnapshot slidesListSnapshot =
-      await _slidesRef.orderBy("index").get();
+    QuerySnapshot slidesListSnapshot = await _slidesRef.orderBy("index").get();
     if (module.slides == null) {
       module.slides = [];
     } else {
@@ -66,22 +62,17 @@ class SlidesDataMaster extends ModuleDataMaster {
       module.addSlide(slide);
       coursesProvider.notifyListeners();
     }
-    //if (module.slides!.length != module.slidesCount) {
-    //  debugPrint ("fetched ${module.slides!.length} slides, was expecting ${module.slidesCount}");
-    //}
+
     return module.slides!;
   }
 
   Future<List<Slide>> get slides async {
     if (module.slides != null) {
-      debugPrint("slides in cache, no need to fetch them");
       return module.slides!;
     } else {
-      debugPrint("slides not in cache, trying to fetch them");
       try {
         return _fetchSlides();
       } catch (e) {
-        debugPrint("error while fetching slides: $e");
         module.slides = null;
         return [];
       }

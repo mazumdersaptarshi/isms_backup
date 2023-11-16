@@ -1,6 +1,5 @@
 // ignore_for_file: file_names
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/models/enums.dart';
 import 'package:isms/models/newExam.dart';
@@ -89,7 +88,7 @@ class ExamCreationState extends State<ExamCreation> {
                   child: TextFormField(
                     controller: titleController,
                     decoration:
-                    customInputDecoration(hintText: "Enter title for exam"),
+                        customInputDecoration(hintText: "Enter title for exam"),
                   ),
                 ),
                 const SizedBox(
@@ -127,8 +126,8 @@ class ExamCreationState extends State<ExamCreation> {
                     child: Text(
                       'Add a question',
                       style: buttonText,
+                    ),
                   ),
-                ),
                 ),
                 const SizedBox(
                   height: 10,
@@ -138,10 +137,6 @@ class ExamCreationState extends State<ExamCreation> {
                   child: ElevatedButton(
                     style: customElevatedButtonStyle(),
                     onPressed: () {
-                      if (kDebugMode) {
-                        print(allQuestions);
-                      }
-
                       NewExam newExam = NewExam(
                           examID: generateRandomId(),
                           passingPercentage:
@@ -150,7 +145,6 @@ class ExamCreationState extends State<ExamCreation> {
                           questionAnswerSet: allQuestions);
 
                       if (widget.examtype == EXAMTYPE.courseExam) {
-                        debugPrint("CREATE EXAMM ${widget.course.exams}");
                         examDataMaster.createCourseExam(exam: newExam);
                       } else if (widget.examtype == EXAMTYPE.moduleExam) {
                         moduleExamDataMaster.createModuleExam(exam: newExam);

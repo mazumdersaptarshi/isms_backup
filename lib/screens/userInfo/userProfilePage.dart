@@ -1,6 +1,5 @@
 // ignore_for_file: file_names
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/models/UserActions.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
@@ -75,7 +74,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
             flexibleSpace: FlexibleSpaceBar(
                 background: UserProfileHeaderWidget(
               view: 'user',
-              refreshCallback: refreshCallback(),
+              refreshCallback: refreshCallback,
             )),
           ),
           SliverToBoxAdapter(
@@ -135,9 +134,6 @@ class UserActionsDropdown extends StatelessWidget {
   final LoggedInState loggedInState;
   @override
   Widget build(BuildContext context) {
-    if (kDebugMode) {
-      print(actionId);
-    }
     if (actionId == 'crs_enrl') {
       return UserEnrolledCoursesDropdown(
         actionId: actionId,
@@ -167,10 +163,6 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
     double courseCompletionPercentage = 0;
     int noOfExams = 0;
     bool isValid = false;
-    if (kDebugMode) {
-      print('Enrolled CoursesDropdown');
-      print(actionId);
-    }
 
     allEnrolledCourses = loggedInState.allEnrolledCoursesGlobal;
 
@@ -261,9 +253,6 @@ class UserCompletedCoursesDropdown extends StatelessWidget {
                 physics: const ClampingScrollPhysics(),
                 itemBuilder: (context, index) {
                   allCompletedCourses = loggedInState.allCompletedCoursesGlobal;
-                  debugPrint(
-                      'ALLCOMPLETEDCOURSESGLOBAL: ${loggedInState.allCompletedCoursesGlobal}');
-
                   return CourseDropdownWidget(
                     courseItem: allCompletedCourses[index],
                     courseDetailsData: getCourseCompletedPercentage(

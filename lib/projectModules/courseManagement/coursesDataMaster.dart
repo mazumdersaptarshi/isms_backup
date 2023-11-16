@@ -1,14 +1,14 @@
 // ignore_for_file: file_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 import 'package:isms/models/adminConsoleModels/coursesDetails.dart';
 
 import 'package:isms/models/course.dart';
 import 'coursesProvider.dart';
 
-class CoursesDataMaster {
+class CoursesDataMaster extends ChangeNotifier {
   static FirebaseFirestore db = FirebaseFirestore.instance;
   static final CollectionReference _coursesRef = db.collection("courses");
   static final CollectionReference _adminConsoleCoursesRef = db
@@ -26,7 +26,6 @@ class CoursesDataMaster {
 
       await _coursesRef.doc(course.name).set(courseMap);
 
-      debugPrint("Course creation successful");
       return true;
     } catch (e) {
       return false;
@@ -44,17 +43,16 @@ class CoursesDataMaster {
           .doc(coursesDetails.course_name)
           .set(courseMap);
 
-      debugPrint("Course creation successful");
       return true;
     } catch (e) {
       return false;
     }
   }
 
-  static Future<void> listenToCourseUpdates(CoursesProvider coursesProvider) async {
-    Stream<QuerySnapshot> coursesStream = _coursesRef
-        .orderBy("createdAt")
-        .snapshots();
+  static Future<void> listenToCourseUpdates(
+      CoursesProvider coursesProvider) async {
+    Stream<QuerySnapshot> coursesStream =
+        _coursesRef.orderBy("createdAt").snapshots();
     coursesStream.listen((snapshot) async {
       //await Future.delayed(const Duration(milliseconds: 5000));
       coursesProvider.allCourses.clear();

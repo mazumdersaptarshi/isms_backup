@@ -31,7 +31,6 @@ class _AdminInstructionSlidesState extends State<AdminInstructionSlides> {
       AdminProvider adminProvider, String category, String subCategory) async {
     var fetchedSlides = await adminProvider.fetchAdminInstructionsFromFirestore(
         category, subCategory);
-    debugPrint('slidessdcd: $fetchedSlides');
     return fetchedSlides;
   }
 
