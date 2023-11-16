@@ -101,8 +101,6 @@ class _CourseCreationFormState extends State<CourseCreationForm> {
                           CoursesDetails coursesDetails = CoursesDetails(
                             course_id: generateRandomId(),
                             course_name: _nameController.text,
-                            number_of_modules: 0,
-                            number_of_exams: 0,
                           );
                           await CoursesDataMaster.createCourseAdminConsole(
                               coursesDetails: coursesDetails);
