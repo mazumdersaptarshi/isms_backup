@@ -9,7 +9,7 @@ import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/models/slide.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
-import 'package:isms/projectModules/courseManagement/moduleManagement/slideManagement/slidesCreationProvider.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/sharedWidgets/slidesCreationProvider.dart';
 import 'package:isms/projectModules/courseManagement/moduleManagement/slideManagement/slidesDataMaster.dart';
 import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
@@ -45,74 +45,63 @@ class SlideFormContainer extends StatefulWidget {
 }
 
 class _SlideFormContainerState extends State<SlideFormContainer> {
-  SlidesDataMaster? slidesDataMaster;
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
-    slidesDataMaster = SlidesDataMaster(
+    SlidesDataMaster slidesDataMaster = SlidesDataMaster(
         course: widget.course,
         coursesProvider: coursesProvider,
         module: widget.module);
 
-    return Consumer<SlidesCreationProvider>(
-      builder: (BuildContext context,
-          SlidesCreationProvider slidesCreationProvider, Widget? child) {
-        LoggedInState loggedInState = context.watch<LoggedInState>();
-        return Scaffold(
-            appBar:
-                PlatformCheck.topNavBarWidget(loggedInState, context: context),
-            bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState,
-                context: context),
-            body: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: SizedBox(
-                        height: MediaQuery.of(context).size.height,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: slidesCreationProvider.noOfForms,
-                          itemBuilder: (context, index) {
-                            return SlideForm(
-                              slidesCreationProvider: slidesCreationProvider,
-                            );
-                          },
-                        )),
-                  ),
-                  ElevatedButton(
-                      style: customElevatedButtonStyle(),
-                      onPressed: () async {
-                        await slidesDataMaster?.createSlides(
-                            slides: slidesCreationProvider.slidesList);
+    return ChangeNotifierProvider(
+      create: (_) => SlidesCreationProvider(),
+      child: Consumer<SlidesCreationProvider>(
+        builder: (BuildContext context,
+            SlidesCreationProvider slidesCreationProvider, Widget? child) {
+          LoggedInState loggedInState = context.watch<LoggedInState>();
+          return Scaffold(
+              appBar:
+                  PlatformCheck.topNavBarWidget(loggedInState, context: context),
+              bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState,
+                  context: context),
+              body: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: SizedBox(
+                          height: MediaQuery.of(context).size.height,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: slidesCreationProvider.noOfForms,
+                            itemBuilder: (context, index) {
+                              return SlideForm();
+                            },
+                          )),
+                    ),
+                    ElevatedButton(
+                        style: customElevatedButtonStyle(),
+                        onPressed: () async {
+                          await slidesDataMaster.createSlides(
+                              slides: slidesCreationProvider.slidesList);
 
-                        slidesCreationProvider.clearSlidesList();
-                        if (!context.mounted) return;
-                        Navigator.pop(context);
-                      },
-                      child: const Text("Finish creating slides"))
-                ],
+                          slidesCreationProvider.clearSlidesList();
+                          if (!context.mounted) return;
+                          Navigator.pop(context);
+                        },
+                        child: const Text("Finish creating slides"))
+                  ],
+                ),
               ),
-            ));
-      },
+          );
+        },
+      ),
     );
   }
 }
 
 class SlideForm extends StatefulWidget {
-  const SlideForm({super.key, required this.slidesCreationProvider});
-  final SlidesCreationProvider slidesCreationProvider;
+  const SlideForm({super.key});
 
   @override
   State<SlideForm> createState() => _SlideFormState();
@@ -123,10 +112,9 @@ class _SlideFormState extends State<SlideForm> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   bool isSlideAdded = false;
-  String contentBody = "";
-
   String result = '';
   final HtmlEditorController controller = HtmlEditorController();
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -134,6 +122,7 @@ class _SlideFormState extends State<SlideForm> {
 
   @override
   Widget build(BuildContext context) {
+    SlidesCreationProvider slidesCreationProvider = context.watch<SlidesCreationProvider>();
     return SingleChildScrollView(
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -362,14 +351,12 @@ class _SlideFormState extends State<SlideForm> {
                                     );
                                     setState(() {
                                       if (isSlideAdded == false) {
-                                        widget.slidesCreationProvider
-                                            .addSlideToList(slide);
+                                        slidesCreationProvider.addSlideToList(slide);
                                         debugPrint(
-                                            "${widget.slidesCreationProvider.slidesList},,, $isSlideAdded");
+                                            "${slidesCreationProvider.slidesList},,, $isSlideAdded");
                                         isSlideAdded = true;
                                       }
-                                      widget.slidesCreationProvider
-                                          .incrementFormNo();
+                                      slidesCreationProvider.incrementFormNo();
                                     });
                                   }
                                 },
@@ -399,10 +386,10 @@ class _SlideFormState extends State<SlideForm> {
                       );
                       setState(() {
                         if (isSlideAdded == false) {
-                          widget.slidesCreationProvider.addSlideToList(slide);
+                          slidesCreationProvider.addSlideToList(slide);
                           isSlideAdded = true;
                           if (kDebugMode) {
-                            print(widget.slidesCreationProvider.slidesList);
+                            print(slidesCreationProvider.slidesList);
                           }
                         }
                       });
@@ -410,30 +397,6 @@ class _SlideFormState extends State<SlideForm> {
                   },
                   child: const Text('Add new slide'),
                 ),
-                // Container(
-                //   height: 50,
-                //   child: ElevatedButton(
-                //     onPressed: () async {
-                //       if (_formKey.currentState!.validate()) {
-                //         Slide slide = Slide(
-                //           id: generateRandomId(),
-                //           title: _titleController.text,
-                //           content: contentBody,
-                //         );
-                //         setState(() {
-                //           if (isSlideAdded == false) {
-                //             widget.slidesCreationProvider.addSlideToList(slide);
-                //             debugPrint(
-                //                 "${widget.slidesCreationProvider.slidesList},,, ${isSlideAdded}");
-                //             isSlideAdded = true;
-                //           }
-                //           widget.slidesCreationProvider.incrementFormNo();
-                //         });
-                //       }
-                //     },
-                //     child: Text('Add new Slide'),
-                //   ),
-                // ),
               ],
             ),
           ),
