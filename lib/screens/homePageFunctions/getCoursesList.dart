@@ -149,10 +149,7 @@ Map<String, dynamic> getUserCourseData(
           print(courseCompPercent);
         } catch (e) {
           print("INSIDE CATCH $e");
-          courseCompPercent = ((courseStarted["modules_completed"].length /
-                      course.modulesCount) *
-                  100)
-              .ceil();
+          courseCompPercent = 0;
         }
         //courseStartDate = courseStarted["started_at"];
       }

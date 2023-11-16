@@ -136,8 +136,8 @@ class _CoursePageState extends State<CoursePage> {
                       children: [
                         Row(
                           children: [
-                            Flexible(flex: 1, child: Container()),
-                            Flexible(
+                            Expanded(flex: 1, child: Container()),
+                            Expanded(
                               flex: 8,
                               child: Container(
                                 margin: const EdgeInsets.symmetric(
@@ -220,79 +220,71 @@ class _CoursePageState extends State<CoursePage> {
                                         padding:
                                             const EdgeInsets.only(top: 20.0),
                                         child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
                                           children: [
-                                            Expanded(
-                                              child: ElevatedButton(
-                                                onPressed: () {
-                                                  if (isALlModulesCompleted) {
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            ExamListScreen(
-                                                          course: widget.course,
-                                                          examtype: EXAMTYPE
-                                                              .courseExam,
-                                                        ),
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                if (isALlModulesCompleted) {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ExamListScreen(
+                                                        course: widget.course,
+                                                        examtype:
+                                                            EXAMTYPE.courseExam,
                                                       ),
-                                                    );
-                                                  }
+                                                    ),
+                                                  );
+                                                }
+                                              },
+                                              style: customTheme
+                                                  .elevatedButtonTheme.style!
+                                                  .copyWith(
+                                                      backgroundColor: isALlModulesCompleted
+                                                          ? MaterialStateProperty
+                                                              .all<Color>(
+                                                                  Colors.white)
+                                                          : MaterialStateProperty
+                                                              .all<Color>(Colors
+                                                                  .grey
+                                                                  .shade200)),
+                                              child: Text("View course exams",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      color:
+                                                          isALlModulesCompleted
+                                                              ? primaryColor
+                                                              : Colors.grey)),
+                                            ),
+                                            const SizedBox(width: 20),
+                                            if (userRole == "admin")
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ExamCreation(
+                                                        course: widget.course,
+                                                        examtype:
+                                                            EXAMTYPE.courseExam,
+                                                      ),
+                                                    ),
+                                                  );
                                                 },
                                                 style: customTheme
                                                     .elevatedButtonTheme.style!
                                                     .copyWith(
-                                                        backgroundColor: isALlModulesCompleted
-                                                            ? MaterialStateProperty
+                                                        backgroundColor:
+                                                            MaterialStateProperty
                                                                 .all<Color>(
                                                                     Colors
-                                                                        .white)
-                                                            : MaterialStateProperty
-                                                                .all<Color>(Colors
-                                                                    .grey
-                                                                    .shade200)),
-                                                child: Text("View course exams",
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        color:
-                                                            isALlModulesCompleted
-                                                                ? primaryColor
-                                                                : Colors.grey)),
-                                              ),
-                                            ),
-                                            const SizedBox(width: 20),
-                                            if (userRole == "admin")
-                                              Expanded(
-                                                child: ElevatedButton(
-                                                  onPressed: () {
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            ExamCreation(
-                                                          course: widget.course,
-                                                          examtype: EXAMTYPE
-                                                              .courseExam,
-                                                        ),
-                                                      ),
-                                                    );
-                                                  },
-                                                  style: customTheme
-                                                      .elevatedButtonTheme
-                                                      .style!
-                                                      .copyWith(
-                                                          backgroundColor:
-                                                              MaterialStateProperty
-                                                                  .all<Color>(
-                                                                      Colors
-                                                                          .white)),
-                                                  child: const Text(
-                                                    "Create course exam",
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        color: primaryColor),
-                                                  ),
+                                                                        .white)),
+                                                child: const Text(
+                                                  "Create course exam",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      color: primaryColor),
                                                 ),
                                               ),
                                           ],
