@@ -140,6 +140,7 @@ class ModuleExamCompletionStrategy implements ExamCompletionStrategy {
         "courseID": course.id,
         "course_name": course.name,
         "course_modules_count": course.modulesCount,
+        "course_exams_count": course.examsCount ?? 0,
         "started_at": DateTime.now()
       };
       return ElevatedButton(

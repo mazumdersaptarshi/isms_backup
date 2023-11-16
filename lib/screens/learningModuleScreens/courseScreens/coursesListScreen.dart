@@ -81,7 +81,9 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
                     // tileHeight: tileMinimumheight,
                     courseData: getUserCourseData(
                         loggedInState: loggedInState,
-                        course: coursesProvider.allCourses[courseIndex]),
+                        course: coursesProvider.allCourses[courseIndex],
+                        coursesProvider: coursesProvider),
+
                     subTitle:
                         coursesProvider.allCourses[courseIndex].description ??
                             '',

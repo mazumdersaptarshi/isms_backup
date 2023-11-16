@@ -52,6 +52,7 @@ class _ModuleDetailsState extends State<ModuleDetails> {
       "courseID": widget.course.id,
       "course_name": widget.course.name,
       "course_modules_count": widget.course.modulesCount,
+      "course_exams_count": widget.course.examsCount,
       "started_at": DateTime.now()
     };
     return Scaffold(

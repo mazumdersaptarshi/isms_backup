@@ -269,7 +269,7 @@ class UserCompletedCoursesDropdown extends StatelessWidget {
                   return CourseDropdownWidget(
                     courseItem: allCompletedCourses[index],
                     courseDetailsData: getCourseCompletedPercentage(
-                        allCompletedCourses[index], coursesProvider, index),
+                        allCompletedCourses[index], coursesProvider),
                     detailType: 'courses_completed',
                   );
                 },
