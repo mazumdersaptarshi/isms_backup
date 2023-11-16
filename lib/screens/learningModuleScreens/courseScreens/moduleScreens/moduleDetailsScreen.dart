@@ -124,6 +124,7 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                   ),
                 ],
               ),
+              const SizedBox(height: 10),
               Card(
                 surfaceTintColor: Colors.white,
                 elevation: 4,

@@ -133,7 +133,8 @@ class ExamCreationState extends State<ExamCreation> {
 
                       NewExam newExam = NewExam(
                           examID: generateRandomId(),
-                          passingMarks: int.parse(passingMarksController.text),
+                          passingPercentage:
+                              int.parse(passingMarksController.text),
                           title: titleController.text,
                           questionAnswerSet: allQuestions);
 

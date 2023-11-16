@@ -17,7 +17,6 @@ Widget loadingWidget({Widget? textWidget}) {
                 color: Colors.black,
               ),
             ),
-        SizedBox(width: 10), // Add a SizedBox for the spacing
         Lottie.asset(
           'assets/images/loading_animation.json',
           width: 100,

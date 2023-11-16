@@ -360,14 +360,14 @@ class _CoursePageState extends State<CoursePage> {
                   )),
             )
           : SizedBox(
-              height: 300,
+              height: 200,
               child: AlertDialog(
                 elevation: 4,
                 content: Align(
                     alignment: Alignment.topCenter,
                     child: loadingWidget(
                         textWidget: Text(
-                      "Loading modules ...",
+                      "Loading",
                       style: customTheme.textTheme.labelMedium!
                           .copyWith(fontSize: 18, fontWeight: FontWeight.bold),
                     ))),
