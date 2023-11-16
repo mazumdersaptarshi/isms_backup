@@ -2,7 +2,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:isms/projectModules/courseManagement/moduleManagement/slideManagement/slidesDataMaster.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleDetailsScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/modulesListScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/slidesDisplayScreen.dart';
@@ -45,7 +44,7 @@ class CourseExamCompletionStrategy implements ExamCompletionStrategy {
                 builder: (context) => CoursePage(course: course)));
       },
       child: Text(
-          "Mark Exam as Done- completed ${exam.index}/${course.exams.length}"),
+          "Mark Exam as Done- completed ${exam.index}/${course.exams!.length}"),
     );
   }
 
@@ -141,10 +140,9 @@ class ModuleExamCompletionStrategy implements ExamCompletionStrategy {
         "courseID": course.id,
         "course_name": course.name,
         "course_modules_count": course.modulesCount,
+        "course_exams_count": course.examsCount ?? 0,
         "started_at": DateTime.now()
       };
-      SlidesDataMaster? slidesDataMaster = SlidesDataMaster(
-          course: course, coursesProvider: coursesProvider, module: module);
       return ElevatedButton(
         onPressed: () async {
           await loggedInState.setUserCourseStarted(
@@ -162,7 +160,6 @@ class ModuleExamCompletionStrategy implements ExamCompletionStrategy {
                   builder: (context) => SlidesDisplayScreen(
                         course: course,
                         module: module,
-                        slidesDataMaster: slidesDataMaster,
                       )));
         },
         child: const Text("Study the module first"),

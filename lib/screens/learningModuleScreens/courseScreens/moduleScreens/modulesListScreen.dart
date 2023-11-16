@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/createModuleScreenHTML.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/sharedWidgets/moduleTile.dart';
-// import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/createModuleScreenHTML.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examListScreen.dart';
 import 'package:isms/themes/common_theme.dart';
@@ -26,16 +25,8 @@ class CoursePage extends StatefulWidget {
 }
 
 class _CoursePageState extends State<CoursePage> {
-  bool isModulesFetched = false;
+  late ModuleDataMaster moduleDataMaster;
   late String userRole;
-  ModuleDataMaster? moduleDataMaster;
-
-  fetchCourseModules({required CoursesProvider coursesProvider}) async {
-    await moduleDataMaster?.fetchModules();
-    setState(() {
-      isModulesFetched = true;
-    });
-  }
 
   @override
   void initState() {
@@ -98,29 +89,21 @@ class _CoursePageState extends State<CoursePage> {
     moduleDataMaster = ModuleDataMaster(
         course: widget.course, coursesProvider: coursesProvider);
 
-    if (isModulesFetched == false) {
-      fetchCourseModules(coursesProvider: coursesProvider);
-    }
-
     userRole = loggedInState.currentUserRole;
 
-    // compute the grid shape:
-    // requirements
-    // requirements
-    // available width, in pixels
-
-    // int maxColumns =
-    //     max(((screenWidth - (horizontalMargin * 2)) / tileMinWidth).floor(), 1);
-    // number of tiles that have to fit on the screen
     int itemCount = widget.course.modulesCount ?? 0;
-    // grid width, in tiles
 
     return Scaffold(
       appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
       bottomNavigationBar:
           PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
-      body: isModulesFetched
-          ? NestedScrollView(
+      body: FutureBuilder<List<Module>>(
+        future: moduleDataMaster.modules,
+        builder: (BuildContext context, AsyncSnapshot<List<Module>> snapshot) {
+          if (snapshot.hasData) {
+            List<Module> modules = snapshot.data!;
+
+            return NestedScrollView(
               headerSliverBuilder: (context, innerBoxIsScrolled) => [
                 SliverToBoxAdapter(
                   child: Container(
@@ -136,8 +119,8 @@ class _CoursePageState extends State<CoursePage> {
                       children: [
                         Row(
                           children: [
-                            Flexible(flex: 1, child: Container()),
-                            Flexible(
+                            Expanded(flex: 1, child: Container()),
+                            Expanded(
                               flex: 8,
                               child: Container(
                                 margin: const EdgeInsets.symmetric(
@@ -220,79 +203,71 @@ class _CoursePageState extends State<CoursePage> {
                                         padding:
                                             const EdgeInsets.only(top: 20.0),
                                         child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
                                           children: [
-                                            Expanded(
-                                              child: ElevatedButton(
-                                                onPressed: () {
-                                                  if (isALlModulesCompleted) {
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            ExamListScreen(
-                                                          course: widget.course,
-                                                          examtype: EXAMTYPE
-                                                              .courseExam,
-                                                        ),
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                if (isALlModulesCompleted) {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ExamListScreen(
+                                                        course: widget.course,
+                                                        examtype:
+                                                            EXAMTYPE.courseExam,
                                                       ),
-                                                    );
-                                                  }
+                                                    ),
+                                                  );
+                                                }
+                                              },
+                                              style: customTheme
+                                                  .elevatedButtonTheme.style!
+                                                  .copyWith(
+                                                      backgroundColor: isALlModulesCompleted
+                                                          ? MaterialStateProperty
+                                                              .all<Color>(
+                                                                  Colors.white)
+                                                          : MaterialStateProperty
+                                                              .all<Color>(Colors
+                                                                  .grey
+                                                                  .shade200)),
+                                              child: Text("View course exams",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      color:
+                                                          isALlModulesCompleted
+                                                              ? primaryColor
+                                                              : Colors.grey)),
+                                            ),
+                                            const SizedBox(width: 20),
+                                            if (userRole == "admin")
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ExamCreation(
+                                                        course: widget.course,
+                                                        examtype:
+                                                            EXAMTYPE.courseExam,
+                                                      ),
+                                                    ),
+                                                  );
                                                 },
                                                 style: customTheme
                                                     .elevatedButtonTheme.style!
                                                     .copyWith(
-                                                        backgroundColor: isALlModulesCompleted
-                                                            ? MaterialStateProperty
+                                                        backgroundColor:
+                                                            MaterialStateProperty
                                                                 .all<Color>(
                                                                     Colors
-                                                                        .white)
-                                                            : MaterialStateProperty
-                                                                .all<Color>(Colors
-                                                                    .grey
-                                                                    .shade200)),
-                                                child: Text("View course exams",
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        color:
-                                                            isALlModulesCompleted
-                                                                ? primaryColor
-                                                                : Colors.grey)),
-                                              ),
-                                            ),
-                                            const SizedBox(width: 20),
-                                            if (userRole == "admin")
-                                              Expanded(
-                                                child: ElevatedButton(
-                                                  onPressed: () {
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            ExamCreation(
-                                                          course: widget.course,
-                                                          examtype: EXAMTYPE
-                                                              .courseExam,
-                                                        ),
-                                                      ),
-                                                    );
-                                                  },
-                                                  style: customTheme
-                                                      .elevatedButtonTheme
-                                                      .style!
-                                                      .copyWith(
-                                                          backgroundColor:
-                                                              MaterialStateProperty
-                                                                  .all<Color>(
-                                                                      Colors
-                                                                          .white)),
-                                                  child: const Text(
-                                                    "Create course exam",
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        color: primaryColor),
-                                                  ),
+                                                                        .white)),
+                                                child: const Text(
+                                                  "Create course exam",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      color: primaryColor),
                                                 ),
                                               ),
                                           ],
@@ -332,35 +307,51 @@ class _CoursePageState extends State<CoursePage> {
                         ),
                         Column(
                           children: List.generate(
-                              itemCount,
-                              (moduleIndex) => SizedBox(
-                                    // height: 200,
-                                    width: MediaQuery.of(context).size.width >
-                                            SCREEN_COLLAPSE_WIDTH
-                                        ? MediaQuery.of(context).size.width *
-                                            0.5
-                                        : MediaQuery.of(context).size.width,
-                                    child: ModuleTile(
-                                      course: widget.course,
-                                      module:
-                                          widget.course.modules[moduleIndex],
-                                      isModuleStarted: checkIfModuleStarted(
-                                          loggedInState: loggedInState,
-                                          module: widget
-                                              .course.modules[moduleIndex]),
-                                      isModuleCompleted: checkIfModuleCompleted(
-                                          loggedInState: loggedInState,
-                                          module: widget
-                                              .course.modules[moduleIndex]),
-                                    ),
-                                  )),
-                        )
+                            itemCount,
+                            (moduleIndex) {
+                              Module module = modules[moduleIndex];
+                              return SizedBox(
+                                // height: 200,
+                                width: MediaQuery.of(context).size.width >
+                                        SCREEN_COLLAPSE_WIDTH
+                                    ? MediaQuery.of(context).size.width * 0.5
+                                    : MediaQuery.of(context).size.width,
+                                child: ModuleTile(
+                                  course: widget.course,
+                                  module: module,
+                                  isModuleStarted: checkIfModuleStarted(
+                                      loggedInState: loggedInState,
+                                      module: module),
+                                  isModuleCompleted: checkIfModuleCompleted(
+                                      loggedInState: loggedInState,
+                                      module: module),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
                       ],
                     ),
                   )),
-            )
-          : SizedBox(
-              height: 200,
+            );
+          } else if (snapshot.hasError) {
+            return SizedBox(
+              height: 300,
+              child: AlertDialog(
+                elevation: 4,
+                content: Align(
+                    alignment: Alignment.topCenter,
+                    child: loadingErrorWidget(
+                        textWidget: Text(
+                      "Error loading modules",
+                      style: customTheme.textTheme.labelMedium!
+                          .copyWith(fontSize: 18, fontWeight: FontWeight.bold),
+                    ))),
+              ),
+            );
+          } else {
+            return SizedBox(
+              height: 300,
               child: AlertDialog(
                 elevation: 4,
                 content: Align(
@@ -372,7 +363,10 @@ class _CoursePageState extends State<CoursePage> {
                           .copyWith(fontSize: 18, fontWeight: FontWeight.bold),
                     ))),
               ),
-            ),
+            );
+          }
+        },
+      ),
       floatingActionButton: userRole == 'admin'
           ? FloatingActionButton(
               onPressed: () {

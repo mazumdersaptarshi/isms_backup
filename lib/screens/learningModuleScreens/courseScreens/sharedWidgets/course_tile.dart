@@ -10,22 +10,21 @@ class CourseTile extends StatelessWidget {
   final int modulesCount;
   // double tileHeight;
   final double tileWidth;
-  final dynamic modulesCompleted;
-  final dynamic subTitle;
+  //dynamic? modulesCompleted;
+  final String subTitle;
   final Map<String, dynamic>? courseData;
-
-  final String? pageView;
+  final String pageView;
   const CourseTile(
       {super.key,
       required this.index,
       required this.title,
-      this.subTitle,
       required this.onPressed,
       required this.modulesCount,
       required this.courseData,
       required this.tileWidth,
-      this.modulesCompleted,
-      this.pageView});
+      //this.modulesCompleted,
+      this.subTitle = '',
+      this.pageView = ''});
 
   @override
   Widget build(BuildContext context) {

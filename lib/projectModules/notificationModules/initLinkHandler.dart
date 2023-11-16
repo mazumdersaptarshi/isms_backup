@@ -75,7 +75,7 @@ class InitLinkHandler {
       {required Uri uri, required BuildContext context}) {
     String? category = uri.queryParameters['category'];
     if (kDebugMode) {
-      print(uri);
+      print(uri.toString());
     }
     for (String key in categories.keys) {
       if (key == category) {
@@ -83,7 +83,7 @@ class InitLinkHandler {
             context,
             MaterialPageRoute(
                 builder: (context) => AdminInstructionCategories(
-                      category: category!,
+                      category: key,
                       subCategories: categories[key],
                     )));
       }

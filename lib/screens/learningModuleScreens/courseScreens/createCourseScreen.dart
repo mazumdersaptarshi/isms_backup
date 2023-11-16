@@ -104,7 +104,6 @@ class _CourseCreationFormState extends State<CourseCreationForm> {
                             number_of_modules: 0,
                             number_of_exams: 0,
                           );
-
                           await CoursesDataMaster.createCourseAdminConsole(
                               coursesDetails: coursesDetails);
                           if (isCourseCreated) {

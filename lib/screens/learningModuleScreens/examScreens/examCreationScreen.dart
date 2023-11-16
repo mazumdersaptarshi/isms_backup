@@ -16,6 +16,7 @@ import '../../../models/course.dart';
 import '../../../models/module.dart';
 import '../../../projectModules/courseManagement/coursesProvider.dart';
 import '../../../projectModules/courseManagement/examManagement/examDataMaster.dart';
+import '../../../projectModules/courseManagement/moduleManagement/examManagement/examDataMaster.dart';
 import '../../../sharedWidgets/navIndexTracker.dart';
 
 List<Map<String, dynamic>> allQuestions = [];
@@ -35,6 +36,7 @@ class ExamCreation extends StatefulWidget {
 class ExamCreationState extends State<ExamCreation> {
   int noOfQuestions = 1;
   late ExamDataMaster examDataMaster;
+  late ModuleExamDataMaster moduleExamDataMaster;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController titleController = TextEditingController();
   TextEditingController passingMarksController = TextEditingController();
@@ -57,8 +59,17 @@ class ExamCreationState extends State<ExamCreation> {
   Widget build(BuildContext context) {
     NavIndexTracker.setNavDestination(navDestination: NavDestinations.other);
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
-    examDataMaster =
-        ExamDataMaster(course: widget.course, coursesProvider: coursesProvider);
+    examDataMaster = ExamDataMaster(
+      course: widget.course,
+      coursesProvider: coursesProvider,
+    );
+    if (widget.examtype == EXAMTYPE.moduleExam) {
+      moduleExamDataMaster = ModuleExamDataMaster(
+        course: widget.course,
+        coursesProvider: coursesProvider,
+        module: widget.module!,
+      );
+    }
     double screenWidth = MediaQuery.of(context).size.width;
     LoggedInState loggedInState = context.watch<LoggedInState>();
     return Scaffold(
@@ -78,7 +89,7 @@ class ExamCreationState extends State<ExamCreation> {
                   child: TextFormField(
                     controller: titleController,
                     decoration:
-                        customInputDecoration(hintText: "Enter title for exam"),
+                    customInputDecoration(hintText: "Enter title for exam"),
                   ),
                 ),
                 const SizedBox(
@@ -102,7 +113,7 @@ class ExamCreationState extends State<ExamCreation> {
                       itemCount: noOfQuestions,
                       itemBuilder: (context, index) => QuestionWidget(
                         onQuestionSaved: () {},
-                        questiontype: QUESTIONTYPE.checkbox,
+                        questiontype: QUESTIONTYPE.Checkbox,
                       ),
                     )),
                 SizedBox(
@@ -116,8 +127,8 @@ class ExamCreationState extends State<ExamCreation> {
                     child: Text(
                       'Add a question',
                       style: buttonText,
-                    ),
                   ),
+                ),
                 ),
                 const SizedBox(
                   height: 10,
@@ -142,8 +153,7 @@ class ExamCreationState extends State<ExamCreation> {
                         debugPrint("CREATE EXAMM ${widget.course.exams}");
                         examDataMaster.createCourseExam(exam: newExam);
                       } else if (widget.examtype == EXAMTYPE.moduleExam) {
-                        examDataMaster.createModuleExam(
-                            module: widget.module!, exam: newExam);
+                        moduleExamDataMaster.createModuleExam(exam: newExam);
                         allQuestions.clear();
                       }
 
