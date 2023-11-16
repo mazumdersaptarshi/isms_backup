@@ -5,18 +5,16 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
-import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 import 'package:isms/projectModules/courseManagement/coursesDataMaster.dart';
 
 class ModuleDataMaster extends CoursesDataMaster {
   ModuleDataMaster({
-    required this.coursesProvider,
+    required super.coursesProvider,
     required this.course,
   }) {
-    _courseRef = CoursesDataMaster.coursesRef.doc(course.name);
+    _courseRef = coursesRef.doc(course.name);
     _modulesRef = _courseRef.collection("modules");
   }
-  final CoursesProvider coursesProvider;
   final Course course;
   late final DocumentReference _courseRef;
   late final CollectionReference _modulesRef;
