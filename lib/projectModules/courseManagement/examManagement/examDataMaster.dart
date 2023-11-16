@@ -50,10 +50,11 @@ class ExamDataMaster extends CoursesDataMaster {
 
     QuerySnapshot examsListSnapshot =
       await _examsRef.orderBy("index").get();
-    if (course.exams == null)
+    if (course.exams == null) {
       course.exams = [];
-    else
+    } else {
       course.exams!.clear();
+    }
     for (var element in examsListSnapshot.docs) {
       NewExam exam = NewExam.fromMap(element.data() as Map<String, dynamic>);
       course.addExam(exam);
@@ -73,7 +74,7 @@ class ExamDataMaster extends CoursesDataMaster {
       try {
         return _fetchExams();
       } catch (e) {
-        debugPrint("error while fetching course exams: ${e}");
+        debugPrint("error while fetching course exams: $e");
         course.exams = null;
         return [];
       }

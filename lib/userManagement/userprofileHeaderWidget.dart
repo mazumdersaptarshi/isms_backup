@@ -6,10 +6,10 @@ import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 
 class UserProfileHeaderWidget extends StatelessWidget {
-  UserProfileHeaderWidget(
+  const UserProfileHeaderWidget(
       {super.key, this.view = 'user', this.refreshCallback});
   final String view;
-  Function? refreshCallback;
+  final Function? refreshCallback;
 
   @override
   Widget build(BuildContext context) {

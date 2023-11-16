@@ -18,14 +18,12 @@ import 'package:provider/provider.dart';
 
 class SlidesDisplayScreen extends StatefulWidget {
   const SlidesDisplayScreen(
-      {super.key,
-      required this.module,
-      required this.course});
+      {super.key, required this.module, required this.course});
   final Course course;
   final Module module;
 
   @override
-  _SlidesDisplayScreenState createState() => _SlidesDisplayScreenState();
+  State<SlidesDisplayScreen> createState() => _SlidesDisplayScreenState();
 }
 
 class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
@@ -75,14 +73,14 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
       bottomNavigationBar:
           PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
       body: Container(
-        margin: EdgeInsets.only(top: 20),
+        margin: const EdgeInsets.only(top: 20),
         child: FutureBuilder<List<Slide>>(
           future: slidesDataMaster.slides,
           builder: (BuildContext context, AsyncSnapshot<List<Slide>> snapshot) {
             if (snapshot.hasData) {
               List<Slide> slides = snapshot.data!;
               List<Map<String, dynamic>> cardItems =
-                _initializeCardItems(slides);
+                  _initializeCardItems(slides);
 
               return Column(
                 children: [
@@ -90,7 +88,7 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
                       pageController: _pageController,
                       cardItems: cardItems,
                       currentIndex: currentIndex),
-              const SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -107,12 +105,12 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
                                           module: widget.module,
                                         )));
                           },
-                      child: const Text(
+                          child: const Text(
                             'Take exams',
                           ),
                         ),
                       ),
-                  const SizedBox(width: 20),
+                      const SizedBox(width: 20),
                       Visibility(
                         visible: currentIndex == cardItems.length - 1,
                         child: ElevatedButton(
@@ -120,9 +118,9 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                builder: (context) => const HomePage()));
+                                    builder: (context) => const HomePage()));
                           },
-                      child: const Text(
+                          child: const Text(
                             'Back to Home',
                           ),
                         ),

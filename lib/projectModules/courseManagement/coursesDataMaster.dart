@@ -59,12 +59,12 @@ class CoursesDataMaster {
       //await Future.delayed(const Duration(milliseconds: 5000));
       coursesProvider.allCourses.clear();
 
-      snapshot.docs.forEach((element) {
+      for (var element in snapshot.docs) {
         Map<String, dynamic> elementMap =
             element.data() as Map<String, dynamic>;
         Course course = Course.fromMap(elementMap);
         coursesProvider.addCourse(course);
-      });
+      }
 
       coursesProvider.notifyListeners();
     });

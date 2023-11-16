@@ -46,12 +46,10 @@ class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
 
     CoursesProvider coursesProvider = context.watch<CoursesProvider>();
 
-    List<NewExam>? exams = [];
-    moduleExamDataMaster =
-      ModuleExamDataMaster(
-          course: widget.course,
-          coursesProvider: coursesProvider,
-          module: widget.module);
+    moduleExamDataMaster = ModuleExamDataMaster(
+        course: widget.course,
+        coursesProvider: coursesProvider,
+        module: widget.module);
 
     return Scaffold(
       appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
@@ -103,7 +101,6 @@ class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
           }
         },
       ),
-
       floatingActionButton: loggedInState.currentUserRole == "admin"
           ? FloatingActionButton(
               onPressed: () {

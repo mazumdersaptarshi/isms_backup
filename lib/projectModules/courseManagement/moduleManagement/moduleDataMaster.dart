@@ -52,10 +52,11 @@ class ModuleDataMaster extends CoursesDataMaster {
 
     QuerySnapshot modulesListSnapshot =
       await _modulesRef.orderBy("index").get();
-    if (course.modules == null)
+    if (course.modules == null) {
       course.modules = [];
-    else
+    } else {
       course.modules!.clear();
+    }
     for (var element in modulesListSnapshot.docs) {
       Module module = Module.fromMap(element.data() as Map<String, dynamic>);
       course.addModule(module);
@@ -75,7 +76,7 @@ class ModuleDataMaster extends CoursesDataMaster {
       try {
         return _fetchModules();
       } catch (e) {
-        debugPrint("error while fetching modules: ${e}");
+        debugPrint("error while fetching modules: $e");
         course.modules = null;
         return [];
       }

@@ -2,10 +2,8 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/models/newExam.dart';
-import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 import 'package:isms/projectModules/courseManagement/moduleManagement/moduleDataMaster.dart';
 
 class ModuleExamDataMaster extends ModuleDataMaster {
@@ -55,10 +53,11 @@ class ModuleExamDataMaster extends ModuleDataMaster {
 
     QuerySnapshot examsListSnapshot =
       await _examsRef.orderBy("index").get();
-    if (module.exams == null)
+    if (module.exams == null) {
       module.exams = [];
-    else
+    } else {
       module.exams!.clear();
+    }
     for (var element in examsListSnapshot.docs) {
       NewExam exam = NewExam.fromMap(element.data() as Map<String, dynamic>);
       module.addExam(exam);
@@ -78,7 +77,7 @@ class ModuleExamDataMaster extends ModuleDataMaster {
       try {
         return _fetchExams();
       } catch (e) {
-        debugPrint("error while fetching module exams: ${e}");
+        debugPrint("error while fetching module exams: $e");
         module.exams = null;
         return [];
       }

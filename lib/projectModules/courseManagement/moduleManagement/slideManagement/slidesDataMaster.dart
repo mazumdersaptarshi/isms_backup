@@ -2,10 +2,8 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/models/slide.dart';
-import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 import 'package:isms/projectModules/courseManagement/moduleManagement/moduleDataMaster.dart';
 
 class SlidesDataMaster extends ModuleDataMaster {
@@ -58,10 +56,11 @@ class SlidesDataMaster extends ModuleDataMaster {
 
     QuerySnapshot slidesListSnapshot =
       await _slidesRef.orderBy("index").get();
-    if (module.slides == null)
+    if (module.slides == null) {
       module.slides = [];
-    else
+    } else {
       module.slides!.clear();
+    }
     for (var element in slidesListSnapshot.docs) {
       Slide slide = Slide.fromMap(element.data() as Map<String, dynamic>);
       module.addSlide(slide);
@@ -82,7 +81,7 @@ class SlidesDataMaster extends ModuleDataMaster {
       try {
         return _fetchSlides();
       } catch (e) {
-        debugPrint("error while fetching slides: ${e}");
+        debugPrint("error while fetching slides: $e");
         module.slides = null;
         return [];
       }

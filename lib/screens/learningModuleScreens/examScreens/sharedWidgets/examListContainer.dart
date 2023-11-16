@@ -71,9 +71,9 @@ class ExamListContainer extends StatelessWidget {
             const SizedBox(height: 20),
             ListView.builder(
               shrinkWrap: true,
-              itemCount: exams?.length,
+              itemCount: exams.length,
               itemBuilder: (BuildContext context, int examIndex) {
-                NewExam exam = exams![examIndex];
+                NewExam exam = exams[examIndex];
                 return ExamTile(
                   title: exam.title,
                   onPressed: () {

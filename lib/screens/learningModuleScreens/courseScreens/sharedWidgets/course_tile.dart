@@ -103,7 +103,7 @@ class CourseTile extends StatelessWidget {
                                     if (pageView != 'explore')
                                       Expanded(
                                         child: Text(
-                                          "$subTitle",
+                                          subTitle,
                                           style: customTheme
                                               .textTheme.labelSmall!
                                               .copyWith(
@@ -116,7 +116,7 @@ class CourseTile extends StatelessWidget {
                                     else
                                       Expanded(
                                         child: Text(
-                                          '$subTitle',
+                                          subTitle,
                                           style: customTheme
                                               .textTheme.labelSmall!
                                               .copyWith(

@@ -75,8 +75,7 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
                     index: courseIndex,
                     title: coursesProvider.allCourses[courseIndex].name,
                     modulesCount:
-                        coursesProvider.allCourses[courseIndex].modulesCount ??
-                            0,
+                        coursesProvider.allCourses[courseIndex].modulesCount,
                     tileWidth: tileMinWidth,
                     // tileHeight: tileMinimumheight,
                     courseData: getUserCourseData(
@@ -85,8 +84,7 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
                         coursesProvider: coursesProvider),
 
                     subTitle:
-                        coursesProvider.allCourses[courseIndex].description ??
-                            '',
+                        coursesProvider.allCourses[courseIndex].description,
                     pageView: 'explore',
                     onPressed: () {
                       Navigator.push(

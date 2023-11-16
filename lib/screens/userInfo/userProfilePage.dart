@@ -49,9 +49,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
   }
 
   refreshCallback() {
-    setState(() {
-      print("Refresshhhh ");
-    });
+    setState(() {});
   }
   // UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
 

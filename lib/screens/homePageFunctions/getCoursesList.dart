@@ -74,7 +74,7 @@ Future<List<Widget>> getEnrolledCoursesList(
             : null,
         index: i,
         subTitle: getLatestModuleName(coursesStarted[i]) ?? '',
-        modulesCount: course != null ? (course.modulesCount ?? 0) : 0,
+        modulesCount: course != null ? (course.modulesCount) : 0,
         // dateValue: course.dateCreated,
       ));
     }
@@ -110,7 +110,7 @@ Future<List<Widget>> getRecommendedCoursesList(
       courseData: null,
       index: i,
       subTitle: courseToRecommend.description,
-      modulesCount: courseToRecommend.modulesCount ?? 0,
+      modulesCount: courseToRecommend.modulesCount,
       // dateValue: course.dateCreated,
     ));
   }
@@ -146,9 +146,7 @@ Map<String, dynamic> getUserCourseData(
           double coursePercentDecimal = getCourseCompletedPercentage(
               courseStarted, coursesProvider)["courseCompletionPercentage"];
           courseCompPercent = (coursePercentDecimal * 100).toInt();
-          print(courseCompPercent);
         } catch (e) {
-          print("INSIDE CATCH $e");
           courseCompPercent = 0;
         }
         //courseStartDate = courseStarted["started_at"];

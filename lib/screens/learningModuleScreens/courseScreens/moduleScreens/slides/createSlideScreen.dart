@@ -75,7 +75,7 @@ class _SlideFormContainerState extends State<SlideFormContainer> {
                             scrollDirection: Axis.horizontal,
                             itemCount: slidesCreationProvider.noOfForms,
                             itemBuilder: (context, index) {
-                              return SlideForm();
+                              return const SlideForm();
                             },
                           )),
                     ),

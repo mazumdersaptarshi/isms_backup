@@ -1,6 +1,5 @@
 // ignore_for_file: file_names, non_constant_identifier_names
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleDetailsScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/modulesListScreen.dart';
@@ -62,8 +61,9 @@ class CourseExamCompletionStrategy implements ExamCompletionStrategy {
           } catch (e) {
             // startedAt = DateTime.now();
           }
-        } else
+        } else {
           startedAt = DateTime.now();
+        }
       }
     }
     Map<String, dynamic> courseDetailsMap = {
@@ -140,7 +140,7 @@ class ModuleExamCompletionStrategy implements ExamCompletionStrategy {
         "courseID": course.id,
         "course_name": course.name,
         "course_modules_count": course.modulesCount,
-        "course_exams_count": course.examsCount ?? 0,
+        "course_exams_count": course.examsCount,
         "started_at": DateTime.now()
       };
       return ElevatedButton(

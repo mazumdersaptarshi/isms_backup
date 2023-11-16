@@ -17,8 +17,8 @@ Map<String, dynamic> getCourseCompletedPercentage(
     var element = coursesProvider.allCourses[i];
 
     if (element.name == courseItem["course_name"]) {
-      modulesCount = element.modulesCount!;
-      noOfExams = element.examsCount!;
+      modulesCount = element.modulesCount;
+      noOfExams = element.examsCount;
       isValid = true;
     }
   }
