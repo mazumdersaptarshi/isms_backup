@@ -11,11 +11,10 @@ import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/s
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/sharedWidgets/htmlSlideDisplay.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/slidesDisplayScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
+import 'package:isms/sharedWidgets/navIndexTracker.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/utilityFunctions/platformCheck.dart';
 import 'package:provider/provider.dart';
-
-import '../../../../sharedWidgets/navIndexTracker.dart';
 
 class ModuleDetails extends StatefulWidget {
   const ModuleDetails(
@@ -117,6 +116,7 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                   ),
                 ],
               ),
+              const SizedBox(height: 10),
               Card(
                 surfaceTintColor: Colors.white,
                 elevation: 4,

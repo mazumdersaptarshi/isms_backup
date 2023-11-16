@@ -8,19 +8,18 @@ Widget loadingErrorWidget({Widget? textWidget}) {
     child: Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        textWidget == null
-            ? Expanded(
-                child: const Text(
-                  "Error",
-                  style: TextStyle(
-                    fontSize: 36,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.red,
-                  ),
+        textWidget ??
+            const Expanded(
+              child: Text(
+                "Error",
+                style: TextStyle(
+                  fontSize: 36,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.red,
                 ),
-              )
-            : textWidget,
-        Expanded(
+              ),
+            ),
+        const Expanded(
           child: SizedBox(
             width: 100,
             height: 100,
@@ -38,7 +37,7 @@ Widget loadingWidget({Widget? textWidget}) {
       mainAxisSize: MainAxisSize.min,
       children: [
         textWidget ??
-            Text(
+            const Text(
               "Loading",
               style: TextStyle(
                 fontSize: 36,
@@ -46,7 +45,6 @@ Widget loadingWidget({Widget? textWidget}) {
                 color: Colors.black,
               ),
             ),
-        SizedBox(width: 10), // Add a SizedBox for the spacing
         Lottie.asset(
           'assets/images/loading_animation.json',
           width: 100,

@@ -37,11 +37,15 @@ class ModuleTile extends StatelessWidget {
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(module.title,
-                          style: customTheme.textTheme.labelMedium!.copyWith(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).colorScheme.tertiary)),
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                            maxWidth: MediaQuery.of(context).size.width * 0.7),
+                        child: Text(module.title,
+                            style: customTheme.textTheme.labelMedium!.copyWith(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context).colorScheme.tertiary)),
+                      ),
                       Icon(
                         isModuleCompleted
                             ? Icons.check_circle
