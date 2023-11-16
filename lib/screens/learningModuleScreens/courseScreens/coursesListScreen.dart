@@ -76,7 +76,7 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
                     title: coursesProvider.allCourses[courseIndex].name,
                     modulesCount:
                         coursesProvider.allCourses[courseIndex].modulesCount ??
-                        0,
+                            0,
                     tileWidth: tileMinWidth,
                     // tileHeight: tileMinimumheight,
                     courseData: getUserCourseData(

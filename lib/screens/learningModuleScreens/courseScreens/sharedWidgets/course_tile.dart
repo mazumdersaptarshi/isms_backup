@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../themes/common_theme.dart';
 
@@ -55,8 +54,8 @@ class CourseTile extends StatelessWidget {
                     flex: 1,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: SvgPicture.asset(
-                        "assets/images/courseIcons/courseIcon$imageIndex.svg",
+                      child: Image.asset(
+                        "assets/images/courseIcons/courseIcon$imageIndex.png",
                         // height: kIsWeb ? imgWebHeight : 150,
                         // width: kIsWeb ? imgWebWidth : 150,
                         // fit: BoxFit.contain,
