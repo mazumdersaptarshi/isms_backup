@@ -9,7 +9,7 @@
 	<key>ANDROID_CLIENT_ID</key>
 	<string>931235749581-0ossdpsusvkjakudi84ragh94p2td7vt.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyBt0Dq-B9J_6K2tXhCF0CB3G_B--t2Irkk</string>
+	<string>AIzaSyB8308B-hRkIOSeSxtrl9ye0jovrNLVOBE</string>
 	<key>GCM_SENDER_ID</key>
 	<string>931235749581</string>
 	<key>PLIST_VERSION</key>
@@ -17,9 +17,9 @@
 	<key>BUNDLE_ID</key>
 	<string>com.example.isms</string>
 	<key>PROJECT_ID</key>
-	<string>isms-2c025</string>
+	<string>isms-pvp</string>
 	<key>STORAGE_BUCKET</key>
-	<string>isms-2c025.appspot.com</string>
+	<string>isms-pvp.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>

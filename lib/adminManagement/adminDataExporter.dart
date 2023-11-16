@@ -147,7 +147,9 @@ class DataExporter {
         String courseTitle = course['course_name'] ?? '';
         //String courseId = course['courseID'] ?? '';
         if (course['modules_completed'] != null) {
-          debugPrint(course['modules_completed']);
+          if (kDebugMode) {
+            print(course['modules_completed']);
+          }
           for (var module in course['modules_completed']) {
             try {
               currentUserModulesCompletedIDs.add(module['module_id']);

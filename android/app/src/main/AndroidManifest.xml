@@ -25,8 +25,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="https" android:host="oddly-fast-elk.ngrok-free.app" />
-                <data android:scheme="https" android:host="isms-2c025.web.app" />
-                <data android:scheme="https" android:host="isms-2c025.firebaseapp.com" />
+                <data android:scheme="https" android:host="isms-pvp.web.app" />
+                <data android:scheme="https" android:host="isms-pvp.firebaseapp.com" />
             </intent-filter>
 
             <!-- Specifies an Android theme to apply to this Activity as soon as

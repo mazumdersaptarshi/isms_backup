@@ -23,7 +23,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        return ios;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for ios - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.macOS:
         return macos;
       case TargetPlatform.windows:
@@ -44,42 +47,30 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBuXWtYbhv69KUPb0txw1wcVrAq3Gi_5wg',
-    appId: '1:931235749581:web:a673704d04ff0784819384',
-    messagingSenderId: '931235749581',
-    projectId: 'isms-2c025',
-    authDomain: 'isms-2c025.firebaseapp.com',
-    storageBucket: 'isms-2c025.appspot.com',
-    measurementId: 'G-4XCDLFSNCK',
+    apiKey: 'AIzaSyDjQEJznD6r295tU6d1Vj0W0wA7c91ZMk4',
+    appId: '1:1064574915790:web:ee1732dcc0b7e63333ec9f',
+    messagingSenderId: '1064574915790',
+    projectId: 'isms-pvp',
+    authDomain: 'isms-pvp.firebaseapp.com',
+    storageBucket: 'isms-pvp.appspot.com',
+    measurementId: 'G-CRPZP17WBQ',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBUFNusytMFdzyjx40OZwAYH0iTF6HWKPw',
-    appId: '1:931235749581:android:dda2cf99012f1d13819384',
-    messagingSenderId: '931235749581',
-    projectId: 'isms-2c025',
-    storageBucket: 'isms-2c025.appspot.com',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBt0Dq-B9J_6K2tXhCF0CB3G_B--t2Irkk',
-    appId: '1:931235749581:ios:1a48578ba8fa121b819384',
-    messagingSenderId: '931235749581',
-    projectId: 'isms-2c025',
-    storageBucket: 'isms-2c025.appspot.com',
-    androidClientId: '931235749581-0ossdpsusvkjakudi84ragh94p2td7vt.apps.googleusercontent.com',
-    iosClientId: '931235749581-bnrf5esofvd3m6f8hi7hsq2sb2ltk5kr.apps.googleusercontent.com',
-    iosBundleId: 'com.example.isms',
+    apiKey: 'AIzaSyB8308B-hRkIOSeSxtrl9ye0jovrNLVOBE',
+    appId: '1:1064574915790:android:42b82d4af3059eb933ec9f',
+    messagingSenderId: '1064574915790',
+    projectId: 'isms-pvp',
+    storageBucket: 'isms-pvp.appspot.com',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyBt0Dq-B9J_6K2tXhCF0CB3G_B--t2Irkk',
-    appId: '1:931235749581:ios:d429fd9f34c7aabc819384',
-    messagingSenderId: '931235749581',
-    projectId: 'isms-2c025',
-    storageBucket: 'isms-2c025.appspot.com',
-    androidClientId: '931235749581-0ossdpsusvkjakudi84ragh94p2td7vt.apps.googleusercontent.com',
-    iosClientId: '931235749581-kdkloent0cqvlvikbot8na16e1db2ec1.apps.googleusercontent.com',
+    apiKey: 'AIzaSyAM6rZ7bGwBiMOpyuCF6SMTKAL99_V9JHg',
+    appId: '1:1064574915790:ios:c5e3e303077da04433ec9f',
+    messagingSenderId: '1064574915790',
+    projectId: 'isms-pvp',
+    storageBucket: 'isms-pvp.appspot.com',
+    iosClientId: '1064574915790-1o3o8npl6rt4rcvu7vl9hq8prbmevcql.apps.googleusercontent.com',
     iosBundleId: 'com.example.isms.RunnerTests',
   );
 }

@@ -4,8 +4,8 @@
 <dict>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>applinks:isms-2c025.web.app</string>
-		<string>applinks:isms-2c025.firebaseapp.com</string>
+		<string>applinks:isms-pvp.web.app</string>
+		<string>applinks:isms-pvp.firebaseapp.com</string>
 	</array>
 </dict>
 </plist>

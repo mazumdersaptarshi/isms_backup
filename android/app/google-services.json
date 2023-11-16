@@ -1,104 +1,40 @@
 {
   "project_info": {
-    "project_number": "931235749581",
-    "project_id": "isms-2c025",
-    "storage_bucket": "isms-2c025.appspot.com"
+    "project_number": "1064574915790",
+    "project_id": "isms-pvp",
+    "storage_bucket": "isms-pvp.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:931235749581:android:dda2cf99012f1d13819384",
+        "mobilesdk_app_id": "1:1064574915790:android:42b82d4af3059eb933ec9f",
         "android_client_info": {
           "package_name": "com.example.isms"
         }
       },
       "oauth_client": [
         {
-          "client_id": "931235749581-0ossdpsusvkjakudi84ragh94p2td7vt.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.isms",
-            "certificate_hash": "c6c6d9e008c34b0b0d46713dbad961b8422b4da9"
-          }
-        },
-        {
-          "client_id": "931235749581-2e5nfsdek3tcjsb68pepvjjbtv8ioc0g.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.isms",
-            "certificate_hash": "275e086a0122346b9cde9a2dfdce3ecedf2e8376"
-          }
-        },
-        {
-          "client_id": "931235749581-9g8gn5q97ep7n2870lej27ecneah4f0t.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.isms",
-            "certificate_hash": "a6742d8b8261817d9dc590c9f30d8571074d2eec"
-          }
-        },
-        {
-          "client_id": "931235749581-9llgglke68glsghk5ec3j5fcupavtica.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.isms",
-            "certificate_hash": "0e53a034563d16079b207a2d7053fcb65d3a0d52"
-          }
-        },
-        {
-          "client_id": "931235749581-apqnfuc5j5fp9sh5bk0unm0p9u503t22.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.isms",
-            "certificate_hash": "75fd5824347b07af05dc8340c5577c612858557b"
-          }
-        },
-        {
-          "client_id": "931235749581-jngoc7gkk1pqifhgvjt9o921hns6lasj.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.isms",
-            "certificate_hash": "bae44aa63c9b9766483308949194fc6acbf79d0e"
-          }
-        },
-        {
-          "client_id": "931235749581-oo5f8r03abjkg91l0f4dfon5egl66a0d.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.isms",
-            "certificate_hash": "ef4eb329dd1b88efb25f57218df435ccf136de21"
-          }
-        },
-        {
-          "client_id": "931235749581-p7dre7a91jr4oaav07obllfq3qperhht.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.isms",
-            "certificate_hash": "e53c5c88025293bc82684c4404bb1e25faa0a399"
-          }
-        },
-        {
-          "client_id": "931235749581-k2l5s41nh81592pv4irm8nklmksad491.apps.googleusercontent.com",
+          "client_id": "1064574915790-sj0eivhbc1rl0msgd072619aia6e7in3.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBUFNusytMFdzyjx40OZwAYH0iTF6HWKPw"
+          "current_key": "AIzaSyB8308B-hRkIOSeSxtrl9ye0jovrNLVOBE"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "931235749581-k2l5s41nh81592pv4irm8nklmksad491.apps.googleusercontent.com",
+              "client_id": "1064574915790-3qtk9ku18lb4cjl7d8q4hvcucoul3i9s.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "931235749581-bnrf5esofvd3m6f8hi7hsq2sb2ltk5kr.apps.googleusercontent.com",
+              "client_id": "1064574915790-1o3o8npl6rt4rcvu7vl9hq8prbmevcql.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.isms"
+                "bundle_id": "com.example.isms.RunnerTests"
               }
             }
           ]
