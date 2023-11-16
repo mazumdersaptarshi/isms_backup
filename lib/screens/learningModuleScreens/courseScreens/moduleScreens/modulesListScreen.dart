@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/createModuleScreenHTML.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/sharedWidgets/moduleTile.dart';
-// import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/createModuleScreenHTML.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examListScreen.dart';
 import 'package:isms/themes/common_theme.dart';
@@ -26,16 +25,8 @@ class CoursePage extends StatefulWidget {
 }
 
 class _CoursePageState extends State<CoursePage> {
-  bool isModulesFetched = false;
+  late ModuleDataMaster moduleDataMaster;
   late String userRole;
-  ModuleDataMaster? moduleDataMaster;
-
-  fetchCourseModules({required CoursesProvider coursesProvider}) async {
-    await moduleDataMaster?.fetchModules();
-    setState(() {
-      isModulesFetched = true;
-    });
-  }
 
   @override
   void initState() {
@@ -98,29 +89,21 @@ class _CoursePageState extends State<CoursePage> {
     moduleDataMaster = ModuleDataMaster(
         course: widget.course, coursesProvider: coursesProvider);
 
-    if (isModulesFetched == false) {
-      fetchCourseModules(coursesProvider: coursesProvider);
-    }
-
     userRole = loggedInState.currentUserRole;
 
-    // compute the grid shape:
-    // requirements
-    // requirements
-    // available width, in pixels
-
-    // int maxColumns =
-    //     max(((screenWidth - (horizontalMargin * 2)) / tileMinWidth).floor(), 1);
-    // number of tiles that have to fit on the screen
     int itemCount = widget.course.modulesCount ?? 0;
-    // grid width, in tiles
 
     return Scaffold(
       appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
       bottomNavigationBar:
           PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
-      body: isModulesFetched
-          ? NestedScrollView(
+      body: FutureBuilder<List<Module>>(
+        future: moduleDataMaster.modules,
+        builder: (BuildContext context, AsyncSnapshot<List<Module>> snapshot) {
+          if (snapshot.hasData) {
+            List<Module> modules = snapshot.data!;
+
+            return NestedScrollView(
               headerSliverBuilder: (context, innerBoxIsScrolled) => [
                 SliverToBoxAdapter(
                   child: Container(
@@ -325,7 +308,9 @@ class _CoursePageState extends State<CoursePage> {
                         Column(
                           children: List.generate(
                               itemCount,
-                              (moduleIndex) => SizedBox(
+                              (moduleIndex) {
+                                  Module module = modules[moduleIndex];
+                                  return SizedBox(
                                     // height: 200,
                                     width: MediaQuery.of(context).size.width >
                                             SCREEN_COLLAPSE_WIDTH
@@ -334,24 +319,39 @@ class _CoursePageState extends State<CoursePage> {
                                         : MediaQuery.of(context).size.width,
                                     child: ModuleTile(
                                       course: widget.course,
-                                      module:
-                                          widget.course.modules[moduleIndex],
+                                        module: module,
                                       isModuleStarted: checkIfModuleStarted(
                                           loggedInState: loggedInState,
-                                          module: widget
-                                              .course.modules[moduleIndex]),
+                                            module: module),
                                       isModuleCompleted: checkIfModuleCompleted(
                                           loggedInState: loggedInState,
-                                          module: widget
-                                              .course.modules[moduleIndex]),
+                                                module: module),
                                     ),
-                                  )),
-                        )
+                                  );
+                              },
+                          ),
+                        ),
                       ],
                     ),
                   )),
-            )
-          : SizedBox(
+            );
+          } else if (snapshot.hasError) {
+            return SizedBox(
+              height: 300,
+              child: AlertDialog(
+                elevation: 4,
+                content: Align(
+                    alignment: Alignment.topCenter,
+                    child: loadingErrorWidget(
+                        textWidget: Text(
+                      "Error loading modules",
+                      style: customTheme.textTheme.labelMedium!
+                          .copyWith(fontSize: 18, fontWeight: FontWeight.bold),
+                    ))),
+              ),
+            );
+          } else {
+            return SizedBox(
               height: 300,
               child: AlertDialog(
                 elevation: 4,
@@ -364,7 +364,11 @@ class _CoursePageState extends State<CoursePage> {
                           .copyWith(fontSize: 18, fontWeight: FontWeight.bold),
                     ))),
               ),
-            ),
+            );
+          }
+        },
+      ),
+
       floatingActionButton: userRole == 'admin'
           ? FloatingActionButton(
               onPressed: () {

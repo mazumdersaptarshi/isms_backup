@@ -53,7 +53,7 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
       numberColumns =
           min(itemCount, maxColumns) > 0 ? min(itemCount, maxColumns) : 1;
     }
-    // grid width, in pixels
+
     if (kDebugMode) {
       print('uuupop: ${coursesProvider.allCourses}');
     }
@@ -76,7 +76,7 @@ class _CoursesDisplayScreenState extends State<CoursesDisplayScreen> {
                     title: coursesProvider.allCourses[courseIndex].name,
                     modulesCount:
                         coursesProvider.allCourses[courseIndex].modulesCount ??
-                            0,
+                        0,
                     tileWidth: tileMinWidth,
                     // tileHeight: tileMinimumheight,
                     courseData: getUserCourseData(

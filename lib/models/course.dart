@@ -1,35 +1,49 @@
+import 'package:flutter/foundation.dart';
+
+import 'package:isms/models/module.dart';
 import 'package:isms/models/newExam.dart';
 import 'package:isms/utilityFunctions/csvDataHandler.dart';
 
-import 'module.dart';
-
 class Course {
-  String id;
-  String name;
-  String? description;
-  int? modulesCount = 0;
-  int? examsCount = 0;
-  List<Module> modules = [];
-  List<NewExam> exams = [];
-  String? dateCreated;
+  // these fields match Firestore fields
+  final String id;
+  final String name;
+  int modulesCount;
+  int examsCount;
+  final String description;
+  String dateCreated; // TODO make this a DateTime
 
-  Course(
-      {required this.id,
-      required this.name,
-      this.modulesCount,
-      this.examsCount,
-      this.description,
-      this.dateCreated});
+  // these fields match Firestore subcollections,
+  // so they are nullable
+  List<Module>? modules;
+  List<NewExam>? exams;
 
+  // create a course locally
+  Course({
+    required this.id,
+    required this.name,
+    this.modulesCount = 0,
+    this.examsCount = 0,
+    this.description = "",
+    this.dateCreated = '',//DateTime.now().toString(),
+    this.modules = const [],
+    this.exams = const [],
+  });
+
+  // shallow-import a course from Firestore (skip subcollections)
   factory Course.fromMap(Map<String, dynamic> map) {
     return Course(
         id: map['id'],
         name: map['name'],
+        modulesCount: map["modulesCount"],
+        examsCount: map["examsCount"],
         description: map['description'] ?? "",
-        modulesCount: map["modulesCount"] ?? 0,
-        examsCount: map["examsCount"] ?? 0,
+        modules: null,
+        exams: null,
         dateCreated:
-            CSVDataHandler.timestampToReadableDateInWords(map['createdAt']));
+            // TODO store a Timestamp
+            CSVDataHandler.timestampToReadableDateInWords(map['createdAt']),
+      );
   }
 
   Map<String, dynamic> toMap() {
@@ -37,10 +51,25 @@ class Course {
       'id': id,
       'name': name,
       'description': description,
-      'exams': exams,
       'modulesCount': modulesCount,
       'examsCount': examsCount,
       'createdAt': dateCreated,
     };
+  }
+
+  addModule(Module module) {
+    if (modules != null) {
+      modules!.add(module);
+    } else {
+      debugPrint("not adding the module locally, as there is no cache");
+    }
+  }
+
+  addExam(NewExam exam) {
+    if (exams != null) {
+      exams!.add(exam);
+    } else {
+      debugPrint("not adding the course exam locally, as there is no cache");
+    }
   }
 }

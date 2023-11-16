@@ -176,6 +176,7 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
 
     allEnrolledCourses = loggedInState.allEnrolledCoursesGlobal;
 
+    // TODO check what this loop is for
     for (var _ in allEnrolledCourses) {
       int modulesCount = 0;
 
@@ -183,8 +184,8 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
         var element = coursesProvider.allCourses[i];
 
         if (element.name == allEnrolledCourses[index]["course_name"]) {
-          modulesCount = element.modulesCount!;
-          noOfExams = element.examsCount!;
+          modulesCount = element.modulesCount;
+          noOfExams = element.examsCount;
           isValid = true;
         }
       }

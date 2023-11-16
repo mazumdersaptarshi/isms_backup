@@ -26,7 +26,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late String userRole;
   String? initialLink;
-  bool isUserInfoFetched = false;
+
   @override
   void initState() {
     super.initState();
@@ -70,8 +70,8 @@ class _HomePageState extends State<HomePage> {
 
     userRole = loggedInState.currentUserRole;
 
-    return Consumer<CoursesProvider>(builder:
-        (BuildContext context, CoursesProvider coursesProvider, Widget? child) {
+    return Consumer<CoursesProvider>(
+        builder: (BuildContext context, CoursesProvider coursesProvider, Widget? child) {
       return Scaffold(
           backgroundColor: Colors.white,
           bottomNavigationBar:
@@ -126,7 +126,6 @@ class _HomePageState extends State<HomePage> {
                   SliverToBoxAdapter(
                     child: HomePageMainContent(
                       coursesProvider: coursesProvider,
-                      //loggedInState: loggedInState,
                       homePageContainerHeight: homePageContainerHeight,
                     ),
                   )

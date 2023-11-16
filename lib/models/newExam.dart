@@ -69,7 +69,7 @@ class QuestionAnswerSet {
           .map((optionMap) => Option.fromMap(optionMap as Map<String, dynamic>))
           .toList(),
       type: EnumToString.fromString(QUESTIONTYPE.values, map['type']) ??
-          QUESTIONTYPE.checkbox, // If you still want to keep the question type.
+          QUESTIONTYPE.Checkbox, // If you still want to keep the question type.
     );
   }
 }

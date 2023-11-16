@@ -49,7 +49,6 @@ class _MyLearningScreenState extends State<MyLearningScreen> {
     // grid width, in tiles
     int numberColumns =
         min(itemCount, maxColumns) > 0 ? min(itemCount, maxColumns) : 1;
-    // grid width, in pixels
 
     /*String? getLatestModuleName(Map<String, dynamic> courseItem) {
       int latestModuleIndex = (courseItem['modules_started'].length - 1) ?? 0;

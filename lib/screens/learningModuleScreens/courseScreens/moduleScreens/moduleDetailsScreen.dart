@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
-import 'package:isms/projectModules/courseManagement/moduleManagement/slideManagement/slidesDataMaster.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleExamsListScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/modulesListScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/createSlideScreen.dart';
@@ -32,7 +31,6 @@ class ModuleDetails extends StatefulWidget {
 }
 
 class _ModuleDetailsState extends State<ModuleDetails> {
-  SlidesDataMaster? slidesDataMaster;
   late String userRole;
   final isWeb = kIsWeb;
 
@@ -49,11 +47,6 @@ class _ModuleDetailsState extends State<ModuleDetails> {
     userRole = loggedInState.currentUserRole;
 
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
-
-    slidesDataMaster = SlidesDataMaster(
-        course: widget.course,
-        coursesProvider: coursesProvider,
-        module: widget.module);
 
     Map<String, dynamic> courseDetailsMap = {
       "courseID": widget.course.id,
@@ -91,7 +84,6 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                           builder: (context) => SlidesDisplayScreen(
                             course: widget.course,
                             module: widget.module,
-                            slidesDataMaster: slidesDataMaster!,
                           ),
                         ),
                       );

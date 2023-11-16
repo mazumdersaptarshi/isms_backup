@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
+import 'package:isms/models/slide.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 import 'package:isms/projectModules/courseManagement/moduleManagement/slideManagement/slidesDataMaster.dart';
 import 'package:isms/screens/homePage.dart';
@@ -19,44 +20,25 @@ class SlidesDisplayScreen extends StatefulWidget {
   const SlidesDisplayScreen(
       {super.key,
       required this.module,
-      required this.course,
-      required this.slidesDataMaster});
+      required this.course});
   final Course course;
   final Module module;
-  final SlidesDataMaster slidesDataMaster;
 
   @override
-  State<SlidesDisplayScreen> createState() => _SlidesDisplayScreenState();
+  _SlidesDisplayScreenState createState() => _SlidesDisplayScreenState();
 }
 
 class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
-  List<Map<String, dynamic>> cardItems = [];
+  late SlidesDataMaster slidesDataMaster;
   int currentIndex = 0;
   final PageController _pageController = PageController(initialPage: 0);
-  bool isSlidesFetched = false;
-  bool isSlidesListEmpty = false;
 
-  List<Map<String, dynamic>> _initializeCardItems() {
+  List<Map<String, dynamic>> _initializeCardItems(List<Slide> slides) {
     List<Map<String, dynamic>> slidesMap = [];
-    if (!isSlidesListEmpty) {
-      for (var element in widget.module.slides!) {
-        slidesMap.add({'title': element.title, 'text': element.content});
-      }
+    for (var element in slides) {
+      slidesMap.add({'title': element.title, 'text': element.content});
     }
     return slidesMap;
-  }
-
-  fetchSlidesList({required CoursesProvider coursesProvider}) async {
-    await widget.slidesDataMaster.fetchSlides();
-    cardItems = _initializeCardItems();
-    setState(() {
-      {
-        if (widget.module.slides == null || widget.module.slides == []) {
-          isSlidesListEmpty = true;
-        }
-        isSlidesFetched = true;
-      }
-    });
   }
 
   @override
@@ -83,24 +65,32 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
 
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
 
-    if (isSlidesFetched == false) {
-      fetchSlidesList(coursesProvider: coursesProvider);
-    }
+    slidesDataMaster = SlidesDataMaster(
+        course: widget.course,
+        coursesProvider: coursesProvider,
+        module: widget.module);
 
     return Scaffold(
       appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
       bottomNavigationBar:
           PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
       body: Container(
-        margin: const EdgeInsets.only(top: 20),
-        child: isSlidesFetched
-            ? Column(
+        margin: EdgeInsets.only(top: 20),
+        child: FutureBuilder<List<Slide>>(
+          future: slidesDataMaster.slides,
+          builder: (BuildContext context, AsyncSnapshot<List<Slide>> snapshot) {
+            if (snapshot.hasData) {
+              List<Slide> slides = snapshot.data!;
+              List<Map<String, dynamic>> cardItems =
+                _initializeCardItems(slides);
+
+              return Column(
                 children: [
                   SlidesContentWidget(
                       pageController: _pageController,
                       cardItems: cardItems,
                       currentIndex: currentIndex),
-                  const SizedBox(height: 20),
+              const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -117,12 +107,12 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
                                           module: widget.module,
                                         )));
                           },
-                          child: const Text(
+                      child: const Text(
                             'Take exams',
                           ),
                         ),
                       ),
-                      const SizedBox(width: 20),
+                  const SizedBox(width: 20),
                       Visibility(
                         visible: currentIndex == cardItems.length - 1,
                         child: ElevatedButton(
@@ -130,9 +120,9 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => const HomePage()));
+                                builder: (context) => const HomePage()));
                           },
-                          child: const Text(
+                      child: const Text(
                             'Back to Home',
                           ),
                         ),
@@ -140,8 +130,24 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
                     ],
                   ),
                 ],
-              )
-            : SizedBox(
+              );
+            } else if (snapshot.hasError) {
+              return SizedBox(
+                height: 300,
+                child: AlertDialog(
+                  elevation: 4,
+                  content: Align(
+                      alignment: Alignment.topCenter,
+                      child: loadingErrorWidget(
+                          textWidget: Text(
+                        "error loading slides",
+                        style: customTheme.textTheme.labelMedium!.copyWith(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ))),
+                ),
+              );
+            } else {
+              return SizedBox(
                 height: 300,
                 child: AlertDialog(
                   elevation: 4,
@@ -154,7 +160,10 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
                             fontSize: 18, fontWeight: FontWeight.bold),
                       ))),
                 ),
-              ),
+              );
+            }
+          },
+        ),
       ),
     );
   }

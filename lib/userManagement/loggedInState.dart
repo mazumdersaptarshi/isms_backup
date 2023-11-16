@@ -23,8 +23,9 @@ class LoggedInState extends _UserDataGetterMaster {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   /// Constructor of the class LoggedInState.
-  /// This constructor checks if the user is connected
-  /// If the user is not connected the user data in memory are cleared and the
+  /// This constructor sets a listener that fires immediately, then each
+  /// time a user connects or disconnects
+  /// If a user disconnects, the user data in memory is cleared and the
   /// user is sent back to the connection screen by a signal sent to the home
   /// page
   /// Input : None
@@ -35,13 +36,19 @@ class LoggedInState extends _UserDataGetterMaster {
       if (user == null) {
         debugPrint(
             "auth state changed: no account currently signed into Firebase");
-        notifyListeners();
         clear();
+        // this needs to be called at the end og this branch, because we
+        // should only refresh the fisplay after `clear()` has
+        // completed, 
+        notifyListeners();
       } else {
         debugPrint(
             "auth state changed: ${user.email} currently signed into Firebase");
         _fetchFromFirestore(user).then((value) {
           storeUserCoursesData(currentUserSnapshot!);
+          // this needs to be called in `then()`, because we should only
+          // refresh the fisplay after `storeUserCoursesData()` has
+          // completed, 
           notifyListeners();
         });
       }
@@ -141,8 +148,8 @@ class _UserDataGetterMaster with ChangeNotifier {
 
   // fetch data from Firestore and store it in the app
   Future<void> _fetchFromFirestore(User user) async {
-    _currentUser = user;
-    _userRef = FirebaseFirestore.instance.collection('users').doc(user.uid);
+    _userRef =
+        FirebaseFirestore.instance.collection('users').doc(user.uid);
     DocumentSnapshot userSnapshot = await _userRef!.get();
     if (userSnapshot.exists) {
       debugPrint('data fetched from Firestore for user ${user.email}');
@@ -151,8 +158,9 @@ class _UserDataGetterMaster with ChangeNotifier {
           userSnapshot.data() as Map<String, dynamic>?;
       _customUserObject = CustomUser.fromMap(userData!);
 
-      // last step: set _currentUser, so the app knows that it is signed
-      // in and can now access user data
+      // last step: now that the user data is available, allow the app
+      // to access it by setting _currentUser
+      _currentUser = user;
     } else {
       debugPrint('user ${user.email} not found in Firestore');
       // no data was found in Firestore for this user, so something went
@@ -196,10 +204,12 @@ class _UserDataGetterMaster with ChangeNotifier {
     if (snapshot.exists) {
       Map<String, dynamic> mapData = snapshot.data() as Map<String, dynamic>;
       UserCoursesDetails data = UserCoursesDetails.fromMap(mapData);
+      // TODO check why this is cleared then set
       allEnrolledCoursesGlobal.clear();
       allCompletedCoursesGlobal.clear();
       allEnrolledCoursesGlobal = data.courses_started!;
       // allCompletedCoursesGlobal = data.courses_completed!;
+      // TODO check first that these lists aren't null
       for (var courseInStarted in data.courses_started!) {
         for (var courseInCompleted in data.courses_completed!) {
           if (courseInCompleted['courseID'] == courseInStarted['courseID']) {
@@ -302,15 +312,18 @@ class _UserDataGetterMaster with ChangeNotifier {
         int examPassed = -1;
         if (courseStarted["exams_completed"].isNotEmpty) {
           examPassed = courseStarted["exams_completed"]
-              .indexWhere((element) => element == examIndex);
+              .indexWhere((element) => element["exam_index"] == examIndex);
         }
         if (examPassed == -1) {
+          // FIXME: we should add an exam with this index, not just the
+          // index
           courseStarted["exams_completed"].add(examIndex);
           loggedInUser.courses_started[courseIndex] = courseStarted;
           await setUserData();
           notifyListeners();
         }
-        List<NewExam> remainingExams = List.from(course.exams);
+        // TODO make sure the exams are feched
+        List<NewExam> remainingExams = List.from(course.exams!);
         courseStarted["exams_completed"].forEach((examIndex) =>
             {remainingExams.removeWhere((exam) => exam.index == examIndex)});
         courseExamCompleted = remainingExams.isEmpty;

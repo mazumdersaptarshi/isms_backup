@@ -34,8 +34,7 @@ class _OptionTileState extends State<OptionTile> {
   @override
   Widget build(BuildContext context) {
     isChecked = widget.optionCreationProvider.isOptionChecked;
-    debugPrint(
-        "ISOPTIONCHECKED ${widget.optionCreationProvider.isOptionChecked}");
+    debugPrint("ISOPTIONCHECKED ${widget.optionCreationProvider.isOptionChecked}");
     return Form(
       key: _formKey,
       child: Row(
@@ -61,15 +60,15 @@ class _OptionTileState extends State<OptionTile> {
               }),
            Expanded(
               child: TextFormField(
-            decoration: customInputDecoration(hintText: 'Enter Option'),
-            controller: widget.controller,
-            onChanged: (value) {
-              setState(() {
-                optionName = value;
-                isOptionSaved = false;
-              });
-            },
-          )),
+                decoration: customInputDecoration(hintText: 'Enter Option'),
+                controller: widget.controller,
+                onChanged: (value) {
+                  setState(() {
+                    optionName = value;
+                    isOptionSaved = false;
+                  });
+                },
+              )),
           if (isOptionSaved == false)
             Row(
               children: [

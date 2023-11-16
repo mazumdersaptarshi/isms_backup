@@ -1,14 +1,22 @@
+import 'package:flutter/foundation.dart';
+
 import 'newExam.dart';
 import 'slide.dart';
 
 class Module {
-  String title;
-  String id;
-  String contentDescription;
+  // these fields match Firestore fields
+  final String title;
+  final String id;
+  final String contentDescription;
   String additionalInfo;
-  int index;
+  int? index;
+  // TODO add an examCount field, similar to Course
+
+  // these fields match Firestore subcollections,
+  // so they are nullable
   List<Slide>? slides;
   List<NewExam>? exams;
+
   Module(
       {required this.title,
       required this.id,
@@ -16,28 +24,49 @@ class Module {
       required this.additionalInfo,
       this.slides,
       this.exams,
-      this.index = 0});
+      this.index});
 
   factory Module.fromMap(Map<String, dynamic> map) {
     return Module(
         id: map['id'],
-        index: map['index'] ?? 0,
+        index: map['index'],
         title: map['title'],
         contentDescription: map['contentDescription'],
         additionalInfo: map['additionalInfo'] ?? '',
-        slides: map['slides'] ?? [],
-        exams: map['exams'] ?? []);
+      );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'title': title,
-      'slides': slides,
-      'exams': exams,
       'contentDescription': contentDescription,
       'additionalInfo': additionalInfo,
-      'index': index
+      'index': index,
     };
+  }
+
+  addSlides(List<Slide> newSlides) {
+    if (slides != null) {
+      slides!.addAll(newSlides);
+    } else {
+      debugPrint("not adding the slides locally, as there is no cache");
+    }
+  }
+
+  addSlide(Slide slide) {
+    if (slides != null) {
+      slides!.add(slide);
+    } else {
+      debugPrint("not adding the slide locally, as there is no cache");
+    }
+  }
+
+  addExam(NewExam exam) {
+    if (exams != null) {
+      exams!.add(exam);
+    } else {
+      debugPrint("not adding the module exam locally, as there is no cache");
+    }
   }
 }

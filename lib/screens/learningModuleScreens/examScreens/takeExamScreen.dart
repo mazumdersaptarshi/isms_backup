@@ -169,7 +169,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
                       List.generate(_questions.length, (index) => <int>{});
                   _showScore = false;
                 }),
-                child: const Text('Retake Exam'),
+              child: const Text('Retake Exam'),
               )
             ],
           ),
