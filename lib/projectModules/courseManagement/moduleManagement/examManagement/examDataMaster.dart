@@ -6,7 +6,6 @@ import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/models/newExam.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
-import 'package:isms/projectModules/courseManagement/coursesDataMaster.dart';
 import 'package:isms/projectModules/courseManagement/moduleManagement/moduleDataMaster.dart';
 
 class ModuleExamDataMaster extends ModuleDataMaster {
@@ -51,6 +50,7 @@ class ModuleExamDataMaster extends ModuleDataMaster {
   }
 
   Future<List<NewExam>> _fetchExams() async {
+    // this delay can be enabled to test the loading code
     //await Future.delayed(const Duration(milliseconds: 1000));
 
     QuerySnapshot examsListSnapshot =
@@ -63,6 +63,9 @@ class ModuleExamDataMaster extends ModuleDataMaster {
       NewExam exam = NewExam.fromMap(element.data() as Map<String, dynamic>);
       module.addExam(exam);
     }
+    //if (module.exams!.length != module.examsCount) {
+    //  debugPrint ("fetched ${module.exams!.length} module exams, was expecting ${module.examsCount}");
+    //}
     return module.exams!;
   }
 

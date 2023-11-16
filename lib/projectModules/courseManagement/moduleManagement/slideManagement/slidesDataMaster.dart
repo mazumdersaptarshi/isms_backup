@@ -2,10 +2,11 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
+import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/models/slide.dart';
+import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 import 'package:isms/projectModules/courseManagement/moduleManagement/moduleDataMaster.dart';
-import '../../coursesProvider.dart';
 
 class SlidesDataMaster extends ModuleDataMaster {
   SlidesDataMaster({
@@ -13,41 +14,46 @@ class SlidesDataMaster extends ModuleDataMaster {
     required super.course,
     required this.module,
   }) : super() {
-    DocumentReference moduleRef = modulesRef.doc(module.title);
-    _slidesRef = moduleRef.collection("slides");
+    _moduleRef = modulesRef.doc(module.title);
+    _slidesRef = _moduleRef.collection("slides");
   }
   final Module module;
+  late DocumentReference _moduleRef;
   late final CollectionReference _slidesRef;
 
-  //Future<bool> createSlides({required List<Slide> slides}) async {
-  //  List<Map<String, dynamic>> slidesMapList = [];
-  //  int startingIndex = 0;
-  //  try {
-  //    startingIndex = module.slides!.length;
-  //  } catch (e) {
-  //    startingIndex = 0;
-  //  }
-  //  try {
-  //    slides.forEach((slideItem) {
-  //      startingIndex++;
-  //      slideItem.index = startingIndex;
-  //      Map<String, dynamic> slideMap = slideItem.toMap();
-  //      slideMap['createdAt'] = DateTime.now();
-  //      slidesMapList.add(slideMap);
-  //    });
-  //    slidesMapList.forEach((slideMap) async {
-  //      await _slidesRef.doc(slideMap['id']).set(slideMap);
-  //      debugPrint("Created slide ${slideMap}");
-  //    });
-  //    coursesProvider.addSlidesToModules(module, slides);
-  //    debugPrint("Slides creation successful");
-  //    return true;
-  //  } catch (e) {
-  //    return false;
-  //  }
-  //}
+  Future<bool> createSlides({required List<Slide> slides}) async {
+    try {
+      //int index = module.slidesCount;
+      // TODO replace the following line with the previous line, once
+      // the field `slidesCount` has been added to Module
+      int index = module.slides?.length ?? 0;
+
+      for (Slide slide in slides) {
+        index++;
+        slide.index = index;
+
+        // add the new slide into the database
+        Map<String, dynamic> slideMap = slide.toMap();
+        slideMap['createdAt'] = DateTime.now();
+        await _slidesRef.doc(slideMap['id']).set(slideMap);
+      }
+      //await _moduleRef.update({'slidesCount': index});
+
+      // add the new slides in the local cache
+      module.addSlides(slides);
+      //module.slidesCount = index;
+
+      debugPrint("Slides creation successful");
+
+      coursesProvider.notifyListeners();
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 
   Future<List<Slide>> _fetchSlides() async {
+    // this delay can be enabled to test the loading code
     //await Future.delayed(const Duration(milliseconds: 1000));
 
     QuerySnapshot slidesListSnapshot =
@@ -61,6 +67,9 @@ class SlidesDataMaster extends ModuleDataMaster {
       module.addSlide(slide);
       coursesProvider.notifyListeners();
     }
+    //if (module.slides!.length != module.slidesCount) {
+    //  debugPrint ("fetched ${module.slides!.length} slides, was expecting ${module.slidesCount}");
+    //}
     return module.slides!;
   }
 

@@ -46,6 +46,14 @@ class Module {
     };
   }
 
+  addSlides(List<Slide> newSlides) {
+    if (slides != null) {
+      slides!.addAll(newSlides);
+    } else {
+      debugPrint("not adding the slides locally, as there is no cache");
+    }
+  }
+
   addSlide(Slide slide) {
     if (slides != null) {
       slides!.add(slide);

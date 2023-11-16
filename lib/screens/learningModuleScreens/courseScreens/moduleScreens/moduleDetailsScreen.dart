@@ -152,11 +152,11 @@ class _ModuleDetailsState extends State<ModuleDetails> {
       floatingActionButton: loggedInState.currentUserRole == "admin"
           ? FloatingActionButton(
               onPressed: () {
-                //Navigator.push(
-                //    context,
-                //    MaterialPageRoute(
-                //        builder: (context) => CreateSlideScreen(
-                //            course: widget.course, module: widget.module)));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CreateSlideScreen(
+                            course: widget.course, module: widget.module)));
               },
               child: const Icon(Icons.add),
             )
