@@ -37,22 +37,20 @@ Widget loadingWidget({Widget? textWidget}) {
     child: Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        textWidget ?? const Expanded(
-                child: Text(
-                  "Loading",
-                  style: TextStyle(
-                    fontSize: 36,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
+        textWidget ??
+            Text(
+              "Loading",
+              style: TextStyle(
+                fontSize: 36,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
               ),
-        Expanded(
-          child: SizedBox(
-            width: 100,
-            height: 100,
-            child: Lottie.asset('assets/images/loading_animation.json'),
-          ),
+            ),
+        SizedBox(width: 10), // Add a SizedBox for the spacing
+        Lottie.asset(
+          'assets/images/loading_animation.json',
+          width: 100,
+          height: 100,
         ),
       ],
     ),

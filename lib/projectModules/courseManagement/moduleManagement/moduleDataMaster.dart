@@ -31,11 +31,11 @@ class ModuleDataMaster extends CoursesDataMaster {
       Map<String, dynamic> moduleMap = module.toMap();
       moduleMap['createdAt'] = DateTime.now();
       await _modulesRef.doc(module.title).set(moduleMap);
-      await _courseRef.update({'modulesCount': module.index});
+      await _courseRef.update({'modulesCount': module.index!});
 
       // add the new module in the local cache
       course.addModule(module);
-      course.modulesCount = module.index;
+      course.modulesCount = module.index!;
 
       debugPrint("Module creation successful");
 
