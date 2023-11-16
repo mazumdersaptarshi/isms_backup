@@ -51,7 +51,7 @@ class UserCourseStartedDetailsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var courseDetailsData =
-        getCourseCompletedPercentage(courseItem, coursesProvider, index);
+        getCourseCompletedPercentage(courseItem, coursesProvider);
     return CourseDropdownWidget(
       courseItem: courseItem,
       courseDetailsData: courseDetailsData,
