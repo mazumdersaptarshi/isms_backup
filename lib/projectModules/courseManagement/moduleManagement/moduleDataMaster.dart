@@ -1,15 +1,11 @@
-
 // ignore_for_file: file_names
-
-import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
+import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 import 'package:isms/projectModules/courseManagement/coursesDataMaster.dart';
-
-import '../coursesProvider.dart';
 
 class ModuleDataMaster extends CoursesDataMaster {
   ModuleDataMaster({
@@ -30,16 +26,20 @@ class ModuleDataMaster extends CoursesDataMaster {
     // TODO fail if there is already a module with this name
     try {
       module.index = course.modulesCount + 1;
+
+      // add the new module into the database
       Map<String, dynamic> moduleMap = module.toMap();
-
       moduleMap['createdAt'] = DateTime.now();
-
       await _modulesRef.doc(module.title).set(moduleMap);
-
       await _courseRef.update({'modulesCount': module.index});
+
+      // add the new module in the local cache
       course.addModule(module);
-      coursesProvider.notifyListeners();
+      course.modulesCount = module.index;
+
       debugPrint("Module creation successful");
+
+      coursesProvider.notifyListeners();
       return true;
     } catch (e) {
       return false;
@@ -47,6 +47,7 @@ class ModuleDataMaster extends CoursesDataMaster {
   }
 
   Future<List<Module>> _fetchModules() async {
+    // this delay can be enabled to test the loading code
     //await Future.delayed(const Duration(milliseconds: 1000));
 
     QuerySnapshot modulesListSnapshot =
@@ -58,6 +59,9 @@ class ModuleDataMaster extends CoursesDataMaster {
     for (var element in modulesListSnapshot.docs) {
       Module module = Module.fromMap(element.data() as Map<String, dynamic>);
       course.addModule(module);
+    }
+    if (course.modules!.length != course.modulesCount) {
+      debugPrint ("fetched ${course.modules!.length} modules, was expecting ${course.modulesCount}");
     }
     return course.modules!;
   }

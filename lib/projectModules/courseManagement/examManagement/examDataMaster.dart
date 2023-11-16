@@ -3,10 +3,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:isms/models/course.dart';
-import 'package:isms/models/module.dart';
 import 'package:isms/models/newExam.dart';
+import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 import 'package:isms/projectModules/courseManagement/coursesDataMaster.dart';
-import '../coursesProvider.dart';
 
 class ExamDataMaster extends CoursesDataMaster {
   ExamDataMaster({
@@ -22,22 +21,23 @@ class ExamDataMaster extends CoursesDataMaster {
   late final CollectionReference _examsRef;
 
   Future<bool> createCourseExam({required NewExam exam}) async {
+    // TODO fail if there is already an exam with this title
     try {
-      int index = course.examsCount + 1;
+      exam.index = course.examsCount + 1;
 
-      exam.index = index;
+      // add the new exam into the database
       Map<String, dynamic> examMap = exam.toMap();
-
       examMap['createdAt'] = DateTime.now();
-
       await _examsRef.doc(exam.title).set(examMap);
+      await _courseRef.update({'examsCount': exam.index});
 
+      // add the new exam in the local cache
       course.addExam(exam);
+      course.examsCount = exam.index;
+
+      debugPrint("Course exam creation successful");
+
       coursesProvider.notifyListeners();
-
-      await _courseRef.update({'examsCount': index});
-
-      debugPrint("Exam creation successful");
       return true;
     } catch (e) {
       return false;
@@ -45,6 +45,7 @@ class ExamDataMaster extends CoursesDataMaster {
   }
 
   Future<List<NewExam>> _fetchExams() async {
+    // this delay can be enabled to test the loading code
     //await Future.delayed(const Duration(milliseconds: 1000));
 
     QuerySnapshot examsListSnapshot =
@@ -56,6 +57,9 @@ class ExamDataMaster extends CoursesDataMaster {
     for (var element in examsListSnapshot.docs) {
       NewExam exam = NewExam.fromMap(element.data() as Map<String, dynamic>);
       course.addExam(exam);
+    }
+    if (course.exams!.length != course.examsCount) {
+      debugPrint ("fetched ${course.exams!.length} course exams, was expecting ${course.examsCount}");
     }
     return course.exams!;
   }

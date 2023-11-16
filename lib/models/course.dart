@@ -4,11 +4,11 @@ import 'package:isms/utilityFunctions/csvDataHandler.dart';
 
 class Course {
   // these fields match Firestore fields
-  String id;
-  String name;
+  final String id;
+  final String name;
   int modulesCount;
   int examsCount;
-  String description;
+  final String description;
   String dateCreated; // TODO make this a DateTime
 
   // these fields match Firestore subcollections,
@@ -30,7 +30,6 @@ class Course {
 
   // shallow-import a course from Firestore (skip subcollections)
   factory Course.fromMap(Map<String, dynamic> map) {
-    print("map: ${map}");
     return Course(
         id: map['id'],
         name: map['name'],
@@ -60,7 +59,7 @@ class Course {
     if (modules != null) {
       modules!.add(module);
     } else {
-      print("not adding the module locally, as there is no cache");
+      debugPrint("not adding the module locally, as there is no cache");
     }
   }
 
@@ -68,7 +67,7 @@ class Course {
     if (exams != null) {
       exams!.add(exam);
     } else {
-      print("not adding the course exam locally, as there is no cache");
+      debugPrint("not adding the course exam locally, as there is no cache");
     }
   }
 }

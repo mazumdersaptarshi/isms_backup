@@ -2,11 +2,16 @@ import 'newExam.dart';
 import 'slide.dart';
 
 class Module {
-  String title;
-  String id;
-  String contentDescription;
+  // these fields match Firestore fields
+  final String title;
+  final String id;
+  final String contentDescription;
   String additionalInfo;
   int? index;
+  // TODO add an examCount field, similar to Course
+
+  // these fields match Firestore subcollections,
+  // so they are nullable
   List<Slide>? slides;
   List<NewExam>? exams;
 
@@ -43,7 +48,7 @@ class Module {
     if (slides != null) {
       slides!.add(slide);
     } else {
-      print("not adding the slide locally, as there is no cache");
+      debugPrint("not adding the slide locally, as there is no cache");
     }
   }
 
@@ -51,7 +56,7 @@ class Module {
     if (exams != null) {
       exams!.add(exam);
     } else {
-      print("not adding the module exam locally, as there is no cache");
+      debugPrint("not adding the module exam locally, as there is no cache");
     }
   }
 }

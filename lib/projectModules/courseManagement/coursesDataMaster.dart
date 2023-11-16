@@ -17,8 +17,6 @@ class CoursesDataMaster {
       .collection("allCourseItems");
 
   static CollectionReference get coursesRef => _coursesRef;
-  static CollectionReference get adminConsoleCoursesRef =>
-      _adminConsoleCoursesRef;
 
   static Future<bool> createCourse({required Course course}) async {
     try {
@@ -42,7 +40,7 @@ class CoursesDataMaster {
 
       courseMap['createdAt'] = DateTime.now();
 
-      await adminConsoleCoursesRef
+      await _adminConsoleCoursesRef
           .doc(coursesDetails.course_name)
           .set(courseMap);
 

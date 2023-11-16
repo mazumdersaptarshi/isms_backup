@@ -138,7 +138,7 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
                   elevation: 4,
                   content: Align(
                       alignment: Alignment.topCenter,
-                      child: loadingWidget(
+                      child: loadingErrorWidget(
                           textWidget: Text(
                         "error loading slides",
                         style: customTheme.textTheme.labelMedium!.copyWith(
