@@ -58,7 +58,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyB8308B-hRkIOSeSxtrl9ye0jovrNLVOBE',
-    appId: '1:1064574915790:android:42b82d4af3059eb933ec9f',
+    appId: '1:1064574915790:android:3366a6ee6f4d509c33ec9f',
     messagingSenderId: '1064574915790',
     projectId: 'isms-pvp',
     storageBucket: 'isms-pvp.appspot.com',
@@ -70,7 +70,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '1064574915790',
     projectId: 'isms-pvp',
     storageBucket: 'isms-pvp.appspot.com',
-    iosClientId: '1064574915790-1o3o8npl6rt4rcvu7vl9hq8prbmevcql.apps.googleusercontent.com',
-    iosBundleId: 'com.example.isms.RunnerTests',
+    androidClientId:
+        '1064574915790-bb51ulg7ps66gt7do66e16jjghsccfmm.apps.googleusercontent.com',
+    iosClientId:
+        '1064574915790-1o3o8npl6rt4rcvu7vl9hq8prbmevcql.apps.googleusercontent.com',
+    iosBundleId: 'com.isms.prod.RunnerTests',
   );
 }

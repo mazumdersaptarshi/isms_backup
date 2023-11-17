@@ -1,4 +1,4 @@
-package com.example.isms_manager
+package com.isms.prod_manager
 
 import io.flutter.embedding.android.FlutterActivity
 

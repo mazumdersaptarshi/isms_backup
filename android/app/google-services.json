@@ -7,17 +7,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1064574915790:android:de2de11a0c8e852133ec9f",
+        "mobilesdk_app_id": "1:1064574915790:android:3366a6ee6f4d509c33ec9f",
         "android_client_info": {
-          "package_name": "com.pvp.ismstestprod"
+          "package_name": "com.isms.prod"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1064574915790-bb51ulg7ps66gt7do66e16jjghsccfmm.apps.googleusercontent.com",
+          "client_id": "1064574915790-hmu7210gnutcgrska0a7f9gk34b5a67p.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.pvp.ismstestprod",
+            "package_name": "com.isms.prod",
             "certificate_hash": "82f6f7270262125d0adbc66fd0783240bfa00401"
           }
         },
@@ -42,7 +42,7 @@
               "client_id": "1064574915790-1o3o8npl6rt4rcvu7vl9hq8prbmevcql.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.isms.RunnerTests"
+                "bundle_id": "com.isms.prod.RunnerTests"
               }
             }
           ]
