@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1064574915790:android:42b82d4af3059eb933ec9f",
+        "mobilesdk_app_id": "1:1064574915790:android:de2de11a0c8e852133ec9f",
         "android_client_info": {
-          "package_name": "com.example.isms"
+          "package_name": "com.pvp.ismstestprod"
         }
       },
       "oauth_client": [
