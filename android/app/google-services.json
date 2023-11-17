@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "1064574915790-bb51ulg7ps66gt7do66e16jjghsccfmm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pvp.ismstestprod",
+            "certificate_hash": "82f6f7270262125d0adbc66fd0783240bfa00401"
+          }
+        },
+        {
           "client_id": "1064574915790-sj0eivhbc1rl0msgd072619aia6e7in3.apps.googleusercontent.com",
           "client_type": 3
         }
