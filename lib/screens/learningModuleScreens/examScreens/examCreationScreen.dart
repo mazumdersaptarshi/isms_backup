@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:isms/models/enums.dart';
 import 'package:isms/models/newExam.dart';
-import 'package:isms/screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/sharedWidgets/questionWidget.dart';
 import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
@@ -54,6 +53,10 @@ class ExamCreationState extends State<ExamCreation> {
     });
   }
 
+  void initstate() {
+    allQuestions.clear();
+  }
+
   @override
   Widget build(BuildContext context) {
     NavIndexTracker.setNavDestination(navDestination: NavDestinations.other);
@@ -100,7 +103,7 @@ class ExamCreationState extends State<ExamCreation> {
                   child: TextFormField(
                     controller: passingMarksController,
                     decoration: customInputDecoration(
-                        hintText: "Enter passing marks for exam"),
+                        hintText: "Enter passing percentage for exam"),
                   ),
                 ),
                 const SizedBox(height: 20.0),
@@ -152,11 +155,7 @@ class ExamCreationState extends State<ExamCreation> {
                       }
 
                       allQuestions.clear();
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  const CoursesDisplayScreen()));
+                      Navigator.pop(context);
                     },
                     child: Text(
                       'Submit',

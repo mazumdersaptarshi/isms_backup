@@ -5,6 +5,7 @@ import 'package:isms/models/enums.dart';
 class NewExam {
   int index;
   String examID;
+  // int passing_marks
   int passingPercentage;
   String title;
   List questionAnswerSet;
@@ -12,6 +13,7 @@ class NewExam {
   NewExam({
     this.index = 0,
     required this.examID,
+    //required this.passing_marks,
     required this.passingPercentage,
     required this.title,
     required this.questionAnswerSet,
@@ -21,6 +23,7 @@ class NewExam {
     return {
       'index': index,
       'exam_ID': examID,
+      //'passing_marks': passing_marks,
       'passing_percentage': passingPercentage,
       'title': title,
       'question_answer_set': questionAnswerSet,
@@ -31,6 +34,7 @@ class NewExam {
     return NewExam(
       index: map['index'],
       examID: map['exam_ID'],
+      // passing_marks: map['passing_marks'],
       passingPercentage: map['passing_percentage'],
       title: map['title'],
       questionAnswerSet: map['question_answer_set'],
