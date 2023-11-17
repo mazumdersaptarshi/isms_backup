@@ -1,6 +1,10 @@
 // ignore_for_file: file_names
 
+import 'dart:developer';
+
+import 'package:logging/logging.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:isms/models/module.dart';
 import 'package:isms/models/slide.dart';
 import 'package:isms/projectModules/courseManagement/moduleManagement/moduleDataMaster.dart';
@@ -17,6 +21,8 @@ class SlidesDataMaster extends ModuleDataMaster {
   final Module module;
   late DocumentReference _moduleRef;
   late final CollectionReference _slidesRef;
+
+  final Logger logger = Logger("Slides");
 
   Future<bool> createSlides({required List<Slide> slides}) async {
     try {
@@ -62,17 +68,22 @@ class SlidesDataMaster extends ModuleDataMaster {
       module.addSlide(slide);
       coursesProvider.notifyListeners();
     }
-
+    //if (module.slides!.length != module.slidesCount) {
+    //  logger.warning ("fetched ${module.slides!.length} slides, was expecting ${module.slidesCount}");
+    //}
     return module.slides!;
   }
 
   Future<List<Slide>> get slides async {
     if (module.slides != null) {
+      logger.info("slides in cache, no need to fetch them");
       return module.slides!;
     } else {
+      logger.info("slides not in cache, trying to fetch them");
       try {
         return _fetchSlides();
       } catch (e) {
+        logger.severe("error while fetching slides", e);
         module.slides = null;
         return [];
       }
