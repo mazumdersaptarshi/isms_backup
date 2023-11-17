@@ -152,7 +152,7 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
                       title: '${percentageScore.toStringAsFixed(1)}%',
                       color: passColor,
                       radius: 80,
-                      titleStyle: TextStyle(
+                      titleStyle: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
