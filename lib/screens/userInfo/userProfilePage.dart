@@ -1,6 +1,5 @@
 // ignore_for_file: file_names
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/models/UserActions.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
@@ -48,6 +47,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
     allCompletedCourses = [];
   }
 
+  refreshCallback() {
+    setState(() {});
+  }
   // UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
 
   @override
@@ -69,9 +71,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
             backgroundColor: Colors.deepPurpleAccent.shade100,
             expandedHeight: 300.0,
             automaticallyImplyLeading: false,
-            flexibleSpace: const FlexibleSpaceBar(
+            flexibleSpace: FlexibleSpaceBar(
                 background: UserProfileHeaderWidget(
               view: 'user',
+              refreshCallback: refreshCallback,
             )),
           ),
           SliverToBoxAdapter(
@@ -131,9 +134,6 @@ class UserActionsDropdown extends StatelessWidget {
   final LoggedInState loggedInState;
   @override
   Widget build(BuildContext context) {
-    if (kDebugMode) {
-      print(actionId);
-    }
     if (actionId == 'crs_enrl') {
       return UserEnrolledCoursesDropdown(
         actionId: actionId,
@@ -163,13 +163,10 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
     double courseCompletionPercentage = 0;
     int noOfExams = 0;
     bool isValid = false;
-    if (kDebugMode) {
-      print('Enrolled CoursesDropdown');
-      print(actionId);
-    }
 
     allEnrolledCourses = loggedInState.allEnrolledCoursesGlobal;
 
+    // TODO check what this loop is for
     for (var _ in allEnrolledCourses) {
       int modulesCount = 0;
 
@@ -177,8 +174,8 @@ class UserEnrolledCoursesDropdown extends StatelessWidget {
         var element = coursesProvider.allCourses[i];
 
         if (element.name == allEnrolledCourses[index]["course_name"]) {
-          modulesCount = element.modulesCount!;
-          noOfExams = element.examsCount!;
+          modulesCount = element.modulesCount;
+          noOfExams = element.examsCount;
           isValid = true;
         }
       }
@@ -256,13 +253,10 @@ class UserCompletedCoursesDropdown extends StatelessWidget {
                 physics: const ClampingScrollPhysics(),
                 itemBuilder: (context, index) {
                   allCompletedCourses = loggedInState.allCompletedCoursesGlobal;
-                  debugPrint(
-                      'ALLCOMPLETEDCOURSESGLOBAL: ${loggedInState.allCompletedCoursesGlobal}');
-
                   return CourseDropdownWidget(
                     courseItem: allCompletedCourses[index],
                     courseDetailsData: getCourseCompletedPercentage(
-                        allCompletedCourses[index], coursesProvider, index),
+                        allCompletedCourses[index], coursesProvider),
                     detailType: 'courses_completed',
                   );
                 },

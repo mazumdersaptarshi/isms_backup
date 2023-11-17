@@ -1,7 +1,6 @@
 // ignore_for_file: file_names, non_constant_identifier_names
 
 import 'package:flutter/material.dart';
-import 'package:isms/projectModules/courseManagement/moduleManagement/slideManagement/slidesDataMaster.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleDetailsScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/modulesListScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/slidesDisplayScreen.dart';
@@ -44,7 +43,7 @@ class CourseExamCompletionStrategy implements ExamCompletionStrategy {
                 builder: (context) => CoursePage(course: course)));
       },
       child: Text(
-          "Mark Exam as Done- completed ${exam.index}/${course.exams.length}"),
+          "Mark Exam as Done- completed ${exam.index}/${course.exams!.length}"),
     );
   }
 
@@ -52,10 +51,20 @@ class CourseExamCompletionStrategy implements ExamCompletionStrategy {
   Future<void> handleExamCompletion({required BuildContext context}) async {
     final loggedInState = context.read<LoggedInState>();
     final coursesProvider = context.read<CoursesProvider>();
-    DateTime startedAt = DateTime.now();
+    DateTime? startedAt;
     for (var courses_started in loggedInState.loggedInUser.courses_started) {
-      if (courses_started["courseID"] == course.id) {}
-      startedAt = courses_started["started_at"].toDate();
+      if (courses_started["courseID"] == course.id &&
+          courses_started.containsKey("started_at")) {
+        if (courses_started["started_at"] != null) {
+          try {
+            startedAt = courses_started["started_at"].toDate();
+          } catch (e) {
+            // startedAt = DateTime.now();
+          }
+        } else {
+          startedAt = DateTime.now();
+        }
+      }
     }
     Map<String, dynamic> courseDetailsMap = {
       "courseID": course.id,
@@ -131,10 +140,9 @@ class ModuleExamCompletionStrategy implements ExamCompletionStrategy {
         "courseID": course.id,
         "course_name": course.name,
         "course_modules_count": course.modulesCount,
+        "course_exams_count": course.examsCount,
         "started_at": DateTime.now()
       };
-      SlidesDataMaster? slidesDataMaster = SlidesDataMaster(
-          course: course, coursesProvider: coursesProvider, module: module);
       return ElevatedButton(
         onPressed: () async {
           await loggedInState.setUserCourseStarted(
@@ -152,7 +160,6 @@ class ModuleExamCompletionStrategy implements ExamCompletionStrategy {
                   builder: (context) => SlidesDisplayScreen(
                         course: course,
                         module: module,
-                        slidesDataMaster: slidesDataMaster,
                       )));
         },
         child: const Text("Study the module first"),

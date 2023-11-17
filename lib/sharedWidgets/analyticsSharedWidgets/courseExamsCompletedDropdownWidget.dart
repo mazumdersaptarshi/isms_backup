@@ -18,7 +18,6 @@ class CourseExamsCompletedDropdownWidget extends StatelessWidget {
       try {
         return int.parse(value.toString());
       } catch (e) {
-        debugPrint('Value cannot be converted to an int: $e');
         return 0; // Default value or handle as appropriate
       }
     }

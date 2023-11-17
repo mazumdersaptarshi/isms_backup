@@ -14,18 +14,19 @@ function getDayWithSuffix(day) {
   }
 }
 
+function formatTime(timestamp) {
+  const date = timestamp.toDate();
+  const hours = String(date.getUTCHours() + 9).padStart(2, '0');
+  const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+  return `${hours}:${minutes}`;
+}
+
 function formatDate(timestamp) {
   const date = timestamp.toDate();
   const options = { year: "numeric", month: "long", day: "numeric" };
   const formattedDate = new Intl.DateTimeFormat("en-US", options).format(date);
-
   const dayWithSuffix = getDayWithSuffix(date.getDate());
-
-  const hours = String(date.getUTCHours() + 9).padStart(2, '0');
-  const minutes = String(date.getUTCMinutes()).padStart(2, '0');
-  const ampm = date.getUTCHours() >= 12 ? 'PM' : 'AM';
-
-  return `${formattedDate.replace(/\d+/, dayWithSuffix)} at ${hours}:${minutes} ${ampm}`;
+  return `${formattedDate.replace(/\d+/, dayWithSuffix)} at ${formatTime(timestamp)}`;
 }
 
 async function sendEmail(recipientEmail, name, expiredTime, certificationName) {

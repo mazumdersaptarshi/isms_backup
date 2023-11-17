@@ -1,118 +1,76 @@
 // ignore_for_file: file_names
 
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:isms/models/course.dart';
-import 'package:isms/models/module.dart';
 import 'package:isms/models/newExam.dart';
 import 'package:isms/projectModules/courseManagement/coursesDataMaster.dart';
-import '../coursesProvider.dart';
 
 class ExamDataMaster extends CoursesDataMaster {
-  ExamDataMaster({required this.course, required this.coursesProvider})
-      : super() {
-    _examsRef =
-        CoursesDataMaster.coursesRef.doc(course.name).collection("exams");
+  ExamDataMaster({
+    required super.coursesProvider,
+    required this.course,
+  }) : super() {
+    _courseRef = coursesRef.doc(course.name);
+    _examsRef = _courseRef.collection("exams");
   }
-  Course course;
-  CoursesProvider coursesProvider;
-
-  CollectionReference? _examsRef;
-  CollectionReference? get examsRef => _examsRef;
+  final Course course;
+  late final DocumentReference _courseRef;
+  late final CollectionReference _examsRef;
 
   Future<bool> createCourseExam({required NewExam exam}) async {
+    // TODO fail if there is already an exam with this title
     try {
-      int index = course.exams.length + 1;
+      exam.index = course.examsCount + 1;
 
-      exam.index = index;
+      // add the new exam into the database
       Map<String, dynamic> examMap = exam.toMap();
-
       examMap['createdAt'] = DateTime.now();
+      await _examsRef.doc(exam.title).set(examMap);
+      await _courseRef.update({'examsCount': exam.index});
 
-      await examsRef!.doc(exam.title).set(examMap);
+      // add the new exam in the local cache
+      course.addExam(exam);
+      course.examsCount = exam.index;
 
-      coursesProvider.addExamsToCourse(course, [exam]);
-
-      await FirebaseFirestore.instance
-          .collection('courses')
-          .doc(course.name)
-          .update({'examsCount': index});
-
-      debugPrint("Exam creation successful");
+      coursesProvider.notifyListeners();
       return true;
     } catch (e) {
       return false;
     }
   }
 
-  Future<bool> createModuleExam(
-      {required Module module, required NewExam exam}) async {
-    try {
-      int index = 1;
-      try {
-        index = module.exams!.length + 1;
-      } catch (e) {
-        index = 1;
-      }
-      exam.index = index;
-      Map<String, dynamic> examMap = exam.toMap();
+  Future<List<NewExam>> _fetchExams() async {
+    // this delay can be enabled to test the loading code
+    //await Future.delayed(const Duration(milliseconds: 1000));
 
-      examMap['createdAt'] = DateTime.now();
-
-      await CoursesDataMaster.coursesRef
-          .doc(course.name)
-          .collection("modules")
-          .doc(module.title)
-          .collection("exams")
-          .doc(exam.title)
-          .set(examMap);
-
-      coursesProvider.addExamsToCourseModule(module, [exam]);
-      debugPrint("Module Exam creation successful");
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  Future fetchExams() async {
-    if (course.exams.isNotEmpty) {
-      return;
-    } else {
-      QuerySnapshot examsListSnapshot = await examsRef!.orderBy("index").get();
+    QuerySnapshot examsListSnapshot = await _examsRef.orderBy("index").get();
+    if (course.exams == null) {
       course.exams = [];
-      for (var element in examsListSnapshot.docs) {
-        // debugPrint(element.data());
-        NewExam exam = NewExam.fromMap(element.data() as Map<String, dynamic>);
-
-        course.exams.add(exam);
-      }
-      // coursesProvider.fetchExamsToCourse(courseIndex, course.exams!);
-      debugPrint("FCN Courses ${course.hashCode}, has exams: ${course.exams}");
+    } else {
+      course.exams!.clear();
     }
+    for (var element in examsListSnapshot.docs) {
+      NewExam exam = NewExam.fromMap(element.data() as Map<String, dynamic>);
+      course.addExam(exam);
+    }
+    if (course.exams!.length != course.examsCount) {
+      log("fetched ${course.exams!.length} course exams, was expecting ${course.examsCount}");
+    }
+    return course.exams!;
   }
 
-  Future fetchModuleExams({required Module module}) async {
-    if (module.exams != null && module.exams!.isNotEmpty) {
-      return;
+  Future<List<NewExam>> get exams async {
+    if (course.exams != null) {
+      return course.exams!;
     } else {
-      QuerySnapshot examsListSnapshot = await CoursesDataMaster.coursesRef
-          .doc(course.name)
-          .collection('modules')
-          .doc(module.title)
-          .collection('exams')
-          .orderBy("index")
-          .get();
-      module.exams = [];
-      for (var element in examsListSnapshot.docs) {
-        // debugPrint(element.data());
-        NewExam exam = NewExam.fromMap(element.data() as Map<String, dynamic>);
-
-        module.exams?.add(exam);
+      try {
+        return _fetchExams();
+      } catch (e) {
+        course.exams = null;
+        return [];
       }
-      // coursesProvider.addExamsToCourseModule(
-      //     courseIndex, moduleIndex, module.exams!);
-      debugPrint("FCN Module ${module.hashCode}, has exams: ${module.exams}");
     }
   }
 }

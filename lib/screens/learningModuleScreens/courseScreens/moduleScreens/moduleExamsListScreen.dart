@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/models/newExam.dart';
-import 'package:isms/projectModules/courseManagement/examManagement/examDataMaster.dart';
+import 'package:isms/projectModules/courseManagement/moduleManagement/examManagement/examDataMaster.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/sharedWidgets/examListContainer.dart';
 import 'package:isms/userManagement/loggedInState.dart';
@@ -25,25 +25,17 @@ class ModuleExamListScreen extends StatefulWidget {
   final Course course;
   final Module module;
   final EXAMTYPE examtype;
+
   @override
   State<ModuleExamListScreen> createState() => _ModuleExamListScreenState();
 }
 
 class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
-  bool isExamsFetched = false;
-  late String userRole;
-  late ExamDataMaster examDataMaster;
+  late ModuleExamDataMaster moduleExamDataMaster;
 
   @override
   void initState() {
     super.initState();
-  }
-
-  fetchExamsList({required CoursesProvider coursesProvider}) async {
-    await examDataMaster.fetchModuleExams(module: widget.module);
-    setState(() {
-      isExamsFetched = true;
-    });
   }
 
   @override
@@ -54,33 +46,45 @@ class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
 
     CoursesProvider coursesProvider = context.watch<CoursesProvider>();
 
-    Course course = widget.course;
-    List<NewExam>? exams = [];
-    Module? module;
-    if (widget.examtype == EXAMTYPE.moduleExam) {
-      module = widget.module;
-      exams = module.exams;
-    } else {
-      exams = widget.course.exams;
-    }
-    examDataMaster =
-        ExamDataMaster(course: course, coursesProvider: coursesProvider);
-    if (isExamsFetched == false) {
-      fetchExamsList(coursesProvider: coursesProvider);
-    }
+    moduleExamDataMaster = ModuleExamDataMaster(
+        course: widget.course,
+        coursesProvider: coursesProvider,
+        module: widget.module);
 
     return Scaffold(
       appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
       bottomNavigationBar:
           PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
-      body: isExamsFetched
-          ? ExamListContainer(
-              exams: exams ?? [],
-              course: course,
+      body: FutureBuilder<List<NewExam>>(
+        future: moduleExamDataMaster.exams,
+        builder: (BuildContext context, AsyncSnapshot<List<NewExam>> snapshot) {
+          if (snapshot.hasData) {
+            List<NewExam> exams = snapshot.data!;
+
+            return ExamListContainer(
+              exams: exams,
+              course: widget.course,
               examtype: EXAMTYPE.moduleExam,
-              module: module,
-              loggedInState: loggedInState)
-          : SizedBox(
+              module: widget.module,
+              loggedInState: loggedInState,
+            );
+          } else if (snapshot.hasError) {
+            return SizedBox(
+              height: 300,
+              child: AlertDialog(
+                elevation: 4,
+                content: Align(
+                    alignment: Alignment.topCenter,
+                    child: loadingErrorWidget(
+                        textWidget: Text(
+                      "Error loading quizes",
+                      style: customTheme.textTheme.labelMedium!
+                          .copyWith(fontSize: 18, fontWeight: FontWeight.bold),
+                    ))),
+              ),
+            );
+          } else {
+            return SizedBox(
               height: 300,
               child: AlertDialog(
                 elevation: 4,
@@ -93,7 +97,10 @@ class _ModuleExamListScreenState extends State<ModuleExamListScreen> {
                           .copyWith(fontSize: 18, fontWeight: FontWeight.bold),
                     ))),
               ),
-            ),
+            );
+          }
+        },
+      ),
       floatingActionButton: loggedInState.currentUserRole == "admin"
           ? FloatingActionButton(
               onPressed: () {

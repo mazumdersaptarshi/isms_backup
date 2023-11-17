@@ -1,6 +1,8 @@
+// ignore_for_file: constant_identifier_names
+
 enum QUESTIONTYPE {
-  mcq, // Single correct answer
-  checkbox, // Multiple correct answers
+  MCQ, // Single correct answer
+  Checkbox, // Multiple correct answers
 }
 
 class EnumToString {

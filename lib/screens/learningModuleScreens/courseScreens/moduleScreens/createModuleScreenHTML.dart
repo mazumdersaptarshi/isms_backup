@@ -1,9 +1,10 @@
 // Ensure you have all necessary imports
 // ignore_for_file: file_names
 
+import 'dart:developer';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:isms/models/course.dart';
@@ -128,24 +129,18 @@ class _CourseModuleFormHTMLState extends State<_CourseModuleFormHTML> {
                     toolbarType: ToolbarType.nativeScrollable, //by default
                     onButtonPressed: (ButtonType type, bool? status,
                         Function? updateStatus) {
-                      debugPrint(
-                          "button '${type.name}' pressed, the current selected status is $status");
                       return true;
                     },
                     onDropdownChanged: (DropdownType type, dynamic changed,
                         Function(dynamic)? updateSelectedItem) {
-                      debugPrint("dropdown '${type.name}' changed to $changed");
                       return true;
                     },
                     mediaLinkInsertInterceptor:
                         (String url, InsertFileType type) {
-                      debugPrint(url);
                       return true;
                     },
                     mediaUploadInterceptor:
                         (PlatformFile file, InsertFileType type) async {
-                      debugPrint(
-                          "UPLOADDED IMAGGGEE :  ${file.name}"); //filename
                       final storageRef = FirebaseStorage.instance
                           .ref()
                           .child(widget.course.name)
@@ -173,28 +168,38 @@ class _CourseModuleFormHTMLState extends State<_CourseModuleFormHTML> {
                     },
                   ),
                   otherOptions: const OtherOptions(height: 700),
-                  callbacks: Callbacks(onBeforeCommand: (String? currentHtml) {
-                    debugPrint('html before change is $currentHtml');
-                  }, onChangeContent: (String? changed) {
-                    debugPrint('content changed to $changed');
-                  }, onChangeCodeview: (String? changed) {
-                    debugPrint('code changed to $changed');
-                  }, onChangeSelection: (EditorSettings settings) {
-                    debugPrint('parent element is ${settings.parentElement}');
-                    debugPrint('font name is ${settings.fontName}');
-                  }, onDialogShown: () {
-                    debugPrint('dialog shown');
-                  }, onEnter: () {
-                    debugPrint('enter/return pressed');
-                  }, onFocus: () {
-                    debugPrint('editor focused');
-                  }, onBlur: () {
-                    debugPrint('editor unfocused');
-                  }, onBlurCodeview: () {
-                    debugPrint('codeview either focused or unfocused');
-                  }, onInit: () {
-                    debugPrint('init');
-                  },
+                  callbacks: Callbacks(
+                      onBeforeCommand: (String? currentHtml) {
+                        log('html before change is $currentHtml');
+                      },
+                      onChangeContent: (String? changed) {
+                        log('content changed to $changed');
+                      },
+                      onChangeCodeview: (String? changed) {
+                        log('code changed to $changed');
+                      },
+                      onChangeSelection: (EditorSettings settings) {
+                        log('parent element is ${settings.parentElement}');
+                        log('font name is ${settings.fontName}');
+                      },
+                      onDialogShown: () {
+                        log('dialog shown');
+                      },
+                      onEnter: () {
+                        log('enter/return pressed');
+                      },
+                      onFocus: () {
+                        log('editor focused');
+                      },
+                      onBlur: () {
+                        log('editor unfocused');
+                      },
+                      onBlurCodeview: () {
+                        log('codeview either focused or unfocused');
+                      },
+                      onInit: () {
+                        log('init');
+                      },
                       //this is commented because it overrides the default Summernote handlers
                       /*onImageLinkInsert: (String? url) {
                     debugPrint(url ?? "unknown url");
@@ -206,34 +211,30 @@ class _CourseModuleFormHTMLState extends State<_CourseModuleFormHTML> {
                     debugPrint(file.base64);
                   },*/
                       onImageUploadError: (FileUpload? file, String? base64Str,
-                          UploadError error) {
-                    debugPrint(error.name);
-                    debugPrint(base64Str ?? '');
-                    if (file != null) {
-                      if (kDebugMode) {
-                        print(file.name);
-                        print(file.size);
-                        print(file.type);
-                      }
-                    }
-                  }, onKeyDown: (int? keyCode) {
-                    debugPrint('$keyCode key downed');
-                    debugPrint(
-                        'current character count: ${_htmlEditorController.characterCount}');
-                  }, onKeyUp: (int? keyCode) {
-                    debugPrint('$keyCode key released');
-                  }, onMouseDown: () {
-                    debugPrint('mouse downed');
-                  }, onMouseUp: () {
-                    debugPrint('mouse released');
-                  }, onNavigationRequestMobile: (String url) {
-                    debugPrint(url);
-                    return NavigationActionPolicy.ALLOW;
-                  }, onPaste: () {
-                    debugPrint('pasted into editor');
-                  }, onScroll: () {
-                    debugPrint('editor scrolled');
-                  }),
+                          UploadError error) {},
+                      onKeyDown: (int? keyCode) {
+                        debugPrint('$keyCode key downed');
+                        log('current character count: ${_htmlEditorController.characterCount}');
+                      },
+                      onKeyUp: (int? keyCode) {
+                        log('$keyCode key released');
+                      },
+                      onMouseDown: () {
+                        log('mouse downed');
+                      },
+                      onMouseUp: () {
+                        log('mouse released');
+                      },
+                      onNavigationRequestMobile: (String url) {
+                        log(url);
+                        return NavigationActionPolicy.ALLOW;
+                      },
+                      onPaste: () {
+                        log('pasted into editor');
+                      },
+                      onScroll: () {
+                        log('editor scrolled');
+                      }),
                   plugins: [
                     SummernoteAtMention(
                         getSuggestionsMobile: (String value) {

@@ -1,71 +1,81 @@
-
 // ignore_for_file: file_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/models/slide.dart';
 import 'package:isms/projectModules/courseManagement/moduleManagement/moduleDataMaster.dart';
 
 class SlidesDataMaster extends ModuleDataMaster {
-  SlidesDataMaster(
-      {required super.course,
-      required super.coursesProvider,
-      required this.module})
-      : super() {
-    _slidesRef = modulesRef!.doc(module.title).collection("slides");
+  SlidesDataMaster({
+    required super.coursesProvider,
+    required super.course,
+    required this.module,
+  }) : super() {
+    _moduleRef = modulesRef.doc(module.title);
+    _slidesRef = _moduleRef.collection("slides");
   }
-  Module module;
-  CollectionReference? _slidesRef;
-  CollectionReference? get slidesRef => _slidesRef;
+  final Module module;
+  late DocumentReference _moduleRef;
+  late final CollectionReference _slidesRef;
 
   Future<bool> createSlides({required List<Slide> slides}) async {
-    List<Map<String, dynamic>> slidesMapList = [];
-    int startingIndex = 0;
     try {
-      startingIndex = module.slides!.length;
-    } catch (e) {
-      startingIndex = 0;
-    }
+      //int index = module.slidesCount;
+      // TODO replace the following line with the previous line, once
+      // the field `slidesCount` has been added to Module
+      int index = module.slides?.length ?? 0;
 
-    try {
-      for (var slideItem in slides) {
-        startingIndex++;
-        slideItem.index = startingIndex;
-        Map<String, dynamic> slideMap = slideItem.toMap();
+      for (Slide slide in slides) {
+        index++;
+        slide.index = index;
+
+        // add the new slide into the database
+        Map<String, dynamic> slideMap = slide.toMap();
         slideMap['createdAt'] = DateTime.now();
-        slidesMapList.add(slideMap);
+        await _slidesRef.doc(slideMap['id']).set(slideMap);
       }
+      //await _moduleRef.update({'slidesCount': index});
 
-      for(Map<String, dynamic> slideMap in slidesMapList) {
-        await slidesRef!.doc(slideMap['id']).set(slideMap);
-        debugPrint("Created slide $slideMap");
-      }
+      // add the new slides in the local cache
+      module.addSlides(slides);
+      //module.slidesCount = index;
 
-      coursesProvider.addSlidesToModules(module, slides);
-      debugPrint("Slides creation successful");
+      coursesProvider.notifyListeners();
       return true;
     } catch (e) {
       return false;
     }
   }
 
-  Future fetchSlides() async {
-    if (module.slides != null && module.slides!.isNotEmpty) {
-      debugPrint("Slides for $module already fetched! See ${module.slides}");
-      return;
-    } else {
-      QuerySnapshot slidesListSnapshot =
-          await slidesRef!.orderBy("index").get();
-      List<Slide> slides = [];
-      if (slidesListSnapshot.size == 0) return;
-      for (var element in slidesListSnapshot.docs) {
-        Slide s = Slide.fromMap(element.data() as Map<String, dynamic>);
+  Future<List<Slide>> _fetchSlides() async {
+    // this delay can be enabled to test the loading code
+    //await Future.delayed(const Duration(milliseconds: 1000));
 
-        slides.add(s);
+    QuerySnapshot slidesListSnapshot = await _slidesRef.orderBy("index").get();
+    if (module.slides == null) {
+      module.slides = [];
+    } else {
+      module.slides!.clear();
+    }
+    for (var element in slidesListSnapshot.docs) {
+      Slide slide = Slide.fromMap(element.data() as Map<String, dynamic>);
+      module.addSlide(slide);
+      coursesProvider.notifyListeners();
+    }
+
+    return module.slides!;
+  }
+
+  Future<List<Slide>> get slides async {
+    if (module.slides != null) {
+      return module.slides!;
+    } else {
+      try {
+        return _fetchSlides();
+      } catch (e) {
+        module.slides = null;
+        return [];
       }
-      coursesProvider.addSlidesToModules(module, slides);
-      debugPrint("FCN Slides for ${module.slides}, slides: ${module.slides}");
     }
   }
 }

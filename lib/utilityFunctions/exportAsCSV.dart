@@ -15,7 +15,6 @@ import 'package:universal_html/html.dart' as html;
 exportAsCSV(List<String> headerRow, List<List<String>> listOfListOfStrings,
     String fileNamePrefix,
     {bool sharing = false}) async {
-  debugPrint("***** Gonna Create cv *****");
   //create the final list of lists containing the header and the data
   List<List<String>> headerAndDataList = [];
   headerAndDataList.add(headerRow);
@@ -43,7 +42,7 @@ exportAsCSV(List<String> headerRow, List<List<String>> listOfListOfStrings,
     final bytes = utf8.encode(csvData);
     Uint8List bytes2 = Uint8List.fromList(bytes);
     MimeType type = MimeType.csv;
-    /*final xFile = */await FileSaver.instance.saveAs(
+    /*final xFile = */ await FileSaver.instance.saveAs(
         name: '${fileNamePrefix}_$formattedDate.csv',
         bytes: bytes2,
         ext: 'csv',

@@ -1,6 +1,5 @@
 // ignore_for_file: file_names, non_constant_identifier_names
 
-import 'package:flutter/foundation.dart';
 
 class CustomUser {
   String username;
@@ -32,10 +31,6 @@ class CustomUser {
   }
 
   factory CustomUser.fromMap(Map<String, dynamic> map) {
-    if (kDebugMode) {
-      print(map['username']);
-      print(map['courses_started']);
-    }
     CustomUser customUser = CustomUser(
         username: map['username'],
         email: map['email'],
@@ -43,9 +38,6 @@ class CustomUser {
         courses_started: map['courses_started'] ?? [],
         courses_completed: map['courses_completed'] ?? [],
         uid: map["uid"]);
-    if (kDebugMode) {
-      print('courses_completed: ${customUser.courses_completed}');
-    }
     return customUser;
   }
 }

@@ -49,6 +49,7 @@ mixin CustomAppBarMixin on StatelessWidget {
         loggedInState.currentUserName!,
       );
     }
+    if (!context.mounted) return;
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => const ReminderScreen()));
   }

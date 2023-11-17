@@ -19,7 +19,7 @@ class UserCourseCompletedDetailsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Map<String, dynamic> courseDetailsData =
-        getCourseCompletedPercentage(courseItem, coursesProvider, index);
+        getCourseCompletedPercentage(courseItem, coursesProvider);
     return CourseDropdownWidget(
       courseItem: courseItem,
       courseDetailsData: courseDetailsData,

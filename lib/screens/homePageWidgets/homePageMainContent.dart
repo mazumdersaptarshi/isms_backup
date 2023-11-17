@@ -14,13 +14,12 @@ class HomePageMainContent extends StatelessWidget {
   const HomePageMainContent(
       {super.key,
       required this.homePageContainerHeight,
-      //required this.loggedInState,
       required this.coursesProvider});
   final double homePageContainerHeight;
   final CoursesProvider coursesProvider;
+
   @override
   Widget build(BuildContext context) {
-    bool hasEnrolledCourses = false;
     final loggedInState = context.watch<LoggedInState>();
     return SizedBox(
         width: MediaQuery.of(context).size.width,
@@ -59,7 +58,8 @@ class HomePageMainContent extends StatelessWidget {
                   if (snapshot?.data == null) {
                     return const CircularProgressIndicator();
                   } else {
-                    hasEnrolledCourses = snapshot?.data!["hasEnrolledCourses"];
+                    final bool hasEnrolledCourses =
+                        snapshot?.data!["hasEnrolledCourses"];
                     snapshot?.data!["widgetsList"]
                         .insert(0, Container(width: 100));
                     return Column(

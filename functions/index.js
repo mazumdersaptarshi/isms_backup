@@ -54,6 +54,5 @@ exports.scheduledEmailFunction = functions.pubsub
         }
       })
     );
-
     return null;
   });

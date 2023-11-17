@@ -30,12 +30,12 @@ class ExamListContainer extends StatelessWidget {
         context,
         MaterialPageRoute(
             builder: (context) => TakeExamScreen(
-                  exam: exam,
-                  examtype: EXAMTYPE.courseExam,
-                  course: course,
+              exam: exam,
+              examtype: EXAMTYPE.courseExam,
+              course: course,
                   examCompletionStrategy: CourseExamCompletionStrategy(
                       course: course, exam: exam, loggedInState: loggedInState),
-                )));
+            )));
   }
 
   navigateToModuleExamPage(
@@ -60,7 +60,7 @@ class ExamListContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Align(
+    return  Align(
       alignment: Alignment.topCenter,
       child: SizedBox(
         width: MediaQuery.of(context).size.width > 700

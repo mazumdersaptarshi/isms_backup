@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:isms/models/adminConsoleModels/coursesDetails.dart';
 import 'package:isms/models/course.dart';
+import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 import 'package:isms/projectModules/courseManagement/coursesDataMaster.dart';
 import 'package:isms/sharedWidgets/navIndexTracker.dart';
 import 'package:isms/themes/common_theme.dart';
@@ -36,6 +37,12 @@ class _CourseCreationFormState extends State<CourseCreationForm> {
   @override
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
+    CoursesProvider coursesProvider = context.watch<CoursesProvider>();
+
+    CoursesDataMaster coursesDataMaster = CoursesDataMaster(
+      coursesProvider: coursesProvider,
+    );
+
     NavIndexTracker.setNavDestination(navDestination: NavDestinations.other);
     return Scaffold(
       appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
@@ -95,17 +102,15 @@ class _CourseCreationFormState extends State<CourseCreationForm> {
                             description: _descriptionController.text,
                           );
                           bool isCourseCreated =
-                              await CoursesDataMaster.createCourse(
+                              await coursesDataMaster.createCourse(
                                   course: course);
 
+                          // TODO use the same id in both tables
                           CoursesDetails coursesDetails = CoursesDetails(
                             course_id: generateRandomId(),
                             course_name: _nameController.text,
-                            number_of_modules: 0,
-                            number_of_exams: 0,
                           );
-
-                          await CoursesDataMaster.createCourseAdminConsole(
+                          await coursesDataMaster.createCourseAdminConsole(
                               coursesDetails: coursesDetails);
                           if (isCourseCreated) {
                             if (!context.mounted) return;

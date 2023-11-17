@@ -5,6 +5,7 @@ import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/modulesListScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/sharedWidgets/course_tile.dart';
 import 'package:isms/userManagement/loggedInState.dart';
+import 'package:isms/utilityFunctions/getCourseCompletedPercentage.dart';
 
 import '../../models/course.dart';
 
@@ -66,11 +67,14 @@ Future<List<Widget>> getEnrolledCoursesList(
         // tileHeight: 300,
         tileWidth: 400,
         courseData: course != null
-            ? getUserCourseData(loggedInState: loggedInState, course: course)
+            ? getUserCourseData(
+                loggedInState: loggedInState,
+                course: course,
+                coursesProvider: coursesProvider)
             : null,
         index: i,
         subTitle: getLatestModuleName(coursesStarted[i]) ?? '',
-        modulesCount: course != null ? (course.modulesCount ?? 0) : 0,
+        modulesCount: course != null ? (course.modulesCount) : 0,
         // dateValue: course.dateCreated,
       ));
     }
@@ -106,7 +110,7 @@ Future<List<Widget>> getRecommendedCoursesList(
       courseData: null,
       index: i,
       subTitle: courseToRecommend.description,
-      modulesCount: courseToRecommend.modulesCount ?? 0,
+      modulesCount: courseToRecommend.modulesCount,
       // dateValue: course.dateCreated,
     ));
   }
@@ -114,7 +118,9 @@ Future<List<Widget>> getRecommendedCoursesList(
 }
 
 Map<String, dynamic> getUserCourseData(
-    {required LoggedInState loggedInState, required Course course}) {
+    {required LoggedInState loggedInState,
+    required Course course,
+    required CoursesProvider coursesProvider}) {
   int courseCompPercent = 0;
   /*var courseCompletionDate;
   var courseStartDate;*/
@@ -123,9 +129,6 @@ Map<String, dynamic> getUserCourseData(
     for (var courseCompleted in loggedInState.loggedInUser.courses_completed) {
       if (courseCompleted["courseID"] == course.id) {
         courseCompPercent = 100;
-        debugPrint(
-            "COURSE COMPLETED DATE : ${courseCompleted["course_name"]}, ${courseCompleted["completed_at"].runtimeType}");
-        //courseCompletionDate = courseCompleted["completed_at"];
       }
     }
   }
@@ -134,10 +137,15 @@ Map<String, dynamic> getUserCourseData(
     for (var courseStarted in loggedInState.loggedInUser.courses_started) {
       if (courseStarted["courseID"] == course.id &&
           courseStarted["modules_completed"] != null) {
-        courseCompPercent =
-            ((courseStarted["modules_completed"].length / course.modulesCount) *
-                    100)
-                .ceil();
+        try {
+          // courseCompPercent =
+
+          double coursePercentDecimal = getCourseCompletedPercentage(
+              courseStarted, coursesProvider)["courseCompletionPercentage"];
+          courseCompPercent = (coursePercentDecimal * 100).toInt();
+        } catch (e) {
+          courseCompPercent = 0;
+        }
         //courseStartDate = courseStarted["started_at"];
       }
     }

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/createModuleScreenHTML.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/sharedWidgets/moduleTile.dart';
-// import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/createModuleScreenHTML.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examListScreen.dart';
 import 'package:isms/themes/common_theme.dart';
@@ -26,16 +25,8 @@ class CoursePage extends StatefulWidget {
 }
 
 class _CoursePageState extends State<CoursePage> {
-  bool isModulesFetched = false;
+  late ModuleDataMaster moduleDataMaster;
   late String userRole;
-  ModuleDataMaster? moduleDataMaster;
-
-  fetchCourseModules({required CoursesProvider coursesProvider}) async {
-    await moduleDataMaster?.fetchModules();
-    setState(() {
-      isModulesFetched = true;
-    });
-  }
 
   @override
   void initState() {
@@ -98,29 +89,96 @@ class _CoursePageState extends State<CoursePage> {
     moduleDataMaster = ModuleDataMaster(
         course: widget.course, coursesProvider: coursesProvider);
 
-    if (isModulesFetched == false) {
-      fetchCourseModules(coursesProvider: coursesProvider);
-    }
-
     userRole = loggedInState.currentUserRole;
 
-    // compute the grid shape:
-    // requirements
-    // requirements
-    // available width, in pixels
+    int itemCount = widget.course.modulesCount;
 
-    // int maxColumns =
-    //     max(((screenWidth - (horizontalMargin * 2)) / tileMinWidth).floor(), 1);
-    // number of tiles that have to fit on the screen
-    int itemCount = widget.course.modulesCount ?? 0;
-    // grid width, in tiles
+    // Determining the screen width
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    // Extracting the Row widget for flexibility
+    Row rowWidget() {
+      return Row(
+        children: [
+          ElevatedButton(
+            onPressed: () {
+              if (isALlModulesCompleted) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ExamListScreen(
+                      course: widget.course,
+                      examtype: EXAMTYPE.courseExam,
+                    ),
+                  ),
+                );
+              }
+            },
+            style: customTheme.elevatedButtonTheme.style!.copyWith(
+                backgroundColor: isALlModulesCompleted
+                    ? MaterialStateProperty.all<Color>(Colors.white)
+                    : MaterialStateProperty.all<Color>(Colors.grey.shade200)),
+            child: Text("View course exams",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: isALlModulesCompleted ? primaryColor : Colors.grey)),
+          ),
+          const SizedBox(width: 20),
+          if (userRole == "admin")
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ExamCreation(
+                      course: widget.course,
+                      examtype: EXAMTYPE.courseExam,
+                    ),
+                  ),
+                );
+              },
+              style: customTheme.elevatedButtonTheme.style!.copyWith(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.white)),
+              child: const Text(
+                "Create course exam",
+                textAlign: TextAlign.center,
+                style: TextStyle(color: primaryColor),
+              ),
+            ),
+        ],
+      );
+    }
+
+    // Function to get the appropriate button layout
+    Widget View_and_Create_exams_button() {
+      // Check if the screen width is greater than the threshold
+      if (screenWidth > SCREEN_COLLAPSE_WIDTH) {
+        return rowWidget();
+      } else {
+        // Only wrap the ElevatedButtons with Expanded
+        return Row(
+          children: rowWidget().children.map((child) {
+            if (child is ElevatedButton) {
+              return Expanded(child: child);
+            }
+            return child;
+          }).toList(),
+        );
+      }
+    }
 
     return Scaffold(
       appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
       bottomNavigationBar:
           PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
-      body: isModulesFetched
-          ? NestedScrollView(
+      body: FutureBuilder<List<Module>>(
+        future: moduleDataMaster.modules,
+        builder: (BuildContext context, AsyncSnapshot<List<Module>> snapshot) {
+          if (snapshot.hasData) {
+            List<Module> modules = snapshot.data!;
+
+            return NestedScrollView(
               headerSliverBuilder: (context, innerBoxIsScrolled) => [
                 SliverToBoxAdapter(
                   child: Container(
@@ -136,12 +194,12 @@ class _CoursePageState extends State<CoursePage> {
                       children: [
                         Row(
                           children: [
-                            Flexible(flex: 1, child: Container()),
-                            Flexible(
-                              flex: 8,
+                            //Expanded(flex: 1, child: Container()),
+                            Expanded(
+                              //flex: 10,
                               child: Container(
                                 margin: const EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 20),
+                                    horizontal: 7, vertical: 20),
                                 child: Padding(
                                   padding: const EdgeInsets.only(right: 10.0),
                                   child: Column(
@@ -193,7 +251,7 @@ class _CoursePageState extends State<CoursePage> {
                                             width: 10,
                                           ),
                                           Text(
-                                            '${widget.course.dateCreated}',
+                                            widget.course.dateCreated,
                                             style: const TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 12),
@@ -219,76 +277,7 @@ class _CoursePageState extends State<CoursePage> {
                                       Padding(
                                         padding:
                                             const EdgeInsets.only(top: 20.0),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            ElevatedButton(
-                                              onPressed: () {
-                                                if (isALlModulesCompleted) {
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          ExamListScreen(
-                                                        course: widget.course,
-                                                        examtype:
-                                                            EXAMTYPE.courseExam,
-                                                      ),
-                                                    ),
-                                                  );
-                                                }
-                                              },
-                                              style: customTheme
-                                                  .elevatedButtonTheme.style!
-                                                  .copyWith(
-                                                      backgroundColor: isALlModulesCompleted
-                                                          ? MaterialStateProperty
-                                                              .all<Color>(
-                                                                  Colors.white)
-                                                          : MaterialStateProperty
-                                                              .all<Color>(Colors
-                                                                  .grey
-                                                                  .shade200)),
-                                              child: Text("View course exams",
-                                                  style: TextStyle(
-                                                      color:
-                                                          isALlModulesCompleted
-                                                              ? primaryColor
-                                                              : Colors.grey)),
-                                            ),
-                                            const SizedBox(width: 20),
-                                            if (userRole == "admin")
-                                              ElevatedButton(
-                                                onPressed: () {
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          ExamCreation(
-                                                        course: widget.course,
-                                                        examtype:
-                                                            EXAMTYPE.courseExam,
-                                                      ),
-                                                    ),
-                                                  );
-                                                },
-                                                style: customTheme
-                                                    .elevatedButtonTheme.style!
-                                                    .copyWith(
-                                                        backgroundColor:
-                                                            MaterialStateProperty
-                                                                .all<Color>(
-                                                                    Colors
-                                                                        .white)),
-                                                child: const Text(
-                                                  "Create course exam",
-                                                  style: TextStyle(
-                                                      color: primaryColor),
-                                                ),
-                                              ),
-                                          ],
-                                        ),
+                                        child: View_and_Create_exams_button(),
                                       ),
                                     ],
                                   ),
@@ -324,34 +313,50 @@ class _CoursePageState extends State<CoursePage> {
                         ),
                         Column(
                           children: List.generate(
-                              itemCount,
-                              (moduleIndex) => SizedBox(
-                                    // height: 200,
-                                    width: MediaQuery.of(context).size.width >
-                                            SCREEN_COLLAPSE_WIDTH
-                                        ? MediaQuery.of(context).size.width *
-                                            0.5
-                                        : MediaQuery.of(context).size.width,
-                                    child: ModuleTile(
-                                      course: widget.course,
-                                      module:
-                                          widget.course.modules[moduleIndex],
-                                      isModuleStarted: checkIfModuleStarted(
-                                          loggedInState: loggedInState,
-                                          module: widget
-                                              .course.modules[moduleIndex]),
-                                      isModuleCompleted: checkIfModuleCompleted(
-                                          loggedInState: loggedInState,
-                                          module: widget
-                                              .course.modules[moduleIndex]),
-                                    ),
-                                  )),
-                        )
+                            itemCount,
+                            (moduleIndex) {
+                              Module module = modules[moduleIndex];
+                              return SizedBox(
+                                // height: 200,
+                                width: MediaQuery.of(context).size.width >
+                                        SCREEN_COLLAPSE_WIDTH
+                                    ? MediaQuery.of(context).size.width * 0.5
+                                    : MediaQuery.of(context).size.width,
+                                child: ModuleTile(
+                                  course: widget.course,
+                                  module: module,
+                                  isModuleStarted: checkIfModuleStarted(
+                                      loggedInState: loggedInState,
+                                      module: module),
+                                  isModuleCompleted: checkIfModuleCompleted(
+                                      loggedInState: loggedInState,
+                                      module: module),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
                       ],
                     ),
                   )),
-            )
-          : SizedBox(
+            );
+          } else if (snapshot.hasError) {
+            return SizedBox(
+              height: 300,
+              child: AlertDialog(
+                elevation: 4,
+                content: Align(
+                    alignment: Alignment.topCenter,
+                    child: loadingErrorWidget(
+                        textWidget: Text(
+                      "Error loading modules",
+                      style: customTheme.textTheme.labelMedium!
+                          .copyWith(fontSize: 18, fontWeight: FontWeight.bold),
+                    ))),
+              ),
+            );
+          } else {
+            return SizedBox(
               height: 300,
               child: AlertDialog(
                 elevation: 4,
@@ -359,12 +364,15 @@ class _CoursePageState extends State<CoursePage> {
                     alignment: Alignment.topCenter,
                     child: loadingWidget(
                         textWidget: Text(
-                      "Loading modules ...",
+                      "Loading",
                       style: customTheme.textTheme.labelMedium!
                           .copyWith(fontSize: 18, fontWeight: FontWeight.bold),
                     ))),
               ),
-            ),
+            );
+          }
+        },
+      ),
       floatingActionButton: userRole == 'admin'
           ? FloatingActionButton(
               onPressed: () {

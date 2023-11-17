@@ -5,14 +5,14 @@ import 'package:isms/models/enums.dart';
 class NewExam {
   int index;
   String examID;
-  int passingMarks;
+  int passingPercentage;
   String title;
   List questionAnswerSet;
 
   NewExam({
     this.index = 0,
     required this.examID,
-    required this.passingMarks,
+    required this.passingPercentage,
     required this.title,
     required this.questionAnswerSet,
   });
@@ -21,7 +21,7 @@ class NewExam {
     return {
       'index': index,
       'exam_ID': examID,
-      'passing_marks': passingMarks,
+      'passing_percentage': passingPercentage,
       'title': title,
       'question_answer_set': questionAnswerSet,
     };
@@ -31,7 +31,7 @@ class NewExam {
     return NewExam(
       index: map['index'],
       examID: map['exam_ID'],
-      passingMarks: map['passing_marks'],
+      passingPercentage: map['passing_percentage'],
       title: map['title'],
       questionAnswerSet: map['question_answer_set'],
     );
@@ -69,7 +69,7 @@ class QuestionAnswerSet {
           .map((optionMap) => Option.fromMap(optionMap as Map<String, dynamic>))
           .toList(),
       type: EnumToString.fromString(QUESTIONTYPE.values, map['type']) ??
-          QUESTIONTYPE.checkbox, // If you still want to keep the question type.
+          QUESTIONTYPE.Checkbox, // If you still want to keep the question type.
     );
   }
 }

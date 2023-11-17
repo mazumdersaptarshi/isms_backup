@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
-import 'package:isms/models/module.dart';
 import 'package:isms/models/newExam.dart';
 import 'package:isms/projectModules/courseManagement/examManagement/examDataMaster.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
@@ -30,20 +29,11 @@ class ExamListScreen extends StatefulWidget {
 }
 
 class _ExamListScreenState extends State<ExamListScreen> {
-  bool isExamsFetched = false;
-  late String userRole;
   late ExamDataMaster examDataMaster;
 
   @override
   void initState() {
     super.initState();
-  }
-
-  fetchExamsList({required CoursesProvider coursesProvider}) async {
-    await examDataMaster.fetchExams();
-    setState(() {
-      isExamsFetched = true;
-    });
   }
 
   @override
@@ -53,31 +43,44 @@ class _ExamListScreenState extends State<ExamListScreen> {
     LoggedInState loggedInState = context.watch<LoggedInState>();
     CoursesProvider coursesProvider = context.watch<CoursesProvider>();
 
-    List<NewExam>? exams = [];
-    Module module;
-    if (widget.examtype == EXAMTYPE.moduleExam) {
-      module = widget.course.modules[widget.moduleIndex!];
-      exams = module.exams;
-    } else {
-      exams = widget.course.exams;
-    }
     examDataMaster =
-        ExamDataMaster(course: widget.course, coursesProvider: coursesProvider);
-    if (isExamsFetched == false) {
-      fetchExamsList(coursesProvider: coursesProvider);
-    }
+      ExamDataMaster(
+          course: widget.course,
+          coursesProvider: coursesProvider);
 
     return Scaffold(
       appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
       bottomNavigationBar:
           PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
-      body: isExamsFetched
-          ? ExamListContainer(
-              exams: exams ?? [],
+      body: FutureBuilder<List<NewExam>>(
+        future: examDataMaster.exams,
+        builder: (BuildContext context, AsyncSnapshot<List<NewExam>> snapshot) {
+          if (snapshot.hasData) {
+            List<NewExam> exams = snapshot.data!;
+
+            return ExamListContainer(
+              exams: exams,
               course: widget.course,
               examtype: EXAMTYPE.courseExam,
-              loggedInState: loggedInState)
-          : SizedBox(
+              loggedInState: loggedInState,
+            );
+          } else if (snapshot.hasError) {
+            return SizedBox(
+              height: 300,
+              child: AlertDialog(
+                elevation: 4,
+                content: Align(
+                    alignment: Alignment.topCenter,
+                    child: loadingErrorWidget(
+                        textWidget: Text(
+                      "Error loading exams ...",
+                      style: customTheme.textTheme.labelMedium!
+                          .copyWith(fontSize: 18, fontWeight: FontWeight.bold),
+                    ))),
+              ),
+            );
+          } else {
+            return SizedBox(
               height: 300,
               child: AlertDialog(
                 elevation: 4,
@@ -90,7 +93,11 @@ class _ExamListScreenState extends State<ExamListScreen> {
                           .copyWith(fontSize: 18, fontWeight: FontWeight.bold),
                     ))),
               ),
-            ),
+            );
+          }
+        },
+      ),
+
       floatingActionButton: loggedInState.currentUserRole == "admin"
           ? FloatingActionButton(
               onPressed: () {

@@ -34,8 +34,6 @@ class _OptionTileState extends State<OptionTile> {
   @override
   Widget build(BuildContext context) {
     isChecked = widget.optionCreationProvider.isOptionChecked;
-    debugPrint(
-        "ISOPTIONCHECKED ${widget.optionCreationProvider.isOptionChecked}");
     return Form(
       key: _formKey,
       child: Row(
@@ -59,7 +57,7 @@ class _OptionTileState extends State<OptionTile> {
                   widget.optionCreationProvider.updateIsOptionChecked(value);
                 });
               }),
-           Expanded(
+          Expanded(
               child: TextFormField(
             decoration: customInputDecoration(hintText: 'Enter Option'),
             controller: widget.controller,
@@ -76,7 +74,6 @@ class _OptionTileState extends State<OptionTile> {
                 const SizedBox(
                   width: 10,
                 ),
-
                 SizedBox(
                   width: 80,
                   child: ElevatedButton(

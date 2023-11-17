@@ -1,5 +1,7 @@
 // ignore_for_file: file_names
 
+import 'dart:developer';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
@@ -9,7 +11,7 @@ import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/models/slide.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
-import 'package:isms/projectModules/courseManagement/moduleManagement/slideManagement/slidesCreationProvider.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/sharedWidgets/slidesCreationProvider.dart';
 import 'package:isms/projectModules/courseManagement/moduleManagement/slideManagement/slidesDataMaster.dart';
 import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
@@ -45,31 +47,21 @@ class SlideFormContainer extends StatefulWidget {
 }
 
 class _SlideFormContainerState extends State<SlideFormContainer> {
-  SlidesDataMaster? slidesDataMaster;
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
-    slidesDataMaster = SlidesDataMaster(
+    SlidesDataMaster slidesDataMaster = SlidesDataMaster(
         course: widget.course,
         coursesProvider: coursesProvider,
         module: widget.module);
 
-    return Consumer<SlidesCreationProvider>(
-      builder: (BuildContext context,
-          SlidesCreationProvider slidesCreationProvider, Widget? child) {
-        LoggedInState loggedInState = context.watch<LoggedInState>();
-        return Scaffold(
+    return ChangeNotifierProvider(
+      create: (_) => SlidesCreationProvider(),
+      child: Consumer<SlidesCreationProvider>(
+        builder: (BuildContext context,
+            SlidesCreationProvider slidesCreationProvider, Widget? child) {
+          LoggedInState loggedInState = context.watch<LoggedInState>();
+          return Scaffold(
             appBar:
                 PlatformCheck.topNavBarWidget(loggedInState, context: context),
             bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState,
@@ -85,16 +77,14 @@ class _SlideFormContainerState extends State<SlideFormContainer> {
                           scrollDirection: Axis.horizontal,
                           itemCount: slidesCreationProvider.noOfForms,
                           itemBuilder: (context, index) {
-                            return SlideForm(
-                              slidesCreationProvider: slidesCreationProvider,
-                            );
+                            return const SlideForm();
                           },
                         )),
                   ),
                   ElevatedButton(
                       style: customElevatedButtonStyle(),
                       onPressed: () async {
-                        await slidesDataMaster?.createSlides(
+                        await slidesDataMaster.createSlides(
                             slides: slidesCreationProvider.slidesList);
 
                         slidesCreationProvider.clearSlidesList();
@@ -104,15 +94,16 @@ class _SlideFormContainerState extends State<SlideFormContainer> {
                       child: const Text("Finish creating slides"))
                 ],
               ),
-            ));
-      },
+            ),
+          );
+        },
+      ),
     );
   }
 }
 
 class SlideForm extends StatefulWidget {
-  const SlideForm({super.key, required this.slidesCreationProvider});
-  final SlidesCreationProvider slidesCreationProvider;
+  const SlideForm({super.key});
 
   @override
   State<SlideForm> createState() => _SlideFormState();
@@ -123,10 +114,9 @@ class _SlideFormState extends State<SlideForm> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   bool isSlideAdded = false;
-  String contentBody = "";
-
   String result = '';
   final HtmlEditorController controller = HtmlEditorController();
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -134,6 +124,8 @@ class _SlideFormState extends State<SlideForm> {
 
   @override
   Widget build(BuildContext context) {
+    SlidesCreationProvider slidesCreationProvider =
+        context.watch<SlidesCreationProvider>();
     return SingleChildScrollView(
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -184,26 +176,19 @@ class _SlideFormState extends State<SlideForm> {
                               ToolbarType.nativeScrollable, //by default
                           onButtonPressed: (ButtonType type, bool? status,
                               Function? updateStatus) {
-                            debugPrint(
-                                "button '${type.name}' pressed, the current selected status is $status");
                             return true;
                           },
                           onDropdownChanged: (DropdownType type,
                               dynamic changed,
                               Function(dynamic)? updateSelectedItem) {
-                            debugPrint(
-                                "dropdown '${type.name}' changed to $changed");
                             return true;
                           },
                           mediaLinkInsertInterceptor:
                               (String url, InsertFileType type) {
-                            debugPrint(url);
                             return true;
                           },
                           mediaUploadInterceptor:
                               (PlatformFile file, InsertFileType type) async {
-                            debugPrint(
-                                "UPLOADDED IMAGGGEE :  ${file.name}"); //filename
                             final storageRef = FirebaseStorage.instance
                                 .ref()
                                 .child('images')
@@ -233,28 +218,36 @@ class _SlideFormState extends State<SlideForm> {
                         otherOptions: const OtherOptions(height: 700),
                         callbacks: Callbacks(
                             onBeforeCommand: (String? currentHtml) {
-                          debugPrint('html before change is $currentHtml');
-                        }, onChangeContent: (String? changed) {
-                          debugPrint('content changed to $changed');
-                        }, onChangeCodeview: (String? changed) {
-                          debugPrint('code changed to $changed');
-                        }, onChangeSelection: (EditorSettings settings) {
-                          debugPrint(
-                              'parent element is ${settings.parentElement}');
-                          debugPrint('font name is ${settings.fontName}');
-                        }, onDialogShown: () {
-                          debugPrint('dialog shown');
-                        }, onEnter: () {
-                          debugPrint('enter/return pressed');
-                        }, onFocus: () {
-                          debugPrint('editor focused');
-                        }, onBlur: () {
-                          debugPrint('editor unfocused');
-                        }, onBlurCodeview: () {
-                          debugPrint('codeview either focused or unfocused');
-                        }, onInit: () {
-                          debugPrint('init');
-                        },
+                              log('html before change is $currentHtml');
+                            },
+                            onChangeContent: (String? changed) {
+                              log('content changed to $changed');
+                            },
+                            onChangeCodeview: (String? changed) {
+                              log('code changed to $changed');
+                            },
+                            onChangeSelection: (EditorSettings settings) {
+                              log('parent element is ${settings.parentElement}');
+                              log('font name is ${settings.fontName}');
+                            },
+                            onDialogShown: () {
+                              log('dialog shown');
+                            },
+                            onEnter: () {
+                              log('enter/return pressed');
+                            },
+                            onFocus: () {
+                              log('editor focused');
+                            },
+                            onBlur: () {
+                              log('editor unfocused');
+                            },
+                            onBlurCodeview: () {
+                              log('codeview either focused or unfocused');
+                            },
+                            onInit: () {
+                              log('init');
+                            },
                             //this is commented because it overrides the default Summernote handlers
                             /*onImageLinkInsert: (String? url) {
                   debugPrint(url ?? "unknown url");
@@ -266,34 +259,29 @@ class _SlideFormState extends State<SlideForm> {
                   debugPrint(file.base64);
                 },*/
                             onImageUploadError: (FileUpload? file,
-                                String? base64Str, UploadError error) {
-                          debugPrint(error.name);
-                          debugPrint(base64Str ?? '');
-                          if (file != null) {
-                            if (kDebugMode) {
-                              print(file.name);
-                              print(file.size);
-                              print(file.type);
-                            }
-                          }
-                        }, onKeyDown: (int? keyCode) {
-                          debugPrint('$keyCode key downed');
-                          debugPrint(
-                              'current character count: ${controller.characterCount}');
-                        }, onKeyUp: (int? keyCode) {
-                          debugPrint('$keyCode key released');
-                        }, onMouseDown: () {
-                          debugPrint('mouse downed');
-                        }, onMouseUp: () {
-                          debugPrint('mouse released');
-                        }, onNavigationRequestMobile: (String url) {
-                          debugPrint(url);
-                          return NavigationActionPolicy.ALLOW;
-                        }, onPaste: () {
-                          debugPrint('pasted into editor');
-                        }, onScroll: () {
-                          debugPrint('editor scrolled');
-                        }),
+                                String? base64Str, UploadError error) {},
+                            onKeyDown: (int? keyCode) {
+                              log('$keyCode key downed');
+                              log('current character count: ${controller.characterCount}');
+                            },
+                            onKeyUp: (int? keyCode) {
+                              log('$keyCode key released');
+                            },
+                            onMouseDown: () {
+                              log('mouse downed');
+                            },
+                            onMouseUp: () {
+                              log('mouse released');
+                            },
+                            onNavigationRequestMobile: (String url) {
+                              return NavigationActionPolicy.ALLOW;
+                            },
+                            onPaste: () {
+                              log('pasted into editor');
+                            },
+                            onScroll: () {
+                              log('editor scrolled');
+                            }),
                         plugins: [
                           SummernoteAtMention(
                               getSuggestionsMobile: (String value) {
@@ -308,7 +296,7 @@ class _SlideFormState extends State<SlideForm> {
                               },
                               mentionsWeb: ['test1', 'test2', 'test3'],
                               onSelect: (String value) {
-                                debugPrint(value);
+                                log(value);
                               }),
                         ],
                       ),
@@ -362,14 +350,11 @@ class _SlideFormState extends State<SlideForm> {
                                     );
                                     setState(() {
                                       if (isSlideAdded == false) {
-                                        widget.slidesCreationProvider
+                                        slidesCreationProvider
                                             .addSlideToList(slide);
-                                        debugPrint(
-                                            "${widget.slidesCreationProvider.slidesList},,, $isSlideAdded");
                                         isSlideAdded = true;
                                       }
-                                      widget.slidesCreationProvider
-                                          .incrementFormNo();
+                                      slidesCreationProvider.incrementFormNo();
                                     });
                                   }
                                 },
@@ -399,41 +384,14 @@ class _SlideFormState extends State<SlideForm> {
                       );
                       setState(() {
                         if (isSlideAdded == false) {
-                          widget.slidesCreationProvider.addSlideToList(slide);
+                          slidesCreationProvider.addSlideToList(slide);
                           isSlideAdded = true;
-                          if (kDebugMode) {
-                            print(widget.slidesCreationProvider.slidesList);
-                          }
                         }
                       });
                     }
                   },
                   child: const Text('Add new slide'),
                 ),
-                // Container(
-                //   height: 50,
-                //   child: ElevatedButton(
-                //     onPressed: () async {
-                //       if (_formKey.currentState!.validate()) {
-                //         Slide slide = Slide(
-                //           id: generateRandomId(),
-                //           title: _titleController.text,
-                //           content: contentBody,
-                //         );
-                //         setState(() {
-                //           if (isSlideAdded == false) {
-                //             widget.slidesCreationProvider.addSlideToList(slide);
-                //             debugPrint(
-                //                 "${widget.slidesCreationProvider.slidesList},,, ${isSlideAdded}");
-                //             isSlideAdded = true;
-                //           }
-                //           widget.slidesCreationProvider.incrementFormNo();
-                //         });
-                //       }
-                //     },
-                //     child: Text('Add new Slide'),
-                //   ),
-                // ),
               ],
             ),
           ),

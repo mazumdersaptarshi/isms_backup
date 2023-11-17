@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../themes/common_theme.dart';
 
@@ -10,22 +9,21 @@ class CourseTile extends StatelessWidget {
   final int modulesCount;
   // double tileHeight;
   final double tileWidth;
-  final dynamic modulesCompleted;
-  final dynamic subTitle;
+  //dynamic? modulesCompleted;
+  final String subTitle;
   final Map<String, dynamic>? courseData;
-
-  final String? pageView;
+  final String pageView;
   const CourseTile(
       {super.key,
       required this.index,
       required this.title,
-      this.subTitle,
       required this.onPressed,
       required this.modulesCount,
       required this.courseData,
       required this.tileWidth,
-      this.modulesCompleted,
-      this.pageView});
+      //this.modulesCompleted,
+      this.subTitle = '',
+      this.pageView = ''});
 
   @override
   Widget build(BuildContext context) {
@@ -56,8 +54,8 @@ class CourseTile extends StatelessWidget {
                     flex: 1,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: SvgPicture.asset(
-                        "assets/images/courseIcons/courseIcon$imageIndex.svg",
+                      child: Image.asset(
+                        "assets/images/courseIcons/courseIcon$imageIndex.png",
                         // height: kIsWeb ? imgWebHeight : 150,
                         // width: kIsWeb ? imgWebWidth : 150,
                         // fit: BoxFit.contain,
@@ -105,7 +103,7 @@ class CourseTile extends StatelessWidget {
                                     if (pageView != 'explore')
                                       Expanded(
                                         child: Text(
-                                          "$subTitle",
+                                          subTitle,
                                           style: customTheme
                                               .textTheme.labelSmall!
                                               .copyWith(
@@ -118,7 +116,7 @@ class CourseTile extends StatelessWidget {
                                     else
                                       Expanded(
                                         child: Text(
-                                          '$subTitle',
+                                          subTitle,
                                           style: customTheme
                                               .textTheme.labelSmall!
                                               .copyWith(

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+<<<<<<< HEAD:ios/Runner/Runner.entitlements
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+		<string>applinks:isms-pvp.web.app</string>
+		<string>applinks:isms-pvp.firebaseapp.com</string>
+	</array>
+=======
+	<key>IDEDidComputeMac32BitWarning</key>
+	<true/>
+>>>>>>> beta-app-v1:ios/Runner.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
+</dict>
+</plist>

@@ -95,11 +95,6 @@ TextStyle commonTitleStyle = const TextStyle(
 ShapeBorder customCardShape = RoundedRectangleBorder(
   borderRadius: BorderRadius.circular(10.0),
 );
-
-// TODO
-// - build a colorscheme (start with `fromSeed()`)
-// - remove as much colors as possible from everywhere else
-// - same for other aspects of theme (font size, etc)
 ThemeData customTheme = ThemeData(
   fontFamily: 'Poppins',
   floatingActionButtonTheme: FloatingActionButtonThemeData(

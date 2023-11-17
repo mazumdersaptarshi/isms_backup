@@ -5,18 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
-import 'package:isms/projectModules/courseManagement/moduleManagement/slideManagement/slidesDataMaster.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/moduleExamsListScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/modulesListScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/createSlideScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/sharedWidgets/htmlSlideDisplay.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/slidesDisplayScreen.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
+import 'package:isms/sharedWidgets/navIndexTracker.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/utilityFunctions/platformCheck.dart';
 import 'package:provider/provider.dart';
-
-import '../../../../sharedWidgets/navIndexTracker.dart';
 
 class ModuleDetails extends StatefulWidget {
   const ModuleDetails(
@@ -32,7 +30,6 @@ class ModuleDetails extends StatefulWidget {
 }
 
 class _ModuleDetailsState extends State<ModuleDetails> {
-  SlidesDataMaster? slidesDataMaster;
   late String userRole;
   final isWeb = kIsWeb;
 
@@ -50,15 +47,11 @@ class _ModuleDetailsState extends State<ModuleDetails> {
 
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
 
-    slidesDataMaster = SlidesDataMaster(
-        course: widget.course,
-        coursesProvider: coursesProvider,
-        module: widget.module);
-
     Map<String, dynamic> courseDetailsMap = {
       "courseID": widget.course.id,
       "course_name": widget.course.name,
       "course_modules_count": widget.course.modulesCount,
+      "course_exams_count": widget.course.examsCount,
       "started_at": DateTime.now()
     };
     return Scaffold(
@@ -90,7 +83,6 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                           builder: (context) => SlidesDisplayScreen(
                             course: widget.course,
                             module: widget.module,
-                            slidesDataMaster: slidesDataMaster!,
                           ),
                         ),
                       );
@@ -124,6 +116,7 @@ class _ModuleDetailsState extends State<ModuleDetails> {
                   ),
                 ],
               ),
+              const SizedBox(height: 10),
               Card(
                 surfaceTintColor: Colors.white,
                 elevation: 4,
