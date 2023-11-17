@@ -2,7 +2,6 @@
 
 import 'dart:developer';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/models/enums.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/examCreationScreen.dart';
@@ -119,7 +118,6 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                       for (final question in allQuestions) {
                         if (question["questionID"] == qID) {
                           questionExists = true;
-                          debugPrint("QUESTION EXISTSSSSS");
                           if (newQuestionName != "") {
                             question["questionName"] = newQuestionName;
                           }
@@ -152,9 +150,6 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                             "options": options,
                           });
                         });
-                      }
-                      if (kDebugMode) {
-                        print('qwerty $allQuestions');
                       }
                     },
                     child: Text(

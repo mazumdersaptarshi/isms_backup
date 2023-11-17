@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 
 import 'newExam.dart';
 import 'slide.dart';
@@ -28,12 +27,12 @@ class Module {
 
   factory Module.fromMap(Map<String, dynamic> map) {
     return Module(
-        id: map['id'],
-        index: map['index'],
-        title: map['title'],
-        contentDescription: map['contentDescription'],
-        additionalInfo: map['additionalInfo'] ?? '',
-      );
+      id: map['id'],
+      index: map['index'],
+      title: map['title'],
+      contentDescription: map['contentDescription'],
+      additionalInfo: map['additionalInfo'] ?? '',
+    );
   }
 
   Map<String, dynamic> toMap() {
@@ -49,24 +48,18 @@ class Module {
   addSlides(List<Slide> newSlides) {
     if (slides != null) {
       slides!.addAll(newSlides);
-    } else {
-      debugPrint("not adding the slides locally, as there is no cache");
     }
   }
 
   addSlide(Slide slide) {
     if (slides != null) {
       slides!.add(slide);
-    } else {
-      debugPrint("not adding the slide locally, as there is no cache");
     }
   }
 
   addExam(NewExam exam) {
     if (exams != null) {
       exams!.add(exam);
-    } else {
-      debugPrint("not adding the module exam locally, as there is no cache");
     }
   }
 }

@@ -16,15 +16,15 @@ class AdminConsolePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
-  final List<AdminActions> adminActions = [
-    AdminActions(
-        name: 'User Management', icon: Icons.group, actionId: 'user_mgmt'),
-    AdminActions(
-        name: 'Course Management', icon: Icons.school, actionId: 'crs_mgmt'),
-    AdminActions(name: 'Instructions', icon: Icons.book, actionId: 'instr'),
-    AdminActions(
-        name: 'Download Data', icon: Icons.download, actionId: 'dwnld'),
-  ];
+    final List<AdminActions> adminActions = [
+      AdminActions(
+          name: 'User Management', icon: Icons.group, actionId: 'user_mgmt'),
+      AdminActions(
+          name: 'Course Management', icon: Icons.school, actionId: 'crs_mgmt'),
+      AdminActions(name: 'Instructions', icon: Icons.book, actionId: 'instr'),
+      AdminActions(
+          name: 'Download Data', icon: Icons.download, actionId: 'dwnld'),
+    ];
     AdminProvider adminConsoleProvider = Provider.of<AdminProvider>(context);
 
     return Scaffold(
@@ -38,7 +38,7 @@ class AdminConsolePage extends StatelessWidget {
             backgroundColor: Colors.deepPurpleAccent.shade100,
             expandedHeight: 250.0,
             automaticallyImplyLeading: false,
-            flexibleSpace: FlexibleSpaceBar(
+            flexibleSpace: const FlexibleSpaceBar(
                 background: UserProfileHeaderWidget(
               view: 'admin',
             )),

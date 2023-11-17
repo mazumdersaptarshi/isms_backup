@@ -1,11 +1,8 @@
 // ignore_for_file: file_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
-import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/models/newExam.dart';
-import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 import 'package:isms/projectModules/courseManagement/moduleManagement/moduleDataMaster.dart';
 
 class ModuleExamDataMaster extends ModuleDataMaster {
@@ -21,8 +18,7 @@ class ModuleExamDataMaster extends ModuleDataMaster {
   late final DocumentReference _moduleRef;
   late final CollectionReference _examsRef;
 
-  Future<bool> createModuleExam(
-      {required NewExam exam}) async {
+  Future<bool> createModuleExam({required NewExam exam}) async {
     // TODO fail if there is already an exam with this title
     try {
       //exam.index = module.examsCount + 1;
@@ -40,8 +36,6 @@ class ModuleExamDataMaster extends ModuleDataMaster {
       module.addExam(exam);
       //module.examsCount = exam.index;
 
-      debugPrint("Module Exam creation successful");
-
       coursesProvider.notifyListeners();
       return true;
     } catch (e) {
@@ -53,32 +47,26 @@ class ModuleExamDataMaster extends ModuleDataMaster {
     // this delay can be enabled to test the loading code
     //await Future.delayed(const Duration(milliseconds: 1000));
 
-    QuerySnapshot examsListSnapshot =
-      await _examsRef.orderBy("index").get();
-    if (module.exams == null)
+    QuerySnapshot examsListSnapshot = await _examsRef.orderBy("index").get();
+    if (module.exams == null) {
       module.exams = [];
-    else
+    } else {
       module.exams!.clear();
+    }
     for (var element in examsListSnapshot.docs) {
       NewExam exam = NewExam.fromMap(element.data() as Map<String, dynamic>);
       module.addExam(exam);
     }
-    //if (module.exams!.length != module.examsCount) {
-    //  debugPrint ("fetched ${module.exams!.length} module exams, was expecting ${module.examsCount}");
-    //}
     return module.exams!;
   }
 
   Future<List<NewExam>> get exams async {
     if (module.exams != null) {
-      debugPrint("module exams in cache, no need to fetch them");
       return module.exams!;
     } else {
-      debugPrint("module exams not in cache, trying to fetch them");
       try {
         return _fetchExams();
       } catch (e) {
-        debugPrint("error while fetching module exams: ${e}");
         module.exams = null;
         return [];
       }

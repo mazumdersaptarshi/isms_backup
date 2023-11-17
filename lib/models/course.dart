@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 
 import 'package:isms/models/module.dart';
 import 'package:isms/models/newExam.dart';
@@ -25,7 +24,7 @@ class Course {
     this.modulesCount = 0,
     this.examsCount = 0,
     this.description = "",
-    this.dateCreated = '',//DateTime.now().toString(),
+    this.dateCreated = '', //DateTime.now().toString(),
     this.modules = const [],
     this.exams = const [],
   });
@@ -33,17 +32,17 @@ class Course {
   // shallow-import a course from Firestore (skip subcollections)
   factory Course.fromMap(Map<String, dynamic> map) {
     return Course(
-        id: map['id'],
-        name: map['name'],
-        modulesCount: map["modulesCount"],
-        examsCount: map["examsCount"],
-        description: map['description'] ?? "",
-        modules: null,
-        exams: null,
-        dateCreated:
-            // TODO store a Timestamp
-            CSVDataHandler.timestampToReadableDateInWords(map['createdAt']),
-      );
+      id: map['id'],
+      name: map['name'],
+      modulesCount: map["modulesCount"],
+      examsCount: map["examsCount"],
+      description: map['description'] ?? "",
+      modules: null,
+      exams: null,
+      dateCreated:
+          // TODO store a Timestamp
+          CSVDataHandler.timestampToReadableDateInWords(map['createdAt']),
+    );
   }
 
   Map<String, dynamic> toMap() {
@@ -60,16 +59,12 @@ class Course {
   addModule(Module module) {
     if (modules != null) {
       modules!.add(module);
-    } else {
-      debugPrint("not adding the module locally, as there is no cache");
     }
   }
 
   addExam(NewExam exam) {
     if (exams != null) {
       exams!.add(exam);
-    } else {
-      debugPrint("not adding the course exam locally, as there is no cache");
     }
   }
 }

@@ -34,21 +34,19 @@ class LoggedInState extends _UserDataGetterMaster {
     //_auth.setPersistence(Persistence.NONE);
     _auth.authStateChanges().listen((User? user) {
       if (user == null) {
-        debugPrint(
-            "auth state changed: no account currently signed into Firebase");
         clear();
         // this needs to be called at the end og this branch, because we
         // should only refresh the fisplay after `clear()` has
-        // completed, 
+        // completed,
         notifyListeners();
       } else {
-        debugPrint(
-            "auth state changed: ${user.email} currently signed into Firebase");
         _fetchFromFirestore(user).then((value) {
-          storeUserCoursesData(currentUserSnapshot!);
+          if (currentUserSnapshot != null) {
+            storeUserCoursesData(currentUserSnapshot!);
+          }
           // this needs to be called in `then()`, because we should only
           // refresh the fisplay after `storeUserCoursesData()` has
-          // completed, 
+          // completed,
           notifyListeners();
         });
       }
@@ -100,7 +98,6 @@ class _UserDataGetterMaster with ChangeNotifier {
 
   static Future<void> createUserData(CustomUser customUser) async {
     Map<String, dynamic> userJson = customUser.toMap();
-    debugPrint("creating the user $userJson");
     await db.collection('users').doc(customUser.uid).set(userJson);
 
     //Also creating a reference to the user on Admin side
@@ -148,11 +145,9 @@ class _UserDataGetterMaster with ChangeNotifier {
 
   // fetch data from Firestore and store it in the app
   Future<void> _fetchFromFirestore(User user) async {
-    _userRef =
-        FirebaseFirestore.instance.collection('users').doc(user.uid);
+    _userRef = FirebaseFirestore.instance.collection('users').doc(user.uid);
     DocumentSnapshot userSnapshot = await _userRef!.get();
     if (userSnapshot.exists) {
-      debugPrint('data fetched from Firestore for user ${user.email}');
       _currentUserSnapshot = userSnapshot;
       Map<String, dynamic>? userData =
           userSnapshot.data() as Map<String, dynamic>?;
@@ -162,7 +157,6 @@ class _UserDataGetterMaster with ChangeNotifier {
       // to access it by setting _currentUser
       _currentUser = user;
     } else {
-      debugPrint('user ${user.email} not found in Firestore');
       // no data was found in Firestore for this user, so something went
       // wrong during the account creation and we cannot proceed with
       // the sign-in, therefore we sign out
@@ -184,11 +178,8 @@ class _UserDataGetterMaster with ChangeNotifier {
   void listenToChanges() {
     currentUserDocumentReference?.snapshots().listen((snapshot) {
       if (snapshot.exists) {
-        debugPrint('user document was modified: storing new content');
         storeUserCoursesData(snapshot);
         notifyListeners();
-      } else {
-        debugPrint('user document was deleted');
       }
     });
   }
@@ -217,21 +208,16 @@ class _UserDataGetterMaster with ChangeNotifier {
           }
         }
       }
-    } else {
-      debugPrint('user document was deleted');
     }
   }
 
   //Getter function for all course related info from users collection, for the logged in User
   //Basically populates the two static global variables allEnrolledCoursesGlobal and allCompletedCoursesGlobal
   Future<void> refreshUserCoursesData() async {
-    debugPrint("Fetching fresh data");
-
     DocumentSnapshot? newCurrentUserDocumentSnapshot =
         await newCurrentUserSnapshot;
 
     storeUserCoursesData(newCurrentUserDocumentSnapshot!);
-    debugPrint('890io: $allEnrolledCoursesGlobal');
   }
 
   Future<List> getUserCoursesData(String actionId) async {
@@ -445,7 +431,6 @@ class _UserDataGetterMaster with ChangeNotifier {
       required String username,
       required String uid,
       required String courseMapFieldToUpdate}) async {
-    debugPrint("ENTERED setAdminConsoleCourseMap");
     DocumentSnapshot courseSnapshot = await FirebaseFirestore.instance
         .collection("adminconsole")
         .doc("allcourses")
@@ -455,16 +440,21 @@ class _UserDataGetterMaster with ChangeNotifier {
     if (courseSnapshot.exists) {
       Map<String, dynamic> courseMap =
           courseSnapshot.data() as Map<String, dynamic>;
-      if (courseMap[courseMapFieldToUpdate] == null) {
+      if (!courseMap.containsKey(courseMapFieldToUpdate)) {
         courseMap[courseMapFieldToUpdate] = [];
       }
-      courseMap[courseMapFieldToUpdate].add({"username": username, "uid": uid});
-      await FirebaseFirestore.instance
-          .collection("adminconsole")
-          .doc("allcourses")
-          .collection("allCourseItems")
-          .doc(courseName)
-          .set(courseMap);
+      if (courseMap[courseMapFieldToUpdate]
+              .indexWhere((course) => course["uid"] == uid) ==
+          -1) {
+        courseMap[courseMapFieldToUpdate]
+            .add({"username": username, "uid": uid});
+        await FirebaseFirestore.instance
+            .collection("adminconsole")
+            .doc("allcourses")
+            .collection("allCourseItems")
+            .doc(courseName)
+            .set(courseMap);
+      }
     }
   }
 }
