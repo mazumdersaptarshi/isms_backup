@@ -74,6 +74,6 @@ class DefaultFirebaseOptions {
         '1064574915790-bb51ulg7ps66gt7do66e16jjghsccfmm.apps.googleusercontent.com',
     iosClientId:
         '1064574915790-1o3o8npl6rt4rcvu7vl9hq8prbmevcql.apps.googleusercontent.com',
-    iosBundleId: 'com.isms.prod.RunnerTests',
+    iosBundleId: 'com.example.isms.RunnerTests',
   );
 }
