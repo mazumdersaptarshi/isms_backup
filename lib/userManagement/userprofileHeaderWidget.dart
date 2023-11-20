@@ -21,25 +21,32 @@ class UserProfileHeaderWidget extends StatelessWidget {
         children: [
           if (loggedInState.currentUser?.photoURL != null)
             Padding(
-                padding: const EdgeInsets.only(
-                    top: 25.0), // Increased padding on the top
-                child: (view == 'admin')
-                    ? const Icon(
-                        Icons.supervisor_account_rounded,
-                        size: 100,
-                        color: Colors.white,
-                      )
-                    : const Icon(
-                        Icons.account_circle,
-                        size: 100,
-                        color: Colors.white,
-                      )
-                // CircleAvatar(
-                //   radius: 50,
-                //   backgroundImage:
-                //       NetworkImage(loggedInState.currentUser!.photoURL!),
-                // ),
-                ),
+              padding: const EdgeInsets.only(
+                  top: 25.0), // Increased padding on the top
+              // child: (view == 'admin')
+              //     ? const Icon(
+              //         Icons.supervisor_account_rounded,
+              //         size: 100,
+              //         color: Colors.white,
+              //       )
+              //     : const Icon(
+              //         Icons.account_circle,
+              //         size: 100,
+              //         color: Colors.white,
+              //       )
+              child: (NetworkImage(loggedInState.currentUser!.photoURL!) !=
+                      null)
+                  ? CircleAvatar(
+                      radius: 50,
+                      backgroundImage:
+                          NetworkImage(loggedInState.currentUser!.photoURL!),
+                    )
+                  : const Icon(
+                      Icons.account_circle,
+                      size: 100,
+                      color: Colors.white,
+                    ),
+            ),
           const SizedBox(
             height: 10,
           ),
