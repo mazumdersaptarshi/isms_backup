@@ -3,6 +3,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:isms/projectModules/notificationModules/initLinkHandler.dart';
 import 'package:isms/screens/homePage.dart';
 import 'package:isms/sharedWidgets/loadingScreenWidget.dart';
 import 'package:isms/themes/common_theme.dart';
@@ -22,8 +23,10 @@ class LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
+    String? initialLink;
 
     if (loggedInState.currentUser != null) {
+      InitLinkHandler.initLinks(context: context);
       return const HomePage();
     }
 

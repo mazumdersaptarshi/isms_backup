@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:footer/footer.dart';
 import 'package:footer/footer_view.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
-import 'package:isms/projectModules/notificationModules/initLinkHandler.dart';
 import 'package:isms/screens/homePageWidgets/homePageMainContent.dart';
 import 'package:isms/sharedWidgets/appFooter.dart';
 import 'package:isms/themes/common_theme.dart';
@@ -25,13 +24,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late String userRole;
-  String? initialLink;
+  //String? initialLink;
 
   @override
   void initState() {
     super.initState();
-
-    InitLinkHandler.initLinks(context: context);
+    //InitLinkHandler.initLinks(context: context);
   }
 
   // Utility function to check and potentially create the admin document
