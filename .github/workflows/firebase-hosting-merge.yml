@@ -23,6 +23,9 @@ jobs:
 
       # New step to deploy to Firebase using the Firebase CLI
       - name: Deploy to Firebase
-        run: firebase deploy --token "$FIREBASE_TOKEN"
+        run: |
+          echo "Token length: ${#FIREBASE_TOKEN}" # This is just for debugging; it will print the length of the token.
+          firebase deploy --token "${{ secrets.FIREBASE_TOKEN }}"
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+
