@@ -42,7 +42,7 @@ class _OptionTileState extends State<OptionTile> {
               fillColor: MaterialStateProperty.resolveWith<Color>(
                   (Set<MaterialState> states) {
                 if (states.contains(MaterialState.disabled)) {
-                  return Colors.grey; // Fill color for the disabled state
+                  return secondaryColor; // Fill color for the disabled state
                 }
                 if (states.contains(MaterialState.selected)) {
                   return primaryColor; // Fill color when the checkbox is checked

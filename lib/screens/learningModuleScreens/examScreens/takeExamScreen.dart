@@ -110,9 +110,6 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
   }
 
   Widget buildScoreWidget() {
-    //LoggedInState loggedInState = Provider.of<LoggedInState>(context);
-    //CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
-
     int correctAnswers = 0;
     for (int i = 0; i < _questions.length; i++) {
       if (Set.from(_questions[i].shuffledCorrectAnswers)
@@ -123,103 +120,88 @@ class _TakeExamScreenState extends State<TakeExamScreen> {
 
     double percentageScore = (correctAnswers / _questions.length) * 100;
     double failedScore = 100 - percentageScore;
+    bool isPassed = percentageScore >= widget.exam.passingPercentage;
 
-    if (percentageScore < 75) {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 30.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                alignment: Alignment.center,
-                height: 250,
-                width: MediaQuery.of(context).size.width,
-                child: Text(
-                    'Your Score is: $correctAnswers/${_questions.length}. You need to get 75% to pass.'),
-              ),
-              SizedBox(
-                height: 50,
-                width: 50,
-                child: PieChart(PieChartData(centerSpaceRadius: 40, sections: [
-                  PieChartSectionData(
-                    value: percentageScore,
-                    title: '${percentageScore.toStringAsFixed(1)}%',
-                    radius: 80,
-                    color: Colors.deepPurpleAccent.shade100,
-                  ),
-                  PieChartSectionData(
+    Color passColor = isPassed
+        ? Theme.of(context).colorScheme.primary
+        : Theme.of(context).colorScheme.secondary;
+    String resultText = isPassed
+        ? 'Congratulations!, you passed\n Your Score is: $correctAnswers/${_questions.length}'
+        : 'Your Score is : $correctAnswers/${_questions.length} \n You need at least ${widget.exam.passingPercentage}% to pass';
+
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 30.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(resultText,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.headlineSmall),
+            const SizedBox(height: 50),
+            SizedBox(
+              height: 200,
+              width: 200,
+              child: PieChart(
+                PieChartData(
+                  borderData: FlBorderData(show: true),
+                  centerSpaceRadius: 60,
+                  sections: [
+                    PieChartSectionData(
+                      value: percentageScore,
+                      title: '${percentageScore.toStringAsFixed(1)}%',
+                      color: passColor,
+                      radius: 80,
+                      titleStyle: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                      titlePositionPercentageOffset: 0.55,
+                    ),
+                    PieChartSectionData(
                       value: failedScore,
-                      title: '${failedScore.toStringAsFixed(1)}%',
-                      color: const Color.fromARGB(255, 255, 167, 167),
-                      radius: 75),
-                ])),
-              ),
-              const SizedBox(height: 150),
-              ElevatedButton(
-                onPressed: () => setState(() {
-                  shuffleQuestions();
-                  _currentIndex = 0;
-                  _selectedAnswers =
-                      List.generate(_questions.length, (index) => <int>{});
-                  _showScore = false;
-                }),
-                child: const Text('Retake Exam'),
-              )
-            ],
-          ),
-        ),
-      );
-    } else {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 30.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                alignment: Alignment.center,
-                height: 250,
-                width: MediaQuery.of(context).size.width,
-                child: Text(
-                  'Congratulations! Your Score is: $correctAnswers/${_questions.length}',
+                      title: '',
+                      color: Colors.grey[300],
+                      radius: 40,
+                    ),
+                  ],
+                  sectionsSpace: 0,
+                  pieTouchData: PieTouchData(
+                    touchCallback: (FlTouchEvent event, pieTouchResponse) {
+                      setState(() {
+                        if (!event.isInterestedForInteractions ||
+                            pieTouchResponse == null ||
+                            pieTouchResponse.touchedSection == null) {
+                          return;
+                        }
+                      });
+                    },
+                  ),
                 ),
               ),
-              SizedBox(
-                height: 50,
-                width: 50,
-                child: PieChart(PieChartData(centerSpaceRadius: 40, sections: [
-                  PieChartSectionData(
-                    value: percentageScore,
-                    title: '${percentageScore.toStringAsFixed(1)}%',
-                    radius: 80,
-                    color: Colors.deepPurpleAccent.shade100,
-                  ),
-                  PieChartSectionData(
-                      value: failedScore,
-                      title: '${failedScore.toStringAsFixed(1)}%',
-                      color: const Color.fromARGB(255, 255, 167, 167),
-                      radius: 75),
-                ])),
-              ),
-              const SizedBox(height: 100),
+            ),
+            const SizedBox(height: 60),
+            if (isPassed)
               widget.examCompletionStrategy.buildSumbitButton(context: context),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () => setState(() {
-                  shuffleQuestions();
-                  _currentIndex = 0;
-                  _selectedAnswers =
-                      List.generate(_questions.length, (index) => <int>{});
-                  _showScore = false;
-                }),
-                child: const Text('Retry for Fun!'),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () => setState(() {
+                shuffleQuestions();
+                _currentIndex = 0;
+                _selectedAnswers =
+                    List.generate(_questions.length, (index) => <int>{});
+                _showScore = false;
+              }),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: secondaryColor,
               ),
-            ],
-          ),
+              child: const Text('Retake Exam'),
+            )
+          ],
         ),
-      );
-    }
+      ),
+    );
   }
 
   Widget buildExamWidget() {

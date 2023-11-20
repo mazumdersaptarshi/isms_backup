@@ -1,11 +1,11 @@
 // ignore_for_file: file_names
 
-import 'dart:developer';
-
+import 'package:logging/logging.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
 import 'package:isms/adminManagement/createUserReferenceForAdmin.dart';
 import 'package:isms/models/newExam.dart';
 
@@ -34,12 +34,16 @@ class LoggedInState extends _UserDataGetterMaster {
     //_auth.setPersistence(Persistence.NONE);
     _auth.authStateChanges().listen((User? user) {
       if (user == null) {
+        logger.info(
+            "auth state changed: no account currently signed into Firebase");
         clear();
         // this needs to be called at the end og this branch, because we
         // should only refresh the fisplay after `clear()` has
         // completed,
         notifyListeners();
       } else {
+        logger.info(
+            "auth state changed: ${user.email} currently signed into Firebase");
         _fetchFromFirestore(user).then((value) {
           if (currentUserSnapshot != null) {
             storeUserCoursesData(currentUserSnapshot!);
@@ -96,6 +100,8 @@ class _UserDataGetterMaster with ChangeNotifier {
   List<dynamic> allCompletedCoursesGlobal =
       []; //Global List to hold all completed courses for User
 
+  final Logger logger = Logger('Account');
+
   static Future<void> createUserData(CustomUser customUser) async {
     Map<String, dynamic> userJson = customUser.toMap();
     await db.collection('users').doc(customUser.uid).set(userJson);
@@ -148,6 +154,7 @@ class _UserDataGetterMaster with ChangeNotifier {
     _userRef = FirebaseFirestore.instance.collection('users').doc(user.uid);
     DocumentSnapshot userSnapshot = await _userRef!.get();
     if (userSnapshot.exists) {
+      logger.info('data fetched from Firestore for user ${user.email}');
       _currentUserSnapshot = userSnapshot;
       Map<String, dynamic>? userData =
           userSnapshot.data() as Map<String, dynamic>?;
@@ -157,6 +164,7 @@ class _UserDataGetterMaster with ChangeNotifier {
       // to access it by setting _currentUser
       _currentUser = user;
     } else {
+      logger.warning('user ${user.email} not found in Firestore');
       // no data was found in Firestore for this user, so something went
       // wrong during the account creation and we cannot proceed with
       // the sign-in, therefore we sign out
@@ -178,8 +186,11 @@ class _UserDataGetterMaster with ChangeNotifier {
   void listenToChanges() {
     currentUserDocumentReference?.snapshots().listen((snapshot) {
       if (snapshot.exists) {
+        logger.info('user document was modified: storing new content');
         storeUserCoursesData(snapshot);
         notifyListeners();
+      } else {
+        logger.warning('user document was deleted');
       }
     });
   }
@@ -208,6 +219,8 @@ class _UserDataGetterMaster with ChangeNotifier {
           }
         }
       }
+    } else {
+      logger.warning('user document was deleted');
     }
   }
 
@@ -234,12 +247,8 @@ class _UserDataGetterMaster with ChangeNotifier {
     bool flag = false;
     if (loggedInUser.courses_started.isNotEmpty) {
       for (var course in loggedInUser.courses_started) {
-        try {
-          if (course['courseID'] == courseDetails['courseID']) {
-            flag = true;
-          }
-        } catch (e) {
-          log(e.toString());
+        if (course['courseID'] == courseDetails['courseID']) {
+          flag = true;
         }
       }
     }
@@ -259,12 +268,8 @@ class _UserDataGetterMaster with ChangeNotifier {
     bool flag = false;
     if (loggedInUser.courses_completed.isNotEmpty) {
       for (var course in loggedInUser.courses_completed) {
-        try {
-          if (course['courseID'] == courseDetails['courseID']) {
-            flag = true;
-          }
-        } catch (e) {
-          log(e.toString());
+        if (course['courseID'] == courseDetails['courseID']) {
+          flag = true;
         }
       }
     }
@@ -388,41 +393,37 @@ class _UserDataGetterMaster with ChangeNotifier {
       required Course course,
       required Module module,
       required int examIndex}) async {
-    try {
-      int courseIndex = loggedInUser.courses_started.indexWhere(
-          (courseInList) =>
-              courseInList["courseID"] == courseDetails["courseID"]);
-      if (courseIndex > -1) {
-        int moduleIndex = loggedInUser.courses_started[courseIndex]
-                ["modules_started"]
-            .indexWhere(
-                (moduleInList) => moduleInList["module_name"] == module.title);
-        if (moduleIndex > -1) {
-          Map<String, dynamic> startedModule = loggedInUser
-              .courses_started[courseIndex]["modules_started"][moduleIndex];
-          if (!startedModule.containsKey("exams_completed")) {
-            startedModule.addAll({"exams_completed": []});
-          }
-          if (!startedModule["exams_completed"].contains(examIndex)) {
-            startedModule["exams_completed"].add(examIndex);
-            loggedInUser.courses_started[courseIndex]["modules_started"]
-                [moduleIndex] = startedModule;
-            await setUserData();
-            if (startedModule["exams_completed"].length >=
-                module.exams?.length) {
-              await setUserCourseModuleCompleted(
-                  courseDetails: courseDetails,
-                  coursesProvider: coursesProvider,
-                  course: course,
-                  module: module);
-            }
+    int courseIndex = loggedInUser.courses_started.indexWhere(
+        (courseInList) =>
+            courseInList["courseID"] == courseDetails["courseID"]);
+    if (courseIndex > -1) {
+      int moduleIndex = loggedInUser.courses_started[courseIndex]
+              ["modules_started"]
+          .indexWhere(
+              (moduleInList) => moduleInList["module_name"] == module.title);
+      if (moduleIndex > -1) {
+        Map<String, dynamic> startedModule = loggedInUser
+            .courses_started[courseIndex]["modules_started"][moduleIndex];
+        if (!startedModule.containsKey("exams_completed")) {
+          startedModule.addAll({"exams_completed": []});
+        }
+        if (!startedModule["exams_completed"].contains(examIndex)) {
+          startedModule["exams_completed"].add(examIndex);
+          loggedInUser.courses_started[courseIndex]["modules_started"]
+              [moduleIndex] = startedModule;
+          await setUserData();
+          if (startedModule["exams_completed"].length >=
+              module.exams?.length) {
+            await setUserCourseModuleCompleted(
+                courseDetails: courseDetails,
+                coursesProvider: coursesProvider,
+                course: course,
+                module: module);
           }
         }
       }
-      //moduleStartedIndex++;*/
-    } catch (e) {
-      log(e.toString());
     }
+    //moduleStartedIndex++;*/
   }
   //notifyListeners();
 

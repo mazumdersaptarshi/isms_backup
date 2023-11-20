@@ -2,7 +2,9 @@
 
 import 'dart:developer';
 
+import 'package:logging/logging.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/projectModules/courseManagement/coursesDataMaster.dart';
@@ -18,6 +20,8 @@ class ModuleDataMaster extends CoursesDataMaster {
   final Course course;
   late final DocumentReference _courseRef;
   late final CollectionReference _modulesRef;
+
+  final Logger logger = Logger("Modules");
 
   CollectionReference get modulesRef => _modulesRef;
 
@@ -59,19 +63,21 @@ class ModuleDataMaster extends CoursesDataMaster {
       course.addModule(module);
     }
     if (course.modules!.length != course.modulesCount) {
-      log("fetched ${course.modules!.length} modules, was expecting ${course.modulesCount}");
+      logger.warning("fetched ${course.modules!.length} modules, was expecting ${course.modulesCount}");
     }
     return course.modules!;
   }
 
   Future<List<Module>> get modules async {
     if (course.modules != null) {
+      logger.info("modules in cache, no need to fetch them");
       return course.modules!;
     } else {
+      logger.info("modules not in cache, trying to fetch them");
       try {
         return _fetchModules();
       } catch (e) {
-        log("error while fetching modules: $e");
+        logger.severe("error while fetching modules", e);
         course.modules = null;
         return [];
       }

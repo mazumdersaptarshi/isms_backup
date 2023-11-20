@@ -1,3 +1,4 @@
+import 'package:logging/logging.dart';
 
 import 'newExam.dart';
 import 'slide.dart';
@@ -15,6 +16,8 @@ class Module {
   // so they are nullable
   List<Slide>? slides;
   List<NewExam>? exams;
+
+  final log = Logger("Module");
 
   Module(
       {required this.title,
@@ -48,18 +51,24 @@ class Module {
   addSlides(List<Slide> newSlides) {
     if (slides != null) {
       slides!.addAll(newSlides);
+    } else {
+      log.info("not adding the course exam locally, as there is no cache");
     }
   }
 
   addSlide(Slide slide) {
     if (slides != null) {
       slides!.add(slide);
+    } else {
+      log.info("not adding the slide locally, as there is no cache");
     }
   }
 
   addExam(NewExam exam) {
     if (exams != null) {
       exams!.add(exam);
+    } else {
+      log.info("not adding the module exam locally, as there is no cache");
     }
   }
 }
