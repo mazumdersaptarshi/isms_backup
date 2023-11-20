@@ -23,7 +23,6 @@ class LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
-    String? initialLink;
 
     if (loggedInState.currentUser != null) {
       InitLinkHandler.initLinks(context: context);
