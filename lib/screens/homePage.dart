@@ -70,8 +70,8 @@ class _HomePageState extends State<HomePage> {
 
     userRole = loggedInState.currentUserRole;
 
-    return Consumer<CoursesProvider>(
-        builder: (BuildContext context, CoursesProvider coursesProvider, Widget? child) {
+    return Consumer<CoursesProvider>(builder:
+        (BuildContext context, CoursesProvider coursesProvider, Widget? child) {
       return Scaffold(
           backgroundColor: Colors.white,
           bottomNavigationBar:

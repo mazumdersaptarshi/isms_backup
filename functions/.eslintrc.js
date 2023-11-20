@@ -17,16 +17,13 @@ module.exports = {
     "prefer-arrow-callback": "error",
     "quotes": ["error", "double", {"allowTemplateLiterals": true}],
     "@typescript-eslint/no-var-requires": "off",
-
+    "require-jsdoc": "off",
   },
   overrides: [
     {
       files: ["**/*.spec.*"],
       env: {
         mocha: true,
-      },
-      rules: {
-        "require-jsdoc": 0,
       },
     },
   ],

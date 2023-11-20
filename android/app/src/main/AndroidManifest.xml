@@ -24,7 +24,6 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="https" android:host="oddly-fast-elk.ngrok-free.app" />
                 <data android:scheme="https" android:host="isms-pvp.web.app" />
                 <data android:scheme="https" android:host="isms-pvp.firebaseapp.com" />
             </intent-filter>
