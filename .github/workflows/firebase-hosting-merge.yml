@@ -13,13 +13,9 @@ jobs:
         with:
           flutter-version: '3.13.9'
       - run: flutter build web --release
-      - name: Build Firebase Functions
-        run: firebase deploy --only functions
-      - name: Deploy to Firebase
-        uses: FirebaseExtended/action-hosting-deploy@v0
+      - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_ISMS_2C025 }}'
           channelId: live
           projectId: isms-2c025
-
