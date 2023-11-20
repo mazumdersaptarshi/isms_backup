@@ -6,15 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:footer/footer.dart';
 import 'package:footer/footer_view.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
-import 'package:isms/projectModules/notificationModules/initLinkHandler.dart';
 import 'package:isms/screens/homePageWidgets/homePageMainContent.dart';
+import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/sharedWidgets/appFooter.dart';
 import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/utilityFunctions/platformCheck.dart';
 import 'package:provider/provider.dart';
-
-import 'login/loginScreen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -25,14 +23,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late String userRole;
-  String? initialLink;
-
-  @override
-  void initState() {
-    super.initState();
-
-    InitLinkHandler.initLinks(context: context);
-  }
 
   // Utility function to check and potentially create the admin document
   Future<void> checkAndCreateUserDocument(
@@ -70,8 +60,8 @@ class _HomePageState extends State<HomePage> {
 
     userRole = loggedInState.currentUserRole;
 
-    return Consumer<CoursesProvider>(
-        builder: (BuildContext context, CoursesProvider coursesProvider, Widget? child) {
+    return Consumer<CoursesProvider>(builder:
+        (BuildContext context, CoursesProvider coursesProvider, Widget? child) {
       return Scaffold(
           backgroundColor: Colors.white,
           bottomNavigationBar:
