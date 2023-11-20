@@ -32,7 +32,7 @@ class LoggedInState extends _UserDataGetterMaster {
   LoggedInState() {
     // for testing purposes
     //_auth.setPersistence(Persistence.NONE);
-    _auth.authStateChanges().listen((User? user) {
+    _auth.authStateChanges().listen((User? user) async {
       if (user == null) {
         logger.info(
             "auth state changed: no account currently signed into Firebase");
@@ -44,6 +44,9 @@ class LoggedInState extends _UserDataGetterMaster {
       } else {
         logger.info(
             "auth state changed: ${user.email} currently signed into Firebase");
+        // ensure the app has a user entry for this account
+        await _UserDataGetterMaster.ensureUserDataExists(
+            FirebaseAuth.instance.currentUser);
         _fetchFromFirestore(user).then((value) {
           if (currentUserSnapshot != null) {
             storeUserCoursesData(currentUserSnapshot!);
@@ -74,10 +77,6 @@ class LoggedInState extends _UserDataGetterMaster {
     // ignore: unused_local_variable
     UserCredential userCredential =
         await FirebaseAuth.instance.signInWithCredential(credential);
-
-    // ensure the app has a user entry for this account
-    _UserDataGetterMaster.ensureUserDataExists(
-        FirebaseAuth.instance.currentUser);
   }
 
   static Future<void> logout() async {
@@ -393,9 +392,8 @@ class _UserDataGetterMaster with ChangeNotifier {
       required Course course,
       required Module module,
       required int examIndex}) async {
-    int courseIndex = loggedInUser.courses_started.indexWhere(
-        (courseInList) =>
-            courseInList["courseID"] == courseDetails["courseID"]);
+    int courseIndex = loggedInUser.courses_started.indexWhere((courseInList) =>
+        courseInList["courseID"] == courseDetails["courseID"]);
     if (courseIndex > -1) {
       int moduleIndex = loggedInUser.courses_started[courseIndex]
               ["modules_started"]
@@ -412,8 +410,7 @@ class _UserDataGetterMaster with ChangeNotifier {
           loggedInUser.courses_started[courseIndex]["modules_started"]
               [moduleIndex] = startedModule;
           await setUserData();
-          if (startedModule["exams_completed"].length >=
-              module.exams?.length) {
+          if (startedModule["exams_completed"].length >= module.exams?.length) {
             await setUserCourseModuleCompleted(
                 courseDetails: courseDetails,
                 coursesProvider: coursesProvider,
