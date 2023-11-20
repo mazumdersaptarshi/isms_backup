@@ -25,12 +25,13 @@ class AdminInstructionCategories extends StatelessWidget {
 
     return Scaffold(
       appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
+      bottomNavigationBar:
+          PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: subCategories != null
               ? Center(
-                  // Centers horizontally
                   child: Container(
                     constraints: BoxConstraints(
                       maxWidth: (MediaQuery.of(context).size.width > 1000
@@ -88,8 +89,6 @@ class AdminInstructionCategories extends StatelessWidget {
               : const Center(child: Text('No sub-categories found')),
         ),
       ),
-      bottomNavigationBar:
-          PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
     );
   }
 }

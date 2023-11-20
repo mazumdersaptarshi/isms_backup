@@ -1,3 +1,4 @@
+import 'package:logging/logging.dart';
 
 import 'package:isms/models/module.dart';
 import 'package:isms/models/newExam.dart';
@@ -16,6 +17,8 @@ class Course {
   // so they are nullable
   List<Module>? modules;
   List<NewExam>? exams;
+
+  final log = Logger("Course");
 
   // create a course locally
   Course({
@@ -59,12 +62,16 @@ class Course {
   addModule(Module module) {
     if (modules != null) {
       modules!.add(module);
+    } else {
+      log.info("not adding the module locally, as there is no cache");
     }
   }
 
   addExam(NewExam exam) {
     if (exams != null) {
       exams!.add(exam);
+    } else {
+      log.info("not adding the course exam locally, as there is no cache");
     }
   }
 }

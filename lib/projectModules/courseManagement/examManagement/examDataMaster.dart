@@ -1,8 +1,8 @@
 // ignore_for_file: file_names
 
-import 'dart:developer';
-
+import 'package:logging/logging.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:isms/models/course.dart';
 import 'package:isms/models/newExam.dart';
 import 'package:isms/projectModules/courseManagement/coursesDataMaster.dart';
@@ -18,6 +18,8 @@ class ExamDataMaster extends CoursesDataMaster {
   final Course course;
   late final DocumentReference _courseRef;
   late final CollectionReference _examsRef;
+
+  final Logger logger = Logger('Course exams');
 
   Future<bool> createCourseExam({required NewExam exam}) async {
     // TODO fail if there is already an exam with this title
@@ -56,18 +58,21 @@ class ExamDataMaster extends CoursesDataMaster {
       course.addExam(exam);
     }
     if (course.exams!.length != course.examsCount) {
-      log("fetched ${course.exams!.length} course exams, was expecting ${course.examsCount}");
+      logger.warning("fetched ${course.exams!.length} course exams, was expecting ${course.examsCount}");
     }
     return course.exams!;
   }
 
   Future<List<NewExam>> get exams async {
     if (course.exams != null) {
+      logger.info("course exams in cache, no need to fetch them");
       return course.exams!;
     } else {
+      logger.info("course exams not in cache, trying to fetch them");
       try {
         return _fetchExams();
       } catch (e) {
+        logger.severe("error while fetching course exams", e);
         course.exams = null;
         return [];
       }

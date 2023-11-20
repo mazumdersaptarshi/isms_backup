@@ -1,21 +1,20 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:isms/models/course.dart';
 import 'package:isms/models/enums.dart';
+import 'package:isms/models/module.dart';
 import 'package:isms/models/newExam.dart';
+import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
+import 'package:isms/projectModules/courseManagement/examManagement/examDataMaster.dart';
+import 'package:isms/projectModules/courseManagement/moduleManagement/examManagement/examDataMaster.dart';
 import 'package:isms/screens/learningModuleScreens/examScreens/sharedWidgets/questionWidget.dart';
+import 'package:isms/sharedWidgets/navIndexTracker.dart';
 import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/utilityFunctions/generateRandom.dart';
 import 'package:isms/utilityFunctions/platformCheck.dart';
 import 'package:provider/provider.dart';
-
-import '../../../models/course.dart';
-import '../../../models/module.dart';
-import '../../../projectModules/courseManagement/coursesProvider.dart';
-import '../../../projectModules/courseManagement/examManagement/examDataMaster.dart';
-import '../../../projectModules/courseManagement/moduleManagement/examManagement/examDataMaster.dart';
-import '../../../sharedWidgets/navIndexTracker.dart';
 
 List<Map<String, dynamic>> allQuestions = [];
 

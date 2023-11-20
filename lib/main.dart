@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:logging/logging.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/adminManagement/adminProvider.dart';
@@ -10,13 +13,28 @@ import 'package:flutter/gestures.dart';
 import 'firebase_options.dart';
 
 void main() async {
+  // logging setup
+  // lowest level that will be logged (default: Level.INFO)
+  Logger.root.level = Level.ALL;
+  Logger.root.onRecord.listen((record) {
+    // react to logging events by calling developer.log()
+    log(
+      record.message,
+      name: record.loggerName,
+      level: record.level.value,
+      error: record.object
+    );
+  });
+  final Logger logger = Logger('ISMS');
+
   WidgetsFlutterBinding.ensureInitialized();
 
   try {
     await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform);
   } on Exception catch (_) {}
-  debugPrint('Firebase initialized');
+  logger.info('Firebase initialized');
+
   runApp(const MyApp());
 }
 

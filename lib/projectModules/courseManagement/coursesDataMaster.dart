@@ -1,10 +1,10 @@
 // ignore_for_file: file_names
 
+import 'package:logging/logging.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:isms/models/adminConsoleModels/coursesDetails.dart';
-
 import 'package:isms/models/course.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
 
@@ -19,6 +19,8 @@ class CoursesDataMaster extends ChangeNotifier {
       .collection('adminconsole')
       .doc('allcourses')
       .collection("allCourseItems");
+
+  final Logger logger = Logger("Courses");
 
   CollectionReference get coursesRef => _coursesRef;
 

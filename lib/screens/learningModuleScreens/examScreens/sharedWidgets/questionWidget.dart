@@ -42,11 +42,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        color: Colors.deepPurpleAccent[100],
-        borderRadius: BorderRadius.circular(30.0),
-        // Set border radius
-      ), // Set the background color here
+      decoration: customBoxTheme, // Set the background color here
       child: SingleChildScrollView(
         child: Form(
           child: SizedBox(
