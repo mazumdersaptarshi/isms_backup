@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "1064574915790-i04i7tbdtf1s3vjfockt9j9veubnjftc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.isms.prod",
+            "certificate_hash": "275e086a0122346b9cde9a2dfdce3ecedf2e8376"
+          }
+        },
+        {
           "client_id": "1064574915790-sj0eivhbc1rl0msgd072619aia6e7in3.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -42,7 +50,7 @@
               "client_id": "1064574915790-1o3o8npl6rt4rcvu7vl9hq8prbmevcql.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.isms.RunnerTests"
+                "bundle_id": "com.isms.prod.RunnerTests"
               }
             }
           ]

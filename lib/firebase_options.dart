@@ -23,12 +23,12 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
+        return ios;
+      case TargetPlatform.macOS:
         throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
+          'DefaultFirebaseOptions have not been configured for macos - '
           'you can reconfigure this by running the FlutterFire CLI again.',
         );
-      case TargetPlatform.macOS:
-        return macos;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -64,16 +64,14 @@ class DefaultFirebaseOptions {
     storageBucket: 'isms-pvp.appspot.com',
   );
 
-  static const FirebaseOptions macos = FirebaseOptions(
+  static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyAM6rZ7bGwBiMOpyuCF6SMTKAL99_V9JHg',
-    appId: '1:1064574915790:ios:c5e3e303077da04433ec9f',
+    appId: '1:1064574915790:ios:46a209e3f533c15633ec9f',
     messagingSenderId: '1064574915790',
     projectId: 'isms-pvp',
     storageBucket: 'isms-pvp.appspot.com',
-    androidClientId:
-        '1064574915790-bb51ulg7ps66gt7do66e16jjghsccfmm.apps.googleusercontent.com',
-    iosClientId:
-        '1064574915790-1o3o8npl6rt4rcvu7vl9hq8prbmevcql.apps.googleusercontent.com',
-    iosBundleId: 'com.example.isms.RunnerTests',
+    androidClientId: '1064574915790-bb51ulg7ps66gt7do66e16jjghsccfmm.apps.googleusercontent.com',
+    iosClientId: '1064574915790-c1tuq7eu2bf2hv9dg1te1v4mocvjdrfl.apps.googleusercontent.com',
+    iosBundleId: 'com.isms.prod',
   );
 }

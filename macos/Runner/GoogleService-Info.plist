@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.isms.RunnerTests</string>
+	<string>com.isms.prod.RunnerTests</string>
 	<key>PROJECT_ID</key>
 	<string>isms-pvp</string>
 	<key>STORAGE_BUCKET</key>
