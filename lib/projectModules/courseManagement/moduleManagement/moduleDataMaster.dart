@@ -1,7 +1,5 @@
 // ignore_for_file: file_names
 
-import 'dart:developer';
-
 import 'package:logging/logging.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -63,7 +61,8 @@ class ModuleDataMaster extends CoursesDataMaster {
       course.addModule(module);
     }
     if (course.modules!.length != course.modulesCount) {
-      logger.warning("fetched ${course.modules!.length} modules, was expecting ${course.modulesCount}");
+      logger.warning(
+          "fetched ${course.modules!.length} modules, was expecting ${course.modulesCount}");
     }
     return course.modules!;
   }

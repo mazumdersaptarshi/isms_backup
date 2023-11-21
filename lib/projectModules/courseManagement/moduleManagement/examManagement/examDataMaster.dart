@@ -1,7 +1,5 @@
 // ignore_for_file: file_names
 
-import 'dart:developer';
-
 import 'package:logging/logging.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -70,11 +68,15 @@ class ModuleExamDataMaster extends ModuleDataMaster {
   }
 
   Future<List<NewExam>> get exams async {
-    if (module.exams != null) {
+    //the second part of the if check if all the question list have been load to reload them when a test has been newly created
+    if (module.exams != null &&
+        (module.exams!.where((element) => element.questionAnswerSet.isEmpty))
+            .isEmpty) {
       logger.info("module exams in cache, no need to fetch them");
       return module.exams!;
     } else {
-      logger.info("module exams not in cache, trying to fetch them");
+      logger.info(
+          "module exams not in cache or missing data, trying to fetch them");
       try {
         return _fetchExams();
       } catch (e) {

@@ -46,7 +46,7 @@ class DataExporter {
 
     await Future.delayed(const Duration(
         seconds:
-        1)); //Introducing delay to prevent spamming of download button in case download finishes too fast
+            1)); //Introducing delay to prevent spamming of download button in case download finishes too fast
     // exportAsCSV(csvData[0], csvData.sublist(1));
   }
 
@@ -77,8 +77,8 @@ class DataExporter {
       String courseName = courseItem['course_name'] ?? '';
       String courseId = courseItem['course_id'] ?? '';
       String creationDate =
-      CSVDataHandler.timestampToReadableDate(courseItem['createdAt'])
-          .toString();
+          CSVDataHandler.timestampToReadableDate(courseItem['createdAt'])
+              .toString();
       List<String> courseCompletedUsers = [];
       List<String> courseStartedUsers = [];
 
@@ -151,7 +151,6 @@ class DataExporter {
           String courseTitle = course['course_name'] ?? '';
           //String courseId = course['courseID'] ?? '';
           if (course['modules_completed'] != null) {
-            print(course['modules_completed']);
             for (var module in course['modules_completed']) {
               try {
                 currentUserModulesCompletedIDs.add(module['module_id']);
@@ -290,7 +289,7 @@ class DataExporter {
     //fetching exams data for that course
     try {
       CollectionReference examsCollection =
-      queryDocumentSnapshot.reference.collection("exams");
+          queryDocumentSnapshot.reference.collection("exams");
       QuerySnapshot examsCollectionSnapshot = await examsCollection.get();
       debugPrint('----------------------------------');
       for (var doc in examsCollectionSnapshot.docs) {
@@ -306,7 +305,7 @@ class DataExporter {
 
     try {
       CollectionReference modulesCollection =
-      queryDocumentSnapshot.reference.collection("modules");
+          queryDocumentSnapshot.reference.collection("modules");
       QuerySnapshot modulesCollectionSnapshot = await modulesCollection.get();
       debugPrint('----------------------------------');
 
@@ -427,8 +426,8 @@ class DataExporter {
 
       String moduleId = module['id'].toString();
       String moduleCreationDate =
-      CSVDataHandler.timestampToReadableDate(module['createdAt'])
-          .toString();
+          CSVDataHandler.timestampToReadableDate(module['createdAt'])
+              .toString();
 
       // Loop through each slide in the module
       var slides = module['slides'] ?? [];
@@ -442,8 +441,8 @@ class DataExporter {
         String slideIndex = slide['index'].toString();
         String slideId = slide['id'].toString();
         String slideCreationDate =
-        CSVDataHandler.timestampToReadableDate(slide['createdAt'])
-            .toString();
+            CSVDataHandler.timestampToReadableDate(slide['createdAt'])
+                .toString();
         String slidesCount = slides.length.toString();
 
         // Create the CSV row and add it to csvData
@@ -493,8 +492,8 @@ class DataExporter {
 
       String moduleId = module['id'].toString();
       String moduleCreationDate =
-      CSVDataHandler.timestampToReadableDate(module['createdAt'])
-          .toString();
+          CSVDataHandler.timestampToReadableDate(module['createdAt'])
+              .toString();
       var exams = module['exams'] ?? [];
       for (var exam in exams) {
         String passingMarks = exam['passing_marks'].toString();
