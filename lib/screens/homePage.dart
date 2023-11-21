@@ -24,6 +24,11 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late String userRole;
 
+  @override
+  void initState() {
+    super.initState();
+  }
+
   // Utility function to check and potentially create the admin document
   Future<void> checkAndCreateUserDocument(
     String uid,
@@ -103,7 +108,7 @@ class _HomePageState extends State<HomePage> {
                                   0.2, // 50% of screen width
 
                               child: Image.asset(
-                                "assets/images/security2.png",
+                                "assets/images/security.png",
                                 fit: BoxFit
                                     .contain, // This will cover the available space, you can change it to BoxFit.contain to prevent the image from being cropped.
                               ),

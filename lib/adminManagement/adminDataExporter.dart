@@ -1,9 +1,12 @@
 // ignore_for_file: file_names
 
+import 'dart:convert';
 import 'dart:developer';
 
 // import 'dart:html' as html;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:csv/csv.dart';
+import 'package:flutter/foundation.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/utilityFunctions/csvDataHandler.dart';
 
@@ -16,16 +19,30 @@ class DataExporter {
 
   Future<void> downloadCSV() async {
     //Download Users data
+    List<List> csvData = [];
     QuerySnapshot querySnapshot;
     querySnapshot = await FirebaseFirestore.instance
         .collection(collectionDataToDownload!)
         .get();
     if (collectionDataToDownload == 'users') {
+      csvData = getUsersDataAsCSV(querySnapshot);
     } else if (collectionDataToDownload == 'courses') {
+      csvData = await getCoursesDataAsCSV(querySnapshot);
     } else if (collectionDataToDownload == 'adminconsole') {
       getCoursesProgressDataAsCSV(querySnapshot);
     }
     // Loop through the documents to populate the CSV data
+
+    if (kDebugMode) {
+      print(csvData);
+    }
+
+    final buffer = const ListToCsvConverter().convert(csvData);
+    Uint8List bytes = Uint8List.fromList(utf8.encode(buffer));
+
+    if (kDebugMode) {
+      print(bytes);
+    }
 
     await Future.delayed(const Duration(
         seconds:
@@ -53,6 +70,10 @@ class DataExporter {
       // Access fields inside the sub-document
       var courseItem = courseItemDoc.data();
 
+      // Process or print the field data as needed
+      if (kDebugMode) {
+        print(courseItem);
+      }
       String courseName = courseItem['course_name'] ?? '';
       String courseId = courseItem['course_id'] ?? '';
       String creationDate =
@@ -88,6 +109,9 @@ class DataExporter {
       // Define the headers
       ['username', 'email', 'courses_enrolled', 'courses_completed']
     ];
+    if (kDebugMode) {
+      print(allData);
+    }
     // Loop through the documents to populate the CSV data
 
     for (QueryDocumentSnapshot snapshot in allData) {
@@ -110,67 +134,81 @@ class DataExporter {
           'is Module Completed'
         ]
       ];
-      for (var course in dataMap['courses_completed']) {
-        String courseTitle = course['course_name'] ?? '';
-        String courseId = course['courseID'] ?? '';
-        currentUserCoursesCompleted.add(courseTitle);
-        currentUserCoursesCompletedIDs.add(courseId);
-      }
-      for (var course in dataMap['courses_started']) {
-        String courseTitle = course['course_name'] ?? '';
-        //String courseId = course['courseID'] ?? '';
-        if (course['modules_completed'] != null) {
-          for (var module in course['modules_completed']) {
-            try {
-              currentUserModulesCompletedIDs.add(module['module_id']);
-            } catch (e) {
-              log(e.toString());
-            }
+
+      if (dataMap['courses_started'] != null) {
+        if (dataMap['courses_completed'] != null) {
+          for (var course in dataMap['courses_completed']) {
+            String courseTitle = course['course_name'] ?? '';
+            String courseId = course['courseID'] ?? '';
+            currentUserCoursesCompleted.add(courseTitle);
+            currentUserCoursesCompletedIDs.add(courseId);
           }
+          debugPrint(
+              'currentUserCoursesCompletedIDs: $currentUserCoursesCompletedIDs');
         }
-        String moduleCompleted = 'no';
-        if (course['modules_started'] != null) {
-          for (var module in course['modules_started']) {
-            try {
-              if (currentUserModulesCompletedIDs
-                  .contains(module['module_id'])) {
-                moduleCompleted = 'yes';
+
+        for (var course in dataMap['courses_started']) {
+          String courseTitle = course['course_name'] ?? '';
+          //String courseId = course['courseID'] ?? '';
+          if (course['modules_completed'] != null) {
+            for (var module in course['modules_completed']) {
+              try {
+                currentUserModulesCompletedIDs.add(module['module_id']);
+              } catch (e) {
+                log(e.toString());
               }
-            } catch (e) {
-              log(e.toString());
             }
+          }
+          String moduleCompleted = 'no';
+          if (course['modules_started'] != null) {
+            for (var module in course['modules_started']) {
+              if (kDebugMode) {
+                print('$module ${userInfo.username}');
+                print(currentUserModulesCompletedIDs);
+              }
 
-            String courseCompleted = 'no';
-            if (currentUserCoursesCompletedIDs.contains(course['courseID'])) {
-              courseCompleted = 'yes';
-            }
-            currentUserCoursesEnrolled.add(courseTitle);
-            try {
-              List<String> row = [
-                userInfo.username,
-                userInfo.email,
-                courseTitle,
-                module['module_name'],
-                courseCompleted,
-                moduleCompleted
-              ];
-              userCsvData.add(row);
-            } catch (e) {
-              log(e.toString());
+              try {
+                if (currentUserModulesCompletedIDs
+                    .contains(module['module_id'])) {
+                  moduleCompleted = 'yes';
+                }
+              } catch (e) {
+                log(e.toString());
+              }
+
+              String courseCompleted = 'no';
+              if (currentUserCoursesCompletedIDs.contains(course['courseID'])) {
+                courseCompleted = 'yes';
+              }
+              currentUserCoursesEnrolled.add(courseTitle);
+              debugPrint('ududud');
+              try {
+                List<String> row = [
+                  userInfo.username,
+                  userInfo.email,
+                  courseTitle,
+                  module['module_name'],
+                  courseCompleted,
+                  moduleCompleted
+                ];
+                userCsvData.add(row);
+              } catch (e) {
+                log(e.toString());
+              }
             }
           }
         }
-      }
-      exportAsCSV(userCsvData[0], userCsvData.sublist(1), userInfo.username);
+        exportAsCSV(userCsvData[0], userCsvData.sublist(1), userInfo.username);
 
-      csvData.add([
-        userInfo.username.toString(),
-        userInfo.email.toString(),
-        // userInfo.courses_started.toString(),
-        currentUserCoursesEnrolled.toString(),
-        // userInfo.courses_completed.toString()
-        currentUserCoursesCompleted.toString(),
-      ]);
+        csvData.add([
+          userInfo.username.toString(),
+          userInfo.email.toString(),
+          // userInfo.courses_started.toString(),
+          currentUserCoursesEnrolled.toString(),
+          // userInfo.courses_completed.toString()
+          currentUserCoursesCompleted.toString(),
+        ]);
+      }
     }
 
     String filePrefixName = 'Users_Overview';
@@ -194,6 +232,7 @@ class DataExporter {
         'createdAt'
       ]
     ];
+    // print(allData);
     // Loop through the documents to populate the CSV data
 
     for (QueryDocumentSnapshot snapshot in allData) {
@@ -201,6 +240,8 @@ class DataExporter {
       Map<String, dynamic> dataMap = snapshot.data() as Map<String, dynamic>;
       Course coursesInfo = Course.fromMap(dataMap);
 
+      debugPrint(
+          'examsModulesDataMap: ${examsModulesDataMap['modulesData'].toString()}');
       // var examsData = CSVDataHandler.mapsToReadableStringConverter(
       //     examsModulesDataMap['examsData']!);
       // var modulesData = CSVDataHandler.mapsToReadableStringConverter(
@@ -250,6 +291,7 @@ class DataExporter {
       CollectionReference examsCollection =
           queryDocumentSnapshot.reference.collection("exams");
       QuerySnapshot examsCollectionSnapshot = await examsCollection.get();
+      debugPrint('----------------------------------');
       for (var doc in examsCollectionSnapshot.docs) {
         examsData.add(doc.data());
         // Perform operations using data
@@ -265,6 +307,7 @@ class DataExporter {
       CollectionReference modulesCollection =
           queryDocumentSnapshot.reference.collection("modules");
       QuerySnapshot modulesCollectionSnapshot = await modulesCollection.get();
+      debugPrint('----------------------------------');
 
       modulesData = await getModuleData(modulesCollectionSnapshot, modulesData);
     } catch (e) {
@@ -281,28 +324,44 @@ class DataExporter {
       List<dynamic> moduleDataType) async {
     for (var doc in modulesCollectionSnapshot.docs) {
       var docData = doc.data() as Map<String, dynamic>;
+      debugPrint('docData: ${doc.data()}');
       DocumentReference docRef = doc.reference;
       CollectionReference colRef = docRef.collection('slides');
       QuerySnapshot subCollectionSnapshot = await colRef.get();
       var moduleSlides = [];
       for (QueryDocumentSnapshot subDoc in subCollectionSnapshot.docs) {
+        if (kDebugMode) {
+          print(subDoc.data());
+          print('titlee: ${subDoc['title']}');
+          print('contentt: ${subDoc['content']}');
+        }
         moduleSlides.add(subDoc.data());
       }
+      debugPrint('moduleSlides: $moduleSlides');
       docData['slides'] = moduleSlides;
+      debugPrint('newDocData: ${docData['slides']}');
 
       moduleDataType.add(docData);
     }
 
     for (var doc in modulesCollectionSnapshot.docs) {
       var docData = doc.data() as Map<String, dynamic>;
+      debugPrint('docData: ${doc.data()}');
       DocumentReference docRef = doc.reference;
       CollectionReference colRef = docRef.collection('exams');
       QuerySnapshot subCollectionSnapshot = await colRef.get();
       var moduleExams = [];
       for (QueryDocumentSnapshot subDoc in subCollectionSnapshot.docs) {
+        if (kDebugMode) {
+          print(subDoc.data());
+          print('titlee: ${subDoc['title']}');
+          print('passing marks: ${subDoc['passing_marks']}');
+        }
         moduleExams.add(subDoc.data());
       }
+      debugPrint('moduleSlides: $moduleExams');
       docData['exams'] = moduleExams;
+      debugPrint('newDocData: ${docData['slides']}');
 
       moduleDataType.add(docData);
     }
@@ -319,7 +378,6 @@ class DataExporter {
         'Course Title',
         'Course ID',
         'Number of Course exams',
-        'Modules',
         'Number of Modules',
         'Creation Date'
       ]
@@ -440,11 +498,13 @@ class DataExporter {
       for (var exam in exams) {
         String passingMarks = exam['passing_marks'].toString();
         var questionAnswerSet = exam['question_answer_set'] ?? [];
+        debugPrint('questionAnswerSet: $questionAnswerSet');
         for (var set in questionAnswerSet) {
           String questionId = set['questionID'].toString();
           String questionText = set['questionName'] ?? '';
           String options = set['options'].toString();
 
+          debugPrint('$questionId, $options');
           List<String> row = [
             moduleTitle,
             moduleDescription,

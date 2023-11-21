@@ -1,13 +1,13 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/myLearningScreen.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:provider/provider.dart';
 
 import '../../projectModules/courseManagement/coursesProvider.dart';
 import '../../themes/common_theme.dart';
 import '../homePageFunctions/getCoursesList.dart';
-import '../learningModuleScreens/courseScreens/coursesListScreen.dart';
 import 'homePageItemsContainer.dart';
 
 class HomePageMainContent extends StatelessWidget {
@@ -96,7 +96,7 @@ class HomePageLabel extends StatelessWidget {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => const CoursesDisplayScreen()));
+                    builder: (context) => const MyLearningScreen()));
           },
           child: Row(
             children: [

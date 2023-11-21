@@ -2,16 +2,15 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:isms/screens/adminScreens/AdminConsole/adminConsolePage.dart';
 import 'package:isms/screens/homePage.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/myLearningScreen.dart';
 import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/screens/reminderScreen.dart';
+import 'package:isms/screens/userInfo/userProfilePage.dart';
 import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
-
-import '../screens/adminScreens/AdminConsole/adminConsolePage.dart';
-import '../screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
-import '../screens/userInfo/userProfilePage.dart';
 
 mixin CustomAppBarMixin on StatelessWidget {
   final Map<String, ValueNotifier<bool>> hovering = {

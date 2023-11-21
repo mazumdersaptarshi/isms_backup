@@ -44,7 +44,9 @@ class LoggedInState extends _UserDataGetterMaster {
       } else {
         logger.info(
             "auth state changed: ${user.email} currently signed into Firebase");
-        await _UserDataGetterMaster.ensureUserDataExists(user);
+        // ensure the app has a user entry for this account
+        await _UserDataGetterMaster.ensureUserDataExists(
+            FirebaseAuth.instance.currentUser);
         _fetchFromFirestore(user).then((value) {
           if (currentUserSnapshot != null) {
             storeUserCoursesData(currentUserSnapshot!);
@@ -59,6 +61,11 @@ class LoggedInState extends _UserDataGetterMaster {
     listenToChanges();
   }
 
+  ///This function handles the connection from a user to the database
+  ///
+  ///The login automatically trigger the change of states monitored by the constructor
+  ///input : none
+  ///return: none
   static Future<void> login() async {
     // get a signed-into Google account (authentication),
     // and sign it into the app (authorisation)
@@ -77,6 +84,11 @@ class LoggedInState extends _UserDataGetterMaster {
         await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
+  ///This function logout a user from the database and from the GCP authentication
+  ///
+  ///This change of states automatically trigger the authStateChanges monitored by the constructor.
+  ///input : the user object created by the authentication
+  ///return: null
   static Future<void> logout() async {
     // sign the Firebase account out of the Firebase app
     await FirebaseAuth.instance.signOut();
@@ -85,6 +97,10 @@ class LoggedInState extends _UserDataGetterMaster {
   }
 }
 
+/////-------------------------------/////
+// Class handling the user's data
+// This class is private to be only accessed though the LoggedInState class that handles the authentication.
+/////-------------------------------/////
 class _UserDataGetterMaster with ChangeNotifier {
   static FirebaseFirestore db = FirebaseFirestore.instance;
   static User? _currentUser;
@@ -99,6 +115,10 @@ class _UserDataGetterMaster with ChangeNotifier {
 
   final Logger logger = Logger('Account');
 
+  ///This function saves a new user in the DB
+  ///
+  ///input : A custom user object filled with the information received from the authentication process
+  ///return: null
   static Future<void> createUserData(CustomUser customUser) async {
     Map<String, dynamic> userJson = customUser.toMap();
     await db.collection('users').doc(customUser.uid).set(userJson);
@@ -108,6 +128,11 @@ class _UserDataGetterMaster with ChangeNotifier {
     userRefForAdmin.createUserRef(customUser.uid);
   }
 
+  ///This function checks if a user exists in the database
+  ///
+  ///If a uswer does not exist in the database this function redirect to the user creation function.
+  ///input : the user object created by the authentication
+  ///return: null
   static Future<void> ensureUserDataExists(User? user) async {
     if (user == null) return;
 
@@ -146,7 +171,10 @@ class _UserDataGetterMaster with ChangeNotifier {
   String get currentUserRole =>
       _customUserObject != null ? _customUserObject!.role : "";
 
-  // fetch data from Firestore and store it in the app
+  ///This function fetch the current user's information from the app and store it in the current user variable accessed with the getter
+  ///
+  ///input : the user object created by the authentication
+  ///return: null
   Future<void> _fetchFromFirestore(User user) async {
     _userRef = FirebaseFirestore.instance.collection('users').doc(user.uid);
     DocumentSnapshot userSnapshot = await _userRef!.get();
@@ -173,13 +201,19 @@ class _UserDataGetterMaster with ChangeNotifier {
     }
   }
 
-  // clear user data upon sign-out
+  /// clear user data upon sign-out
+  /// inputs: none
+  /// return: none
   void clear() {
     // first step: unset _currentUser, so the app knows it is signed out
     // and won't attempt to read any user data
     _currentUser = null;
   }
 
+  ///This function creates a listener that monitore any change to the user's data in the DB
+  ///
+  ///input : the user object created by the authentication
+  ///return: null
   void listenToChanges() {
     currentUserDocumentReference?.snapshots().listen((snapshot) {
       if (snapshot.exists) {
@@ -192,6 +226,10 @@ class _UserDataGetterMaster with ChangeNotifier {
     });
   }
 
+  ///This function encapuslate the methods to gather the user's data from database and map them to the NewUser object
+  ///
+  ///input : none
+  ///return: null
   setUserData() async {
     FirebaseFirestore.instance
         .collection("users")
@@ -199,6 +237,10 @@ class _UserDataGetterMaster with ChangeNotifier {
         .set(loggedInUser.toMap());
   }
 
+  ///This function store the information related to the courses started and completed by the current user
+  ///
+  ///input : the snapshot of the current user in the DB
+  ///return: null
   void storeUserCoursesData(DocumentSnapshot snapshot) {
     if (snapshot.exists) {
       Map<String, dynamic> mapData = snapshot.data() as Map<String, dynamic>;
@@ -282,12 +324,21 @@ class _UserDataGetterMaster with ChangeNotifier {
     notifyListeners();
   }
 
+  ///this function saves when a user complete an exam at course level
+  ///
+  ///input :
+  /// -courseDetails : a subset of the course's information
+  /// -coursesProvider
+  /// -course: the course information
+  /// -examIndex: the index of the exam passed
+  ///return: null
   Future<bool> setUserCourseExamCompleted(
       {required Map<String, dynamic> courseDetails,
       required CoursesProvider coursesProvider,
       required Course course,
       required int examIndex}) async {
     bool courseExamCompleted = false;
+    //we check if the course provided is in the list of course started by the user.
     if (loggedInUser.courses_started.isNotEmpty) {
       int courseIndex = loggedInUser.courses_started
           .indexWhere((element) => element['courseID'] == course.id);
@@ -297,6 +348,7 @@ class _UserDataGetterMaster with ChangeNotifier {
         if (!courseStarted.containsKey('exams_completed')) {
           courseStarted["exams_completed"] = [];
         }
+        //we add the exam to the list of exams_completed only if the exam is not already in the list
         int examPassed = -1;
         if (courseStarted["exams_completed"].isNotEmpty) {
           examPassed = courseStarted["exams_completed"]
@@ -320,6 +372,14 @@ class _UserDataGetterMaster with ChangeNotifier {
     return courseExamCompleted;
   }
 
+  ///this function saves when a user complete a module (study +all exams completed)
+  ///
+  ///input :
+  /// -courseDetails : a subset of the course's information
+  /// -coursesProvider
+  /// -course: the course information
+  /// -module: the module completed
+  ///return: null
   setUserCourseModuleCompleted(
       {required Map<String, dynamic> courseDetails,
       required CoursesProvider coursesProvider,
@@ -340,6 +400,7 @@ class _UserDataGetterMaster with ChangeNotifier {
           courseStarted['modules_completed']
               .indexWhere((element) => element['module_id'] == module.id);
         }
+        //we add the module in the completed list only of the module is not already here to no create duplicates
         if (moduleIndex == -1) {
           courseStarted['modules_completed']
               .add({"module_name": module.title, "module_id": module.id});
@@ -351,6 +412,14 @@ class _UserDataGetterMaster with ChangeNotifier {
     }
   }
 
+  ///this function saves when a user starts a new model
+  ///
+  ///input :
+  /// -courseDetails : a subset of the course's information
+  /// -coursesProvider
+  /// -course: the course information
+  /// -module: the module started
+  ///return: null
   setUserCourseModuleStarted(
       {required Map<String, dynamic> courseDetails,
       required CoursesProvider coursesProvider,
@@ -375,6 +444,8 @@ class _UserDataGetterMaster with ChangeNotifier {
         "module_id": module.id,
         "module_name": module.title
       };
+      //we check if the module is already listed in the list of module started
+      //if yes (module index above -1) we do not add the module to not create duplicates
       if (moduleIndex == -1) {
         loggedInUser.courses_started[courseIndex]["modules_started"]
             .add(moduleStartedMap);
@@ -384,15 +455,27 @@ class _UserDataGetterMaster with ChangeNotifier {
     }
   }
 
+  ///this function saves when a user complete an exam at module level
+  ///
+  ///input :
+  /// -courseDetails : a subset of the course's information
+  /// -coursesProvider
+  /// -course: the course information
+  /// -module: the module related to the exam passed
+  /// -examIndex: the index of the exam completed in the list of exams associated with this module
+  ///return: null
   setUserModuleExamCompleted(
       {required Map<String, dynamic> courseDetails,
       required CoursesProvider coursesProvider,
       required Course course,
       required Module module,
       required int examIndex}) async {
+    //we check if the course provided in in the list of courses started by the user
+    //it should always be the case except if an error happend when the user started the module
     int courseIndex = loggedInUser.courses_started.indexWhere((courseInList) =>
         courseInList["courseID"] == courseDetails["courseID"]);
     if (courseIndex > -1) {
+      //course found in the list of course started so we get the index of the module related to the exam
       int moduleIndex = loggedInUser.courses_started[courseIndex]
               ["modules_started"]
           .indexWhere(
@@ -400,9 +483,11 @@ class _UserDataGetterMaster with ChangeNotifier {
       if (moduleIndex > -1) {
         Map<String, dynamic> startedModule = loggedInUser
             .courses_started[courseIndex]["modules_started"][moduleIndex];
+        //section to add the exams_completed in the user's map if this section is not present
         if (!startedModule.containsKey("exams_completed")) {
           startedModule.addAll({"exams_completed": []});
         }
+        //we add the exam completed in the list only if it is not already in it, so we do not have duplicates
         if (!startedModule["exams_completed"].contains(examIndex)) {
           startedModule["exams_completed"].add(examIndex);
           loggedInUser.courses_started[courseIndex]["modules_started"]
@@ -422,6 +507,14 @@ class _UserDataGetterMaster with ChangeNotifier {
   }
   //notifyListeners();
 
+  ///this function updates the global admin lists in the DB when a user starts or completes a course
+  ///
+  ///input :
+  /// -courseName : the course started / completed
+  /// -username: The user starting/completing the course
+  /// -UID: the uid of the user
+  /// -courseMapFieldToUpdate: the section's title to update in the map. can be course_started or course_completed
+  ///return: null
   setAdminConsoleCourseMap(
       {required String courseName,
       required String username,
