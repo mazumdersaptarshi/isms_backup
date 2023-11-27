@@ -29,23 +29,37 @@ class SlidesContentWidget extends StatelessWidget {
               child: PageView(
                 controller: pageController,
                 children: cardItems.map((item) {
+                  print('iohoiooih:${item['title'].length}');
                   return Padding(
                     padding: const EdgeInsets.all(20),
                     child: SizedBox(
                       height: 400,
                       child: ListView(
                         children: [
-                          Text(
-                            '${item['title']}:',
-                            style: const TextStyle(
-                                fontSize: 25, fontWeight: FontWeight.bold),
-                          ),
+                          (item['title'].length > 0 &&
+                                  item['title'] != null &&
+                                  item['title'] != " ")
+                              ? Text(
+                                  '${item['title']}',
+                                  style: const TextStyle(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold),
+                                )
+                              : SizedBox(
+                                  height: 0.1,
+                                ),
                           const SizedBox(height: 20),
-                          const Divider(
-                            height: 2,
-                            color: Colors.grey,
-                            thickness: 2,
-                          ),
+                          (item['title'].length > 0 &&
+                                  item['title'] != null &&
+                                  item['title'] != " ")
+                              ? const Divider(
+                                  height: 2,
+                                  color: Colors.grey,
+                                  thickness: 2,
+                                )
+                              : SizedBox(
+                                  height: 0.1,
+                                ),
                           const SizedBox(height: 20),
                           HTMLSlideDisplay(htmlString: item['text'])
                         ],

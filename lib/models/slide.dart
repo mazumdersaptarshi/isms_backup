@@ -1,14 +1,10 @@
 class Slide {
   String id;
-  String title;
-  String content;
+  String? title;
+  String? content;
   int? index;
 
-  Slide(
-      {required this.id,
-      required this.title,
-      required this.content,
-      this.index});
+  Slide({required this.id, this.title, this.content, this.index});
 
   factory Slide.fromMap(Map<String, dynamic> map) {
     return Slide(
