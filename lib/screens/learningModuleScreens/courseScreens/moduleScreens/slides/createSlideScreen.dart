@@ -11,8 +11,8 @@ import 'package:isms/models/course.dart';
 import 'package:isms/models/module.dart';
 import 'package:isms/models/slide.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
-import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/sharedWidgets/slidesCreationProvider.dart';
 import 'package:isms/projectModules/courseManagement/moduleManagement/slideManagement/slidesDataMaster.dart';
+import 'package:isms/screens/learningModuleScreens/courseScreens/moduleScreens/slides/sharedWidgets/slidesCreationProvider.dart';
 import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/utilityFunctions/generateRandom.dart';
@@ -144,12 +144,12 @@ class _SlideFormState extends State<SlideForm> {
                   child: TextFormField(
                     controller: _titleController,
                     decoration: const InputDecoration(labelText: 'Title'),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter a title';
-                      }
-                      return null;
-                    },
+                    // validator: (value) {
+                    //   if (value == null || value.isEmpty) {
+                    //     return 'Please enter a title';
+                    //   }
+                    //   return null;
+                    // },
                   ),
                 ),
                 const SizedBox(height: 16),

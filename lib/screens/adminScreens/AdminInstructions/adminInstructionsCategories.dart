@@ -12,7 +12,7 @@ class AdminInstructionCategories extends StatelessWidget {
   const AdminInstructionCategories({
     super.key,
     required this.category,
-    required this.subCategories,
+    this.subCategories,
   });
 
   final String category;

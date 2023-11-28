@@ -9,12 +9,17 @@ class Slide {
   factory Slide.fromMap(Map<String, dynamic> map) {
     return Slide(
         id: map['id'],
-        title: map['title'],
-        index: map['index'],
-        content: map['content']);
+        title: map['title'] ?? 'n/a',
+        index: map['index'] ?? 'n/a',
+        content: map['content'] ?? 'n/a');
   }
 
   Map<String, dynamic> toMap() {
-    return {'id': id, 'title': title, 'index': index, 'content': content};
+    return {
+      'id': id,
+      'title': title ?? 'n/a',
+      'index': index,
+      'content': content ?? 'n/a'
+    };
   }
 }
