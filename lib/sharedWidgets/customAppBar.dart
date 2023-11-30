@@ -3,6 +3,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/screens/adminScreens/AdminConsole/adminConsolePage.dart';
+import 'package:isms/screens/adminScreens/timedRemindersScreen.dart';
 import 'package:isms/screens/homePage.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
 import 'package:isms/screens/learningModuleScreens/courseScreens/myLearningScreen.dart';
@@ -15,6 +16,7 @@ import 'package:isms/userManagement/loggedInState.dart';
 mixin CustomAppBarMixin on StatelessWidget {
   final Map<String, ValueNotifier<bool>> hovering = {
     "Explore": ValueNotifier(false),
+    "Notifications": ValueNotifier(false),
     "Reminders": ValueNotifier(false),
     "Account": ValueNotifier(false),
     "Admin Console": ValueNotifier(false),
@@ -56,6 +58,11 @@ mixin CustomAppBarMixin on StatelessWidget {
   void navigateToAdminConsolePage(BuildContext context) {
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => const AdminConsolePage()));
+  }
+
+  void navigateToTimedRemindersPage(BuildContext context) {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const TimedRemindersScreen()));
   }
 
   Widget appBarItem(
@@ -225,7 +232,7 @@ class CustomAppBarWeb extends StatelessWidget
         if (loggedInState?.currentUserRole == 'admin')
           appBarItem(
               Icons.notifications_active_rounded,
-              "Reminders",
+              "Notifications",
               () => navigateToRemindersPage(context, loggedInState!),
               _paddingValue),
         appBarItem(Icons.account_circle, "Account",
@@ -233,6 +240,9 @@ class CustomAppBarWeb extends StatelessWidget
         if (loggedInState?.currentUserRole == 'admin')
           appBarItem(Icons.admin_panel_settings_outlined, "Admin Console",
               () => navigateToAdminConsolePage(context), _paddingValue),
+        if (loggedInState?.currentUserRole == 'admin')
+          appBarItem(Icons.timer_outlined, "Reminders",
+              () => navigateToTimedRemindersPage(context), _paddingValue),
         dividerItem(),
         logoutButtonItem(context),
       ],

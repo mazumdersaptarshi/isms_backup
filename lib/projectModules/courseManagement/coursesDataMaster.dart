@@ -1,12 +1,11 @@
 // ignore_for_file: file_names
 
-import 'package:logging/logging.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-
 import 'package:isms/models/adminConsoleModels/coursesDetails.dart';
 import 'package:isms/models/course.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
+import 'package:logging/logging.dart';
 
 class CoursesDataMaster extends ChangeNotifier {
   CoursesDataMaster({
@@ -72,5 +71,31 @@ class CoursesDataMaster extends ChangeNotifier {
 
       coursesProvider.notifyListeners();
     });
+  }
+
+  static Future<List<dynamic>> getCurrentCourse(
+      {String? identifier, String? module}) async {
+    List<Map<String, dynamic>> currentCourseDetails = [];
+    DocumentSnapshot courseDocumentSnapshot =
+        await db.collection('courses').doc('${identifier}').get();
+    if (courseDocumentSnapshot.exists) {
+      Map<String, dynamic> courseOverviewData =
+          courseDocumentSnapshot.data() as Map<String, dynamic>;
+      currentCourseDetails.add({'courseOverview': courseOverviewData});
+    }
+    if (module != null) {
+      DocumentSnapshot moduleDocumentSnapshot = await db
+          .collection('courses')
+          .doc('${identifier}')
+          .collection('modules')
+          .doc(module)
+          .get();
+      if (moduleDocumentSnapshot.exists) {
+        Map<String, dynamic> courseModuleOverviewData =
+            moduleDocumentSnapshot.data() as Map<String, dynamic>;
+        currentCourseDetails.add({'currentModule': courseModuleOverviewData});
+      }
+    }
+    return currentCourseDetails;
   }
 }

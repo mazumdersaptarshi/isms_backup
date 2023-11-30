@@ -45,6 +45,7 @@ class AdminProvider extends ChangeNotifier {
         .collection('adminconsole')
         .doc('allusers')
         .collection('userRefs')
+        .where("domain", isEqualTo: loggedInState.loggedInUser.domain)
         .snapshots()
         .listen((snapshot) {
       if (snapshot.docs.isNotEmpty) {
@@ -86,6 +87,7 @@ class AdminProvider extends ChangeNotifier {
         .collection('adminconsole')
         .doc('allusers')
         .collection('userRefs')
+        .where("domain", isEqualTo: loggedInState.loggedInUser.domain)
         .get();
     for (QueryDocumentSnapshot<Object?> documentSnapshot
         in userRefsQuerySnapshot.docs) {
@@ -106,11 +108,12 @@ class AdminProvider extends ChangeNotifier {
       //Clearing old data if there is new data available
       allUsers.clear();
       userRefs.clear();
-
+      print('${loggedInState.loggedInUser.domain}');
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('adminconsole')
           .doc('allusers')
           .collection('userRefs')
+          .where("domain", isEqualTo: loggedInState.loggedInUser.domain)
           .get();
 
       for (QueryDocumentSnapshot<Object?> documentSnapshot

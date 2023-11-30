@@ -348,7 +348,8 @@ class _ReminderScreenState extends State<ReminderScreen> {
   DateTime? expiryDatePeople;
   DateTime? expiryDatePlayers;
   DateTime? expiryDateVendors;
-
+  List<dynamic> allReminders = [];
+  bool _areDatesFetched = false;
   @override
   void initState() {
     super.initState();
@@ -361,7 +362,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
         .collection('admins')
         .doc(uid)
         .get();
-
+    print('udhh');
     if (doc.exists && mounted) {
       Map<String, dynamic>? data = doc.data() as Map<String, dynamic>?;
 
@@ -400,34 +401,42 @@ class _ReminderScreenState extends State<ReminderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    LoggedInState loggedInState = context.watch<LoggedInState>();
+    LoggedInState loggedInState =
+        Provider.of<LoggedInState>(context, listen: false);
 
+    print(loggedInState.currentUserUid!);
     getExpiryDates(loggedInState.currentUserUid!);
+
     return Scaffold(
         appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
         body: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
             children: [
-              ReminderLine(
-                text: "People",
-                setExpiryDateForCertificate: (uid, date) =>
-                    setExpiryDate(uid, "People", date),
-                initialExpiryDate: expiryDatePeople, // Pass initial expiry date
-              ),
-              ReminderLine(
-                text: "Players",
-                setExpiryDateForCertificate: (uid, date) =>
-                    setExpiryDate(uid, "Players", date),
-                initialExpiryDate:
-                    expiryDatePlayers, // Pass initial expiry date
-              ),
-              ReminderLine(
-                text: "Vendors",
-                setExpiryDateForCertificate: (uid, date) =>
-                    setExpiryDate(uid, "Vendors", date),
-                initialExpiryDate:
-                    expiryDateVendors, // Pass initial expiry date
+              Column(
+                children: [
+                  ReminderLine(
+                    text: "People",
+                    setExpiryDateForCertificate: (uid, date) =>
+                        setExpiryDate(uid, "People", date),
+                    initialExpiryDate:
+                        expiryDatePeople, // Pass initial expiry date
+                  ),
+                  ReminderLine(
+                    text: "Players",
+                    setExpiryDateForCertificate: (uid, date) =>
+                        setExpiryDate(uid, "Players", date),
+                    initialExpiryDate:
+                        expiryDatePlayers, // Pass initial expiry date
+                  ),
+                  ReminderLine(
+                    text: "Vendors",
+                    setExpiryDateForCertificate: (uid, date) =>
+                        setExpiryDate(uid, "Vendors", date),
+                    initialExpiryDate:
+                        expiryDateVendors, // Pass initial expiry date
+                  ),
+                ],
               ),
             ],
           ),

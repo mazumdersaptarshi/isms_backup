@@ -125,6 +125,14 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
                           ),
                         ),
                       ),
+                      ElevatedButton(
+                          onPressed: () async {
+                            var t = await loggedInState.getCurrentCourse(
+                                identifier: widget.course.name,
+                                module: widget.module.title);
+                            print(t);
+                          },
+                          child: Text('Current Course')),
                     ],
                   ),
                 ],

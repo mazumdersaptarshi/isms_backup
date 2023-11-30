@@ -99,6 +99,7 @@ flutter:
     - assets/images/courseIcons/
     - assets/images/moduleIcons/
     - assets/images/loading_animation.json
+    - assets/data/domain01/
 
   #   - images/a_dot_ham.jpeg
 

@@ -1,15 +1,17 @@
 import 'dart:developer';
 
-import 'package:logging/logging.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/adminManagement/adminProvider.dart';
 import 'package:isms/projectModules/courseManagement/coursesProvider.dart';
+import 'package:isms/remindersManagement/remindersProvider.dart';
 import 'package:isms/screens/login/loginScreen.dart';
 import 'package:isms/themes/common_theme.dart';
 import 'package:isms/userManagement/loggedInState.dart';
+import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/gestures.dart';
+
 import 'firebase_options.dart';
 
 void main() async {
@@ -18,12 +20,10 @@ void main() async {
   Logger.root.level = Level.ALL;
   Logger.root.onRecord.listen((record) {
     // react to logging events by calling developer.log()
-    log(
-      record.message,
-      name: record.loggerName,
-      level: record.level.value,
-      error: record.object
-    );
+    log(record.message,
+        name: record.loggerName,
+        level: record.level.value,
+        error: record.object);
   });
   final Logger logger = Logger('ISMS');
 
@@ -53,6 +53,9 @@ class MyApp extends StatelessWidget {
         }),
         ChangeNotifierProvider<AdminProvider>(create: (context) {
           return AdminProvider();
+        }),
+        ChangeNotifierProvider<RemindersProvider>(create: (context) {
+          return RemindersProvider();
         }),
       ],
       child: MaterialApp(

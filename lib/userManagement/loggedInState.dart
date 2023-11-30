@@ -1,13 +1,13 @@
 // ignore_for_file: file_names
 
-import 'package:logging/logging.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
 import 'package:isms/adminManagement/createUserReferenceForAdmin.dart';
 import 'package:isms/models/newExam.dart';
+import 'package:isms/projectModules/domain_management/domain_provider.dart';
+import 'package:logging/logging.dart';
 
 import '../models/course.dart';
 import '../models/customUser.dart';
@@ -122,7 +122,6 @@ class _UserDataGetterMaster with ChangeNotifier {
   static Future<void> createUserData(CustomUser customUser) async {
     Map<String, dynamic> userJson = customUser.toMap();
     await db.collection('users').doc(customUser.uid).set(userJson);
-
     //Also creating a reference to the user on Admin side
     CreateUserReferenceForAdmin userRefForAdmin = CreateUserReferenceForAdmin();
     userRefForAdmin.createUserRef(customUser.uid);
@@ -140,13 +139,16 @@ class _UserDataGetterMaster with ChangeNotifier {
         await db.collection('users').doc(user.uid).get();
 
     if (!userSnapshot.exists) {
+      DomainProvider domainProvider = DomainProvider();
+      String domain = await domainProvider.getUserDomain(user.uid);
       await createUserData(CustomUser(
           username: user.displayName!,
           email: user.email!,
           role: 'user',
           courses_started: [],
           courses_completed: [],
-          uid: user.uid));
+          uid: user.uid,
+          domain: domain));
     }
   }
 
@@ -184,7 +186,16 @@ class _UserDataGetterMaster with ChangeNotifier {
       Map<String, dynamic>? userData =
           userSnapshot.data() as Map<String, dynamic>?;
       _customUserObject = CustomUser.fromMap(userData!);
-
+      //correction for domain
+      if ((!userData.containsKey("domain")) || (userData["domain"] == "")) {
+        CreateUserReferenceForAdmin userRefForAdmin =
+            CreateUserReferenceForAdmin();
+        userRefForAdmin.updateUserRef(user.uid);
+        DomainProvider domainProvider = DomainProvider();
+        String domain = await domainProvider.getUserDomain(loggedInUser.uid);
+        loggedInUser.domain = domain;
+        setUserData();
+      }
       // last step: now that the user data is available, allow the app
       // to access it by setting _currentUser
       _currentUser = user;
@@ -545,5 +556,12 @@ class _UserDataGetterMaster with ChangeNotifier {
             .set(courseMap);
       }
     }
+  }
+
+  //
+
+  getCurrentCourse({String? identifier, String? module}) {
+    return CoursesProvider.getCurrentCourse(
+        identifier: identifier, module: module);
   }
 }

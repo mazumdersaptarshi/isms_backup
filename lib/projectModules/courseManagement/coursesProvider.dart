@@ -17,4 +17,10 @@ class CoursesProvider with ChangeNotifier {
   addCourse(Course course) {
     _allCourses.add(course);
   }
+
+  static Future<List<dynamic>> getCurrentCourse(
+      {String? identifier, String? module}) async {
+    return await CoursesDataMaster.getCurrentCourse(
+        identifier: identifier, module: module);
+  }
 }
