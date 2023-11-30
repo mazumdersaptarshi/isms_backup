@@ -123,6 +123,34 @@ class _CoursePageState extends State<CoursePage> {
                 style: TextStyle(
                     color: isALlModulesCompleted ? primaryColor : Colors.grey)),
           ),
+          ElevatedButton(
+            onPressed: () {
+              // if (isALlModulesCompleted) {
+              //   Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //       builder: (context) => ExamListScreen(
+              //         course: widget.course,
+              //         examtype: EXAMTYPE.courseExam,
+              //       ),
+              //     ),
+              //   );
+              // }
+              loggedInState.setUserCourseCompleted(courseDetails: {
+                'course_name': widget.course.name,
+                "courseID": widget.course.id,
+                "course_modules_count": widget.course.modulesCount,
+              });
+            },
+            style: customTheme.elevatedButtonTheme.style!.copyWith(
+                backgroundColor: isALlModulesCompleted
+                    ? MaterialStateProperty.all<Color>(Colors.white)
+                    : MaterialStateProperty.all<Color>(Colors.grey.shade200)),
+            child: Text("Mark Course as Completed",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: isALlModulesCompleted ? primaryColor : Colors.grey)),
+          ),
           const SizedBox(width: 20),
           if (userRole == "admin")
             ElevatedButton(

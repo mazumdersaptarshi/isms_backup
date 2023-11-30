@@ -16,6 +16,8 @@ import 'package:isms/userManagement/loggedInState.dart';
 import 'package:isms/utilityFunctions/platformCheck.dart';
 import 'package:provider/provider.dart';
 
+import '../modulesListScreen.dart';
+
 class SlidesDisplayScreen extends StatefulWidget {
   const SlidesDisplayScreen(
       {super.key, required this.module, required this.course});
@@ -125,14 +127,29 @@ class _SlidesDisplayScreenState extends State<SlidesDisplayScreen> {
                           ),
                         ),
                       ),
-                      ElevatedButton(
-                          onPressed: () async {
-                            var t = await loggedInState.getCurrentCourse(
-                                identifier: widget.course.name,
-                                module: widget.module.title);
-                            print(t);
-                          },
-                          child: Text('Current Course')),
+                      if (loggedInState.currentCourseModule[1]['currentModule']
+                              ['examsCount'] ==
+                          0)
+                        const SizedBox(width: 20),
+                      Visibility(
+                        visible: currentIndex == cardItems.length - 1,
+                        child: ElevatedButton(
+                            onPressed: () async {
+                              print('test');
+                              loggedInState.setUserCourseModuleCompleted(
+                                  coursesProvider: coursesProvider,
+                                  course: widget.course,
+                                  module: widget.module);
+                              if (widget.course != null) {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => CoursePage(
+                                            course: widget.course!)));
+                              }
+                            },
+                            child: Text('Mark Module as Completed')),
+                      ),
                     ],
                   ),
                 ],

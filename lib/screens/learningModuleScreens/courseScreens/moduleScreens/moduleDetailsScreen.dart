@@ -37,6 +37,12 @@ class _ModuleDetailsState extends State<ModuleDetails> {
     super.initState();
   }
 
+  Future<List<dynamic>> getCurrentCourseModule(LoggedInState loggedInState,
+      {String? identifier, String? module}) async {
+    return await loggedInState.getCurrentCourse(
+        identifier: identifier, module: module);
+  }
+
   @override
   Widget build(BuildContext context) {
     NavIndexTracker.setNavDestination(navDestination: NavDestinations.other);
@@ -47,6 +53,7 @@ class _ModuleDetailsState extends State<ModuleDetails> {
     CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
 
     Map<String, dynamic> courseDetailsMap = {
+      "domain": loggedInState.loggedInUser.domain,
       "courseID": widget.course.id,
       "course_name": widget.course.name,
       "course_modules_count": widget.course.modulesCount,
@@ -55,88 +62,99 @@ class _ModuleDetailsState extends State<ModuleDetails> {
     };
     return Scaffold(
       appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
-      body: Container(
-        margin: const EdgeInsets.only(top: 20),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
+      body: FutureBuilder<List<dynamic>>(
+        future: getCurrentCourseModule(loggedInState,
+            identifier: widget.course.name, module: widget.module.title),
+        builder: (context, snapshot) {
+          if (snapshot.hasData)
+            return Container(
+              margin: const EdgeInsets.only(top: 20),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    ElevatedButton(
-                      onPressed: () async {
-                        await loggedInState.setUserCourseStarted(
-                            courseDetails: courseDetailsMap);
-                        await loggedInState.setUserCourseModuleStarted(
-                            courseDetails: courseDetailsMap,
-                            coursesProvider: coursesProvider,
-                            course: widget.course,
-                            module: widget.module);
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          ElevatedButton(
+                            onPressed: () async {
+                              await loggedInState.setUserCourseStarted(
+                                  courseDetails: courseDetailsMap);
+                              await loggedInState.setUserCourseModuleStarted(
+                                  courseDetails: courseDetailsMap,
+                                  coursesProvider: coursesProvider,
+                                  course: widget.course,
+                                  module: widget.module);
 
-                        if (!context.mounted) return;
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SlidesDisplayScreen(
-                              course: widget.course,
-                              module: widget.module,
-                            ),
+                              if (!context.mounted) return;
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SlidesDisplayScreen(
+                                    course: widget.course,
+                                    module: widget.module,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: const Text('Study Module'),
                           ),
-                        );
-                      },
-                      child: const Text('Study Module'),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          ModuleExamListScreen(
+                                            course: widget.course,
+                                            examtype: EXAMTYPE.moduleExam,
+                                            module: widget.module,
+                                          )));
+                            },
+                            child: const Text("View module exams"),
+                          ),
+                        ],
+                      ),
                     ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ModuleExamListScreen(
-                                      course: widget.course,
-                                      examtype: EXAMTYPE.moduleExam,
-                                      module: widget.module,
-                                    )));
-                      },
-                      child: const Text("View module exams"),
+                    const SizedBox(height: 10),
+                    Card(
+                      surfaceTintColor: Colors.white,
+                      elevation: 4,
+                      child: Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: SizedBox(
+                          height: isWeb
+                              ? MediaQuery.of(context).size.height - 260
+                              : 500,
+                          child: ListView(
+                            children: [
+                              Text(
+                                '${widget.module.title}:',
+                                style: const TextStyle(
+                                    fontSize: 25, fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(height: 20),
+                              const Divider(
+                                height: 2,
+                                color: Colors.grey,
+                                thickness: 2,
+                              ),
+                              const SizedBox(height: 20),
+                              HTMLSlideDisplay(
+                                  htmlString: widget.module.additionalInfo),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 10),
-              Card(
-                surfaceTintColor: Colors.white,
-                elevation: 4,
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: SizedBox(
-                    height:
-                        isWeb ? MediaQuery.of(context).size.height - 260 : 500,
-                    child: ListView(
-                      children: [
-                        Text(
-                          '${widget.module.title}:',
-                          style: const TextStyle(
-                              fontSize: 25, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 20),
-                        const Divider(
-                          height: 2,
-                          color: Colors.grey,
-                          thickness: 2,
-                        ),
-                        const SizedBox(height: 20),
-                        HTMLSlideDisplay(
-                            htmlString: widget.module.additionalInfo),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+            );
+          else
+            return CircularProgressIndicator();
+        },
       ),
       floatingActionButton: loggedInState.currentUserRole == "admin"
           ? FloatingActionButton(

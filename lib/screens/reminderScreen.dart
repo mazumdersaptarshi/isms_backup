@@ -423,13 +423,6 @@ class _ReminderScreenState extends State<ReminderScreen> {
                         expiryDatePeople, // Pass initial expiry date
                   ),
                   ReminderLine(
-                    text: "Players",
-                    setExpiryDateForCertificate: (uid, date) =>
-                        setExpiryDate(uid, "Players", date),
-                    initialExpiryDate:
-                        expiryDatePlayers, // Pass initial expiry date
-                  ),
-                  ReminderLine(
                     text: "Vendors",
                     setExpiryDateForCertificate: (uid, date) =>
                         setExpiryDate(uid, "Vendors", date),

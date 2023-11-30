@@ -1,7 +1,9 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:isms/userManagement/loggedInState.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:provider/provider.dart';
 
 import '../../../adminManagement/adminProvider.dart';
 
@@ -103,9 +105,21 @@ class CourseDetailExpansionTile extends StatelessWidget {
   final List<dynamic> courses;
   final int index;
   final String title;
+  List<dynamic> getCoursesForCurrentDomainAdmin(
+      List<dynamic> allUsersList, LoggedInState loggedInState) {
+    List<dynamic> listOfDomainusers = [];
+    for (var userItem in allUsersList) {
+      if (userItem['domain'] == loggedInState.loggedInUser.domain) {
+        listOfDomainusers.add(userItem);
+      }
+    }
+    return listOfDomainusers;
+  }
 
   @override
   Widget build(BuildContext context) {
+    LoggedInState loggedInState =
+        Provider.of<LoggedInState>(context, listen: false);
     return ExpansionTile(
       title: Text(
         title,
@@ -115,23 +129,30 @@ class CourseDetailExpansionTile extends StatelessWidget {
           ? CircularPercentIndicator(
               radius: 20.0,
               lineWidth: 5.0,
-              percent: (courses[index].course_completed!.length /
+              percent: ((getCoursesForCurrentDomainAdmin(
+                              courses[index].course_completed!, loggedInState)
+                          .length) /
                       (adminProvider.userRefs.length)) ??
                   0,
-              center: Text(
-                  '${(courses[index].course_completed!.length / (adminProvider.userRefs.length) * 100).round()}%',
-                  style: const TextStyle(fontSize: 10)),
+              center:
+                  // Text(
+                  //     '${(courses[index].course_completed!.length / (adminProvider.userRefs.length) * 100).round()}%',
+                  //     style: const TextStyle(fontSize: 10)),
+                  Text(
+                      '${((getCoursesForCurrentDomainAdmin(courses[index].course_completed!, loggedInState).length) / (adminProvider.userRefs.length) * 100).round()}%'),
               progressColor: Colors.lightGreen,
             )
           : (title == 'Enrolled')
               ? CircularPercentIndicator(
                   radius: 20.0,
                   lineWidth: 5.0,
-                  percent: (courses[index].course_started!.length /
+                  percent: ((getCoursesForCurrentDomainAdmin(
+                                  courses[index].course_started!, loggedInState)
+                              .length) /
                           (adminProvider.userRefs.length)) ??
                       0,
                   center: Text(
-                    '${(courses[index].course_started!.length / (adminProvider.userRefs.length) * 100).round()}%',
+                    '${((getCoursesForCurrentDomainAdmin(courses[index].course_started!, loggedInState).length) / (adminProvider.userRefs.length) * 100).round()}%',
                     style: const TextStyle(fontSize: 10),
                   ),
                   progressColor: Colors.orangeAccent,

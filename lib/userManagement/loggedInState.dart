@@ -112,6 +112,7 @@ class _UserDataGetterMaster with ChangeNotifier {
 
   List<dynamic> allCompletedCoursesGlobal =
       []; //Global List to hold all completed courses for User
+  List<dynamic> currentCourseModule = [];
 
   final Logger logger = Logger('Account');
 
@@ -306,6 +307,7 @@ class _UserDataGetterMaster with ChangeNotifier {
       loggedInUser.courses_started.add(courseDetails);
       await setUserData();
       await setAdminConsoleCourseMap(
+          domain: loggedInUser.domain,
           courseName: courseDetails["course_name"],
           courseMapFieldToUpdate: "course_started",
           username: loggedInUser.username,
@@ -327,6 +329,7 @@ class _UserDataGetterMaster with ChangeNotifier {
       loggedInUser.courses_completed.add(courseDetails);
       await setUserData();
       await setAdminConsoleCourseMap(
+          domain: loggedInUser.domain,
           courseName: courseDetails["course_name"],
           courseMapFieldToUpdate: "course_completed",
           username: loggedInUser.username,
@@ -392,7 +395,7 @@ class _UserDataGetterMaster with ChangeNotifier {
   /// -module: the module completed
   ///return: null
   setUserCourseModuleCompleted(
-      {required Map<String, dynamic> courseDetails,
+      {Map<String, dynamic>? courseDetails,
       required CoursesProvider coursesProvider,
       required Course course,
       required Module module}) async {
@@ -530,7 +533,8 @@ class _UserDataGetterMaster with ChangeNotifier {
       {required String courseName,
       required String username,
       required String uid,
-      required String courseMapFieldToUpdate}) async {
+      required String courseMapFieldToUpdate,
+      required String domain}) async {
     DocumentSnapshot courseSnapshot = await FirebaseFirestore.instance
         .collection("adminconsole")
         .doc("allcourses")
@@ -547,7 +551,7 @@ class _UserDataGetterMaster with ChangeNotifier {
               .indexWhere((course) => course["uid"] == uid) ==
           -1) {
         courseMap[courseMapFieldToUpdate]
-            .add({"username": username, "uid": uid});
+            .add({"username": username, "uid": uid, "domain": domain});
         await FirebaseFirestore.instance
             .collection("adminconsole")
             .doc("allcourses")
@@ -560,8 +564,10 @@ class _UserDataGetterMaster with ChangeNotifier {
 
   //
 
-  getCurrentCourse({String? identifier, String? module}) {
-    return CoursesProvider.getCurrentCourse(
+  Future<List<dynamic>> getCurrentCourse(
+      {String? identifier, String? module}) async {
+    currentCourseModule = await CoursesProvider.getCurrentCourse(
         identifier: identifier, module: module);
+    return currentCourseModule;
   }
 }
