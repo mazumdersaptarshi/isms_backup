@@ -1,16 +1,11 @@
-# isms
+# ISMS Manager
 
-A new Flutter project.
+ISMS Management App
 
-## Getting Started
+## Links
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- [Project Google Drive](https://drive.google.com/drive/folders/1GXQBpYhby3-perTxKm2ehJ63cj1TMLUj)
+  - [Executive Summary](https://docs.google.com/presentation/d/1PMYluIWJm2rIaNctLDENE7-vRSPWiD5lILrWf-34WdM/edit)
+  - [Feature Overview](https://docs.google.com/spreadsheets/d/1jAx8PFuumzu36o7i1ZvUX1U6YnIPRwnvazKjLmYpKIE/edit)
+  - [Gantt Chart](https://docs.google.com/spreadsheets/d/1OkMQDJRUEkZg4i2hgCaWiD4Y1hFvG7c5OwIb0ICLwjY/edit)
+- [App Demo](https://isms-pvp.web.app/)

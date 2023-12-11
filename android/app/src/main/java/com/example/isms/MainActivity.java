@@ -1,4 +1,4 @@
-package com.example.isms;
+package com.isms.prod;
 
 import io.flutter.embedding.android.FlutterActivity;
 

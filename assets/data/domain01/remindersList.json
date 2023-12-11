@@ -1,0 +1,416 @@
+[
+  {
+    "number": "4.1",
+    "actionItemName": "「組織及びその状況の理解」をし、ISMSに関する課題を検討",
+    "actionItemLabel": "実施事項",
+    "documentItemLabel": "文書名",
+    "documentItem": "外部および内部の課題",
+    "date": "4月",
+    "categoryName": "必須",
+    "categoryType": "required",
+    "actionSubItems": []
+  },
+  {
+    "number": "4.2",
+    "actionItemName": "「利害関係者のニーズ及び期待の理解」をし、ISMSに関する課題を検討",
+    "actionItemLabel": "実施事項",
+    "documentItemLabel": "文書名",
+    "documentItem": "外部および内部の課題",
+    "date": "4月",
+    "categoryName": "必須",
+    "categoryType": "required",
+    "actionSubItems": []
+  },
+  {
+    "number": "4.3",
+    "actionItemName": "「情報セキュリティマネジメントシステムの適用範囲の決定」（認証範囲の見直し）",
+    "documentItem": "ISMSマニュアル",
+    "actionItemLabel": "実施事項",
+    "documentItemLabel": "文書名",
+    "date": "4月",
+    "categoryName": "必要に応じて",
+    "categoryType": "as_needed",
+    "actionSubItems": []
+  },
+  {
+    "number": "5.2",
+    "actionItemName": "情報セキュリティに関する「方針」の見直し",
+    "documentItem": "情報セキュリティ方針",
+    "actionItemLabel": "実施事項",
+    "documentItemLabel": "文書名",
+    "date": "5月",
+    "categoryName": "必要に応じて",
+    "categoryType": "as_needed",
+    "actionSubItems": []
+  },
+  {
+    "number": "5.3",
+    "actionItemName": "ISMSを構築・運用するための「組織の役割、責任及び権限」の見直し",
+    "documentItem": "情報セキュリティ委員会組織図",
+    "actionItemLabel": "実施事項",
+    "documentItemLabel": "文書名",
+    "date": "5月",
+    "categoryName": "必要に応じて",
+    "categoryType": "as_needed",
+    "actionSubItems": []
+  },
+  {
+    "number": "6.1",
+    "actionItemName": "「リスク及び機会に対処する活動」の検討",
+    "documentItem": "",
+    "actionItemLabel": "実施事項",
+    "documentItemLabel": "文書名",
+    "date": "5月",
+    "categoryName": "",
+    "categoryType": "",
+    "actionSubItems": [
+      {
+        "actionItemName": "4.1、4.2の課題に対する活動の検討",
+        "DocumentItem": "外部および内部の課題",
+        "actionItemLabel": "実施事項",
+        "documentItemLabel": "文書名",
+        "date": "5月",
+        "categoryName": "必須",
+        "categoryType": "required"
+      },
+      {
+        "actionItemName": "リスクアセスメントの実施",
+        "DocumentItem": "資産目録",
+        "actionItemLabel": "実施事項",
+        "documentItemLabel": "文書名",
+        "date": "6月",
+        "categoryName": "必要に応じて",
+        "categoryType": "as_needed"
+      },
+      {
+        "actionItemName": "",
+        "DocumentItem": "リスクアセスメント報告書",
+        "actionItemLabel": "実施事項",
+        "documentItemLabel": "文書名",
+        "date": "6月",
+        "categoryName": "必須",
+        "categoryType": "required"
+      },
+      {
+        "actionItemName": "リスク対応のための計画作成",
+        "DocumentItem": "適用宣言書",
+        "actionItemLabel": "実施事項",
+        "documentItemLabel": "文書名",
+        "date": "6月",
+        "categoryName": "必要に応じて",
+        "categoryType": "as_needed"
+      },
+      {
+        "actionItemName": "（アクションプランの作成）",
+        "DocumentItem": "リスク対応計画",
+        "actionItemLabel": "実施事項",
+        "documentItemLabel": "文書名",
+        "date": "6月",
+        "categoryName": "必須",
+        "categoryType": "required"
+      },
+      {
+        "actionItemName": "管理策(ルール)の検討",
+        "documentItem": "情報セキュリティ手順書",
+        "actionItemLabel": "実施事項",
+        "documentItemLabel": "文書名",
+        "date": "7月",
+        "categoryName": "必要に応じて",
+        "categoryType": "as_needed"
+      }
+
+    ]
+  } ,
+  {
+    "number": "6.2",
+    "actionItemName": "部門毎に「情報セキュリティ目的及びそれを達成するための計画」を作成",
+    "documentItem": "有効性評価表",
+    "actionItemLabel": "実施事項",
+    "documentItemLabel": "文書名",
+    "date": "5月",
+    "categoryName": "必須",
+    "categoryType": "required",
+    "actionSubItems": []
+  },
+  {
+    "number": "7.2",
+    "actionItemName": "5.3で決定した主要メンバーの「力量」の評価・証拠の文書化",
+    "documentItem": "力量確認票",
+    "actionItemLabel": "実施事項",
+    "documentItemLabel": "文書名",
+    "date": "5月",
+    "categoryName": "必要に応じて",
+    "categoryType": "as_needed",
+    "actionSubItems": []
+  },
+  {
+    "number": "7.3",
+    "actionItemName": "全従業者に重要事項を「認識」してもらう",
+    "documentItem": "",
+    "actionItemLabel": "実施事項",
+    "documentItemLabel": "文書名",
+    "date": "7月",
+    "categoryName": "",
+    "categoryType": "",
+    "actionSubItems": [
+      {
+        "actionItemName": "教育計画",
+        "documentItem": "ISMS教育計画書",
+        "actionItemLabel": "実施事項",
+        "documentItemLabel": "文書名",
+        "date": "7月",
+        "categoryName": "必須",
+        "categoryType": "required"
+      },
+      {
+        "actionItemName": "教育準備",
+        "documentItem": "(ISMSハンドブック)(理解度確認テスト)",
+        "actionItemLabel": "実施事項",
+        "documentItemLabel": "文書名",
+        "date": "8月",
+        "categoryName": "必須",
+        "categoryType": "required"
+      },
+      {
+        "actionItemName": "教育実施",
+        "documentItem": "教育報告書",
+        "actionItemLabel": "実施事項",
+        "documentItemLabel": "文書名",
+        "date": "8月",
+        "categoryName": "必須",
+        "categoryType": "required"
+      }
+    ]
+  },
+  {
+    "number": "7.5",
+    "actionItemName": "ISMSを運用する上で必要な「文書化した情報」の見直しと作成",
+    "documentItem": "ISMSマニュアル他",
+    "actionItemLabel": "実施事項",
+    "documentItemLabel": "文書名",
+    "date": "5月",
+    "categoryName": "必要に応じて",
+    "categoryType": "as_needed",
+    "actionSubItems": []
+  },
+  {
+    "number": "8.3",
+    "actionItemName": "6.1で作成した「情報セキュリティリスク対応」計画の実行",
+    "documentItem": "リスク対応計画",
+    "actionItemLabel": "実施事項",
+    "documentItemLabel": "文書名",
+    "date": "11月",
+    "categoryName": "必須",
+    "categoryType": "required",
+    "actionSubItems": []
+  },
+  {
+    "number": "9.1",
+    "actionItemName": "「監視、測定、分析及び評価」の実施",
+    "documentItem": "",
+    "actionItemLabel": "実施事項",
+    "documentItemLabel": "文書名",
+    "date": "7月",
+    "categoryName": "",
+    "categoryType": "",
+    "actionSubItems": [
+      {
+        "actionItemName": "ISMSの有効性の評価",
+        "documentItem": "有効性評価表",
+        "actionItemLabel": "実施事項",
+        "documentItemLabel": "文書名",
+        "date": "7月",
+        "categoryName": "必須",
+        "categoryType": "required"
+      },
+      {
+        "actionItemName": "情報セキュリティパフォーマンス",
+        "documentItem": "内部監査チェックリスト",
+        "actionItemLabel": "実施事項",
+        "documentItemLabel": "文書名",
+        "date": "7月",
+        "categoryName": "必須",
+        "categoryType": "required"
+      }
+    ]
+  },
+  {
+    "number": "9.2",
+    "actionItemName": "「内部監査」の実施",
+    "documentItem": "",
+    "actionItemLabel": "実施事項",
+    "documentItemLabel": "文書名",
+    "date": "5月",
+    "categoryName": "",
+    "categoryType": "",
+    "actionSubItems": [
+      {
+        "actionItemName": "内部監査計画",
+        "documentItem": "内部監査計画書",
+        "actionItemLabel": "実施事項",
+        "documentItemLabel": "文書名",
+        "date": "5月",
+        "categoryName": "必須",
+        "categoryType": "required"
+      },
+      {
+        "actionItemName": "内部監査の実施",
+        "documentItem": "内部監査チェックリスト",
+        "actionItemLabel": "実施事項",
+        "documentItemLabel": "文書名",
+        "date": "7月",
+        "categoryName": "必須",
+        "categoryType": "required"
+      },
+      {
+        "actionItemName": "",
+        "documentItem": "内部監査報告書",
+        "actionItemLabel": "実施事項",
+        "documentItemLabel": "文書名",
+        "date": "7月",
+        "categoryName": "必須",
+        "categoryType": "required"
+      }
+    ]
+  },
+  {
+    "number": "9.3",
+    "actionItemName": "「マネジメントレビュー」を実施し、ISMSの構築・運用状況を報告",
+    "documentItem": "マネジメントレビュー報告書",
+    "actionItemLabel": "実施事項",
+    "documentItemLabel": "文書名",
+    "date": "8月",
+    "categoryName": "必須",
+    "categoryType": "required",
+    "actionSubItems": []
+  },
+  {
+    "number": "10.2",
+    "actionItemName": "内部監査の指摘等の「不適合及び是正処置」を実施",
+    "documentItem": "是正処置実施記録",
+    "actionItemLabel": "実施事項",
+    "documentItemLabel": "文書名",
+    "date": "9月",
+    "categoryName": "必要に応じて",
+    "categoryType": "as_needed",
+    "actionSubItems": []
+  },
+  {
+    "number": "A.5.5",
+    "actionItemName": "「関係当局との連絡」体制の見直し",
+    "documentItem": "連絡先一覧",
+    "actionItemLabel": "実施事項",
+    "documentItemLabel": "文書名",
+    "date": "5月",
+    "categoryName": "必要に応じて",
+    "categoryType": "as_needed",
+    "actionSubItems": []
+  },
+  {
+    "number": "A.5.22",
+    "actionItemName": "「供給者のサービス提供の監視、レビュー及び変更管理」見直し",
+    "documentItem": "委託先審査票",
+    "actionItemLabel": "実施事項",
+    "documentItemLabel": "文書名",
+    "date": "6月",
+    "categoryName": "必須",
+    "categoryType": "required",
+    "actionSubItems": []
+  },
+  {
+    "number": "A.5.29",
+    "actionItemName": "「事業の中断・阻害時の情報セキュリティ」",
+    "documentItem": "",
+    "actionItemLabel": "実施事項",
+    "documentItemLabel": "文書名",
+    "date": "7月",
+    "categoryName": "",
+    "categoryType": "",
+    "actionSubItems": [
+      {
+        "actionItemName": "情報セキュリティ計画",
+        "documentItem": "情報セキュリティ継続計画書",
+        "actionItemLabel": "実施事項",
+        "documentItemLabel": "文書名",
+        "date": "7月",
+        "categoryName": "必要に応じて",
+        "categoryType": "as_needed"
+      },
+      {
+        "actionItemName": "情報セキュリティ継続の検証・レビュー",
+        "documentItem": "情報セキュリティ継続報告書",
+        "actionItemLabel": "実施事項",
+        "documentItemLabel": "文書名",
+        "date": "8月",
+        "categoryName": "必須",
+        "categoryType": "required"
+      }
+    ]
+  },
+  {
+    "number": "A.5.31",
+    "actionItemName": "「法令、規制及び契約上の要求事項」見直し",
+    "documentItem": "法令規制一覧表",
+    "actionItemLabel": "実施事項",
+    "documentItemLabel": "文書名",
+    "date": "5月",
+    "categoryName": "必要に応じて",
+    "categoryType": "as_needed",
+    "actionSubItems": []
+  },
+  {
+    "number": "A.5.36",
+    "actionItemName": "「情報セキュリティのための⽅針群、規則及び標準の順守」状況の点検",
+    "documentItem": "運用チェックリスト",
+    "actionItemLabel": "実施事項",
+    "documentItemLabel": "文書名",
+    "date": "7月",
+    "categoryName": "必須",
+    "categoryType": "required",
+    "actionSubItems": []
+  },
+  {
+    "number": "-",
+    "actionItemName": "審査日の確定",
+    "documentItem": "-",
+    "actionItemLabel": "実施事項",
+    "documentItemLabel": "文書名",
+    "date": "5月",
+    "categoryName": "必須",
+    "categoryType": "required",
+    "actionSubItems": []
+  },
+  {
+    "number": "-",
+    "actionItemName": "審査機関による審査",
+    "documentItem": "",
+    "actionItemLabel": "実施事項",
+    "documentItemLabel": "文書名",
+    "date": "5月",
+    "categoryName": "",
+    "categoryType": "",
+    "actionSubItems": [
+      {
+        "actionItemName": "審査",
+        "documentItem": "-",
+        "actionItemLabel": "実施事項",
+        "documentItemLabel": "文書名",
+        "date": "9月",
+        "categoryName": "",
+        "categoryType": ""
+      }
+    ]
+  },
+  {
+    "number": "-",
+    "actionItemName": "是正",
+    "documentItem": "-",
+    "actionItemLabel": "実施事項",
+    "documentItemLabel": "文書名",
+    "date": "10月",
+    "categoryName": "",
+    "categoryType": "",
+    "actionSubItems": []
+  }
+]
+

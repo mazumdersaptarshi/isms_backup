@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "1064574915790",
+    "project_id": "isms-pvp",
+    "storage_bucket": "isms-pvp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1064574915790:android:3366a6ee6f4d509c33ec9f",
+        "android_client_info": {
+          "package_name": "com.isms.prod"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1064574915790-hmu7210gnutcgrska0a7f9gk34b5a67p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.isms.prod",
+            "certificate_hash": "82f6f7270262125d0adbc66fd0783240bfa00401"
+          }
+        },
+        {
+          "client_id": "1064574915790-i04i7tbdtf1s3vjfockt9j9veubnjftc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.isms.prod",
+            "certificate_hash": "275e086a0122346b9cde9a2dfdce3ecedf2e8376"
+          }
+        },
+        {
+          "client_id": "1064574915790-sj0eivhbc1rl0msgd072619aia6e7in3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8308B-hRkIOSeSxtrl9ye0jovrNLVOBE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1064574915790-3qtk9ku18lb4cjl7d8q4hvcucoul3i9s.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1064574915790-1o3o8npl6rt4rcvu7vl9hq8prbmevcql.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.isms.prod.RunnerTests"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

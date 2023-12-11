@@ -1,0 +1,77 @@
+{
+  "coursesList": [
+    {
+      "courseId": "ip78hd",
+      "courseName": "Introduction to Web Development",
+      "courseDescription": "This course provides a comprehensive introduction to web development, covering HTML, CSS, and JavaScript.",
+      "courseSections": [
+        {
+          "sectionId": "mod1",
+          "sectionType": "module",
+          "sectionContent": "Learn the fundamentals of HTML and how to structure web pages.",
+          "sectionTitle": "HTML and CSS intro"
+        },
+        {
+          "sectionId": "mod2",
+          "title": "Module 2: CSS Essentials",
+          "sectionContent": "Explore the basics of CSS for styling web pages."
+        },
+        {
+          "sectionId": "mod3",
+          "title": "Module 3: Introduction to JavaScript",
+          "sectionContent": "Get started with JavaScript to add interactivity to your web pages."
+        }
+      ],
+      "numberOfCourseSections": 3,
+      "courseAssesments": []
+    },
+    {
+      "courseId": "jd92nd",
+      "courseName": "Fundamentals of Python Programming",
+      "courseDescription": "An introductory course to Python programming, covering basic concepts and practical applications.",
+      "courseSections": [
+        {
+          "sectionId": "py1",
+          "sectionType": "module",
+          "sectionContent": "Introduction to Python and its programming environment."
+        },
+        {
+          "sectionId": "py2",
+          "title": "Python Basics: Variables and Data Types",
+          "sectionContent": "Understanding variables, data types, and basic operations in Python."
+        },
+        {
+          "sectionId": "py3",
+          "title": "Control Structures and Functions in Python",
+          "sectionContent": "Learn about control structures and writing functions in Python."
+        }
+      ],
+      "numberOfCourseSections": 3,
+      "courseAssesments": []
+    },
+    {
+      "courseId": "lk83jd",
+      "courseName": "Introduction to Data Science",
+      "courseDescription": "This course introduces the core concepts of data science, including data analysis, visualization, and machine learning.",
+      "courseSections": [
+        {
+          "sectionId": "ds1",
+          "sectionType": "module",
+          "sectionContent": "The basics of data analysis and manipulation."
+        },
+        {
+          "sectionId": "ds2",
+          "title": "Data Visualization Techniques",
+          "sectionContent": "Explore various tools and techniques for data visualization."
+        },
+        {
+          "sectionId": "ds3",
+          "title": "Introduction to Machine Learning",
+          "sectionContent": "An overview of machine learning concepts and applications."
+        }
+      ],
+      "numberOfCourseSections": 3,
+      "courseAssesments": []
+    }
+  ]
+}

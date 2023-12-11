@@ -1,0 +1,21 @@
+name: Deploy to Firebase Hosting on Push
+'on':
+  push:
+    branches:
+      - beta-app-v1-demo-env
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '3.13.9'
+      - run: flutter build web --release
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_ISMS_2C025 }}'
+          channelId: live
+          projectId: isms-pvp
