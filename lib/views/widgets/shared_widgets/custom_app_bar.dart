@@ -42,6 +42,7 @@ import '../../screens/user_screens/user_profile_screen.dart';
 // import '../views/screens/login/login_screen.dart';
 // import '../views/screens/reminder_screen.dart';
 // import '../views/screens/userInfo/user_profile_screen.dart';
+import '../../screens/course_page.dart';
 
 mixin CustomAppBarMixin on StatelessWidget {
   final Map<String, ValueNotifier<bool>> hovering = {
@@ -49,6 +50,7 @@ mixin CustomAppBarMixin on StatelessWidget {
     "Notifications": ValueNotifier(false),
     "Reminders": ValueNotifier(false),
     "Account": ValueNotifier(false),
+    "Course Test": ValueNotifier(false),
     "Admin Console": ValueNotifier(false),
     "My Learning": ValueNotifier(false),
   };
@@ -57,6 +59,13 @@ mixin CustomAppBarMixin on StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const UserProfilePage()),
+    );
+  }
+
+  void navigateToCourseTestPage(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const CoursePage()),
     );
   }
 
@@ -253,6 +262,8 @@ class CustomAppBarWeb extends StatelessWidget
             () => navigateToCoursesPage(context), _paddingValue),
         appBarItem(Icons.lightbulb, "My Learning",
             () => navigateToMyLearningPage(context), _paddingValue),
+        appBarItem(Icons.lightbulb, "Course Test",
+                () => navigateToCourseTestPage(context), _paddingValue),
         if (loggedInState?.currentUserRole == 'admin')
           appBarItem(
               Icons.notifications_active_rounded,

@@ -1,0 +1,51 @@
+{
+    "courseId": "ip78hd",
+    "examTitle": "Test Exam",
+    "examDescription": "Test Exam description",
+    "examPassingMark": 80.0,
+    "examAllowedAttempts": 3,
+    "examQuestions": [
+        {
+            "sectionType": "MultipleChoiceQuestion",
+            "sectionTitle": "Multiple choice question 1",
+            "sectionContent": {
+                "multipleChoiceQuestionText": "Q1",
+                "multipleChoiceQuestionCorrectAnswer": 2,
+                "multipleChoiceQuestionAnswers": [
+                    "A1",
+                    "A2",
+                    "A3"
+                ]
+            }
+        },
+        {
+            "sectionType": "MultipleChoiceQuestion",
+            "sectionTitle": "Multiple choice question 2",
+            "sectionContent": {
+                "multipleChoiceQuestionText": "Q2",
+                "multipleChoiceQuestionCorrectAnswer": 4,
+                "multipleChoiceQuestionAnswers": [
+                    "A1",
+                    "A2",
+                    "A3",
+                    "A4"
+                ]
+            }
+        },
+        {
+            "sectionType": "MultipleChoiceQuestion",
+            "sectionTitle": "Multiple choice question 3",
+            "sectionContent": {
+                "multipleChoiceQuestionText": "Q3",
+                "multipleChoiceQuestionCorrectAnswer": 1,
+                "multipleChoiceQuestionAnswers": [
+                    "A1",
+                    "A2"
+                ]
+            }
+        },
+        {
+            "sectionType": "FinishExamButton"
+        }
+    ]
+}

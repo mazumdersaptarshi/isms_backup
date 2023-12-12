@@ -1,0 +1,54 @@
+{
+    "courseId": "ip78hd",
+    "courseTitle": "Test Course",
+    "courseDescription": "Test Course description",
+    "courseSections": [
+        {
+            "sectionType": "Html",
+            "sectionTitle": "Static HTML 1",
+            "sectionContent": "<html><body><p>HTML 1</p></body></html>"
+        },
+        {
+            "sectionType": "MultipleChoiceQuestion",
+            "sectionTitle": "Multiple choice question",
+            "sectionContent": {
+                "multipleChoiceQuestionText": "Q1",
+                "multipleChoiceQuestionCorrectAnswer": 2,
+                "multipleChoiceQuestionAnswers": [
+                    "A1",
+                    "A2",
+                    "A3"
+                ]
+            }
+        },
+        {
+            "sectionType": "NextSectionButton"
+        },
+        {
+            "sectionType": "Html",
+            "sectionTitle": "Static HTML 2",
+            "sectionContent": "<html><body><p>HTML 2</p></body></html>"
+        },
+        {
+            "sectionType": "Flipcard",
+            "sectionTitle": "Flipcards",
+            "sectionContent": [
+                {
+                    "flipcardFront": "Front 1",
+                    "flipcardBack": "Back 1"
+                },
+                {
+                    "flipcardFront": "Front 2",
+                    "flipcardBack": "Back 2"
+                },
+                {
+                    "flipcardFront": "Front 2",
+                    "flipcardBack": "Back 3"
+                }
+            ]
+        },
+        {
+            "sectionType": "StartExamButton"
+        }
+    ]
+}
