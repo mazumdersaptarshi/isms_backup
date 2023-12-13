@@ -7,19 +7,53 @@
       "courseSections": [
         {
           "sectionId": "mod1",
-          "sectionType": "module",
-          "sectionContent": "Learn the fundamentals of HTML and how to structure web pages.",
+          "sectionType": "html",
+          "sectionContent": "<p>Learn the fundamentals of HTML and how to structure web pages.</p>",
           "sectionTitle": "HTML and CSS intro"
         },
         {
           "sectionId": "mod2",
+          "sectionType": "flip_cards",
+          "itemList": [{
+            "front": "This is front",
+            "back": "This is back"
+          },
+            {
+              "front": "Front",
+              "back": "back"
+            }
+          ],
           "title": "Module 2: CSS Essentials",
           "sectionContent": "Explore the basics of CSS for styling web pages."
         },
         {
           "sectionId": "mod3",
           "title": "Module 3: Introduction to JavaScript",
-          "sectionContent": "Get started with JavaScript to add interactivity to your web pages."
+          "sectionType": "mcq",
+        "itemList": [
+          {
+            "question": "This is a question",
+            "options": [
+              {
+                "optionLabel": "Wrong Ans 1",
+                "isCorrect": false
+              },
+              {
+                "optionLabel": "Wrong Ans 2",
+                "isCorrect": false
+              },
+              {
+                "optionLabel": "Right Ans 1",
+                "isCorrect": true
+              },
+              {
+                "optionLabel": "Right Ans 2",
+                "isCorrect": true
+              }
+            ]
+
+          }
+        ]
         }
       ],
       "numberOfCourseSections": 3,

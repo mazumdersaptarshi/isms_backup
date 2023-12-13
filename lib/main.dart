@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:isms/services/hive/hive_adapters/user_course_progress.dart';
 // import 'package:isms/remindersManagement/reminders_provider.dart';
 // import 'package:isms/screens/login/login_screen.dart';
 import 'package:isms/views/screens/authentication/login_screen.dart';
@@ -36,7 +37,11 @@ void main() async {
         options: DefaultFirebaseOptions.currentPlatform);
   } on Exception catch (_) {}
   logger.info('Firebase initialized');
-  await Hive.initFlutter();
+
+  await Hive.initFlutter(); //initializing Hive
+  Hive.registerAdapter(
+      UserCourseprogressHiveAdapter()); //Registering Adapters for Hive
+  var box = await Hive.openBox('users'); // Opening Users Box
 
   runApp(const MyApp());
 }

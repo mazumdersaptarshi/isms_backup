@@ -5,6 +5,7 @@ class UserCourseProgress {
   String? courseName;
   String? completionStatus;
   String? currentSectionId;
+  Map<String, dynamic>? currentSection;
   List? sectionProgressList;
   List? attempts;
   List? scores;
@@ -14,6 +15,7 @@ class UserCourseProgress {
       this.courseName,
       this.completionStatus,
       this.currentSectionId,
+      this.currentSection,
       this.sectionProgressList,
       this.attempts,
       this.scores});

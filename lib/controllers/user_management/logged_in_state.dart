@@ -5,8 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive/hive.dart';
-import 'package:isms/controllers/course_management/course_provider.dart';
-import 'package:isms/models/course_progress/user_course_progress.dart';
+import 'package:isms/services/hive/hive_adapters/user_course_progress.dart';
 // import 'package:isms/projectModules/domain_management/domain_provider.dart';
 import 'package:logging/logging.dart';
 
@@ -55,13 +54,6 @@ class LoggedInState extends _UserDataGetterMaster {
       }
     });
     listenToChanges();
-
-    //Test lines
-    updateCourseProgress('ip78hd');
-  }
-
-  static Future<void> updateUserLocalData() async {
-    var box = Hive.openBox('localData');
   }
 
   ///This function handles the connection from a user to the database
@@ -175,15 +167,15 @@ class _UserDataGetterMaster with ChangeNotifier {
       "email": user?.email!,
       "role": "user",
       "domain": domain,
-      // "coursesProgressData": {[]}
+      "courses": {},
     };
-    var box = await Hive.openBox('users');
-    try {
-      Map<String, dynamic> res = box.get('users');
-      if (res[user?.uid]) print("iik: $res");
-    } catch (e) {
-      print('Local User Data Doesn\'t exist, creating local data...');
-      await box.put('hshh', localUserData);
+    var box = Hive.box('users');
+    var res = box.get('${user?.uid}');
+    if (res != null) {
+      box.put('${user?.uid}', localUserData);
+      print(box.get('${user?.uid}'));
+    } else {
+      box.put('${user?.uid}', localUserData);
     }
   }
 
@@ -257,48 +249,74 @@ class _UserDataGetterMaster with ChangeNotifier {
   }
 
   /// Updates the current progress to the course by looking it up by courseId, if userCourseProgress object exists
-  /// for user then the progress is updated, if not exists then new userCourseProgress object is created
-  Future<void> updateCourseProgress(String? courseId) async {
-    Map<String, dynamic> course = {};
-    course = await CourseProvider.getCourseByID(courseId: courseId);
-    print('${course}');
-
-    ///making a userCourseProgress object
-    UserCourseProgress userCourseProgress = UserCourseProgress(
-        courseId: courseId!,
-        courseName: course['courseName'],
-        completionStatus: 'not_completed',
-        currentSectionId: '',
-        sectionProgressList: [],
-        attempts: [],
-        scores: []);
-    print(userCourseProgress.courseName);
-
-    ///Map to create course progress data to be stored
-    Map<String, dynamic> currentProgressData = {
-      "courseId": userCourseProgress.courseId,
-      "courseName": userCourseProgress.courseName,
-      "completionStatus": userCourseProgress.completionStatus,
-      "currentSectionId": userCourseProgress.currentSectionId,
-      "sectionProgressList": userCourseProgress.sectionProgressList,
-      "attempts": userCourseProgress.attempts,
-      "scores": userCourseProgress.scores,
+  /// for user then the progress is updated with the new details, if not exists then new userCourseProgress object is created
+  Future<void> updateCourseProgress({
+    String? courseId,
+    String? courseName,
+    String? completionStatus,
+    String? currentSectionId,
+    Map<String, dynamic>? currentSection,
+  }) async {
+    /*
+    Creating a map of the latest progress data received by the function, and
+    Sending it to be updated in the storage
+     */
+    Map<String, dynamic> latestProgressDataMap = {
+      "courseId": courseId!,
+      "courseName": courseName,
+      "completionStatus": completionStatus,
+      "currentSectionId": currentSectionId,
+      "currentSection": currentSection,
     };
 
-    print(currentProgressData);
-    // var box = await Hive.openBox('userCourseProgress');
-    // box.put('currentProgressData', currentProgressData);
-    // loadCourseProgress();
+//Calling function to update Local progress data for the course for current User
+    await updateCurrentCourseProgressLocal(
+        latestProgressDataMap, _currentUser!);
   }
 
-  Future<void> loadCourseProgress({String? courseId}) async {
-    var box = await Hive.openBox('userCourseProgress');
+  /// Updates Existing User Data with the Local Course Progress data in Hive, for the current User
+  /* This function will be moved to a different Script HiveService which controls all functionality related to
+    User data stored in Hive */
+  static Future<void> updateCurrentCourseProgressLocal(
+      Map<String, dynamic> currentProgressData, User currentUser) async {
+    var box = Hive.box('users'); //Opens existing Hive box 'users'
 
-    print('This is Box data: ${box.get('currentProgressData')}');
-    box.close();
+    //Test debug line
+    print('users Box All Data Before Insert:${box.toMap()}');
+
+    Map<String, dynamic> existingUserData =
+        {}; //Declaring empty existingUserData map
+    try {
+      existingUserData = await box.get(
+          currentUser.uid); // Gets the existing User data from the Hive Box
+
+      var currentCourseProgress = UserCourseProgressHive(
+        courseId: currentProgressData['courseId'],
+        courseName: currentProgressData['courseName'],
+        completionStatus: currentProgressData['completionStatus'],
+        currentSectionId: currentProgressData['currentSectionId'],
+        currentSection: currentProgressData['currentSection'],
+        // attempts: currentProgressData['attempts'],
+        // scores: currentProgressData['scores'],
+      );
+      existingUserData['courses']['${currentProgressData['courseId']}'] =
+          currentCourseProgress;
+      //Updating the existingUserData variable with the Course Progress
+
+      //putting the Updated users data in Hive
+      box.put('$currentUser.uid', existingUserData);
+      var res = await box.get('$currentUser.uid')['courses'];
+      print(res);
+      //Test Debug lines
+    } catch (e) {
+      print('No existing User Data found locally, failed to Update Data');
+    }
+    // print('users Box All Data After Insert:${box.toMap()}');
+
+    // await box.clear();
   }
 
-  ///This function creates a listener that monitore any change to the user's data in the DB
+  ///This function creates a listener that monitor any change to the user's data in the DB
   ///
   ///input : the user object created by the authentication
   ///return: null
