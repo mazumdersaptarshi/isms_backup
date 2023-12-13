@@ -9,20 +9,54 @@
             "sectionContent": "<html><body><p>HTML 1</p></body></html>"
         },
         {
-            "sectionType": "MultipleChoiceQuestion",
-            "sectionTitle": "Multiple choice question",
+            "sectionType": "SingleSelectionQuestion",
+            "sectionTitle": "Multiple choice question with single answer selection",
             "sectionContent": {
-                "multipleChoiceQuestionText": "Q1",
-                "multipleChoiceQuestionCorrectAnswer": 2,
-                "multipleChoiceQuestionAnswers": [
-                    "A1",
-                    "A2",
-                    "A3"
+                "questionText": "SSQ",
+                "questionAnswers": [
+                    {
+                        "answerText": "A1",
+                        "answerPoints": 0
+                    },
+                    {
+                        "answerText": "A2",
+                        "answerPoints": 1
+                    },
+                    {
+                        "answerText": "A3",
+                        "answerPoints": 0
+                    }
                 ]
             }
         },
         {
-            "sectionType": "NextSectionButton"
+            "sectionType": "MultipleSelectionQuestion",
+            "sectionTitle": "Multiple choice question with multiple answer selection",
+            "sectionContent": {
+                "questionText": "MSQ",
+                "questionAnswers": [
+                    {
+                        "answerText": "A1",
+                        "answerPoints": 1
+                    },
+                    {
+                        "answerText": "A2",
+                        "answerPoints": 0
+                    },
+                    {
+                        "answerText": "A3",
+                        "answerPoints": 0
+                    },
+                    {
+                        "answerText": "A4",
+                        "answerPoints": 1
+                    }
+                ]
+            }
+        },
+        {
+            "sectionType": "NextSectionButton",
+            "sectionContent": "Proceed to next section"
         },
         {
             "sectionType": "Html",
@@ -48,7 +82,8 @@
             ]
         },
         {
-            "sectionType": "StartExamButton"
+            "sectionType": "StartExamButton",
+            "sectionContent": "Start this course's exam"
         }
     ]
 }
