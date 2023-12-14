@@ -16,15 +16,15 @@
                 "questionAnswers": [
                     {
                         "answerText": "A1",
-                        "answerPoints": 0
+                        "answerCorrect": false
                     },
                     {
                         "answerText": "A2",
-                        "answerPoints": 1
+                        "answerCorrect": true
                     },
                     {
                         "answerText": "A3",
-                        "answerPoints": 0
+                        "answerCorrect": false
                     }
                 ]
             }
@@ -37,19 +37,19 @@
                 "questionAnswers": [
                     {
                         "answerText": "A1",
-                        "answerPoints": 1
+                        "answerCorrect": true
                     },
                     {
                         "answerText": "A2",
-                        "answerPoints": 0
+                        "answerCorrect": false
                     },
                     {
                         "answerText": "A3",
-                        "answerPoints": 0
+                        "answerCorrect": false
                     },
                     {
                         "answerText": "A4",
-                        "answerPoints": 1
+                        "answerCorrect": true
                     }
                 ]
             }
@@ -64,26 +64,22 @@
             "sectionContent": "<html><body><p>HTML 2</p></body></html>"
         },
         {
-            "sectionType": "Flipcard",
-            "sectionTitle": "Flipcards",
+            "sectionType": "FlipCard",
+            "sectionTitle": "FlipCards",
             "sectionContent": [
                 {
-                    "flipcardFront": "Front 1",
-                    "flipcardBack": "Back 1"
+                    "flipCardFront": "Front 1",
+                    "flipCardBack": "Back 1"
                 },
                 {
-                    "flipcardFront": "Front 2",
-                    "flipcardBack": "Back 2"
+                    "flipCardFront": "Front 2",
+                    "flipCardBack": "Back 2"
                 },
                 {
-                    "flipcardFront": "Front 2",
-                    "flipcardBack": "Back 3"
+                    "flipCardFront": "Front 2",
+                    "flipCardBack": "Back 3"
                 }
             ]
-        },
-        {
-            "sectionType": "StartExamButton",
-            "sectionContent": "Start this course's exam"
         }
     ]
 }

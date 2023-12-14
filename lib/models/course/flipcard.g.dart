@@ -6,12 +6,12 @@ part of 'flipcard.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Flipcard _$FlipcardFromJson(Map<String, dynamic> json) => Flipcard(
-      flipcardFront: json['flipcardFront'] as String,
-      flipcardBack: json['flipcardBack'] as String,
+FlipCard _$FlipCardFromJson(Map<String, dynamic> json) => FlipCard(
+      flipCardFront: json['flipCardFront'] as String,
+      flipCardBack: json['flipCardBack'] as String,
     );
 
-Map<String, dynamic> _$FlipcardToJson(Flipcard instance) => <String, dynamic>{
-      'flipcardFront': instance.flipcardFront,
-      'flipcardBack': instance.flipcardBack,
+Map<String, dynamic> _$FlipCardToJson(FlipCard instance) => <String, dynamic>{
+      'flipCardFront': instance.flipCardFront,
+      'flipCardBack': instance.flipCardBack,
     };

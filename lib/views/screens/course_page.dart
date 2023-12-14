@@ -1,7 +1,11 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
-//import 'course_sidebar.dart'; // Import the sidebar widget
+import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+
+import 'package:isms/models/enums.dart';
+import 'package:isms/models/course/course.dart';
+import 'package:isms/models/course/course_section.dart';
 
 class CoursePage extends StatefulWidget {
   const CoursePage({super.key});
@@ -11,6 +15,15 @@ class CoursePage extends StatefulWidget {
 }
 
 class _CoursePageState extends State<CoursePage> {
+  final String jsonString = '{"courseId": "ip78hd","courseTitle": "Test Course","courseDescription": "Test Course description","courseSections": [{"sectionType": "Html","sectionTitle": "Static HTML 1","sectionContent": "<html><body><p>HTML 1</p></body></html>"},{"sectionType": "SingleSelectionQuestion","sectionTitle": "Multiple choice question with single answer selection","sectionContent": {"questionText": "SSQ","questionAnswers": [{"answerText": "A1","answerCorrect": false},{"answerText": "A2","answerCorrect": true},{"answerText": "A3","answerCorrect": false}]}},{"sectionType": "MultipleSelectionQuestion","sectionTitle": "Multiple choice question with multiple answer selection","sectionContent": {"questionText": "MSQ","questionAnswers": [{"answerText": "A1","answerCorrect": true},{"answerText": "A2","answerCorrect": false},{"answerText": "A3","answerCorrect": false},{"answerText": "A4","answerCorrect": true}]}},{"sectionType": "NextSectionButton","sectionContent": "Proceed to next section"},{"sectionType": "Html","sectionTitle": "Static HTML 2","sectionContent": "<html><body><p>HTML 2</p></body></html>"},{"sectionType": "FlipCard","sectionTitle": "FlipCards","sectionContent": [{"flipCardFront": "Front 1","flipCardBack": "Back 1"},{"flipCardFront": "Front 2","flipCardBack": "Back 2"},{"flipCardFront": "Front 2","flipCardBack": "Back 3"}]}]}';
+  late final Course course;
+
+  @override
+  void initState() {
+    super.initState();
+    final Map<String, dynamic> courseMap = jsonDecode(jsonString) as Map<String, dynamic>;
+    course = Course.fromJson(courseMap);
+  }
   int currentSection = 0;
   final List<String> sections = [
     'Introduction',
@@ -109,36 +122,57 @@ class _CoursePageState extends State<CoursePage> {
   ];
 
   List<Widget> getContentWidgets() {
-    List<Widget> contentWidgets = [];
-    for (int i = 0; i <= currentSection; i++) {
-      contentWidgets.add(Html(data: htmlContent[i]));
-      if (i < currentSection) {
-        contentWidgets.add(const SizedBox(height: 10)); // Adjusted size for less spacing
+    final List<Widget> contentWidgets = [];
+
+    for (CourseSection section in course.courseSections) {
+      switch (section.sectionType) {
+        case 'Html':
+          contentWidgets.add(Html(data: section.sectionContent));
+        case 'SingleSelectionQuestion':
+          break;
+        case 'MultipleSelectionQuestion':
+          break;
+        case 'FlipCard':
+          break;
+        case 'NextSectionButton':
+          contentWidgets.add(ElevatedButton(
+            onPressed: goToNextSection,
+            child: Text(section.sectionContent),
+          ));
+        default:
+          break;
       }
     }
 
-    // Flip cards in the "Review" section
-    if (currentSection == sections.length - 1) {
-      contentWidgets.addAll([
-        Wrap(
-          alignment: WrapAlignment.center,
-          spacing: 10.0,
-          runSpacing: 10.0,
-          children: List.generate(4, (index) => FlipCard(content: 'Content for Card ${index + 1}')),
-        ),
-        const SizedBox(height: 20),
-      ]);
-    }
+    // for (int i = 0; i <= currentSection; i++) {
+    //   contentWidgets.add(Html(data: htmlContent[i]));
+    //   if (i < currentSection) {
+    //     contentWidgets.add(const SizedBox(height: 10)); // Adjusted size for less spacing
+    //   }
+    // }
+    //
+    // // Flip cards in the "Review" section
+    // if (currentSection == sections.length - 1) {
+    //   contentWidgets.addAll([
+    //     Wrap(
+    //       alignment: WrapAlignment.center,
+    //       spacing: 10.0,
+    //       runSpacing: 10.0,
+    //       children: List.generate(4, (index) => FlipCard(content: 'Content for Card ${index + 1}')),
+    //     ),
+    //     const SizedBox(height: 20),
+    //   ]);
+    // }
 
     return contentWidgets;
   }
 
   void goToNextSection() {
-    if (currentSection < sections.length - 1) {
-      setState(() {
-        currentSection++;
-      });
-    }
+    // if (currentSection < sections.length - 1) {
+    //   setState(() {
+    //     currentSection++;
+    //   });
+    // }
   }
 
   @override
@@ -153,11 +187,11 @@ class _CoursePageState extends State<CoursePage> {
         child: Column(
           children: [
             ...getContentWidgets(),
-            if (currentSection < sections.length - 1)
-              ElevatedButton(
-                onPressed: goToNextSection,
-                child: const Text('Next Section'),
-              ),
+            // if (currentSection < sections.length - 1)
+            //   ElevatedButton(
+            //     onPressed: goToNextSection,
+            //     child: const Text('Next Section'),
+            //   ),
           ],
         ),
       ),

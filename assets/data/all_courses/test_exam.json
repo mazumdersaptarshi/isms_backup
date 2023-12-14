@@ -2,50 +2,54 @@
     "courseId": "ip78hd",
     "examTitle": "Test Exam",
     "examDescription": "Test Exam description",
-    "examPassingMark": 80.0,
+    "examRequiredCorrectAnswers": 2,
     "examAllowedAttempts": 3,
     "examQuestions": [
         {
-            "sectionType": "MultipleChoiceQuestion",
-            "sectionTitle": "Multiple choice question 1",
+            "sectionType": "SingleSelectionQuestion",
+            "sectionTitle": "Multiple choice question with single answer selection",
             "sectionContent": {
-                "multipleChoiceQuestionText": "Q1",
-                "multipleChoiceQuestionCorrectAnswer": 2,
-                "multipleChoiceQuestionAnswers": [
-                    "A1",
-                    "A2",
-                    "A3"
+                "questionText": "SSQ",
+                "questionAnswers": [
+                    {
+                        "answerText": "A1",
+                        "answerCorrect": false
+                    },
+                    {
+                        "answerText": "A2",
+                        "answerCorrect": true
+                    },
+                    {
+                        "answerText": "A3",
+                        "answerCorrect": false
+                    }
                 ]
             }
         },
         {
-            "sectionType": "MultipleChoiceQuestion",
-            "sectionTitle": "Multiple choice question 2",
+            "sectionType": "MultipleSelectionQuestion",
+            "sectionTitle": "Multiple choice question with multiple answer selection",
             "sectionContent": {
-                "multipleChoiceQuestionText": "Q2",
-                "multipleChoiceQuestionCorrectAnswer": 4,
-                "multipleChoiceQuestionAnswers": [
-                    "A1",
-                    "A2",
-                    "A3",
-                    "A4"
+                "questionText": "MSQ",
+                "questionAnswers": [
+                    {
+                        "answerText": "A1",
+                        "answerCorrect": true
+                    },
+                    {
+                        "answerText": "A2",
+                        "answerCorrect": false
+                    },
+                    {
+                        "answerText": "A3",
+                        "answerCorrect": false
+                    },
+                    {
+                        "answerText": "A4",
+                        "answerCorrect": true
+                    }
                 ]
             }
-        },
-        {
-            "sectionType": "MultipleChoiceQuestion",
-            "sectionTitle": "Multiple choice question 3",
-            "sectionContent": {
-                "multipleChoiceQuestionText": "Q3",
-                "multipleChoiceQuestionCorrectAnswer": 1,
-                "multipleChoiceQuestionAnswers": [
-                    "A1",
-                    "A2"
-                ]
-            }
-        },
-        {
-            "sectionType": "FinishExamButton"
         }
     ]
 }

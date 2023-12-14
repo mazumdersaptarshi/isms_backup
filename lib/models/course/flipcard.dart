@@ -7,19 +7,19 @@ part 'flipcard.g.dart';
 /// An annotation for the code generator to know that this class needs the
 /// JSON serialisation logic to be generated.
 @JsonSerializable(explicitToJson: true)
-class Flipcard {
-  final String flipcardFront;
-  final String flipcardBack;
+class FlipCard {
+  final String flipCardFront;
+  final String flipCardBack;
 
-  Flipcard({
-      required this.flipcardFront,
-      required this.flipcardBack});
+  FlipCard({
+      required this.flipCardFront,
+      required this.flipCardBack});
 
   /// A necessary factory constructor for creating a new class instance from a map.
   /// Pass the map to the generated constructor, which is named after the source class.
-  factory Flipcard.fromJson(Map<String, dynamic> json) => _$FlipcardFromJson(json);
+  factory FlipCard.fromJson(Map<String, dynamic> json) => _$FlipCardFromJson(json);
 
   /// `toJson` is the convention for a class to declare support for serialisation
   /// to JSON. The implementation simply calls the private, generated helper method.
-  Map<String, dynamic> toJson() => _$FlipcardToJson(this);
+  Map<String, dynamic> toJson() => _$FlipCardToJson(this);
 }

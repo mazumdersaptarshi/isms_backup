@@ -1,8 +1,11 @@
 // ignore_for_file: constant_identifier_names
 
-enum QUESTIONTYPE {
-  MCQ, // Single correct answer
-  Checkbox, // Multiple correct answers
+enum SectionType {
+  Html,
+  SingleSelectionQuestion,
+  MultipleSelectionQuestion,
+  FlipCard,
+  NextSectionButton
 }
 
 class EnumToString {

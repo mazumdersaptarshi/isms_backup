@@ -1,8 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'package:isms/models/course/question.dart';
-import 'package:isms/models/course/flipcard.dart';
 import 'package:isms/interfaces/serializable.dart';
+import 'package:isms/models/course/flipcard.dart';
+import 'package:isms/models/course/question.dart';
 
 /// This allows the class to access private members in the generated file.
 /// The value for this is `*.g.dart`, where the asterisk denotes the source file name.
@@ -43,12 +43,11 @@ class CourseSection<T> {
 ///  - `Html` -> `String`
 ///  - `SingleSelectionQuestion` -> `Question`
 ///  - `MultipleSelectionQuestion` -> `Question`
-///  - `Flipcard` -> `List<Flipcard>`
+///  - `FlipCard` -> `List<FlipCard>`
 ///  - `NextSectionButton` -> `String`
-///  - `StartExamButton` -> `String`
 ///
 /// Note that the `String` returned in JSON field `sectionType` is necessary for
-/// conditional logic when displaying the section *only in Dart*; here we need to
+/// conditional logic when displaying the section **only in Dart**; here we need to
 /// inspect the keys present in the returned JSON map(s) to identify the type.
 class ModelConverter<T> implements JsonConverter<T, Object> {
   const ModelConverter();
@@ -75,11 +74,14 @@ class ModelConverter<T> implements JsonConverter<T, Object> {
       /// Inspect the first element of the List of JSON to determine its Type
       Map<String,dynamic> first = json.first as Map<String,dynamic>;
 
-      if (first.containsKey('flipcardFront')) {
-        return json.map((mapJson) => Flipcard.fromJson(mapJson)).toList() as T;
+      if (first.containsKey('flipCardFront')) {
+        return json.map((mapJson) => FlipCard.fromJson(mapJson)).toList() as T;
       }
+    } else if (json is String) {
+      /// Return the String as-is since we do not need to deserialise it.
+      return json as T;
     }
-    /// We didn't recognize this JSON map as one of our model classes, throw an error
+    /// We didn't recognise this JSON map as one of our model classes, throw an error
     /// so we can add the missing case
     throw ArgumentError.value(json, 'json', 'OperationResult._fromJson cannot handle'
         ' this JSON payload. Please add a handler to _fromJson.');

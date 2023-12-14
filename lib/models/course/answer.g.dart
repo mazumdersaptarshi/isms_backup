@@ -8,10 +8,10 @@ part of 'answer.dart';
 
 Answer _$AnswerFromJson(Map<String, dynamic> json) => Answer(
       answerText: json['answerText'] as String,
-      answerPoints: json['answerPoints'] as int,
+      answerCorrect: json['answerCorrect'] as bool,
     );
 
 Map<String, dynamic> _$AnswerToJson(Answer instance) => <String, dynamic>{
       'answerText': instance.answerText,
-      'answerPoints': instance.answerPoints,
+      'answerCorrect': instance.answerCorrect,
     };
