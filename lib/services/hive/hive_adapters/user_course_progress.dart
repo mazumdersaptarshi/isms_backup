@@ -7,9 +7,10 @@ class UserCourseProgressHive {
   UserCourseProgressHive(
       {this.courseId,
       this.courseName,
+      this.startStatus,
       this.completionStatus,
       this.currentSectionId,
-      this.sectionProgressList,
+      this.sections,
       this.attempts,
       this.scores,
       this.currentSection});
@@ -27,7 +28,7 @@ class UserCourseProgressHive {
   String? currentSectionId;
 
   @HiveField(4)
-  List? sectionProgressList;
+  List? sections;
 
   @HiveField(5)
   List? attempts;
@@ -36,5 +37,8 @@ class UserCourseProgressHive {
   List? scores;
 
   @HiveField(7)
-  Map<String, dynamic>? currentSection;
+  Map<String, dynamic>? currentSection = {};
+
+  @HiveField(8)
+  String? startStatus;
 }

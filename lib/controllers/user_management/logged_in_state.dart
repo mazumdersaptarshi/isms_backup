@@ -4,8 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:hive/hive.dart';
-import 'package:isms/services/hive/hive_adapters/user_course_progress.dart';
+import 'package:isms/controllers/storage/hive_service/hive_service.dart';
 // import 'package:isms/projectModules/domain_management/domain_provider.dart';
 import 'package:logging/logging.dart';
 
@@ -32,7 +31,7 @@ class LoggedInState extends _UserDataGetterMaster {
     //_auth.setPersistence(Persistence.NONE);
     _auth.authStateChanges().listen((User? user) async {
       if (user == null) {
-        logger.info(
+        _logger.info(
             "auth state changed: no account currently signed into Firebase");
         clear();
         // this needs to be called at the end og this branch, because we
@@ -40,7 +39,7 @@ class LoggedInState extends _UserDataGetterMaster {
         // completed,
         notifyListeners();
       } else {
-        logger.info(
+        _logger.info(
             "auth state changed: ${user.email} currently signed into Firebase");
         // ensure the app has a user entry for this account
         await _UserDataGetterMaster.ensureUserDataExists(
@@ -102,14 +101,8 @@ class _UserDataGetterMaster with ChangeNotifier {
   static DocumentReference? _userRef;
   static DocumentSnapshot? _currentUserSnapshot;
   static CustomUser? _customUserObject;
-  List<dynamic> allEnrolledCoursesGlobal =
-      []; //Global List to hold all enrolled courses for User
 
-  List<dynamic> allCompletedCoursesGlobal =
-      []; //Global List to hold all completed courses for User
-  List<dynamic> currentCourseModule = [];
-
-  final Logger logger = Logger('Account');
+  final Logger _logger = Logger('Account');
 
   ///This function saves a new user in the DB
   ///
@@ -125,7 +118,7 @@ class _UserDataGetterMaster with ChangeNotifier {
 
   ///This function checks if a user exists in the database
   ///
-  ///If a uswer does not exist in the database this function redirect to the user creation function.
+  ///If a user does not exist in the database this function redirect to the user creation function.
   ///input : the user object created by the authentication
   ///return: null
   static Future<void> ensureUserDataExists(User? user) async {
@@ -135,12 +128,10 @@ class _UserDataGetterMaster with ChangeNotifier {
         await db.collection('users').doc(user.uid).get();
 
     if (userSnapshot.exists) {
-      //Checking if local Data exists for this user or not, work in progress
       DomainProvider domainProvider = DomainProvider();
 
-      String domain = await domainProvider.getUserDomain(user.uid);
-      await ensureUserLocalDataExists(user,
-          domain); //function call to check if local user data exists or not
+      await HiveService.ensureUserLocalDataExists(
+          user); //function call to check if local user data exists or not
     }
 
     if (!userSnapshot.exists) {
@@ -153,29 +144,7 @@ class _UserDataGetterMaster with ChangeNotifier {
           role: 'user',
           uid: user.uid,
           domain: domain!));
-      await ensureUserLocalDataExists(user, domain);
-    }
-  }
-
-  ///Function to check if local data exists for User or not
-  ///If not, then create it
-  static Future<void> ensureUserLocalDataExists(
-      User? user, String? domain) async {
-    Map<String, dynamic> localUserData = {
-      "userId": user?.uid,
-      "username": user?.displayName,
-      "email": user?.email!,
-      "role": "user",
-      "domain": domain,
-      "courses": {},
-    };
-    var box = Hive.box('users');
-    var res = box.get('${user?.uid}');
-    if (res != null) {
-      box.put('${user?.uid}', localUserData);
-      print(box.get('${user?.uid}'));
-    } else {
-      box.put('${user?.uid}', localUserData);
+      await HiveService.ensureUserLocalDataExists(user);
     }
   }
 
@@ -208,7 +177,7 @@ class _UserDataGetterMaster with ChangeNotifier {
     _userRef = FirebaseFirestore.instance.collection('users').doc(user.uid);
     DocumentSnapshot userSnapshot = await _userRef!.get();
     if (userSnapshot.exists) {
-      logger.info('data fetched from Firestore for user ${user.email}');
+      _logger.info('data fetched from Firestore for user ${user.email}');
       _currentUserSnapshot = userSnapshot;
       Map<String, dynamic>? userData =
           userSnapshot.data() as Map<String, dynamic>?;
@@ -227,7 +196,7 @@ class _UserDataGetterMaster with ChangeNotifier {
       // to access it by setting _currentUser
       _currentUser = user;
     } else {
-      logger.warning('user ${user.email} not found in Firestore');
+      _logger.warning('user ${user.email} not found in Firestore');
       // no data was found in Firestore for this user, so something went
       // wrong during the account creation and we cannot proceed with
       // the sign-in, therefore we sign out
@@ -253,10 +222,13 @@ class _UserDataGetterMaster with ChangeNotifier {
   Future<void> updateCourseProgress({
     String? courseId,
     String? courseName,
+    String? startStatus,
     String? completionStatus,
     String? currentSectionId,
     Map<String, dynamic>? currentSection,
   }) async {
+    _logger.info(
+        await HiveService.getExistingUserCourseLocalData(currentUserUid!));
     /*
     Creating a map of the latest progress data received by the function, and
     Sending it to be updated in the storage
@@ -264,56 +236,15 @@ class _UserDataGetterMaster with ChangeNotifier {
     Map<String, dynamic> latestProgressDataMap = {
       "courseId": courseId!,
       "courseName": courseName,
+      "startStatus": startStatus,
       "completionStatus": completionStatus,
       "currentSectionId": currentSectionId,
       "currentSection": currentSection,
     };
 
-//Calling function to update Local progress data for the course for current User
-    await updateCurrentCourseProgressLocal(
+//Calling Hive function to update Local progress data for the course for current User
+    await HiveService.updateCurrentCourseProgressLocal(
         latestProgressDataMap, _currentUser!);
-  }
-
-  /// Updates Existing User Data with the Local Course Progress data in Hive, for the current User
-  /* This function will be moved to a different Script HiveService which controls all functionality related to
-    User data stored in Hive */
-  static Future<void> updateCurrentCourseProgressLocal(
-      Map<String, dynamic> currentProgressData, User currentUser) async {
-    var box = Hive.box('users'); //Opens existing Hive box 'users'
-
-    //Test debug line
-    print('users Box All Data Before Insert:${box.toMap()}');
-
-    Map<String, dynamic> existingUserData =
-        {}; //Declaring empty existingUserData map
-    try {
-      existingUserData = await box.get(
-          currentUser.uid); // Gets the existing User data from the Hive Box
-
-      var currentCourseProgress = UserCourseProgressHive(
-        courseId: currentProgressData['courseId'],
-        courseName: currentProgressData['courseName'],
-        completionStatus: currentProgressData['completionStatus'],
-        currentSectionId: currentProgressData['currentSectionId'],
-        currentSection: currentProgressData['currentSection'],
-        // attempts: currentProgressData['attempts'],
-        // scores: currentProgressData['scores'],
-      );
-      existingUserData['courses']['${currentProgressData['courseId']}'] =
-          currentCourseProgress;
-      //Updating the existingUserData variable with the Course Progress
-
-      //putting the Updated users data in Hive
-      box.put('$currentUser.uid', existingUserData);
-      var res = await box.get('$currentUser.uid')['courses'];
-      print(res);
-      //Test Debug lines
-    } catch (e) {
-      print('No existing User Data found locally, failed to Update Data');
-    }
-    // print('users Box All Data After Insert:${box.toMap()}');
-
-    // await box.clear();
   }
 
   ///This function creates a listener that monitor any change to the user's data in the DB
@@ -323,10 +254,10 @@ class _UserDataGetterMaster with ChangeNotifier {
   void listenToChanges() {
     currentUserDocumentReference?.snapshots().listen((snapshot) {
       if (snapshot.exists) {
-        logger.info('user document was modified: storing new content');
+        _logger.info('user document was modified: storing new content');
         notifyListeners();
       } else {
-        logger.warning('user document was deleted');
+        _logger.warning('user document was deleted');
       }
     });
   }

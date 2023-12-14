@@ -13,7 +13,6 @@ import 'package:footer/footer_view.dart';
 // import 'package:isms/utilityFunctions/platform_check.dart';
 import 'package:provider/provider.dart';
 
-import '../../controllers/course_management/course_provider.dart';
 import '../../controllers/theme_management/common_theme.dart';
 import '../../controllers/user_management/logged_in_state.dart';
 // import '../controllers/themes/common_theme.dart';
@@ -120,30 +119,6 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ],
                     ),
-                  ),
-                ),
-                SliverToBoxAdapter(
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      String courseId = 'ip78hd';
-                      Map<String, dynamic> course = {};
-                      //gets Course details by ID from Local storage. For now, we neeed to load this data from
-                      //Course Provider, but in the actual implementation this data will be loaded in the memory so we won't have to fetch it from the Provider
-                      course = await CourseProvider.getCourseByIDLocal(
-                          courseId: courseId);
-                      await loggedInState.updateCourseProgress(
-                          courseId: courseId,
-                          courseName: course['courseName'],
-                          completionStatus: 'not_completed',
-                          currentSectionId: 'mod1',
-                          currentSection:
-                              CourseProvider.getCourseSectionByIdLocal(
-                                  sectionId: 'mod1',
-                                  sections: course['courseSections']));
-
-                      // await LoggedInState.updateUserLocalData();
-                    },
-                    child: Text('Update courses'),
                   ),
                 ),
               ],
