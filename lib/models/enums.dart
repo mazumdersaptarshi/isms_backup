@@ -19,6 +19,30 @@ enum ExamKeys {
   examSections
 }
 
+/// All possible JSON schema keys for course and exam sections
+enum SectionKeys {
+  sectionId,
+  sectionTitle,
+  sectionElements
+}
+
+/// All possible JSON schema keys for course and exam elements
+enum ElementKeys {
+  elementId,
+  elementType,
+  elementTitle,
+  elementContent
+}
+
+/// All possible values for key `elementType` in JSON schema of course and exam elements
+enum ElementTypeValues {
+  html,
+  singleSelectionQuestion,
+  multipleSelectionQuestion,
+  flipCard,
+  nextSectionButton
+}
+
 /// All possible JSON schema keys for questions
 enum QuestionKeys {
   questionText,
@@ -35,23 +59,6 @@ enum AnswerKeys {
 enum FlipCardKeys {
   flipCardFront,
   flipCardBack
-}
-
-/// All possible JSON schema keys for course and exam sections
-enum SectionKeys {
-  sectionId,
-  sectionType,
-  sectionTitle,
-  sectionContent
-}
-
-/// All possible values for key `sectionType` in JSON schema of course and exam sections
-enum SectionTypeValues {
-  html,
-  singleSelectionQuestion,
-  multipleSelectionQuestion,
-  flipCard,
-  nextSectionButton
 }
 
 class EnumToString {

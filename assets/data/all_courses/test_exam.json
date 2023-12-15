@@ -7,52 +7,58 @@
     "examAllowedAttempts": 3,
     "examSections": [
         {
-            "sectionId": "question1",
-            "sectionType": "singleSelectionQuestion",
-            "sectionTitle": "Multiple choice question with single answer selection",
-            "sectionContent": {
-                "questionText": "SSQ",
-                "questionAnswers": [
-                    {
-                        "answerText": "A1",
-                        "answerCorrect": false
-                    },
-                    {
-                        "answerText": "A2",
-                        "answerCorrect": true
-                    },
-                    {
-                        "answerText": "A3",
-                        "answerCorrect": false
+            "sectionId": "section1",
+            "sectionTitle": "Section 1",
+            "sectionElements": [
+                {
+                    "elementId": "question1",
+                    "elementType": "singleSelectionQuestion",
+                    "elementTitle": "Multiple choice question with single answer selection",
+                    "elementContent": {
+                        "questionText": "SSQ",
+                        "questionAnswers": [
+                            {
+                                "answerText": "A1",
+                                "answerCorrect": false
+                            },
+                            {
+                                "answerText": "A2",
+                                "answerCorrect": true
+                            },
+                            {
+                                "answerText": "A3",
+                                "answerCorrect": false
+                            }
+                        ]
                     }
-                ]
-            }
-        },
-        {
-            "sectionId": "question2",
-            "sectionType": "multipleSelectionQuestion",
-            "sectionTitle": "Multiple choice question with multiple answer selection",
-            "sectionContent": {
-                "questionText": "MSQ",
-                "questionAnswers": [
-                    {
-                        "answerText": "A1",
-                        "answerCorrect": true
-                    },
-                    {
-                        "answerText": "A2",
-                        "answerCorrect": false
-                    },
-                    {
-                        "answerText": "A3",
-                        "answerCorrect": false
-                    },
-                    {
-                        "answerText": "A4",
-                        "answerCorrect": true
+                },
+                {
+                    "elementId": "question2",
+                    "elementType": "multipleSelectionQuestion",
+                    "elementTitle": "Multiple choice question with multiple answer selection",
+                    "elementContent": {
+                        "questionText": "MSQ",
+                        "questionAnswers": [
+                            {
+                                "answerText": "A1",
+                                "answerCorrect": true
+                            },
+                            {
+                                "answerText": "A2",
+                                "answerCorrect": false
+                            },
+                            {
+                                "answerText": "A3",
+                                "answerCorrect": false
+                            },
+                            {
+                                "answerText": "A4",
+                                "answerCorrect": true
+                            }
+                        ]
                     }
-                ]
-            }
+                }
+            ]
         }
     ]
 }

@@ -14,7 +14,7 @@ Exam _$ExamFromJson(Map<String, dynamic> json) => Exam(
       examRequiredCorrectAnswers: json['examRequiredCorrectAnswers'] as int,
       examAllowedAttempts: json['examAllowedAttempts'] as int,
       examSections: (json['examSections'] as List<dynamic>)
-          .map((e) => Section<dynamic>.fromJson(e as Map<String, dynamic>))
+          .map((e) => Element<dynamic>.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 

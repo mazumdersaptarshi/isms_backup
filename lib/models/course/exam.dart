@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'package:isms/models/course/section.dart';
+import 'package:isms/models/course/element.dart';
 
 /// This allows the class to access private members in the generated file.
 /// The value for this is `*.g.dart`, where the asterisk denotes the source file name.
@@ -16,7 +16,7 @@ class Exam {
   final String examDescription;
   final int examRequiredCorrectAnswers;
   final int examAllowedAttempts;
-  final List<Section> examSections;
+  final List<Element> examSections;
 
   Exam({
       required this.courseId,

@@ -6,18 +6,17 @@ part of 'section.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Section<T> _$SectionFromJson<T>(Map<String, dynamic> json) => Section<T>(
+Section _$SectionFromJson(Map<String, dynamic> json) => Section(
       sectionId: json['sectionId'] as String,
-      sectionType: json['sectionType'] as String,
-      sectionTitle: json['sectionTitle'] as String? ?? '',
-      sectionContent:
-          ModelConverter<T>().fromJson(json['sectionContent'] as Object),
+      sectionTitle: json['sectionTitle'] as String,
+      sectionElements: (json['sectionElements'] as List<dynamic>)
+          .map((e) => Element<dynamic>.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
-Map<String, dynamic> _$SectionToJson<T>(Section<T> instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$SectionToJson(Section instance) => <String, dynamic>{
       'sectionId': instance.sectionId,
-      'sectionType': instance.sectionType,
       'sectionTitle': instance.sectionTitle,
-      'sectionContent': ModelConverter<T>().toJson(instance.sectionContent),
+      'sectionElements':
+          instance.sectionElements.map((e) => e.toJson()).toList(),
     };

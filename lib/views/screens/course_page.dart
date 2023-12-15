@@ -5,8 +5,9 @@ import 'package:flutter_html/flutter_html.dart';
 
 import 'package:isms/models/enums.dart';
 import 'package:isms/models/course/course.dart';
-import 'package:isms/models/course/section.dart';
+import 'package:isms/models/course/element.dart' as isms_element;
 import 'package:isms/models/course/flipcard.dart';
+import 'package:isms/models/course/section.dart';
 
 class CoursePage extends StatefulWidget {
   const CoursePage({super.key});
@@ -16,7 +17,7 @@ class CoursePage extends StatefulWidget {
 }
 
 class _CoursePageState extends State<CoursePage> {
-  final String jsonString = '{"courseId": "ip78hd","courseTitle": "Test Course","courseDescription": "Test Course description","courseSections": [{"sectionId": "html1","sectionType": "html","sectionTitle": "Static HTML 1","sectionContent": "<html><body><p>HTML 1</p></body></html>"},{"sectionId": "question1","sectionType": "singleSelectionQuestion","sectionTitle": "Multiple choice question with single answer selection","sectionContent": {"questionText": "SSQ","questionAnswers": [{"answerText": "A1","answerCorrect": false},{"answerText": "A2","answerCorrect": true},{"answerText": "A3","answerCorrect": false}]}},{"sectionId": "question2","sectionType": "multipleSelectionQuestion","sectionTitle": "Multiple choice question with multiple answer selection","sectionContent": {"questionText": "MSQ","questionAnswers": [{"answerText": "A1","answerCorrect": true},{"answerText": "A2","answerCorrect": false},{"answerText": "A3","answerCorrect": false},{"answerText": "A4","answerCorrect": true}]}},{"sectionId": "button1","sectionType": "nextSectionButton","sectionContent": "Proceed to next section"},{"sectionId": "html2","sectionType": "html","sectionTitle": "Static HTML 2","sectionContent": "<html><body><p>HTML 2</p></body></html>"},{"sectionId": "flipcards1","sectionType": "flipCard","sectionTitle": "FlipCards","sectionContent": [{"flipCardFront": "Front 1","flipCardBack": "Back 1"},{"flipCardFront": "Front 2","flipCardBack": "Back 2"},{"flipCardFront": "Front 2","flipCardBack": "Back 3"}]}]}';
+  final String jsonString = '{"courseId": "ip78hd","courseTitle": "Test Course","courseDescription": "Test Course description","courseSections": [{"sectionId": "section1","sectionTitle": "Section 1","sectionElements": [{"elementId": "html1","elementType": "html","elementTitle": "Static HTML 1","elementContent": "<html><body><p>HTML 1</p></body></html>"},{"elementId": "question1","elementType": "singleSelectionQuestion","elementTitle": "Multiple choice question with single answer selection","elementContent": {"questionText": "SSQ","questionAnswers": [{"answerText": "A1","answerCorrect": false},{"answerText": "A2","answerCorrect": true},{"answerText": "A3","answerCorrect": false}]}}]},{"sectionId": "section2","sectionTitle": "Section 2","sectionElements": [{"elementId": "question2","elementType": "multipleSelectionQuestion","elementTitle": "Multiple choice question with multiple answer selection","elementContent": {"questionText": "MSQ","questionAnswers": [{"answerText": "A1","answerCorrect": true},{"answerText": "A2","answerCorrect": false},{"answerText": "A3","answerCorrect": false},{"answerText": "A4","answerCorrect": true}]}},{"elementId": "html2","elementType": "html","elementTitle": "Static HTML 2","elementContent": "<html><body><p>HTML 2</p></body></html>"},{"elementId": "flipcards1","elementType": "flipCard","elementTitle": "FlipCards","elementContent": [{"flipCardFront": "Front 1","flipCardBack": "Back 1"},{"flipCardFront": "Front 2","flipCardBack": "Back 2"},{"flipCardFront": "Front 2","flipCardBack": "Back 3"}]}]}]}';
   late final Course course;
   late final List<Map<String,dynamic>> courseSectionCompletion;
   int currentCourseSectionIndex = 0;
@@ -26,10 +27,10 @@ class _CoursePageState extends State<CoursePage> {
     super.initState();
     final Map<String, dynamic> courseMap = jsonDecode(jsonString) as Map<String, dynamic>;
     course = Course.fromJson(courseMap);
-    courseSectionCompletion = initialiseCourseSectionCompletion();
+    courseSectionCompletion = initCourseSectionCompletion();
   }
 
-  List<Map<String,dynamic>> initialiseCourseSectionCompletion() {
+  List<Map<String,dynamic>> initCourseSectionCompletion() {
     List<Map<String,dynamic>> courseSectionCompletion = [];
 
     for (Section section in course.courseSections) {
@@ -48,33 +49,38 @@ class _CoursePageState extends State<CoursePage> {
     final List<Widget> contentWidgets = [];
 
     for (Section section in course.courseSections) {
-      if (section.sectionType == SectionTypeValues.html.name) {
-        contentWidgets.add(Html(data: section.sectionContent));
-      } else if (section.sectionType == SectionTypeValues.singleSelectionQuestion.name) {
+      for (isms_element.Element element in section.sectionElements) {
+        if (element.elementType == ElementTypeValues.html.name) {
+          contentWidgets.add(Html(data: element.elementContent));
+        } else if (element.elementType ==
+            ElementTypeValues.singleSelectionQuestion.name) {
 
-      } else if (section.sectionType == SectionTypeValues.multipleSelectionQuestion.name) {
+        } else if (element.elementType ==
+            ElementTypeValues.multipleSelectionQuestion.name) {
 
-      } else if (section.sectionType == SectionTypeValues.flipCard.name) {
-        final List<FlipCard> flipCardsContent = section.sectionContent;
-        final List<FlipCardWidget> flipCards = [];
+        } else if (element.elementType == ElementTypeValues.flipCard.name) {
+          final List<FlipCard> flipCardsContent = element.elementContent;
+          final List<FlipCardWidget> flipCards = [];
 
-        for (FlipCard content in flipCardsContent) {
-          flipCards.add(FlipCardWidget(content: content));
+          for (FlipCard content in flipCardsContent) {
+            flipCards.add(FlipCardWidget(content: content));
+          }
+          contentWidgets.addAll([
+            Wrap(
+              alignment: WrapAlignment.center,
+              spacing: 10.0,
+              runSpacing: 10.0,
+              children: flipCards,
+            ),
+            const SizedBox(height: 20),
+          ]);
+        } else
+        if (element.elementType == ElementTypeValues.nextSectionButton.name) {
+          contentWidgets.add(ElevatedButton(
+            onPressed: goToNextSection,
+            child: Text(element.elementContent),
+          ));
         }
-        contentWidgets.addAll([
-          Wrap(
-            alignment: WrapAlignment.center,
-            spacing: 10.0,
-            runSpacing: 10.0,
-            children: flipCards,
-          ),
-          const SizedBox(height: 20),
-        ]);
-      } else if (section.sectionType == SectionTypeValues.nextSectionButton.name) {
-        contentWidgets.add(ElevatedButton(
-          onPressed: goToNextSection,
-          child: Text(section.sectionContent),
-        ));
       }
     }
 
