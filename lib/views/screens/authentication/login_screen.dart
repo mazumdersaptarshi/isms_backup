@@ -3,9 +3,9 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:isms/views/screens/home_screen.dart';
 import 'package:isms/views/screens/testing/test_runner.dart';
 // import 'package:isms/projectModules/notificationModules/init_link_handler.dart';
-// import 'package:isms/screens/home_screen.dart';
 // import 'package:isms/sharedWidgets/loading_screen_widget.dart';
 // import 'package:isms/themes/common_theme.dart';
 // import 'package:isms/userManagement/logged_in_state.dart';
@@ -36,8 +36,8 @@ class LoginPageState extends State<LoginPage> {
 
     if (loggedInState.currentUser != null) {
       InitLinkHandler.initLinks(context: context);
-      // return const HomePage();
-      return const TestRunner();
+      return const HomePage();
+      // return const TestRunner();
     }
 
     return Scaffold(

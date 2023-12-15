@@ -1,17 +1,19 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'package:isms/interfaces/serializable.dart';
+import 'package:isms/utilities/serializable.dart';
+import 'package:isms/models/enums.dart';
 import 'package:isms/models/course/flipcard.dart';
 import 'package:isms/models/course/question.dart';
 
 /// This allows the class to access private members in the generated file.
 /// The value for this is `*.g.dart`, where the asterisk denotes the source file name.
-part 'course_section.g.dart';
+part 'section.g.dart';
 
 /// An annotation for the code generator to know that this class needs the
 /// JSON serialisation logic to be generated.
 @JsonSerializable(explicitToJson: true)
-class CourseSection<T> {
+class Section<T> {
+  final String sectionId;
   final String sectionType;
   final String sectionTitle;
 
@@ -22,29 +24,30 @@ class CourseSection<T> {
   @ModelConverter()
   final T sectionContent;
 
-  CourseSection({
+  Section({
+      required this.sectionId,
       required this.sectionType,
       this.sectionTitle = '',
       required this.sectionContent});
 
   /// A necessary factory constructor for creating a new class instance from a map.
   /// Pass the map to the generated constructor, which is named after the source class.
-  factory CourseSection.fromJson(Map<String, dynamic> json) => _$CourseSectionFromJson(json);
+  factory Section.fromJson(Map<String, dynamic> json) => _$SectionFromJson(json);
 
   /// `toJson` is the convention for a class to declare support for serialisation
   /// to JSON. The implementation simply calls the private, generated helper method.
-  Map<String, dynamic> toJson() => _$CourseSectionToJson(this);
+  Map<String, dynamic> toJson() => _$SectionToJson(this);
 }
 
 /// This converter helper class determines the required Dart object to create
 /// for each type of data returned in the JSON field `sectionContent`.
 ///
 /// Possible JSON `sectionType` values with their corresponding type in Dart are:
-///  - `Html` -> `String`
-///  - `SingleSelectionQuestion` -> `Question`
-///  - `MultipleSelectionQuestion` -> `Question`
-///  - `FlipCard` -> `List<FlipCard>`
-///  - `NextSectionButton` -> `String`
+///  - `html` -> `String`
+///  - `singleSelectionQuestion` -> `Question`
+///  - `multipleSelectionQuestion` -> `Question`
+///  - `flipCard` -> `List<FlipCard>`
+///  - `nextSectionButton` -> `String`
 ///
 /// Note that the `String` returned in JSON field `sectionType` is necessary for
 /// conditional logic when displaying the section **only in Dart**; here we need to
@@ -65,7 +68,7 @@ class ModelConverter<T> implements JsonConverter<T, Object> {
     if (json is Map<String,dynamic>) {
       /// If it is a `Map`, we then identify the serialised JSON object by
       /// checking for the existence of keys which are unique to each.
-      if (json.containsKey('questionText')) {
+      if (json.containsKey(QuestionKeys.questionText.name)) {
         return Question.fromJson(json) as T;
       }
     } else if (json is List) { /// Here we handle Lists of JSON maps
@@ -74,7 +77,7 @@ class ModelConverter<T> implements JsonConverter<T, Object> {
       /// Inspect the first element of the List of JSON to determine its Type
       Map<String,dynamic> first = json.first as Map<String,dynamic>;
 
-      if (first.containsKey('flipCardFront')) {
+      if (first.containsKey(FlipCardKeys.flipCardFront.name)) {
         return json.map((mapJson) => FlipCard.fromJson(mapJson)).toList() as T;
       }
     } else if (json is String) {

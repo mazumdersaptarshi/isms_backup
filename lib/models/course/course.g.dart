@@ -11,8 +11,7 @@ Course _$CourseFromJson(Map<String, dynamic> json) => Course(
       courseTitle: json['courseTitle'] as String,
       courseDescription: json['courseDescription'] as String,
       courseSections: (json['courseSections'] as List<dynamic>)
-          .map(
-              (e) => CourseSection<dynamic>.fromJson(e as Map<String, dynamic>))
+          .map((e) => Section<dynamic>.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 

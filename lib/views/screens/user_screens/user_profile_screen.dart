@@ -18,7 +18,7 @@ import '../../../controllers/user_management/logged_in_state.dart';
 // import '../../sharedWidgets/analyticsSharedWidgets/course_dropdown_widget.dart';
 // import '../../sharedWidgets/analyticsSharedWidgets/userCourseStartedDetailsWidget.dart';
 
-import '../../../controllers/utility_functions/platform_check.dart';
+import '../../../utilities/platform_check.dart';
 import '../../widgets/user_screens_widgets/user_profile_header_widget.dart';
 import '../authentication/login_screen.dart';
 // import '../../controllers/themes/common_theme.dart';

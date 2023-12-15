@@ -5,7 +5,8 @@ import 'package:flutter_html/flutter_html.dart';
 
 import 'package:isms/models/enums.dart';
 import 'package:isms/models/course/course.dart';
-import 'package:isms/models/course/course_section.dart';
+import 'package:isms/models/course/section.dart';
+import 'package:isms/models/course/flipcard.dart';
 
 class CoursePage extends StatefulWidget {
   const CoursePage({super.key});
@@ -15,132 +16,65 @@ class CoursePage extends StatefulWidget {
 }
 
 class _CoursePageState extends State<CoursePage> {
-  final String jsonString = '{"courseId": "ip78hd","courseTitle": "Test Course","courseDescription": "Test Course description","courseSections": [{"sectionType": "Html","sectionTitle": "Static HTML 1","sectionContent": "<html><body><p>HTML 1</p></body></html>"},{"sectionType": "SingleSelectionQuestion","sectionTitle": "Multiple choice question with single answer selection","sectionContent": {"questionText": "SSQ","questionAnswers": [{"answerText": "A1","answerCorrect": false},{"answerText": "A2","answerCorrect": true},{"answerText": "A3","answerCorrect": false}]}},{"sectionType": "MultipleSelectionQuestion","sectionTitle": "Multiple choice question with multiple answer selection","sectionContent": {"questionText": "MSQ","questionAnswers": [{"answerText": "A1","answerCorrect": true},{"answerText": "A2","answerCorrect": false},{"answerText": "A3","answerCorrect": false},{"answerText": "A4","answerCorrect": true}]}},{"sectionType": "NextSectionButton","sectionContent": "Proceed to next section"},{"sectionType": "Html","sectionTitle": "Static HTML 2","sectionContent": "<html><body><p>HTML 2</p></body></html>"},{"sectionType": "FlipCard","sectionTitle": "FlipCards","sectionContent": [{"flipCardFront": "Front 1","flipCardBack": "Back 1"},{"flipCardFront": "Front 2","flipCardBack": "Back 2"},{"flipCardFront": "Front 2","flipCardBack": "Back 3"}]}]}';
+  final String jsonString = '{"courseId": "ip78hd","courseTitle": "Test Course","courseDescription": "Test Course description","courseSections": [{"sectionId": "html1","sectionType": "html","sectionTitle": "Static HTML 1","sectionContent": "<html><body><p>HTML 1</p></body></html>"},{"sectionId": "question1","sectionType": "singleSelectionQuestion","sectionTitle": "Multiple choice question with single answer selection","sectionContent": {"questionText": "SSQ","questionAnswers": [{"answerText": "A1","answerCorrect": false},{"answerText": "A2","answerCorrect": true},{"answerText": "A3","answerCorrect": false}]}},{"sectionId": "question2","sectionType": "multipleSelectionQuestion","sectionTitle": "Multiple choice question with multiple answer selection","sectionContent": {"questionText": "MSQ","questionAnswers": [{"answerText": "A1","answerCorrect": true},{"answerText": "A2","answerCorrect": false},{"answerText": "A3","answerCorrect": false},{"answerText": "A4","answerCorrect": true}]}},{"sectionId": "button1","sectionType": "nextSectionButton","sectionContent": "Proceed to next section"},{"sectionId": "html2","sectionType": "html","sectionTitle": "Static HTML 2","sectionContent": "<html><body><p>HTML 2</p></body></html>"},{"sectionId": "flipcards1","sectionType": "flipCard","sectionTitle": "FlipCards","sectionContent": [{"flipCardFront": "Front 1","flipCardBack": "Back 1"},{"flipCardFront": "Front 2","flipCardBack": "Back 2"},{"flipCardFront": "Front 2","flipCardBack": "Back 3"}]}]}';
   late final Course course;
+  late final List<Map<String,dynamic>> courseSectionCompletion;
+  int currentCourseSectionIndex = 0;
 
   @override
   void initState() {
     super.initState();
     final Map<String, dynamic> courseMap = jsonDecode(jsonString) as Map<String, dynamic>;
     course = Course.fromJson(courseMap);
+    courseSectionCompletion = initialiseCourseSectionCompletion();
   }
-  int currentSection = 0;
-  final List<String> sections = [
-    'Introduction',
-    'Contact Center AI (CCAI)',
-    'Key Takeaways',
-    'Review', // New section
-  ];
 
-  final List<String> htmlContent = [
-    '''
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Course</title>
-    <style>
-        .course-section {
-            margin-bottom: 20px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
+  List<Map<String,dynamic>> initialiseCourseSectionCompletion() {
+    List<Map<String,dynamic>> courseSectionCompletion = [];
 
+    for (Section section in course.courseSections) {
+      courseSectionCompletion.add(
+          {
+            SectionKeys.sectionId.name: section.sectionId,
+            'sectionCompleted': false
+          }
+      );
+    }
 
-        .hidden {
-            display: none;
-        }
-
-
-        .flip-card {
-            background-color: transparent;
-            width: 300px;
-            height: 200px;
-            perspective: 1000px;
-            margin-bottom: 20px;
-        }
-
-
-        .flip-card-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            transition: transform 0.6s;
-            transform-style: preserve-3d;
-            cursor: pointer;
-        }
-
-
-        .flip-card-front, .flip-card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-        }
-
-
-        .flip-card-front {
-            background-color: #bbb;
-            color: black;
-        }
-
-
-        .flip-card-back {
-            background-color: #2980b9;
-            color: white;
-            transform: rotateY(180deg);
-        }
-    </style>
-</head>
-<h2 style="text-align: center; color: black; font-weight: bold;">Introduction</h2>
-<hr style="background-color: purple;">
-<p>This introductory section will provide an overview of the course. You will learn about the basic concepts and get familiar with the key terms used throughout the course.</p>
-<hr>
-    ''',
-    '''
-<h2 style="text-align: center; color: black; font-weight: bold;">Contact Center AI (CCAI)</h2>
-<hr style="background-color: purple;">
-<p>In this section, we'll delve into the world of Contact Center AI. You'll learn about its functionalities, how it improves customer service, and the technology that drives it.</p>
-<hr>
-    ''',
-    '''
-<h2 style="text-align: center; color: black; font-weight: bold;">Key Takeaways</h2>
-<hr style="background-color: purple;">
-<ul>
-    <li>Understanding the basics of CCAI and its impact on customer service.</li>
-    <li>Key functionalities and advantages of using CCAI in business.</li>
-    <li>Strategies for implementing CCAI effectively.</li>
-</ul>
-<hr>
-    ''',
-    '''
-<h2 style="text-align: center; color: black; font-weight: bold;">Review</h2>
-<hr style="background-color: purple;">
-<p>This final review section will cover key aspects and takeaways from the course.</p>
-<hr>
-    ''',
-  ];
+    return courseSectionCompletion;
+  }
 
   List<Widget> getContentWidgets() {
     final List<Widget> contentWidgets = [];
 
-    for (CourseSection section in course.courseSections) {
-      switch (section.sectionType) {
-        case 'Html':
-          contentWidgets.add(Html(data: section.sectionContent));
-        case 'SingleSelectionQuestion':
-          break;
-        case 'MultipleSelectionQuestion':
-          break;
-        case 'FlipCard':
-          break;
-        case 'NextSectionButton':
-          contentWidgets.add(ElevatedButton(
-            onPressed: goToNextSection,
-            child: Text(section.sectionContent),
-          ));
-        default:
-          break;
+    for (Section section in course.courseSections) {
+      if (section.sectionType == SectionTypeValues.html.name) {
+        contentWidgets.add(Html(data: section.sectionContent));
+      } else if (section.sectionType == SectionTypeValues.singleSelectionQuestion.name) {
+
+      } else if (section.sectionType == SectionTypeValues.multipleSelectionQuestion.name) {
+
+      } else if (section.sectionType == SectionTypeValues.flipCard.name) {
+        final List<FlipCard> flipCardsContent = section.sectionContent;
+        final List<FlipCardWidget> flipCards = [];
+
+        for (FlipCard content in flipCardsContent) {
+          flipCards.add(FlipCardWidget(content: content));
+        }
+        contentWidgets.addAll([
+          Wrap(
+            alignment: WrapAlignment.center,
+            spacing: 10.0,
+            runSpacing: 10.0,
+            children: flipCards,
+          ),
+          const SizedBox(height: 20),
+        ]);
+      } else if (section.sectionType == SectionTypeValues.nextSectionButton.name) {
+        contentWidgets.add(ElevatedButton(
+          onPressed: goToNextSection,
+          child: Text(section.sectionContent),
+        ));
       }
     }
 
@@ -199,16 +133,16 @@ class _CoursePageState extends State<CoursePage> {
   }
 }
 
-class FlipCard extends StatefulWidget {
-  final String content;
+class FlipCardWidget extends StatefulWidget {
+  final FlipCard content;
 
-  const FlipCard({Key? key, required this.content}) : super(key: key);
+  const FlipCardWidget({Key? key, required this.content}) : super(key: key);
 
   @override
-  State<FlipCard> createState() => _FlipCardState();
+  State<FlipCardWidget> createState() => _FlipCardWidgetState();
 }
 
-class _FlipCardState extends State<FlipCard> with SingleTickerProviderStateMixin {
+class _FlipCardWidgetState extends State<FlipCardWidget> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
   @override
@@ -249,7 +183,7 @@ class _FlipCardState extends State<FlipCard> with SingleTickerProviderStateMixin
               height: 200,
               color: Colors.deepPurpleAccent.shade100,
               alignment: Alignment.center,
-              child: const Text('Flip Me', style: TextStyle(fontSize: 20, color: Colors.white)),
+              child: Text(widget.content.flipCardFront, style: const TextStyle(fontSize: 20, color: Colors.white)),
             )
                 : Transform(
               alignment: Alignment.center,
@@ -259,7 +193,7 @@ class _FlipCardState extends State<FlipCard> with SingleTickerProviderStateMixin
                 height: 200,
                 color: Colors.grey[300],
                 alignment: Alignment.center,
-                child: Text(widget.content, style: const TextStyle(fontSize: 20, color: Colors.black)),
+                child: Text(widget.content.flipCardBack, style: const TextStyle(fontSize: 20, color: Colors.black)),
               ),
             ),
           );

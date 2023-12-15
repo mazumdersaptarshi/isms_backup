@@ -18,7 +18,7 @@ import '../../controllers/user_management/logged_in_state.dart';
 // import '../controllers/themes/common_theme.dart';
 // import '../controllers/userManagement/logged_in_state.dart';
 // import '../sharedWidgets/app_footer.dart';
-import '../../controllers/utility_functions/platform_check.dart';
+import '../../utilities/platform_check.dart';
 import '../widgets/shared_widgets/app_footer.dart';
 import 'authentication/login_screen.dart';
 

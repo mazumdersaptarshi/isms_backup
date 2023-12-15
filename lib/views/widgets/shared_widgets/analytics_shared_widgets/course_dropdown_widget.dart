@@ -6,7 +6,7 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 
 // import '../../../utilityFunctions/csv_data_handler.dart';
 // import '../../utilityFunctions/csv_data_handler.dart';
-import '../../../../controllers/utility_functions/csv_data_handler.dart';
+import '../../../../utilities/csv_data_handler.dart';
 // import '../../../../utilityFunctions/csv_data_handler.dart';
 import 'course_exams_completed_dropdown_widget.dart';
 import 'modules_details_dropdown_widget.dart';

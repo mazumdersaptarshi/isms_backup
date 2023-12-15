@@ -1,21 +1,22 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'course_section.dart';
+part of 'section.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-CourseSection<T> _$CourseSectionFromJson<T>(Map<String, dynamic> json) =>
-    CourseSection<T>(
+Section<T> _$SectionFromJson<T>(Map<String, dynamic> json) => Section<T>(
+      sectionId: json['sectionId'] as String,
       sectionType: json['sectionType'] as String,
       sectionTitle: json['sectionTitle'] as String? ?? '',
       sectionContent:
           ModelConverter<T>().fromJson(json['sectionContent'] as Object),
     );
 
-Map<String, dynamic> _$CourseSectionToJson<T>(CourseSection<T> instance) =>
+Map<String, dynamic> _$SectionToJson<T>(Section<T> instance) =>
     <String, dynamic>{
+      'sectionId': instance.sectionId,
       'sectionType': instance.sectionType,
       'sectionTitle': instance.sectionTitle,
       'sectionContent': ModelConverter<T>().toJson(instance.sectionContent),

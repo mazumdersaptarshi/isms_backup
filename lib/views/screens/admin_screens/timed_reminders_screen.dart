@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../controllers/reminders_management/reminders_provider.dart';
 import '../../../controllers/user_management/logged_in_state.dart';
-import '../../../controllers/utility_functions/platform_check.dart';
+import '../../../utilities/platform_check.dart';
 // import '../../../utilityFunctions/platform_check.dart';
 // import '../../controllers/remindersManagement/reminders_provider.dart';
 // // import '../../remindersManagement/reminders_provider.dart';

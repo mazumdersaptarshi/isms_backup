@@ -3,11 +3,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../../views/widgets/shared_widgets/bottom_nav_bar.dart';
-import '../../views/widgets/shared_widgets/custom_app_bar.dart';
-import '../theme_management/common_theme.dart';
+import '../views/widgets/shared_widgets/bottom_nav_bar.dart';
+import '../views/widgets/shared_widgets/custom_app_bar.dart';
+import '../controllers/theme_management/common_theme.dart';
 // import '../userManagement/logged_in_state.dart';
-import '../user_management/logged_in_state.dart';
+import '../controllers/user_management/logged_in_state.dart';
 
 // import 'package:isms/sharedWidgets/bottom_nav_bar.dart';
 // import 'package:isms/sharedWidgets/custom_app_bar.dart';

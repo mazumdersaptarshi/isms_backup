@@ -9,7 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../controllers/user_management/logged_in_state.dart';
-import '../../controllers/utility_functions/platform_check.dart';
+import '../../utilities/platform_check.dart';
 
 // import '../controllers/userManagement/logged_in_state.dart';
 

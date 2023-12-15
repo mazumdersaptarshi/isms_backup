@@ -1,12 +1,14 @@
 {
     "courseId": "ip78hd",
+    "examId": "de44qv",
     "examTitle": "Test Exam",
     "examDescription": "Test Exam description",
     "examRequiredCorrectAnswers": 2,
     "examAllowedAttempts": 3,
-    "examQuestions": [
+    "examSections": [
         {
-            "sectionType": "SingleSelectionQuestion",
+            "sectionId": "question1",
+            "sectionType": "singleSelectionQuestion",
             "sectionTitle": "Multiple choice question with single answer selection",
             "sectionContent": {
                 "questionText": "SSQ",
@@ -27,7 +29,8 @@
             }
         },
         {
-            "sectionType": "MultipleSelectionQuestion",
+            "sectionId": "question2",
+            "sectionType": "multipleSelectionQuestion",
             "sectionTitle": "Multiple choice question with multiple answer selection",
             "sectionContent": {
                 "questionText": "MSQ",

@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'package:isms/models/course/question.dart';
+import 'package:isms/models/course/section.dart';
 
 /// This allows the class to access private members in the generated file.
 /// The value for this is `*.g.dart`, where the asterisk denotes the source file name.
@@ -11,19 +11,21 @@ part 'exam.g.dart';
 @JsonSerializable(explicitToJson: true)
 class Exam {
   final String courseId;
+  final String examId;
   final String examTitle;
   final String examDescription;
   final int examRequiredCorrectAnswers;
   final int examAllowedAttempts;
-  final List<Question> examQuestions;
+  final List<Section> examSections;
 
   Exam({
       required this.courseId,
+      required this.examId,
       required this.examTitle,
       required this.examDescription,
       required this.examRequiredCorrectAnswers,
       required this.examAllowedAttempts,
-      required this.examQuestions});
+      required this.examSections});
 
   /// A necessary factory constructor for creating a new class instance from a map.
   /// Pass the map to the generated constructor, which is named after the source class.

@@ -4,12 +4,14 @@
     "courseDescription": "Test Course description",
     "courseSections": [
         {
-            "sectionType": "Html",
+            "sectionId": "html1",
+            "sectionType": "html",
             "sectionTitle": "Static HTML 1",
             "sectionContent": "<html><body><p>HTML 1</p></body></html>"
         },
         {
-            "sectionType": "SingleSelectionQuestion",
+            "sectionId": "question1",
+            "sectionType": "singleSelectionQuestion",
             "sectionTitle": "Multiple choice question with single answer selection",
             "sectionContent": {
                 "questionText": "SSQ",
@@ -30,7 +32,8 @@
             }
         },
         {
-            "sectionType": "MultipleSelectionQuestion",
+            "sectionId": "question2",
+            "sectionType": "multipleSelectionQuestion",
             "sectionTitle": "Multiple choice question with multiple answer selection",
             "sectionContent": {
                 "questionText": "MSQ",
@@ -55,16 +58,19 @@
             }
         },
         {
-            "sectionType": "NextSectionButton",
+            "sectionId": "button1",
+            "sectionType": "nextSectionButton",
             "sectionContent": "Proceed to next section"
         },
         {
-            "sectionType": "Html",
+            "sectionId": "html2",
+            "sectionType": "html",
             "sectionTitle": "Static HTML 2",
             "sectionContent": "<html><body><p>HTML 2</p></body></html>"
         },
         {
-            "sectionType": "FlipCard",
+            "sectionId": "flipcards1",
+            "sectionType": "flipCard",
             "sectionTitle": "FlipCards",
             "sectionContent": [
                 {
