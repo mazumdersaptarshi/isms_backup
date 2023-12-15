@@ -19,7 +19,7 @@ class UserCourseProgressHiveAdapter
     };
     return UserCourseProgressHive(
       courseId: fields[0] as String?,
-      courseName: fields[1] as String?,
+      courseTitle: fields[1] as String?,
       startStatus: fields[8] as String?,
       completionStatus: fields[2] as String?,
       currentSectionId: fields[3] as String?,
@@ -37,7 +37,7 @@ class UserCourseProgressHiveAdapter
       ..writeByte(0)
       ..write(obj.courseId)
       ..writeByte(1)
-      ..write(obj.courseName)
+      ..write(obj.courseTitle)
       ..writeByte(2)
       ..write(obj.completionStatus)
       ..writeByte(3)

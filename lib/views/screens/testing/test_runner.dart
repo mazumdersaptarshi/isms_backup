@@ -29,7 +29,7 @@ class TestRunner extends StatelessWidget {
                     await CourseProvider.getCourseByIDLocal(courseId: courseId);
                 await loggedInState.updateCourseProgress(
                     courseId: courseId,
-                    courseName: course['courseName'],
+                    courseTitle: course['courseName'],
                     completionStatus: 'not_completed',
                     currentSectionId: 'mod1',
                     currentSection: CourseProvider.getCourseSectionByIdLocal(
@@ -44,8 +44,6 @@ class TestRunner extends StatelessWidget {
                   var box = Hive.box('users');
                   var existingUserData = await box.get(loggedInState
                       .currentUserUid); // Gets the existing User data from the Hive Box
-                  // print(existingUserData);
-                  // print(existingUserData['courses']['ip78hd'].currentSection);
                   var res = await HiveService.getExistingUserCourseLocalData(
                       loggedInState.currentUserUid,
                       courseId: 'ip78hd');

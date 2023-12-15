@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hive/hive.dart';
 import 'package:isms/controllers/domain_management/domain_provider.dart';
+import 'package:isms/models/enums.dart';
 import 'package:isms/services/hive/hive_adapters/user_course_progress.dart';
 import 'package:logging/logging.dart';
 
@@ -43,8 +44,8 @@ class HiveService {
 
       // Create an instance of UserCourseProgressHive with the current progress data.
       final userCourseProgressHive = UserCourseProgressHive(
-        courseId: currentProgressData['courseId'],
-        courseName: currentProgressData['courseName'],
+        courseId: currentProgressData[CourseKeys.courseId.name],
+        courseTitle: currentProgressData['courseName'],
         completionStatus: currentProgressData['completionStatus'],
         currentSectionId: currentProgressData['currentSectionId'],
         currentSection: currentProgressData['currentSection'],

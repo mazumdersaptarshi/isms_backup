@@ -6,7 +6,7 @@ part 'user_course_progress.g.dart';
 class UserCourseProgressHive {
   UserCourseProgressHive(
       {this.courseId,
-      this.courseName,
+      this.courseTitle,
       this.startStatus,
       this.completionStatus,
       this.currentSectionId,
@@ -19,7 +19,7 @@ class UserCourseProgressHive {
   String? courseId;
 
   @HiveField(1)
-  String? courseName;
+  String? courseTitle;
 
   @HiveField(2)
   String? completionStatus;
