@@ -15,6 +15,7 @@ import '../../../controllers/theme_management//common_theme.dart';
 import '../../../controllers/user_management/logged_in_state.dart';
 // import '../../../projectModules/notification_management/init_link_handler.dart';
 import '../../widgets/shared_widgets/loading_screen_widget.dart';
+import '../home_screen.dart';
 
 // import '../../controllers/themes/common_theme.dart';
 // import '../../controllers/userManagement/logged_in_state.dart';
@@ -35,8 +36,8 @@ class LoginPageState extends State<LoginPage> {
 
     if (loggedInState.currentUser != null) {
       InitLinkHandler.initLinks(context: context);
-      // return const HomePage();
-      return const TestRunner();
+      return const HomePage();
+      // return const TestRunner();
     }
 
     return Scaffold(

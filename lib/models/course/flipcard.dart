@@ -8,10 +8,12 @@ part 'flipcard.g.dart';
 /// JSON serialisation logic to be generated.
 @JsonSerializable(explicitToJson: true)
 class FlipCard {
+  final String flipCardId;
   final String flipCardFront;
   final String flipCardBack;
 
   FlipCard({
+      required this.flipCardId,
       required this.flipCardFront,
       required this.flipCardBack});
 

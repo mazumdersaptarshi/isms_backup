@@ -37,46 +37,34 @@ enum ElementKeys {
 /// All possible values for key `elementType` in JSON schema of course and exam elements
 enum ElementTypeValues {
   html,
-  singleSelectionQuestion,
-  multipleSelectionQuestion,
-  flipCard,
-  nextSectionButton
+  question,
+  flipCard
 }
 
 /// All possible JSON schema keys for questions
 enum QuestionKeys {
+  questionId,
+  questionType,
   questionText,
   questionAnswers
 }
 
+/// All possible values for key `questionType` in JSON schema of question elements
+enum QuestionTypeValues {
+  singleSelectionQuestion,
+  multipleSelectionQuestion
+}
+
 /// All possible JSON schema keys for answers
 enum AnswerKeys {
+  answerId,
   answerText,
   answerCorrect
 }
 
 /// All possible JSON schema keys for flipcards
 enum FlipCardKeys {
+  flipCardId,
   flipCardFront,
   flipCardBack
-}
-
-class EnumToString {
-  static String? getStringValue<T>(T value) {
-    if (value == null) {
-      return null;
-    }
-    return value.toString().split('.').last;
-  }
-
-  static T? fromString<T>(Iterable<T> values, String? value) {
-    if (value == null) {
-      return null;
-    }
-    return values.firstWhere(
-      (v) => value.toLowerCase() == getStringValue(v)?.toLowerCase(),
-      orElse: () =>
-          null as T, // Use type casting to ensure the correct return type
-    );
-  }
 }

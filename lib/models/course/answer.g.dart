@@ -7,11 +7,13 @@ part of 'answer.dart';
 // **************************************************************************
 
 Answer _$AnswerFromJson(Map<String, dynamic> json) => Answer(
+      answerId: json['answerId'] as String,
       answerText: json['answerText'] as String,
       answerCorrect: json['answerCorrect'] as bool,
     );
 
 Map<String, dynamic> _$AnswerToJson(Answer instance) => <String, dynamic>{
+      'answerId': instance.answerId,
       'answerText': instance.answerText,
       'answerCorrect': instance.answerCorrect,
     };

@@ -8,10 +8,12 @@ part 'answer.g.dart';
 /// JSON serialisation logic to be generated.
 @JsonSerializable(explicitToJson: true)
 class Answer {
+  final String answerId;
   final String answerText;
   final bool answerCorrect;
 
   Answer({
+      required this.answerId,
       required this.answerText,
       required this.answerCorrect});
 

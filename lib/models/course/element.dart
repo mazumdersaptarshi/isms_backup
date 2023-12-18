@@ -44,8 +44,7 @@ class Element<T> {
 ///
 /// Possible JSON `elementType` values with their corresponding type in Dart are:
 ///  - `html` -> String
-///  - `singleSelectionQuestion` -> Question
-///  - `multipleSelectionQuestion` -> Question
+///  - `question` -> List<Question>
 ///  - `flipCard` -> List<FlipCard>
 ///
 /// Note that the String returned in JSON field `elementType` is necessary for
@@ -64,19 +63,17 @@ class ModelConverter<T> implements JsonConverter<T, Object> {
   @override
   T fromJson(Object json) {
     /// Start by checking if json is just a single JSON map, not a List.
-    if (json is Map<String,dynamic>) {
-      /// If it is a Map, we then identify the serialised JSON object by
-      /// checking for the existence of keys which are unique to each.
-      if (json.containsKey(QuestionKeys.questionText.name)) {
-        return Question.fromJson(json) as T;
-      }
-    } else if (json is List) { /// Here we handle Lists of JSON maps
+    if (json is List) {
       if (json.isEmpty) return [] as T;
 
-      /// Inspect the first element of the List of JSON to determine its Type
+      /// We need to inspect the first element of the List of JSON to determine its type
       Map<String,dynamic> first = json.first as Map<String,dynamic>;
 
-      if (first.containsKey(FlipCardKeys.flipCardFront.name)) {
+      /// Identify the serialised JSON object by checking for
+      /// the existence of keys which are unique to each.
+      if (first.containsKey(QuestionKeys.questionId.name)) {
+        return json.map((mapJson) => Question.fromJson(mapJson)).toList() as T;
+      } else if (first.containsKey(FlipCardKeys.flipCardId.name)) {
         return json.map((mapJson) => FlipCard.fromJson(mapJson)).toList() as T;
       }
     } else if (json is String) {

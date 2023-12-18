@@ -12,51 +12,122 @@
             "sectionElements": [
                 {
                     "elementId": "question1",
-                    "elementType": "singleSelectionQuestion",
+                    "elementType": "question",
                     "elementTitle": "Multiple choice question with single answer selection",
-                    "elementContent": {
-                        "questionText": "SSQ",
-                        "questionAnswers": [
-                            {
-                                "answerText": "A1",
-                                "answerCorrect": false
-                            },
-                            {
-                                "answerText": "A2",
-                                "answerCorrect": true
-                            },
-                            {
-                                "answerText": "A3",
-                                "answerCorrect": false
-                            }
-                        ]
-                    }
+                    "elementContent": [
+                        {
+                            "questionId": "ssq1",
+                            "questionType": "singleSelectionQuestion",
+                            "questionText": "SSQ",
+                            "questionAnswers": [
+                                {
+                                    "answerId": "ssq1a1",
+                                    "answerText": "A1",
+                                    "answerCorrect": false
+                                },
+                                {
+                                    "answerId": "ssq1a2",
+                                    "answerText": "A2",
+                                    "answerCorrect": true
+                                },
+                                {
+                                    "answerId": "ssq1a3",
+                                    "answerText": "A3",
+                                    "answerCorrect": false
+                                }
+                            ]
+                        }
+                    ]
                 },
                 {
                     "elementId": "question2",
-                    "elementType": "multipleSelectionQuestion",
+                    "elementType": "question",
                     "elementTitle": "Multiple choice question with multiple answer selection",
-                    "elementContent": {
-                        "questionText": "MSQ",
-                        "questionAnswers": [
-                            {
-                                "answerText": "A1",
-                                "answerCorrect": true
-                            },
-                            {
-                                "answerText": "A2",
-                                "answerCorrect": false
-                            },
-                            {
-                                "answerText": "A3",
-                                "answerCorrect": false
-                            },
-                            {
-                                "answerText": "A4",
-                                "answerCorrect": true
-                            }
-                        ]
-                    }
+                    "elementContent": [
+                        {
+                            "questionId": "msq1",
+                            "questionType": "multipleSelectionQuestion",
+                            "questionText": "MSQ",
+                            "questionAnswers": [
+                                {
+                                    "answerId": "msq1a1",
+                                    "answerText": "A1",
+                                    "answerCorrect": true
+                                },
+                                {
+                                    "answerId": "msq1a2",
+                                    "answerText": "A2",
+                                    "answerCorrect": false
+                                },
+                                {
+                                    "answerId": "msq1a3",
+                                    "answerText": "A3",
+                                    "answerCorrect": false
+                                },
+                                {
+                                    "answerId": "msq1a4",
+                                    "answerText": "A4",
+                                    "answerCorrect": true
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "elementId": "questiongroup1",
+                    "elementType": "question",
+                    "elementTitle": "Multiple questions",
+                    "elementContent": [
+                        {
+                            "questionId": "ssq2",
+                            "questionType": "singleSelectionQuestion",
+                            "questionText": "SSQ",
+                            "questionAnswers": [
+                                {
+                                    "answerId": "ssq2a1",
+                                    "answerText": "A1",
+                                    "answerCorrect": false
+                                },
+                                {
+                                    "answerId": "ssq2a2",
+                                    "answerText": "A2",
+                                    "answerCorrect": true
+                                },
+                                {
+                                    "answerId": "ssq2a3",
+                                    "answerText": "A3",
+                                    "answerCorrect": false
+                                }
+                            ]
+                        },
+                        {
+                            "questionId": "msq2",
+                            "questionType": "multipleSelectionQuestion",
+                            "questionText": "MSQ",
+                            "questionAnswers": [
+                                {
+                                    "answerId": "msq2a1",
+                                    "answerText": "A1",
+                                    "answerCorrect": true
+                                },
+                                {
+                                    "answerId": "msq2a2",
+                                    "answerText": "A2",
+                                    "answerCorrect": false
+                                },
+                                {
+                                    "answerId": "msq2a3",
+                                    "answerText": "A3",
+                                    "answerCorrect": false
+                                },
+                                {
+                                    "answerId": "msq2a4",
+                                    "answerText": "A4",
+                                    "answerCorrect": true
+                                }
+                            ]
+                        }
+                    ]
                 }
             ]
         }

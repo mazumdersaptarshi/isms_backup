@@ -10,10 +10,14 @@ part 'question.g.dart';
 /// JSON serialisation logic to be generated.
 @JsonSerializable(explicitToJson: true)
 class Question {
+  final String questionId;
+  final String questionType;
   final String questionText;
   final List<Answer> questionAnswers;
 
   Question({
+      required this.questionId,
+      required this.questionType,
       required this.questionText,
       required this.questionAnswers});
 
