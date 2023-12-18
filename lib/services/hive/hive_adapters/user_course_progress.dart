@@ -28,7 +28,7 @@ class UserCourseProgressHive {
   String? currentSectionId;
 
   @HiveField(4)
-  List? sections;
+  Map? sections;
 
   @HiveField(5)
   List? attempts;

@@ -26,33 +26,53 @@ class HiveService {
   /// with the provided course progress data. If an error occurs during this process,
   /// it is caught and logged.
   ///
-  /// [currentProgressData] A map containing the progress data for the course.
+  /// [newProgressData] A map containing the progress data for the course.
   /// [currentUser] The user whose course progress is being updated.
-  static Future<void> updateCurrentCourseProgressLocal(
-      Map<String, dynamic> currentProgressData, User currentUser) async {
+  static Future<void> updateCourseWithNewProgressLocal(
+      Map<String, dynamic> newProgressData, User currentUser) async {
     //Declaring a Hive Box variable to store the Hive box
     try {
       _box = Hive.box(_usersBoxName); //Opens existing Hive box 'users'
 
       final userIdKey = currentUser.uid;
       // Ensures there is existing user data to be fetched.
-      DomainProvider domainProvider = DomainProvider();
-      String domain = await domainProvider.getUserDomain(userIdKey);
+
       await ensureUserLocalDataExists(currentUser);
+      /* First we need to fetch the existing user data and check the sections data present
+      for that course ID, which contains the past and then we update the map present with that ID with the latest map
+      of the progress
+       */
       final existingUserData = Map<String, dynamic>.from(await _box
           .get(userIdKey)); // Gets the existing User data from the Hive Box
 
+      Map<String, dynamic> sections = {};
+      try {
+        existingUserData[_coursesFieldName].forEach((key, value) {
+          sections = value.sections;
+          // print(sections);
+          // print(value.sections);
+          sections['${newProgressData['currentSectionId']}'] =
+              newProgressData['currentSection'];
+        });
+      } catch (e) {
+        sections['${newProgressData['currentSectionId']}'] =
+            newProgressData['currentSection'];
+        print(sections);
+        _logger.severe('No sections found');
+      }
+
       // Create an instance of UserCourseProgressHive with the current progress data.
       final userCourseProgressHive = UserCourseProgressHive(
-        courseId: currentProgressData[CourseKeys.courseId.name],
-        courseTitle: currentProgressData['courseName'],
-        completionStatus: currentProgressData['completionStatus'],
-        currentSectionId: currentProgressData['currentSectionId'],
-        currentSection: currentProgressData['currentSection'],
+        courseId: newProgressData[CourseKeys.courseId.name],
+        courseTitle: newProgressData['courseTitle'],
+        completionStatus: newProgressData['completionStatus'],
+        currentSectionId: newProgressData['currentSectionId'],
+        currentSection: newProgressData['currentSection'],
+        sections: sections,
       );
       //Updating the existingUserData variable with the Course Progress
-      existingUserData[_coursesFieldName]
-          ['${currentProgressData['courseId']}'] = userCourseProgressHive;
+      existingUserData[_coursesFieldName]['${newProgressData['courseId']}'] =
+          userCourseProgressHive;
 
       //putting the Updated users data in Hive
       _box.put(userIdKey, existingUserData);
@@ -121,8 +141,9 @@ class HiveService {
 
     // Ensure that the retrieved data is a Map<String, dynamic>.
     try {
-      return userData['courses'][courseId].currentSectionId;
+      return userData['courses']['${courseId}'].sections;
     } catch (e) {
+      _logger.severe('No local data currently exists for this, error');
       return userData;
     }
   }

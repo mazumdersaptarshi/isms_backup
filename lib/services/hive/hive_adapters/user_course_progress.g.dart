@@ -23,7 +23,7 @@ class UserCourseProgressHiveAdapter
       startStatus: fields[8] as String?,
       completionStatus: fields[2] as String?,
       currentSectionId: fields[3] as String?,
-      sections: (fields[4] as List?)?.cast<dynamic>(),
+      sections: (fields[4] as Map?)?.cast<dynamic, dynamic>(),
       attempts: (fields[5] as List?)?.cast<dynamic>(),
       scores: (fields[6] as List?)?.cast<dynamic>(),
       currentSection: (fields[7] as Map?)?.cast<String, dynamic>(),

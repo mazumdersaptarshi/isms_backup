@@ -244,7 +244,7 @@ class _UserDataGetterMaster with ChangeNotifier {
     };
 
 //Calling Hive function to update Local progress data for the course for current User
-    await HiveService.updateCurrentCourseProgressLocal(
+    await HiveService.updateCourseWithNewProgressLocal(
         latestProgressDataMap, _currentUser!);
   }
 
