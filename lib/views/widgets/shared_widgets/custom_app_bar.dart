@@ -2,47 +2,17 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-// import 'package:isms/screens/adminScreens/AdminConsole/admin_console_page.dart';
-// import 'package:isms/screens/adminScreens/timed_reminders_screen.dart';
-// import 'package:isms/screens/home_screen.dart';
-// import 'package:isms/screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
-// import 'package:isms/screens/learningModuleScreens/courseScreens/myLearningScreen.dart';
-// import 'package:isms/screens/login/login_screen.dart';
-// import 'package:isms/screens/reminder_screen.dart';
-// import 'package:isms/screens/userInfo/user_profile_screen.dart';
+import 'package:isms/views/screens/testing/test_runner.dart';
 
 import '../../../controllers/theme_management/common_theme.dart';
 import '../../../controllers/user_management/logged_in_state.dart';
-// import '../../controllers/themes/common_theme.dart';
-// import '../../controllers/userManagement/logged_in_state.dart';
 import '../../screens/admin_screens/admin_console/admin_console_page.dart';
 import '../../screens/admin_screens/timed_reminders_screen.dart';
 import '../../screens/authentication/login_screen.dart';
+import '../../screens/course_page.dart';
 import '../../screens/home_screen.dart';
 import '../../screens/reminder_screen.dart';
 import '../../screens/user_screens/user_profile_screen.dart';
-// import '../../screens/userInfo/user_profile_screen.dart';
-// import '../screens/adminScreens/AdminConsole/admin_console_page.dart';
-// import '../screens/adminScreens/timed_reminders_screen.dart';
-// import '../screens/home_screen.dart';
-// import '../screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
-// import '../screens/learningModuleScreens/courseScreens/myLearningScreen.dart';
-// import '../screens/login/login_screen.dart';
-// import '../screens/reminder_screen.dart';
-// import '../screens/userInfo/user_profile_screen.dart';
-// import '../controllers/themes/common_theme.dart';
-// import '../controllers/userManagement/logged_in_state.dart';
-// import '../screens/login/login_screen.dart';
-// import '../views/screens/adminScreens/AdminConsole/admin_console_page.dart';
-// import '../views/screens/adminScreens/timed_reminders_screen.dart';
-// import '../views/screens/home_screen.dart';
-// import '../views/screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
-// import '../views/screens/learningModuleScreens/courseScreens/myLearningScreen.dart';
-// import '../views/screens/login/login_screen.dart';
-// import '../views/screens/reminder_screen.dart';
-// import '../views/screens/userInfo/user_profile_screen.dart';
-import '../../screens/course_page.dart';
 
 mixin CustomAppBarMixin on StatelessWidget {
   final Map<String, ValueNotifier<bool>> hovering = {
@@ -53,6 +23,7 @@ mixin CustomAppBarMixin on StatelessWidget {
     "Course Test": ValueNotifier(false),
     "Admin Console": ValueNotifier(false),
     "My Learning": ValueNotifier(false),
+    "Tracking": ValueNotifier(false),
   };
 
   void navigateToUserProfilePage(BuildContext context) {
@@ -96,6 +67,11 @@ mixin CustomAppBarMixin on StatelessWidget {
   void navigateToTimedRemindersPage(BuildContext context) {
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => const TimedRemindersScreen()));
+  }
+
+  void navigateToTrackingPage(BuildContext context) {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => const TestRunner()));
   }
 
   Widget appBarItem(
@@ -263,7 +239,9 @@ class CustomAppBarWeb extends StatelessWidget
         appBarItem(Icons.lightbulb, "My Learning",
             () => navigateToMyLearningPage(context), _paddingValue),
         appBarItem(Icons.lightbulb, "Course Test",
-                () => navigateToCourseTestPage(context), _paddingValue),
+            () => navigateToCourseTestPage(context), _paddingValue),
+        appBarItem(Icons.track_changes, "Tracking",
+            () => navigateToTrackingPage(context), _paddingValue),
         if (loggedInState?.currentUserRole == 'admin')
           appBarItem(
               Icons.notifications_active_rounded,

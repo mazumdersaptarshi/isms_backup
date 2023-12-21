@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hive/hive.dart';
 import 'package:isms/controllers/domain_management/domain_provider.dart';
-import 'package:isms/models/enums.dart';
 import 'package:isms/services/hive/hive_adapters/user_course_progress.dart';
 import 'package:logging/logging.dart';
 
@@ -10,7 +9,9 @@ class HiveService {
   static final Logger _logger = Logger('HiveService');
 
   static final String _usersBoxName = 'users';
-  static final String _coursesFieldName = 'courses';
+  // static final String _coursesFieldName = 'courses';
+
+  static String _fieldName = '';
   static late Box _box;
 
   /// Registers the adapters required for the custom objects used in Hive
@@ -28,8 +29,10 @@ class HiveService {
   ///
   /// [newProgressData] A map containing the progress data for the course.
   /// [currentUser] The user whose course progress is being updated.
-  static Future<void> updateCourseWithNewProgressLocal(
-      Map<String, dynamic> newProgressData, User currentUser) async {
+  static Future<void> updateUserProgressLocalData(
+      Map<String, dynamic> newProgressData,
+      User currentUser,
+      String fieldName) async {
     //Declaring a Hive Box variable to store the Hive box
     try {
       _box = Hive.box(_usersBoxName); //Opens existing Hive box 'users'
@@ -38,45 +41,36 @@ class HiveService {
       // Ensures there is existing user data to be fetched.
 
       await ensureUserLocalDataExists(currentUser);
-      /* First we need to fetch the existing user data and check the sections data present
-      for that course ID, which contains the past and then we update the map present with that ID with the latest map
-      of the progress
+      /* Fetch the existing User Data, and update it with the new data
+      being passed to this function
        */
       final existingUserData = Map<String, dynamic>.from(await _box
           .get(userIdKey)); // Gets the existing User data from the Hive Box
 
-      Map<String, dynamic> sections = {};
-      try {
-        existingUserData[_coursesFieldName].forEach((key, value) {
-          sections = value.sections;
-          // print(sections);
-          // print(value.sections);
-          sections['${newProgressData['currentSectionId']}'] =
-              newProgressData['currentSection'];
-        });
-      } catch (e) {
-        sections['${newProgressData['currentSectionId']}'] =
-            newProgressData['currentSection'];
-        print(sections);
-        _logger.severe('No sections found');
+      List<dynamic> sections = [];
+      _fieldName = fieldName;
+      if (_fieldName == 'courses') {
+        final userCourseProgressHive = UserCourseProgressHive(
+          courseId: newProgressData['fieldId'],
+          currentSection: newProgressData['currentSection'],
+          completedSections: newProgressData['completedSections'],
+        );
+
+        //Updating the existingUserData variable with the Course Progress
+        existingUserData[_fieldName]['${newProgressData['fieldId']}'] =
+            userCourseProgressHive;
+
+        //putting the Updated users data in Hive
+        _box.put(userIdKey, existingUserData);
+        _logger
+            .info('Successfully updated course progress for user $userIdKey.');
+        _logger.info(
+            existingUserData[_fieldName]['${newProgressData['fieldId']}']);
+      } else {
+        _logger.severe(
+            'Invalid Field Id, the given field does not exist in Hive!');
       }
-
       // Create an instance of UserCourseProgressHive with the current progress data.
-      final userCourseProgressHive = UserCourseProgressHive(
-        courseId: newProgressData[CourseKeys.courseId.name],
-        courseTitle: newProgressData['courseTitle'],
-        completionStatus: newProgressData['completionStatus'],
-        currentSectionId: newProgressData['currentSectionId'],
-        currentSection: newProgressData['currentSection'],
-        sections: sections,
-      );
-      //Updating the existingUserData variable with the Course Progress
-      existingUserData[_coursesFieldName]['${newProgressData['courseId']}'] =
-          userCourseProgressHive;
-
-      //putting the Updated users data in Hive
-      _box.put(userIdKey, existingUserData);
-      _logger.info('Successfully updated course progress for user $userIdKey.');
     } catch (e) {
       // Log any exceptions that occur during the update process.
       _logger.severe(
@@ -132,16 +126,17 @@ class HiveService {
     }
   }
 
-  static Future<dynamic> getExistingUserCourseLocalData(String? userId,
-      {String? courseId}) async {
+  static Future<dynamic> getExistingUserLocalData(String? userId,
+      {String? fieldId}) async {
     final box = Hive.box(_usersBoxName);
-    if (courseId == null) courseId = '';
+    if (fieldId == null) fieldId = '';
     // Attempt to retrieve the user data from the box.
     final userData = await box.get(userId);
 
     // Ensure that the retrieved data is a Map<String, dynamic>.
+    _fieldName = 'courses';
     try {
-      return userData['courses']['${courseId}'].sections;
+      return userData[_fieldName]['${fieldId}'];
     } catch (e) {
       _logger.severe('No local data currently exists for this, error');
       return userData;

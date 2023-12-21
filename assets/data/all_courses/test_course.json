@@ -21,7 +21,7 @@
                         {
                             "questionId": "ssq1",
                             "questionType": "singleSelectionQuestion",
-                            "questionText": "SSQ",
+                            "questionText": "Section 1 Question",
                             "questionAnswers": [
                                 {
                                     "answerId": "ssq1a1",
@@ -56,7 +56,7 @@
                         {
                             "questionId": "msq1",
                             "questionType": "multipleSelectionQuestion",
-                            "questionText": "MSQ",
+                            "questionText": "Section 2 Question",
                             "questionAnswers": [
                                 {
                                     "answerId": "msq1a1",

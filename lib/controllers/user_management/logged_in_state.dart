@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:isms/controllers/storage/hive_service/hive_service.dart';
-import 'package:isms/models/enums.dart';
 // import 'package:isms/projectModules/domain_management/domain_provider.dart';
 import 'package:logging/logging.dart';
 
@@ -220,32 +219,13 @@ class _UserDataGetterMaster with ChangeNotifier {
 
   /// Updates the current progress to the course by looking it up by courseId, if userCourseProgress object exists
   /// for user then the progress is updated with the new details, if not exists then new userCourseProgress object is created
-  Future<void> updateCourseProgress({
-    String? courseId,
-    String? courseTitle,
-    String? startStatus,
-    String? completionStatus,
-    String? currentSectionId,
-    Map<String, dynamic>? currentSection,
+  Future<void> updateUserProgress({
+    required String fieldName,
+    Map<String, dynamic>? data,
   }) async {
-    _logger.info(
-        await HiveService.getExistingUserCourseLocalData(currentUserUid!));
-    /*
-    Creating a map of the latest progress data received by the function, and
-    Sending it to be updated in the storage
-     */
-    Map<String, dynamic> latestProgressDataMap = {
-      CourseKeys.courseId.name: courseId!,
-      CourseKeys.courseTitle.name: courseTitle,
-      "startStatus": startStatus,
-      "completionStatus": completionStatus,
-      "currentSectionId": currentSectionId,
-      "currentSection": currentSection,
-    };
-
 //Calling Hive function to update Local progress data for the course for current User
-    await HiveService.updateCourseWithNewProgressLocal(
-        latestProgressDataMap, _currentUser!);
+    await HiveService.updateUserProgressLocalData(
+        data!, _currentUser!, fieldName);
   }
 
   ///This function creates a listener that monitor any change to the user's data in the DB
