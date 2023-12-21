@@ -14,7 +14,7 @@ class Exam {
   final String examId;
   final String examTitle;
   final String examDescription;
-  final int examRequiredCorrectAnswers;
+  final int examPassMark;
   final int examAllowedAttempts;
   final List<Section> examSections;
 
@@ -23,7 +23,7 @@ class Exam {
       required this.examId,
       required this.examTitle,
       required this.examDescription,
-      required this.examRequiredCorrectAnswers,
+      required this.examPassMark,
       required this.examAllowedAttempts,
       required this.examSections});
 

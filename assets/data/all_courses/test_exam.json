@@ -3,7 +3,7 @@
     "examId": "de44qv",
     "examTitle": "Test Exam",
     "examDescription": "Test Exam description",
-    "examRequiredCorrectAnswers": 2,
+    "examPassMark": 2,
     "examAllowedAttempts": 3,
     "examSections": [
         {

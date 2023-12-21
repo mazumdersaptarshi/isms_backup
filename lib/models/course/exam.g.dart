@@ -11,7 +11,7 @@ Exam _$ExamFromJson(Map<String, dynamic> json) => Exam(
       examId: json['examId'] as String,
       examTitle: json['examTitle'] as String,
       examDescription: json['examDescription'] as String,
-      examRequiredCorrectAnswers: json['examRequiredCorrectAnswers'] as int,
+      examPassMark: json['examPassMark'] as int,
       examAllowedAttempts: json['examAllowedAttempts'] as int,
       examSections: (json['examSections'] as List<dynamic>)
           .map((e) => Section.fromJson(e as Map<String, dynamic>))
@@ -23,7 +23,7 @@ Map<String, dynamic> _$ExamToJson(Exam instance) => <String, dynamic>{
       'examId': instance.examId,
       'examTitle': instance.examTitle,
       'examDescription': instance.examDescription,
-      'examRequiredCorrectAnswers': instance.examRequiredCorrectAnswers,
+      'examPassMark': instance.examPassMark,
       'examAllowedAttempts': instance.examAllowedAttempts,
       'examSections': instance.examSections.map((e) => e.toJson()).toList(),
     };

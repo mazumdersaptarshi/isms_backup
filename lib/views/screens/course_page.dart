@@ -26,6 +26,7 @@ class _CoursePageState extends State<CoursePage> {
   late final Course course;
   final Set<String> _completedSections = {};
   final Set<String> _interactedSections = {};
+  final Set<String> _requiredInteractiveElements = {};
   int _currentSectionIndex = 0;
   late String _currentSectionId;
   late final Map<String,Set<String>> _completedInteractiveElements;
@@ -44,6 +45,7 @@ class _CoursePageState extends State<CoursePage> {
 
     for (_currentSectionIndex = 0; _currentSectionIndex < course.courseSections.length; _currentSectionIndex++) {
       Section currentSection = course.courseSections[_currentSectionIndex];
+      _requiredInteractiveElements.clear();
 
       // Iterate through all course sections until we reach one which hasn't been completed
       if (!_completedSections.contains(currentSection.sectionId)) {
@@ -61,6 +63,7 @@ class _CoursePageState extends State<CoursePage> {
           // Questions
           } else if (element.elementType == ElementTypeValues.question.name) {
             for (Question question in element.elementContent) {
+              _requiredInteractiveElements.add(question.questionId);
 
               // Single Selection Question (Radio buttons)
               if (question.questionType == QuestionTypeValues.singleSelectionQuestion.name) {
@@ -71,15 +74,14 @@ class _CoursePageState extends State<CoursePage> {
                     onItemSelected: (selectedValue) {
                       print(selectedValue.toString());
                       setState(() {
-                        _selectedAnswer = selectedValue;
                         // Only enable the related button once an option has been selected.
                         // Radio buttons cannot be deselected so there's no need to disable the button again.
-                        _completedInteractiveElements[_currentSectionId]?.add(element.elementId);
+                        _completedInteractiveElements[_currentSectionId]?.add(question.questionId);
                       });
                       print(_completedInteractiveElements[_currentSectionId].toString());
                     },
                   ),
-                  _completedInteractiveElements[_currentSectionId]!.contains(element.elementId)
+                  _completedInteractiveElements[_currentSectionId]!.contains(question.questionId)
                       ? ElevatedButton(
                           onPressed: _submitAnswer,
                           child: Text(
@@ -105,20 +107,19 @@ class _CoursePageState extends State<CoursePage> {
                     onItemSelected: (selectedValues) {
                       print(selectedValues.toString());
                       setState(() {
-                        // _selectedAnswer = selectedValues;
                         // Only enable the related button once at least one option has been selected.
                         // As checkboxes can be deselected, we also need to disable the button if all
                         // options are subsequently deselected.
                         if (selectedValues.values.contains(true)) {
-                          _completedInteractiveElements[_currentSectionId]?.add(element.elementId);
+                          _completedInteractiveElements[_currentSectionId]?.add(question.questionId);
                         } else {
-                          _completedInteractiveElements[_currentSectionId]?.remove(element.elementId);
+                          _completedInteractiveElements[_currentSectionId]?.remove(question.questionId);
                         }
                       });
                       print(_completedInteractiveElements[_currentSectionId].toString());
                     },
                   ),
-                  _completedInteractiveElements[_currentSectionId]!.contains(element.elementId)
+                  _completedInteractiveElements[_currentSectionId]!.contains(question.questionId)
                       ? ElevatedButton(
                     onPressed: _submitAnswer,
                     child: Text(
@@ -142,15 +143,17 @@ class _CoursePageState extends State<CoursePage> {
             final List<FlipCardWidget> flipCards = [];
 
             for (FlipCard flipCard in element.elementContent) {
+              _requiredInteractiveElements.add(flipCard.flipCardId);
               flipCards.add(
                   FlipCardWidget(
                       content: flipCard,
                       onItemSelected: (selectedCard) {
-                        print(selectedCard.toString());
+                        print(selectedCard);
                         setState(() {
                           _completedInteractiveElements[_currentSectionId]?.add(selectedCard);
                         });
                         print(_completedInteractiveElements[_currentSectionId].toString());
+                        _checkInteractiveElementsCompleted();
                     },
                   )
               );
@@ -226,21 +229,19 @@ class _CoursePageState extends State<CoursePage> {
     return requiredSections;
   }
 
-  void _submitAnswer() {
-    final List<course_element.Element> currentSectionElements = course.courseSections[_currentSectionIndex].sectionElements;
-    final Set<String> requiredInteractiveElements = {};
-    for (course_element.Element element in currentSectionElements) {
-      if ((element.elementType == ElementTypeValues.question.name) || (element.elementType == ElementTypeValues.flipCard.name)) {
-        requiredInteractiveElements.add(element.elementId);
-      }
-    }
-
-    //
-    if (setEquals(requiredInteractiveElements, _completedInteractiveElements[_currentSectionId])) {
+  void _checkInteractiveElementsCompleted() {
+    print(_requiredInteractiveElements.toString());
+    print(_completedInteractiveElements[_currentSectionId].toString());
+    if (setEquals(_requiredInteractiveElements, _completedInteractiveElements[_currentSectionId])) {
       setState(() {
         _interactedSections.add(_currentSectionId);
       });
+      print(_interactedSections.toString());
     }
+  }
+
+  void _submitAnswer() {
+    _checkInteractiveElementsCompleted();
   }
 
   void _goToNextSection() {

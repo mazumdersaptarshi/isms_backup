@@ -14,7 +14,7 @@ enum ExamKeys {
   examId,
   examTitle,
   examDescription,
-  examRequiredCorrectAnswers,
+  examPassMark,
   examAllowedAttempts,
   examSections
 }
