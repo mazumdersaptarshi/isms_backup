@@ -130,7 +130,7 @@ class _UserDataGetterMaster with ChangeNotifier {
     if (userSnapshot.exists) {
       DomainProvider domainProvider = DomainProvider();
 
-      await HiveService.ensureUserLocalDataExists(
+      await HiveService.ensureLocalDataExists(
           user); //function call to check if local user data exists or not
     }
 
@@ -144,7 +144,7 @@ class _UserDataGetterMaster with ChangeNotifier {
           role: 'user',
           uid: user.uid,
           domain: domain!));
-      await HiveService.ensureUserLocalDataExists(user);
+      await HiveService.ensureLocalDataExists(user);
     }
   }
 
@@ -221,11 +221,11 @@ class _UserDataGetterMaster with ChangeNotifier {
   /// for user then the progress is updated with the new details, if not exists then new userCourseProgress object is created
   Future<void> updateUserProgress({
     required String fieldName,
+    required String key,
     Map<String, dynamic>? data,
   }) async {
 //Calling Hive function to update Local progress data for the course for current User
-    await HiveService.updateUserProgressLocalData(
-        data!, _currentUser!, fieldName);
+    await HiveService.updateLocalData(data!, _currentUser!, fieldName, key);
   }
 
   ///This function creates a listener that monitor any change to the user's data in the DB

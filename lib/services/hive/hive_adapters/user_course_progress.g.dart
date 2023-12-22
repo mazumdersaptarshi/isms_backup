@@ -19,9 +19,9 @@ class UserCourseProgressHiveAdapter
     };
     return UserCourseProgressHive(
       courseId: fields[0] as String?,
-      completionStatus: fields[2] as String?,
-      currentSection: fields[3] as String?,
-      completedSections: (fields[9] as List?)?.cast<dynamic>(),
+      completionStatus: fields[1] as String?,
+      currentSection: fields[2] as String?,
+      completedSections: (fields[3] as List?)?.cast<dynamic>(),
     );
   }
 
@@ -31,11 +31,11 @@ class UserCourseProgressHiveAdapter
       ..writeByte(4)
       ..writeByte(0)
       ..write(obj.courseId)
-      ..writeByte(2)
+      ..writeByte(1)
       ..write(obj.completionStatus)
-      ..writeByte(3)
+      ..writeByte(2)
       ..write(obj.currentSection)
-      ..writeByte(9)
+      ..writeByte(3)
       ..write(obj.completedSections);
   }
 
