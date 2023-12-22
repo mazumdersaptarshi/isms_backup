@@ -4,7 +4,7 @@
     "examTitle": "Test Exam",
     "examDescription": "Test Exam description",
     "examPassMark": 2,
-    "examAllowedAttempts": 3,
+    "examEstimatedTime": 3,
     "examSections": [
         {
             "sectionId": "section1",

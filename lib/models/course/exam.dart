@@ -15,7 +15,7 @@ class Exam {
   final String examTitle;
   final String examDescription;
   final int examPassMark;
-  final int examAllowedAttempts;
+  final int examEstimatedTime;
   final List<Section> examSections;
 
   Exam({
@@ -24,7 +24,7 @@ class Exam {
       required this.examTitle,
       required this.examDescription,
       required this.examPassMark,
-      required this.examAllowedAttempts,
+      required this.examEstimatedTime,
       required this.examSections});
 
   /// A necessary factory constructor for creating a new class instance from a map.

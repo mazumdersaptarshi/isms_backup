@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'flipcard.dart';
+part of 'flip_card.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
