@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hive/hive.dart';
 import 'package:isms/controllers/domain_management/domain_provider.dart';
+import 'package:isms/services/hive/config/config.dart';
 import 'package:isms/services/hive/hive_adapters/user_course_progress.dart';
+import 'package:isms/services/hive/hive_adapters/user_exam_progress.dart';
 import 'package:logging/logging.dart';
 
 class HiveService {
@@ -20,6 +22,7 @@ class HiveService {
   /// This should be called during app initialization
   static void registerAdapters() {
     Hive.registerAdapter(UserCourseProgressHiveAdapter());
+    Hive.registerAdapter(UserExamProgressHiveAdapter());
     // Register other adapters as needed
   }
 
@@ -47,22 +50,22 @@ class HiveService {
       final existingUserData = Map<String, dynamic>.from(await _box
           .get(userIdKey)); // Gets the existing User data from the Hive Box
 
-      switch (fieldName) {
-        case 'courses':
-          _userProgress = UserCourseProgressHive.fromMap(data);
-
-          //Updating the existingUserData variable with the Course Progress
-          existingUserData[fieldName][key] = _userProgress;
-
-          //putting the Updated users data in Hive
-          _box.put(userIdKey, existingUserData);
-          _logger.info(
-              'Successfully updated course progress for user $userIdKey.');
-          _logger.info(existingUserData[fieldName][key]);
-        default:
-          _logger.severe(
-              'Invalid Field Id, the given field does not exist in Hive!');
+      if (fieldName == FieldName.courses.name) {
+        _userProgress = UserCourseProgressHive.fromMap(data);
+      } else if (fieldName == FieldName.exams.name) {
+        _userProgress = UserExamProgressHive.fromMap(data);
+      } else {
+        _logger.severe(
+            'Invalid Field Id, the given field ${fieldName} does not exist in Hive!');
       }
+      //Updating the existingUserData variable with new Progress Data
+      existingUserData[fieldName][key] = _userProgress;
+
+      //putting the Updated users data in Hive
+      _box.put(userIdKey, existingUserData);
+      _logger.info('Successfully updated course progress for user $userIdKey.');
+      _logger.info(existingUserData[fieldName][key]);
+
       // Create an instance of UserCourseProgressHive with the current progress data.
     } catch (e) {
       // Log any exceptions that occur during the update process.
@@ -109,6 +112,7 @@ class HiveService {
         "role": "user",
         "domain": domain ?? 'n/a', // Provide a default value
         "courses": {},
+        "exams": {},
       };
       // Save the newly created default user data to the Hive box.
       await _box.put('${user?.uid}', localUserData);
