@@ -22,8 +22,12 @@ class CoursePage extends StatefulWidget {
 }
 
 class _CoursePageState extends State<CoursePage> {
-  static const checkAnswerLabel = 'Check answer';
-  static const selectAnswerLabel = 'Select answer';
+  static const labelButtonCheckAnswer = 'Check answer';
+  static const labelButtonSelectAnswer = 'Select answer';
+  static const labelButtonSectionContentIncomplete = 'Complete all section content to proceed';
+  static const labelButtonFinishCourse = 'Finish course and return to course list';
+  static const labelButtonNextSection = 'Proceed to next section: ';
+  static const labelButtonPreviousSection = 'Back to previous section: ';
   final TextStyle _buttonEnabledStyle = const TextStyle(fontSize: 20, color: Colors.white);
   final TextStyle _buttonDisabledStyle = const TextStyle(fontSize: 20, color: Colors.red);
   final String _jsonString = '{"courseId": "ip78hd","courseTitle": "Test Course","courseDescription": "Test Course description","courseSections": [{"sectionId": "section1","sectionTitle": "Section 1","sectionElements": [{"elementId": "html1","elementType": "html","elementTitle": "Static HTML 1","elementContent": "<html><body><p>HTML 1</p></body></html>"},{"elementId": "question1","elementType": "question","elementTitle": "Multiple choice question with single answer selection","elementContent": [{"questionId": "ssq1","questionType": "singleSelectionQuestion","questionText": "SSQ","questionAnswers": [{"answerId": "ssq1a1","answerText": "A1","answerCorrect": false},{"answerId": "ssq1a2","answerText": "A2","answerCorrect": true},{"answerId": "ssq1a3","answerText": "A3","answerCorrect": false}]}]}]},{"sectionId": "section2","sectionTitle": "Section 2","sectionElements": [{"elementId": "question2","elementType": "question","elementTitle": "Multiple choice question with multiple answer selection","elementContent": [{"questionId": "msq1","questionType": "multipleSelectionQuestion","questionText": "MSQ","questionAnswers": [{"answerId": "msq1a1","answerText": "A1","answerCorrect": true},{"answerId": "msq1a2","answerText": "A2","answerCorrect": false},{"answerId": "msq1a3","answerText": "A3","answerCorrect": false},{"answerId": "msq1a4","answerText": "A4","answerCorrect": true}]}]},{"elementId": "html2","elementType": "html","elementTitle": "Static HTML 2","elementContent": "<html><body><p>HTML 2</p></body></html>"},{"elementId": "flipcards1","elementType": "flipCard","elementTitle": "FlipCards","elementContent": [{"flipCardId": "fc1","flipCardFront": "Front 1","flipCardBack": "Back 1"},{"flipCardId": "fc2","flipCardFront": "Front 2","flipCardBack": "Back 2"},{"flipCardId": "fc3","flipCardFront": "Front 2","flipCardBack": "Back 3"}]}]}]}';
@@ -122,14 +126,14 @@ class _CoursePageState extends State<CoursePage> {
                         }
                       },
                       child: Text(
-                          checkAnswerLabel,
+                          labelButtonCheckAnswer,
                           style: _buttonEnabledStyle
                       ),
                     )
                   : ElevatedButton(
                       onPressed: null,
                       child: Text(
-                          selectAnswerLabel,
+                          labelButtonSelectAnswer,
                           style: _buttonDisabledStyle
                       ),
                     )
@@ -167,14 +171,14 @@ class _CoursePageState extends State<CoursePage> {
                         }
                       },
                       child: Text(
-                          checkAnswerLabel,
+                          labelButtonCheckAnswer,
                           style: _buttonEnabledStyle
                       ),
                     )
                   : ElevatedButton(
                       onPressed: null,
                       child: Text(
-                          selectAnswerLabel,
+                          labelButtonSelectAnswer,
                           style: _buttonDisabledStyle
                       ),
                     )
@@ -228,14 +232,14 @@ class _CoursePageState extends State<CoursePage> {
           ? ElevatedButton(
               onPressed: _completeCourse,
               child: Text(
-                  'Finish course and return to course list',
+                  labelButtonFinishCourse,
                   style: _buttonEnabledStyle
               ),
             )
           : ElevatedButton(
               onPressed: null,
               child: Text(
-                  'Complete all section content to proceed',
+                  labelButtonSectionContentIncomplete,
                   style: _buttonDisabledStyle
               ),
             )
@@ -246,14 +250,14 @@ class _CoursePageState extends State<CoursePage> {
           ? ElevatedButton(
               onPressed: _goToNextSection,
               child: Text(
-                  'Proceed to next section: ${_course.courseSections[_currentSectionIndex + 1].sectionTitle}',
+                  '$labelButtonNextSection${_course.courseSections[_currentSectionIndex + 1].sectionTitle}',
                   style: _buttonEnabledStyle
               ),
             )
           : ElevatedButton(
               onPressed: null,
               child: Text(
-                  'Complete all section content to proceed',
+                  labelButtonSectionContentIncomplete,
                   style: _buttonDisabledStyle
               ),
             )
@@ -266,7 +270,7 @@ class _CoursePageState extends State<CoursePage> {
           ElevatedButton(
             onPressed: _goToPreviousSection,
             child: Text(
-                'Back to previous section: ${_course.courseSections[_currentSectionIndex - 1].sectionTitle}',
+                '$labelButtonPreviousSection${_course.courseSections[_currentSectionIndex - 1].sectionTitle}',
                 style: _buttonEnabledStyle
             ),
           )
