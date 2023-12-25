@@ -97,187 +97,204 @@ class _CoursePageState extends State<CoursePage> {
             _currentSectionRequiredInteractiveElements.add(question.questionId);
           }
 
-          // Single Selection Question (Radio buttons)
-          if (question.questionType == QuestionTypeValues.singleSelectionQuestion.name) {
-            contentWidgets.addAll([
-              Text(question.questionText),
-              RadioList(
-                values: question.questionAnswers,
-                onItemSelected: (selectedValue) {
-                  print('selected: $selectedValue');
-                  setState(() {
-                    // Only enable the related button once an option has been selected.
-                    // Radio buttons cannot be deselected so there's no need to disable the button again.
-                    _currentSectionNonEmptyQuestions.add(question.questionId);
-                  });
-                  print('required: ${_currentSectionRequiredInteractiveElements.toString()}');
-                  print('current: ${_currentSectionNonEmptyQuestions.toString()}');
-                  print('question id: ${question.questionId}');
-                  print(_currentSectionNonEmptyQuestions.contains(question.questionId));
-                },
-              ),
-              _currentSectionNonEmptyQuestions.contains(question.questionId)
-                  ? ElevatedButton(
-                      onPressed: () {
-                        // No need to track interactive UI element completion if revisiting the section
-                        if (!_currentSectionCompleted) {
-                          _currentSectionCompletedInteractiveElements.add(question.questionId);
-                          _checkInteractiveElementsCompleted();
-                        }
-                      },
-                      child: Text(
-                          labelButtonCheckAnswer,
-                          style: _buttonEnabledStyle
-                      ),
-                    )
-                  : ElevatedButton(
-                      onPressed: null,
-                      child: Text(
-                          labelButtonSelectAnswer,
-                          style: _buttonDisabledStyle
-                      ),
-                    )
-            ]);
-
-          // Multiple Selection Question (Checkboxes)
-          } else if (question.questionType == QuestionTypeValues.multipleSelectionQuestion.name) {
-            contentWidgets.addAll([
-              Text(question.questionText),
-              CheckboxList(
-                values: question.questionAnswers,
-                onItemSelected: (selectedValues) {
-                  print('selected: $selectedValues.toString()');
-                  setState(() {
-                    // Only enable the related button once at least one option has been selected.
-                    // As checkboxes can be deselected, we also need to disable the button if all
-                    // options are subsequently deselected.
-                    if (selectedValues.values.contains(true)) {
-                      _currentSectionNonEmptyQuestions.add(question.questionId);
-                    } else {
-                      _currentSectionNonEmptyQuestions.remove(question.questionId);
-                    }
-                  });
-                  print('required: ${_currentSectionRequiredInteractiveElements.toString()}');
-                  print('current: ${_currentSectionNonEmptyQuestions.toString()}');
-                },
-              ),
-              _currentSectionNonEmptyQuestions.contains(question.questionId)
-                  ? ElevatedButton(
-                      onPressed: () {
-                        // No need to track interactive UI element completion if revisiting the section
-                        if (!_currentSectionCompleted) {
-                          _currentSectionCompletedInteractiveElements.add(question.questionId);
-                          _checkInteractiveElementsCompleted();
-                        }
-                      },
-                      child: Text(
-                          labelButtonCheckAnswer,
-                          style: _buttonEnabledStyle
-                      ),
-                    )
-                  : ElevatedButton(
-                      onPressed: null,
-                      child: Text(
-                          labelButtonSelectAnswer,
-                          style: _buttonDisabledStyle
-                      ),
-                    )
-            ]);
-          }
+          contentWidgets.addAll(_getQuestionWidgets(question));
         }
 
       // FlipCards
       } else if (element.elementType == ElementTypeValues.flipCard.name) {
-        final List<flip_card_widget.FlipCard> flipCards = [];
+        final List<flip_card_widget.FlipCard> flipCardWidgets = [];
 
         for (flip_card_model.FlipCard flipCard in element.elementContent) {
           // No need to track interactive UI element completion if revisiting the section
           if (!_currentSectionCompleted) {
             _currentSectionRequiredInteractiveElements.add(flipCard.flipCardId);
           }
-          flipCards.add(
-              flip_card_widget.FlipCard(
-                  content: flipCard,
-                  onItemSelected: (selectedCard) {
-                    print(selectedCard);
-                    setState(() {
-                      // No need to track interactive UI element completion if revisiting the section
-                      if (!_currentSectionCompleted) {
-                        _currentSectionCompletedInteractiveElements.add(selectedCard);
-                        _checkInteractiveElementsCompleted();
-                      }
-                    });
-                    print(_currentSectionCompletedInteractiveElements.toString());
-                },
-              )
-          );
+          flipCardWidgets.add(_getFlipCardWidget(flipCard));
         }
         contentWidgets.addAll([
           Wrap(
             alignment: WrapAlignment.center,
             spacing: 10.0,
             runSpacing: 10.0,
-            children: flipCards,
+            children: flipCardWidgets,
           ),
           const SizedBox(height: 20),
         ]);
       }
     }
 
+    contentWidgets.add(_getSectionEndButton());
+
+    // Don't add a previous section button for the first section
+    if (_currentSectionIndex > 0) {
+      contentWidgets.insert(0, _getSectionBeginningButton());
+    }
+
+    return contentWidgets;
+  }
+
+  List<Widget> _getQuestionWidgets(Question question) {
+    final List<Widget> contentWidgets = [];
+
+    // Single Selection Question (Radio buttons)
+    if (question.questionType == QuestionTypeValues.singleSelectionQuestion.name) {
+      contentWidgets.addAll([
+        Text(question.questionText),
+        RadioList(
+          values: question.questionAnswers,
+          onItemSelected: (selectedValue) {
+            print('selected: $selectedValue');
+            setState(() {
+              // Only enable the related button once an option has been selected.
+              // Radio buttons cannot be deselected so there's no need to disable the button again.
+              _currentSectionNonEmptyQuestions.add(question.questionId);
+            });
+            print('required: ${_currentSectionRequiredInteractiveElements.toString()}');
+            print('current: ${_currentSectionNonEmptyQuestions.toString()}');
+            print('question id: ${question.questionId}');
+            print(_currentSectionNonEmptyQuestions.contains(question.questionId));
+          },
+        ),
+        _currentSectionNonEmptyQuestions.contains(question.questionId)
+            ? ElevatedButton(
+          onPressed: () {
+            // No need to track interactive UI element completion if revisiting the section
+            if (!_currentSectionCompleted) {
+              _currentSectionCompletedInteractiveElements.add(question.questionId);
+              _checkInteractiveElementsCompleted();
+            }
+          },
+          child: Text(
+              labelButtonCheckAnswer,
+              style: _buttonEnabledStyle
+          ),
+        )
+            : ElevatedButton(
+          onPressed: null,
+          child: Text(
+              labelButtonSelectAnswer,
+              style: _buttonDisabledStyle
+          ),
+        )
+      ]);
+
+      // Multiple Selection Question (Checkboxes)
+    } else if (question.questionType == QuestionTypeValues.multipleSelectionQuestion.name) {
+      contentWidgets.addAll([
+        Text(question.questionText),
+        CheckboxList(
+          values: question.questionAnswers,
+          onItemSelected: (selectedValues) {
+            print('selected: $selectedValues.toString()');
+            setState(() {
+              // Only enable the related button once at least one option has been selected.
+              // As checkboxes can be deselected, we also need to disable the button if all
+              // options are subsequently deselected.
+              if (selectedValues.values.contains(true)) {
+                _currentSectionNonEmptyQuestions.add(question.questionId);
+              } else {
+                _currentSectionNonEmptyQuestions.remove(question.questionId);
+              }
+            });
+            print('required: ${_currentSectionRequiredInteractiveElements.toString()}');
+            print('current: ${_currentSectionNonEmptyQuestions.toString()}');
+          },
+        ),
+        _currentSectionNonEmptyQuestions.contains(question.questionId)
+            ? ElevatedButton(
+          onPressed: () {
+            // No need to track interactive UI element completion if revisiting the section
+            if (!_currentSectionCompleted) {
+              _currentSectionCompletedInteractiveElements.add(question.questionId);
+              _checkInteractiveElementsCompleted();
+            }
+          },
+          child: Text(
+              labelButtonCheckAnswer,
+              style: _buttonEnabledStyle
+          ),
+        )
+            : ElevatedButton(
+          onPressed: null,
+          child: Text(
+              labelButtonSelectAnswer,
+              style: _buttonDisabledStyle
+          ),
+        )
+      ]);
+    }
+
+    return contentWidgets;
+  }
+
+  flip_card_widget.FlipCard _getFlipCardWidget(flip_card_model.FlipCard flipCard) {
+      return flip_card_widget.FlipCard(
+        content: flipCard,
+        onItemSelected: (selectedCard) {
+          print(selectedCard);
+          setState(() {
+            // No need to track interactive UI element completion if revisiting the section
+            if (!_currentSectionCompleted) {
+              _currentSectionCompletedInteractiveElements.add(selectedCard);
+              _checkInteractiveElementsCompleted();
+            }
+          });
+          print(_currentSectionCompletedInteractiveElements.toString());
+        },
+      );
+  }
+
+  ElevatedButton _getSectionEndButton() {
+    late ElevatedButton button;
     // We need to determine whether the current section is the final one or not
     // to only display the "Finish Course" button at the very bottom of the course.
     if (_currentSectionIndex == _course.courseSections.length - 1) {
       // Only enable the button once all interactive elements in the section have been interacted with.
-      contentWidgets.add(_currentSectionCompleted
+      button = _currentSectionCompleted
           ? ElevatedButton(
-              onPressed: _completeCourse,
-              child: Text(
-                  labelButtonFinishCourse,
-                  style: _buttonEnabledStyle
-              ),
-            )
+        onPressed: _completeCourse,
+        child: Text(
+            labelButtonFinishCourse,
+            style: _buttonEnabledStyle
+        ),
+      )
           : ElevatedButton(
-              onPressed: null,
-              child: Text(
-                  labelButtonSectionContentIncomplete,
-                  style: _buttonDisabledStyle
-              ),
-            )
+        onPressed: null,
+        child: Text(
+            labelButtonSectionContentIncomplete,
+            style: _buttonDisabledStyle
+        ),
       );
     } else {
       // Only enable the button once all interactive elements in the section have been interacted with.
-      contentWidgets.add(_currentSectionCompleted
+      button = _currentSectionCompleted
           ? ElevatedButton(
-              onPressed: _goToNextSection,
-              child: Text(
-                  '$labelButtonNextSection${_course.courseSections[_currentSectionIndex + 1].sectionTitle}',
-                  style: _buttonEnabledStyle
-              ),
-            )
+        onPressed: _goToNextSection,
+        child: Text(
+            '$labelButtonNextSection${_course.courseSections[_currentSectionIndex + 1].sectionTitle}',
+            style: _buttonEnabledStyle
+        ),
+      )
           : ElevatedButton(
-              onPressed: null,
-              child: Text(
-                  labelButtonSectionContentIncomplete,
-                  style: _buttonDisabledStyle
-              ),
-            )
+        onPressed: null,
+        child: Text(
+            labelButtonSectionContentIncomplete,
+            style: _buttonDisabledStyle
+        ),
       );
     }
 
-    // Don't add a previous section button for the first section
-    if (_currentSectionIndex > 0) {
-      contentWidgets.insert(0,
-          ElevatedButton(
-            onPressed: _goToPreviousSection,
-            child: Text(
-                '$labelButtonPreviousSection${_course.courseSections[_currentSectionIndex - 1].sectionTitle}',
-                style: _buttonEnabledStyle
-            ),
-          )
-      );
-    }
+    return button;
+  }
 
-    return contentWidgets;
+  ElevatedButton _getSectionBeginningButton() {
+    return ElevatedButton(
+      onPressed: _goToPreviousSection,
+      child: Text(
+          '$labelButtonPreviousSection${_course.courseSections[_currentSectionIndex - 1].sectionTitle}',
+          style: _buttonEnabledStyle
+      ),
+    );
   }
 
   void _checkInteractiveElementsCompleted() {
