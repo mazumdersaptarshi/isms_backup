@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hive/hive.dart';
 import 'package:isms/controllers/domain_management/domain_provider.dart';
 import 'package:isms/services/hive/config/config.dart';
+import 'package:isms/services/hive/hive_adapters/user_attempts.dart';
 import 'package:isms/services/hive/hive_adapters/user_course_progress.dart';
 import 'package:isms/services/hive/hive_adapters/user_exam_progress.dart';
 import 'package:logging/logging.dart';
@@ -23,6 +24,8 @@ class HiveService {
   static void registerAdapters() {
     Hive.registerAdapter(UserCourseProgressHiveAdapter());
     Hive.registerAdapter(UserExamProgressHiveAdapter());
+    Hive.registerAdapter(UserAttemptsAdapter());
+
     // Register other adapters as needed
   }
 
@@ -50,9 +53,9 @@ class HiveService {
       final existingUserData = Map<String, dynamic>.from(await _box
           .get(userIdKey)); // Gets the existing User data from the Hive Box
 
-      if (fieldName == FieldName.courses.name) {
+      if (fieldName == HiveFieldKey.courses.name) {
         _userProgress = UserCourseProgressHive.fromMap(data);
-      } else if (fieldName == FieldName.exams.name) {
+      } else if (fieldName == HiveFieldKey.exams.name) {
         _userProgress = UserExamProgressHive.fromMap(data);
       } else {
         _logger.severe(

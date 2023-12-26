@@ -1,4 +1,4 @@
-enum FieldName {
+enum HiveFieldKey {
   courses,
   exams,
 }

@@ -25,49 +25,7 @@ class AdminProvider extends ChangeNotifier {
   // UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
   Map<String, dynamic> snapshotData = {};
   LoggedInState loggedInState = LoggedInState();
-  AdminProvider() {
-    listenToCoursesChanges();
-    listenToUsersChanges();
-  }
-
-  void listenToCoursesChanges() {
-    FirebaseFirestore.instance
-        .collection('adminconsole')
-        .doc('allcourses')
-        .collection('allCourseItems')
-        .snapshots()
-        .listen((snapshot) {
-      if (snapshot.docs.isNotEmpty) {
-        _hasNewCoursesData = true;
-        notifyListeners();
-      }
-    });
-  }
-
-  void listenToUsersChanges() {
-    FirebaseFirestore.instance
-        .collection('adminconsole')
-        .doc('allusers')
-        .collection('userRefs')
-        .where("domain", isEqualTo: loggedInState.loggedInUser.domain)
-        .snapshots()
-        .listen((snapshot) {
-      if (snapshot.docs.isNotEmpty) {
-        _hasNewUsersData = true;
-        notifyListeners();
-      }
-    });
-
-    FirebaseFirestore.instance
-        .collection('users')
-        .snapshots()
-        .listen((snapshot) {
-      if (snapshot.docs.isNotEmpty) {
-        _hasNewUsersData = true;
-        notifyListeners();
-      }
-    });
-  }
+  AdminProvider() {}
 
   Future<List> allCoursesDataFetcher() async {
     if (!_hasNewCoursesData && allCourses.isNotEmpty) {

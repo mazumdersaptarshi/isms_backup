@@ -14,7 +14,7 @@ class UserExamProgressHive {
   UserExamProgressHive.fromMap(Map<String, dynamic> data) {
     courseId = data['courseId'] as String?;
     examId = data['examId'] as String?;
-    attempts = data['attempts'] as List?;
+    attempts = data['attempts'] as Map<String, dynamic>?;
     completionStatus = data['completionStatus'] as String?;
   }
 
@@ -25,7 +25,7 @@ class UserExamProgressHive {
   String? examId;
 
   @HiveField(2)
-  List? attempts;
+  Map<String, dynamic>? attempts;
 
   @HiveField(3)
   String? completionStatus;

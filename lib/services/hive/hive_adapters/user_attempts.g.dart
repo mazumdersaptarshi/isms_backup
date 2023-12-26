@@ -1,41 +1,47 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'user_exam_progress.dart';
+part of 'user_attempts.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class UserExamProgressHiveAdapter extends TypeAdapter<UserExamProgressHive> {
+class UserAttemptsAdapter extends TypeAdapter<UserAttempts> {
   @override
-  final int typeId = 2;
+  final int typeId = 3;
 
   @override
-  UserExamProgressHive read(BinaryReader reader) {
+  UserAttempts read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return UserExamProgressHive(
-      courseId: fields[0] as String?,
-      examId: fields[1] as String?,
-      attempts: (fields[2] as Map?)?.cast<String, dynamic>(),
+    return UserAttempts(
+      attemptId: fields[0] as String?,
+      startTime: fields[1] as String?,
+      endTime: fields[2] as String?,
       completionStatus: fields[3] as String?,
+      score: fields[4] as int?,
+      responses: (fields[5] as List?)?.cast<dynamic>(),
     );
   }
 
   @override
-  void write(BinaryWriter writer, UserExamProgressHive obj) {
+  void write(BinaryWriter writer, UserAttempts obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(6)
       ..writeByte(0)
-      ..write(obj.courseId)
+      ..write(obj.attemptId)
       ..writeByte(1)
-      ..write(obj.examId)
+      ..write(obj.startTime)
       ..writeByte(2)
-      ..write(obj.attempts)
+      ..write(obj.endTime)
       ..writeByte(3)
-      ..write(obj.completionStatus);
+      ..write(obj.completionStatus)
+      ..writeByte(4)
+      ..write(obj.score)
+      ..writeByte(5)
+      ..write(obj.responses);
   }
 
   @override
@@ -44,7 +50,7 @@ class UserExamProgressHiveAdapter extends TypeAdapter<UserExamProgressHive> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is UserExamProgressHiveAdapter &&
+      other is UserAttemptsAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
