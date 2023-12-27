@@ -8,6 +8,7 @@ import 'package:isms/controllers/storage/hive_service/hive_service.dart';
 // import 'package:isms/remindersManagement/reminders_provider.dart';
 // import 'package:isms/screens/login/login_screen.dart';
 import 'package:isms/views/screens/authentication/login_screen.dart';
+import 'package:isms/views/screens/course_state.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 
@@ -58,6 +59,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<LoggedInState>(create: (context) {
           return LoggedInState();
         }),
+        ChangeNotifierProvider<CourseState>(create: (context) {
+          return CourseState();
+        }),
         ChangeNotifierProvider<AdminProvider>(create: (context) {
           return AdminProvider();
         }),
@@ -68,7 +72,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         scrollBehavior: MyCustomScrollBehavior(),
         debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
+        title: 'ISMS',
         theme: customTheme,
         home: const LoginPage(),
       ),

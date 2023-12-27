@@ -26,12 +26,19 @@ class _RadioListState extends State<RadioList> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
+    // return Center(
+    //   child: Row(
+    //     mainAxisSize: MainAxisSize.min,
+    //     mainAxisAlignment: MainAxisAlignment.center,
+    //     children: _buildList(context),
+    //   ),
+    // );
+    return Expanded(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: _buildList(context),
-      ),
+      )
     );
   }
 
@@ -39,8 +46,8 @@ class _RadioListState extends State<RadioList> {
     List<Widget> radioButtons = [];
     for (Answer answer in widget.values) {
       radioButtons.add(
-        Expanded(
-          flex: 1,
+        Flexible(
+          fit: FlexFit.loose,
           child: RadioListTile<Answer>(
             title: Text(answer.answerText),
             value: answer,

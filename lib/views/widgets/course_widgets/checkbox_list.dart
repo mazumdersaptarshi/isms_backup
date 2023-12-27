@@ -37,12 +37,19 @@ class _CheckboxListState extends State<CheckboxList> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
+    // return Center(
+    //   child: Row(
+    //     mainAxisSize: MainAxisSize.min,
+    //     mainAxisAlignment: MainAxisAlignment.center,
+    //     children: _buildList(context),
+    //   ),
+    // );
+    return Expanded(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: _buildList(context),
-      ),
+      )
     );
   }
 
@@ -50,8 +57,8 @@ class _CheckboxListState extends State<CheckboxList> {
     List<Widget> checkboxes = [];
     for (Answer answer in widget.values) {
       checkboxes.add(
-        Expanded(
-          flex: 1,
+        Flexible(
+          fit: FlexFit.loose,
           child: CheckboxListTile(
             title: Text(answer.answerText),
             value: _checkboxAnswerState[answer.answerId],
