@@ -68,6 +68,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<RemindersProvider>(create: (context) {
           return RemindersProvider();
         }),
+        ChangeNotifierProvider<AdminProvider>(create: (context) {
+          return AdminProvider();
+        }),
       ],
       child: MaterialApp(
         scrollBehavior: MyCustomScrollBehavior(),

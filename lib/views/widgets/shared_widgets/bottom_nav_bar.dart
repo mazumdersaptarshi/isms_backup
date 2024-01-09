@@ -24,7 +24,6 @@ import 'package:flutter/material.dart';
 // import '../views/screens/userInfo/user_profile_screen.dart';
 import '../../../controllers/theme_management/common_theme.dart';
 import '../../../controllers/user_management/logged_in_state.dart';
-import '../../screens/admin_screens/admin_console/admin_console_page.dart';
 import '../../screens/home_screen.dart';
 // import '../../screens/userInfo/user_profile_screen.dart';
 import '../../screens/user_screens/user_profile_screen.dart';
@@ -56,8 +55,8 @@ class BottomNavBar extends StatelessWidget {
     void NavigateToMyLearningPage() {}
 
     void navigateToAdminConsolePage() {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const AdminConsolePage()));
+      // Navigator.push(context,
+      //     MaterialPageRoute(builder: (context) => const AdminConsolePage()));
     }
 
     void decideNavigation({required int index}) {

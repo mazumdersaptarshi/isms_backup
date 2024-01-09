@@ -1,160 +1,60 @@
-// ignore_for_file: file_names
-
-import 'dart:developer';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
-
-// import 'package:isms/models/adminConsoleModels/courses_details.dart';
-
-// import 'package:isms/userManagement/logged_in_state.dart';
-
-import '../../models/admin_models/courses_details.dart';
-import '../../models/custom_user.dart';
-import '../user_management/logged_in_state.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:isms/controllers/storage/hive_service/hive_service.dart';
+import 'package:isms/services/hive/config/config.dart';
 
 class AdminProvider extends ChangeNotifier {
-  bool isCoursesStreamFetched = false;
-  List<dynamic> allCourses = [];
-  List<dynamic> allUsers = [];
-  List<dynamic> userRefs = [];
+  static Map _allUsersData = {};
 
-  bool _hasNewCoursesData = false;
-  bool _authStateChanged = false;
-  bool _hasNewUsersData = false;
-  // UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
-  Map<String, dynamic> snapshotData = {};
-  LoggedInState loggedInState = LoggedInState();
-  AdminProvider() {}
-
-  Future<List> allCoursesDataFetcher() async {
-    if (!_hasNewCoursesData && allCourses.isNotEmpty) {
-      return allCourses;
-    }
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('adminconsole')
-        .doc('allcourses')
-        .collection('allCourseItems')
-        .get();
-    allCourses.clear();
-    for (var documentSnapshot in querySnapshot.docs) {
-      if (documentSnapshot.exists) {
-        Map<String, dynamic> elementMap =
-            documentSnapshot.data() as Map<String, dynamic>;
-        CoursesDetails courseItem = CoursesDetails.fromMap(elementMap);
-        allCourses.add(courseItem);
-      }
-    }
-    QuerySnapshot userRefsQuerySnapshot = await FirebaseFirestore.instance
-        .collection('adminconsole')
-        .doc('allusers')
-        .collection('userRefs')
-        .where("domain", isEqualTo: loggedInState.loggedInUser.domain)
-        .get();
-    for (QueryDocumentSnapshot<Object?> documentSnapshot
-        in userRefsQuerySnapshot.docs) {
-      if (documentSnapshot.exists) {
-        if (!userRefs.contains(documentSnapshot.id)) {
-          userRefs.add(documentSnapshot.id);
-        }
-      }
-    }
-
-    _hasNewCoursesData = false;
-
-    return allCourses;
+  AdminProvider() {
+    getUsers();
+    notifyListeners();
   }
 
-  Future<List> allUsersDataFetcher() async {
-    if (_authStateChanged || _hasNewUsersData) {
-      //Clearing old data if there is new data available
-      allUsers.clear();
-      userRefs.clear();
-      print('${loggedInState.loggedInUser.domain}');
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection('adminconsole')
-          .doc('allusers')
-          .collection('userRefs')
-          .where("domain", isEqualTo: loggedInState.loggedInUser.domain)
-          .get();
-
-      for (QueryDocumentSnapshot<Object?> documentSnapshot
-          in querySnapshot.docs) {
-        if (documentSnapshot.exists) {
-          if (!userRefs.contains(documentSnapshot.id)) {
-            userRefs.add(documentSnapshot.id);
-          }
-        }
-      }
-      CollectionReference users =
-          FirebaseFirestore.instance.collection('users');
-      for (String userRef in userRefs) {
-        DocumentSnapshot userSnapshot = await users.doc(userRef).get();
-        try {
-          Map<String, dynamic> userData =
-              userSnapshot.data() as Map<String, dynamic>;
-          userData["uid"] = userSnapshot.id;
-
-          // localUserDataList.add({
-          //   'username': userData['username'],
-          //   'email': userData['email'],
-          //   'role': userData['role'],
-          // });
-          CustomUser userInfo = CustomUser.fromMap(userData);
-
-          allUsers.add(userInfo);
-        } catch (e) {
-          log('There was an issue with user Data; Could not fetch user data. Reason for error: $e');
-        }
-      }
-      _hasNewUsersData = false;
-      _authStateChanged = false;
-      return allUsers;
-    } else {
-      return allUsers;
-    }
+  static Map getUsers() {
+    _allUsersData = HiveService.getExistingLocalDataFromUsersBox();
+    return _allUsersData;
   }
 
-  Future<Map<String, dynamic>?> fetchAdminInstructions(
-      String category, String subCategory) async {
-    //getting a reference of the collection, returns Future<QuerySnapshot<Map<String, dynamic>>>
-    var collectionRef = FirebaseFirestore.instance
-        .collection('adminconsole')
-        .doc('instructions')
-        .collection(category);
-    final ref1 = await collectionRef
-        .get(); //this makes it QuerySnapshot<Map<String, dynamic>>
-
-    for (var document in ref1.docs) {
-      final ref = collectionRef.doc(document.id).collection(subCategory).get();
-
-      QuerySnapshot<Map<String, dynamic>> querySnapshot = await ref;
-      for (QueryDocumentSnapshot<Map<String, dynamic>> doc
-          in querySnapshot.docs) {
-        // Access data via .data() or []
-        Map<String, dynamic> data = doc.data();
-        return data;
-      }
-    }
-    return null;
+  static Map getCoursesForUser(String uid) {
+    Map courses = {};
+    print(_allUsersData);
+    try {
+      courses = _allUsersData[uid][HiveFieldKey.courses.name];
+    } catch (e) {}
+    print(courses);
+    return courses;
   }
 
-  Future<List> fetchAdminInstructionsFromFirestore(
-      String category, String subCategory) async {
-    DocumentReference docRef = FirebaseFirestore.instance
-        .collection('adminconsole')
-        .doc('instructions')
-        .collection(category)
-        .doc(subCategory);
-    DocumentSnapshot docSnapshot = await docRef.get();
+  static Map getExamsForCourseForUser(String uid, String courseId) {
+    Map exams = {};
+    try {
+      Map all_exams = _allUsersData[uid][HiveFieldKey.exams.name];
 
-    if (docSnapshot.exists) {
-      Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
+      all_exams.forEach((key, value) {
+        if (value.courseId == courseId) {
+          exams[key] = value;
+        }
+      });
+    } catch (e) {}
+    getExamAttemptsForCourseForUser(exams, 'de44qv');
+    return exams;
+  }
 
-      var slides = data['slides'];
-      return slides;
-    } else {
-      return [];
-    }
+  static Map getExamAttemptsForCourseForUser(Map exams, String examId) {
+    Map attempts = {};
+    try {
+      exams.forEach((key, value) {
+        // print('attempt: ${value.attempts} for exam ${value.examId}');
+        if (value.examId == examId) {
+          // print('attempt: ${value.attempts} for exam ${value.examId}');
+          value.attempts.forEach((key, value) {
+            print('${value.attemptId},  ${value.score}');
+          });
+          // attempts[value.attempts.attemptId] = value.attempts;
+        }
+        // print(attempts);
+      });
+    } catch (e) {}
+    return exams;
   }
 }

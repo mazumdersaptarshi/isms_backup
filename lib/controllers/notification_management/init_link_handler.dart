@@ -5,14 +5,12 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:isms/views/widgets/admin_console/admin_actions/admin_action_dropdown.dart';
 // import 'package:isms/screens/adminScreens/AdminInstructions/admin_instructions_categories.dart';
 // import 'package:isms/userManagement/logged_in_state.dart';
 import 'package:provider/provider.dart';
 import 'package:uni_links/uni_links.dart';
 
 import '../../controllers/user_management/logged_in_state.dart';
-import '../../views/screens/admin_screens/admin_instructions/admin_instructions_categories.dart';
 
 class InitLinkHandler {
   static StreamSubscription? _sub;
@@ -67,17 +65,17 @@ class InitLinkHandler {
     LoggedInState loggedinstate =
         Provider.of<LoggedInState>(context, listen: false);
     String? category = uri.queryParameters['category'];
-    for (String key in categories.keys) {
-      if (key == category && loggedinstate.currentUser != null) {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => AdminInstructionCategories(
-                      category: category!,
-                      subCategories: categories[key],
-                    )));
-      }
-    }
+    // for (String key in categories.keys) {
+    //   if (key == category && loggedinstate.currentUser != null) {
+    //     Navigator.push(
+    //         context,
+    //         MaterialPageRoute(
+    //             builder: (context) => AdminInstructionCategories(
+    //                   category: category!,
+    //                   subCategories: categories[key],
+    //                 )));
+    //   }
+    // }
   }
 
   static void dispose() {

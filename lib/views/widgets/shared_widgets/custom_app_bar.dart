@@ -2,11 +2,11 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:isms/views/screens/admin_screens/admin_console/admin_user_details_screen.dart';
 import 'package:isms/views/screens/testing/test_runner.dart';
 
 import '../../../controllers/theme_management/common_theme.dart';
 import '../../../controllers/user_management/logged_in_state.dart';
-import '../../screens/admin_screens/admin_console/admin_console_page.dart';
 import '../../screens/admin_screens/timed_reminders_screen.dart';
 import '../../screens/authentication/login_screen.dart';
 import '../../screens/course_page.dart';
@@ -24,6 +24,7 @@ mixin CustomAppBarMixin on StatelessWidget {
     "Admin Console": ValueNotifier(false),
     "My Learning": ValueNotifier(false),
     "Tracking": ValueNotifier(false),
+    "Admin Center": ValueNotifier(false),
   };
 
   void navigateToUserProfilePage(BuildContext context) {
@@ -59,9 +60,11 @@ mixin CustomAppBarMixin on StatelessWidget {
         MaterialPageRoute(builder: (context) => const ReminderScreen()));
   }
 
-  void navigateToAdminConsolePage(BuildContext context) {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const AdminConsolePage()));
+  void navigateToAdminCenterPage(BuildContext context) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const AdminUserDetailsScreen()));
   }
 
   void navigateToTimedRemindersPage(BuildContext context) {
@@ -242,6 +245,8 @@ class CustomAppBarWeb extends StatelessWidget
             () => navigateToCourseTestPage(context), _paddingValue),
         appBarItem(Icons.track_changes, "Tracking",
             () => navigateToTrackingPage(context), _paddingValue),
+        appBarItem(Icons.admin_panel_settings_rounded, "Admin Center",
+            () => navigateToAdminCenterPage(context), _paddingValue),
         if (loggedInState?.currentUserRole == 'admin')
           appBarItem(
               Icons.notifications_active_rounded,
@@ -252,7 +257,7 @@ class CustomAppBarWeb extends StatelessWidget
             () => navigateToUserProfilePage(context), _paddingValue),
         if (loggedInState?.currentUserRole == 'admin')
           appBarItem(Icons.admin_panel_settings_outlined, "Admin Console",
-              () => navigateToAdminConsolePage(context), _paddingValue),
+              () => navigateToAdminCenterPage(context), _paddingValue),
         if (loggedInState?.currentUserRole == 'admin')
           appBarItem(Icons.timer_outlined, "Reminders",
               () => navigateToTimedRemindersPage(context), _paddingValue),
@@ -286,7 +291,7 @@ class CustomAppBarMobile extends StatelessWidget
       actions: <Widget>[
         if (loggedInState?.currentUserRole == 'admin')
           appBarItem(Icons.admin_panel_settings_outlined, "Admin Console",
-              () => navigateToAdminConsolePage(context), _paddingValue),
+              () => navigateToAdminCenterPage(context), _paddingValue),
         if (loggedInState?.currentUserRole == 'admin')
           appBarItem(
               Icons.notifications_active_rounded,
