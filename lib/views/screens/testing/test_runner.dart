@@ -189,6 +189,25 @@ class TestRunner extends StatelessWidget {
                   HiveService.clearLocalHiveData();
                 },
                 child: Text('Clear Hive Data')),
+            ElevatedButton(
+              onPressed: () async {
+                Map<String, dynamic> course = {};
+                //gets Course details by ID from Local storage. For now, we neeed to load this data from
+                //Course Provider, but in the actual implementation this data will be loaded in the memory so we won't have to fetch it from the Provider
+                // course = await CourseProvider.getCourseByIDLocal(
+                //     courseId: courseId2);
+                await loggedInState.updateUserProgress(
+                    fieldName: 'courses',
+                    key: courseId2,
+                    data: {
+                      'courseId': courseId2,
+                      'completionStatus': 'not_completed',
+                      'currentSection': 'py1',
+                      'completedSections': ['py1'],
+                    });
+              },
+              child: Text('Fundamentals of Python Programming '),
+            ),
             Divider(),
             Text('Admin Buttons'),
             ElevatedButton(

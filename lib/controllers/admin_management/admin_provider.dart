@@ -15,12 +15,15 @@ class AdminProvider extends ChangeNotifier {
     return _allUsersData;
   }
 
-  static Map getCoursesForUser(String uid) {
-    Map courses = {};
+  static Future<Map<String, dynamic>> getCoursesForUser(String uid) async {
+    Map<String, dynamic> courses = {};
+
+    await Future.delayed(Duration(seconds: 2));
     print(_allUsersData);
-    try {
-      courses = _allUsersData[uid][HiveFieldKey.courses.name];
-    } catch (e) {}
+
+    courses = Map.from(_allUsersData[uid]['courses']);
+    print(_allUsersData[uid]);
+
     print(courses);
     return courses;
   }
