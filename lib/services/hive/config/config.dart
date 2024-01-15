@@ -1,6 +1,10 @@
 enum HiveFieldKey {
   courses,
   exams,
+  completedSections,
+  courseId,
+  currentSection,
+  completionStatus,
 }
 
 class HiveConfig {

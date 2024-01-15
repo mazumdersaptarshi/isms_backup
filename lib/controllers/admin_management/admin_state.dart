@@ -1,21 +1,22 @@
-import 'package:flutter/cupertino.dart';
 import 'package:isms/controllers/storage/hive_service/hive_service.dart';
 import 'package:isms/services/hive/config/config.dart';
 
-class AdminProvider extends ChangeNotifier {
-  static Map _allUsersData = {};
+class AdminState {
+  static final AdminState _instance = AdminState._internal();
+  Map _allUsersData = {};
 
-  AdminProvider() {
-    getUsers();
-    notifyListeners();
+  AdminState._internal() {
+    _allUsersData = HiveService.getExistingLocalDataFromUsersBox();
+  }
+  factory AdminState() {
+    return _instance;
   }
 
-  static Map getUsers() {
-    _allUsersData = HiveService.getExistingLocalDataFromUsersBox();
+  Map fetchUsersData() {
     return _allUsersData;
   }
 
-  static Future<Map<String, dynamic>> getCoursesForUser(String uid) async {
+  Future<Map<String, dynamic>> getCoursesForUser(String uid) async {
     Map<String, dynamic> courses = {};
 
     await Future.delayed(Duration(seconds: 2));
@@ -28,8 +29,8 @@ class AdminProvider extends ChangeNotifier {
     return courses;
   }
 
-  static Map getExamsForCourseForUser(String uid, String courseId) {
-    Map exams = {};
+  Map<String, dynamic> getExamsForCourseForUser(String uid, String courseId) {
+    Map<String, dynamic> exams = {};
     try {
       Map all_exams = _allUsersData[uid][HiveFieldKey.exams.name];
 
@@ -43,8 +44,8 @@ class AdminProvider extends ChangeNotifier {
     return exams;
   }
 
-  static Map getExamAttemptsForCourseForUser(Map exams, String examId) {
-    Map attempts = {};
+  static Map<String, dynamic> getExamAttemptsForCourseForUser(
+      Map<String, dynamic> exams, String examId) {
     try {
       exams.forEach((key, value) {
         // print('attempt: ${value.attempts} for exam ${value.examId}');

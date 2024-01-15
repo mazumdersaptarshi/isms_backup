@@ -5,6 +5,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:isms/controllers/storage/hive_service/hive_service.dart';
+import 'package:isms/controllers/user_management/user_progress_tracker.dart';
 // import 'package:isms/remindersManagement/reminders_provider.dart';
 // import 'package:isms/screens/login/login_screen.dart';
 import 'package:isms/views/screens/authentication/login_screen.dart';
@@ -12,7 +13,6 @@ import 'package:isms/views/screens/course_state.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 
-import 'controllers/admin_management/admin_provider.dart';
 import 'controllers/reminders_management/reminders_provider.dart';
 import 'controllers/theme_management/common_theme.dart';
 import 'controllers/user_management/logged_in_state.dart';
@@ -42,12 +42,19 @@ void main() async {
   await Hive.initFlutter(); //initializing Hive
 
   HiveService.registerAdapters(); //Registering Adapters for Hive
-  var box = await Hive.openBox('users'); // Opening Users Box
+  await Hive.openBox('users'); // Opening Users Box
+
+  ChangeNotifierProxyProvider<LoggedInState, UserProgressState?>(
+    create: (context) => null,
+    update: (context, loggedInState, previousUserProgressState) {
+      return UserProgressState(
+        userId: loggedInState.currentUser!.uid ?? '',
+      );
+    },
+  );
 
   runApp(const MyApp());
 }
-
-void func() {}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -59,17 +66,16 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<LoggedInState>(create: (context) {
           return LoggedInState();
         }),
+        ChangeNotifierProxyProvider<LoggedInState, UserProgressState?>(
+            create: (context) => null,
+            update: (context, loggedInState, previousUserProgressState) {
+              return UserProgressState(userId: loggedInState.currentUser!.uid);
+            }),
         ChangeNotifierProvider<CourseState>(create: (context) {
           return CourseState();
         }),
-        ChangeNotifierProvider<AdminProvider>(create: (context) {
-          return AdminProvider();
-        }),
         ChangeNotifierProvider<RemindersProvider>(create: (context) {
           return RemindersProvider();
-        }),
-        ChangeNotifierProvider<AdminProvider>(create: (context) {
-          return AdminProvider();
         }),
       ],
       child: MaterialApp(

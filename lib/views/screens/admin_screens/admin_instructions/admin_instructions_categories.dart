@@ -1,17 +1,17 @@
 // // ignore_for_file: file_names
 //
 // import 'package:flutter/material.dart';
-// // import 'package:isms/adminManagement/admin_provider.dart';
+// // import 'package:isms/adminManagement/admin_state.dart';
 // // import 'package:isms/screens/adminScreens/AdminInstructions/admin_instructions_slides.dart';
 // // import 'package:isms/themes/common_theme.dart';
 // // import 'package:isms/userManagement/logged_in_state.dart';
 // // import 'package:isms/utilityFunctions/platform_check.dart';
 // import 'package:provider/provider.dart';
 //
-// import '../../../../controllers/admin_management/admin_provider.dart';
+// import '../../../../controllers/admin_management/admin_state.dart';
 // import '../../../../controllers/theme_management/common_theme.dart';
 // import '../../../../controllers/user_management/logged_in_state.dart';
-// // import '../../../controllers/adminManagement/admin_provider.dart';
+// // import '../../../controllers/adminManagement/admin_state.dart';
 // // import '../../../controllers/themes/common_theme.dart';
 // // import '../../../controllers/userManagement/logged_in_state.dart';
 // import '../../../../utilities/platform_check.dart';

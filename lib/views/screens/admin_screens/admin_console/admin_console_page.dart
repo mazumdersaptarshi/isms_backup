@@ -6,14 +6,14 @@
 // // import 'package:isms/utilityFunctions/platform_check.dart';
 // import 'package:provider/provider.dart';
 //
-// // import '../../../adminManagement/admin_provider.dart';
-// import '../../../../controllers/admin_management/admin_provider.dart';
+// // import '../../../adminManagement/admin_state.dart';
+// import '../../../../controllers/admin_management/admin_state.dart';
 // import '../../../../controllers/user_management/logged_in_state.dart';
 // import '../../../../utilities/platform_check.dart';
 // import '../../../../models/admin_models/admin_actions.dart';
 // import '../../../widgets/admin_console/admin_actions/admin_actions_widget.dart';
 // import '../../../widgets/user_screens_widgets/user_profile_header_widget.dart';
-// // import '../../../controllers/adminManagement/admin_provider.dart';
+// // import '../../../controllers/adminManagement/admin_state.dart';
 // // import '../../../controllers/userManagement/logged_in_state.dart';
 // // import '../../../controllers/userManagement/user_profile_header_widget.dart';
 // // import '../../../models/adminConsoleModels/admin_actions.dart';

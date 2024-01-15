@@ -40,6 +40,17 @@ class UserAttempts {
     responses = data['responses'] as List?;
   }
 
+  Map<String, dynamic> toMap() {
+    return {
+      'attemptId': attemptId,
+      'startTime': startTime,
+      'endTime': endTime,
+      'completionStatus': completionStatus,
+      'score': score,
+      'responses': responses
+    };
+  }
+
   @HiveField(0)
   String? attemptId; // Unique identifier for the attempt.
 

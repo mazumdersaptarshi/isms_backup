@@ -74,6 +74,7 @@ dependencies:
   hive_flutter: ^1.0.0
   flutter_html: ^3.0.0-beta.2
   json_annotation: ^4.8.1
+  flip_card: ^0.7.0
 dev_dependencies:
   hive_generator:
   flutter_test:

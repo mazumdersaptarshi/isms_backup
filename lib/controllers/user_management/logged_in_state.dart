@@ -225,6 +225,7 @@ class _UserDataGetterMaster with ChangeNotifier {
     Map<String, dynamic>? data,
   }) async {
 //Calling Hive function to update Local progress data for the course for current User
+    print('uijk: ${data}');
     await HiveService.updateLocalData(data!, _currentUser!, fieldName, key);
   }
 

@@ -5,10 +5,10 @@
 // import 'package:percent_indicator/circular_percent_indicator.dart';
 // import 'package:provider/provider.dart';
 //
-// // import '../../../adminManagement/admin_provider.dart';
-// import '../../../../controllers/admin_management/admin_provider.dart';
+// // import '../../../adminManagement/admin_state.dart';
+// import '../../../../controllers/admin_management/admin_state.dart';
 // import '../../../../controllers/user_management/logged_in_state.dart';
-// // import '../../../controllers/adminManagement/admin_provider.dart';
+// // import '../../../controllers/adminManagement/admin_state.dart';
 // // import '../../../controllers/userManagement/logged_in_state.dart';
 //
 // class AllCoursesDropdown extends StatelessWidget {

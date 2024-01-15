@@ -15,7 +15,7 @@ class HiveService {
   // static final String _coursesFieldName = 'courses';
 
   static late Box _box;
-  static dynamic _userData;
+  static Map<String, dynamic> _userData = {};
   static Map _allUsersData = {};
 
   static dynamic _userProgress;
@@ -127,11 +127,17 @@ class HiveService {
     }
   }
 
-  static Future<dynamic> getExistingLocalDataForUser(User? user) async {
+  static Future<Map<String, dynamic>> getExistingLocalDataForUser(
+      User? user) async {
+    _box = Hive.box(_usersBoxName);
+    print(_box);
+    dynamic data = await _box.get(user?.uid);
+
+    _userData = Map<String, dynamic>.from(data);
+    print(_userData);
+
+    // _userData = await _box.get(user?.uid);
     try {
-      _box = Hive.box(_usersBoxName);
-      _userData = await _box.get(user?.uid);
-      // print(_userData['courses']['ip78hd'].completedSections);
       return _userData;
     } catch (e) {
       _logger.severe(
@@ -148,6 +154,7 @@ class HiveService {
       _logger.severe(
           'Retrieving failed, there maybe an error with the field name, field Id, box name, or the data does not exist');
     }
+    print(_allUsersData);
     return _allUsersData;
   }
 

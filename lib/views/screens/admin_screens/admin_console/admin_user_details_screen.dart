@@ -3,24 +3,36 @@ import 'package:flutter/material.dart';
 import 'package:footer/footer.dart';
 import 'package:footer/footer_view.dart';
 import 'package:isms/controllers/admin_management/admin_data.dart';
-import 'package:isms/controllers/admin_management/admin_provider.dart';
+import 'package:isms/controllers/admin_management/admin_state.dart';
 import 'package:isms/controllers/course_management/course_provider.dart';
 import 'package:isms/controllers/user_management/logged_in_state.dart';
 import 'package:isms/utilities/platform_check.dart';
 import 'package:isms/views/widgets/shared_widgets/app_footer.dart';
 import 'package:provider/provider.dart';
 
-class AdminUserDetailsScreen extends StatelessWidget {
+class AdminUserDetailsScreen extends StatefulWidget {
   const AdminUserDetailsScreen({super.key});
+
+  @override
+  State<AdminUserDetailsScreen> createState() => _AdminUserDetailsScreenState();
+}
+
+class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
+  late AdminState adminState;
+
+  @override
+  void initState() {
+    super.initState();
+    adminState = AdminState();
+  }
 
   @override
   Widget build(BuildContext context) {
     final loggedInState = context.watch<LoggedInState>();
-    final adminProvider = context.watch<AdminProvider>();
     final String uid = 'gZZg3iv6e2YsoMXlMrXIVgf6Ycl2';
 
     Future<Map<String, dynamic>> userCourseMap(String uid) async {
-      Map courses = await AdminProvider.getCoursesForUser(uid);
+      Map courses = await adminState.getCoursesForUser(uid);
       Map<String, dynamic> coursesDetails = {};
 
       for (var entry in courses.entries) {
@@ -28,12 +40,40 @@ class AdminUserDetailsScreen extends StatelessWidget {
         Map fetchedCourse =
             await CourseProvider.getCourseByIDLocal(courseId: entry.key);
         coursesDetails[entry.key] = {
+          'courseId': fetchedCourse['courseId'],
           'courseName': fetchedCourse['courseName'],
           'completionStatus': entry.value.completionStatus
         };
       }
 
       return coursesDetails;
+    }
+
+    Widget examAttempts(Map<String, dynamic> examAttempts) {
+      print(examAttempts);
+      List<Widget> attemptsList = [];
+      examAttempts.forEach((key, value) {
+        attemptsList.add(Row(
+          children: [
+            Text(value.attemptId.toString()),
+            SizedBox(
+              width: 10,
+            ),
+            Text(value.startTime.toString()),
+            SizedBox(
+              width: 10,
+            ),
+            Text(value.completionStatus.toString()),
+            SizedBox(
+              width: 10,
+            ),
+            Text(value.score.toString()),
+          ],
+        ));
+      });
+      return Column(
+        children: attemptsList,
+      );
     }
 
     return Scaffold(
@@ -89,15 +129,31 @@ class AdminUserDetailsScreen extends StatelessWidget {
                           padding: const EdgeInsets.all(8.0),
                           child: Container(
                             decoration: BoxDecoration(
-                                color: Colors.grey,
+                                color: Colors.grey.shade200,
                                 borderRadius: BorderRadius.circular(5)),
-                            child: ListTile(
-                              title: Text(
-                                snapshot.data!.values
-                                    .elementAt(index)
-                                    .toString(),
-                                style: TextStyle(color: Colors.white),
-                              ),
+                            child: Column(
+                              children: [
+                                ListTile(
+                                  title: Text(
+                                    snapshot.data!.values
+                                        .elementAt(index)
+                                        .toString(),
+                                  ),
+                                ),
+                                Text(
+                                    '${AdminState().getExamsForCourseForUser(uid, snapshot.data!.values.elementAt(index)['courseId'])}'),
+                                for (var entry in AdminState()
+                                    .getExamsForCourseForUser(
+                                        uid,
+                                        snapshot.data!.values
+                                            .elementAt(index)['courseId'])
+                                    .entries)
+                                  Column(
+                                    children: [
+                                      examAttempts(entry.value.attempts)
+                                    ],
+                                  ),
+                              ],
                             ),
                           ),
                         );

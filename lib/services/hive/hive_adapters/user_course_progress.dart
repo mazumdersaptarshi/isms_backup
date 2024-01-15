@@ -17,6 +17,15 @@ class UserCourseProgressHive {
     completedSections = data['completedSections'] as List?;
   }
 
+  Map<String, dynamic> toMap() {
+    return {
+      'courseId': courseId,
+      'completionStatus': completionStatus,
+      'currentSection': currentSection,
+      'completedSections': completedSections,
+    };
+  }
+
   @HiveField(0)
   String? courseId;
 

@@ -106,6 +106,30 @@
       ],
       "numberOfCourseSections": 3,
       "courseAssesments": []
+    },
+    {
+      "courseId": "hd78hb",
+      "courseName": "Introduction to Document AI",
+      "courseDescription": "This course introduces the core concepts of Document AI",
+      "courseSections": [
+        {
+          "sectionId": "ds1",
+          "sectionType": "module",
+          "sectionContent": "The basics of data analysis and manipulation."
+        },
+        {
+          "sectionId": "ds2",
+          "title": "Data Visualization Techniques",
+          "sectionContent": "Explore various tools and techniques for data visualization."
+        },
+        {
+          "sectionId": "ds3",
+          "title": "Introduction to Machine Learning",
+          "sectionContent": "An overview of machine learning concepts and applications."
+        }
+      ],
+      "numberOfCourseSections": 3,
+      "courseAssesments": []
     }
   ]
 }
