@@ -3,7 +3,7 @@ enum HiveFieldKey {
   exams,
   completedSections,
   courseId,
-  currentSection,
+  currentSectionId,
   completionStatus,
 }
 

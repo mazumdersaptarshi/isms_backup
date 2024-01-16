@@ -3,6 +3,7 @@ import 'package:isms/controllers/user_management/logged_in_state.dart';
 import 'package:isms/controllers/user_management/user_progress_tracker.dart';
 import 'package:isms/services/hive/hive_adapters/user_attempts.dart';
 import 'package:provider/provider.dart';
+import 'dart:math';
 
 class TestCourse1Exam1Page extends StatefulWidget {
   @override
@@ -23,12 +24,7 @@ class _TestCourse1Exam1PageState extends State<TestCourse1Exam1Page> {
     ),
     Question(
       questionText: 'What does CSS stand for?',
-      options: [
-        'Colorful Style Sheets',
-        'Computer Style Sheets',
-        'Cascading Style Sheets',
-        'Creative Style Sheets'
-      ],
+      options: ['Colorful Style Sheets', 'Computer Style Sheets', 'Cascading Style Sheets', 'Creative Style Sheets'],
       correctAnswerIndex: 2,
     ),
   ];
@@ -52,6 +48,12 @@ class _TestCourse1Exam1PageState extends State<TestCourse1Exam1Page> {
   };
 
   List<int> userAnswers = [-1, -1, -1]; // To store user's answers
+  String generateRandomKey(int length) {
+    const String _chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+    Random _rnd = Random();
+
+    return String.fromCharCodes(Iterable.generate(length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -107,18 +109,20 @@ class _TestCourse1Exam1PageState extends State<TestCourse1Exam1Page> {
               loggedInState: loggedInState,
               courseId: courseId1,
               examId: examId1,
-              progressData: {
-                'attempts': attempts1,
-                'completionStatus': 'not_completed',
-                'currentAttempt': 'hj89lm',
+              attemptData: {
+                'attemptId': generateRandomKey(6),
+                'startTime': DateTime.now(),
+                'endTime': '',
+                'completionStatus': 'completed',
+                'score': 30,
+                'responses': [],
               });
-          await loggedInState
-              .updateUserProgress(fieldName: 'exams', key: examId1, data: {
-            'courseId': courseId1,
-            'examId': examId1,
-            'attempts': attempts1,
-            'completionStatus': 'not_completed',
-          });
+          // await loggedInState.updateUserProgress(fieldName: 'exams', key: examId1, data: {
+          //   'courseId': courseId1,
+          //   'examId': examId1,
+          //   'attempts': attempts1,
+          //   'completionStatus': 'not_completed',
+          // });
 
           showDialog(
             context: context,
@@ -146,8 +150,5 @@ class Question {
   List<String> options;
   int correctAnswerIndex;
 
-  Question(
-      {required this.questionText,
-      required this.options,
-      required this.correctAnswerIndex});
+  Question({required this.questionText, required this.options, required this.correctAnswerIndex});
 }

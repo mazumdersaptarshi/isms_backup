@@ -11,7 +11,8 @@ class HiveService {
   //class variables
   static final Logger _logger = Logger('HiveService');
 
-  static final String _usersBoxName = 'users';
+  static const String _usersBoxName = 'users';
+
   // static final String _coursesFieldName = 'courses';
 
   static late Box _box;
@@ -38,8 +39,7 @@ class HiveService {
   ///
   /// [data] A map containing the progress data for the course.
   /// [currentUser] The user whose course progress is being updated.
-  static Future<void> updateLocalData(Map<String, dynamic> data,
-      User currentUser, String fieldName, String key) async {
+  static Future<void> updateLocalData(Map<String, dynamic> data, User currentUser, String fieldName, String key) async {
     //Declaring a Hive Box variable to store the Hive box
     try {
       _box = Hive.box(_usersBoxName); //Opens existing Hive box 'users'
@@ -51,16 +51,15 @@ class HiveService {
       /* Fetch the existing User Data, and update it with the new data
       being passed to this function
        */
-      final existingUserData = Map<String, dynamic>.from(await _box
-          .get(userIdKey)); // Gets the existing User data from the Hive Box
+      final existingUserData =
+          Map<String, dynamic>.from(await _box.get(userIdKey)); // Gets the existing User data from the Hive Box
 
       if (fieldName == HiveFieldKey.courses.name) {
         _userProgress = UserCourseProgressHive.fromMap(data);
       } else if (fieldName == HiveFieldKey.exams.name) {
         _userProgress = UserExamProgressHive.fromMap(data);
       } else {
-        _logger.severe(
-            'Invalid Field Id, the given field ${fieldName} does not exist in Hive!');
+        _logger.severe('Invalid Field Id, the given field ${fieldName} does not exist in Hive!');
       }
       //Updating the existingUserData variable with new Progress Data
       existingUserData[fieldName][key] = _userProgress;
@@ -73,8 +72,7 @@ class HiveService {
       // Create an instance of UserCourseProgressHive with the current progress data.
     } catch (e) {
       // Log any exceptions that occur during the update process.
-      _logger.severe(
-          'There was an error in updating the local course progress data ', e);
+      _logger.severe('There was an error in updating the local course progress data ', e);
     }
   }
 
@@ -103,8 +101,7 @@ class HiveService {
 
     if (existingData == null) {
       // Create a map with default user data.
-      _logger.info(
-          'No stored local data found, creating local data for user $userId');
+      _logger.info('No stored local data found, creating local data for user $userId');
       //Fetching the domain of the user for the local data map
       DomainProvider domainProvider = DomainProvider();
 
@@ -127,8 +124,7 @@ class HiveService {
     }
   }
 
-  static Future<Map<String, dynamic>> getExistingLocalDataForUser(
-      User? user) async {
+  static Future<Map<String, dynamic>> getExistingLocalDataForUser(User? user) async {
     _box = Hive.box(_usersBoxName);
     print(_box);
     dynamic data = await _box.get(user?.uid);

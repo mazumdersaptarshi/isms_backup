@@ -39,7 +39,6 @@ class UserAttempts {
     score = data['score'] as int?;
     responses = data['responses'] as List?;
   }
-
   Map<String, dynamic> toMap() {
     return {
       'attemptId': attemptId,

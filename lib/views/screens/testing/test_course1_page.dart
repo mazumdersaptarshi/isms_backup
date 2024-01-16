@@ -11,7 +11,7 @@ class TestCourse1Page extends StatefulWidget {
 }
 
 class _TestCourse1PageState extends State<TestCourse1Page> {
-  int currentSection = 0;
+  int currentSectionIndex = 0;
   List sectionContents = [];
   List sectionIDs = [];
 
@@ -24,13 +24,13 @@ class _TestCourse1PageState extends State<TestCourse1Page> {
   String courseId1 = 'ip78hd';
 
   Future<void> _nextSection({required LoggedInState loggedInState}) async {
-    if (currentSection < sectionContents.length - 1) {
+    if (currentSectionIndex < sectionContents.length - 1) {
       setState(() {
-        currentSection++;
+        currentSectionIndex++;
       });
       Map<String, dynamic> progressData = {
         HiveFieldKey.completionStatus.name: 'not_completed',
-        HiveFieldKey.currentSection.name: sectionIDs[currentSection],
+        HiveFieldKey.currentSectionId.name: sectionIDs[currentSectionIndex],
       };
       UserProgressState.updateUserCourseProgress(
           loggedInState: loggedInState,
@@ -53,9 +53,9 @@ class _TestCourse1PageState extends State<TestCourse1Page> {
   }
 
   void _previousSection() {
-    if (currentSection > 0) {
+    if (currentSectionIndex > 0) {
       setState(() {
-        currentSection--;
+        currentSectionIndex--;
       });
     }
   }
@@ -76,17 +76,17 @@ class _TestCourse1PageState extends State<TestCourse1Page> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Expanded(
-              child: SectionContent(section: sectionContents[currentSection]),
+              child: SectionContent(section: sectionContents[currentSectionIndex]),
             ),
             SizedBox(height: 20),
-            if (currentSection > 0)
+            if (currentSectionIndex > 0)
               ElevatedButton(
                 child: Text('Previous Section'),
                 onPressed: _previousSection,
               ),
             SizedBox(height: 10),
             ElevatedButton(
-              child: Text(currentSection < sectionContents.length - 1
+              child: Text(currentSectionIndex < sectionContents.length - 1
                   ? 'Next Section'
                   : 'Take Assessment'),
               onPressed: () => _nextSection(loggedInState: loggedInState),
