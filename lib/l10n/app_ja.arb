@@ -1,0 +1,8 @@
+{
+  "buttonCheckAnswer": "回答をチェック",
+  "buttonSelectAnswer": "回答を選択してください",
+  "buttonSectionContentIncomplete": "未回答の質問があります",
+  "buttonFinishCourse": "コースを完了しコースリストに戻る",
+  "buttonNextSection": "次のセクション「{nextSection}」へ進む",
+  "buttonPreviousSection": "前のセクション「{previousSection}」に戻る"
+}

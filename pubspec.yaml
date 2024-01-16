@@ -75,6 +75,8 @@ dependencies:
   flutter_html: ^3.0.0-beta.2
   json_annotation: ^4.8.1
   flip_card: ^0.7.0
+  flutter_localizations:
+    sdk: flutter
 dev_dependencies:
   hive_generator:
   flutter_test:
@@ -99,6 +101,9 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  # Needed to provide custom localisation messages
+  generate: true
 
   # To add assets to your application, add an assets section, like this:
   assets:

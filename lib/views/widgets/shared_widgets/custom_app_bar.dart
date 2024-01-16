@@ -1,18 +1,16 @@
-// ignore_for_file: file_names
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:isms/views/screens/admin_screens/admin_console/admin_user_details_screen.dart';
-import 'package:isms/views/screens/testing/test_runner.dart';
 
-import '../../../controllers/theme_management/common_theme.dart';
-import '../../../controllers/user_management/logged_in_state.dart';
-import '../../screens/admin_screens/timed_reminders_screen.dart';
-import '../../screens/authentication/login_screen.dart';
-import '../../screens/course_page.dart';
-import '../../screens/home_screen.dart';
-import '../../screens/reminder_screen.dart';
-import '../../screens/user_screens/user_profile_screen.dart';
+import 'package:isms/controllers/theme_management/common_theme.dart';
+import 'package:isms/controllers/user_management/logged_in_state.dart';
+import 'package:isms/views/screens/admin_screens/admin_console/admin_user_details_screen.dart';
+import 'package:isms/views/screens/admin_screens/timed_reminders_screen.dart';
+import 'package:isms/views/screens/authentication/login_screen.dart';
+import 'package:isms/views/screens/course_page.dart';
+import 'package:isms/views/screens/home_screen.dart';
+import 'package:isms/views/screens/reminder_screen.dart';
+import 'package:isms/views/screens/testing/test_runner.dart';
+import 'package:isms/views/screens/user_screens/user_profile_screen.dart';
 
 mixin CustomAppBarMixin on StatelessWidget {
   final Map<String, ValueNotifier<bool>> hovering = {

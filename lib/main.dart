@@ -3,20 +3,21 @@ import 'dart:developer';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:isms/controllers/storage/hive_service/hive_service.dart';
-import 'package:isms/controllers/user_management/user_progress_tracker.dart';
-// import 'package:isms/remindersManagement/reminders_provider.dart';
-// import 'package:isms/screens/login/login_screen.dart';
-import 'package:isms/views/screens/authentication/login_screen.dart';
-import 'package:isms/views/screens/course_state.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 
-import 'controllers/reminders_management/reminders_provider.dart';
-import 'controllers/theme_management/common_theme.dart';
-import 'controllers/user_management/logged_in_state.dart';
-import 'firebase_options.dart';
+import 'package:isms/firebase_options.dart';
+import 'package:isms/controllers/storage/hive_service/hive_service.dart';
+import 'package:isms/controllers/reminders_management/reminders_provider.dart';
+import 'package:isms/controllers/theme_management/common_theme.dart';
+import 'package:isms/controllers/user_management/logged_in_state.dart';
+import 'package:isms/controllers/user_management/user_progress_tracker.dart';
+import 'package:isms/views/screens/authentication/login_screen.dart';
+// import 'package:isms/remindersManagement/reminders_provider.dart';
+// import 'package:isms/screens/login/login_screen.dart';
 
 void main() async {
   // logging setup
@@ -53,11 +54,11 @@ void main() async {
     },
   );
 
-  runApp(const MyApp());
+  runApp(const IsmsApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class IsmsApp extends StatelessWidget {
+  const IsmsApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -71,25 +72,32 @@ class MyApp extends StatelessWidget {
             update: (context, loggedInState, previousUserProgressState) {
               return UserProgressState(userId: loggedInState.currentUser!.uid);
             }),
-        ChangeNotifierProvider<CourseState>(create: (context) {
-          return CourseState();
-        }),
         ChangeNotifierProvider<RemindersProvider>(create: (context) {
           return RemindersProvider();
         }),
       ],
       child: MaterialApp(
-        scrollBehavior: MyCustomScrollBehavior(),
-        debugShowCheckedModeBanner: false,
         title: 'ISMS',
         theme: customTheme,
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('en'),
+          Locale('ja'),
+        ],
+        scrollBehavior: CustomScrollBehavior(),
+        debugShowCheckedModeBanner: false,
         home: const LoginPage(),
       ),
     );
   }
 }
 
-class MyCustomScrollBehavior extends MaterialScrollBehavior {
+class CustomScrollBehavior extends MaterialScrollBehavior {
   // Override behavior methods and getters like dragDevices
   @override
   Set<PointerDeviceKind> get dragDevices => {
