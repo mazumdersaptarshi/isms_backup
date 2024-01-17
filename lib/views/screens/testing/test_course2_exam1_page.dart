@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:isms/controllers/user_management/logged_in_state.dart';
+import 'package:isms/controllers/user_management/user_progress_tracker.dart';
 import 'package:isms/services/hive/hive_adapters/user_attempts.dart';
+import 'package:isms/utilities/random_key_generator.dart';
 import 'package:provider/provider.dart';
 
 class TestCourse2Exam1Page extends StatefulWidget {
@@ -21,31 +23,14 @@ class _TestCourse2Exam1PageState extends State<TestCourse2Exam1Page> {
       correctAnswerIndex: 0,
     ),
     Question(
-      questionText:
-          'Which of the following is a correct variable declaration in Python?',
+      questionText: 'Which of the following is a correct variable declaration in Python?',
       options: ['int a = 10', 'a = 10', 'var a = 10', 'let a = 10'],
       correctAnswerIndex: 1,
     ),
   ];
 
-  String courseId3 = 'hd78hb';
-  String examId1 = 'cx87vb';
-  Map<String, dynamic> attempts1 = {
-    'sz09bc': UserAttempts.fromMap({
-      'attemptId': 'sz09bc',
-      'startTime': DateTime.now(),
-      'endTime': '',
-      'completionStatus': 'completed',
-      'score': 10,
-      'responses': [],
-    }),
-    'bv69ol': UserAttempts.fromMap({
-      'attemptId': 'bv69ol',
-      'startTime': DateTime.now(),
-      'endTime': '',
-      'completionStatus': 'not_completed',
-    }),
-  };
+  String courseId2 = 'tt89mn';
+  String examId1 = 'dz06lp';
 
   List<int> userAnswers = [-1, -1, -1]; // To store user's answers
 
@@ -98,13 +83,18 @@ class _TestCourse2Exam1PageState extends State<TestCourse2Exam1Page> {
               score++;
             }
           }
-          await loggedInState
-              .updateUserProgress(fieldName: 'exams', key: examId1, data: {
-            'courseId': courseId3,
-            'examId': examId1,
-            'attempts': attempts1,
-            'completionStatus': 'not_completed',
-          });
+          UserProgressState.updateUserExamProgress(
+              loggedInState: loggedInState,
+              courseId: courseId2,
+              examId: examId1,
+              newAttemptData: {
+                'attemptId': randomKeyGenerator(),
+                'startTime': DateTime.now(),
+                'endTime': '',
+                'completionStatus': 'completed',
+                'score': 30,
+                'responses': [],
+              });
 
           showDialog(
             context: context,
@@ -132,8 +122,5 @@ class Question {
   List<String> options;
   int correctAnswerIndex;
 
-  Question(
-      {required this.questionText,
-      required this.options,
-      required this.correctAnswerIndex});
+  Question({required this.questionText, required this.options, required this.correctAnswerIndex});
 }

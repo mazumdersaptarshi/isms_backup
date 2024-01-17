@@ -29,13 +29,11 @@ class _TestCourse1PageState extends State<TestCourse1Page> {
         currentSectionIndex++;
       });
       Map<String, dynamic> progressData = {
-        HiveFieldKey.completionStatus.name: 'not_completed',
-        HiveFieldKey.currentSectionId.name: sectionIDs[currentSectionIndex],
+        DatabaseFields.completionStatus.name: 'not_completed',
+        DatabaseFields.currentSectionId.name: sectionIDs[currentSectionIndex],
       };
       UserProgressState.updateUserCourseProgress(
-          loggedInState: loggedInState,
-          courseId: courseId1,
-          progressData: progressData);
+          loggedInState: loggedInState, courseId: courseId1, progressData: progressData);
 
       // await loggedInState
       //     .updateUserProgress(fieldName: 'courses', key: courseId1, data: {
@@ -47,8 +45,7 @@ class _TestCourse1PageState extends State<TestCourse1Page> {
     } else {
       // Go to assessment
       print('Go to Assessment');
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => TestCourse1Exam1Page()));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => TestCourse1Exam1Page()));
     }
   }
 
@@ -86,9 +83,7 @@ class _TestCourse1PageState extends State<TestCourse1Page> {
               ),
             SizedBox(height: 10),
             ElevatedButton(
-              child: Text(currentSectionIndex < sectionContents.length - 1
-                  ? 'Next Section'
-                  : 'Take Assessment'),
+              child: Text(currentSectionIndex < sectionContents.length - 1 ? 'Next Section' : 'Take Assessment'),
               onPressed: () => _nextSection(loggedInState: loggedInState),
             ),
           ],
@@ -115,7 +110,8 @@ class SectionContent extends StatelessWidget {
           ),
           SizedBox(height: 10),
           Text(
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', // Replace with actual content
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            // Replace with actual content
             style: TextStyle(fontSize: 16),
           ),
         ],

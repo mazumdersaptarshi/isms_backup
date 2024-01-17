@@ -14,10 +14,11 @@
         {
           "sectionId": "mod2",
           "sectionType": "flip_cards",
-          "itemList": [{
-            "front": "This is front",
-            "back": "This is back"
-          },
+          "itemList": [
+            {
+              "front": "This is front",
+              "back": "This is back"
+            },
             {
               "front": "Front",
               "back": "back"
@@ -30,53 +31,57 @@
           "sectionId": "mod3",
           "title": "Module 3: Introduction to JavaScript",
           "sectionType": "mcq",
-        "itemList": [
-          {
-            "question": "This is a question",
-            "options": [
-              {
-                "optionLabel": "Wrong Ans 1",
-                "isCorrect": false
-              },
-              {
-                "optionLabel": "Wrong Ans 2",
-                "isCorrect": false
-              },
-              {
-                "optionLabel": "Right Ans 1",
-                "isCorrect": true
-              },
-              {
-                "optionLabel": "Right Ans 2",
-                "isCorrect": true
-              }
-            ]
-
-          }
-        ]
+          "itemList": [
+            {
+              "question": "This is a question",
+              "options": [
+                {
+                  "optionLabel": "Wrong Ans 1",
+                  "isCorrect": false
+                },
+                {
+                  "optionLabel": "Wrong Ans 2",
+                  "isCorrect": false
+                },
+                {
+                  "optionLabel": "Right Ans 1",
+                  "isCorrect": true
+                },
+                {
+                  "optionLabel": "Right Ans 2",
+                  "isCorrect": true
+                }
+              ]
+            }
+          ]
         }
       ],
       "numberOfCourseSections": 3,
       "courseAssesments": []
     },
     {
-      "courseId": "jd92nd",
+      "courseId": "tt89mn",
       "courseName": "Fundamentals of Python Programming",
       "courseDescription": "An introductory course to Python programming, covering basic concepts and practical applications.",
       "courseSections": [
         {
-          "sectionId": "py1",
+          "sectionId": "nm2scv",
           "sectionType": "module",
-          "sectionContent": "Introduction to Python and its programming environment."
+          "sectionContent": "Introduction to Python."
         },
         {
-          "sectionId": "py2",
-          "title": "Python Basics: Variables and Data Types",
+          "sectionId": "sz12sd",
+          "title": "What is Python",
           "sectionContent": "Understanding variables, data types, and basic operations in Python."
         },
         {
-          "sectionId": "py3",
-          "title": "Control Structures and Functions in Python",
+          "sectionId": "vb15hy",
+          "title": "Introduction to Pandas",
+          "sectionContent": "Learn about control structures and writing functions in Python."
+        },
+        {
+          "sectionId": "cf41jj",
+          "title": "Introduction to Django",
           "sectionContent": "Learn about control structures and writing functions in Python."
         }
       ],

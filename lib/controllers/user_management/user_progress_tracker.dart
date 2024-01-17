@@ -42,78 +42,65 @@ class UserProgressState extends ChangeNotifier {
       // Update the list of completed sections based on the current section.
       // If course has not been started yet and the completed sections list is null
       // Then an empty list is returned for completedSections
-      if (existingCourseProgressData[HiveFieldKey.completedSections.name] != null) {
+      if (existingCourseProgressData[DatabaseFields.completedSections.name] != null) {
         updatedCompletedSections = _updateCompletedSections(
-            completedSections: existingCourseProgressData[HiveFieldKey.completedSections.name],
-            currentSection: progressData[HiveFieldKey.currentSectionId.name]);
+            completedSections: existingCourseProgressData[DatabaseFields.completedSections.name],
+            currentSection: progressData[DatabaseFields.currentSectionId.name]);
       } else {
         updatedCompletedSections = _updateCompletedSections(
-            completedSections: [], currentSection: progressData[HiveFieldKey.currentSectionId.name]);
+            completedSections: [], currentSection: progressData[DatabaseFields.currentSectionId.name]);
       }
       // Update the progress data with the list of completed sections.
-      progressData[HiveFieldKey.completedSections.name] = updatedCompletedSections ?? [];
+      progressData[DatabaseFields.completedSections.name] = updatedCompletedSections ?? [];
     } catch (e) {
       _logger.info(e);
     }
 
     _logger.info(progressData);
     // Finally, Update the user's course progress data by accessing the loggedInState.
-    await loggedInState.updateUserProgress(fieldName: HiveFieldKey.courses.name, key: courseId, data: progressData);
+    await loggedInState.updateUserProgress(fieldName: DatabaseFields.courses.name, key: courseId, data: progressData);
   }
 
+  /// Updates the user's exam progress for a specific course and exam.
+  /// This function handles updating existing exam attempt records or creating new ones.
+  ///
+  /// Args:
+  ///   loggedInState (LoggedInState): The current logged-in state of the user.
+  ///   courseId (String): The ID of the course related to the exam.
+  ///   examId (String): The ID of the exam being attempted.
+  ///   completionStatus (String?): The completion status of the exam.
+  ///   attemptData (Map<String, dynamic>): Data related to the current attempt.
   static void updateUserExamProgress(
       {required LoggedInState loggedInState,
       required String courseId,
       required String examId,
       String? completionStatus,
-      required Map<String, dynamic> attemptData}) async {
-    _logger.info('attempt_data: ${attemptData}');
-    Map<String, dynamic> existingExamProgressData = {};
+      required Map<String, dynamic> newAttemptData}) async {
+    Map<String, dynamic> existingExamAttemptsData = {};
+    Map<String, dynamic> finalAttemptsMap = {};
+    Map<String, dynamic> finalExamsMap = {};
 
+    // Fetch existing user data from Hive service.
     _userData = await HiveService.getExistingLocalDataForUser(loggedInState.currentUser);
+    // Retrieve existing exam attempts data for the specific course and exam.
+    existingExamAttemptsData =
+        _getExistingExamAttemptsForCourse(userData: _userData, courseId: courseId, examId: examId);
 
-    existingExamProgressData = _fetchExamsMapFromUserData(userData: _userData, courseId: courseId, examId: examId);
-    _logger.info('existingExamProgressData: $existingExamProgressData');
-    _logger.info(existingExamProgressData['attempts']);
-    if (existingExamProgressData.isNotEmpty) {
-      // If there is existing exam data, update the attempts with the new attempt data.
-      Map<String, dynamic>? updatedAttempts =
-          _updateAttemptInUserData(attempts: existingExamProgressData['attempts'], attemptData: attemptData);
+    // Determine if there's existing data to update or if new data needs to be created.
+    finalAttemptsMap = existingExamAttemptsData.isNotEmpty
+        ? _updateExistingAttemptsMap(
+            existingAttempts: existingExamAttemptsData['attempts'], newAttemptData: newAttemptData)
+        : _createNewAttemptsMap(newAttemptData: newAttemptData);
 
-      Map<String, dynamic> updatedExamData = {
-        'courseId': courseId,
-        'examId': examId,
-        'attempts': updatedAttempts,
-        'completionStatus': 'not_completed',
-      };
-      await loggedInState.updateUserProgress(fieldName: 'exams', key: examId, data: updatedExamData);
-      existingExamProgressData.forEach((key, value) {
-        if (key == 'attempts') {
-          print(value);
-        }
-      });
-    } else {
-      // If there is no existing exam data, create a new record for this attempt.
-
-      Map<String, dynamic> newAttemptData = {
-        attemptData['attemptId']: UserAttempts.fromMap({
-          'attemptId': attemptData['attemptId'],
-          'startTime': attemptData['startTime'],
-          'endTime': attemptData['endTime'],
-          'completionStatus': attemptData['completionStatus'],
-          'score': attemptData['score'],
-          'responses': attemptData['responses'],
-        }),
-      };
-
-      Map<String, dynamic> newExamData = {
-        'courseId': courseId,
-        'examId': examId,
-        'attempts': newAttemptData,
-        'completionStatus': 'not_completed',
-      };
-      await loggedInState.updateUserProgress(fieldName: 'exams', key: examId, data: newExamData);
-    }
+    // Prepare updated exams data map
+    finalExamsMap = {
+      DatabaseFields.courseId.name: courseId,
+      DatabaseFields.examId.name: examId,
+      DatabaseFields.attempts.name: finalAttemptsMap,
+      DatabaseFields.completionStatus.name: completionStatus ?? 'not_completed',
+    };
+    // Update the user's exam progress data in Hive storage.
+    await loggedInState.updateUserProgress(fieldName: 'exams', key: examId, data: finalExamsMap);
   }
 
   /// Helper method to extract the course progress data from the user's data.
@@ -124,7 +111,7 @@ class UserProgressState extends ChangeNotifier {
     try {
       // Iterate through user data to find and extract the course progress data.
       userData.forEach((key, userInfoItem) {
-        if (key == HiveFieldKey.courses.name) {
+        if (key == DatabaseFields.courses.name) {
           if (userInfoItem != null) {
             userInfoItem.forEach((courseId, courseProgressInstance) {
               // Convert course progress instance, which is an Instance of type UserCourseProgressHive, to a map.
@@ -138,36 +125,95 @@ class UserProgressState extends ChangeNotifier {
     return coursesMap;
   }
 
-  //In progress...
-  static Map<String, dynamic>? _updateAttemptInUserData(
-      {required Map<String, dynamic> attempts, required Map<String, dynamic> attemptData}) {
-    attempts[attemptData['attemptId']] = UserAttempts.fromMap({
-      'attemptId': attemptData['attemptId'],
-      'startTime': attemptData['startTime'],
-      'endTime': attemptData['endTime'],
-      'completionStatus': attemptData['completionStatus'],
-      'score': attemptData['score'],
-      'responses': attemptData['responses'],
-    });
+  /// Updates the existing attempts map with new attempt data.
+  ///
+  /// Args:
+  ///   existingAttempts (Map<String, dynamic>): The current map of attempts.
+  ///   newAttemptData (Map<String, dynamic>): The data for the new attempt to be added or updated.
+  ///
+  /// Returns:
+  ///   Map<String, dynamic>: The updated map of attempts.
+  static Map<String, dynamic> _updateExistingAttemptsMap({
+    required Map<String, dynamic> existingAttempts,
+    required Map<String, dynamic> newAttemptData,
+  }) {
+    try {
+      // Update the specific attempt record in the existing attempts map.
+      existingAttempts[newAttemptData[DatabaseFields.attemptId.name]] = UserAttempts.fromMap({
+        DatabaseFields.attemptId.name: newAttemptData[DatabaseFields.attemptId.name],
+        DatabaseFields.startTime.name: newAttemptData[DatabaseFields.startTime.name],
+        DatabaseFields.endTime.name: newAttemptData[DatabaseFields.endTime.name],
+        DatabaseFields.completionStatus.name: newAttemptData[DatabaseFields.completionStatus.name],
+        DatabaseFields.score.name: newAttemptData[DatabaseFields.score.name],
+        DatabaseFields.responses.name: newAttemptData[DatabaseFields.responses.name],
+      });
+    } catch (e) {
+      // Log the error or handle it as necessary.
+      _logger.warning('Error updating existing attempts map: $e');
+    }
 
-    return attempts;
+    return existingAttempts;
   }
 
-  static Map<String, dynamic> _fetchExamsMapFromUserData(
-      {required Map<String, dynamic> userData, required courseId, required examId}) {
-    Map<String, dynamic> examsMap = {};
-    print(userData);
+  /// Creates a new attempts map from the provided attempt data.
+  ///
+  /// Args:
+  ///   newAttemptData (Map<String, dynamic>): The data for the new attempt to be added.
+  ///
+  /// Returns:
+  ///   Map<String, dynamic>: A new map of attempts containing only the provided attempt data.
+  static Map<String, dynamic> _createNewAttemptsMap({
+    required Map<String, dynamic> newAttemptData,
+  }) {
+    try {
+      // Create a new map with a single attempt record.
+      Map<String, dynamic> newAttemptDataMap = {
+        newAttemptData[DatabaseFields.attemptId.name]: UserAttempts.fromMap({
+          DatabaseFields.attemptId.name: newAttemptData[DatabaseFields.attemptId.name],
+          DatabaseFields.startTime.name: newAttemptData[DatabaseFields.startTime.name],
+          DatabaseFields.endTime.name: newAttemptData[DatabaseFields.endTime.name],
+          DatabaseFields.completionStatus.name: newAttemptData[DatabaseFields.completionStatus.name],
+          DatabaseFields.score.name: newAttemptData[DatabaseFields.score.name],
+          DatabaseFields.responses.name: newAttemptData[DatabaseFields.responses.name],
+        }),
+      };
+
+      return newAttemptDataMap;
+    } catch (e) {
+      // Log the error or handle it as necessary.
+      _logger.warning('Error creating new attempts map: $e');
+    }
+    return {};
+  }
+
+  /// Retrieves the exam progress data for a specific course and exam from the user's data.
+  ///
+  /// Args:
+  ///   userData (Map<String, dynamic>): The user data containing information about exams.
+  ///   courseId (String): The ID of the course related to the exam.
+  ///   examId (String): The ID of the exam for which progress data is needed.
+  ///
+  /// Returns:
+  ///   Map<String, dynamic>: A map containing the progress data of the specified exam.
+  static Map<String, dynamic> _getExistingExamAttemptsForCourse({
+    required Map<String, dynamic> userData,
+    required courseId,
+    required examId,
+  }) {
+    Map<String, dynamic> examProgressMap = {};
     userData.forEach((key, userInfoItem) {
-      if (key == HiveFieldKey.exams.name) {
+      if (key == DatabaseFields.exams.name) {
         if (userInfoItem != null) {
           userInfoItem.forEach((examId, examProgressInstance) {
-            examsMap = examProgressInstance.toMap();
+            //Iterates through all items in the exams list, by their ID
+            //We need to go a layer deeper and then filter only those exams that match the course ID
+            if (examProgressInstance.courseId == courseId) examProgressMap = examProgressInstance.toMap();
           });
         }
       }
     });
 
-    return examsMap;
+    return examProgressMap;
   }
 
   /// Helper method to update the list of completed sections for a course.

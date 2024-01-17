@@ -34,11 +34,10 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
     Future<Map<String, dynamic>> userCourseMap(String uid) async {
       Map courses = await adminState.getCoursesForUser(uid);
       Map<String, dynamic> coursesDetails = {};
-
+      print('courses: $courses');
       for (var entry in courses.entries) {
         print(entry.value.completionStatus);
-        Map fetchedCourse =
-            await CourseProvider.getCourseByIDLocal(courseId: entry.key);
+        Map fetchedCourse = await CourseProvider.getCourseByIDLocal(courseId: entry.key);
         coursesDetails[entry.key] = {
           'courseId': fetchedCourse['courseId'],
           'courseName': fetchedCourse['courseName'],
@@ -50,7 +49,6 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
     }
 
     Widget examAttempts(Map<String, dynamic> examAttempts) {
-      print(examAttempts);
       List<Widget> attemptsList = [];
       examAttempts.forEach((key, value) {
         attemptsList.add(Row(
@@ -77,19 +75,16 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
     }
 
     return Scaffold(
-      bottomNavigationBar:
-          PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
+      bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
       appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
       body: FooterView(
         footer: kIsWeb
-            ? Footer(
-                backgroundColor: Colors.transparent, child: const AppFooter())
+            ? Footer(backgroundColor: Colors.transparent, child: const AppFooter())
             : Footer(backgroundColor: Colors.transparent, child: Container()),
         children: <Widget>[
           FutureBuilder<Map<String, dynamic>>(
             future: AdminData.getUser(uid), // The async function call
-            builder: (BuildContext context,
-                AsyncSnapshot<Map<String, dynamic>> snapshot) {
+            builder: (BuildContext context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 // Display a loading indicator while waiting for the data
                 return CircularProgressIndicator();
@@ -107,8 +102,7 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
           ),
           FutureBuilder<Map<String, dynamic>>(
             future: userCourseMap(uid), // The async function call
-            builder: (BuildContext context,
-                AsyncSnapshot<Map<String, dynamic>> snapshot) {
+            builder: (BuildContext context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 // Display a loading indicator while waiting for the data
                 return CircularProgressIndicator();
@@ -117,6 +111,7 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
                 return Text('Error: ${snapshot.error}');
               } else if (snapshot.hasData) {
                 // Data is fetched successfully, display the user's name
+                print('snapshotdata: ${snapshot.data?.values}');
                 return Column(
                   children: [
                     // Text(snapshot.data?.toString() ?? 'No courses found'),
@@ -128,30 +123,23 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Container(
-                            decoration: BoxDecoration(
-                                color: Colors.grey.shade200,
-                                borderRadius: BorderRadius.circular(5)),
+                            decoration:
+                                BoxDecoration(color: Colors.grey.shade200, borderRadius: BorderRadius.circular(5)),
                             child: Column(
                               children: [
                                 ListTile(
                                   title: Text(
-                                    snapshot.data!.values
-                                        .elementAt(index)
-                                        .toString(),
+                                    'course: ${snapshot.data!.values.elementAt(index).toString()}',
                                   ),
                                 ),
+                                Text('${snapshot.data!.values.elementAt(index)['courseId']}'),
                                 Text(
                                     '${AdminState().getExamsForCourseForUser(uid, snapshot.data!.values.elementAt(index)['courseId'])}'),
                                 for (var entry in AdminState()
-                                    .getExamsForCourseForUser(
-                                        uid,
-                                        snapshot.data!.values
-                                            .elementAt(index)['courseId'])
+                                    .getExamsForCourseForUser(uid, snapshot.data!.values.elementAt(index)['courseId'])
                                     .entries)
                                   Column(
-                                    children: [
-                                      examAttempts(entry.value.attempts)
-                                    ],
+                                    children: [examAttempts(entry.value.attempts)],
                                   ),
                               ],
                             ),

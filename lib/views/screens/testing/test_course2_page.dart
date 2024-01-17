@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:isms/controllers/user_management/logged_in_state.dart';
+import 'package:isms/controllers/user_management/user_progress_tracker.dart';
+import 'package:isms/services/hive/config/config.dart';
 import 'package:isms/views/screens/testing/test_course2_exam1_page.dart';
 import 'package:provider/provider.dart';
 
@@ -9,41 +11,40 @@ class TestCourse2Page extends StatefulWidget {
 }
 
 class _TestCourse2PageState extends State<TestCourse2Page> {
-  int currentSection = 0;
-  final List<String> sections = [
-    'Introduction to Python',
-    'What is Pandas',
-    'Introduction to NumPy',
-    'Introduction to Django',
-    // Add more sections as needed
-  ];
-  // String courseId1 = 'ip78hd';
-  String courseId2 = 'jd92nd';
+  int currentSectionIndex = 0;
+  List sectionContents = [];
+  List sectionIDs = [];
 
-  Future<void> _nextSection(LoggedInState loggedInState) async {
-    if (currentSection < sections.length - 1) {
+  Map<String, dynamic> sectionsMap = {
+    'nm2scv': 'Introduction to Python',
+    'sz12sd': 'What is Python',
+    'vb15hy': 'Introduction to Pandas',
+    'cf41jj': 'Introduction to Django',
+  };
+  String courseId2 = 'tt89mn';
+
+  Future<void> _nextSection({required LoggedInState loggedInState}) async {
+    if (currentSectionIndex < sectionContents.length - 1) {
       setState(() {
-        currentSection++;
+        currentSectionIndex++;
       });
-      await loggedInState
-          .updateUserProgress(fieldName: 'courses', key: courseId2, data: {
-        'courseId': courseId2,
-        'completionStatus': 'not_completed',
-        'currentSection': 'py1',
-        'completedSections': ['py1'],
-      });
+      Map<String, dynamic> progressData = {
+        DatabaseFields.completionStatus.name: 'not_completed',
+        DatabaseFields.currentSectionId.name: sectionIDs[currentSectionIndex],
+      };
+      UserProgressState.updateUserCourseProgress(
+          loggedInState: loggedInState, courseId: courseId2, progressData: progressData);
     } else {
       // Go to assessment
       print('Go to Assessment');
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => TestCourse2Exam1Page()));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => TestCourse2Exam1Page()));
     }
   }
 
   void _previousSection() {
-    if (currentSection > 0) {
+    if (currentSectionIndex > 0) {
       setState(() {
-        currentSection--;
+        currentSectionIndex--;
       });
     }
   }
@@ -51,6 +52,8 @@ class _TestCourse2PageState extends State<TestCourse2Page> {
   @override
   Widget build(BuildContext context) {
     final loggedInState = context.watch<LoggedInState>();
+    sectionContents = sectionsMap.values.toList();
+    sectionIDs = sectionsMap.keys.toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -62,20 +65,18 @@ class _TestCourse2PageState extends State<TestCourse2Page> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Expanded(
-              child: SectionContent(section: sections[currentSection]),
+              child: SectionContent(section: sectionContents[currentSectionIndex]),
             ),
             SizedBox(height: 20),
-            if (currentSection > 0)
+            if (currentSectionIndex > 0)
               ElevatedButton(
                 child: Text('Previous Section'),
                 onPressed: _previousSection,
               ),
             SizedBox(height: 10),
             ElevatedButton(
-              child: Text(currentSection < sections.length - 1
-                  ? 'Next Section'
-                  : 'Take Assessment'),
-              onPressed: () => _nextSection(loggedInState),
+              child: Text(currentSectionIndex < sectionContents.length - 1 ? 'Next Section' : 'Take Assessment'),
+              onPressed: () => _nextSection(loggedInState: loggedInState),
             ),
           ],
         ),
@@ -101,7 +102,8 @@ class SectionContent extends StatelessWidget {
           ),
           SizedBox(height: 10),
           Text(
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', // Replace with actual content
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            // Replace with actual content
             style: TextStyle(fontSize: 16),
           ),
         ],

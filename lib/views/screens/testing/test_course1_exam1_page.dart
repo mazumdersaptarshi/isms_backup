@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:isms/controllers/user_management/logged_in_state.dart';
 import 'package:isms/controllers/user_management/user_progress_tracker.dart';
 import 'package:isms/services/hive/hive_adapters/user_attempts.dart';
+import 'package:isms/utilities/random_key_generator.dart';
 import 'package:provider/provider.dart';
 import 'dart:math';
 
@@ -30,30 +31,8 @@ class _TestCourse1Exam1PageState extends State<TestCourse1Exam1Page> {
   ];
   String courseId1 = 'ip78hd';
   String examId1 = 'gv24fb';
-  Map<String, dynamic> attempts1 = {
-    'vb23kl': UserAttempts.fromMap({
-      'attemptId': 'vb23kl',
-      'startTime': DateTime.now(),
-      'endTime': '',
-      'completionStatus': 'completed',
-      'score': 10,
-      'responses': [],
-    }),
-    'km09lp': UserAttempts.fromMap({
-      'attemptId': 'km09lp',
-      'startTime': DateTime.now(),
-      'endTime': '',
-      'completionStatus': 'not_completed',
-    }),
-  };
 
   List<int> userAnswers = [-1, -1, -1]; // To store user's answers
-  String generateRandomKey(int length) {
-    const String _chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-    Random _rnd = Random();
-
-    return String.fromCharCodes(Iterable.generate(length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -109,8 +88,8 @@ class _TestCourse1Exam1PageState extends State<TestCourse1Exam1Page> {
               loggedInState: loggedInState,
               courseId: courseId1,
               examId: examId1,
-              attemptData: {
-                'attemptId': generateRandomKey(6),
+              newAttemptData: {
+                'attemptId': randomKeyGenerator(),
                 'startTime': DateTime.now(),
                 'endTime': '',
                 'completionStatus': 'completed',

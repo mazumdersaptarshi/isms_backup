@@ -8,6 +8,7 @@ class AdminState {
   AdminState._internal() {
     _allUsersData = HiveService.getExistingLocalDataFromUsersBox();
   }
+
   factory AdminState() {
     return _instance;
   }
@@ -30,22 +31,28 @@ class AdminState {
   }
 
   Map<String, dynamic> getExamsForCourseForUser(String uid, String courseId) {
+    print('CourseID: $courseId');
     Map<String, dynamic> exams = {};
     try {
-      Map all_exams = _allUsersData[uid][HiveFieldKey.exams.name];
+      Map all_exams = _allUsersData[uid][DatabaseFields.exams.name];
 
       all_exams.forEach((key, value) {
         if (value.courseId == courseId) {
           exams[key] = value;
+          print(value.courseId);
+          print(value.examId);
+          print(value.attempts);
+
+          print('------------');
         }
       });
     } catch (e) {}
-    getExamAttemptsForCourseForUser(exams, 'de44qv');
+    // getExamAttemptsForCourseForUser(exams, 'de44qv');
+
     return exams;
   }
 
-  static Map<String, dynamic> getExamAttemptsForCourseForUser(
-      Map<String, dynamic> exams, String examId) {
+  static Map<String, dynamic> getExamAttemptsForCourseForUser(Map<String, dynamic> exams, String examId) {
     try {
       exams.forEach((key, value) {
         // print('attempt: ${value.attempts} for exam ${value.examId}');

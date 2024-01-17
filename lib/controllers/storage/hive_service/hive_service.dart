@@ -54,9 +54,9 @@ class HiveService {
       final existingUserData =
           Map<String, dynamic>.from(await _box.get(userIdKey)); // Gets the existing User data from the Hive Box
 
-      if (fieldName == HiveFieldKey.courses.name) {
+      if (fieldName == DatabaseFields.courses.name) {
         _userProgress = UserCourseProgressHive.fromMap(data);
-      } else if (fieldName == HiveFieldKey.exams.name) {
+      } else if (fieldName == DatabaseFields.exams.name) {
         _userProgress = UserExamProgressHive.fromMap(data);
       } else {
         _logger.severe('Invalid Field Id, the given field ${fieldName} does not exist in Hive!');
