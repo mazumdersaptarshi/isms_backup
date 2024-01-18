@@ -3,11 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:isms/models/course/answer.dart';
 
 class RadioList extends StatefulWidget {
-  const RadioList(
-      {Key? key,
-        required this.values,
-        required this.onItemSelected})
-      : super(key: key);
+  const RadioList({Key? key, required this.values, required this.onItemSelected}) : super(key: key);
 
   final List<Answer> values;
   final dynamic Function(dynamic selectedValue) onItemSelected;
@@ -26,20 +22,12 @@ class _RadioListState extends State<RadioList> {
 
   @override
   Widget build(BuildContext context) {
-    // return Center(
-    //   child: Row(
-    //     mainAxisSize: MainAxisSize.min,
-    //     mainAxisAlignment: MainAxisAlignment.center,
-    //     children: _buildList(context),
-    //   ),
-    // );
     return Expanded(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: _buildList(context),
-      )
-    );
+        child: Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: _buildList(context),
+    ));
   }
 
   _buildList(BuildContext context) {

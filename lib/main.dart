@@ -12,10 +12,11 @@ import 'package:provider/provider.dart';
 import 'package:isms/firebase_options.dart';
 import 'package:isms/controllers/storage/hive_service/hive_service.dart';
 import 'package:isms/controllers/reminders_management/reminders_provider.dart';
-import 'package:isms/controllers/theme_management/common_theme.dart';
+import 'package:isms/controllers/theme_management/app_theme.dart';
 import 'package:isms/controllers/user_management/logged_in_state.dart';
 import 'package:isms/controllers/user_management/user_progress_tracker.dart';
 import 'package:isms/views/screens/authentication/login_screen.dart';
+
 // import 'package:isms/remindersManagement/reminders_provider.dart';
 // import 'package:isms/screens/login/login_screen.dart';
 
@@ -25,18 +26,14 @@ void main() async {
   Logger.root.level = Level.ALL;
   Logger.root.onRecord.listen((record) {
     // react to logging events by calling developer.log()
-    log(record.message,
-        name: record.loggerName,
-        level: record.level.value,
-        error: record.object);
+    log(record.message, name: record.loggerName, level: record.level.value, error: record.object);
   });
   final Logger logger = Logger('ISMS');
 
   WidgetsFlutterBinding.ensureInitialized();
 
   try {
-    await Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform);
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   } on Exception catch (_) {}
   logger.info('Firebase initialized');
 
@@ -78,7 +75,7 @@ class IsmsApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'ISMS',
-        theme: customTheme,
+        theme: ismsTheme,
         localizationsDelegates: const [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,

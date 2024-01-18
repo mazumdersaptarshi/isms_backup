@@ -3,11 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:isms/models/course/answer.dart';
 
 class CheckboxList extends StatefulWidget {
-  const CheckboxList(
-      {Key? key,
-        required this.values,
-        required this.onItemSelected})
-      : super(key: key);
+  const CheckboxList({Key? key, required this.values, required this.onItemSelected}) : super(key: key);
 
   final List<Answer> values;
   final dynamic Function(dynamic selectedValues) onItemSelected;
@@ -17,7 +13,7 @@ class CheckboxList extends StatefulWidget {
 }
 
 class _CheckboxListState extends State<CheckboxList> {
-  late Map<String,bool> _checkboxAnswerState;
+  late Map<String, bool> _checkboxAnswerState;
 
   @override
   void initState() {
@@ -25,8 +21,8 @@ class _CheckboxListState extends State<CheckboxList> {
     _checkboxAnswerState = _initCheckboxStateTracking();
   }
 
-  Map<String,bool> _initCheckboxStateTracking() {
-    final Map<String,bool> answers = {};
+  Map<String, bool> _initCheckboxStateTracking() {
+    final Map<String, bool> answers = {};
 
     for (Answer value in widget.values) {
       answers[value.answerId] = false;
@@ -37,20 +33,12 @@ class _CheckboxListState extends State<CheckboxList> {
 
   @override
   Widget build(BuildContext context) {
-    // return Center(
-    //   child: Row(
-    //     mainAxisSize: MainAxisSize.min,
-    //     mainAxisAlignment: MainAxisAlignment.center,
-    //     children: _buildList(context),
-    //   ),
-    // );
     return Expanded(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: _buildList(context),
-      )
-    );
+        child: Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: _buildList(context),
+    ));
   }
 
   _buildList(BuildContext context) {

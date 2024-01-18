@@ -23,11 +23,9 @@ class CoursePage extends StatefulWidget {
 }
 
 class _CourseState extends State<CoursePage> {
-  final TextStyle buttonEnabledStyle = const TextStyle(fontSize: 20, color: Colors.white);
-  final TextStyle buttonDisabledStyle = const TextStyle(fontSize: 20, color: Colors.red);
-
   // Data structures containing course content populated in initState() then not changed
-  final String _jsonString = '{"courseId": "ip78hd","courseTitle": "Test Course","courseDescription": "Test Course description","courseSections": [{"sectionId": "section1","sectionTitle": "Section 1","sectionElements": [{"elementId": "html1","elementType": "html","elementTitle": "Static HTML 1","elementContent": "<html><body><p>HTML 1</p></body></html>"},{"elementId": "question1","elementType": "question","elementTitle": "Multiple choice question with single answer selection","elementContent": [{"questionId": "ssq1","questionType": "singleSelectionQuestion","questionText": "SSQ","questionAnswers": [{"answerId": "ssq1a1","answerText": "A1","answerCorrect": false},{"answerId": "ssq1a2","answerText": "A2","answerCorrect": true},{"answerId": "ssq1a3","answerText": "A3","answerCorrect": false}]}]}]},{"sectionId": "section2","sectionTitle": "Section 2","sectionElements": [{"elementId": "question2","elementType": "question","elementTitle": "Multiple choice question with multiple answer selection","elementContent": [{"questionId": "msq1","questionType": "multipleSelectionQuestion","questionText": "MSQ","questionAnswers": [{"answerId": "msq1a1","answerText": "A1","answerCorrect": true},{"answerId": "msq1a2","answerText": "A2","answerCorrect": false},{"answerId": "msq1a3","answerText": "A3","answerCorrect": false},{"answerId": "msq1a4","answerText": "A4","answerCorrect": true}]}]},{"elementId": "html2","elementType": "html","elementTitle": "Static HTML 2","elementContent": "<html><body><p>HTML 2</p></body></html>"},{"elementId": "flipcards1","elementType": "flipCard","elementTitle": "FlipCards","elementContent": [{"flipCardId": "fc1","flipCardFront": "Front 1","flipCardBack": "Back 1"},{"flipCardId": "fc2","flipCardFront": "Front 2","flipCardBack": "Back 2"},{"flipCardId": "fc3","flipCardFront": "Front 2","flipCardBack": "Back 3"}]}]}]}';
+  final String _jsonString =
+      '{"courseId": "ip78hd","courseTitle": "Test Course","courseDescription": "Test Course description","courseSections": [{"sectionId": "section1","sectionTitle": "Section 1","sectionElements": [{"elementId": "html1","elementType": "html","elementTitle": "Static HTML 1","elementContent": "<html><body><p>HTML 1</p></body></html>"},{"elementId": "question1","elementType": "question","elementTitle": "Multiple choice question with single answer selection","elementContent": [{"questionId": "ssq1","questionType": "singleSelectionQuestion","questionText": "SSQ","questionAnswers": [{"answerId": "ssq1a1","answerText": "A1","answerCorrect": false},{"answerId": "ssq1a2","answerText": "A2","answerCorrect": true},{"answerId": "ssq1a3","answerText": "A3","answerCorrect": false}]}]}]},{"sectionId": "section2","sectionTitle": "Section 2","sectionElements": [{"elementId": "question2","elementType": "question","elementTitle": "Multiple choice question with multiple answer selection","elementContent": [{"questionId": "msq1","questionType": "multipleSelectionQuestion","questionText": "MSQ","questionAnswers": [{"answerId": "msq1a1","answerText": "A1","answerCorrect": true},{"answerId": "msq1a2","answerText": "A2","answerCorrect": false},{"answerId": "msq1a3","answerText": "A3","answerCorrect": false},{"answerId": "msq1a4","answerText": "A4","answerCorrect": true}]}]},{"elementId": "html2","elementType": "html","elementTitle": "Static HTML 2","elementContent": "<html><body><p>HTML 2</p></body></html>"},{"elementId": "flipcards1","elementType": "flipCard","elementTitle": "FlipCards","elementContent": [{"flipCardId": "fc1","flipCardFront": "Front 1","flipCardBack": "Back 1"},{"flipCardId": "fc2","flipCardFront": "Front 2","flipCardBack": "Back 2"},{"flipCardId": "fc3","flipCardFront": "Front 2","flipCardBack": "Back 3"}]}]}]}';
   late final Course _course;
   final List<String> _courseSections = [];
   final Map<String, dynamic> _courseWidgets = {};
@@ -90,13 +88,7 @@ class _CourseState extends State<CoursePage> {
       // drawerScrimColor: Colors.transparent,
       // body: SingleChildScrollView(
       body: Column(
-        children: [
-          ..._getSectionWidgets()
-          // Expanded(
-          //     child: Consumer<_CourseState>(builder: (context, value, child) => const _SectionElement())
-          //   // child: ListView.builder(itemBuilder: (context, index) => _SectionElement(index))
-          // ),
-        ],
+        children: [..._getSectionWidgets()],
       ),
       // ),
     );
@@ -119,11 +111,9 @@ class _CourseState extends State<CoursePage> {
     // Add widgets for all elements in the current course section, conditionally building
     // different widget types depending on `elementType` from the JSON.
     for (element_model.Element element in currentSection.sectionElements) {
-
       // Static HTML
       if (element.elementType == ElementTypeValues.html.name) {
         contentWidgets.add(Flexible(child: Html(data: element.elementContent)));
-        // contentWidgets.add(const SizedBox(height: 10)); // Adjusted size for less spacing
 
         // Questions
       } else if (element.elementType == ElementTypeValues.question.name) {
@@ -184,25 +174,19 @@ class _CourseState extends State<CoursePage> {
         ),
         _currentSectionNonEmptyQuestions.contains(question.questionId)
             ? ElevatedButton(
-              onPressed: () {
-                // No need to track interactive UI element completion if revisiting the section
-                if (!_currentSectionCompleted) {
-                  _currentSectionCompletedInteractiveElements.add(question.questionId);
-                  _checkInteractiveElementsCompleted();
-                }
-              },
-              child: Text(
-                  AppLocalizations.of(context)!.buttonCheckAnswer,
-                  style: buttonEnabledStyle
-              ),
-            )
+                onPressed: () {
+                  // No need to track interactive UI element completion if revisiting the section
+                  if (!_currentSectionCompleted) {
+                    _currentSectionCompletedInteractiveElements.add(question.questionId);
+                    _checkInteractiveElementsCompleted();
+                  }
+                },
+                child: Text(AppLocalizations.of(context)!.buttonCheckAnswer),
+              )
             : ElevatedButton(
-              onPressed: null,
-              child: Text(
-                  AppLocalizations.of(context)!.buttonSelectAnswer,
-                  style: buttonDisabledStyle
-              ),
-            )
+                onPressed: null,
+                child: Text(AppLocalizations.of(context)!.buttonSelectAnswer),
+              )
       ]);
 
       // Multiple Selection Question (Checkboxes)
@@ -229,25 +213,19 @@ class _CourseState extends State<CoursePage> {
         ),
         _currentSectionNonEmptyQuestions.contains(question.questionId)
             ? ElevatedButton(
-              onPressed: () {
-                // No need to track interactive UI element completion if revisiting the section
-                if (!_currentSectionCompleted) {
-                  _currentSectionCompletedInteractiveElements.add(question.questionId);
-                  _checkInteractiveElementsCompleted();
-                }
-              },
-              child: Text(
-                  AppLocalizations.of(context)!.buttonCheckAnswer,
-                  style: buttonEnabledStyle
-              ),
-            )
+                onPressed: () {
+                  // No need to track interactive UI element completion if revisiting the section
+                  if (!_currentSectionCompleted) {
+                    _currentSectionCompletedInteractiveElements.add(question.questionId);
+                    _checkInteractiveElementsCompleted();
+                  }
+                },
+                child: Text(AppLocalizations.of(context)!.buttonCheckAnswer),
+              )
             : ElevatedButton(
-              onPressed: null,
-              child: Text(
-                  AppLocalizations.of(context)!.buttonSelectAnswer,
-                  style: buttonDisabledStyle
-              ),
-            )
+                onPressed: null,
+                child: Text(AppLocalizations.of(context)!.buttonSelectAnswer),
+              )
       ]);
     }
 
@@ -279,40 +257,29 @@ class _CourseState extends State<CoursePage> {
       // Only enable the button once all interactive elements in the section have been interacted with.
       button = _currentSectionCompleted
           ? ElevatedButton(
-            onPressed: () {
-              _recordCourseCompletion;
-              // Return to parent screen (course list)
-              Navigator.pop(context);
-            },
-            child: Text(
-                AppLocalizations.of(context)!.buttonFinishCourse,
-                style: buttonEnabledStyle
-            ),
-          )
+              onPressed: () {
+                _recordCourseCompletion;
+                // Return to parent screen (course list)
+                Navigator.pop(context);
+              },
+              child: Text(AppLocalizations.of(context)!.buttonFinishCourse),
+            )
           : ElevatedButton(
-            onPressed: null,
-            child: Text(
-                AppLocalizations.of(context)!.buttonSectionContentIncomplete,
-                style: buttonDisabledStyle
-            ),
-          );
+              onPressed: null,
+              child: Text(AppLocalizations.of(context)!.buttonSectionContentIncomplete),
+            );
     } else {
       // Only enable the button once all interactive elements in the section have been interacted with.
       button = _currentSectionCompleted
           ? ElevatedButton(
-            onPressed: _goToNextSection,
-            child: Text(
-                AppLocalizations.of(context)!.buttonNextSection(_course.courseSections[_currentSectionIndex + 1].sectionTitle),
-                style: buttonEnabledStyle
-            ),
-          )
+              onPressed: _goToNextSection,
+              child: Text(AppLocalizations.of(context)!
+                  .buttonNextSection(_course.courseSections[_currentSectionIndex + 1].sectionTitle)),
+            )
           : ElevatedButton(
-            onPressed: null,
-            child: Text(
-                AppLocalizations.of(context)!.buttonSectionContentIncomplete,
-                style: buttonDisabledStyle
-            ),
-          );
+              onPressed: null,
+              child: Text(AppLocalizations.of(context)!.buttonSectionContentIncomplete),
+            );
     }
 
     return button;
@@ -321,17 +288,16 @@ class _CourseState extends State<CoursePage> {
   ElevatedButton _getSectionBeginningButton() {
     return ElevatedButton(
       onPressed: _goToPreviousSection,
-      child: Text(
-          AppLocalizations.of(context)!.buttonPreviousSection(_course.courseSections[_currentSectionIndex - 1].sectionTitle),
-          style: buttonEnabledStyle
-      ),
+      child: Text(AppLocalizations.of(context)!
+          .buttonPreviousSection(_course.courseSections[_currentSectionIndex - 1].sectionTitle)),
     );
   }
 
   void _checkInteractiveElementsCompleted() {
     print(_courseRequiredInteractiveElements[_courseSections[_currentSectionIndex]].toString());
     print(_currentSectionCompletedInteractiveElements.toString());
-    if (setEquals(_courseRequiredInteractiveElements[_courseSections[_currentSectionIndex]], _currentSectionCompletedInteractiveElements)) {
+    if (setEquals(_courseRequiredInteractiveElements[_courseSections[_currentSectionIndex]],
+        _currentSectionCompletedInteractiveElements)) {
       setState(() {
         _currentSectionCompleted = true;
       });

@@ -43,8 +43,7 @@ mixin CustomAppBarMixin on StatelessWidget {
 
   void navigateToMyLearningPage(BuildContext context) {}
 
-  void navigateToRemindersPage(
-      BuildContext context, LoggedInState loggedInState) async {
+  void navigateToRemindersPage(BuildContext context, LoggedInState loggedInState) async {
     String userRole = loggedInState.currentUserRole;
     if (userRole == "admin") {
       await checkAndCreateUserDocument(
@@ -54,29 +53,22 @@ mixin CustomAppBarMixin on StatelessWidget {
       );
     }
     if (!context.mounted) return;
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const ReminderScreen()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => const ReminderScreen()));
   }
 
   void navigateToAdminCenterPage(BuildContext context) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => const AdminUserDetailsScreen()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => const AdminUserDetailsScreen()));
   }
 
   void navigateToTimedRemindersPage(BuildContext context) {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const TimedRemindersScreen()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => const TimedRemindersScreen()));
   }
 
   void navigateToTrackingPage(BuildContext context) {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => const TestRunner()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => const TestRunner()));
   }
 
-  Widget appBarItem(
-      IconData icon, String title, VoidCallback onTap, double paddingValue) {
+  Widget appBarItem(IconData icon, String title, VoidCallback onTap, double paddingValue) {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       onEnter: (_) => hovering[title]!.value = true,
@@ -84,8 +76,7 @@ mixin CustomAppBarMixin on StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: paddingValue)
-              .copyWith(top: 4.0, bottom: 4.0),
+          padding: EdgeInsets.symmetric(horizontal: paddingValue).copyWith(top: 4.0, bottom: 4.0),
           child: ValueListenableBuilder<bool>(
             valueListenable: hovering[title]!,
             builder: (context, isHover, child) {
@@ -94,8 +85,7 @@ mixin CustomAppBarMixin on StatelessWidget {
                 curve: Curves.easeInOut,
                 transform: Matrix4.identity()..scale(isHover ? 1.1 : 1.0),
                 child: Column(
-                  mainAxisSize: MainAxisSize
-                      .min, // Use the minimum space required by children
+                  mainAxisSize: MainAxisSize.min, // Use the minimum space required by children
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Icon(
@@ -107,8 +97,7 @@ mixin CustomAppBarMixin on StatelessWidget {
                     Flexible(
                       child: Text(title,
                           overflow: TextOverflow.ellipsis, // Prevent overflow
-                          style: customTheme.textTheme.bodyMedium
-                              ?.copyWith(fontSize: 10, color: Colors.white)),
+                          style: customTheme.textTheme.bodyMedium?.copyWith(fontSize: 10, color: Colors.white)),
                     ),
                     Visibility(
                       maintainAnimation: true,
@@ -137,10 +126,8 @@ mixin CustomAppBarMixin on StatelessWidget {
       onTap: () {
         Navigator.of(context).pushReplacement(
           PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) =>
-                const HomePage(),
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) {
+            pageBuilder: (context, animation, secondaryAnimation) => const HomePage(),
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
               return FadeTransition(
                 opacity: animation,
                 child: child,
@@ -177,14 +164,12 @@ mixin CustomAppBarMixin on StatelessWidget {
 
   Widget dividerItem() {
     return Container(
-      margin: const EdgeInsets.symmetric(
-          vertical: 8), // Adds space above and below the divider
+      margin: const EdgeInsets.symmetric(vertical: 8), // Adds space above and below the divider
 
       child: VerticalDivider(
         width: 1, // Width of the divider line
         thickness: 1, // Thickness of the divider line
-        color: Colors.white
-            .withOpacity(0.5), // Divider color with some transparency
+        color: Colors.white.withOpacity(0.5), // Divider color with some transparency
       ),
     );
   }
@@ -199,10 +184,8 @@ mixin CustomAppBarMixin on StatelessWidget {
           await LoggedInState.logout().then((value) {
             Navigator.of(context).pushReplacement(
               PageRouteBuilder(
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    const LoginPage(),
-                transitionsBuilder:
-                    (context, animation, secondaryAnimation, child) {
+                pageBuilder: (context, animation, secondaryAnimation) => const LoginPage(),
+                transitionsBuilder: (context, animation, secondaryAnimation, child) {
                   return FadeTransition(
                     opacity: animation,
                     child: child,
@@ -218,12 +201,12 @@ mixin CustomAppBarMixin on StatelessWidget {
   }
 }
 
-class CustomAppBarWeb extends StatelessWidget
-    with CustomAppBarMixin
-    implements PreferredSizeWidget {
+class CustomAppBarWeb extends StatelessWidget with CustomAppBarMixin implements PreferredSizeWidget {
   final LoggedInState? loggedInState;
   final double _paddingValue = 20;
+
   CustomAppBarWeb({super.key, this.loggedInState});
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -235,35 +218,24 @@ class CustomAppBarWeb extends StatelessWidget
             : homeButtonItem(context, displayText: false),
       ),
       actions: <Widget>[
-        appBarItem(Icons.explore, "Explore",
-            () => navigateToCoursesPage(context), _paddingValue),
-        appBarItem(Icons.lightbulb, "My Learning",
-            () => navigateToMyLearningPage(context), _paddingValue),
-        appBarItem(Icons.lightbulb, "Course Test",
-            () => navigateToCourseTestPage(context), _paddingValue),
-        appBarItem(Icons.track_changes, "Tracking",
-            () => navigateToTrackingPage(context), _paddingValue),
-        appBarItem(Icons.admin_panel_settings_rounded, "Admin Center",
-            () => navigateToAdminCenterPage(context), _paddingValue),
+        appBarItem(Icons.explore, "Explore", () => navigateToCoursesPage(context), _paddingValue),
+        appBarItem(Icons.lightbulb, "My Learning", () => navigateToMyLearningPage(context), _paddingValue),
+        appBarItem(Icons.lightbulb, "Course Test", () => navigateToCourseTestPage(context), _paddingValue),
+        appBarItem(Icons.track_changes, "Tracking", () => navigateToTrackingPage(context), _paddingValue),
+        appBarItem(Icons.admin_panel_settings_rounded, "Admin Center", () => navigateToAdminCenterPage(context),
+            _paddingValue),
         if (loggedInState?.currentUserRole == 'admin')
-          appBarItem(
-              Icons.notifications_active_rounded,
-              "Notifications",
-              () => navigateToRemindersPage(context, loggedInState!),
+          appBarItem(Icons.notifications_active_rounded, "Notifications",
+              () => navigateToRemindersPage(context, loggedInState!), _paddingValue),
+        appBarItem(Icons.account_circle, "Account", () => navigateToUserProfilePage(context), _paddingValue),
+        if (loggedInState?.currentUserRole == 'admin')
+          appBarItem(Icons.admin_panel_settings_outlined, "Admin Console", () => navigateToAdminCenterPage(context),
               _paddingValue),
-        appBarItem(Icons.account_circle, "Account",
-            () => navigateToUserProfilePage(context), _paddingValue),
         if (loggedInState?.currentUserRole == 'admin')
-          appBarItem(Icons.admin_panel_settings_outlined, "Admin Console",
-              () => navigateToAdminCenterPage(context), _paddingValue),
-        if (loggedInState?.currentUserRole == 'admin')
-          appBarItem(Icons.timer_outlined, "Reminders",
-              () => navigateToTimedRemindersPage(context), _paddingValue),
+          appBarItem(Icons.timer_outlined, "Reminders", () => navigateToTimedRemindersPage(context), _paddingValue),
         dividerItem(),
         logoutButtonItem(context),
       ],
-      backgroundColor: Colors.deepPurpleAccent.shade100,
-      elevation: 0,
     );
   }
 
@@ -272,12 +244,12 @@ class CustomAppBarWeb extends StatelessWidget
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
-class CustomAppBarMobile extends StatelessWidget
-    with CustomAppBarMixin
-    implements PreferredSizeWidget {
+class CustomAppBarMobile extends StatelessWidget with CustomAppBarMixin implements PreferredSizeWidget {
   final LoggedInState? loggedInState;
   final double _paddingValue = 8;
+
   CustomAppBarMobile({super.key, this.loggedInState});
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -288,19 +260,14 @@ class CustomAppBarMobile extends StatelessWidget
       ),
       actions: <Widget>[
         if (loggedInState?.currentUserRole == 'admin')
-          appBarItem(Icons.admin_panel_settings_outlined, "Admin Console",
-              () => navigateToAdminCenterPage(context), _paddingValue),
-        if (loggedInState?.currentUserRole == 'admin')
-          appBarItem(
-              Icons.notifications_active_rounded,
-              "Reminders",
-              () => navigateToRemindersPage(context, loggedInState!),
+          appBarItem(Icons.admin_panel_settings_outlined, "Admin Console", () => navigateToAdminCenterPage(context),
               _paddingValue),
+        if (loggedInState?.currentUserRole == 'admin')
+          appBarItem(Icons.notifications_active_rounded, "Reminders",
+              () => navigateToRemindersPage(context, loggedInState!), _paddingValue),
         dividerItem(),
         logoutButtonItem(context),
       ],
-      backgroundColor: Colors.deepPurpleAccent.shade100,
-      elevation: 0,
     );
   }
 
