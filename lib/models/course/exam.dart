@@ -6,8 +6,7 @@ import 'package:isms/models/course/section.dart';
 /// The value for this is `*.g.dart`, where the asterisk denotes the source file name.
 part 'exam.g.dart';
 
-/// An annotation for the code generator to know that this class needs the
-/// JSON serialisation logic to be generated.
+/// An annotation for the code generator to know that this class needs the JSON serialisation logic to be generated.
 @JsonSerializable(explicitToJson: true)
 class Exam {
   final String courseId;
@@ -18,8 +17,8 @@ class Exam {
   final int examEstimatedTime;
   final List<Section> examSections;
 
-  Exam({
-      required this.courseId,
+  Exam(
+      {required this.courseId,
       required this.examId,
       required this.examTitle,
       required this.examDescription,
@@ -31,7 +30,7 @@ class Exam {
   /// Pass the map to the generated constructor, which is named after the source class.
   factory Exam.fromJson(Map<String, dynamic> json) => _$ExamFromJson(json);
 
-  /// `toJson` is the convention for a class to declare support for serialisation
-  /// to JSON. The implementation simply calls the private, generated helper method.
+  /// `toJson` is the convention for a class to declare support for serialisation to JSON.
+  /// The implementation simply calls the private, generated helper method.
   Map<String, dynamic> toJson() => _$ExamToJson(this);
 }
