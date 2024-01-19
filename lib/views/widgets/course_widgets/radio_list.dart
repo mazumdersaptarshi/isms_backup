@@ -37,7 +37,14 @@ class _RadioListState extends State<RadioList> {
         Flexible(
           fit: FlexFit.loose,
           child: RadioListTile<Answer>(
-            title: Text(answer.answerText),
+            title: Text(
+              answer.answerText,
+              // When an answer is selected, text colour is the same as `fillColor` for the radio button,
+              // inherited from the app theme (`Theme.of(context).radioTheme.fillColor`).
+              // This cannot be decoupled so override the text colour at this level to standardise the behaviour for
+              // text displayed in both `RadioListTile`s and `CheckboxListTile`s.
+              style: const TextStyle(color: Colors.black),
+            ),
             value: answer,
             groupValue: _groupNewValue,
             onChanged: (selectedValue) {

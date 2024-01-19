@@ -44,8 +44,14 @@ class _CourseState extends State<CoursePage> {
   // Data structures tracking current section state
   int _currentSectionIndex = 0;
   bool _currentSectionCompleted = false;
+
+  /// `Set` of completed section IDs
   final Set<String> _completedSections = {};
+
+  /// `Set` of interactive widget IDs which have been interacted with
   final Set<String> _currentSectionCompletedInteractiveElements = {};
+
+  /// `Set` of question widget IDs which have (an) answer(s) selected
   final Set<String> _currentSectionNonEmptyQuestions = {};
 
   @override
@@ -73,27 +79,13 @@ class _CourseState extends State<CoursePage> {
         }
       }
     }
-    print(_courseSections.toString());
-    print(_courseRequiredInteractiveElements.toString());
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // body: CustomScrollView(
-      //     slivers: [
-      //       const SliverAppBar(
-      //         title: Text(''),
-      //       ),
-      //       SliverList(
-      //           delegate: SliverChildBuilderDelegate(
-      //                   (context, index) => _SectionElement(index)
-      //           )
-      //       )
-      //     ]
-      // ),
       appBar: AppBar(
-        title: const Text(''),
+        title: Text("${_course.courseTitle} - ${_course.courseSections[_currentSectionIndex].sectionTitle}"),
       ),
       // drawer: const SidebarWidget(),
       // drawerScrimColor: Colors.transparent,
@@ -109,12 +101,13 @@ class _CourseState extends State<CoursePage> {
 
   /// Returns an ordered `List` of all widgets in the current course section.
   List<Widget> _getSectionWidgets() {
-    _getContentWidgets();
+    _getCourseWidgets();
+    print(_courseWidgets[_course.courseSections[_currentSectionIndex].sectionId].toString());
     return _courseWidgets[_course.courseSections[_currentSectionIndex].sectionId];
   }
 
-  /// Populates data structure [_courseWidgets] which stores all course widgets.
-  void _getContentWidgets() {
+  /// Populates data structure [_courseWidgets] with all course widgets.
+  void _getCourseWidgets() {
     for (Section section in _course.courseSections) {
       _courseWidgets[section.sectionId] = _getSectionContent(_course.courseSections[_currentSectionIndex]);
     }
@@ -181,16 +174,11 @@ class _CourseState extends State<CoursePage> {
         RadioList(
           values: question.questionAnswers,
           onItemSelected: (selectedValue) {
-            print('selected: $selectedValue');
             setState(() {
-              // Only enable the related button once an option has been selected
+              // Only enable the related button once an answer has been selected
               // Radio buttons cannot be deselected so there's no need to disable the button again
               _currentSectionNonEmptyQuestions.add(question.questionId);
             });
-            print('required: ${_courseRequiredInteractiveElements[_courseSections[_currentSectionIndex]].toString()}');
-            print('current: ${_currentSectionNonEmptyQuestions.toString()}');
-            print('question id: ${question.questionId}');
-            print(_currentSectionNonEmptyQuestions.contains(question.questionId));
           },
         ),
         _currentSectionNonEmptyQuestions.contains(question.questionId)
@@ -217,10 +205,9 @@ class _CourseState extends State<CoursePage> {
         CheckboxList(
           values: question.questionAnswers,
           onItemSelected: (selectedValues) {
-            print('selected: $selectedValues');
             setState(() {
-              // Only enable the related button once at least one option has been selected
-              // As checkboxes can be deselected, we also need to disable the button if all options are
+              // Only enable the related button once at least one answer has been selected
+              // Since checkboxes can be deselected, we also need to disable the button if all options are
               // subsequently deselected
               if (selectedValues.values.contains(true)) {
                 _currentSectionNonEmptyQuestions.add(question.questionId);
@@ -228,8 +215,6 @@ class _CourseState extends State<CoursePage> {
                 _currentSectionNonEmptyQuestions.remove(question.questionId);
               }
             });
-            print('required: ${_courseRequiredInteractiveElements[_courseSections[_currentSectionIndex]].toString()}');
-            print('current: ${_currentSectionNonEmptyQuestions.toString()}');
           },
         ),
         _currentSectionNonEmptyQuestions.contains(question.questionId)
@@ -258,7 +243,6 @@ class _CourseState extends State<CoursePage> {
     return flip_card_widget.FlipCard(
       content: flipCard,
       onItemSelected: (selectedCard) {
-        print(selectedCard);
         setState(() {
           // No need to track interactive UI element completion if revisiting the section
           if (!_currentSectionCompleted) {
@@ -266,7 +250,6 @@ class _CourseState extends State<CoursePage> {
             _checkInteractiveElementsCompleted();
           }
         });
-        print(_currentSectionCompletedInteractiveElements.toString());
       },
     );
   }
@@ -324,15 +307,12 @@ class _CourseState extends State<CoursePage> {
   /// Updates [_currentSectionCompleted] to `true` only if all widgets requiring user interaction
   /// in the current section have been interacted with.
   void _checkInteractiveElementsCompleted() {
-    print(_courseRequiredInteractiveElements[_courseSections[_currentSectionIndex]].toString());
-    print(_currentSectionCompletedInteractiveElements.toString());
     if (setEquals(_courseRequiredInteractiveElements[_courseSections[_currentSectionIndex]],
         _currentSectionCompletedInteractiveElements)) {
       setState(() {
         _currentSectionCompleted = true;
       });
     }
-    print(_currentSectionCompleted);
   }
 
   /// Updates variables and data structures which track progress/state of the overall course:

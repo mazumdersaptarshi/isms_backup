@@ -13,7 +13,7 @@ const Set<MaterialState> interactiveStates = <MaterialState>{
 /// App theme
 final ThemeData ismsTheme = _ismsTheme();
 
-/// Returns app theme (as `ThemeData`), based on the default light theme with specific widget styles overridden.
+/// Returns app theme as `ThemeData`, based on the default light theme with specific widget themes overridden.
 ThemeData _ismsTheme() {
   final ThemeData base = ThemeData.light();
 
@@ -34,7 +34,6 @@ ThemeData _ismsTheme() {
     cardTheme: _cardTheme(base.cardTheme),
     checkboxTheme: _checkboxTheme(base.checkboxTheme),
     elevatedButtonTheme: _elevatedButtonTheme(base.elevatedButtonTheme),
-    radioTheme: _radioTheme(base.radioTheme),
   );
 }
 
@@ -85,13 +84,9 @@ ElevatedButtonThemeData _elevatedButtonTheme(ElevatedButtonThemeData base) => El
       ),
     );
 
-/// Returns app-wide `RadioThemeData`.
-RadioThemeData _radioTheme(RadioThemeData base) =>
-    base.copyWith(fillColor: MaterialStateProperty.resolveWith(_getRadioFillColor));
-
 // Functions for conditional widget styling
 
-/// Returns button background color as `Color` depending on the widget state tracked in [states].
+/// Returns button background colour as `Color` depending on the widget state tracked in [states].
 Color _getButtonBackgroundColor(Set<MaterialState> states) {
   Color color;
 
@@ -106,14 +101,9 @@ Color _getButtonBackgroundColor(Set<MaterialState> states) {
   return color;
 }
 
-/// Returns button foreground color as `Color` depending on the widget state tracked in [states].
+/// Returns button foreground colour as `Color` depending on the widget state tracked in [states].
 Color _getButtonForegroundColor(Set<MaterialState> states) {
   return states.any((state) => state == MaterialState.disabled) ? Colors.white54 : Colors.white;
-}
-
-/// Returns radio button fill color as `Color` depending on the widget state tracked in [states].
-Color _getRadioFillColor(Set<MaterialState> states) {
-  return states.any((state) => state == MaterialState.selected) ? Colors.blue : Colors.black;
 }
 
 const TextStyle flipCardFrontStyle = TextStyle(
