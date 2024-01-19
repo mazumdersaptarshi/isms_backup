@@ -23,6 +23,9 @@ class CoursePage extends StatefulWidget {
 }
 
 class _CourseState extends State<CoursePage> {
+  /// SizedBox for adding consistent spacing between widgets
+  static const _separator = SizedBox(height: 20);
+
   // Data structures containing course content populated in initState() then not changed
   /// Course data represented as a JSON [String]
   final String _jsonString =
@@ -122,6 +125,8 @@ class _CourseState extends State<CoursePage> {
     // Add widgets for all elements in the current course section, conditionally building different widget types
     // depending on `elementType` from the JSON
     for (element_model.Element element in currentSection.sectionElements) {
+      contentWidgets.add(_separator);
+
       // Static HTML
       if (element.elementType == ElementTypeValues.html.name) {
         contentWidgets.add(Flexible(child: Html(data: element.elementContent)));
@@ -146,16 +151,16 @@ class _CourseState extends State<CoursePage> {
             runSpacing: 10.0,
             children: flipCardWidgets,
           ),
-          // const SizedBox(height: 20),
         ]);
       }
     }
 
-    contentWidgets.add(_getSectionEndButton());
+    contentWidgets.addAll([_separator, _getSectionEndButton()]);
 
-    // Don't add a previous section button for the first section
+    // Add a previous section button (and preceding spacing) to the beginning of the widget [List]
+    // only for sections after the first section
     if (_currentSectionIndex > 0) {
-      contentWidgets.insert(0, _getSectionBeginningButton());
+      contentWidgets.insertAll(0, [_separator, _getSectionBeginningButton()]);
     }
 
     return contentWidgets;
@@ -171,6 +176,7 @@ class _CourseState extends State<CoursePage> {
     if (question.questionType == QuestionTypeValues.singleSelectionQuestion.name) {
       contentWidgets.addAll([
         Text(question.questionText),
+        _separator,
         CustomRadioList(
           values: question.questionAnswers,
           onItemSelected: (selectedValue) {
@@ -181,6 +187,7 @@ class _CourseState extends State<CoursePage> {
             });
           },
         ),
+        _separator,
         _currentSectionNonEmptyQuestions.contains(question.questionId)
             ? ElevatedButton(
                 onPressed: () {
@@ -202,6 +209,7 @@ class _CourseState extends State<CoursePage> {
     } else if (question.questionType == QuestionTypeValues.multipleSelectionQuestion.name) {
       contentWidgets.addAll([
         Text(question.questionText),
+        _separator,
         CustomCheckboxList(
           values: question.questionAnswers,
           onItemSelected: (selectedValues) {
@@ -217,6 +225,7 @@ class _CourseState extends State<CoursePage> {
             });
           },
         ),
+        _separator,
         _currentSectionNonEmptyQuestions.contains(question.questionId)
             ? ElevatedButton(
                 onPressed: () {

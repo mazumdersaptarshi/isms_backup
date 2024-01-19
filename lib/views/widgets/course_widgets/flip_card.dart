@@ -18,6 +18,7 @@ class CustomFlipCard extends StatelessWidget {
       fill: Fill.fillBack,
       front: _buildFront(),
       back: _buildBack(),
+      // Dynamic anonymous function used to expose the flipped card's ID to the caller scope
       onFlip: () => onCardFlipped(content.flipCardId),
     );
   }
