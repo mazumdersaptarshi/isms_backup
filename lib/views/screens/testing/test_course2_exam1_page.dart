@@ -30,8 +30,8 @@ class _TestCourse2Exam1PageState extends State<TestCourse2Exam1Page> {
   ];
 
   String courseId2 = 'tt89mn';
-  String examId1 = 'dz06lp';
-
+  String examId1 = 'rt89nb';
+  int passing_score = 20;
   List<int> userAnswers = [-1, -1, -1]; // To store user's answers
 
   @override
@@ -92,7 +92,8 @@ class _TestCourse2Exam1PageState extends State<TestCourse2Exam1Page> {
                 'startTime': DateTime.now(),
                 'endTime': '',
                 'completionStatus': 'completed',
-                'score': 30,
+                'score': score * 10,
+                'result': 'PASS',
                 'responses': [],
               });
 

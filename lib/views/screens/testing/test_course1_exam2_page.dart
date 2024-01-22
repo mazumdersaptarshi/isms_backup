@@ -6,32 +6,32 @@ import 'package:isms/utilities/random_key_generator.dart';
 import 'package:provider/provider.dart';
 import 'dart:math';
 
-class TestCourse1Exam1Page extends StatefulWidget {
+class TestCourse1Exam2Page extends StatefulWidget {
   @override
   _TestCourse1Exam1PageState createState() => _TestCourse1Exam1PageState();
 }
 
-class _TestCourse1Exam1PageState extends State<TestCourse1Exam1Page> {
+class _TestCourse1Exam1PageState extends State<TestCourse1Exam2Page> {
   final List<Question> questions = [
     Question(
-      questionText: 'Which HTML tag is used to define an internal style sheet?',
-      options: ['<style>', '<script>', '<css>', '<link>'],
-      correctAnswerIndex: 0,
+      questionText: 'Which tag is not valid in HTML?',
+      options: ['<style>', '<div>', '<int>', '<a>'],
+      correctAnswerIndex: 2,
     ),
     Question(
-      questionText: 'Which is not a JavaScript data type?',
-      options: ['Undefined', 'Number', 'Boolean', 'Float'],
+      questionText: 'Which is a valid HTML tag?',
+      options: ['<String>', '<type>', '<net>', '<input>'],
       correctAnswerIndex: 3,
     ),
     Question(
-      questionText: 'What does CSS stand for?',
-      options: ['Colorful Style Sheets', 'Computer Style Sheets', 'Cascading Style Sheets', 'Creative Style Sheets'],
-      correctAnswerIndex: 2,
+      questionText: 'Is this true? HTML along with CSS is called XML',
+      options: ['No', 'Yes', 'Sometimes', 'Not sure'],
+      correctAnswerIndex: 0,
     ),
   ];
   String courseId1 = 'ip78hd';
-  String examId1 = 'de44qv';
-  int passing_score = 20;
+  String examId1 = 'lx54mn';
+  int passing_score = 10;
 
   List<int> userAnswers = [-1, -1, -1]; // To store user's answers
 
@@ -41,7 +41,7 @@ class _TestCourse1Exam1PageState extends State<TestCourse1Exam1Page> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Web Development Quiz'),
+        title: Text('Web Development Quiz 2'),
       ),
       body: ListView.builder(
         itemCount: questions.length,
