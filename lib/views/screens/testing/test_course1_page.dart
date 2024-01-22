@@ -3,6 +3,7 @@ import 'package:isms/controllers/user_management/logged_in_state.dart';
 import 'package:isms/controllers/user_management/user_progress_tracker.dart';
 import 'package:isms/services/hive/config/config.dart';
 import 'package:isms/views/screens/testing/test_course1_exam1_page.dart';
+import 'package:isms/views/screens/testing/test_course1_exam2_page.dart';
 import 'package:provider/provider.dart';
 
 class TestCourse1Page extends StatefulWidget {
@@ -23,7 +24,7 @@ class _TestCourse1PageState extends State<TestCourse1Page> {
   };
   String courseId1 = 'ip78hd';
 
-  Future<void> _nextSection({required LoggedInState loggedInState}) async {
+  Future<void> _nextSection({required LoggedInState loggedInState, int? examIndex}) async {
     if (currentSectionIndex < sectionContents.length - 1) {
       setState(() {
         currentSectionIndex++;
@@ -43,9 +44,16 @@ class _TestCourse1PageState extends State<TestCourse1Page> {
       //   'completedSections': ['mod1'],
       // });
     } else {
+      if (examIndex == 0) {
+        print('Go to Assessment  1');
+        Navigator.push(context, MaterialPageRoute(builder: (context) => TestCourse1Exam1Page()));
+      }
       // Go to assessment
-      print('Go to Assessment');
-      Navigator.push(context, MaterialPageRoute(builder: (context) => TestCourse1Exam1Page()));
+
+      else {
+        print('Go to Assessment  2');
+        Navigator.push(context, MaterialPageRoute(builder: (context) => TestCourse1Exam2Page()));
+      }
     }
   }
 
@@ -83,9 +91,14 @@ class _TestCourse1PageState extends State<TestCourse1Page> {
               ),
             SizedBox(height: 10),
             ElevatedButton(
-              child: Text(currentSectionIndex < sectionContents.length - 1 ? 'Next Section' : 'Take Assessment'),
-              onPressed: () => _nextSection(loggedInState: loggedInState),
+              child: Text(currentSectionIndex < sectionContents.length - 1 ? 'Next Section' : 'Take Assessment 1'),
+              onPressed: () => _nextSection(loggedInState: loggedInState, examIndex: 0),
             ),
+            if (currentSectionIndex == sectionContents.length - 1)
+              ElevatedButton(
+                child: Text(currentSectionIndex < sectionContents.length - 1 ? 'Next Section' : 'Take Assessment 2'),
+                onPressed: () => _nextSection(loggedInState: loggedInState, examIndex: 1),
+              ),
           ],
         ),
       ),

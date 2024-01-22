@@ -37,28 +37,63 @@ class UserProgressState extends ChangeNotifier {
     Map<String, dynamic> existingCourseProgressData =
         _fetchCoursesMapFromUserData(userData: userData, courseId: courseId);
     List updatedCompletedSections = [];
-    _logger.info(existingCourseProgressData.keys);
-    try {
-      // Update the list of completed sections based on the current section.
-      // If course has not been started yet and the completed sections list is null
-      // Then an empty list is returned for completedSections
+    List updatedCompletedExams = [];
+    _logger.info(existingCourseProgressData);
+
+    // Update the list of completed sections based on the current section.
+    // If course has not been started yet and the completed sections list is null
+    // Then an empty list is returned for completedSections
+    if (progressData[DatabaseFields.currentSectionId.name] != null) {
+      print('Updating Course sections Only: ${progressData[DatabaseFields.currentSectionId.name]}');
       if (existingCourseProgressData[DatabaseFields.completedSections.name] != null) {
         updatedCompletedSections = _updateCompletedSections(
             completedSections: existingCourseProgressData[DatabaseFields.completedSections.name],
-            currentSection: progressData[DatabaseFields.currentSectionId.name]);
+            currentSectionId: progressData[DatabaseFields.currentSectionId.name]);
       } else {
         updatedCompletedSections = _updateCompletedSections(
-            completedSections: [], currentSection: progressData[DatabaseFields.currentSectionId.name]);
+          completedSections: [],
+          currentSectionId: progressData[DatabaseFields.currentSectionId.name],
+        );
+        existingCourseProgressData['courseId'] = courseId;
+        existingCourseProgressData['currentSection'] = progressData['currentSectionId'];
+        existingCourseProgressData['completionStatus'] = progressData['completionStatus'];
       }
-      // Update the progress data with the list of completed sections.
-      progressData[DatabaseFields.completedSections.name] = updatedCompletedSections ?? [];
-    } catch (e) {
-      _logger.info(e);
+      existingCourseProgressData[DatabaseFields.completedSections.name] = updatedCompletedSections ?? [];
+
+      _logger.info('Exzisting progress data: ${existingCourseProgressData} changing to: ');
+      _logger.info(existingCourseProgressData);
+
+      await loggedInState.updateUserProgress(
+          fieldName: DatabaseFields.courses.name, key: courseId, data: existingCourseProgressData);
     }
 
-    _logger.info(progressData);
+    if (progressData['examId'] != null) {
+      print('Updating Course Exams Only: ${progressData['examId']}');
+
+      if (existingCourseProgressData['completedExams'] != null) {
+        updatedCompletedExams = _updateCompletedExams(
+          completedExams: existingCourseProgressData['completedExams'],
+          currentExamId: progressData['examId'],
+        );
+      } else {
+        updatedCompletedExams = _updateCompletedExams(
+          completedExams: [],
+          currentExamId: progressData['examId'],
+        );
+      }
+      existingCourseProgressData['completedExams'] = updatedCompletedExams ?? [];
+      _logger.info('Exzisting progress data: ${existingCourseProgressData} changing to: ');
+
+      _logger.info(existingCourseProgressData);
+
+      await loggedInState.updateUserProgress(
+          fieldName: DatabaseFields.courses.name, key: courseId, data: existingCourseProgressData);
+    }
+
+    // Update the progress data with the list of completed sections.
+
     // Finally, Update the user's course progress data by accessing the loggedInState.
-    await loggedInState.updateUserProgress(fieldName: DatabaseFields.courses.name, key: courseId, data: progressData);
+    // await loggedInState.updateUserProgress(fieldName: DatabaseFields.courses.name, key: courseId, data: progressData);
   }
 
   /// Updates the user's exam progress for a specific course and exam.
@@ -87,9 +122,9 @@ class UserProgressState extends ChangeNotifier {
         _getExistingExamAttemptsForCourse(userData: _userData, courseId: courseId, examId: examId);
 
     // Determine if there's existing data to update or if new data needs to be created.
+    print('existingExamAttemptsData: ${existingExamAttemptsData}');
     finalAttemptsMap = existingExamAttemptsData.isNotEmpty
-        ? _updateExistingAttemptsMap(
-            existingAttempts: existingExamAttemptsData['attempts'], newAttemptData: newAttemptData)
+        ? _updateExistingAttemptsMap(existingAttempts: existingExamAttemptsData, newAttemptData: newAttemptData)
         : _createNewAttemptsMap(newAttemptData: newAttemptData);
 
     // Prepare updated exams data map
@@ -101,6 +136,12 @@ class UserProgressState extends ChangeNotifier {
     };
     // Update the user's exam progress data in Hive storage.
     await loggedInState.updateUserProgress(fieldName: 'exams', key: examId, data: finalExamsMap);
+
+    if (newAttemptData['result'] == 'PASS') {
+      updateUserCourseProgress(loggedInState: loggedInState, courseId: courseId, progressData: {
+        'examId': examId,
+      });
+    }
   }
 
   /// Helper method to extract the course progress data from the user's data.
@@ -113,9 +154,9 @@ class UserProgressState extends ChangeNotifier {
       userData.forEach((key, userInfoItem) {
         if (key == DatabaseFields.courses.name) {
           if (userInfoItem != null) {
-            userInfoItem.forEach((courseId, courseProgressInstance) {
+            userInfoItem.forEach((courseIdInInstance, courseProgressInstance) {
               // Convert course progress instance, which is an Instance of type UserCourseProgressHive, to a map.
-              coursesMap = courseProgressInstance.toMap();
+              if (courseIdInInstance == courseId) coursesMap = courseProgressInstance.toMap();
             });
           }
         }
@@ -137,6 +178,7 @@ class UserProgressState extends ChangeNotifier {
     required Map<String, dynamic> existingAttempts,
     required Map<String, dynamic> newAttemptData,
   }) {
+    print('Attempts exist for this exam $existingAttempts');
     try {
       // Update the specific attempt record in the existing attempts map.
       existingAttempts[newAttemptData[DatabaseFields.attemptId.name]] = UserAttempts.fromMap({
@@ -201,31 +243,51 @@ class UserProgressState extends ChangeNotifier {
     required examId,
   }) {
     Map<String, dynamic> examProgressMap = {};
-    userData.forEach((key, userInfoItem) {
-      if (key == DatabaseFields.exams.name) {
-        if (userInfoItem != null) {
-          userInfoItem.forEach((examId, examProgressInstance) {
-            //Iterates through all items in the exams list, by their ID
-            //We need to go a layer deeper and then filter only those exams that match the course ID
-            if (examProgressInstance.courseId == courseId) examProgressMap = examProgressInstance.toMap();
-          });
-        }
-      }
-    });
+    // userData.forEach((key, userInfoItem) {
+    //   if (key == DatabaseFields.exams.name) {
+    //     if (userInfoItem != null) {
+    //       userInfoItem.forEach((examId, examProgressInstance) {
+    //         //Iterates through all items in the exams list, by their ID
+    //         //We need to go a layer deeper and then filter only those exams that match the course ID
+    //         if (examProgressInstance.courseId == courseId && examProgressInstance.examId == examId) {
+    //           examProgressMap = examProgressInstance.toMap();
+    //         }
+    //       });
+    //     }
+    //   }
+    // });
+    try {
+      var allExams = userData['exams'];
+      var currentExam = allExams[examId];
+      print('currentExamId: $examId:  ${currentExam.attempts}');
+
+      examProgressMap = currentExam.attempts;
+      print(examProgressMap);
+    } catch (e) {}
 
     return examProgressMap;
   }
 
   /// Helper method to update the list of completed sections for a course.
   /// It checks if the current section is already in the list and adds it if not.
-  static List _updateCompletedSections({required List completedSections, required String currentSection}) {
+  static List _updateCompletedSections({required List completedSections, required String currentSectionId}) {
     print(completedSections);
     try {
-      if (!completedSections.contains(currentSection)) {
-        completedSections.add(currentSection);
+      if (!completedSections.contains(currentSectionId)) {
+        completedSections.add(currentSectionId);
       }
     } catch (e) {}
 
     return completedSections;
+  }
+
+  static List _updateCompletedExams({required List completedExams, required String currentExamId}) {
+    print(completedExams);
+    try {
+      if (!completedExams.contains(currentExamId)) {
+        completedExams.add(currentExamId);
+      }
+    } catch (e) {}
+    return completedExams;
   }
 }

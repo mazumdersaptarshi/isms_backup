@@ -5,6 +5,7 @@ import 'package:isms/controllers/user_management/logged_in_state.dart';
 import 'package:isms/utilities/platform_check.dart';
 import 'package:isms/views/screens/testing/test_course1_page.dart';
 import 'package:isms/views/screens/testing/test_course2_page.dart';
+
 // import 'package:isms/views/screens/testing/test_ui/test_course3_page.dart';
 import 'package:isms/views/screens/testing/test_ui_type1/test_course3_page.dart';
 import 'package:isms/views/screens/testing/test_ui_type2/first_page.dart';
@@ -45,34 +46,22 @@ class TestRunner extends StatelessWidget {
             Text('Mockup Courses'),
             ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => TestCourse1Page()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => TestCourse1Page()));
                 },
                 child: Text('Test Course 1 Introduction to Web Dev')),
             ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => TestCourse2Page()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => TestCourse2Page()));
                 },
                 child: Text('Test Course 2 Introduction to Python')),
             ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => DocumentAIPage()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => DocumentAIPage()));
                 },
                 child: Text('Test Course 3 Document AI')),
             ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => CoursePageType2()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => CoursePageType2()));
                 },
                 child: Text('CourseType2')),
             Divider(),
@@ -86,19 +75,15 @@ class TestRunner extends StatelessWidget {
             ElevatedButton(
                 onPressed: () {
                   print('-----------------');
-                  print(AdminState()
-                      .getCoursesForUser('jHa0j6gTUUPZZEdfA6NLwND0Y7A3'));
+                  print(AdminState().getCoursesForUser('jHa0j6gTUUPZZEdfA6NLwND0Y7A3'));
                 },
-                child:
-                    Text('Get Courses for user jHa0j6gTUUPZZEdfA6NLwND0Y7A3')),
+                child: Text('Get Courses for user jHa0j6gTUUPZZEdfA6NLwND0Y7A3')),
             ElevatedButton(
                 onPressed: () {
                   print('-----------------');
-                  print(AdminState().getExamsForCourseForUser(
-                      'jHa0j6gTUUPZZEdfA6NLwND0Y7A3', 'ip78hd'));
+                  print(AdminState().getExamsProgressForCourseForUser('jHa0j6gTUUPZZEdfA6NLwND0Y7A3', 'ip78hd'));
                 },
-                child: Text(
-                    'Get Webb Dev Course Exam for User jHa0j6gTUUPZZEdfA6NLwND0Y7A3')),
+                child: Text('Get Webb Dev Course Exam for User jHa0j6gTUUPZZEdfA6NLwND0Y7A3')),
           ],
         ),
       ),

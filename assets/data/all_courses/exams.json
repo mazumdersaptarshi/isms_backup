@@ -1,5 +1,5 @@
 {
-  "examsList":[
+  "examsList": [
     {
       "courseId": "ip78hd",
       "examId": "de44qv",
@@ -136,7 +136,7 @@
       ]
     },
     {
-      "courseId": "ip78hd",
+      "courseId": "tt89mn",
       "examId": "rt89nb",
       "examTitle": "Test Exam 2",
       "examDescription": "Test Exam 2 description",
@@ -271,10 +271,10 @@
       ]
     },
     {
-      "courseId": "jd92nd",
+      "courseId": "ip78hd",
       "examId": "lx54mn",
-      "examTitle": "Test Exam 2",
-      "examDescription": "Test Exam 2 description",
+      "examTitle": "Test Exam3",
+      "examDescription": "Test Exam 3 description",
       "examPassMark": 2,
       "examAllowedAttempts": 3,
       "examSections": [

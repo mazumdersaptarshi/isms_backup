@@ -5,16 +5,14 @@ part 'user_course_progress.g.dart';
 @HiveType(typeId: 1)
 class UserCourseProgressHive {
   UserCourseProgressHive(
-      {this.courseId,
-      this.completionStatus,
-      this.currentSection,
-      this.completedSections});
+      {this.courseId, this.completionStatus, this.currentSection, this.completedSections, this.completedExams});
 
   UserCourseProgressHive.fromMap(Map<String, dynamic> data) {
     courseId = data['courseId'] as String?;
     completionStatus = data['completionStatus'] as String?;
     currentSection = data['currentSection'] as String?;
     completedSections = data['completedSections'] as List?;
+    completedExams = data['completedExams'] as List?;
   }
 
   Map<String, dynamic> toMap() {
@@ -23,6 +21,7 @@ class UserCourseProgressHive {
       'completionStatus': completionStatus,
       'currentSection': currentSection,
       'completedSections': completedSections,
+      'completedExams': completedExams,
     };
   }
 
@@ -37,4 +36,7 @@ class UserCourseProgressHive {
 
   @HiveField(3)
   List? completedSections;
+
+  @HiveField(4)
+  List? completedExams;
 }

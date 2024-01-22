@@ -22,13 +22,14 @@ class UserCourseProgressHiveAdapter
       completionStatus: fields[1] as String?,
       currentSection: fields[2] as String?,
       completedSections: (fields[3] as List?)?.cast<dynamic>(),
+      completedExams: (fields[4] as List?)?.cast<dynamic>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, UserCourseProgressHive obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.courseId)
       ..writeByte(1)
@@ -36,7 +37,9 @@ class UserCourseProgressHiveAdapter
       ..writeByte(2)
       ..write(obj.currentSection)
       ..writeByte(3)
-      ..write(obj.completedSections);
+      ..write(obj.completedSections)
+      ..writeByte(4)
+      ..write(obj.completedExams);
   }
 
   @override
