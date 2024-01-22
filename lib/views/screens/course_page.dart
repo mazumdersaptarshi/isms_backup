@@ -12,7 +12,7 @@ import 'package:isms/models/course/flip_card.dart' as flip_card_model;
 import 'package:isms/models/course/question.dart';
 import 'package:isms/models/course/section.dart';
 import 'package:isms/views/widgets/course_widgets/checkbox_list.dart';
-import 'package:isms/views/widgets/course_widgets/flip_card.dart' as flip_card_widget;
+import 'package:isms/views/widgets/course_widgets/flip_card.dart';
 import 'package:isms/views/widgets/course_widgets/radio_list.dart';
 
 class CoursePage extends StatefulWidget {
@@ -24,34 +24,34 @@ class CoursePage extends StatefulWidget {
 
 class _CourseState extends State<CoursePage> {
   // Data structures containing course content populated in initState() then not changed
-  /// Course data represented as a JSON `String`
+  /// Course data represented as a JSON [String]
   final String _jsonString =
       '{"courseId": "ip78hd","courseTitle": "Test Course","courseDescription": "Test Course description","courseSections": [{"sectionId": "section1","sectionTitle": "Section 1","sectionElements": [{"elementId": "html1","elementType": "html","elementTitle": "Static HTML 1","elementContent": "<html><body><p>HTML 1</p></body></html>"},{"elementId": "question1","elementType": "question","elementTitle": "Multiple choice question with single answer selection","elementContent": [{"questionId": "ssq1","questionType": "singleSelectionQuestion","questionText": "SSQ","questionAnswers": [{"answerId": "ssq1a1","answerText": "A1","answerCorrect": false},{"answerId": "ssq1a2","answerText": "A2","answerCorrect": true},{"answerId": "ssq1a3","answerText": "A3","answerCorrect": false}]}]}]},{"sectionId": "section2","sectionTitle": "Section 2","sectionElements": [{"elementId": "question2","elementType": "question","elementTitle": "Multiple choice question with multiple answer selection","elementContent": [{"questionId": "msq1","questionType": "multipleSelectionQuestion","questionText": "MSQ","questionAnswers": [{"answerId": "msq1a1","answerText": "A1","answerCorrect": true},{"answerId": "msq1a2","answerText": "A2","answerCorrect": false},{"answerId": "msq1a3","answerText": "A3","answerCorrect": false},{"answerId": "msq1a4","answerText": "A4","answerCorrect": true}]}]},{"elementId": "html2","elementType": "html","elementTitle": "Static HTML 2","elementContent": "<html><body><p>HTML 2</p></body></html>"},{"elementId": "flipcards1","elementType": "flipCard","elementTitle": "FlipCards","elementContent": [{"flipCardId": "fc1","flipCardFront": "Front 1","flipCardBack": "Back 1"},{"flipCardId": "fc2","flipCardFront": "Front 2","flipCardBack": "Back 2"},{"flipCardId": "fc3","flipCardFront": "Front 2","flipCardBack": "Back 3"}]}]}]}';
 
-  /// Course data stored in custom `Course` object
+  /// Course data stored in custom [Course] object
   late final Course _course;
 
-  /// Ordered `List` of section IDs to allow lookup by section index
+  /// Ordered [List] of section IDs to allow lookup by section index
   final List<String> _courseSections = [];
 
-  /// `Map` of widgets for all course sections keyed by section ID
+  /// [Map] of widgets for all course sections keyed by section ID
   final Map<String, dynamic> _courseWidgets = {};
 
   /// Map of each section's widgets which need to be interacted with before proceeding to the next section
-  /// The `Map` is keyed on section IDs, with each `Set` containing the element IDs
+  /// The [Map] is keyed on section IDs, with each [Set] containing the element IDs
   final Map<String, Set<String>> _courseRequiredInteractiveElements = {};
 
   // Data structures tracking current section state
   int _currentSectionIndex = 0;
   bool _currentSectionCompleted = false;
 
-  /// `Set` of completed section IDs
+  /// [Set] of completed section IDs
   final Set<String> _completedSections = {};
 
-  /// `Set` of interactive widget IDs which have been interacted with
+  /// [Set] of interactive widget IDs which have been interacted with
   final Set<String> _currentSectionCompletedInteractiveElements = {};
 
-  /// `Set` of question widget IDs which have (an) answer(s) selected
+  /// [Set] of question widget IDs which have (an) answer(s) selected
   final Set<String> _currentSectionNonEmptyQuestions = {};
 
   @override
@@ -99,7 +99,7 @@ class _CourseState extends State<CoursePage> {
 
   // Functions returning/updating data structures containing widgets for the whole course and individual sections
 
-  /// Returns an ordered `List` of all widgets in the current course section.
+  /// Returns an ordered [List] of all widgets in the current course section.
   List<Widget> _getSectionWidgets() {
     _getCourseWidgets();
     print(_courseWidgets[_course.courseSections[_currentSectionIndex].sectionId].toString());
@@ -113,8 +113,8 @@ class _CourseState extends State<CoursePage> {
     }
   }
 
-  /// Returns an ordered `List` of widgets for a course section.
-  /// Widgets are created based on their defined type in the custom `Element` object,
+  /// Returns an ordered [List] of widgets for a course section.
+  /// Widgets are created based on their defined type in the custom [element_model.Element] object,
   /// with data being passed in as required for each.
   List<Widget> _getSectionContent(Section currentSection) {
     final List<Widget> contentWidgets = [];
@@ -134,7 +134,7 @@ class _CourseState extends State<CoursePage> {
 
         // FlipCards
       } else if (element.elementType == ElementTypeValues.flipCard.name) {
-        final List<flip_card_widget.FlipCard> flipCardWidgets = [];
+        final List<CustomFlipCard> flipCardWidgets = [];
 
         for (flip_card_model.FlipCard flipCard in element.elementContent) {
           flipCardWidgets.add(_getFlipCardWidget(flipCard));
@@ -146,7 +146,7 @@ class _CourseState extends State<CoursePage> {
             runSpacing: 10.0,
             children: flipCardWidgets,
           ),
-          const SizedBox(height: 20),
+          // const SizedBox(height: 20),
         ]);
       }
     }
@@ -163,7 +163,7 @@ class _CourseState extends State<CoursePage> {
 
   // Functions returning widget(s) for each type
 
-  /// Returns a `List` of widgets comprising each question type.
+  /// Returns a [List] of widgets comprising each question type.
   List<Widget> _getQuestionWidgets(Question question) {
     final List<Widget> contentWidgets = [];
 
@@ -171,7 +171,7 @@ class _CourseState extends State<CoursePage> {
     if (question.questionType == QuestionTypeValues.singleSelectionQuestion.name) {
       contentWidgets.addAll([
         Text(question.questionText),
-        RadioList(
+        CustomRadioList(
           values: question.questionAnswers,
           onItemSelected: (selectedValue) {
             setState(() {
@@ -202,7 +202,7 @@ class _CourseState extends State<CoursePage> {
     } else if (question.questionType == QuestionTypeValues.multipleSelectionQuestion.name) {
       contentWidgets.addAll([
         Text(question.questionText),
-        CheckboxList(
+        CustomCheckboxList(
           values: question.questionAnswers,
           onItemSelected: (selectedValues) {
             setState(() {
@@ -238,15 +238,15 @@ class _CourseState extends State<CoursePage> {
     return contentWidgets;
   }
 
-  /// Returns a custom `FlipCard` widget.
-  flip_card_widget.FlipCard _getFlipCardWidget(flip_card_model.FlipCard flipCard) {
-    return flip_card_widget.FlipCard(
+  /// Returns a [CustomFlipCard] widget.
+  CustomFlipCard _getFlipCardWidget(flip_card_model.FlipCard flipCard) {
+    return CustomFlipCard(
       content: flipCard,
-      onItemSelected: (selectedCard) {
+      onCardFlipped: (flippedCardId) {
         setState(() {
           // No need to track interactive UI element completion if revisiting the section
           if (!_currentSectionCompleted) {
-            _currentSectionCompletedInteractiveElements.add(selectedCard);
+            _currentSectionCompletedInteractiveElements.add(flippedCardId);
             _checkInteractiveElementsCompleted();
           }
         });
@@ -254,7 +254,7 @@ class _CourseState extends State<CoursePage> {
     );
   }
 
-  /// Returns an `ElevatedButton` widget used for end-of-section operations:
+  /// Returns an [ElevatedButton] widget used for end-of-section operations:
   ///  - Proceeding to the next section
   ///  - Completing the course and returning to the course list screen
   ElevatedButton _getSectionEndButton() {
@@ -293,7 +293,7 @@ class _CourseState extends State<CoursePage> {
     return button;
   }
 
-  /// Returns an `ElevatedButton` widget used for returning to the previous section.
+  /// Returns an [ElevatedButton] widget used for returning to the previous section.
   ElevatedButton _getSectionBeginningButton() {
     return ElevatedButton(
       onPressed: _goToPreviousSection,

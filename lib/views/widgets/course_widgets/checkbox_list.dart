@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 
 import 'package:isms/models/course/answer.dart';
 
-class CheckboxList extends StatefulWidget {
-  const CheckboxList({Key? key, required this.values, required this.onItemSelected}) : super(key: key);
-
+class CustomCheckboxList extends StatefulWidget {
   final List<Answer> values;
   final dynamic Function(dynamic selectedValues) onItemSelected;
 
+  const CustomCheckboxList({Key? key, required this.values, required this.onItemSelected}) : super(key: key);
+
   @override
-  State<CheckboxList> createState() => _CheckboxListState();
+  State<CustomCheckboxList> createState() => _CustomCheckboxListState();
 }
 
-class _CheckboxListState extends State<CheckboxList> {
+class _CustomCheckboxListState extends State<CustomCheckboxList> {
   late Map<String, bool> _checkboxAnswerState;
 
   @override
@@ -33,12 +33,11 @@ class _CheckboxListState extends State<CheckboxList> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-        child: Column(
+    return Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: _buildList(context),
-    ));
+    );
   }
 
   _buildList(BuildContext context) {

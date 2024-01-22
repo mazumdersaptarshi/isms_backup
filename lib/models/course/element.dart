@@ -39,18 +39,18 @@ class Element<T> {
 /// in the JSON field `elementContent`.
 ///
 /// Possible JSON `elementType` values with their corresponding type in Dart are:
-///  - `html` -> `String`
-///  - `question` -> `List<Question>`
-///  - `flipCard` -> `List<FlipCard>`
+///  - `html` -> [String]
+///  - `question` -> [List<Question>]
+///  - `flipCard` -> [List<FlipCard>]
 ///
-/// Note that the String returned in JSON field `elementType` is necessary for conditional logic when
+/// Note that the [String] returned in JSON field `elementType` is necessary for conditional logic when
 /// displaying the element **only in Dart**; here we need to inspect the keys present in the returned JSON map(s)
 /// to identify the type.
 class ModelConverter<T> implements JsonConverter<T, Object> {
   const ModelConverter();
 
-  /// `fromJson` takes `Object` instead of `Map<String,dynamic>` so as to handle both
-  /// a single JSON map or a `List` of JSON maps.
+  /// `fromJson` takes [Object] instead of [Map<String,dynamic>] so as to handle both
+  /// a single JSON map or a [List] of JSON maps.
   @override
   T fromJson(Object json) {
     if (json is List) {
@@ -79,28 +79,28 @@ class ModelConverter<T> implements JsonConverter<T, Object> {
             ' this JSON payload. Please add a handler to _fromJson.');
   }
 
-  /// Since we want to handle both JSON `String`s and `List`s of JSON in our `toJson()` method,
-  /// our return type will be `Object`.
+  /// Since we want to handle both JSON [String]s and [List]s of JSON in our [toJson()] method,
+  /// our return type will be [Object].
   ///
-  /// Below, `Serializable` is an abstract class/interface we created to allow us to check whether
-  /// a concrete class of type T has a `toJson()` method.
+  /// Below, [Serializable] is an abstract class/interface we created to allow us to check whether
+  /// a concrete class of type T has a [toJson()] method.
   /// Maybe there's a better way to do this?
   ///
-  /// Our JsonConverter uses a type variable of T, rather than "T extends Serializable",
-  /// since if T is a `List`, it won't have a `toJson()` method and it's not a class under our control.
+  /// Our JsonConverter uses a type variable of T, rather than `T extends Serializable`,
+  /// since if T is a [List], it won't have a [toJson()] method and it's not a class under our control.
   /// Thus, we impose no narrower scope so as to handle both cases:
-  ///  - An object which has a `toJson()` method
-  ///  - A `List` of such objects
+  ///  - An object which has a [toJson()] method
+  ///  - A [List] of such objects
   @override
   Object toJson(T object) {
-    /// First we'll check if the object is `Serializable`.
-    /// Testing for the `Serializable` type (our custom interface of a class signature that has a `toJson()` method)
-    /// allows us to call `toJson()` directly on it.
+    /// First we'll check if the object is [Serializable].
+    /// Testing for the [Serializable] type (our custom interface of a class signature that has a [toJson()] method)
+    /// allows us to call [toJson()] directly on it.
     if (object is Serializable) {
       return object.toJson();
     }
 
-    /// Otherwise, check if it's a `List` & not empty & elements are `Serializable`.
+    /// Otherwise, check if it's a [List] & not empty & elements are [Serializable].
     else if (object is List) {
       if (object.isEmpty) return [];
 
@@ -109,7 +109,7 @@ class ModelConverter<T> implements JsonConverter<T, Object> {
       }
     }
 
-    /// It's not a `List` & it's not `Serializable`; this is a design issue.
+    /// It's not a [List] & it's not [Serializable]; this is a design issue.
     throw ArgumentError.value(
         object,
         'Cannot serialize to JSON',
