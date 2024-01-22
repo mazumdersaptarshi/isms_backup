@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 
 import 'package:isms/models/course/answer.dart';
 
-class RadioList extends StatefulWidget {
-  const RadioList({Key? key, required this.values, required this.onItemSelected}) : super(key: key);
-
+class CustomRadioList extends StatefulWidget {
   final List<Answer> values;
   final dynamic Function(dynamic selectedValue) onItemSelected;
 
+  const CustomRadioList({Key? key, required this.values, required this.onItemSelected}) : super(key: key);
+
   @override
-  State<RadioList> createState() => _RadioListState();
+  State<CustomRadioList> createState() => _CustomRadioListState();
 }
 
-class _RadioListState extends State<RadioList> {
+class _CustomRadioListState extends State<CustomRadioList> {
   dynamic _groupNewValue;
 
   @override
@@ -22,12 +22,11 @@ class _RadioListState extends State<RadioList> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-        child: Column(
+    return Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: _buildList(context),
-    ));
+    );
   }
 
   _buildList(BuildContext context) {
@@ -37,7 +36,14 @@ class _RadioListState extends State<RadioList> {
         Flexible(
           fit: FlexFit.loose,
           child: RadioListTile<Answer>(
-            title: Text(answer.answerText),
+            title: Text(
+              answer.answerText,
+              // When an answer is selected, text colour is the same as `fillColor` for the radio button,
+              // inherited from the app theme (`Theme.of(context).radioTheme.fillColor`).
+              // This cannot be decoupled so override the text colour at this level to standardise the behaviour for
+              // text displayed in both `RadioListTile`s and `CheckboxListTile`s.
+              style: const TextStyle(color: Colors.black),
+            ),
             value: answer,
             groupValue: _groupNewValue,
             onChanged: (selectedValue) {
