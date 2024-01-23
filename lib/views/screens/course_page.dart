@@ -23,10 +23,14 @@ class CoursePage extends StatefulWidget {
 }
 
 class _CourseState extends State<CoursePage> {
+  /// SizedBox for adding consistent spacing between widgets
+  static const SizedBox _separator = SizedBox(height: 20);
+
   // Data structures containing course content populated in initState() then not changed
+
   /// Course data represented as a JSON [String]
   final String _jsonString =
-      '{"courseId": "ip78hd","courseTitle": "Test Course","courseDescription": "Test Course description","courseSections": [{"sectionId": "section1","sectionTitle": "Section 1","sectionElements": [{"elementId": "html1","elementType": "html","elementTitle": "Static HTML 1","elementContent": "<html><body><p>HTML 1</p></body></html>"},{"elementId": "question1","elementType": "question","elementTitle": "Multiple choice question with single answer selection","elementContent": [{"questionId": "ssq1","questionType": "singleSelectionQuestion","questionText": "SSQ","questionAnswers": [{"answerId": "ssq1a1","answerText": "A1","answerCorrect": false},{"answerId": "ssq1a2","answerText": "A2","answerCorrect": true},{"answerId": "ssq1a3","answerText": "A3","answerCorrect": false}]}]}]},{"sectionId": "section2","sectionTitle": "Section 2","sectionElements": [{"elementId": "question2","elementType": "question","elementTitle": "Multiple choice question with multiple answer selection","elementContent": [{"questionId": "msq1","questionType": "multipleSelectionQuestion","questionText": "MSQ","questionAnswers": [{"answerId": "msq1a1","answerText": "A1","answerCorrect": true},{"answerId": "msq1a2","answerText": "A2","answerCorrect": false},{"answerId": "msq1a3","answerText": "A3","answerCorrect": false},{"answerId": "msq1a4","answerText": "A4","answerCorrect": true}]}]},{"elementId": "html2","elementType": "html","elementTitle": "Static HTML 2","elementContent": "<html><body><p>HTML 2</p></body></html>"},{"elementId": "flipcards1","elementType": "flipCard","elementTitle": "FlipCards","elementContent": [{"flipCardId": "fc1","flipCardFront": "Front 1","flipCardBack": "Back 1"},{"flipCardId": "fc2","flipCardFront": "Front 2","flipCardBack": "Back 2"},{"flipCardId": "fc3","flipCardFront": "Front 2","flipCardBack": "Back 3"}]}]}]}';
+      '{"courseId": "ip78hd","courseTitle": "Test Course","courseDescription": "Test Course description","courseSections": [{"sectionId": "section1","sectionTitle": "Section 1","sectionElements": [{"elementId": "html1","elementType": "html","elementTitle": "Static HTML 1","elementContent": "<html><body><p>HTML 1<br>This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.<br><b>This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.</b><br><s>This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.</s><br>This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.<br> IT LOOKS LIKE WE CANNOT SET FONT SIZE IN HTML HERE</p></body></html>"},{"elementId": "question1","elementType": "question","elementTitle": "Multiple choice question with single answer selection","elementContent": [{"questionId": "ssq1","questionType": "singleSelectionQuestion","questionText": "Section 1 Question","questionAnswers": [{"answerId": "ssq1a1","answerText": "Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. ","answerCorrect": false},{"answerId": "ssq1a2","answerText": "Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. ","answerCorrect": true},{"answerId": "ssq1a3","answerText": "Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. ","answerCorrect": false}]}]}]},{"sectionId": "section2","sectionTitle": "Section 2","sectionElements": [{"elementId": "question2","elementType": "question","elementTitle": "Multiple choice question with multiple answer selection","elementContent": [{"questionId": "msq1","questionType": "multipleSelectionQuestion","questionText": "Section 2 Question","questionAnswers": [{"answerId": "msq1a1","answerText": "A1","answerCorrect": true},{"answerId": "msq1a2","answerText": "A2","answerCorrect": false},{"answerId": "msq1a3","answerText": "A3","answerCorrect": false},{"answerId": "msq1a4","answerText": "A4","answerCorrect": true}]}]}]},   {   "sectionId": "section3",   "sectionTitle": "Section 3",   "sectionElements": [   {   "elementId": "html2",   "elementType": "html",   "elementTitle": "Static HTML 2",   "elementContent": "<html><body><p>HTML 1<br>This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.<br><b>This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.</b><br><s>This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.</s><br>This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.<br> IT LOOKS LIKE WE CANNOT SET FONT SIZE IN HTML HERE</p></body></html>"   },   {   "elementId": "flipcards1",   "elementType": "flipCard",   "elementTitle": "FlipCards",   "elementContent": [   {   "flipCardId": "fc1",   "flipCardFront": "Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. ",   "flipCardBack": "Back 1. Back 1. Back 1. Back 1. Back 1. Back 1. Back 1. Back 1. Back 1. Back 1. Back 1. Back 1. "   },   {   "flipCardId": "fc2",   "flipCardFront": "Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. ",   "flipCardBack": "Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. "   },   {   "flipCardId": "fc3",   "flipCardFront": "Front 3. Front 3. Front 3. Front 3. Front 3. Front 3. Front 3. Front 3. Front 3. Front 3. Front 3. Front 3. Front 3. Front 3. Front 3. Front 3. Front 3. Front 3. Front 3. ",   "flipCardBack": "Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. "   }   ]   }   ]   }]}';
 
   /// Course data stored in custom [Course] object
   late final Course _course;
@@ -42,6 +46,7 @@ class _CourseState extends State<CoursePage> {
   final Map<String, Set<String>> _courseRequiredInteractiveElements = {};
 
   // Data structures tracking current section state
+
   int _currentSectionIndex = 0;
   bool _currentSectionCompleted = false;
 
@@ -122,6 +127,8 @@ class _CourseState extends State<CoursePage> {
     // Add widgets for all elements in the current course section, conditionally building different widget types
     // depending on `elementType` from the JSON
     for (element_model.Element element in currentSection.sectionElements) {
+      contentWidgets.add(_separator);
+
       // Static HTML
       if (element.elementType == ElementTypeValues.html.name) {
         contentWidgets.add(Flexible(child: Html(data: element.elementContent)));
@@ -146,16 +153,16 @@ class _CourseState extends State<CoursePage> {
             runSpacing: 10.0,
             children: flipCardWidgets,
           ),
-          // const SizedBox(height: 20),
         ]);
       }
     }
 
-    contentWidgets.add(_getSectionEndButton());
+    contentWidgets.addAll([_separator, _getSectionEndButton()]);
 
-    // Don't add a previous section button for the first section
+    // Add a previous section button (and preceding spacing) to the beginning of the widget [List]
+    // only for sections after the first section
     if (_currentSectionIndex > 0) {
-      contentWidgets.insert(0, _getSectionBeginningButton());
+      contentWidgets.insertAll(0, [_separator, _getSectionBeginningButton()]);
     }
 
     return contentWidgets;
@@ -171,6 +178,7 @@ class _CourseState extends State<CoursePage> {
     if (question.questionType == QuestionTypeValues.singleSelectionQuestion.name) {
       contentWidgets.addAll([
         Text(question.questionText),
+        _separator,
         CustomRadioList(
           values: question.questionAnswers,
           onItemSelected: (selectedValue) {
@@ -181,6 +189,7 @@ class _CourseState extends State<CoursePage> {
             });
           },
         ),
+        _separator,
         _currentSectionNonEmptyQuestions.contains(question.questionId)
             ? ElevatedButton(
                 onPressed: () {
@@ -202,6 +211,7 @@ class _CourseState extends State<CoursePage> {
     } else if (question.questionType == QuestionTypeValues.multipleSelectionQuestion.name) {
       contentWidgets.addAll([
         Text(question.questionText),
+        _separator,
         CustomCheckboxList(
           values: question.questionAnswers,
           onItemSelected: (selectedValues) {
@@ -217,6 +227,7 @@ class _CourseState extends State<CoursePage> {
             });
           },
         ),
+        _separator,
         _currentSectionNonEmptyQuestions.contains(question.questionId)
             ? ElevatedButton(
                 onPressed: () {

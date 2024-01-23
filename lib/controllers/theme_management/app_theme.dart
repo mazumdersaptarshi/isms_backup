@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 /// App-wide font family override
-const String fontFamily = "Poppins";
+const String fontFamily = 'Poppins';
 
 /// Set of [MaterialStates] used to apply conditional widget style when being interacted with
 const Set<MaterialState> interactiveStates = <MaterialState>{
@@ -9,12 +9,6 @@ const Set<MaterialState> interactiveStates = <MaterialState>{
   MaterialState.hovered,
   MaterialState.focused
 };
-
-/// App-wide primary colour
-Color primary = Colors.deepPurpleAccent.shade100;
-
-/// App-wide widget [BorderRadius]
-BorderRadius borderRadius = BorderRadius.circular(10);
 
 /// App-wide theme
 final ThemeData ismsTheme = _ismsTheme();
@@ -25,9 +19,9 @@ ThemeData _ismsTheme() {
 
   return base.copyWith(
     colorScheme: base.colorScheme.copyWith(
-      primary: primary,
+      primary: getPrimaryColor(),
       onPrimary: Colors.white,
-      secondary: Colors.green,
+      secondary: getSecondaryColor(),
       onSecondary: Colors.black,
       tertiary: Colors.orange,
       onTertiary: Colors.black,
@@ -67,7 +61,7 @@ TextTheme _textTheme(TextTheme base) => base.copyWith(
 
 /// Returns app-wide [AppBarTheme].
 AppBarTheme _appBarTheme(AppBarTheme base) =>
-    base.copyWith(backgroundColor: primary, foregroundColor: Colors.white, elevation: 0);
+    base.copyWith(backgroundColor: getPrimaryColor(), foregroundColor: Colors.white, elevation: 0);
 
 /// Returns app-wide [CheckboxThemeData].
 ///
@@ -86,43 +80,59 @@ ElevatedButtonThemeData _elevatedButtonTheme(ElevatedButtonThemeData base) => El
         backgroundColor: MaterialStateProperty.resolveWith(_getButtonBackgroundColor),
         foregroundColor: MaterialStateProperty.resolveWith(_getButtonForegroundColor),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-          RoundedRectangleBorder(borderRadius: borderRadius),
+          RoundedRectangleBorder(borderRadius: getBorderRadius()),
         ),
       ),
     );
 
 // Private functions for conditional widget styling in app theme
 
-/// Returns button background colour as [Color] depending on the [MaterialState] of the widget (tracked in [states]).
+/// Returns button background [Color] depending on the [MaterialState] of the widget (tracked in [states]).
 Color _getButtonBackgroundColor(Set<MaterialState> states) {
   Color color;
 
   /// If [states] contains any of the [MaterialState]s defined in [interactiveStates],
   /// then the button is being interacted with.
   if (states.any(interactiveStates.contains)) {
-    color = Colors.blue.shade700;
+    color = getSecondaryColor();
   } else if (states.any((state) => state == MaterialState.disabled)) {
     // Button is disabled
     color = Colors.grey.shade400;
   } else {
     // Default case
-    color = primary;
+    color = getPrimaryColor();
   }
 
   return color;
 }
 
-/// Returns button foreground colour as [Color] depending on the [MaterialState] of the widget (tracked in [states]).
+/// Returns button foreground [Color] depending on the [MaterialState] of the widget (tracked in [states]).
 Color _getButtonForegroundColor(Set<MaterialState> states) {
   return states.any((state) => state == MaterialState.disabled) ? Colors.white54 : Colors.white;
 }
 
-// Public functions for styling which lives outside the app theme and must be applied on a per-widget basis
+// Public functions for styling which either lives outside the app theme or
+// otherwise needs to be accessible globally to be applied on a per-widget basis
+
+/// Returns app-wide primary [Color]
+Color getPrimaryColor() {
+  return Colors.deepPurpleAccent.shade100;
+}
+
+/// Returns app-wide secondary [Color]
+Color getSecondaryColor() {
+  return Colors.deepPurpleAccent;
+}
+
+/// Returns app-wide widget [BorderRadius]
+BorderRadius getBorderRadius() {
+  return BorderRadius.circular(10);
+}
 
 /// Returns [BoxDecoration] used for styling [FlipCard]s
 BoxDecoration getFlipCardBoxDecoration() {
   return BoxDecoration(
     color: Colors.grey[300],
-    borderRadius: borderRadius,
+    borderRadius: getBorderRadius(),
   );
 }
