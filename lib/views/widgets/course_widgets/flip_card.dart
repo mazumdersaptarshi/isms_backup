@@ -29,21 +29,24 @@ class CustomFlipCard extends StatelessWidget {
       width: 200,
       decoration: getFlipCardBoxDecoration(),
       child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Image.asset(
-            //   imagePath,
-            //   width: 180,
-            //   height: 180,
-            // ),
-            // const SizedBox(height: 20),
-            Text(
-              content.flipCardFront,
-              // style: Format.flipCardText,
-            ),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Image.asset(
+              //   imagePath,
+              //   width: 180,
+              //   height: 180,
+              // ),
+              // const SizedBox(height: 20),
+              Text(
+                content.flipCardFront,
+                // style: Format.flipCardText,
+              ),
+            ],
+          ),
         ),
       ),
     );
