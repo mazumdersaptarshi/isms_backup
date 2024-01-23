@@ -33,6 +33,8 @@ ThemeData _ismsTheme() {
     appBarTheme: _appBarTheme(base.appBarTheme),
     checkboxTheme: _checkboxTheme(base.checkboxTheme),
     elevatedButtonTheme: _elevatedButtonTheme(base.elevatedButtonTheme),
+    expansionTileTheme: _expansionTileTheme(base.expansionTileTheme),
+    listTileTheme: _listTileTheme(base.listTileTheme),
   );
 }
 
@@ -85,6 +87,21 @@ ElevatedButtonThemeData _elevatedButtonTheme(ElevatedButtonThemeData base) => El
       ),
     );
 
+/// Returns app-wide [ExpansionTileThemeData].
+ExpansionTileThemeData _expansionTileTheme(ExpansionTileThemeData base) => ExpansionTileThemeData(
+      backgroundColor: getPrimaryColor(),
+      collapsedBackgroundColor: Colors.grey[300],
+      iconColor: Colors.white,
+      collapsedIconColor: Colors.black,
+      textColor: Colors.white,
+      // collapsedTextColor: Colors.black,
+      shape: RoundedRectangleBorder(borderRadius: getBorderRadius()),
+      collapsedShape: RoundedRectangleBorder(borderRadius: getBorderRadius()),
+    );
+
+/// Returns app-wide [ListTileThemeData].
+ListTileThemeData _listTileTheme(ListTileThemeData base) => const ListTileThemeData(textColor: Colors.white);
+
 // Private functions for conditional widget styling in app theme
 
 /// Returns button background [Color] depending on the [MaterialState] of the widget (tracked in [states]).
@@ -127,6 +144,11 @@ Color getSecondaryColor() {
 /// Returns app-wide widget [BorderRadius]
 BorderRadius getBorderRadius() {
   return BorderRadius.circular(10);
+}
+
+/// Returns [BoxDecoration] used for styling [ExpansionTile]s
+BoxDecoration getExpansionTileBoxDecoration() {
+  return BoxDecoration(border: Border.all(), borderRadius: getBorderRadius());
 }
 
 /// Returns [BoxDecoration] used for styling [FlipCard]s
