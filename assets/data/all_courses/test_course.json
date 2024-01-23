@@ -1,1 +1,122 @@
-{"courseId": "ip78hd","courseTitle": "Test Course","courseDescription": "Test Course description","courseSections": [{"sectionId": "section1","sectionTitle": "Section 1","sectionElements": [{"elementId": "html1","elementType": "html","elementTitle": "Static HTML 1","elementContent": "<html><body><p>HTML 1<br>This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.<br><b>This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.</b><br><s>This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.</s><br>This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.<br> IT LOOKS LIKE WE CANNOT SET FONT SIZE IN HTML HERE</p></body></html>"},{"elementId": "question1","elementType": "question","elementTitle": "Multiple choice question with single answer selection","elementContent": [{"questionId": "ssq1","questionType": "singleSelectionQuestion","questionText": "Section 1 Question","questionAnswers": [{"answerId": "ssq1a1","answerText": "Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. ","answerCorrect": false},{"answerId": "ssq1a2","answerText": "Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. ","answerCorrect": true},{"answerId": "ssq1a3","answerText": "Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. ","answerCorrect": false}]}]}]},{"sectionId": "section2","sectionTitle": "Section 2","sectionElements": [{"elementId": "question2","elementType": "question","elementTitle": "Multiple choice question with multiple answer selection","elementContent": [{"questionId": "msq1","questionType": "multipleSelectionQuestion","questionText": "Section 2 Question","questionAnswers": [{"answerId": "msq1a1","answerText": "A1","answerCorrect": true},{"answerId": "msq1a2","answerText": "A2","answerCorrect": false},{"answerId": "msq1a3","answerText": "A3","answerCorrect": false},{"answerId": "msq1a4","answerText": "A4","answerCorrect": true}]}]}]},   {   "sectionId": "section3",   "sectionTitle": "Section 3",   "sectionElements": [   {   "elementId": "html2",   "elementType": "html",   "elementTitle": "Static HTML 2",   "elementContent": "<html><body><p>HTML 1<br>This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.<br><b>This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.</b><br><s>This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.</s><br>This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.<br> IT LOOKS LIKE WE CANNOT SET FONT SIZE IN HTML HERE</p></body></html>"   },   {   "elementId": "flipcards1",   "elementType": "flipCard",   "elementTitle": "FlipCards",   "elementContent": [   {   "flipCardId": "fc1",   "flipCardFront": "Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. ",   "flipCardBack": "Back 1. Back 1. Back 1. Back 1. Back 1. Back 1. Back 1. Back 1. Back 1. Back 1. Back 1. Back 1. "   },   {   "flipCardId": "fc2",   "flipCardFront": "Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. ",   "flipCardBack": "Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. "   },   {   "flipCardId": "fc3",   "flipCardFront": "Front 3. Front 3. Front 3. Front 3. Front 3. Front 3. Front 3. Front 3. Front 3. Front 3. Front 3. Front 3. Front 3. Front 3. Front 3. Front 3. Front 3. Front 3. Front 3. ",   "flipCardBack": "Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. "   }   ]   }   ]   }]}
+{
+    "courseId":"ip78hd",
+    "courseTitle":"Test Course",
+    "courseDescription":"Test Course description",
+    "courseSections":[
+        {
+            "sectionId":"section1",
+            "sectionTitle":"Section 1",
+            "sectionElements":[
+                {
+                    "elementId":"html1",
+                    "elementType":"html",
+                    "elementTitle":"Static HTML 1",
+                    "elementContent":"<html><body><p>HTML 1<br>This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.<br><b>This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.</b><br><s>This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.</s><br>This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.<br> IT LOOKS LIKE WE CANNOT SET FONT SIZE IN HTML HERE</p></body></html>"
+                },
+                {
+                    "elementId":"question1",
+                    "elementType":"question",
+                    "elementTitle":"Multiple choice question with single answer selection",
+                    "elementContent":[
+                        {
+                            "questionId":"ssq1",
+                            "questionType":"singleSelectionQuestion",
+                            "questionText":"Section 1 Question",
+                            "questionAnswers":[
+                                {
+                                    "answerId":"ssq1a1",
+                                    "answerText":"Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. Answer 1. ",
+                                    "answerCorrect":false
+                                },
+                                {
+                                    "answerId":"ssq1a2",
+                                    "answerText":"Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. Answer 2. ",
+                                    "answerCorrect":true
+                                },
+                                {
+                                    "answerId":"ssq1a3",
+                                    "answerText":"Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. Answer 3. ",
+                                    "answerCorrect":false
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "sectionId":"section2",
+            "sectionTitle":"Section 2",
+            "sectionElements":[
+                {
+                    "elementId":"question2",
+                    "elementType":"question",
+                    "elementTitle":"Multiple choice question with multiple answer selection",
+                    "elementContent":[
+                        {
+                            "questionId":"msq1",
+                            "questionType":"multipleSelectionQuestion",
+                            "questionText":"Section 2 Question",
+                            "questionAnswers":[
+                                {
+                                    "answerId":"msq1a1",
+                                    "answerText":"A1",
+                                    "answerCorrect":true
+                                },
+                                {
+                                    "answerId":"msq1a2",
+                                    "answerText":"A2",
+                                    "answerCorrect":false
+                                },
+                                {
+                                    "answerId":"msq1a3",
+                                    "answerText":"A3",
+                                    "answerCorrect":false
+                                },
+                                {
+                                    "answerId":"msq1a4",
+                                    "answerText":"A4",
+                                    "answerCorrect":true
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "sectionId":"section3",
+            "sectionTitle":"Section 3",
+            "sectionElements":[
+                {
+                    "elementId":"html2",
+                    "elementType":"html",
+                    "elementTitle":"Static HTML 2",
+                    "elementContent":"<html><body><p>HTML 1<br>This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.<br><b>This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.</b><br><s>This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.</s><br>This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.This is question part in HTML.<br> IT LOOKS LIKE WE CANNOT SET FONT SIZE IN HTML HERE</p></body></html>"
+                },
+                {
+                    "elementId":"flipcards1",
+                    "elementType":"flipCard",
+                    "elementTitle":"FlipCards",
+                    "elementContent":[
+                        {
+                            "flipCardId":"fc1",
+                            "flipCardFront":"Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. ",
+                            "flipCardBack":"Back 1. Back 1. Back 1. Back 1. Back 1. Back 1. Back 1. Back 1. Back 1. Back 1. Back 1. Back 1. "
+                        },
+                        {
+                            "flipCardId":"fc2",
+                            "flipCardFront":"Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. ",
+                            "flipCardBack":"Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. "
+                        },
+                        {
+                            "flipCardId":"fc3",
+                            "flipCardFront":"Front 3. Front 3. Front 3. Front 3. Front 3. Front 3. Front 3. Front 3. Front 3. Front 3. Front 3. Front 3. Front 3. Front 3. Front 3. Front 3. Front 3. Front 3. Front 3. ",
+                            "flipCardBack":"Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. Back 3. "
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
