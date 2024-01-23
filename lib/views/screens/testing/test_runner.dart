@@ -72,18 +72,6 @@ class TestRunner extends StatelessWidget {
                   print(AdminState().fetchUsersData());
                 },
                 child: Text('Get all Users')),
-            ElevatedButton(
-                onPressed: () {
-                  print('-----------------');
-                  print(AdminState().getCoursesForUser('jHa0j6gTUUPZZEdfA6NLwND0Y7A3'));
-                },
-                child: Text('Get Courses for user jHa0j6gTUUPZZEdfA6NLwND0Y7A3')),
-            ElevatedButton(
-                onPressed: () {
-                  print('-----------------');
-                  print(AdminState().getExamsProgressForCourseForUser('jHa0j6gTUUPZZEdfA6NLwND0Y7A3', 'ip78hd'));
-                },
-                child: Text('Get Webb Dev Course Exam for User jHa0j6gTUUPZZEdfA6NLwND0Y7A3')),
           ],
         ),
       ),

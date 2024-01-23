@@ -60,65 +60,74 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
   Widget build(BuildContext context) {
     final loggedInState = context.watch<LoggedInState>();
     final String uid = 'gZZg3iv6e2YsoMXlMrXIVgf6Ycl2';
-    Map<String, dynamic> coursesDetails = {};
-    Map<String, dynamic> examDetails = {};
-    Map<String, dynamic> userAllData = {};
+    Map<String, dynamic> _coursesDetails = {};
+    Map _userAllData = {};
 
-    Future<Map<String, dynamic>> fetchAllDataForUser(String uid) async {
-      Map userAllData = await adminState.getAllDataForUser(uid);
-      Map userCourses = userAllData['courses'];
-      Map userExams = userAllData['exams'];
-      print('EXAMS: $userExams');
-      for (var courseProgressItem in userCourses.entries) {
-        //gets the course details from the database
-        Map fetchedCourse = await CourseProvider.getCourseByID(courseId: courseProgressItem.key);
-        int fetchedCourseSectionsLength =
-            await CourseProvider.getSectionsCountForCourse(courseId: courseProgressItem.key);
-        int fetchedExamsCount = await ExamProvider.getExamsCountForCourse(courseId: courseProgressItem.key);
-        List fetchedCourseExams = await ExamProvider.getExamsByCourseId(courseId: courseProgressItem.key);
-
-        coursesDetails[courseProgressItem.key] = {
-          'courseId': fetchedCourse['courseId'],
-          'courseName': fetchedCourse['courseName'],
-          'courseSections': fetchedCourse['courseSections'],
-          'courseItemsLength': fetchedCourseSectionsLength + fetchedExamsCount,
-          'courseExams': fetchedCourseExams,
-          'completionStatus': courseProgressItem.value.completionStatus,
-          'completedSections': courseProgressItem.value.completedSections,
-          'completedExams': courseProgressItem.value.completedExams,
-          'userExams': userExams,
-        };
-      }
-
-      return coursesDetails;
+    Future<Map<String, dynamic>> _fetchAllCoursesDataForUser({required String uid}) async {
+      _userAllData = await adminState.getAllDataForUser(uid);
+      _coursesDetails = await adminState.buildUserCoursesDetailsMapUserDetailsPage(userAllData: _userAllData);
+      return _coursesDetails;
     }
 
-    void examsMap({required Map<String, dynamic> allExams}) {}
+    Map<String, dynamic> _fetchAllExamsProgressDataForCourseForUser({required String uid, required String courseId}) {
+      return adminState.getExamsProgressForCourseForUser(uid, courseId);
+    }
 
-    Widget examAttempts(Map<String, dynamic> examAttempts) {
-      List<Widget> attemptsList = [];
-      examAttempts.forEach((key, value) {
-        attemptsList.add(Row(
-          children: [
-            Text(value.attemptId.toString()),
-            SizedBox(
-              width: 10,
-            ),
-            Text(value.startTime.toString()),
-            SizedBox(
-              width: 10,
-            ),
-            Text(value.completionStatus.toString()),
-            SizedBox(
-              width: 10,
-            ),
-            Text('${value.score.toString()}%'),
-          ],
-        ));
-      });
-      return Column(
-        children: attemptsList,
+    Widget _attemptWidget({required Map<String, dynamic> attempt}) {
+      Widget attemptWidget = Row(
+        children: [
+          Text('${attempt['attemptId']}'),
+          SizedBox(
+            width: 20,
+          ),
+          Text('${attempt['startTime']}'),
+          SizedBox(
+            width: 20,
+          ),
+          Text('${attempt['completionStatus']}'),
+          SizedBox(
+            width: 20,
+          ),
+          Text('${attempt['score']}'),
+          SizedBox(
+            width: 20,
+          ),
+          Text('${attempt['responses']}'),
+        ],
       );
+      return attemptWidget;
+    }
+
+    List<Widget> _examAttemptsList(List<dynamic> attempts) {
+      List<Widget> attemptWidgets = [];
+      for (var attempt in attempts) {
+        attemptWidgets.add(_attemptWidget(attempt: attempt));
+      }
+      return attemptWidgets;
+    }
+
+    Widget _courseExamWidget({required Map<String, dynamic> examData}) {
+      Widget courseDescription = Row(
+        children: [
+          Text('${examData['examId']}'),
+          SizedBox(
+            width: 20,
+          ),
+          Text('${examData['examTitle']}'),
+        ],
+      );
+      return courseDescription;
+    }
+
+    List<Widget> _courseExamsList({required Map<String, dynamic> allExamsTakenByUser}) {
+      List<Widget> widgets = [];
+      for (var entry in allExamsTakenByUser.entries) {
+        widgets.add(_courseExamWidget(examData: entry.value));
+
+        widgets.addAll(_examAttemptsList(entry.value['attempts']));
+      }
+
+      return widgets;
     }
 
     return Scaffold(
@@ -148,7 +157,7 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
             },
           ),
           FutureBuilder<Map<String, dynamic>>(
-            future: fetchAllDataForUser(uid), // The async function call
+            future: _fetchAllCoursesDataForUser(uid: uid), // The async function call
             builder: (BuildContext context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 // Display a loading indicator while waiting for the data
@@ -175,9 +184,6 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
                             child: Column(
                               children: [
                                 ListTile(
-                                  // title: Text(
-                                  //   'course: ${snapshot.data!.values.elementAt(index).toString()}',
-                                  // ),
                                   title: Text(
                                     'course: ${snapshot.data!.values.elementAt(index)['courseName'].toString()}',
                                   ),
@@ -186,35 +192,9 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
                                   '(${snapshot.data!.values.elementAt(index)['completedSections']} + '
                                   ' ${snapshot.data!.values.elementAt(index)['completedExams']}) /  ${snapshot.data!.values.elementAt(index)['courseItemsLength']}',
                                 ),
-                                // Text(
-                                //   '${AdminState().getExamsProgressForCourseForUser(uid, snapshot.data!.values.elementAt(index)['courseId'])}',
-                                // ),
-                                // for (var entry in AdminState()
-                                //     .getExamsProgressForCourseForUser(
-                                //         uid, snapshot.data!.values.elementAt(index)['courseId'])
-                                //     .entries)
-                                //   Column(
-                                //     children: [
-                                //       examAttempts(entry.value.attempts),
-                                //     ],
-                                //   ),
-                                for (var entry in AdminState()
-                                    .getExamsProgressForCourseForUser(
-                                        uid, snapshot.data!.values.elementAt(index)['courseId'])
-                                    .entries)
-                                  Column(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          '${entry.toString()}',
-                                          style: TextStyle(
-                                            backgroundColor: Colors.blue,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  )
+                                ..._courseExamsList(
+                                    allExamsTakenByUser: _fetchAllExamsProgressDataForCourseForUser(
+                                        uid: uid, courseId: snapshot.data!.values.elementAt(index)['courseId'])),
                               ],
                             ),
                           ),

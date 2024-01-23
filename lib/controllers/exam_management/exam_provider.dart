@@ -14,7 +14,7 @@ class ExamProvider extends ChangeNotifier {
   }
 
   /// Searches for Course details by ID from Local storage and returns the details. For now, we get this data from JSON
-  static Future<Map<String, dynamic>> getExamByIDLocal({String? examId}) async {
+  static Map<String, dynamic> getExamByIDLocal({String? examId}) {
     Map<String, dynamic> fetchedExam =
         {}; //this variable will store the course that needs to be fetched from the local storage
 
@@ -22,8 +22,9 @@ class ExamProvider extends ChangeNotifier {
     if (_allExams.isEmpty) {
       _allExams = getAllExams();
     }
-    List examsList = _allExams['examsList']; // Gets the List of courses
-    for (Map<String, dynamic> exam in examsList) {
+    // print(_allExams);
+    // List examsList = _allExams['examsList']; // Gets the List of courses
+    for (Map<String, dynamic> exam in _allExams) {
       if (exam['examId'] == examId) {
         fetchedExam = exam;
       }

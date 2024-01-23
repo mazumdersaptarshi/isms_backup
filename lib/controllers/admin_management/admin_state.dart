@@ -1,12 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:isms/controllers/course_management/course_provider.dart';
+import 'package:isms/controllers/exam_management/exam_provider.dart';
 import 'package:isms/controllers/storage/hive_service/hive_service.dart';
 import 'package:isms/services/hive/config/config.dart';
 
 class AdminState {
   static final AdminState _instance = AdminState._internal();
   Map _allUsersData = {};
-  Map<String, dynamic> _allUserData = {};
+  Map<String, dynamic> _userAllData = {};
 
   AdminState._internal() {
     _allUsersData = HiveService.getExistingLocalDataFromUsersBox();
@@ -24,21 +25,36 @@ class AdminState {
     await Future.delayed(Duration(seconds: 2));
     print('allUserData: ${_allUsersData}');
 
-    _allUserData = Map.from(_allUsersData[uid]);
-    return _allUserData;
+    _userAllData = Map.from(_allUsersData[uid]);
+    return _userAllData;
   }
 
-  Future<Map<String, dynamic>> getCoursesForUser(String uid) async {
-    Map<String, dynamic> courses = {};
+  Future<Map<String, dynamic>> buildUserCoursesDetailsMapUserDetailsPage({required Map userAllData}) async {
+    Map<String, dynamic> coursesDetails = {};
 
-    await Future.delayed(Duration(seconds: 2));
-    print('allUserData: ${_allUsersData}');
+    Map userCourses = userAllData['courses'];
+    Map userExams = userAllData['exams'];
+    for (var courseProgressItem in userCourses.entries) {
+      //gets the course details from the database
+      Map fetchedCourse = await CourseProvider.getCourseByID(courseId: courseProgressItem.key);
+      int fetchedCourseSectionsLength =
+          await CourseProvider.getSectionsCountForCourse(courseId: courseProgressItem.key);
+      int fetchedExamsCount = await ExamProvider.getExamsCountForCourse(courseId: courseProgressItem.key);
+      List fetchedCourseExams = await ExamProvider.getExamsByCourseId(courseId: courseProgressItem.key);
 
-    courses = Map.from(_allUsersData[uid]['courses']);
-    print(_allUsersData[uid]);
-
-    // print('courses that user has enrolled: $courses');
-    return courses;
+      coursesDetails[courseProgressItem.key] = {
+        'courseId': fetchedCourse['courseId'],
+        'courseName': fetchedCourse['courseName'],
+        'courseSections': fetchedCourse['courseSections'],
+        'courseItemsLength': fetchedCourseSectionsLength + fetchedExamsCount,
+        'courseExams': fetchedCourseExams,
+        'completionStatus': courseProgressItem.value.completionStatus,
+        'completedSections': courseProgressItem.value.completedSections,
+        'completedExams': courseProgressItem.value.completedExams,
+        'userExams': userExams,
+      };
+    }
+    return coursesDetails;
   }
 
   ///This function gets all the Exams taken by the User for that particular  course
@@ -51,17 +67,31 @@ class AdminState {
       Map all_exams = _allUsersData[uid][DatabaseFields.exams.name];
       all_exams.forEach((key, value) {
         if (value.courseId == courseId) {
-          // exams[key] = value;
           exams[value.examId] = value.attempts;
         }
       });
     } catch (e) {}
-    // getExamAttemptsForCourseForUser(exams, 'de44qv');
-    /**
-     * Here we also get a list of exam IDs that the course has
-     */
 
-    // print(CourseProvider.getSectionsForCourse(courseId: courseId));
+    exams = buildExamsMapForCourseForUser(exams: exams);
     return exams;
+  }
+
+  Map<String, dynamic> buildExamsMapForCourseForUser({required Map<String, dynamic> exams}) {
+    Map<String, dynamic> userExamsProgress = {};
+    exams.forEach((examId, value) async {
+      Map<String, dynamic> examData = ExamProvider.getExamByIDLocal(examId: examId);
+      List listOfAttempts = [];
+      value.forEach((key, value) {
+        listOfAttempts.add(value.toMap());
+      });
+      userExamsProgress[examId] = {
+        'examId': examId,
+        'examTitle': examData['examTitle'],
+        'attempts': listOfAttempts,
+      };
+
+      print('__________');
+    });
+    return userExamsProgress;
   }
 }
