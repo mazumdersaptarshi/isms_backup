@@ -11,9 +11,32 @@ const Set<MaterialState> interactiveStates = <MaterialState>{
 };
 
 /// App-wide theme
-final ThemeData ismsTheme = _ismsTheme();
+final ThemeData ismsTheme = _ismsThemeDark();
 
 /// Returns app theme as [ThemeData], based on the default light theme with specific widget themes overridden.
+///
+ThemeData _ismsThemeDark() {
+  final ThemeData base = ThemeData.dark();
+
+  return base.copyWith(
+    colorScheme: base.colorScheme.copyWith(
+      primary: getPrimaryColor(),
+      onPrimary: Colors.white,
+      secondary: getSecondaryColor(),
+      onSecondary: Colors.white,
+      tertiary: Colors.orange,
+      onTertiary: Colors.black,
+      error: Colors.red,
+      background: Colors.black,
+      onBackground: Colors.red,
+    ),
+    textTheme: _textTheme(base.textTheme),
+    appBarTheme: _appBarTheme(base.appBarTheme),
+    checkboxTheme: _checkboxTheme(base.checkboxTheme),
+    elevatedButtonTheme: _elevatedButtonTheme(base.elevatedButtonTheme),
+  );
+}
+
 ThemeData _ismsTheme() {
   final ThemeData base = ThemeData.light();
 
@@ -133,12 +156,18 @@ Color _getButtonForegroundColor(Set<MaterialState> states) {
 
 /// Returns app-wide primary [Color]
 Color getPrimaryColor() {
-  return Colors.deepPurpleAccent.shade100;
+  // return Colors.deepPurpleAccent.shade100;
+  return Colors.blue.shade800;
+}
+
+Color getTertiaryColor1() {
+  return Colors.orangeAccent;
 }
 
 /// Returns app-wide secondary [Color]
 Color getSecondaryColor() {
-  return Colors.deepPurpleAccent;
+  // return Colors.deepPurpleAccent;
+  return Colors.blue.shade700;
 }
 
 /// Returns app-wide widget [BorderRadius]

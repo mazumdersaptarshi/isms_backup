@@ -1,3 +1,6 @@
+import 'dart:core';
+import 'dart:core';
+
 import 'package:flutter/cupertino.dart';
 import 'package:isms/controllers/course_management/course_provider.dart';
 import 'package:isms/controllers/exam_management/exam_provider.dart';
@@ -7,6 +10,7 @@ import 'package:isms/services/hive/config/config.dart';
 class AdminState {
   static final AdminState _instance = AdminState._internal();
   Map _allUsersData = {};
+
   Map<String, dynamic> _userAllData = {};
 
   AdminState._internal() {
