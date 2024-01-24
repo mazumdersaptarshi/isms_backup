@@ -1,0 +1,271 @@
+{
+    "courseId":"ip78hd",
+    "courseTitle":"Test Course",
+    "courseDescription":"Test Course description",
+    "courseSections":[
+        {
+            "sectionId":"section1",
+            "sectionTitle":"Section 1",
+            "sectionElements":[
+                {
+                    "elementId":"html1",
+                    "elementType":"html",
+                    "elementTitle":"Static HTML 1",
+                    "elementContent":"<html><body><p><b>What is Document AI?</b></p><p>Learn about the fundamentals of Document AI and how it turns unstructured content into business-ready structured data. You will focus on how Document AI uses machine learning (ML) on a scalable could-based platform to help customer unlock insights. You will also learn what Document AI is, determine how it works, review its use cases, and identify its competitive differentiators.</p></body></html>"
+                },
+                {
+                    "elementId":"question2",
+                    "elementType":"question",
+                    "elementTitle":"Multiple choice question with single answer selection",
+                    "elementContent":[
+                        {
+                            "questionId":"ssq1",
+                            "questionType":"singleSelectionQuestion",
+                            "questionText":"Section 2 Question",
+                            "questionAnswers":[
+                                {
+                                    "answerId":"ssq1a2",
+                                    "answerText":"ACK",
+                                    "answerCorrect":true
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "sectionId":"section2",
+            "sectionTitle":"Section 2",
+            "sectionElements":[
+                {
+                    "elementId":"html2",
+                    "elementType":"html",
+                    "elementTitle":"What is Document AI?",
+                    "elementContent":"<html><body><p><b>Why Document AI?</b></p><p>Document AI helps out customers to achieve their business goals by unlocking insights from documents using machine learning. While you may think that the use of paper is dwindling, consider these stats:</p><ul><li> Over 4 trillion paper documents in the US, growing at 22% per year.</li><li>Nearly 75% of a typical workers time is spent searching for and filling paper-based information</li><li>95% of corporate information exists on paper</li><li>75% of all documents get lost; 3% of the remainder are misfiled</li><li>Companies spend 20 in labor to file a document; 120 in labor to find a misfiled document; 220 in labor to recreate a lost document</li></ul></body></html>"
+                },
+                {
+                    "elementId":"question2",
+                    "elementType":"question",
+                    "elementTitle":"Multiple choice question with single answer selection",
+                    "elementContent":[
+                        {
+                            "questionId":"ssq1",
+                            "questionType":"singleSelectionQuestion",
+                            "questionText":"Section 2 Question",
+                            "questionAnswers":[
+                                {
+                                    "answerId":"ssq1a2",
+                                    "answerText":"ACK",
+                                    "answerCorrect":true
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "sectionId":"section3",
+            "sectionTitle":"Section 3",
+            "sectionElements":[
+                {
+                    "elementId":"html3",
+                    "elementType":"html",
+                    "elementTitle":"Static HTML 3",
+                    "elementContent":"<html><body><p><b>What is Document AI?</b></p><p>Almost every account you have will want to learn about new ways to serve their customers while improving how they leverage their data. You, on the other hand, also want to help your customers process documents while achieving your goals. Document AI can help you.</p><b>Select each card to learn more.</b></body></html>"
+                },
+                {
+                    "elementId":"flipcards1",
+                    "elementType":"flipCard",
+                    "elementTitle":"FlipCards",
+                    "elementContent":[
+                        {
+                            "flipCardId":"fc1",
+                            "flipCardFront":"Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. ",
+                            "flipCardBack":"Back 1. Back 1. Back 1. Back 1. Back 1. Back 1. Back 1. Back 1. Back 1. Back 1. Back 1. Back 1. "
+                        },
+                        {
+                            "flipCardId":"fc2",
+                            "flipCardFront":"Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. ",
+                            "flipCardBack":"Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. "
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "sectionId":"section4",
+            "sectionTitle":"Section 4",
+            "sectionElements":[
+                {
+                    "elementId":"html4",
+                    "elementType":"html",
+                    "elementTitle":"The Background on Document AI",
+                    "elementContent":"<html><body><p><b>The Background on Document AI?</b></p><p>For centuries, documents have been foundational to our societies. We record histories, establish laws, legitimize trade, launch companies, and confirm identities with documents.</p><p>The computer age has introduced the idea of digital documents, which now serve as the backbone of our modern societies, and the power and value of digital documents is immense.</p><p><b>Knowledge Check</b></p></body></html>"
+                },
+                {
+                    "elementId":"question2",
+                    "elementType":"question",
+                    "elementTitle":"Knowledge Check",
+                    "elementContent":[
+                        {
+                            "questionId":"ssq1",
+                            "questionType":"multipleSelectionQuestion",
+                            "questionText":"Identify some of the industries that use Document AI to transform their businesses.",
+                            "questionAnswers":[
+                                {
+                                    "answerId":"ssq1a1",
+                                    "answerText":"Engineering, Manufacturing, and Construction",
+                                    "answerCorrect":true
+                                },
+                                {
+                                    "answerId":"ssq1a2",
+                                    "answerText":"Supply Chain",
+                                    "answerCorrect":true
+                                },
+                                {
+                                    "answerId":"ssq1a3",
+                                    "answerText":"Sports",
+                                    "answerCorrect":true
+                                },
+                                {
+                                    "answerId":"ssq1a4",
+                                    "answerText":"Health Care an Life Sciences",
+                                    "answerCorrect":true
+                                }
+                            ]
+                        },
+                        {
+                            "questionId":"ssq2",
+                            "questionType":"multipleSelectionQuestion",
+                            "questionText":"Identify some of the industries that use Document AI to transform their businesses.",
+                            "questionAnswers":[
+                                {
+                                    "answerId":"ssq2a1",
+                                    "answerText":"Engineering, Manufacturing, and Construction",
+                                    "answerCorrect":true
+                                },
+                                {
+                                    "answerId":"ssqa2",
+                                    "answerText":"Supply Chain",
+                                    "answerCorrect":true
+                                },
+                                {
+                                    "answerId":"ssq2a3",
+                                    "answerText":"Sports",
+                                    "answerCorrect":true
+                                },
+                                {
+                                    "answerId":"ssq2a4",
+                                    "answerText":"Health Care an Life Sciences",
+                                    "answerCorrect":true
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "elementId":"html4",
+                    "elementType":"html",
+                    "elementTitle":"Document AI Use Cases",
+                    "elementContent":"<html><body><p><b>Document AI Use Cases</b></p><p>Document AI aims to be the platform of choice for business-ready document processing, and we have specialized models for some of the world\'s most commonly used business documents. These specialized or pretrained document models enable higher levels of accuracy, especially with custom document layouts, and always output the same core concepts (“schema”). We have grouped some of these specialized models into bundles that address high-value use cases.</p><p>It is important to note that Document AI has been designed to address a customer’s end-to-end document workflow – but not necessarily the full business workflow. For example, Document AI can help a customer classify and extract information from an invoice, but it does not address the full accounts payable process. Customers can either integrate the Document AI API into their existing workflows (on their own, or with a systems integrator), or they can work with ISV / SaaS providers who leverage Document AI directly.</p></body></html>"
+                }
+            ]
+        },
+        {
+            "sectionId":"section5",
+            "sectionTitle":"Section 5",
+            "sectionElements":[
+                {
+                    "elementId":"question5",
+                    "elementType":"question",
+                    "elementTitle":"Assessment",
+                    "elementContent":[
+                        {
+                            "questionId":"ssq1",
+                            "questionType":"singleSelectionQuestion",
+                            "questionText":"What is the output of print(0.1 + 0.2 == 0.3)?",
+                            "questionAnswers":[
+                                {
+                                    "answerId":"ssq1a1",
+                                    "answerText":"True",
+                                    "answerCorrect":false
+                                },
+                                {
+                                    "answerId":"ssq1a2",
+                                    "answerText":"False",
+                                    "answerCorrect":false
+                                },
+                                {
+                                    "answerId":"ssq1a3",
+                                    "answerText":"Error",
+                                    "answerCorrect":true
+                                },
+                                {
+                                    "answerId":"ssq1a4",
+                                    "answerText":"None",
+                                    "answerCorrect":false
+                                }
+                            ]
+                        },
+                        {
+                            "questionId":"ssq2",
+                            "questionType":"singleSelectionQuestion",
+                            "questionText":"How do you insert COMMENTS in Python code?",
+                            "questionAnswers":[
+                                {
+                                    "answerId":"ssq2a1",
+                                    "answerText":"# comment",
+                                    "answerCorrect":true
+                                },
+                                {
+                                    "answerId":"ssq2a2",
+                                    "answerText":"// comment",
+                                    "answerCorrect":false
+                                },
+                                {
+                                    "answerId":"ssq2a3",
+                                    "answerText":"/* comment */",
+                                    "answerCorrect":false
+                                },
+                                {
+                                    "answerId":"ssq2a4",
+                                    "answerText":"<!-- comment -->",
+                                    "answerCorrect":false
+                                }
+                            ]
+                        },
+                        {
+                            "questionId":"ssq3",
+                            "questionType":"singleSelectionQuestion",
+                            "questionText":"Which of the following is a correct variable declaration in Python?",
+                            "questionAnswers":[
+                                {
+                                    "answerId":"ssq3a1",
+                                    "answerText":"int a = 10",
+                                    "answerCorrect":true
+                                },
+                                {
+                                    "answerId":"ssq3a2",
+                                    "answerText":"a = 10",
+                                    "answerCorrect":false
+                                },
+                                {
+                                    "answerId":"ssq3a3",
+                                    "answerText":"var a = 10",
+                                    "answerCorrect":false
+                                },
+                                {
+                                    "answerId":"ssq3a4",
+                                    "answerText":"let a = 10",
+                                    "answerCorrect":false
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
