@@ -100,7 +100,7 @@ ExpansionTileThemeData _expansionTileTheme(ExpansionTileThemeData base) => Expan
     );
 
 /// Returns app-wide [ListTileThemeData].
-ListTileThemeData _listTileTheme(ListTileThemeData base) => const ListTileThemeData(textColor: Colors.white);
+ListTileThemeData _listTileTheme(ListTileThemeData base) => const ListTileThemeData(textColor: Colors.black);
 
 // Private functions for conditional widget styling in app theme
 
