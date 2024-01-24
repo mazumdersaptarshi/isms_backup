@@ -20,7 +20,6 @@ class CourseList extends StatefulWidget {
 class _CourseListState extends State<CourseList> {
   /// SizedBox for adding consistent spacing between widgets
   static const SizedBox _separator = SizedBox(height: 20);
-  static const EdgeInsets _padding = EdgeInsets.all(25.0);
 
   // Data structures containing course content populated in initState() then not changed
   /// Course data represented as a JSON [String]
@@ -41,12 +40,6 @@ class _CourseListState extends State<CourseList> {
 
   final Map<String, Course> _courses = {};
   final Map<String, Exam> _exams = {};
-
-  /// Ordered [List] of section IDs to allow lookup by section index
-  final List<String> _courseSections = [];
-
-  /// [Map] of widgets for all course sections keyed by section ID
-  final Map<String, dynamic> _courseWidgets = {};
 
   @override
   void initState() {
@@ -93,28 +86,33 @@ class _CourseListState extends State<CourseList> {
     // depending on `elementType` from the JSON
     _courses.forEach((courseId, course) {
       contentWidgets.add(Container(
-          padding: _padding,
+          padding: const EdgeInsets.fromLTRB(25.0, 25.0, 25.0, 0.0),
           child: Container(
               decoration: getExpansionTileBoxDecoration(),
               child: ExpansionTile(
                 title: Text(course.courseTitle),
                 subtitle: Text(course.courseDescription),
-                childrenPadding: _padding,
+                childrenPadding: const EdgeInsets.fromLTRB(25.0, 10.0, 25.0, 25.0),
                 children: [
-                  ElevatedButton(onPressed: () => {print(course.courseTitle)}, child: Text('Start Course')),
+                  Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                          decoration: getExpansionTileBoxDecoration(),
+                          child: ElevatedButton(
+                              onPressed: () => {print(course.courseTitle)}, child: Text('Start Course')))),
                   _separator,
                   Container(
                       decoration: getExpansionTileBoxDecoration(),
                       child: ExpansionTile(
                           title: Text("Sections (0/${course.courseSections.length} Completed)"),
-                          childrenPadding: _padding,
+                          childrenPadding: const EdgeInsets.fromLTRB(25.0, 10.0, 25.0, 25.0),
                           children: [..._getCourseSections(course.courseId)])),
                   _separator,
                   Container(
                       decoration: getExpansionTileBoxDecoration(),
                       child: ExpansionTile(
                           title: Text("Exams"),
-                          childrenPadding: _padding,
+                          childrenPadding: const EdgeInsets.fromLTRB(25.0, 10.0, 25.0, 25.0),
                           children: [..._getExamWidgets(course.courseId)]))
                 ],
               ))));
@@ -129,13 +127,26 @@ class _CourseListState extends State<CourseList> {
     for (Section section in _courses[courseId]!.courseSections) {
       contentWidgets.add(Container(
           decoration: getExpansionTileBoxDecoration(),
-          child: ListTile(
-            title: Text(
-              section.sectionTitle,
-              // style: const TextStyle(color: Colors.white),
-            ),
-            onTap: () => {print(section.sectionTitle)},
-          )));
+          child: Row(children: [
+            section.sectionTitle == 'Section 1'
+                ? IconButton(
+                    icon: Icon(Icons.check_circle_outline, color: Colors.green, shadows: [getIconBoxShadow()]),
+                    padding: const EdgeInsets.only(left: 15.0),
+                    onPressed: () => {print(section.sectionTitle)},
+                    style: getIconButtonStyleTransparent(),
+                  )
+                : IconButton(
+                    icon: Icon(Icons.highlight_off, color: Colors.red, shadows: [getIconBoxShadow()]),
+                    padding: const EdgeInsets.only(left: 15.0),
+                    onPressed: () => {print(section.sectionTitle)},
+                    style: getIconButtonStyleTransparent(),
+                  ),
+            Flexible(
+                child: ListTile(
+              title: Text(section.sectionTitle),
+              onTap: () => {print(section.sectionTitle)},
+            ))
+          ])));
       contentWidgets.add(_separator);
     }
 

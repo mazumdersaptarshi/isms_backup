@@ -11,32 +11,9 @@ const Set<MaterialState> interactiveStates = <MaterialState>{
 };
 
 /// App-wide theme
-final ThemeData ismsTheme = _ismsThemeDark();
+final ThemeData ismsTheme = _ismsTheme();
 
 /// Returns app theme as [ThemeData], based on the default light theme with specific widget themes overridden.
-///
-ThemeData _ismsThemeDark() {
-  final ThemeData base = ThemeData.dark();
-
-  return base.copyWith(
-    colorScheme: base.colorScheme.copyWith(
-      primary: getPrimaryColor(),
-      onPrimary: Colors.white,
-      secondary: getSecondaryColor(),
-      onSecondary: Colors.white,
-      tertiary: Colors.orange,
-      onTertiary: Colors.black,
-      error: Colors.red,
-      background: Colors.black,
-      onBackground: Colors.red,
-    ),
-    textTheme: _textTheme(base.textTheme),
-    appBarTheme: _appBarTheme(base.appBarTheme),
-    checkboxTheme: _checkboxTheme(base.checkboxTheme),
-    elevatedButtonTheme: _elevatedButtonTheme(base.elevatedButtonTheme),
-  );
-}
-
 ThemeData _ismsTheme() {
   final ThemeData base = ThemeData.light();
 
@@ -101,11 +78,11 @@ CheckboxThemeData _checkboxTheme(CheckboxThemeData base) =>
 /// based on the [MaterialState] of the widget.
 ElevatedButtonThemeData _elevatedButtonTheme(ElevatedButtonThemeData base) => ElevatedButtonThemeData(
       style: ButtonStyle(
-        textStyle: MaterialStateProperty.all<TextStyle>(const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+        textStyle: const MaterialStatePropertyAll(TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
         backgroundColor: MaterialStateProperty.resolveWith(_getButtonBackgroundColor),
         foregroundColor: MaterialStateProperty.resolveWith(_getButtonForegroundColor),
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-          RoundedRectangleBorder(borderRadius: getBorderRadius()),
+        shape: MaterialStatePropertyAll(
+          getRoundedRectangleBorder(),
         ),
       ),
     );
@@ -118,12 +95,12 @@ ExpansionTileThemeData _expansionTileTheme(ExpansionTileThemeData base) => Expan
       collapsedIconColor: Colors.black,
       textColor: Colors.white,
       // collapsedTextColor: Colors.black,
-      shape: RoundedRectangleBorder(borderRadius: getBorderRadius()),
-      collapsedShape: RoundedRectangleBorder(borderRadius: getBorderRadius()),
+      shape: getRoundedRectangleBorder(),
+      collapsedShape: getRoundedRectangleBorder(),
     );
 
 /// Returns app-wide [ListTileThemeData].
-ListTileThemeData _listTileTheme(ListTileThemeData base) => const ListTileThemeData(textColor: Colors.black);
+ListTileThemeData _listTileTheme(ListTileThemeData base) => const ListTileThemeData(textColor: Colors.white);
 
 // Private functions for conditional widget styling in app theme
 
@@ -156,18 +133,18 @@ Color _getButtonForegroundColor(Set<MaterialState> states) {
 
 /// Returns app-wide primary [Color]
 Color getPrimaryColor() {
-  // return Colors.deepPurpleAccent.shade100;
-  return Colors.blue.shade800;
-}
-
-Color getTertiaryColor1() {
-  return Colors.orangeAccent;
+  return Colors.deepPurpleAccent.shade100;
+  // return Colors.blue.shade800;
 }
 
 /// Returns app-wide secondary [Color]
 Color getSecondaryColor() {
-  // return Colors.deepPurpleAccent;
-  return Colors.blue.shade700;
+  return Colors.deepPurpleAccent;
+  // return Colors.blue.shade700;
+}
+
+Color getTertiaryColor1() {
+  return Colors.orangeAccent;
 }
 
 /// Returns app-wide widget [BorderRadius]
@@ -177,7 +154,31 @@ BorderRadius getBorderRadius() {
 
 /// Returns [BoxDecoration] used for styling [ExpansionTile]s
 BoxDecoration getExpansionTileBoxDecoration() {
-  return BoxDecoration(border: Border.all(), borderRadius: getBorderRadius());
+  return BoxDecoration(color: getPrimaryColor(), borderRadius: getBorderRadius(), boxShadow: [getTileBoxShadow()]);
+}
+
+/// Returns [BoxShadow] used for styling [ExpansionTile]s and [ListTile]s
+BoxShadow getTileBoxShadow() {
+  return const BoxShadow(
+    color: Colors.black38,
+    spreadRadius: 1.5,
+    blurRadius: 1.5,
+    offset: Offset(0, 1.5),
+  );
+}
+
+/// Returns [BoxShadow] used for styling [Icon]s when drawn on top of widgets with poorly contrasting colours
+BoxShadow getIconBoxShadow() {
+  return const BoxShadow(
+    color: Colors.black,
+    blurRadius: 2.5,
+  );
+}
+
+/// Returns [ButtonStyle] used for styling [IconButton]s by removing on hover and on select colours
+/// to hide the fact that they are separate widgets
+ButtonStyle getIconButtonStyleTransparent() {
+  return const ButtonStyle(overlayColor: MaterialStatePropertyAll(Colors.transparent));
 }
 
 /// Returns [BoxDecoration] used for styling [FlipCard]s
@@ -186,4 +187,9 @@ BoxDecoration getFlipCardBoxDecoration() {
     color: Colors.grey[300],
     borderRadius: getBorderRadius(),
   );
+}
+
+/// Returns app-wide widget [RoundedRectangleBorder]
+RoundedRectangleBorder getRoundedRectangleBorder() {
+  return RoundedRectangleBorder(borderRadius: getBorderRadius());
 }
