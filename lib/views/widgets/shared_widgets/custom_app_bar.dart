@@ -6,6 +6,7 @@ import 'package:isms/controllers/user_management/logged_in_state.dart';
 import 'package:isms/views/screens/admin_screens/admin_console/admin_user_details_screen.dart';
 import 'package:isms/views/screens/admin_screens/timed_reminders_screen.dart';
 import 'package:isms/views/screens/authentication/login_screen.dart';
+import 'package:isms/views/screens/course_list.dart';
 import 'package:isms/views/screens/course_page.dart';
 import 'package:isms/views/screens/home_screen.dart';
 import 'package:isms/views/screens/reminder_screen.dart';
@@ -14,13 +15,12 @@ import 'package:isms/views/screens/user_screens/user_profile_screen.dart';
 
 mixin CustomAppBarMixin on StatelessWidget {
   final Map<String, ValueNotifier<bool>> hovering = {
-    "Explore": ValueNotifier(false),
+    "My Courses": ValueNotifier(false),
+    "Course Test": ValueNotifier(false),
     "Notifications": ValueNotifier(false),
     "Reminders": ValueNotifier(false),
     "Account": ValueNotifier(false),
-    "Course Test": ValueNotifier(false),
     "Admin Console": ValueNotifier(false),
-    "My Learning": ValueNotifier(false),
     "Tracking": ValueNotifier(false),
     "Admin Center": ValueNotifier(false),
   };
@@ -32,16 +32,19 @@ mixin CustomAppBarMixin on StatelessWidget {
     );
   }
 
+  void navigateToCourseListPage(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const CourseList()),
+    );
+  }
+
   void navigateToCourseTestPage(BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const CoursePage()),
     );
   }
-
-  void navigateToCoursesPage(BuildContext context) {}
-
-  void navigateToMyLearningPage(BuildContext context) {}
 
   void navigateToRemindersPage(BuildContext context, LoggedInState loggedInState) async {
     String userRole = loggedInState.currentUserRole;
@@ -218,13 +221,11 @@ class CustomAppBarWeb extends StatelessWidget with CustomAppBarMixin implements 
             : homeButtonItem(context, displayText: false),
       ),
       actions: <Widget>[
-        appBarItem(Icons.explore, "Explore", () => navigateToCoursesPage(context), _paddingValue),
-        appBarItem(Icons.lightbulb, "My Learning", () => navigateToMyLearningPage(context), _paddingValue),
-        appBarItem(Icons.lightbulb, "Course Test", () => navigateToCourseTestPage(context), _paddingValue),
+        appBarItem(Icons.list, "My Courses", () => navigateToCourseListPage(context), _paddingValue),
+        appBarItem(Icons.article, "Course Test", () => navigateToCourseTestPage(context), _paddingValue),
         appBarItem(Icons.track_changes, "Tracking", () => navigateToTrackingPage(context), _paddingValue),
         appBarItem(Icons.admin_panel_settings_rounded, "Admin Center", () => navigateToAdminCenterPage(context),
             _paddingValue),
-
         if (loggedInState?.currentUserRole == 'admin')
           appBarItem(Icons.notifications_active_rounded, "Notifications",
               () => navigateToRemindersPage(context, loggedInState!), _paddingValue),
