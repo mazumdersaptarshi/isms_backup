@@ -20,7 +20,7 @@
                 {
                   "questionId": "ssq1",
                   "questionType": "singleSelectionQuestion",
-                  "questionText": "SSQ",
+                  "questionText": "What is AI",
                   "questionAnswers": [
                     {
                       "answerId": "ssq1a1",

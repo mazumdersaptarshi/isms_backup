@@ -6,7 +6,9 @@ class CustomRadioList extends StatefulWidget {
   final List<Answer> values;
   final dynamic Function(dynamic selectedValue) onItemSelected;
 
-  const CustomRadioList({Key? key, required this.values, required this.onItemSelected}) : super(key: key);
+  const CustomRadioList(
+      {Key? key, required this.values, required this.onItemSelected})
+      : super(key: key);
 
   @override
   State<CustomRadioList> createState() => _CustomRadioListState();
@@ -22,10 +24,20 @@ class _CustomRadioListState extends State<CustomRadioList> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: _buildList(context),
+    return Align(
+      alignment: Alignment.center, // Use Alignment as needed
+      child: Container(
+        padding: const EdgeInsets.all(16.0), // Add padding as needed
+        constraints: BoxConstraints(
+          maxWidth: 800, // Set a maximum width
+          // Add other constraints as needed
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: _buildList(context),
+        ),
+      ),
     );
   }
 

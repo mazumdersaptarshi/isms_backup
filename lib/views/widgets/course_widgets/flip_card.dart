@@ -10,7 +10,9 @@ class CustomFlipCard extends StatelessWidget {
 
   // final String imagePath;
 
-  const CustomFlipCard({Key? key, required this.content, required this.onCardFlipped}) : super(key: key);
+  const CustomFlipCard(
+      {Key? key, required this.content, required this.onCardFlipped})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,7 @@ class CustomFlipCard extends StatelessWidget {
     return Container(
       height: 300,
       width: 200,
-      decoration: getFlipCardBoxDecoration(),
+      decoration: getFlipCardBoxDecorationFront(),
       child: Center(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -56,7 +58,7 @@ class CustomFlipCard extends StatelessWidget {
     return Container(
       height: 300,
       width: 200,
-      decoration: getFlipCardBoxDecoration(),
+      decoration: getFlipCardBoxDecorationBack(),
       child: Center(
         child: Padding(
           padding: const EdgeInsets.all(20.0),

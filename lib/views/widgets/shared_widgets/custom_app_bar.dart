@@ -224,6 +224,7 @@ class CustomAppBarWeb extends StatelessWidget with CustomAppBarMixin implements 
         appBarItem(Icons.track_changes, "Tracking", () => navigateToTrackingPage(context), _paddingValue),
         appBarItem(Icons.admin_panel_settings_rounded, "Admin Center", () => navigateToAdminCenterPage(context),
             _paddingValue),
+
         if (loggedInState?.currentUserRole == 'admin')
           appBarItem(Icons.notifications_active_rounded, "Notifications",
               () => navigateToRemindersPage(context, loggedInState!), _paddingValue),
