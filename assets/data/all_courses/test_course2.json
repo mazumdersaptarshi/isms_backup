@@ -11,22 +11,27 @@
                     "elementId":"html1",
                     "elementType":"html",
                     "elementTitle":"Static HTML 1",
-                    "elementContent":"<html><body><p><b>What is Document AI?</b></p><p>Learn about the fundamentals of Document AI and how it turns unstructured content into business-ready structured data. You will focus on how Document AI uses machine learning (ML) on a scalable could-based platform to help customer unlock insights. You will also learn what Document AI is, determine how it works, review its use cases, and identify its competitive differentiators.</p></body></html>"
+                    "elementContent":"<html><body><p><b><u>What is Document AI?</u></b></p><p>Learn about the fundamentals of Document AI and how it turns unstructured content into business-ready structured data. You will focus on how Document AI uses machine learning (ML) on a scalable could-based platform to help customer unlock insights. You will also learn what Document AI is, determine how it works, review its use cases, and identify its competitive differentiators.</p><p>Learn about the fundamentals of Document AI and how it turns unstructured content into business-ready structured data. You will focus on how Document AI uses machine learning (ML) on a scalable could-based platform to help customer unlock insights. You will also learn what Document AI is, determine how it works, review its use cases, and identify its competitive differentiators.</p></body></html>"
                 },
                 {
-                    "elementId":"question2",
+                    "elementId":"question1",
                     "elementType":"question",
                     "elementTitle":"Multiple choice question with single answer selection",
                     "elementContent":[
                         {
                             "questionId":"ssq1",
                             "questionType":"singleSelectionQuestion",
-                            "questionText":"Section 2 Question",
+                            "questionText":"Section 1 Question",
                             "questionAnswers":[
+                                {
+                                    "answerId":"ssq1a1",
+                                    "answerText":"ACK",
+                                    "answerCorrect":true
+                                },
                                 {
                                     "answerId":"ssq1a2",
                                     "answerText":"ACK",
-                                    "answerCorrect":true
+                                    "answerCorrect":false
                                 }
                             ]
                         }
@@ -42,7 +47,7 @@
                     "elementId":"html2",
                     "elementType":"html",
                     "elementTitle":"What is Document AI?",
-                    "elementContent":"<html><body><p><b>Why Document AI?</b></p><p>Document AI helps out customers to achieve their business goals by unlocking insights from documents using machine learning. While you may think that the use of paper is dwindling, consider these stats:</p><ul><li> Over 4 trillion paper documents in the US, growing at 22% per year.</li><li>Nearly 75% of a typical workers time is spent searching for and filling paper-based information</li><li>95% of corporate information exists on paper</li><li>75% of all documents get lost; 3% of the remainder are misfiled</li><li>Companies spend 20 in labor to file a document; 120 in labor to find a misfiled document; 220 in labor to recreate a lost document</li></ul></body></html>"
+                    "elementContent":"<html><body><p><b><u>Why Document AI?</u></b></p><p>Document AI helps out customers to achieve their business goals by unlocking insights from documents using machine learning. While you may think that the use of paper is dwindling, consider these stats:</p><ul><li> Over 4 trillion paper documents in the US, growing at 22% per year.</li><li>Nearly 75% of a typical workers time is spent searching for and filling paper-based information</li><li>95% of corporate information exists on paper</li><li>75% of all documents get lost; 3% of the remainder are misfiled</li><li>Companies spend 20 in labor to file a document; 120 in labor to find a misfiled document; 220 in labor to recreate a lost document</li></ul></body></html>"
                 },
                 {
                     "elementId":"question2",
@@ -73,7 +78,7 @@
                     "elementId":"html3",
                     "elementType":"html",
                     "elementTitle":"Static HTML 3",
-                    "elementContent":"<html><body><p><b>What is Document AI?</b></p><p>Almost every account you have will want to learn about new ways to serve their customers while improving how they leverage their data. You, on the other hand, also want to help your customers process documents while achieving your goals. Document AI can help you.</p><b>Select each card to learn more.</b></body></html>"
+                    "elementContent":"<html><body><p><b><u>What is Document AI?</u></b></p><p>Almost every account you have will want to learn about new ways to serve their customers while improving how they leverage their data. You, on the other hand, also want to help your customers process documents while achieving your goals. Document AI can help you.</p><b>Select each card to learn more.</b></body></html>"
                 },
                 {
                     "elementId":"flipcards1",
@@ -102,7 +107,7 @@
                     "elementId":"html4",
                     "elementType":"html",
                     "elementTitle":"The Background on Document AI",
-                    "elementContent":"<html><body><p><b>The Background on Document AI?</b></p><p>For centuries, documents have been foundational to our societies. We record histories, establish laws, legitimize trade, launch companies, and confirm identities with documents.</p><p>The computer age has introduced the idea of digital documents, which now serve as the backbone of our modern societies, and the power and value of digital documents is immense.</p><p><b>Knowledge Check</b></p></body></html>"
+                    "elementContent":"<html><body><p><b><u>The Background on Document AI</u></b></p><p>For centuries, documents have been foundational to our societies. We record histories, establish laws, legitimize trade, launch companies, and confirm identities with documents.</p><p>The computer age has introduced the idea of digital documents, which now serve as the backbone of our modern societies, and the power and value of digital documents is immense.</p><p><b>Knowledge Check</b></p></body></html>"
                 },
                 {
                     "elementId":"question2",
@@ -169,7 +174,7 @@
                     "elementId":"html4",
                     "elementType":"html",
                     "elementTitle":"Document AI Use Cases",
-                    "elementContent":"<html><body><p><b>Document AI Use Cases</b></p><p>Document AI aims to be the platform of choice for business-ready document processing, and we have specialized models for some of the world\'s most commonly used business documents. These specialized or pretrained document models enable higher levels of accuracy, especially with custom document layouts, and always output the same core concepts (“schema”). We have grouped some of these specialized models into bundles that address high-value use cases.</p><p>It is important to note that Document AI has been designed to address a customer’s end-to-end document workflow – but not necessarily the full business workflow. For example, Document AI can help a customer classify and extract information from an invoice, but it does not address the full accounts payable process. Customers can either integrate the Document AI API into their existing workflows (on their own, or with a systems integrator), or they can work with ISV / SaaS providers who leverage Document AI directly.</p></body></html>"
+                    "elementContent":"<html><body><p><b><u>Document AI Use Cases</u></b></p><p>Document AI aims to be the platform of choice for business-ready document processing, and we have specialized models for some of the world\'s most commonly used business documents. These specialized or pretrained document models enable higher levels of accuracy, especially with custom document layouts, and always output the same core concepts (“schema”). We have grouped some of these specialized models into bundles that address high-value use cases.</p><p>It is important to note that Document AI has been designed to address a customer’s end-to-end document workflow – but not necessarily the full business workflow. For example, Document AI can help a customer classify and extract information from an invoice, but it does not address the full accounts payable process. Customers can either integrate the Document AI API into their existing workflows (on their own, or with a systems integrator), or they can work with ISV / SaaS providers who leverage Document AI directly.</p></body></html>"
                 }
             ]
         },
