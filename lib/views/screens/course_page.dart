@@ -103,7 +103,7 @@ class _CourseState extends State<CoursePage> {
         // drawer: const SidebarWidget(),
         // drawerScrimColor: Colors.transparent,
         body: ListView(
-          padding: EdgeInsets.only(right: 90, left: 90),
+          // padding: EdgeInsets.only(right: 90, left: 90),
           children: [..._getSectionWidgets()],
         )
     );
@@ -173,7 +173,7 @@ class _CourseState extends State<CoursePage> {
     // Add a previous section button (and preceding spacing) to the beginning of the widget [List]
     // only for sections after the first section
     if (_currentSectionIndex > 0) {
-      contentWidgets.insertAll(0, [_separator, _getSectionBeginningButton()]);
+      contentWidgets.insertAll(0, [_getSectionBeginningButton()]);
     }
 
     return contentWidgets;
@@ -343,12 +343,16 @@ class _CourseState extends State<CoursePage> {
                 // Return to parent screen (course list)
                 Navigator.pop(context);
               },
-              child: Text(AppLocalizations.of(context)!.buttonFinishCourse),
+              child: Text(AppLocalizations.of(context)!.buttonFinishCourse,
+              style: PreviousAndNextTextStyle),
+        style: PreviousAndNextButtonStyle,
             )
           : ElevatedButton(
               onPressed: null,
               child: Text(
-                  AppLocalizations.of(context)!.buttonSectionContentIncomplete),
+                  AppLocalizations.of(context)!.buttonSectionContentIncomplete,
+                  style: PreviousAndNextTextStyle),
+          style: PreviousAndNextButtonStyle
             );
     } else {
       // Only enable the button once all interactive elements in the section have been interacted with
@@ -357,12 +361,18 @@ class _CourseState extends State<CoursePage> {
               onPressed: _goToNextSection,
               child: Text(AppLocalizations.of(context)!.buttonNextSection(
                   _course
-                      .courseSections[_currentSectionIndex + 1].sectionTitle)),
+                      .courseSections[_currentSectionIndex + 1].sectionTitle),
+                  style: PreviousAndNextTextStyle,
+              ),
+          style: PreviousAndNextButtonStyle
             )
           : ElevatedButton(
               onPressed: null,
               child: Text(
-                  AppLocalizations.of(context)!.buttonSectionContentIncomplete),
+                  AppLocalizations.of(context)!.buttonSectionContentIncomplete,
+                  style: PreviousAndNextTextStyle,
+              ),
+          style: PreviousAndNextButtonStyle
             );
     }
 
@@ -373,10 +383,24 @@ class _CourseState extends State<CoursePage> {
   ElevatedButton _getSectionBeginningButton() {
     return ElevatedButton(
       onPressed: _goToPreviousSection,
-      child: Text(AppLocalizations.of(context)!.buttonPreviousSection(
-          _course.courseSections[_currentSectionIndex - 1].sectionTitle)),
+      child: Text(
+        AppLocalizations.of(context)!.buttonPreviousSection(
+            _course.courseSections[_currentSectionIndex - 1].sectionTitle),
+        style: PreviousAndNextTextStyle,
+      ),
+      style: PreviousAndNextButtonStyle,
     );
   }
+
+  final ButtonStyle PreviousAndNextButtonStyle = ElevatedButton.styleFrom(
+    backgroundColor: Colors.grey[100],
+    minimumSize: Size(double.infinity, 100),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.zero,
+    ),
+  );
+
+  final TextStyle PreviousAndNextTextStyle = TextStyle(color: Colors.grey[600]);
 
   // Functions for Button onPressed events
 
