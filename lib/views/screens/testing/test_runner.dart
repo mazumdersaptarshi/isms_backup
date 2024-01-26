@@ -5,6 +5,8 @@ import 'package:isms/controllers/user_management/logged_in_state.dart';
 import 'package:isms/utilities/platform_check.dart';
 import 'package:isms/views/screens/testing/test_course1_page.dart';
 import 'package:isms/views/screens/testing/test_course2_page.dart';
+import 'package:isms/views/screens/testing/test_course3_exam1_page.dart';
+import 'package:isms/views/screens/testing/test_course3_page.dart';
 
 // import 'package:isms/views/screens/testing/test_ui/test_course3_page.dart';
 import 'package:isms/views/screens/testing/test_ui_type1/test_course3_page.dart';
@@ -54,6 +56,11 @@ class TestRunner extends StatelessWidget {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => TestCourse2Page()));
                 },
                 child: Text('Test Course 2 Introduction to Python')),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => TestCourse3Page()));
+                },
+                child: Text('Test Course 3 Introduction to Data Science')),
             ElevatedButton(
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => DocumentAIPage()));

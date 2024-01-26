@@ -243,19 +243,7 @@ class UserProgressState extends ChangeNotifier {
     required examId,
   }) {
     Map<String, dynamic> examProgressMap = {};
-    // userData.forEach((key, userInfoItem) {
-    //   if (key == DatabaseFields.exams.name) {
-    //     if (userInfoItem != null) {
-    //       userInfoItem.forEach((examId, examProgressInstance) {
-    //         //Iterates through all items in the exams list, by their ID
-    //         //We need to go a layer deeper and then filter only those exams that match the course ID
-    //         if (examProgressInstance.courseId == courseId && examProgressInstance.examId == examId) {
-    //           examProgressMap = examProgressInstance.toMap();
-    //         }
-    //       });
-    //     }
-    //   }
-    // });
+
     try {
       var allExams = userData['exams'];
       var currentExam = allExams[examId];

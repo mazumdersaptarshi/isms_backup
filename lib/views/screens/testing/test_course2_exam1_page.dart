@@ -58,7 +58,10 @@ class _TestCourse2Exam1PageState extends State<TestCourse2Exam1Page> {
                   SizedBox(height: 10.0),
                   ...questions[index].options.asMap().entries.map((option) {
                     return RadioListTile<int>(
-                      title: Text(option.value),
+                      title: Text(
+                        option.value,
+                        style: TextStyle(color: Colors.black),
+                      ),
                       value: option.key,
                       groupValue: userAnswers[index],
                       onChanged: (value) {
@@ -92,7 +95,7 @@ class _TestCourse2Exam1PageState extends State<TestCourse2Exam1Page> {
                 'startTime': DateTime.now(),
                 'endTime': '',
                 'completionStatus': 'completed',
-                'score': score * 10,
+                'score': ((score / questions.length) * 100).toInt(),
                 'result': 'PASS',
                 'responses': [],
               });

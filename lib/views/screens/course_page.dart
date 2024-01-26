@@ -102,9 +102,17 @@ class _CourseState extends State<CoursePage> {
 
         // drawer: const SidebarWidget(),
         // drawerScrimColor: Colors.transparent,
-        body: ListView(
-          padding: const EdgeInsets.all(90),
-          children: [..._getSectionWidgets()],
+        body: Padding(
+          padding: const EdgeInsets.only(left: 90, right: 90),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              // Set a maximum height
+              maxHeight: MediaQuery.of(context).size.height,
+            ),
+            child: ListView(
+              children: [..._getSectionWidgets()],
+            ),
+          ),
         )
 
     );
