@@ -64,7 +64,6 @@ class AdminState {
   ///This function gets all the Exams taken by the User for that particular  course
   Map<String, dynamic> getExamsProgressForCourseForUser(String uid, String courseId) {
     print('CourseID: $courseId');
-    Map<String, dynamic> exam = {};
     Map<String, dynamic> exams = {};
 
     try {

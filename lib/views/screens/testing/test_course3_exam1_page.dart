@@ -4,35 +4,34 @@ import 'package:isms/controllers/user_management/user_progress_tracker.dart';
 import 'package:isms/services/hive/hive_adapters/user_attempts.dart';
 import 'package:isms/utilities/random_key_generator.dart';
 import 'package:provider/provider.dart';
-import 'dart:math';
 
-class TestCourse1Exam1Page extends StatefulWidget {
+class TestCourse3Exam1Page extends StatefulWidget {
   @override
-  _TestCourse1Exam1PageState createState() => _TestCourse1Exam1PageState();
+  _TestCourse3Exam1PageState createState() => _TestCourse3Exam1PageState();
 }
 
-class _TestCourse1Exam1PageState extends State<TestCourse1Exam1Page> {
+class _TestCourse3Exam1PageState extends State<TestCourse3Exam1Page> {
   final List<Question> questions = [
     Question(
-      questionText: 'Which HTML tag is used to define an internal style sheet?',
-      options: ['<style>', '<script>', '<css>', '<link>'],
-      correctAnswerIndex: 0,
-    ),
-    Question(
-      questionText: 'Which is not a JavaScript data type?',
-      options: ['Undefined', 'Number', 'Boolean', 'Float'],
+      questionText: 'Identify the language which is used in data science?',
+      options: ['C++', 'R', 'Java', 'Ruby'],
       correctAnswerIndex: 3,
     ),
     Question(
-      questionText: 'What does CSS stand for?',
-      options: ['Colorful Style Sheets', 'Computer Style Sheets', 'Cascading Style Sheets', 'Creative Style Sheets'],
-      correctAnswerIndex: 2,
+      questionText: 'Choose whether the following statement is true or false:  Unstructured data is not organized',
+      options: ['True', 'False', 'maybe true or false', 'cannot be determined'],
+      correctAnswerIndex: 0,
+    ),
+    Question(
+      questionText: 'A column is a  _________- representation of data.',
+      options: ['Diagonal', 'Vertical', 'Top', 'horizontal0'],
+      correctAnswerIndex: 1,
     ),
   ];
-  String courseId1 = 'ip78hd';
-  String examId1 = 'de44qv';
-  int passing_score = 20;
 
+  String courseId2 = 'po76nm';
+  String examId1 = 'ik54kj';
+  int passing_score = 20;
   List<int> userAnswers = [-1, -1, -1]; // To store user's answers
 
   @override
@@ -81,16 +80,15 @@ class _TestCourse1Exam1PageState extends State<TestCourse1Exam1Page> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.check),
         onPressed: () async {
-          double score = 0;
+          int score = 0;
           for (int i = 0; i < questions.length; i++) {
             if (userAnswers[i] == questions[i].correctAnswerIndex) {
               score++;
             }
           }
-
           UserProgressState.updateUserExamProgress(
               loggedInState: loggedInState,
-              courseId: courseId1,
+              courseId: courseId2,
               examId: examId1,
               newAttemptData: {
                 'attemptId': randomKeyGenerator(),
@@ -101,12 +99,6 @@ class _TestCourse1Exam1PageState extends State<TestCourse1Exam1Page> {
                 'result': 'PASS',
                 'responses': [],
               });
-          // await loggedInState.updateUserProgress(fieldName: 'exams', key: examId1, data: {
-          //   'courseId': courseId1,
-          //   'examId': examId1,
-          //   'attempts': attempts1,
-          //   'completionStatus': 'not_completed',
-          // });
 
           showDialog(
             context: context,

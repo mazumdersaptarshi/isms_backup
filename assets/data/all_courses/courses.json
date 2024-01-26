@@ -89,7 +89,7 @@
       "courseAssesments": []
     },
     {
-      "courseId": "lk83jd",
+      "courseId": "po76nm",
       "courseName": "Introduction to Data Science",
       "courseDescription": "This course introduces the core concepts of data science, including data analysis, visualization, and machine learning.",
       "courseSections": [
@@ -107,6 +107,11 @@
           "sectionId": "ds3",
           "title": "Introduction to Machine Learning",
           "sectionContent": "An overview of machine learning concepts and applications."
+        },
+        {
+          "sectionId": "ds4",
+          "title": "Introduction to Computer Vision",
+          "sectionContent": "An overview of Computer Vision and its applications in self driving vehicles."
         }
       ],
       "numberOfCourseSections": 3,
