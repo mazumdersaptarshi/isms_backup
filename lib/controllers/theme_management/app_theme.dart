@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:isms/controllers/theme_management/app_colors.dart';
 
 /// App-wide font family override
 const String fontFamily = 'Poppins';
@@ -19,9 +20,9 @@ ThemeData _ismsTheme() {
 
   return base.copyWith(
     colorScheme: base.colorScheme.copyWith(
-      primary: getPrimaryColor(),
+      primary: AppColors.getPrimaryColorShade(700),
       onPrimary: Colors.white,
-      secondary: getSecondaryColor(),
+      secondary: AppColors.getPrimaryColorShade(700),
       onSecondary: Colors.black,
       tertiary: Colors.orange,
       onTertiary: Colors.black,
@@ -63,7 +64,7 @@ TextTheme _textTheme(TextTheme base) => base.copyWith(
 
 /// Returns app-wide [AppBarTheme].
 AppBarTheme _appBarTheme(AppBarTheme base) =>
-    base.copyWith(backgroundColor: getPrimaryColor(), foregroundColor: Colors.white, elevation: 0);
+    base.copyWith(backgroundColor: AppColors.primary, foregroundColor: Colors.white, elevation: 0);
 
 /// Returns app-wide [CheckboxThemeData].
 ///
@@ -93,7 +94,7 @@ ExpansionTileThemeData _expansionTileTheme(ExpansionTileThemeData base) => Expan
       // backgroundColor: getPrimaryColor(),
       // collapsedBackgroundColor: Colors.grey[300],
 
-      iconColor: Colors.white,
+      iconColor: AppColors.primary,
       collapsedIconColor: Colors.black,
       // textColor: Colors.white,
       // collapsedTextColor: Colors.black,
@@ -113,13 +114,13 @@ Color _getButtonBackgroundColor(Set<MaterialState> states) {
   /// If [states] contains any of the [MaterialState]s defined in [interactiveStates],
   /// then the button is being interacted with.
   if (states.any(interactiveStates.contains)) {
-    color = getSecondaryColor();
+    color = AppColors.getPrimaryColorShade(700)!;
   } else if (states.any((state) => state == MaterialState.disabled)) {
     // Button is disabled
     color = Colors.grey.shade400;
   } else {
     // Default case
-    color = getPrimaryColor();
+    color = AppColors.primary!;
   }
 
   return color;
@@ -134,10 +135,6 @@ Color _getButtonForegroundColor(Set<MaterialState> states) {
 // otherwise needs to be accessible globally to be applied on a per-widget basis
 
 /// Returns app-wide primary [Color]
-Color getPrimaryColor() {
-  // return Colors.deepPurpleAccent.shade100;
-  return Colors.blue.shade800;
-}
 
 /// Returns app-wide secondary [Color]
 Color getSecondaryColor() {
@@ -153,6 +150,10 @@ Color getSecondaryTextColor() {
   return Colors.grey.shade500;
 }
 
+Color getTertiaryTextColor1() {
+  return Colors.grey.shade700;
+}
+
 /// Returns app-wide widget [BorderRadius]
 BorderRadius getBorderRadius() {
   return BorderRadius.circular(10);
@@ -160,7 +161,7 @@ BorderRadius getBorderRadius() {
 
 /// Returns [BoxDecoration] used for styling [ExpansionTile]s
 BoxDecoration getExpansionTileBoxDecoration() {
-  return BoxDecoration(color: getPrimaryColor(), borderRadius: getBorderRadius(), boxShadow: [getTileBoxShadow()]);
+  return BoxDecoration(color: AppColors.primary, borderRadius: getBorderRadius(), boxShadow: [getTileBoxShadow()]);
 }
 
 /// Returns [BoxShadow] used for styling [ExpansionTile]s and [ListTile]s

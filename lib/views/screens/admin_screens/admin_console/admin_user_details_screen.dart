@@ -3,17 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:footer/footer.dart';
 import 'package:footer/footer_view.dart';
 import 'package:hive/hive.dart';
+import 'package:intl/intl.dart';
 import 'package:isms/controllers/admin_management/admin_data.dart';
 import 'package:isms/controllers/admin_management/admin_state.dart';
 import 'package:isms/controllers/course_management/course_provider.dart';
 import 'package:isms/controllers/exam_management/exam_provider.dart';
+import 'package:isms/controllers/theme_management/app_colors.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart';
 import 'package:isms/controllers/theme_management/common_theme.dart';
 import 'package:isms/controllers/user_management/logged_in_state.dart';
 import 'package:isms/utilities/platform_check.dart';
 import 'package:isms/views/widgets/admin_console/user_courses_list.dart';
 import 'package:isms/views/widgets/shared_widgets/app_footer.dart';
+import 'package:isms/views/widgets/shared_widgets/custom_expansion_tile.dart';
 import 'package:isms/views/widgets/shared_widgets/custom_linear_progress_indicator.dart';
+import 'package:isms/views/widgets/shared_widgets/drawer.dart';
+import 'package:isms/views/widgets/shared_widgets/user_profile_banner.dart';
 import 'package:provider/provider.dart';
 import 'package:line_icons/line_icons.dart';
 
@@ -26,34 +31,6 @@ class AdminUserDetailsScreen extends StatefulWidget {
 
 class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
   late AdminState adminState;
-  List<Map<String, dynamic>> userData = [
-    {
-      'courseName': 'Python Fundamentals',
-      'isEnrolled': true,
-      'status': 'In progress',
-      'attempts': [
-        {
-          'date': '2023-01-15',
-          'attempt': 1,
-          'score': 75,
-          'result': 'Pass',
-        },
-        {
-          'date': '2023-02-15',
-          'attempt': 2,
-          'score': 80,
-          'result': 'Pass',
-        },
-        {
-          'date': '2023-03-15',
-          'attempt': 3,
-          'score': 85,
-          'result': 'Pass',
-        },
-      ],
-    },
-    // ... Other course data
-  ];
 
   @override
   void initState() {
@@ -82,13 +59,8 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
       return adminState.getExamsProgressForCourseForUser(uid, courseId);
     }
 
-    Widget _getAattemptDetailsWidget({required dynamic data}) {
-      return Text(
-        data.toString(),
-      );
-    }
-
-    /// Returns a Widget displaying information about a specific exam attempt.
+    /// Returns a DataTable Widget, each row representing an exam attempt.
+    /// It takes an input List<dynamic> attempts
     /// `attempt` is a Map<String, dynamic> containing the following keys:
     ///
     ///   - 'attemptId': The id of the attempt.
@@ -96,60 +68,96 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
     ///   - 'endTime': The end time of the exam (eg. 2024-01-24 10:30:40.234).
     ///   - 'score': The score in that attempt (eg. 40).
     ///   - 'responses': A list of the responses i.e. the questions and the answers the user selected in that attempt
-    Widget _getAttemptWidget({required Map<String, dynamic> attempt}) {
-      Widget attemptWidget = Row(
-        children: [
-          _getAattemptDetailsWidget(data: attempt['attemptId']),
-          SizedBox(
-            width: 20,
-          ),
-          _getAattemptDetailsWidget(data: attempt['startTime']),
-          SizedBox(
-            width: 20,
-          ),
-          _getAattemptDetailsWidget(data: attempt['completionStatus']),
-          SizedBox(
-            width: 20,
-          ),
-          _getAattemptDetailsWidget(data: attempt['score']),
-          SizedBox(
-            width: 20,
-          ),
-          _getAattemptDetailsWidget(data: attempt['responses']),
-        ],
-      );
-      return attemptWidget;
-    }
-
-    /// Returns a list of Widgets, each representing an exam attempt.
-    /// It takes an input List<dynamic> attempts
-    List<Widget> _getExamAttemptsList(List<dynamic> attempts) {
-      List<Widget> attemptWidgets = [];
-      for (var attempt in attempts) {
-        attemptWidgets.add(_getAttemptWidget(attempt: attempt));
-      }
-      return attemptWidgets;
-    }
-
     Widget _getExamAttemptsDataTable(List<dynamic> attempts) {
-      List<DataColumn> columns = [
-        DataColumn(label: Text('Attempt ID')),
-        DataColumn(label: Text('Start Time')),
-        DataColumn(label: Text('Completion Status')),
-        DataColumn(label: Text('Score')),
-        DataColumn(label: Text('Responses')),
-        // Add more DataColumn if you have more fields in each attempt
-      ];
-      List<DataRow> rows = attempts.map<DataRow>((attempt) {
-        return DataRow(cells: [
-          DataCell(Text(attempt['attemptId'].toString())),
-          DataCell(Text(attempt['startTime'].toString())),
-          DataCell(Text(attempt['completionStatus'].toString())),
-          DataCell(Text(attempt['score'].toString())),
-          DataCell(Text(attempt['responses'].toString())),
-          // Add more DataCell if you have more fields in each attempt
-        ]);
+      if (attempts.isEmpty) {
+        return Text('No attempts data available');
+      }
+      // Add a 'duration' key to each attempt map
+      String durationString = '';
+      for (var attempt in attempts) {
+        if (attempt['startTime'] != null &&
+            attempt['startTime'].isNotEmpty &&
+            attempt['startTime'] != '' &&
+            attempt['endTime'] != null &&
+            attempt['endTime'] != '' &&
+            attempt['endTime'].isNotEmpty) {
+          DateTime startTime = DateTime.parse(attempt['startTime']);
+          DateTime endTime = DateTime.parse(attempt['endTime']);
+          Duration duration = endTime.difference(startTime);
+          durationString = duration.toString().split('.').first; // Format duration
+        }
+
+        // Format duration;
+        attempt['duration'] = durationString; // Add the duration to the attempt map
+      }
+      // Dynamically generate the DataColumn list based on the keys of the first attempt.
+      List<String> keys = attempts.first.keys.toList();
+      // List<String> keys = List.from(attempts.first.keys)..add('duration');
+
+      List<DataColumn> columns = keys.map((key) {
+        return DataColumn(
+            label: Text(
+          key,
+          style: TextStyle(color: getTertiaryTextColor1()),
+        ));
       }).toList();
+      // List<DataColumn> columns = List.from(attempts.first.keys.map((key) => DataColumn(
+      //         label: Text(
+      //       key,
+      //       style: TextStyle(color: getTertiaryTextColor1()),
+      //     ))))
+      //   ..add(DataColumn(
+      //       label: Text('Duration', style: TextStyle(color: getTertiaryTextColor1())))); // Add 'duration' column
+
+      // Dynamically generate the DataRow list.
+      List<DataRow> rows = attempts.asMap().entries.map<DataRow>((entry) {
+        int index = entry.key; // This is the index of the row
+        var attempt = entry.value;
+
+        List<DataCell> cells = keys.map((key) {
+          String cellText;
+          if (attempt[key] == null || attempt[key].toString().isEmpty) {
+            cellText = 'n/a';
+          } else if (key == 'score') {
+            cellText = attempt[key].toString() + '%'; // Add '%' for 'score' key
+          } else if (key == 'startTime' || key == 'endTime') {
+            DateTime dateTime = DateTime.parse(attempt[key]);
+            String date = DateFormat('yyyy-MM-dd').format(dateTime);
+            String time = DateFormat('HH:mm:ss').format(dateTime);
+            cellText = '$date\n$time';
+          } else {
+            cellText = attempt[key].toString().length > 10
+                ? attempt[key].toString().substring(0, 10) + '...'
+                : attempt[key].toString();
+          }
+
+          return DataCell(
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 2, horizontal: 10), // Adjust padding as needed
+              decoration: BoxDecoration(
+                color: key == 'completionStatus'
+                    ? (attempt[key] == 'completed' ? Colors.green : Colors.orange)
+                    : Colors.transparent, // Alternating row colors
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+              ),
+              child: Text(
+                cellText,
+                style: TextStyle(
+                  color: key == 'completionStatus' ? Colors.white : getTertiaryTextColor1(),
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          );
+        }).toList();
+
+        return DataRow(
+            color: MaterialStateProperty.all(
+              (index % 2 == 1) ? Colors.transparent : Colors.grey.shade100,
+            ),
+            cells: cells);
+      }).toList();
+
       return DataTable(columns: columns, rows: rows);
     }
 
@@ -194,11 +202,7 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
         // The content widget for the ExpansionTile
         Widget contentWidget = _getExamAttemptsDataTable(entry.value['attempts']);
 
-        // Create an ExpansionTile and add it to the list
-        expansionTiles.add(ExpansionTile(
-          title: titleWidget,
-          children: [contentWidget],
-        ));
+        expansionTiles.add(CustomExpansionTile(titleWidget: titleWidget, contentWidget: contentWidget));
       }
 
       return expansionTiles;
@@ -261,7 +265,7 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
                                 (courseDetails['completedSections'].length + courseDetails['completedExams'].length) /
                                     (courseDetails['courseSections'].length + courseDetails['courseExams'].length),
                             backgroundColor: Colors.grey[300]!,
-                            valueColor: getPrimaryColor(),
+                            valueColor: AppColors.primary!,
                           ),
                         ),
                         SizedBox(width: 8),
@@ -269,7 +273,7 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
                         // Text widget to display the percentage
                         Text(
                           '${((courseDetails['completedSections'].length + courseDetails['completedExams'].length) / (courseDetails['courseSections'].length + courseDetails['courseExams'].length) * 100).toStringAsFixed(0)}%',
-                          style: TextStyle(color: getPrimaryColor()),
+                          style: TextStyle(color: AppColors.primary),
                         ),
                         SizedBox(width: 4),
                         Text(
@@ -293,6 +297,7 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
     return Scaffold(
       bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
       appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
+      drawer: AdminDrawer(),
       body: FooterView(
         footer: kIsWeb
             ? Footer(backgroundColor: Colors.transparent, child: const AppFooter())
@@ -310,7 +315,12 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
                 return Text('Error: ${snapshot.error}');
               } else if (snapshot.hasData) {
                 // Data is fetched successfully, display the user's name
-                return Text(snapshot.data?['username'] ?? 'No name found');
+                // return Text(snapshot.data?['username'] ?? 'No name found');
+                return UserProfileBanner(
+                  userName: snapshot.data?['username'] ?? 'No name found',
+                  userEmail: snapshot.data?['email'] ?? 'No email found',
+                  userRole: snapshot.data?['role'] ?? 'user',
+                );
               } else {
                 // Handle the case when there's no data
                 return Text('No data available');
@@ -354,41 +364,20 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
                             itemCount: snapshot.data?.length,
                             itemBuilder: (context, index) {
                               // String? key = snapshot.data?.keys.elementAt(index);
-                              return ClipRRect(
-                                borderRadius: (index == 0)
-                                    ? BorderRadius.only(
-                                        topLeft: Radius.circular(20),
-                                        topRight: Radius.circular(20),
-                                      )
-                                    : (index == (snapshot.data!.length - 1))
-                                        ? BorderRadius.only(
-                                            bottomLeft: Radius.circular(20),
-                                            bottomRight: Radius.circular(20),
-                                          )
-                                        : BorderRadius.zero,
-                                child: Material(
-                                  color: Colors.transparent,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        border: Border(
-                                      bottom: BorderSide(width: 1, color: getTertiaryColor1()),
-                                    )),
-                                    child: ExpansionTile(
-                                      // Widget that displays header information for each course.
-                                      title: _courseDetailHeaderWidget(
-                                        courseDetails: snapshot.data!.values.elementAt(index),
-                                        index: index,
-                                      ),
-                                      children: [
-                                        // List of Widgets, that shows a list of exams for each course.
-                                        ..._getCourseExamsList(
-                                            allExamsTakenByUser: _fetchAllExamsProgressDataForCourseForUser(
-                                                uid: uid,
-                                                courseId: snapshot.data!.values.elementAt(index)['courseId'])),
-                                      ],
-                                    ),
-                                  ),
+                              return CustomExpansionTile(
+                                // Widget that displays header information for each course.
+                                titleWidget: _courseDetailHeaderWidget(
+                                  courseDetails: snapshot.data!.values.elementAt(index),
+                                  index: index,
                                 ),
+                                contentWidget:
+                                    // List of Widgets, that shows a list of exams for each course.
+                                    _getCourseExamsList(
+                                        allExamsTakenByUser: _fetchAllExamsProgressDataForCourseForUser(
+                                            uid: uid, courseId: snapshot.data!.values.elementAt(index)['courseId'])),
+                                index: index,
+                                length: snapshot.data?.length,
+                                hasHoverBorder: true,
                               );
                             },
                           ),
@@ -404,11 +393,11 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
             },
           ),
           //The part below is just an example for demonstration purposes only
-          Text(
-            'User Details',
-            style: Theme.of(context).textTheme.headline4,
-          ),
-          UserCoursesList(userData: userData)
+          // Text(
+          //   'User Details',
+          //   style: Theme.of(context).textTheme.headline4,
+          // ),
+          // UserCoursesList(userData: userData)
         ],
       ),
     );

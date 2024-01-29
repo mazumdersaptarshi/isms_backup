@@ -78,6 +78,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   line_icons: ^2.0.3
+  glowy_borders: ^1.0.2
 dev_dependencies:
   hive_generator:
   flutter_test:
