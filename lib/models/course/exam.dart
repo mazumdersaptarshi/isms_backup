@@ -12,6 +12,7 @@ class Exam {
   final String courseId;
   final String examId;
   final String examTitle;
+  final String examSummary;
   final String examDescription;
   final int examPassMark;
   final int examEstimatedTime;
@@ -21,6 +22,7 @@ class Exam {
       {required this.courseId,
       required this.examId,
       required this.examTitle,
+      required this.examSummary,
       required this.examDescription,
       required this.examPassMark,
       required this.examEstimatedTime,

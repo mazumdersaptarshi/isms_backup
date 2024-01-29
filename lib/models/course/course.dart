@@ -11,12 +11,14 @@ part 'course.g.dart';
 class Course {
   final String courseId;
   final String courseTitle;
+  final String courseSummary;
   final String courseDescription;
   final List<Section> courseSections;
 
   Course(
       {required this.courseId,
       required this.courseTitle,
+      required this.courseSummary,
       required this.courseDescription,
       required this.courseSections});
 
