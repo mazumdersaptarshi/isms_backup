@@ -11,9 +11,14 @@ part 'section.g.dart';
 class Section {
   final String sectionId;
   final String sectionTitle;
+  final String sectionSummary;
   final List<Element> sectionElements;
 
-  Section({required this.sectionId, required this.sectionTitle, required this.sectionElements});
+  Section(
+      {required this.sectionId,
+      required this.sectionTitle,
+      required this.sectionSummary,
+      required this.sectionElements});
 
   /// A necessary factory constructor for creating a new class instance from a map.
   /// Pass the map to the generated constructor, which is named after the source class.

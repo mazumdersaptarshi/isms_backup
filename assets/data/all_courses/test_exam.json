@@ -2,6 +2,7 @@
     "courseId": "ip78hd",
     "examId": "de44qv",
     "examTitle": "Test Exam",
+    "examSummary": "Test Exam summary",
     "examDescription": "Test Exam description",
     "examPassMark": 2,
     "examEstimatedTime": 3,
@@ -9,6 +10,7 @@
         {
             "sectionId": "section1",
             "sectionTitle": "Section 1",
+            "sectionSummary": "Section 1 summary",
             "sectionElements": [
                 {
                     "elementId": "question1",
