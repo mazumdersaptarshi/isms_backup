@@ -62,6 +62,9 @@ class _CourseState extends State<CoursePage> {
   /// [Set] of question widget IDs which have (an) answer(s) selected
   final Set<String> _currentSectionNonEmptyQuestions = {};
 
+  /// padding on both sides of HTML and questions
+  final EdgeInsets contentPadding = EdgeInsets.only(right: 120, left: 120);
+
   @override
   void initState() {
     super.initState();
@@ -102,9 +105,16 @@ class _CourseState extends State<CoursePage> {
 
         // drawer: const SidebarWidget(),
         // drawerScrimColor: Colors.transparent,
-        body: ListView(
-          // padding: EdgeInsets.only(right: 90, left: 90),
-          children: [..._getSectionWidgets()],
+        body: Column(
+          children: [
+            Expanded(
+              child: ListView(
+                // padding: EdgeInsets.only(right: 90, left: 90),
+                children: [..._getSectionWidgets()],
+              ),
+            ),
+            _getSectionEndButton()
+          ],
         )
     );
   }
@@ -128,6 +138,8 @@ class _CourseState extends State<CoursePage> {
     }
   }
 
+
+
   /// Returns an ordered [List] of widgets for a course section.
   /// Widgets are created based on their defined type in the custom [element_model.Element] object,
   /// with data being passed in as required for each.
@@ -141,12 +153,21 @@ class _CourseState extends State<CoursePage> {
 
       // Static HTML
       if (element.elementType == ElementTypeValues.html.name) {
-        contentWidgets.add(Flexible(child: Html(data: element.elementContent)));
+        contentWidgets.add(
+            Padding(
+              padding: contentPadding,
+              child: Flexible(child: Html(data: element.elementContent)
+              ),
+            )
+        );
 
         // Questions
       } else if (element.elementType == ElementTypeValues.question.name) {
         for (Question question in element.elementContent) {
-          contentWidgets.addAll(_getQuestionWidgets(question));
+          contentWidgets.addAll(
+              _getQuestionWidgets(
+                  question
+              ));
         }
 
         // FlipCards
@@ -157,18 +178,20 @@ class _CourseState extends State<CoursePage> {
           flipCardWidgets.add(_getFlipCardWidget(flipCard));
         }
         contentWidgets.addAll([
-          Wrap(
-            alignment: WrapAlignment.center,
-            spacing: 10.0,
-            runSpacing: 10.0,
-            children: flipCardWidgets,
+          Padding(
+            padding: contentPadding,
+            child: Wrap(
+              alignment: WrapAlignment.center,
+              spacing: 10.0,
+              runSpacing: 10.0,
+              children: flipCardWidgets,
+            ),
           ),
         ]);
       }
     }
 
-
-    contentWidgets.addAll([_separator, _getSectionEndButton()]);
+    /// contentWidgets.addAll([_separator, _getSectionEndButton()]);
 
     // Add a previous section button (and preceding spacing) to the beginning of the widget [List]
     // only for sections after the first section
@@ -189,7 +212,7 @@ class _CourseState extends State<CoursePage> {
         QuestionTypeValues.singleSelectionQuestion.name) {
       contentWidgets.addAll([
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: contentPadding,
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16.0),
@@ -248,7 +271,7 @@ class _CourseState extends State<CoursePage> {
         QuestionTypeValues.multipleSelectionQuestion.name) {
       contentWidgets.addAll([
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: contentPadding,
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16.0),
@@ -344,15 +367,15 @@ class _CourseState extends State<CoursePage> {
                 Navigator.pop(context);
               },
               child: Text(AppLocalizations.of(context)!.buttonFinishCourse,
-              style: PreviousAndNextTextStyle),
-        style: PreviousAndNextButtonStyle,
+              style: MoveSectionButtonTextStyle),
+        style: MoveSectionButtonStyle,
             )
           : ElevatedButton(
               onPressed: null,
               child: Text(
                   AppLocalizations.of(context)!.buttonSectionContentIncomplete,
-                  style: PreviousAndNextTextStyle),
-          style: PreviousAndNextButtonStyle
+                  style: MoveSectionButtonTextStyle),
+          style: MoveSectionButtonStyle
             );
     } else {
       // Only enable the button once all interactive elements in the section have been interacted with
@@ -362,17 +385,17 @@ class _CourseState extends State<CoursePage> {
               child: Text(AppLocalizations.of(context)!.buttonNextSection(
                   _course
                       .courseSections[_currentSectionIndex + 1].sectionTitle),
-                  style: PreviousAndNextTextStyle,
+                  style: MoveSectionButtonTextStyle,
               ),
-          style: PreviousAndNextButtonStyle
+          style: MoveSectionButtonStyle
             )
           : ElevatedButton(
               onPressed: null,
               child: Text(
                   AppLocalizations.of(context)!.buttonSectionContentIncomplete,
-                  style: PreviousAndNextTextStyle,
+                  style: MoveSectionButtonTextStyle,
               ),
-          style: PreviousAndNextButtonStyle
+          style: MoveSectionButtonStyle
             );
     }
 
@@ -386,13 +409,13 @@ class _CourseState extends State<CoursePage> {
       child: Text(
         AppLocalizations.of(context)!.buttonPreviousSection(
             _course.courseSections[_currentSectionIndex - 1].sectionTitle),
-        style: PreviousAndNextTextStyle,
+        style: MoveSectionButtonTextStyle,
       ),
-      style: PreviousAndNextButtonStyle,
+      style: MoveSectionButtonStyle,
     );
   }
 
-  final ButtonStyle PreviousAndNextButtonStyle = ElevatedButton.styleFrom(
+  final ButtonStyle MoveSectionButtonStyle = ElevatedButton.styleFrom(
     backgroundColor: Colors.grey[100],
     minimumSize: Size(double.infinity, 100),
     shape: RoundedRectangleBorder(
@@ -400,7 +423,7 @@ class _CourseState extends State<CoursePage> {
     ),
   );
 
-  final TextStyle PreviousAndNextTextStyle = TextStyle(color: Colors.grey[600]);
+  final TextStyle MoveSectionButtonTextStyle = TextStyle(color: Colors.grey[600]);
 
   // Functions for Button onPressed events
 
