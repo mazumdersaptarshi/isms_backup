@@ -189,6 +189,12 @@
             "sectionSummary": "Section 5 summary",
             "sectionElements": [
                 {
+                    "elementId": "html5",
+                    "elementType": "html",
+                    "elementTitle": "Assessment",
+                    "elementContent": "<html><body><p><b><u>Course Assessment</u></b></p></body></html>"
+                },
+                {
                     "elementId": "question5",
                     "elementType": "question",
                     "elementTitle": "Assessment",
