@@ -13,6 +13,8 @@ import 'package:isms/views/screens/reminder_screen.dart';
 import 'package:isms/views/screens/testing/test_runner.dart';
 import 'package:isms/views/screens/user_screens/user_profile_screen.dart';
 
+import '../../screens/testing/test_ui_type1/graphs.dart';
+
 mixin CustomAppBarMixin on StatelessWidget {
   final Map<String, ValueNotifier<bool>> hovering = {
     "My Courses": ValueNotifier(false),
@@ -23,6 +25,7 @@ mixin CustomAppBarMixin on StatelessWidget {
     "Admin Console": ValueNotifier(false),
     "Tracking": ValueNotifier(false),
     "Admin Center": ValueNotifier(false),
+    "Graphs": ValueNotifier(false)
   };
 
   void navigateToUserProfilePage(BuildContext context) {
@@ -46,7 +49,8 @@ mixin CustomAppBarMixin on StatelessWidget {
     );
   }
 
-  void navigateToRemindersPage(BuildContext context, LoggedInState loggedInState) async {
+  void navigateToRemindersPage(
+      BuildContext context, LoggedInState loggedInState) async {
     String userRole = loggedInState.currentUserRole;
     if (userRole == "admin") {
       await checkAndCreateUserDocument(
@@ -56,22 +60,36 @@ mixin CustomAppBarMixin on StatelessWidget {
       );
     }
     if (!context.mounted) return;
-    Navigator.push(context, MaterialPageRoute(builder: (context) => const ReminderScreen()));
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const ReminderScreen()));
   }
 
   void navigateToAdminCenterPage(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => const AdminUserDetailsScreen()));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const AdminUserDetailsScreen()));
   }
 
   void navigateToTimedRemindersPage(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => const TimedRemindersScreen()));
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const TimedRemindersScreen()));
+  }
+
+  void navigateToGraphsPage(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const GraphsPage()),
+    );
   }
 
   void navigateToTrackingPage(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => const TestRunner()));
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => const TestRunner()));
   }
 
-  Widget appBarItem(IconData icon, String title, VoidCallback onTap, double paddingValue) {
+  Widget appBarItem(
+      IconData icon, String title, VoidCallback onTap, double paddingValue) {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       onEnter: (_) => hovering[title]!.value = true,
@@ -79,7 +97,8 @@ mixin CustomAppBarMixin on StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: paddingValue).copyWith(top: 4.0, bottom: 4.0),
+          padding: EdgeInsets.symmetric(horizontal: paddingValue)
+              .copyWith(top: 4.0, bottom: 4.0),
           child: ValueListenableBuilder<bool>(
             valueListenable: hovering[title]!,
             builder: (context, isHover, child) {
@@ -88,7 +107,8 @@ mixin CustomAppBarMixin on StatelessWidget {
                 curve: Curves.easeInOut,
                 transform: Matrix4.identity()..scale(isHover ? 1.1 : 1.0),
                 child: Column(
-                  mainAxisSize: MainAxisSize.min, // Use the minimum space required by children
+                  mainAxisSize: MainAxisSize.min,
+                  // Use the minimum space required by children
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Icon(
@@ -100,7 +120,8 @@ mixin CustomAppBarMixin on StatelessWidget {
                     Flexible(
                       child: Text(title,
                           overflow: TextOverflow.ellipsis, // Prevent overflow
-                          style: customTheme.textTheme.bodyMedium?.copyWith(fontSize: 10, color: Colors.white)),
+                          style: customTheme.textTheme.bodyMedium
+                              ?.copyWith(fontSize: 10, color: Colors.white)),
                     ),
                     Visibility(
                       maintainAnimation: true,
@@ -129,8 +150,10 @@ mixin CustomAppBarMixin on StatelessWidget {
       onTap: () {
         Navigator.of(context).pushReplacement(
           PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) => const HomePage(),
-            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                const HomePage(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
               return FadeTransition(
                 opacity: animation,
                 child: child,
@@ -167,12 +190,14 @@ mixin CustomAppBarMixin on StatelessWidget {
 
   Widget dividerItem() {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8), // Adds space above and below the divider
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      // Adds space above and below the divider
 
       child: VerticalDivider(
         width: 1, // Width of the divider line
         thickness: 1, // Thickness of the divider line
-        color: Colors.white.withOpacity(0.5), // Divider color with some transparency
+        color: Colors.white
+            .withOpacity(0.5), // Divider color with some transparency
       ),
     );
   }
@@ -187,8 +212,10 @@ mixin CustomAppBarMixin on StatelessWidget {
           await LoggedInState.logout().then((value) {
             Navigator.of(context).pushReplacement(
               PageRouteBuilder(
-                pageBuilder: (context, animation, secondaryAnimation) => const LoginPage(),
-                transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    const LoginPage(),
+                transitionsBuilder:
+                    (context, animation, secondaryAnimation, child) {
                   return FadeTransition(
                     opacity: animation,
                     child: child,
@@ -204,7 +231,9 @@ mixin CustomAppBarMixin on StatelessWidget {
   }
 }
 
-class CustomAppBarWeb extends StatelessWidget with CustomAppBarMixin implements PreferredSizeWidget {
+class CustomAppBarWeb extends StatelessWidget
+    with CustomAppBarMixin
+    implements PreferredSizeWidget {
   final LoggedInState? loggedInState;
   final double _paddingValue = 20;
 
@@ -221,20 +250,30 @@ class CustomAppBarWeb extends StatelessWidget with CustomAppBarMixin implements 
             : homeButtonItem(context, displayText: false),
       ),
       actions: <Widget>[
-        appBarItem(Icons.list, "My Courses", () => navigateToCourseListPage(context), _paddingValue),
-        appBarItem(Icons.article, "Course Test", () => navigateToCourseTestPage(context), _paddingValue),
-        appBarItem(Icons.track_changes, "Tracking", () => navigateToTrackingPage(context), _paddingValue),
-        appBarItem(Icons.admin_panel_settings_rounded, "Admin Center", () => navigateToAdminCenterPage(context),
-            _paddingValue),
+        appBarItem(Icons.list, "My Courses",
+            () => navigateToCourseListPage(context), _paddingValue),
+        appBarItem(Icons.article, "Course Test",
+            () => navigateToCourseTestPage(context), _paddingValue),
+        appBarItem(Icons.track_changes, "Tracking",
+            () => navigateToTrackingPage(context), _paddingValue),
+        appBarItem(Icons.bar_chart, "Graphs",
+            () => navigateToGraphsPage(context), _paddingValue),
+        appBarItem(Icons.admin_panel_settings_rounded, "Admin Center",
+            () => navigateToAdminCenterPage(context), _paddingValue),
         if (loggedInState?.currentUserRole == 'admin')
-          appBarItem(Icons.notifications_active_rounded, "Notifications",
-              () => navigateToRemindersPage(context, loggedInState!), _paddingValue),
-        appBarItem(Icons.account_circle, "Account", () => navigateToUserProfilePage(context), _paddingValue),
-        if (loggedInState?.currentUserRole == 'admin')
-          appBarItem(Icons.admin_panel_settings_outlined, "Admin Console", () => navigateToAdminCenterPage(context),
+          appBarItem(
+              Icons.notifications_active_rounded,
+              "Notifications",
+              () => navigateToRemindersPage(context, loggedInState!),
               _paddingValue),
+        appBarItem(Icons.account_circle, "Account",
+            () => navigateToUserProfilePage(context), _paddingValue),
         if (loggedInState?.currentUserRole == 'admin')
-          appBarItem(Icons.timer_outlined, "Reminders", () => navigateToTimedRemindersPage(context), _paddingValue),
+          appBarItem(Icons.admin_panel_settings_outlined, "Admin Console",
+              () => navigateToAdminCenterPage(context), _paddingValue),
+        if (loggedInState?.currentUserRole == 'admin')
+          appBarItem(Icons.timer_outlined, "Reminders",
+              () => navigateToTimedRemindersPage(context), _paddingValue),
         dividerItem(),
         logoutButtonItem(context),
       ],
@@ -246,7 +285,9 @@ class CustomAppBarWeb extends StatelessWidget with CustomAppBarMixin implements 
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
-class CustomAppBarMobile extends StatelessWidget with CustomAppBarMixin implements PreferredSizeWidget {
+class CustomAppBarMobile extends StatelessWidget
+    with CustomAppBarMixin
+    implements PreferredSizeWidget {
   final LoggedInState? loggedInState;
   final double _paddingValue = 8;
 
@@ -262,11 +303,14 @@ class CustomAppBarMobile extends StatelessWidget with CustomAppBarMixin implemen
       ),
       actions: <Widget>[
         if (loggedInState?.currentUserRole == 'admin')
-          appBarItem(Icons.admin_panel_settings_outlined, "Admin Console", () => navigateToAdminCenterPage(context),
-              _paddingValue),
+          appBarItem(Icons.admin_panel_settings_outlined, "Admin Console",
+              () => navigateToAdminCenterPage(context), _paddingValue),
         if (loggedInState?.currentUserRole == 'admin')
-          appBarItem(Icons.notifications_active_rounded, "Reminders",
-              () => navigateToRemindersPage(context, loggedInState!), _paddingValue),
+          appBarItem(
+              Icons.notifications_active_rounded,
+              "Reminders",
+              () => navigateToRemindersPage(context, loggedInState!),
+              _paddingValue),
         dividerItem(),
         logoutButtonItem(context),
       ],
