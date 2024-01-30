@@ -1,7 +1,5 @@
 import 'dart:core';
-import 'dart:core';
 
-import 'package:flutter/cupertino.dart';
 import 'package:isms/controllers/course_management/course_provider.dart';
 import 'package:isms/controllers/exam_management/exam_provider.dart';
 import 'package:isms/controllers/storage/hive_service/hive_service.dart';
@@ -12,6 +10,7 @@ class AdminState {
   Map _allUsersData = {};
 
   Map<String, dynamic> _userAllData = {};
+  Map<String, dynamic> _lastLoadedUserSummaryMap = {'inProgressCourses': []};
 
   AdminState._internal() {
     _allUsersData = HiveService.getExistingLocalDataFromUsersBox();
@@ -27,9 +26,10 @@ class AdminState {
 
   Future<Map<String, dynamic>> getAllDataForUser(String uid) async {
     await Future.delayed(Duration(seconds: 2));
-    print('allUserData: ${_allUsersData}');
+    // print('allUserData: ${_allUsersData}');
 
     _userAllData = Map.from(_allUsersData[uid]);
+
     return _userAllData;
   }
 
@@ -52,12 +52,26 @@ class AdminState {
         'courseSections': fetchedCourse['courseSections'],
         'courseItemsLength': fetchedCourseSectionsLength + fetchedExamsCount,
         'courseExams': fetchedCourseExams,
-        'completionStatus': courseProgressItem.value.completionStatus,
+        // 'completionStatus': courseProgressItem.value.completionStatus,
         'completedSections': courseProgressItem.value.completedSections,
         'completedExams': courseProgressItem.value.completedExams,
         'userExams': userExams,
+        'completionStatus':
+            courseProgressItem.value.completedSections.length + courseProgressItem.value.completedExams.length >=
+                fetchedCourseSectionsLength + fetchedExamsCount,
       };
+      print(
+          'nbv: ${((courseProgressItem.value.completedSections).length + (courseProgressItem.value.completedExams).length) <= fetchedCourseSectionsLength + fetchedExamsCount}');
+      if (((courseProgressItem.value.completedSections).length + (courseProgressItem.value.completedExams).length) <=
+          fetchedCourseSectionsLength + fetchedExamsCount) {
+        if (!_lastLoadedUserSummaryMap['inProgressCourses'].contains(fetchedCourse['courseId'])) {
+          _lastLoadedUserSummaryMap['inProgressCourses'].add(fetchedCourse['courseId']);
+        }
+      }
+      _lastLoadedUserSummaryMap['coursesEnrolled'] = _userAllData['courses'].length;
+      _lastLoadedUserSummaryMap['examsTaken'] = _userAllData['exams'].length;
     }
+
     return coursesDetails;
   }
 
@@ -92,9 +106,46 @@ class AdminState {
         'examTitle': examData['examTitle'],
         'attempts': listOfAttempts,
       };
-
-      print('__________');
     });
+
     return userExamsProgress;
+  }
+
+  Map<String, dynamic> getSummaryMap({required Map userAllData, required String uid}) {
+    Map allExams = _allUsersData[uid][DatabaseFields.exams.name];
+    int totalScore = 0;
+    int numberOfAttempts = 0;
+    int inProgressCourses = 0;
+    int completedCourses = 0;
+    try {
+      allExams.forEach((key, examItem) {
+        examItem.attempts.forEach((key, value) {
+          int score = value.toMap()['score'];
+          totalScore += score;
+          numberOfAttempts++;
+        });
+      });
+
+      userAllData['courses'].forEach((courseId, courseData) {
+        print(courseData.toMap());
+        if (courseData.toMap()['completionStatus'] == true) {
+          print(courseData);
+          completedCourses++;
+        } else {
+          inProgressCourses++;
+        }
+      });
+      double averageScore = numberOfAttempts > 0 ? totalScore / numberOfAttempts : 0;
+
+      _lastLoadedUserSummaryMap['averageScore'] = double.parse(averageScore.toStringAsFixed(2));
+
+      print(_lastLoadedUserSummaryMap['inProgressCourses'].length / _userAllData['courses'].length);
+      _lastLoadedUserSummaryMap['inProgressCoursesPercent'] = double.parse(
+          (_lastLoadedUserSummaryMap['inProgressCourses'].length / _userAllData['courses'].length).toStringAsFixed(2));
+
+      print(_lastLoadedUserSummaryMap);
+    } catch (e) {}
+
+    return _lastLoadedUserSummaryMap;
   }
 }

@@ -1,56 +1,90 @@
 import 'package:flutter/material.dart';
-import 'package:isms/controllers/theme_management/app_colors.dart';
+import 'package:isms/controllers/admin_management/admin_state.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart';
 
 class UserProfileBanner extends StatelessWidget {
   final String userName;
   final String userEmail;
   final String userRole;
-  final String profileImageUrl;
+
+  AdminState adminState;
+  Map userAllData = {};
+  String uid = '';
 
   UserProfileBanner({
     required this.userName,
     required this.userEmail,
     required this.userRole,
-    this.profileImageUrl = 'default_profile_image_url', // Replace with actual URL or path
+    required this.adminState,
+    required Map userAllData,
+    required String uid,
   });
+
+  String get profileImageUrl => '';
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context); // Assuming you have a theme set up in your app
+    // print(adminState.getSummaryMap(userAllData: userAllData, uid: uid));
 
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.max,
             children: [
               CircleAvatar(
                 backgroundImage: NetworkImage(profileImageUrl),
-                radius: 50, // Adjust the size of the avatar
+                radius: 40, // Adjust the size of the avatar
               ),
-              Column(
-                children: [
-                  Text(
-                    userName,
-                    style: TextStyle(color: AppColors.primary), // Use your AppTheme's text theme
+              SizedBox(width: 16),
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 8),
+                color: Colors.blue,
+                child: SizedBox(
+                  height: 90,
+                  width: 1,
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        userName,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        userEmail,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                        ),
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        userRole,
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: 8),
-                  Text(
-                    userEmail,
-                    style: theme.textTheme.subtitle2,
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    userRole,
-                    style: theme.textTheme.caption,
-                  ),
-                ],
+                ),
               ),
             ],
           ),
-        ),
-      ],
+          SizedBox(height: 20),
+        ],
+      ),
     );
   }
 }

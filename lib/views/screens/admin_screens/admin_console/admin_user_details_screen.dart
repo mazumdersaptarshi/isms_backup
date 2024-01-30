@@ -6,9 +6,6 @@ import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:isms/controllers/admin_management/admin_data.dart';
 import 'package:isms/controllers/admin_management/admin_state.dart';
-import 'package:isms/controllers/course_management/course_provider.dart';
-import 'package:isms/controllers/exam_management/exam_provider.dart';
-import 'package:isms/controllers/theme_management/app_colors.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart';
 import 'package:isms/controllers/theme_management/common_theme.dart';
 import 'package:isms/controllers/user_management/logged_in_state.dart';
@@ -50,6 +47,8 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
     Future<Map<String, dynamic>> _fetchAllCoursesDataForUser({required String uid}) async {
       _userAllData = await adminState.getAllDataForUser(uid);
       _coursesDetails = await adminState.buildUserCoursesDetailsMapUserDetailsPage(userAllData: _userAllData);
+
+      // adminState.getSummaryMap(userAllData: _userAllData, uid: uid);
       return _coursesDetails;
     }
 
@@ -232,10 +231,10 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
             child: Row(
               children: [
                 Icon(
-                  courseDetails['completionStatus'] == 'completed'
-                      ? Icons.check_circle_outline // Icon for 'completed' status
+                  courseDetails['completionStatus'] == true
+                      ? Icons.check_circle_rounded // Icon for 'completed' status
                       : Icons.pending, // Icon for other statuses
-                  color: courseDetails['completionStatus'] == 'completed'
+                  color: courseDetails['completionStatus'] == true
                       ? Colors.green // Color for 'completed' status
                       : Colors.amber, // Color for other statuses
                 ),
@@ -265,7 +264,7 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
                                 (courseDetails['completedSections'].length + courseDetails['completedExams'].length) /
                                     (courseDetails['courseSections'].length + courseDetails['courseExams'].length),
                             backgroundColor: Colors.grey[300]!,
-                            valueColor: AppColors.primary!,
+                            valueColor: primary!,
                           ),
                         ),
                         SizedBox(width: 8),
@@ -273,7 +272,7 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
                         // Text widget to display the percentage
                         Text(
                           '${((courseDetails['completedSections'].length + courseDetails['completedExams'].length) / (courseDetails['courseSections'].length + courseDetails['courseExams'].length) * 100).toStringAsFixed(0)}%',
-                          style: TextStyle(color: AppColors.primary),
+                          style: TextStyle(color: primary),
                         ),
                         SizedBox(width: 4),
                         Text(
@@ -320,6 +319,9 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
                   userName: snapshot.data?['username'] ?? 'No name found',
                   userEmail: snapshot.data?['email'] ?? 'No email found',
                   userRole: snapshot.data?['role'] ?? 'user',
+                  adminState: adminState,
+                  userAllData: _userAllData,
+                  uid: uid,
                 );
               } else {
                 // Handle the case when there's no data
@@ -346,7 +348,18 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
                     Container(
                       margin: EdgeInsets.fromLTRB(150, 30, 150, 0),
                       child: Text(
-                        'All Courses',
+                        'Summary',
+                        style: TextStyle(
+                          fontSize: 30,
+                          color: Colors.grey.shade600,
+                        ),
+                      ),
+                    ),
+                    _buildSummarySection(_userAllData, uid),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(150, 30, 150, 0),
+                      child: Text(
+                        'Progress Overview',
                         style: TextStyle(fontSize: 30, color: Colors.grey.shade600),
                       ),
                     ),
@@ -392,13 +405,179 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
               }
             },
           ),
-          //The part below is just an example for demonstration purposes only
-          // Text(
-          //   'User Details',
-          //   style: Theme.of(context).textTheme.headline4,
-          // ),
-          // UserCoursesList(userData: userData)
         ],
+      ),
+    );
+  }
+
+  Widget _buildSummarySection(userAllData, uid) {
+    return Container(
+      margin: EdgeInsets.fromLTRB(150, 10, 150, 30),
+      decoration: BoxDecoration(
+        border: Border.all(color: getTertiaryColor1()),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          SummaryItem(
+            title: 'Total Courses Enrolled',
+            value: '${adminState.getSummaryMap(userAllData: userAllData, uid: uid)['coursesEnrolled']}',
+            index: 0,
+            length: 4,
+            type: 'number',
+          ),
+          SummaryItem(
+            title: 'Total Exams Taken',
+            value: '${adminState.getSummaryMap(userAllData: userAllData, uid: uid)['examsTaken']}',
+            index: 1,
+            length: 4,
+            type: 'number',
+          ),
+          SummaryItem(
+            title: 'Average Score',
+            value: '${adminState.getSummaryMap(userAllData: userAllData, uid: uid)['averageScore']}',
+            index: 2,
+            length: 4,
+            type: 'number',
+          ),
+          SummaryItem(
+            title: 'Not Completed',
+            value: '${adminState.getSummaryMap(userAllData: userAllData, uid: uid)['inProgressCoursesPercent']}',
+            index: 3,
+            length: 4,
+            type: 'percent',
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class SummaryItem extends StatefulWidget {
+  final String title;
+  final String value;
+  final int index;
+  final int length;
+
+  final String type;
+
+  const SummaryItem({
+    Key? key,
+    required this.title,
+    required this.value,
+    required this.index,
+    required this.length,
+    required this.type,
+  }) : super(key: key);
+
+  @override
+  _SummaryItemState createState() => _SummaryItemState();
+}
+
+class _SummaryItemState extends State<SummaryItem> {
+  bool _isHovered = false;
+
+  BorderRadius _getBorderRadius() {
+    if (widget.index == 0) {
+      return BorderRadius.only(
+        topLeft: Radius.circular(20),
+        bottomLeft: Radius.circular(20),
+        topRight: Radius.circular(3),
+        bottomRight: Radius.circular(3),
+      );
+    } else if (widget.index == widget.length - 1) {
+      return BorderRadius.only(
+        topRight: Radius.circular(20),
+        bottomRight: Radius.circular(20),
+        topLeft: Radius.circular(3),
+        bottomLeft: Radius.circular(3),
+      );
+    } else {
+      return BorderRadius.circular(3);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: MouseRegion(
+        onEnter: (_) => setState(() => _isHovered = true),
+        onExit: (_) => setState(() => _isHovered = false),
+        child: Container(
+          decoration: BoxDecoration(
+            color: _isHovered ? getPrimaryColorShade(50) : Colors.transparent, // Change color on hover
+            borderRadius: _getBorderRadius(), // Set the border radius based on index
+            border: _isHovered ? Border.all(color: primary!) : null,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              children: [
+                Text(
+                  widget.title,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 14,
+                  ),
+                ),
+                SizedBox(height: 4),
+                if (widget.type == 'number')
+                  Container(
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: getTertiaryColor1(),
+                        width: 1,
+                      ),
+                    ),
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          widget.value,
+                          style: TextStyle(
+                            color: primary,
+                            fontSize: 40,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                if (widget.type == 'percent')
+                  Container(
+                    width: 80,
+                    height: 80,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown, // Ensures the child scales down to fit the available width
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: <Widget>[
+                          SizedBox(
+                            width: 80,
+                            height: 80,
+                            child: CircularProgressIndicator(
+                              value: double.parse(widget.value), // Convert percentage to a value between 0 and 1
+                              strokeWidth: 6.0, // The thickness of the progress bar
+                              backgroundColor: getPrimaryColorShade(50), // Background color of the progress bar
+                              color: primary, // Progress color
+                            ),
+                          ),
+                          Text(
+                            '${(double.parse(widget.value) * 100).toStringAsFixed(0)}%', // The percentage text
+                            style: TextStyle(fontSize: 30, color: primary),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

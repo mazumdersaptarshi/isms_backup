@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:isms/controllers/theme_management/app_colors.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart';
 
 class CustomExpansionTile extends StatefulWidget {
@@ -39,7 +38,7 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
     return BoxDecoration(
       border: widget.hasHoverBorder ?? false
           ? Border.all(
-              color: _isHovered || _isExpanded ? AppColors.getPrimaryColorShade(300)! : Colors.transparent,
+              color: _isHovered || _isExpanded ? getPrimaryColorShade(300)! : Colors.transparent,
               width: 1,
             )
           : null,
@@ -68,17 +67,25 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
   Widget _buildExpansionTile() {
     return Theme(
       data: ThemeData(
+        fontFamily: fontFamily,
         splashColor: Colors.transparent,
-        hoverColor: AppColors.getPrimaryColorShade(50),
-        highlightColor: AppColors.getPrimaryColorShade(50),
-        dividerColor: AppColors.getPrimaryColorShade(50),
+        hoverColor: getPrimaryColorShade(50),
+        highlightColor: getPrimaryColorShade(50),
+        dividerColor: getPrimaryColorShade(50),
         expansionTileTheme: const ExpansionTileThemeData(
           backgroundColor: Colors.transparent,
           collapsedBackgroundColor: Colors.transparent,
         ),
       ),
       child: ExpansionTile(
-        title: widget.titleWidget,
+        title: AnimatedDefaultTextStyle(
+          style: TextStyle(
+            color: _isHovered || _isExpanded ? primary : Colors.black,
+            fontFamily: fontFamily,
+          ),
+          duration: const Duration(milliseconds: 300),
+          child: widget.titleWidget,
+        ),
         children: widget.contentWidget is List<Widget> ? widget.contentWidget : [widget.contentWidget],
         onExpansionChanged: (bool expanded) => setState(() => _isExpanded = expanded),
       ),
