@@ -79,7 +79,7 @@ mixin CustomAppBarMixin on StatelessWidget {
   void navigateToGraphsPage(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const GraphsPage()),
+      MaterialPageRoute(builder: (context) => GraphsPage()),
     );
   }
 

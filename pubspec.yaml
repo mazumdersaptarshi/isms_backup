@@ -75,6 +75,7 @@ dependencies:
   flutter_html: ^3.0.0-beta.2
   json_annotation: ^4.8.1
   flip_card: ^0.7.0
+  
   flutter_localizations:
     sdk: flutter
   line_icons: ^2.0.3
