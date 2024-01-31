@@ -32,7 +32,12 @@ class _TestCourse2Exam1PageState extends State<TestCourse2Exam1Page> {
   String courseId2 = 'tt89mn';
   String examId1 = 'rt89nb';
   int passing_score = 20;
+  dynamic startTime;
   List<int> userAnswers = [-1, -1, -1]; // To store user's answers
+  void initState() {
+    super.initState();
+    startTime = DateTime.now();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,14 +97,13 @@ class _TestCourse2Exam1PageState extends State<TestCourse2Exam1Page> {
               examId: examId1,
               newAttemptData: {
                 'attemptId': randomKeyGenerator(),
-                'startTime': DateTime.now(),
-                'endTime': '',
+                'startTime': startTime,
+                'endTime': DateTime.now(),
                 'completionStatus': 'completed',
                 'score': ((score / questions.length) * 100).toInt(),
                 'result': 'PASS',
                 'responses': [],
               });
-
           showDialog(
             context: context,
             builder: (context) => AlertDialog(

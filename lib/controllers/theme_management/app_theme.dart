@@ -9,6 +9,11 @@ const Set<MaterialState> interactiveStates = <MaterialState>{
   MaterialState.hovered,
   MaterialState.focused
 };
+final Color? primary = getPrimaryColorShade(700);
+
+Color? getPrimaryColorShade(int shade) {
+  return Colors.blue[shade];
+}
 
 /// App-wide theme
 final ThemeData ismsTheme = _ismsTheme();
@@ -19,9 +24,9 @@ ThemeData _ismsTheme() {
 
   return base.copyWith(
     colorScheme: base.colorScheme.copyWith(
-      primary: getPrimaryColor(),
+      primary: getPrimaryColorShade(700),
       onPrimary: Colors.white,
-      secondary: getSecondaryColor(),
+      secondary: getPrimaryColorShade(700),
       onSecondary: Colors.black,
       tertiary: Colors.orange,
       onTertiary: Colors.black,
@@ -63,7 +68,7 @@ TextTheme _textTheme(TextTheme base) => base.copyWith(
 
 /// Returns app-wide [AppBarTheme].
 AppBarTheme _appBarTheme(AppBarTheme base) =>
-    base.copyWith(backgroundColor: getPrimaryColor(), foregroundColor: Colors.white, elevation: 0);
+    base.copyWith(backgroundColor: primary, foregroundColor: Colors.white, elevation: 0);
 
 /// Returns app-wide [CheckboxThemeData].
 ///
@@ -93,7 +98,7 @@ ExpansionTileThemeData _expansionTileTheme(ExpansionTileThemeData base) => Expan
       // backgroundColor: getPrimaryColor(),
       // collapsedBackgroundColor: Colors.grey[300],
 
-      iconColor: Colors.white,
+      iconColor: primary,
       collapsedIconColor: Colors.black,
       // textColor: Colors.white,
       // collapsedTextColor: Colors.black,
@@ -113,13 +118,13 @@ Color _getButtonBackgroundColor(Set<MaterialState> states) {
   /// If [states] contains any of the [MaterialState]s defined in [interactiveStates],
   /// then the button is being interacted with.
   if (states.any(interactiveStates.contains)) {
-    color = getSecondaryColor();
+    color = getPrimaryColorShade(700)!;
   } else if (states.any((state) => state == MaterialState.disabled)) {
     // Button is disabled
     color = Colors.grey.shade400;
   } else {
     // Default case
-    color = getPrimaryColor();
+    color = primary!;
   }
 
   return color;
@@ -134,16 +139,8 @@ Color _getButtonForegroundColor(Set<MaterialState> states) {
 // otherwise needs to be accessible globally to be applied on a per-widget basis
 
 /// Returns app-wide primary [Color]
-Color getPrimaryColor() {
-  // return Colors.deepPurpleAccent.shade100;
-  return Colors.blue.shade800;
-}
 
 /// Returns app-wide secondary [Color]
-Color getSecondaryColor() {
-  // return Colors.deepPurpleAccent;
-  return Colors.blue.shade700;
-}
 
 Color getTertiaryColor1() {
   return Colors.grey.shade300;
@@ -153,14 +150,18 @@ Color getSecondaryTextColor() {
   return Colors.grey.shade500;
 }
 
+Color getTertiaryTextColor1() {
+  return Colors.grey.shade700;
+}
+
 /// Returns app-wide widget [BorderRadius]
-BorderRadius getBorderRadius() {
+BorderRadius _getBorderRadius() {
   return BorderRadius.circular(10);
 }
 
 /// Returns [BoxDecoration] used for styling [ExpansionTile]s
 BoxDecoration getExpansionTileBoxDecoration() {
-  return BoxDecoration(color: getPrimaryColor(), borderRadius: getBorderRadius(), boxShadow: [getTileBoxShadow()]);
+  return BoxDecoration(color: primary, borderRadius: _getBorderRadius(), boxShadow: [getTileBoxShadow()]);
 }
 
 /// Returns [BoxShadow] used for styling [ExpansionTile]s and [ListTile]s
@@ -191,30 +192,30 @@ ButtonStyle getIconButtonStyleTransparent() {
 BoxDecoration getFlipCardBoxDecorationFront() {
   return BoxDecoration(
     color: Colors.grey[100],
-    borderRadius: getBorderRadius(),
+    borderRadius: _getBorderRadius(),
   );
 }
 
 /// Returns app-wide widget [RoundedRectangleBorder]
 RoundedRectangleBorder getRoundedRectangleBorder() {
-  return RoundedRectangleBorder(borderRadius: getBorderRadius());
+  return RoundedRectangleBorder(borderRadius: _getBorderRadius());
 }
 
 BoxDecoration getFlipCardBoxDecorationBack() {
   return BoxDecoration(
     color: Colors.grey[300],
-    borderRadius: getBorderRadius(),
+    borderRadius: _getBorderRadius(),
     border: Border.all(color: Colors.deepPurpleAccent.shade100, width: 3), // Blue border added for flipped state
   );
 }
 
-BoxDecoration ExpansionTileOff() {
+BoxDecoration expansionTileOff() {
   return BoxDecoration(
     color: Colors.grey[300],
   );
 }
 
-BoxDecoration ExpansionTileOn() {
+BoxDecoration expansionTileOn() {
   return BoxDecoration(
       color: Colors.grey[300], border: Border(left: BorderSide(width: 3.0, color: Colors.deepPurpleAccent.shade100)));
 }

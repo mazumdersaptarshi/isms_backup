@@ -3,17 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:footer/footer.dart';
 import 'package:footer/footer_view.dart';
 import 'package:hive/hive.dart';
+import 'package:intl/intl.dart';
 import 'package:isms/controllers/admin_management/admin_data.dart';
 import 'package:isms/controllers/admin_management/admin_state.dart';
-import 'package:isms/controllers/course_management/course_provider.dart';
-import 'package:isms/controllers/exam_management/exam_provider.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart';
 import 'package:isms/controllers/theme_management/common_theme.dart';
 import 'package:isms/controllers/user_management/logged_in_state.dart';
 import 'package:isms/utilities/platform_check.dart';
 import 'package:isms/views/widgets/admin_console/user_courses_list.dart';
 import 'package:isms/views/widgets/shared_widgets/app_footer.dart';
+import 'package:isms/views/widgets/shared_widgets/custom_expansion_tile.dart';
 import 'package:isms/views/widgets/shared_widgets/custom_linear_progress_indicator.dart';
+import 'package:isms/views/widgets/shared_widgets/drawer.dart';
+import 'package:isms/views/widgets/shared_widgets/user_profile_banner.dart';
 import 'package:provider/provider.dart';
 import 'package:line_icons/line_icons.dart';
 
@@ -26,34 +28,6 @@ class AdminUserDetailsScreen extends StatefulWidget {
 
 class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
   late AdminState adminState;
-  List<Map<String, dynamic>> userData = [
-    {
-      'courseName': 'Python Fundamentals',
-      'isEnrolled': true,
-      'status': 'In progress',
-      'attempts': [
-        {
-          'date': '2023-01-15',
-          'attempt': 1,
-          'score': 75,
-          'result': 'Pass',
-        },
-        {
-          'date': '2023-02-15',
-          'attempt': 2,
-          'score': 80,
-          'result': 'Pass',
-        },
-        {
-          'date': '2023-03-15',
-          'attempt': 3,
-          'score': 85,
-          'result': 'Pass',
-        },
-      ],
-    },
-    // ... Other course data
-  ];
 
   @override
   void initState() {
@@ -73,6 +47,8 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
     Future<Map<String, dynamic>> _fetchAllCoursesDataForUser({required String uid}) async {
       _userAllData = await adminState.getAllDataForUser(uid);
       _coursesDetails = await adminState.buildUserCoursesDetailsMapUserDetailsPage(userAllData: _userAllData);
+
+      // adminState.getSummaryMap(userAllData: _userAllData, uid: uid);
       return _coursesDetails;
     }
 
@@ -82,13 +58,8 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
       return adminState.getExamsProgressForCourseForUser(uid, courseId);
     }
 
-    Widget _getAattemptDetailsWidget({required dynamic data}) {
-      return Text(
-        data.toString(),
-      );
-    }
-
-    /// Returns a Widget displaying information about a specific exam attempt.
+    /// Returns a DataTable Widget, each row representing an exam attempt.
+    /// It takes an input List<dynamic> attempts
     /// `attempt` is a Map<String, dynamic> containing the following keys:
     ///
     ///   - 'attemptId': The id of the attempt.
@@ -96,60 +67,96 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
     ///   - 'endTime': The end time of the exam (eg. 2024-01-24 10:30:40.234).
     ///   - 'score': The score in that attempt (eg. 40).
     ///   - 'responses': A list of the responses i.e. the questions and the answers the user selected in that attempt
-    Widget _getAttemptWidget({required Map<String, dynamic> attempt}) {
-      Widget attemptWidget = Row(
-        children: [
-          _getAattemptDetailsWidget(data: attempt['attemptId']),
-          SizedBox(
-            width: 20,
-          ),
-          _getAattemptDetailsWidget(data: attempt['startTime']),
-          SizedBox(
-            width: 20,
-          ),
-          _getAattemptDetailsWidget(data: attempt['completionStatus']),
-          SizedBox(
-            width: 20,
-          ),
-          _getAattemptDetailsWidget(data: attempt['score']),
-          SizedBox(
-            width: 20,
-          ),
-          _getAattemptDetailsWidget(data: attempt['responses']),
-        ],
-      );
-      return attemptWidget;
-    }
-
-    /// Returns a list of Widgets, each representing an exam attempt.
-    /// It takes an input List<dynamic> attempts
-    List<Widget> _getExamAttemptsList(List<dynamic> attempts) {
-      List<Widget> attemptWidgets = [];
-      for (var attempt in attempts) {
-        attemptWidgets.add(_getAttemptWidget(attempt: attempt));
-      }
-      return attemptWidgets;
-    }
-
     Widget _getExamAttemptsDataTable(List<dynamic> attempts) {
-      List<DataColumn> columns = [
-        DataColumn(label: Text('Attempt ID')),
-        DataColumn(label: Text('Start Time')),
-        DataColumn(label: Text('Completion Status')),
-        DataColumn(label: Text('Score')),
-        DataColumn(label: Text('Responses')),
-        // Add more DataColumn if you have more fields in each attempt
-      ];
-      List<DataRow> rows = attempts.map<DataRow>((attempt) {
-        return DataRow(cells: [
-          DataCell(Text(attempt['attemptId'].toString())),
-          DataCell(Text(attempt['startTime'].toString())),
-          DataCell(Text(attempt['completionStatus'].toString())),
-          DataCell(Text(attempt['score'].toString())),
-          DataCell(Text(attempt['responses'].toString())),
-          // Add more DataCell if you have more fields in each attempt
-        ]);
+      if (attempts.isEmpty) {
+        return Text('No attempts data available');
+      }
+      // Add a 'duration' key to each attempt map
+      String durationString = '';
+      for (var attempt in attempts) {
+        if (attempt['startTime'] != null &&
+            attempt['startTime'].isNotEmpty &&
+            attempt['startTime'] != '' &&
+            attempt['endTime'] != null &&
+            attempt['endTime'] != '' &&
+            attempt['endTime'].isNotEmpty) {
+          DateTime startTime = DateTime.parse(attempt['startTime']);
+          DateTime endTime = DateTime.parse(attempt['endTime']);
+          Duration duration = endTime.difference(startTime);
+          durationString = duration.toString().split('.').first; // Format duration
+        }
+
+        // Format duration;
+        attempt['duration'] = durationString; // Add the duration to the attempt map
+      }
+      // Dynamically generate the DataColumn list based on the keys of the first attempt.
+      List<String> keys = attempts.first.keys.toList();
+      // List<String> keys = List.from(attempts.first.keys)..add('duration');
+
+      List<DataColumn> columns = keys.map((key) {
+        return DataColumn(
+            label: Text(
+          key,
+          style: TextStyle(color: getTertiaryTextColor1()),
+        ));
       }).toList();
+      // List<DataColumn> columns = List.from(attempts.first.keys.map((key) => DataColumn(
+      //         label: Text(
+      //       key,
+      //       style: TextStyle(color: getTertiaryTextColor1()),
+      //     ))))
+      //   ..add(DataColumn(
+      //       label: Text('Duration', style: TextStyle(color: getTertiaryTextColor1())))); // Add 'duration' column
+
+      // Dynamically generate the DataRow list.
+      List<DataRow> rows = attempts.asMap().entries.map<DataRow>((entry) {
+        int index = entry.key; // This is the index of the row
+        var attempt = entry.value;
+
+        List<DataCell> cells = keys.map((key) {
+          String cellText;
+          if (attempt[key] == null || attempt[key].toString().isEmpty) {
+            cellText = 'n/a';
+          } else if (key == 'score') {
+            cellText = attempt[key].toString() + '%'; // Add '%' for 'score' key
+          } else if (key == 'startTime' || key == 'endTime') {
+            DateTime dateTime = DateTime.parse(attempt[key]);
+            String date = DateFormat('yyyy-MM-dd').format(dateTime);
+            String time = DateFormat('HH:mm:ss').format(dateTime);
+            cellText = '$date\n$time';
+          } else {
+            cellText = attempt[key].toString().length > 10
+                ? attempt[key].toString().substring(0, 10) + '...'
+                : attempt[key].toString();
+          }
+
+          return DataCell(
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 2, horizontal: 10), // Adjust padding as needed
+              decoration: BoxDecoration(
+                color: key == 'completionStatus'
+                    ? (attempt[key] == 'completed' ? Colors.green : Colors.orange)
+                    : Colors.transparent, // Alternating row colors
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+              ),
+              child: Text(
+                cellText,
+                style: TextStyle(
+                  color: key == 'completionStatus' ? Colors.white : getTertiaryTextColor1(),
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          );
+        }).toList();
+
+        return DataRow(
+            color: MaterialStateProperty.all(
+              (index % 2 == 1) ? Colors.transparent : Colors.grey.shade100,
+            ),
+            cells: cells);
+      }).toList();
+
       return DataTable(columns: columns, rows: rows);
     }
 
@@ -194,11 +201,7 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
         // The content widget for the ExpansionTile
         Widget contentWidget = _getExamAttemptsDataTable(entry.value['attempts']);
 
-        // Create an ExpansionTile and add it to the list
-        expansionTiles.add(ExpansionTile(
-          title: titleWidget,
-          children: [contentWidget],
-        ));
+        expansionTiles.add(CustomExpansionTile(titleWidget: titleWidget, contentWidget: contentWidget));
       }
 
       return expansionTiles;
@@ -228,10 +231,10 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
             child: Row(
               children: [
                 Icon(
-                  courseDetails['completionStatus'] == 'completed'
-                      ? Icons.check_circle_outline // Icon for 'completed' status
+                  courseDetails['completionStatus'] == true
+                      ? Icons.check_circle_rounded // Icon for 'completed' status
                       : Icons.pending, // Icon for other statuses
-                  color: courseDetails['completionStatus'] == 'completed'
+                  color: courseDetails['completionStatus'] == true
                       ? Colors.green // Color for 'completed' status
                       : Colors.amber, // Color for other statuses
                 ),
@@ -261,7 +264,7 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
                                 (courseDetails['completedSections'].length + courseDetails['completedExams'].length) /
                                     (courseDetails['courseSections'].length + courseDetails['courseExams'].length),
                             backgroundColor: Colors.grey[300]!,
-                            valueColor: getPrimaryColor(),
+                            valueColor: primary!,
                           ),
                         ),
                         SizedBox(width: 8),
@@ -269,7 +272,7 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
                         // Text widget to display the percentage
                         Text(
                           '${((courseDetails['completedSections'].length + courseDetails['completedExams'].length) / (courseDetails['courseSections'].length + courseDetails['courseExams'].length) * 100).toStringAsFixed(0)}%',
-                          style: TextStyle(color: getPrimaryColor()),
+                          style: TextStyle(color: primary),
                         ),
                         SizedBox(width: 4),
                         Text(
@@ -293,6 +296,7 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
     return Scaffold(
       bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
       appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
+      drawer: AdminDrawer(),
       body: FooterView(
         footer: kIsWeb
             ? Footer(backgroundColor: Colors.transparent, child: const AppFooter())
@@ -310,7 +314,15 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
                 return Text('Error: ${snapshot.error}');
               } else if (snapshot.hasData) {
                 // Data is fetched successfully, display the user's name
-                return Text(snapshot.data?['username'] ?? 'No name found');
+                // return Text(snapshot.data?['username'] ?? 'No name found');
+                return UserProfileBanner(
+                  userName: snapshot.data?['username'] ?? 'No name found',
+                  userEmail: snapshot.data?['email'] ?? 'No email found',
+                  userRole: snapshot.data?['role'] ?? 'user',
+                  adminState: adminState,
+                  userAllData: _userAllData,
+                  uid: uid,
+                );
               } else {
                 // Handle the case when there's no data
                 return Text('No data available');
@@ -336,7 +348,18 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
                     Container(
                       margin: EdgeInsets.fromLTRB(150, 30, 150, 0),
                       child: Text(
-                        'All Courses',
+                        'Summary',
+                        style: TextStyle(
+                          fontSize: 30,
+                          color: Colors.grey.shade600,
+                        ),
+                      ),
+                    ),
+                    _buildSummarySection(_userAllData, uid),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(150, 30, 150, 0),
+                      child: Text(
+                        'Progress Overview',
                         style: TextStyle(fontSize: 30, color: Colors.grey.shade600),
                       ),
                     ),
@@ -354,41 +377,20 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
                             itemCount: snapshot.data?.length,
                             itemBuilder: (context, index) {
                               // String? key = snapshot.data?.keys.elementAt(index);
-                              return ClipRRect(
-                                borderRadius: (index == 0)
-                                    ? BorderRadius.only(
-                                        topLeft: Radius.circular(20),
-                                        topRight: Radius.circular(20),
-                                      )
-                                    : (index == (snapshot.data!.length - 1))
-                                        ? BorderRadius.only(
-                                            bottomLeft: Radius.circular(20),
-                                            bottomRight: Radius.circular(20),
-                                          )
-                                        : BorderRadius.zero,
-                                child: Material(
-                                  color: Colors.transparent,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        border: Border(
-                                      bottom: BorderSide(width: 1, color: getTertiaryColor1()),
-                                    )),
-                                    child: ExpansionTile(
-                                      // Widget that displays header information for each course.
-                                      title: _courseDetailHeaderWidget(
-                                        courseDetails: snapshot.data!.values.elementAt(index),
-                                        index: index,
-                                      ),
-                                      children: [
-                                        // List of Widgets, that shows a list of exams for each course.
-                                        ..._getCourseExamsList(
-                                            allExamsTakenByUser: _fetchAllExamsProgressDataForCourseForUser(
-                                                uid: uid,
-                                                courseId: snapshot.data!.values.elementAt(index)['courseId'])),
-                                      ],
-                                    ),
-                                  ),
+                              return CustomExpansionTile(
+                                // Widget that displays header information for each course.
+                                titleWidget: _courseDetailHeaderWidget(
+                                  courseDetails: snapshot.data!.values.elementAt(index),
+                                  index: index,
                                 ),
+                                contentWidget:
+                                    // List of Widgets, that shows a list of exams for each course.
+                                    _getCourseExamsList(
+                                        allExamsTakenByUser: _fetchAllExamsProgressDataForCourseForUser(
+                                            uid: uid, courseId: snapshot.data!.values.elementAt(index)['courseId'])),
+                                index: index,
+                                length: snapshot.data?.length,
+                                hasHoverBorder: true,
                               );
                             },
                           ),
@@ -403,13 +405,179 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
               }
             },
           ),
-          //The part below is just an example for demonstration purposes only
-          Text(
-            'User Details',
-            style: Theme.of(context).textTheme.headline4,
-          ),
-          UserCoursesList(userData: userData)
         ],
+      ),
+    );
+  }
+
+  Widget _buildSummarySection(userAllData, uid) {
+    return Container(
+      margin: EdgeInsets.fromLTRB(150, 10, 150, 30),
+      decoration: BoxDecoration(
+        border: Border.all(color: getTertiaryColor1()),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          SummaryItem(
+            title: 'Total Courses Enrolled',
+            value: '${adminState.getSummaryMap(userAllData: userAllData, uid: uid)['coursesEnrolled']}',
+            index: 0,
+            length: 4,
+            type: 'number',
+          ),
+          SummaryItem(
+            title: 'Total Exams Taken',
+            value: '${adminState.getSummaryMap(userAllData: userAllData, uid: uid)['examsTaken']}',
+            index: 1,
+            length: 4,
+            type: 'number',
+          ),
+          SummaryItem(
+            title: 'Average Score',
+            value: '${adminState.getSummaryMap(userAllData: userAllData, uid: uid)['averageScore']}',
+            index: 2,
+            length: 4,
+            type: 'number',
+          ),
+          SummaryItem(
+            title: 'Not Completed',
+            value: '${adminState.getSummaryMap(userAllData: userAllData, uid: uid)['inProgressCoursesPercent']}',
+            index: 3,
+            length: 4,
+            type: 'percent',
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class SummaryItem extends StatefulWidget {
+  final String title;
+  final String value;
+  final int index;
+  final int length;
+
+  final String type;
+
+  const SummaryItem({
+    Key? key,
+    required this.title,
+    required this.value,
+    required this.index,
+    required this.length,
+    required this.type,
+  }) : super(key: key);
+
+  @override
+  _SummaryItemState createState() => _SummaryItemState();
+}
+
+class _SummaryItemState extends State<SummaryItem> {
+  bool _isHovered = false;
+
+  BorderRadius _getBorderRadius() {
+    if (widget.index == 0) {
+      return BorderRadius.only(
+        topLeft: Radius.circular(20),
+        bottomLeft: Radius.circular(20),
+        topRight: Radius.circular(3),
+        bottomRight: Radius.circular(3),
+      );
+    } else if (widget.index == widget.length - 1) {
+      return BorderRadius.only(
+        topRight: Radius.circular(20),
+        bottomRight: Radius.circular(20),
+        topLeft: Radius.circular(3),
+        bottomLeft: Radius.circular(3),
+      );
+    } else {
+      return BorderRadius.circular(3);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: MouseRegion(
+        onEnter: (_) => setState(() => _isHovered = true),
+        onExit: (_) => setState(() => _isHovered = false),
+        child: Container(
+          decoration: BoxDecoration(
+            color: _isHovered ? getPrimaryColorShade(50) : Colors.transparent, // Change color on hover
+            borderRadius: _getBorderRadius(), // Set the border radius based on index
+            border: _isHovered ? Border.all(color: primary!) : null,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              children: [
+                Text(
+                  widget.title,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 14,
+                  ),
+                ),
+                SizedBox(height: 4),
+                if (widget.type == 'number')
+                  Container(
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: getTertiaryColor1(),
+                        width: 1,
+                      ),
+                    ),
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          widget.value,
+                          style: TextStyle(
+                            color: primary,
+                            fontSize: 40,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                if (widget.type == 'percent')
+                  Container(
+                    width: 80,
+                    height: 80,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown, // Ensures the child scales down to fit the available width
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: <Widget>[
+                          SizedBox(
+                            width: 80,
+                            height: 80,
+                            child: CircularProgressIndicator(
+                              value: double.parse(widget.value), // Convert percentage to a value between 0 and 1
+                              strokeWidth: 6.0, // The thickness of the progress bar
+                              backgroundColor: getPrimaryColorShade(50), // Background color of the progress bar
+                              color: primary, // Progress color
+                            ),
+                          ),
+                          Text(
+                            '${(double.parse(widget.value) * 100).toStringAsFixed(0)}%', // The percentage text
+                            style: TextStyle(fontSize: 30, color: primary),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
