@@ -8,9 +8,12 @@ class GraphsPage extends StatelessWidget {
     "course1": {
       "exam1": [
         {
-          "student1": {"score": 85},
+          "student1": {"score": 27},
           "student2": {"score": 90},
           "student3": {"score": 75},
+          "student4": {"score": 40},
+          "student5": {"score": 50},
+          "student6": {"score": 71},
         },
       ],
       "exam2": [
@@ -18,6 +21,9 @@ class GraphsPage extends StatelessWidget {
           "student1": {"score": 88},
           "student2": {"score": 92},
           "student3": {"score": 78},
+          "student4": {"score": 40},
+          "student5": {"score": 50},
+          "student6": {"score": 71},
         },
       ],
       "exam3": [
@@ -25,6 +31,9 @@ class GraphsPage extends StatelessWidget {
           "student1": {"score": 82},
           "student2": {"score": 87},
           "student3": {"score": 80},
+          "student4": {"score": 40},
+          "student5": {"score": 50},
+          "student6": {"score": 71},
         },
       ],
     },
@@ -34,6 +43,9 @@ class GraphsPage extends StatelessWidget {
           "student1": {"score": 68},
           "student2": {"score": 70},
           "student3": {"score": 66},
+          "student4": {"score": 40},
+          "student5": {"score": 50},
+          "student6": {"score": 71},
         },
       ],
       "exam2": [
@@ -41,6 +53,9 @@ class GraphsPage extends StatelessWidget {
           "student1": {"score": 72},
           "student2": {"score": 74},
           "student3": {"score": 71},
+          "student4": {"score": 40},
+          "student5": {"score": 50},
+          "student6": {"score": 71},
         },
       ],
       "exam3": [
@@ -48,6 +63,9 @@ class GraphsPage extends StatelessWidget {
           "student1": {"score": 69},
           "student2": {"score": 65},
           "student3": {"score": 67},
+          "student4": {"score": 40},
+          "student5": {"score": 50},
+          "student6": {"score": 71},
         },
       ],
     },
@@ -57,6 +75,9 @@ class GraphsPage extends StatelessWidget {
           "student1": {"score": 95},
           "student2": {"score": 92},
           "student3": {"score": 90},
+          "student4": {"score": 40},
+          "student5": {"score": 50},
+          "student6": {"score": 71},
         },
       ],
       "exam2": [
@@ -64,6 +85,9 @@ class GraphsPage extends StatelessWidget {
           "student1": {"score": 93},
           "student2": {"score": 91},
           "student3": {"score": 94},
+          "student4": {"score": 40},
+          "student5": {"score": 50},
+          "student6": {"score": 71},
         },
       ],
       "exam3": [
@@ -71,6 +95,9 @@ class GraphsPage extends StatelessWidget {
           "student1": {"score": 96},
           "student2": {"score": 98},
           "student3": {"score": 97},
+          "student4": {"score": 40},
+          "student5": {"score": 50},
+          "student6": {"score": 71},
         },
       ],
     },
@@ -81,6 +108,9 @@ class GraphsPage extends StatelessWidget {
           "student1": {"score": 77},
           "student2": {"score": 84},
           "student3": {"score": 80},
+          "student4": {"score": 40},
+          "student5": {"score": 50},
+          "student6": {"score": 71},
         },
       ],
       "exam2": [
@@ -88,6 +118,9 @@ class GraphsPage extends StatelessWidget {
           "student1": {"score": 82},
           "student2": {"score": 78},
           "student3": {"score": 75},
+          "student4": {"score": 40},
+          "student5": {"score": 50},
+          "student6": {"score": 71},
         },
       ],
       "exam3": [
@@ -95,6 +128,9 @@ class GraphsPage extends StatelessWidget {
           "student1": {"score": 85},
           "student2": {"score": 88},
           "student3": {"score": 83},
+          "student4": {"score": 40},
+          "student5": {"score": 50},
+          "student6": {"score": 71},
         },
       ],
     },
@@ -104,6 +140,9 @@ class GraphsPage extends StatelessWidget {
           "student1": {"score": 65},
           "student2": {"score": 62},
           "student3": {"score": 70},
+          "student4": {"score": 40},
+          "student5": {"score": 50},
+          "student6": {"score": 71},
         },
       ],
       "exam2": [
@@ -111,13 +150,19 @@ class GraphsPage extends StatelessWidget {
           "student1": {"score": 68},
           "student2": {"score": 71},
           "student3": {"score": 73},
+          "student4": {"score": 40},
+          "student5": {"score": 50},
+          "student6": {"score": 71},
         },
       ],
       "exam3": [
         {
-          "student1": {"score": 75},
-          "student2": {"score": 77},
+          "student1": {"score": 56},
+          "student2": {"score": 87},
           "student3": {"score": 72},
+          "student4": {"score": 40},
+          "student5": {"score": 50},
+          "student6": {"score": 35},
         },
       ],
     },
@@ -127,6 +172,9 @@ class GraphsPage extends StatelessWidget {
           "student1": {"score": 90},
           "student2": {"score": 92},
           "student3": {"score": 88},
+          "student4": {"score": 40},
+          "student5": {"score": 50},
+          "student6": {"score": 71},
         },
       ],
       "exam2": [
@@ -134,6 +182,9 @@ class GraphsPage extends StatelessWidget {
           "student1": {"score": 85},
           "student2": {"score": 87},
           "student3": {"score": 89},
+          "student4": {"score": 40},
+          "student5": {"score": 50},
+          "student6": {"score": 71},
         },
       ],
       "exam3": [
@@ -141,15 +192,23 @@ class GraphsPage extends StatelessWidget {
           "student1": {"score": 83},
           "student2": {"score": 81},
           "student3": {"score": 84},
+          "student4": {"score": 40},
+          "student5": {"score": 50},
+          "student6": {"score": 71},
         },
       ],
     },
     "course7": {
       "exam1": [
         {
-          "student1": {"score": 55},
+          "student1": {
+            "score": 55,
+          },
           "student2": {"score": 60},
           "student3": {"score": 58},
+          "student4": {"score": 40},
+          "student5": {"score": 50},
+          "student6": {"score": 71},
         },
       ],
       "exam2": [
@@ -157,6 +216,9 @@ class GraphsPage extends StatelessWidget {
           "student1": {"score": 62},
           "student2": {"score": 64},
           "student3": {"score": 67},
+          "student4": {"score": 40},
+          "student5": {"score": 50},
+          "student6": {"score": 71},
         },
       ],
       "exam3": [
@@ -164,6 +226,9 @@ class GraphsPage extends StatelessWidget {
           "student1": {"score": 70},
           "student2": {"score": 72},
           "student3": {"score": 68},
+          "student4": {"score": 40},
+          "student5": {"score": 50},
+          "student6": {"score": 71},
         },
       ],
     }
@@ -292,6 +357,8 @@ class GraphsPage extends StatelessWidget {
                 ),
               ),
               groupsSpace: 10,
+              // Other BarChartData settings...
+
               // Other BarChartData settings...
             ),
           ),
