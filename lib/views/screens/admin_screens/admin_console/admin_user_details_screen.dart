@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:footer/footer.dart';
@@ -46,9 +47,11 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
     /// data stored in the database for the given user.
     Future<Map<String, dynamic>> _fetchAllCoursesDataForUser({required String uid}) async {
       _userAllData = await adminState.getAllDataForUser(uid);
-      _coursesDetails = await adminState.buildUserCoursesDetailsMapUserDetailsPage(userAllData: _userAllData);
+      _coursesDetails = await adminState.fetchAllDataForCurrentUser(userAllData: _userAllData);
 
       // adminState.getSummaryMap(userAllData: _userAllData, uid: uid);
+
+      // return _coursesDetails['coursesDetails'];
       return _coursesDetails;
     }
 
@@ -95,10 +98,27 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
 
       List<DataColumn> columns = keys.map((key) {
         return DataColumn(
-            label: Text(
-          key,
-          style: TextStyle(color: getTertiaryTextColor1()),
-        ));
+            tooltip: key,
+            label: (key == 'startTime' || key == 'endTime')
+                ? Row(
+                    children: [
+                      Icon(
+                        CupertinoIcons.clock,
+                        size: 15,
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        key,
+                        style: TextStyle(color: getTertiaryTextColor1()),
+                      )
+                    ],
+                  )
+                : Text(
+                    key,
+                    style: TextStyle(color: getTertiaryTextColor1()),
+                  ));
       }).toList();
       // List<DataColumn> columns = List.from(attempts.first.keys.map((key) => DataColumn(
       //         label: Text(
@@ -345,24 +365,9 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      margin: EdgeInsets.fromLTRB(150, 30, 150, 0),
-                      child: Text(
-                        'Summary',
-                        style: TextStyle(
-                          fontSize: 30,
-                          color: Colors.grey.shade600,
-                        ),
-                      ),
-                    ),
-                    _buildSummarySection(_userAllData, uid),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(150, 30, 150, 0),
-                      child: Text(
-                        'Progress Overview',
-                        style: TextStyle(fontSize: 30, color: Colors.grey.shade600),
-                      ),
-                    ),
+                    _buildSectionHeader(title: 'Summary'),
+                    _buildSummarySection(snapshot.data?['summary']),
+                    _buildSectionHeader(title: 'Progress Overview'),
                     Container(
                       margin: EdgeInsets.fromLTRB(150, 10, 150, 30),
                       decoration: BoxDecoration(
@@ -372,24 +377,28 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
                       child: Column(
                         children: [
                           // ListView.builder creates a list of course and exam details.
+
                           ListView.builder(
                             shrinkWrap: true,
-                            itemCount: snapshot.data?.length,
+                            itemCount: _coursesDetails['coursesDetails'].length,
                             itemBuilder: (context, index) {
                               // String? key = snapshot.data?.keys.elementAt(index);
+                              print(_coursesDetails['coursesDetails'].length);
                               return CustomExpansionTile(
                                 // Widget that displays header information for each course.
                                 titleWidget: _courseDetailHeaderWidget(
-                                  courseDetails: snapshot.data!.values.elementAt(index),
+                                  courseDetails: _coursesDetails['coursesDetails'].values.elementAt(index),
                                   index: index,
                                 ),
                                 contentWidget:
                                     // List of Widgets, that shows a list of exams for each course.
                                     _getCourseExamsList(
                                         allExamsTakenByUser: _fetchAllExamsProgressDataForCourseForUser(
-                                            uid: uid, courseId: snapshot.data!.values.elementAt(index)['courseId'])),
+                                            uid: uid,
+                                            courseId:
+                                                _coursesDetails['coursesDetails'].values.elementAt(index)['courseId'])),
                                 index: index,
-                                length: snapshot.data?.length,
+                                length: _coursesDetails['coursesDetails'].length,
                                 hasHoverBorder: true,
                               );
                             },
@@ -410,7 +419,21 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
     );
   }
 
-  Widget _buildSummarySection(userAllData, uid) {
+  Widget _buildSectionHeader({required String title}) {
+    return Container(
+      margin: EdgeInsets.fromLTRB(150, 30, 150, 0),
+      child: Text(
+        title,
+        style: TextStyle(
+          fontSize: 30,
+          color: Colors.grey.shade600,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSummarySection(snapshotData) {
+    print(snapshotData);
     return Container(
       margin: EdgeInsets.fromLTRB(150, 10, 150, 30),
       decoration: BoxDecoration(
@@ -422,28 +445,28 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
         children: [
           SummaryItem(
             title: 'Total Courses Enrolled',
-            value: '${adminState.getSummaryMap(userAllData: userAllData, uid: uid)['coursesEnrolled']}',
+            value: '${snapshotData['coursesEnrolled']}',
             index: 0,
             length: 4,
             type: 'number',
           ),
           SummaryItem(
             title: 'Total Exams Taken',
-            value: '${adminState.getSummaryMap(userAllData: userAllData, uid: uid)['examsTaken']}',
+            value: '${snapshotData['examsTaken']}',
             index: 1,
             length: 4,
             type: 'number',
           ),
           SummaryItem(
             title: 'Average Score',
-            value: '${adminState.getSummaryMap(userAllData: userAllData, uid: uid)['averageScore']}',
+            value: '${snapshotData['averageScore']}',
             index: 2,
             length: 4,
             type: 'number',
           ),
           SummaryItem(
             title: 'Not Completed',
-            value: '${adminState.getSummaryMap(userAllData: userAllData, uid: uid)['inProgressCoursesPercent']}',
+            value: '${snapshotData['inProgressCoursesPercent']}',
             index: 3,
             length: 4,
             type: 'percent',

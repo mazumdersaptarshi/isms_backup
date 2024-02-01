@@ -37,6 +37,7 @@ class ExamProvider extends ChangeNotifier {
 
     /* For now we have alll exams in a list called 'examsList' but when we fecth the data from
     * Firestore we will return a map of all exams. */
+
     return _allExams['examsList'];
   }
 
@@ -46,7 +47,6 @@ class ExamProvider extends ChangeNotifier {
     if (_allExams.isEmpty) {
       _allExams = await getAllExams();
     }
-
     for (var exam in _allExams) {
       if (exam['courseId'] == courseId) {
         examsForCourse.add(exam);
@@ -60,7 +60,6 @@ class ExamProvider extends ChangeNotifier {
     if (_allExams.isEmpty) {
       _allExams = await getAllExams();
     }
-
     for (var exam in _allExams) {
       if (exam['courseId'] == courseId) {
         examsForCourse.add(exam);
