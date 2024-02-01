@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 // import 'package:isms/userManagement/logged_in_state.dart';
 // import 'package:isms/utilityFunctions/platform_check.dart';
 import 'package:provider/provider.dart';
@@ -18,23 +19,18 @@ Future<void> setExpiryDate(
   String certificateName,
   DateTime? expiryDate,
 ) async {
-  DocumentReference adminDocRef = FirebaseFirestore.instance
-      .collection('adminconsole')
-      .doc('allAdmins')
-      .collection('admins')
-      .doc(uid);
+  DocumentReference adminDocRef =
+      FirebaseFirestore.instance.collection('adminconsole').doc('allAdmins').collection('admins').doc(uid);
 
   await adminDocRef.get().then((doc) async {
     if (doc.exists) {
       Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
       List certifications = data['certifications'] as List? ?? [];
-      int existingIndex = certifications
-          .indexWhere((cert) => cert['certification_name'] == certificateName);
+      int existingIndex = certifications.indexWhere((cert) => cert['certification_name'] == certificateName);
 
       Map<String, dynamic> certificateDetails = {
         'certification_name': certificateName,
-        'expiredTime':
-            expiryDate != null ? Timestamp.fromDate(expiryDate) : null,
+        'expiredTime': expiryDate != null ? Timestamp.fromDate(expiryDate) : null,
         'reminderSent': false,
       };
 
@@ -50,8 +46,7 @@ Future<void> setExpiryDate(
         'certifications': [
           {
             'certification_name': certificateName,
-            'expiredTime':
-                expiryDate != null ? Timestamp.fromDate(expiryDate) : null,
+            'expiredTime': expiryDate != null ? Timestamp.fromDate(expiryDate) : null,
             'reminderSent': false,
           },
         ],
@@ -65,11 +60,8 @@ Future<void> checkAndCreateUserDocument(
   String currentUserEmail,
   String currentUserName,
 ) async {
-  DocumentReference adminDocRef = FirebaseFirestore.instance
-      .collection('adminconsole')
-      .doc('allAdmins')
-      .collection('admins')
-      .doc(uid);
+  DocumentReference adminDocRef =
+      FirebaseFirestore.instance.collection('adminconsole').doc('allAdmins').collection('admins').doc(uid);
 
   bool docExists = await adminDocRef.get().then((doc) => doc.exists);
 
@@ -143,8 +135,7 @@ class _ReminderLineState extends State<ReminderLine> {
                       builder: (BuildContext context) {
                         return AlertDialog(
                           title: const Text("Select Date"),
-                          contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 20),
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
                           content: SizedBox(
                             height: 300,
                             width: 500,
@@ -169,17 +160,14 @@ class _ReminderLineState extends State<ReminderLine> {
                                   builder: (BuildContext context) {
                                     return AlertDialog(
                                       title: const Text("Select Time"),
-                                      contentPadding:
-                                          const EdgeInsets.symmetric(
-                                              horizontal: 24, vertical: 20),
+                                      contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
                                       content: SizedBox(
                                         height: 300,
                                         child: CupertinoDatePicker(
                                           mode: CupertinoDatePickerMode.time,
                                           initialDateTime: selectedDate,
                                           use24hFormat: true,
-                                          onDateTimeChanged:
-                                              (DateTime newDate) {
+                                          onDateTimeChanged: (DateTime newDate) {
                                             setState(() {
                                               selectedDate = DateTime(
                                                 selectedDate.year,
@@ -195,8 +183,7 @@ class _ReminderLineState extends State<ReminderLine> {
                                       actions: [
                                         ElevatedButton(
                                           onPressed: () {
-                                            Navigator.of(context)
-                                                .pop(selectedDate);
+                                            Navigator.of(context).pop(selectedDate);
                                           },
                                           child: const Row(
                                             children: [
@@ -248,8 +235,7 @@ class _ReminderLineState extends State<ReminderLine> {
                     if (pickedDate != null) {
                       String? currentUserUid = loggedInState.currentUserUid;
                       if (currentUserUid != null) {
-                        widget.setExpiryDateForCertificate(
-                            currentUserUid, pickedDate);
+                        widget.setExpiryDateForCertificate(currentUserUid, pickedDate);
                         setState(() {
                           expiryDate = pickedDate;
                         });
@@ -265,9 +251,7 @@ class _ReminderLineState extends State<ReminderLine> {
                       SizedBox(width: 5),
                       Text(
                         "Set",
-                        style: TextStyle(
-                            color: Colors.deepOrange,
-                            fontWeight: FontWeight.bold),
+                        style: TextStyle(color: Colors.deepOrange, fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
@@ -277,8 +261,7 @@ class _ReminderLineState extends State<ReminderLine> {
             const SizedBox(height: 5),
             Row(
               children: [
-                if (widget.initialExpiryDate != null &&
-                    DateTime.now().isAfter(widget.initialExpiryDate!))
+                if (widget.initialExpiryDate != null && DateTime.now().isAfter(widget.initialExpiryDate!))
                   Row(
                     children: [
                       const Icon(
@@ -291,20 +274,17 @@ class _ReminderLineState extends State<ReminderLine> {
                         children: [
                           const Text(
                             'Certification expired on',
-                            style:
-                                TextStyle(fontSize: 12, color: Colors.black87),
+                            style: TextStyle(fontSize: 12, color: Colors.black87),
                           ),
                           Text(
                             '${DateFormat('yyyy/MM/dd').format(widget.initialExpiryDate!)} at ${DateFormat('HH:mm').format(widget.initialExpiryDate!)}',
-                            style: const TextStyle(
-                                fontSize: 12, color: Colors.black87),
+                            style: const TextStyle(fontSize: 12, color: Colors.black87),
                           ),
                         ],
                       ),
                     ],
                   ),
-                if (expiryDate != null &&
-                    !DateTime.now().isAfter(widget.initialExpiryDate!))
+                if (expiryDate != null && !DateTime.now().isAfter(widget.initialExpiryDate!))
                   Icon(
                     Icons.check,
                     color: Colors.deepPurpleAccent.shade100,
@@ -322,8 +302,7 @@ class _ReminderLineState extends State<ReminderLine> {
                     color: Colors.grey,
                   ),
                 const SizedBox(width: 5),
-                if (!(widget.initialExpiryDate != null &&
-                    DateTime.now().isAfter(widget.initialExpiryDate!)))
+                if (!(widget.initialExpiryDate != null && DateTime.now().isAfter(widget.initialExpiryDate!)))
                   Text(
                     expiryDate != null
                         ? 'Expiry date: ${DateFormat('yyyy/MM/dd').format(expiryDate!)} at ${DateFormat('HH:mm').format(expiryDate!)}'
@@ -355,6 +334,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
   DateTime? expiryDateVendors;
   List<dynamic> allReminders = [];
   bool _areDatesFetched = false;
+
   @override
   void initState() {
     super.initState();
@@ -406,14 +386,13 @@ class _ReminderScreenState extends State<ReminderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    LoggedInState loggedInState =
-        Provider.of<LoggedInState>(context, listen: false);
+    LoggedInState loggedInState = Provider.of<LoggedInState>(context, listen: false);
 
     print(loggedInState.currentUserUid!);
     getExpiryDates(loggedInState.currentUserUid!);
 
     return Scaffold(
-        appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
+        // appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
         body: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
@@ -422,24 +401,19 @@ class _ReminderScreenState extends State<ReminderScreen> {
                 children: [
                   ReminderLine(
                     text: "People",
-                    setExpiryDateForCertificate: (uid, date) =>
-                        setExpiryDate(uid, "People", date),
-                    initialExpiryDate:
-                        expiryDatePeople, // Pass initial expiry date
+                    setExpiryDateForCertificate: (uid, date) => setExpiryDate(uid, "People", date),
+                    initialExpiryDate: expiryDatePeople, // Pass initial expiry date
                   ),
                   ReminderLine(
                     text: "Vendors",
-                    setExpiryDateForCertificate: (uid, date) =>
-                        setExpiryDate(uid, "Vendors", date),
-                    initialExpiryDate:
-                        expiryDateVendors, // Pass initial expiry date
+                    setExpiryDateForCertificate: (uid, date) => setExpiryDate(uid, "Vendors", date),
+                    initialExpiryDate: expiryDateVendors, // Pass initial expiry date
                   ),
                 ],
               ),
             ],
           ),
         ),
-        bottomNavigationBar:
-            PlatformCheck.bottomNavBarWidget(loggedInState, context: context));
+        bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState, context: context));
   }
 }

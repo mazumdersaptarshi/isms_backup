@@ -1,24 +1,14 @@
-// ignore_for_file: file_names, non_constant_identifier_names
-
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:isms/views/screens/testing/test_runner.dart';
-// import 'package:isms/projectModules/notificationModules/init_link_handler.dart';
-// import 'package:isms/sharedWidgets/loading_screen_widget.dart';
-// import 'package:isms/themes/common_theme.dart';
-// import 'package:isms/userManagement/logged_in_state.dart';
 import 'package:provider/provider.dart';
+import "package:universal_html/html.dart" as html;
 
-import '../../../controllers/notification_management/init_link_handler.dart';
-import '../../../controllers/theme_management//common_theme.dart';
-import '../../../controllers/user_management/logged_in_state.dart';
-// import '../../../projectModules/notification_management/init_link_handler.dart';
-import '../../widgets/shared_widgets/loading_screen_widget.dart';
-import '../home_screen.dart';
-
-// import '../../controllers/themes/common_theme.dart';
-// import '../../controllers/userManagement/logged_in_state.dart';
+import 'package:isms/controllers/notification_management/init_link_handler.dart';
+import 'package:isms/controllers/theme_management/common_theme.dart';
+import 'package:isms/controllers/user_management/logged_in_state.dart';
+import 'package:isms/views/screens/home_screen.dart';
+import 'package:isms/views/widgets/shared_widgets/loading_screen_widget.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -36,8 +26,8 @@ class LoginPageState extends State<LoginPage> {
 
     if (loggedInState.currentUser != null) {
       InitLinkHandler.initLinks(context: context);
+      html.window.history.pushState({}, '', '');
       return const HomePage();
-      // return const TestRunner();
     }
 
     return Scaffold(
@@ -45,16 +35,15 @@ class LoginPageState extends State<LoginPage> {
         child: _isLoading
             ? SizedBox(
                 height: 200,
-                width: MediaQuery.of(context).size.width > SCREEN_COLLAPSE_WIDTH
-                    ? 300
-                    : MediaQuery.of(context).size.width,
+                width:
+                    MediaQuery.of(context).size.width > SCREEN_COLLAPSE_WIDTH ? 300 : MediaQuery.of(context).size.width,
                 child: loadingWidget())
-            : LoginPageUI(),
+            : _getLoginPageUI(),
       ),
     );
   }
 
-  Widget LoginPageUI() {
+  Widget _getLoginPageUI() {
     return LayoutBuilder(
       builder: (context, constraints) {
         // Define max width for better content management
@@ -75,11 +64,9 @@ class LoginPageState extends State<LoginPage> {
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: maxWidthForContent),
               child: Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: horizontalPadding, vertical: verticalPadding),
+                padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: verticalPadding),
                 child: Column(
-                  mainAxisSize: MainAxisSize
-                      .min, // Use MainAxisSize.min to fit content size
+                  mainAxisSize: MainAxisSize.min, // Use MainAxisSize.min to fit content size
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(

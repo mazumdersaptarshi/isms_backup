@@ -295,7 +295,7 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
 
     return Scaffold(
       bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
-      appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
+      appBar: PlatformCheck.topNavBarWidget(context, loggedInState),
       drawer: AdminDrawer(),
       body: FooterView(
         footer: kIsWeb

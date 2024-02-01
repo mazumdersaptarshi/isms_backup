@@ -1,16 +1,16 @@
 import 'dart:math';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+
+import 'package:isms/views/widgets/shared_widgets/custom_app_bar.dart';
 import 'bar_chart_data.dart';
 
 class GraphsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Widget> courseCharts = _buildCourseCharts();
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Graphs'),
-      ),
+      appBar: IsmsAppBar(context: context),
       body: SingleChildScrollView(
         // Make the whole page scrollable
         child: Padding(
@@ -60,8 +60,7 @@ class GraphsPage extends StatelessWidget {
     return courseCharts;
   }
 
-  List<BarChartGroupData> _buildBarGroups(
-      List<Map<String, Map<String, int>>> scoresList) {
+  List<BarChartGroupData> _buildBarGroups(List<Map<String, Map<String, int>>> scoresList) {
     List<BarChartGroupData> barGroups = [];
     int barId = 0;
     scoresList.forEach((studentScores) {
@@ -69,10 +68,7 @@ class GraphsPage extends StatelessWidget {
         barGroups.add(BarChartGroupData(
           x: barId++,
           barRods: [
-            BarChartRodData(
-                toY: data['score']!.toDouble(),
-                color: Colors.blue.shade100,
-                width: 30),
+            BarChartRodData(toY: data['score']!.toDouble(), color: Colors.blue.shade100, width: 30),
           ],
         ));
       });
@@ -85,8 +81,7 @@ class GraphsPage extends StatelessWidget {
       children: [
         Column(
           children: <Widget>[
-            Text('$exam',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            Text('$exam', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             const SizedBox(height: 20),
             Container(
               height: 300,

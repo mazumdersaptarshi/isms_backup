@@ -21,7 +21,7 @@ class TestRunner extends StatelessWidget {
     final loggedInState = context.watch<LoggedInState>();
 
     return Scaffold(
-      appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
+      appBar: PlatformCheck.topNavBarWidget(context, loggedInState),
       body: Container(
         child: Column(
           children: [

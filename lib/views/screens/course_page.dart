@@ -1,8 +1,10 @@
 import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_html/flutter_html.dart';
+
 import 'package:isms/models/enums.dart';
 import 'package:isms/models/course/course.dart';
 import 'package:isms/models/course/element.dart' as element_model;
@@ -12,7 +14,7 @@ import 'package:isms/models/course/section.dart';
 import 'package:isms/views/widgets/course_widgets/checkbox_list.dart';
 import 'package:isms/views/widgets/course_widgets/flip_card.dart';
 import 'package:isms/views/widgets/course_widgets/radio_list.dart';
-import 'package:isms/views/screens/testing/test_ui_type1/expansion_tile.dart';
+import 'package:isms/views/widgets/shared_widgets/custom_app_bar.dart';
 
 class CoursePage extends StatefulWidget {
   const CoursePage({super.key});
@@ -91,9 +93,7 @@ class _CourseState extends State<CoursePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("${_course.courseTitle} - ${_course.courseSections[_currentSectionIndex].sectionTitle}"),
-        ),
+        appBar: IsmsAppBar(context: context),
         // drawer: const SidebarWidget(),
         // drawerScrimColor: Colors.transparent,
         body: Column(

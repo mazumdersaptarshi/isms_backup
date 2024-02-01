@@ -1,49 +1,59 @@
 {
-  "buttonCheckAnswer": "Check answer",
-  "@buttonCheckAnswer": {
-    "type": "text",
-    "description": "Button for checking course question answer"
-  },
-
-  "buttonSelectAnswer": "No answer selected",
-  "@buttonSelectAnswer": {
-    "type": "text",
-    "description": "Disabled button for checking course question answer"
-  },
-
-  "buttonSectionContentIncomplete": "Complete all section content to proceed",
-  "@buttonSectionContentIncomplete": {
-    "type": "text",
-    "description": "Disabled button for proceeding to next section/completing course"
-  },
-
-  "buttonFinishCourse": "Finish course and return to course list",
-  "@buttonFinishCourse": {
-    "type": "text",
-    "description": "Button for completing course"
-  },
-
-  "buttonNextSection": "Proceed to next section: {nextSection}",
-  "@buttonNextSection": {
-    "type": "text",
-    "description": "Button to proceed to next course section",
-    "placeholders": {
-      "nextSection": {
-        "type": "String",
-        "example": "Next Section"
-      }
+    "appBarButtonAdminConsole": "Admin Console",
+    "@appBarButtonAdminConsole": {
+        "type": "text",
+        "description": "Tooltip for app bar Admin Console button"
+    },
+    "appBarButtonCourseList": "My Courses",
+    "@appBarButtonCourseList": {
+        "type": "text",
+        "description": "Tooltip for app bar Course List button"
+    },
+    "appBarButtonLogout": "Logout",
+    "@appBarButtonLogout": {
+        "type": "text",
+        "description": "Tooltip for app bar logout button"
+    },
+    "buttonCheckAnswer": "Check answer",
+    "@buttonCheckAnswer": {
+        "type": "text",
+        "description": "Button for checking course question answer"
+    },
+    "buttonSelectAnswer": "No answer selected",
+    "@buttonSelectAnswer": {
+        "type": "text",
+        "description": "Disabled button for checking course question answer"
+    },
+    "buttonSectionContentIncomplete": "Complete all section content to proceed",
+    "@buttonSectionContentIncomplete": {
+        "type": "text",
+        "description": "Disabled button for proceeding to next section/completing course"
+    },
+    "buttonFinishCourse": "Finish course and return to course list",
+    "@buttonFinishCourse": {
+        "type": "text",
+        "description": "Button for completing course"
+    },
+    "buttonNextSection": "Proceed to next section: {nextSection}",
+    "@buttonNextSection": {
+        "type": "text",
+        "description": "Button to proceed to next course section",
+        "placeholders": {
+            "nextSection": {
+                "type": "String",
+                "example": "Next Section"
+            }
+        }
+    },
+    "buttonPreviousSection": "Back to previous section: {previousSection}",
+    "@buttonPreviousSection": {
+        "type": "text",
+        "description": "Button to return to previous course section",
+        "placeholders": {
+            "previousSection": {
+                "type": "String",
+                "example": "Previous Section"
+            }
+        }
     }
-  },
-
-  "buttonPreviousSection": "Back to previous section: {previousSection}",
-  "@buttonPreviousSection": {
-    "type": "text",
-    "description": "Button to return to previous course section",
-    "placeholders": {
-      "previousSection": {
-        "type": "String",
-        "example": "Previous Section"
-      }
-    }
-  }
 }

@@ -1,8 +1,11 @@
 {
-  "buttonCheckAnswer": "回答をチェック",
-  "buttonSelectAnswer": "回答を選択してください",
-  "buttonSectionContentIncomplete": "未完了の項目があります",
-  "buttonFinishCourse": "コースを完了しコースリストに戻る",
-  "buttonNextSection": "次のセクション「{nextSection}」へ進む",
-  "buttonPreviousSection": "前のセクション「{previousSection}」に戻る"
+    "appBarButtonAdminConsole": "管理コンソール",
+    "appBarButtonCourseList": "コースの概要",
+    "appBarButtonLogout": "ログアウト",
+    "buttonCheckAnswer": "回答をチェック",
+    "buttonSelectAnswer": "回答を選択してください",
+    "buttonSectionContentIncomplete": "未完了の項目があります",
+    "buttonFinishCourse": "コースを完了しコースリストに戻る",
+    "buttonNextSection": "次のセクション「{nextSection}」へ進む",
+    "buttonPreviousSection": "前のセクション「{previousSection}」に戻る"
 }

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../controllers/reminders_management/reminders_provider.dart';
 import '../../../controllers/user_management/logged_in_state.dart';
 import '../../../utilities/platform_check.dart';
+
 // import '../../../utilityFunctions/platform_check.dart';
 // import '../../controllers/remindersManagement/reminders_provider.dart';
 // // import '../../remindersManagement/reminders_provider.dart';
@@ -19,7 +20,7 @@ class TimedRemindersScreen extends StatelessWidget {
     RemindersProvider remindersProvider = context.watch<RemindersProvider>();
     final loggedInState = context.watch<LoggedInState>();
     return Scaffold(
-      appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
+      // appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
       body: Column(
         children: [
           FutureBuilder<Map<String, List<Map<String, dynamic>>>>(
@@ -33,8 +34,7 @@ class TimedRemindersScreen extends StatelessWidget {
                 return Text('Error: ${snapshot.error}');
               } else if (snapshot.hasData) {
                 // Handle the case when the data is available
-                List<String>? dates =
-                    snapshot.data?.keys.toList(); // Get all the date keys
+                List<String>? dates = snapshot.data?.keys.toList(); // Get all the date keys
                 return Expanded(
                   child: ListView.builder(
                     itemCount: dates?.length,
@@ -42,8 +42,7 @@ class TimedRemindersScreen extends StatelessWidget {
                     physics: const ClampingScrollPhysics(),
                     itemBuilder: (context, index) {
                       String? date = dates?[index];
-                      List<Map<String, dynamic>>? itemsForDate =
-                          snapshot.data?[date]!;
+                      List<Map<String, dynamic>>? itemsForDate = snapshot.data?[date]!;
 
                       // Build your list item here using snapshot.data[index]
                       return Card(
@@ -64,9 +63,7 @@ class TimedRemindersScreen extends StatelessWidget {
                                     Text(
                                       date!,
                                       style: TextStyle(
-                                          fontSize: 20,
-                                          color: Colors.grey.shade700,
-                                          fontWeight: FontWeight.bold),
+                                          fontSize: 20, color: Colors.grey.shade700, fontWeight: FontWeight.bold),
                                     ),
                                   ],
                                 )),
@@ -112,8 +109,7 @@ List<Widget> buildListItems(List<Map<String, dynamic>> items) {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (item.containsKey('categoryName') &&
-                        item['categoryName'] != "")
+                    if (item.containsKey('categoryName') && item['categoryName'] != "")
                       Container(
                         child: Text(
                           item['categoryName'] ?? 'n/a',
@@ -137,18 +133,15 @@ List<Widget> buildListItems(List<Map<String, dynamic>> items) {
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         if (item.containsKey('actionItemName'))
-                          Text('${item['actionItemName']}',
-                              style: TextStyle(fontSize: 16.0)),
+                          Text('${item['actionItemName']}', style: TextStyle(fontSize: 16.0)),
                       ],
                     ),
                     SizedBox(height: 4.0),
-                    if (item.containsKey('documentItem'))
-                      Text('${item['documentItem']}' ?? ''),
+                    if (item.containsKey('documentItem')) Text('${item['documentItem']}' ?? ''),
                     if (item.containsKey('actionSubItems'))
                       if (item['actionSubItems'].length > 0)
-                        ...buildListItems(List.from(item['actionSubItems'])
-                            .map((item) => item as Map<String, dynamic>)
-                            .toList())
+                        ...buildListItems(
+                            List.from(item['actionSubItems']).map((item) => item as Map<String, dynamic>).toList())
                   ],
                 ),
               ),

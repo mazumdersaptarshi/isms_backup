@@ -1,14 +1,21 @@
 import 'dart:convert';
 
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart';
 
+import 'package:isms/controllers/user_management/logged_in_state.dart';
 import 'package:isms/models/enums.dart';
 import 'package:isms/models/course/course.dart';
 import 'package:isms/models/course/exam.dart';
 import 'package:isms/models/course/section.dart';
+import 'package:isms/utilities/navigation.dart';
+import 'package:isms/views/widgets/shared_widgets/custom_app_bar.dart';
+
+import 'home_screen.dart';
 
 class CourseList extends StatefulWidget {
   const CourseList({super.key});
@@ -64,9 +71,7 @@ class _CourseListState extends State<CourseList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Courses'),
-      ),
+      appBar: IsmsAppBar(context: context),
       // drawer: const SidebarWidget(),
       // drawerScrimColor: Colors.transparent,
       // body: SingleChildScrollView(
