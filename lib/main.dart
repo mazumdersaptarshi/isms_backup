@@ -15,10 +15,7 @@ import 'package:isms/controllers/reminders_management/reminders_provider.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart';
 import 'package:isms/controllers/user_management/logged_in_state.dart';
 import 'package:isms/controllers/user_management/user_progress_tracker.dart';
-import 'package:isms/views/screens/authentication/login_screen.dart';
-
-// import 'package:isms/remindersManagement/reminders_provider.dart';
-// import 'package:isms/screens/login/login_screen.dart';
+import 'package:isms/utilities/navigation.dart';
 
 void main() async {
   // logging setup
@@ -73,22 +70,26 @@ class IsmsApp extends StatelessWidget {
           return RemindersProvider();
         }),
       ],
-      child: MaterialApp(
+      child: MaterialApp.router(
         title: 'ISMS',
         theme: ismsTheme,
+        scrollBehavior: CustomScrollBehavior(),
+        debugShowCheckedModeBanner: false,
+        // Required for localisation functionality
         localizationsDelegates: const [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
         ],
+        // Supported locales for localisation
         supportedLocales: const [
           Locale('en'),
           Locale('ja'),
         ],
-        scrollBehavior: CustomScrollBehavior(),
-        debugShowCheckedModeBanner: false,
-        home: const LoginPage(),
+        // Configuration for direct URL linking and access
+        routerConfig: ismsRouter,
+        // home: const LoginPage(),
       ),
     );
   }

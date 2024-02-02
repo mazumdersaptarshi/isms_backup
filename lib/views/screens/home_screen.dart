@@ -1,26 +1,15 @@
-// ignore_for_file: file_names, sort_child_properties_last
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:footer/footer.dart';
 import 'package:footer/footer_view.dart';
-// import 'package:isms/screens/homePageWidgets/homePageMainContent.dart';
-// import 'package:isms/screens/login/login_screen.dart';
-// import 'package:isms/sharedWidgets/app_footer.dart';
-// import 'package:isms/themes/common_theme.dart';
-// import 'package:isms/userManagement/logged_in_state.dart';
-// import 'package:isms/utilityFunctions/platform_check.dart';
 import 'package:provider/provider.dart';
 
-import '../../controllers/theme_management/common_theme.dart';
-import '../../controllers/user_management/logged_in_state.dart';
-// import '../controllers/themes/common_theme.dart';
-// import '../controllers/userManagement/logged_in_state.dart';
-// import '../sharedWidgets/app_footer.dart';
-import '../../utilities/platform_check.dart';
-import '../widgets/shared_widgets/app_footer.dart';
-import 'authentication/login_screen.dart';
+import 'package:isms/controllers/theme_management/common_theme.dart';
+import 'package:isms/controllers/user_management/logged_in_state.dart';
+import 'package:isms/utilities/platform_check.dart';
+import 'package:isms/views/widgets/shared_widgets/app_footer.dart';
+import 'package:isms/views/widgets/shared_widgets/custom_app_bar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -30,8 +19,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late String userRole;
-
   @override
   void initState() {
     super.initState();
@@ -43,11 +30,8 @@ class _HomePageState extends State<HomePage> {
     String currentUserEmail,
     String currentUserName,
   ) async {
-    DocumentReference adminDocRef = FirebaseFirestore.instance
-        .collection('adminconsole')
-        .doc('allAdmins')
-        .collection('admins')
-        .doc(uid);
+    DocumentReference adminDocRef =
+        FirebaseFirestore.instance.collection('adminconsole').doc('allAdmins').collection('admins').doc(uid);
 
     bool docExists = await adminDocRef.get().then((doc) => doc.exists);
 
@@ -62,26 +46,17 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    double homePageContainerHeight =
-        MediaQuery.of(context).size.width < SCREEN_COLLAPSE_WIDTH ? 1050 : 400;
-    // 500;
-    final loggedInState = context.watch<LoggedInState>();
-
-    if (loggedInState.currentUser == null) {
-      return const LoginPage();
-    }
-
-    userRole = loggedInState.currentUserRole;
+    double homePageContainerHeight = MediaQuery.of(context).size.width < SCREEN_COLLAPSE_WIDTH ? 1050 : 400;
+    final LoggedInState loggedInState = context.watch<LoggedInState>();
 
     return Scaffold(
         backgroundColor: Colors.white,
-        bottomNavigationBar:
-            PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
-        appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
+        bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
+        // appBar: PlatformCheck.topNavBarWidget(context, loggedInState),
+        appBar: IsmsAppBar(context: context),
         body: FooterView(
           footer: kIsWeb
-              ? Footer(
-                  backgroundColor: Colors.transparent, child: const AppFooter())
+              ? Footer(backgroundColor: Colors.transparent, child: const AppFooter())
               : Footer(backgroundColor: Colors.transparent, child: Container()),
           children: [
             CustomScrollView(
@@ -100,15 +75,13 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         Text(
                           "Welcome back, \n${loggedInState.currentUserName}",
-                          style: customTheme.textTheme.bodyMedium
-                              ?.copyWith(fontSize: 30, color: Colors.white),
+                          style: customTheme.textTheme.bodyMedium?.copyWith(fontSize: 30, color: Colors.white),
                         ),
                         Flexible(
-                          flex:
-                              1, // The flex factor. You can adjust this number to take more or less space in the Row or Column.
+                          flex: 1,
+                          // The flex factor. You can adjust this number to take more or less space in the Row or Column.
                           child: SizedBox(
-                            width: MediaQuery.of(context).size.width *
-                                0.2, // 50% of screen width
+                            width: MediaQuery.of(context).size.width * 0.2, // 50% of screen width
 
                             child: Image.asset(
                               "assets/images/security.png",

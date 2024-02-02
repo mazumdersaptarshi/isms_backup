@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:isms/views/widgets/user_screens_widgets/user_actions.dart';
+
 // import 'package:isms/screens/analyticsSharedWidgets/course_dropdown_widget.dart';
 // import 'package:isms/screens/login/login_screen.dart';
 // import 'package:isms/themes/common_theme.dart';
@@ -13,6 +14,7 @@ import 'package:provider/provider.dart';
 
 import '../../../controllers/theme_management/common_theme.dart';
 import '../../../controllers/user_management/logged_in_state.dart';
+
 // import '../../../sharedWidgets/analyticsSharedWidgets/course_dropdown_widget.dart';
 // import '../../../sharedWidgets/analyticsSharedWidgets/userCourseStartedDetailsWidget.dart';
 // import '../../sharedWidgets/analyticsSharedWidgets/course_dropdown_widget.dart';
@@ -21,6 +23,7 @@ import '../../../controllers/user_management/logged_in_state.dart';
 import '../../../utilities/platform_check.dart';
 import '../../widgets/user_screens_widgets/user_profile_header_widget.dart';
 import '../authentication/login_screen.dart';
+
 // import '../../controllers/themes/common_theme.dart';
 // import '../../controllers/userManagement/logged_in_state.dart';
 // import '../../controllers/userManagement/user_profile_header_widget.dart';
@@ -44,10 +47,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
     // UserActions(
     // //     name: 'Dashboard', icon: Icons.dashboard, actionId: 'dashboard'),
     // UserActions(name: 'Reports', icon: Icons.description, actionId: 'reports'),
-    UserActions(
-        name: 'Courses Enrolled', icon: Icons.school, actionId: 'crs_enrl'),
-    UserActions(
-        name: 'Courses Completed', icon: Icons.check, actionId: 'crs_compl'),
+    UserActions(name: 'Courses Enrolled', icon: Icons.school, actionId: 'crs_enrl'),
+    UserActions(name: 'Courses Completed', icon: Icons.check, actionId: 'crs_compl'),
     // UserActions(name: 'Exams', icon: Icons.assignment, actionId: 'exms'),
     // UserActions(name: 'Logout', icon: Icons.exit_to_app, actionId: 'logout'),
   ];
@@ -62,6 +63,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
   refreshCallback() {
     setState(() {});
   }
+
   // UserDataGetterMaster userDataGetterMaster = UserDataGetterMaster();
 
   @override
@@ -74,9 +76,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
     return Scaffold(
       backgroundColor: Colors.deepPurpleAccent.shade100,
-      appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
-      bottomNavigationBar:
-          PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
+      // appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
+      bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
@@ -107,8 +108,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   final action = userActions[index];
                   return Container(
                     constraints: BoxConstraints(
-                      maxWidth: MediaQuery.of(context).size.width >
-                              SCREEN_COLLAPSE_WIDTH
+                      maxWidth: MediaQuery.of(context).size.width > SCREEN_COLLAPSE_WIDTH
                           ? MediaQuery.of(context).size.width * 0.5
                           : MediaQuery.of(context).size.width,
                     ),
