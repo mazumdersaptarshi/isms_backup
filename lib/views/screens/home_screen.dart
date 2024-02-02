@@ -10,6 +10,7 @@ import 'package:isms/controllers/user_management/logged_in_state.dart';
 import 'package:isms/utilities/platform_check.dart';
 import 'package:isms/views/widgets/shared_widgets/app_footer.dart';
 import 'package:isms/views/widgets/shared_widgets/custom_app_bar.dart';
+import 'package:isms/views/widgets/shared_widgets/custom_drawer.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -50,53 +51,55 @@ class _HomePageState extends State<HomePage> {
     final LoggedInState loggedInState = context.watch<LoggedInState>();
 
     return Scaffold(
-        backgroundColor: Colors.white,
-        bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
-        // appBar: PlatformCheck.topNavBarWidget(context, loggedInState),
-        appBar: IsmsAppBar(context: context),
-        body: FooterView(
-          footer: kIsWeb
-              ? Footer(backgroundColor: Colors.transparent, child: const AppFooter())
-              : Footer(backgroundColor: Colors.transparent, child: Container()),
-          children: [
-            CustomScrollView(
-              physics: const ClampingScrollPhysics(),
-              shrinkWrap: true,
-              slivers: [
-                SliverAppBar(
-                  elevation: 10,
-                  // backgroundColor: Colors.green,
-                  automaticallyImplyLeading: false,
-                  expandedHeight: 280,
-                  pinned: false,
-                  flexibleSpace: FlexibleSpaceBar(
-                    background: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Text(
-                          "Welcome back, \n${loggedInState.currentUserName}",
-                          style: customTheme.textTheme.bodyMedium?.copyWith(fontSize: 30, color: Colors.white),
-                        ),
-                        Flexible(
-                          flex: 1,
-                          // The flex factor. You can adjust this number to take more or less space in the Row or Column.
-                          child: SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.2, // 50% of screen width
+      backgroundColor: Colors.white,
+      bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
+      // appBar: PlatformCheck.topNavBarWidget(context, loggedInState),
+      appBar: IsmsAppBar(context: context),
+      drawer: IsmsDrawer(context: context),
+      body: FooterView(
+        footer: kIsWeb
+            ? Footer(backgroundColor: Colors.transparent, child: const AppFooter())
+            : Footer(backgroundColor: Colors.transparent, child: Container()),
+        children: [
+          CustomScrollView(
+            physics: const ClampingScrollPhysics(),
+            shrinkWrap: true,
+            slivers: [
+              SliverAppBar(
+                elevation: 10,
+                // backgroundColor: Colors.green,
+                automaticallyImplyLeading: false,
+                expandedHeight: 280,
+                pinned: false,
+                flexibleSpace: FlexibleSpaceBar(
+                  background: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text(
+                        "Welcome back, \n${loggedInState.currentUserName}",
+                        style: customTheme.textTheme.bodyMedium?.copyWith(fontSize: 30, color: Colors.white),
+                      ),
+                      Flexible(
+                        flex: 1,
+                        // The flex factor. You can adjust this number to take more or less space in the Row or Column.
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.2, // 50% of screen width
 
-                            child: Image.asset(
-                              "assets/images/security.png",
-                              fit: BoxFit
-                                  .contain, // This will cover the available space, you can change it to BoxFit.contain to prevent the image from being cropped.
-                            ),
+                          child: Image.asset(
+                            "assets/images/security.png",
+                            fit: BoxFit
+                                .contain, // This will cover the available space, you can change it to BoxFit.contain to prevent the image from being cropped.
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            )
-          ],
-        ));
+              ),
+            ],
+          )
+        ],
+      ),
+    );
   }
 }

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+
 import 'package:isms/controllers/user_management/logged_in_state.dart';
 import 'package:isms/utilities/navigation.dart';
 import 'package:isms/views/screens/admin_screens/admin_console/users_analytics_stats_screen.dart';
 import 'package:isms/views/screens/course_page.dart';
 import 'package:isms/views/screens/testing/test_runner.dart';
 import 'package:isms/views/screens/testing/test_ui_type1/graphs.dart';
-import 'package:provider/provider.dart';
 
 class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
   final BuildContext? context;
@@ -21,35 +22,29 @@ class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      automaticallyImplyLeading: false,
-      title: IconButton(
-        icon: const Icon(Icons.home),
-        onPressed: () => context.goNamed(NamedRoutes.home.name),
-      ),
-      // centerTitle: true,
+      title: _getTitle(context),
+      centerTitle: true,
       actions: [..._getActionWidgets(context)],
     );
   }
 
   List<Widget> _getActionWidgets(BuildContext context) {
     final LoggedInState loggedInState = context.watch<LoggedInState>();
-    List<Widget> actionWidgets = [];
+    final List<Widget> actionWidgets = [];
 
-    actionWidgets.add(_getActionIconButton(Icons.list, AppLocalizations.of(context)!.appBarButtonCourseList,
+    actionWidgets.add(_getActionIconButton(context, Icons.list, AppLocalizations.of(context)!.buttonCourseList,
         () => context.goNamed(NamedRoutes.courses.name)));
-    actionWidgets.add(_getActionIconButton(Icons.article, "Course Test",
+    actionWidgets.add(_getActionIconButton(context, Icons.article, "Course Test",
         () => Navigator.push(context, MaterialPageRoute(builder: (context) => const CoursePage()))));
-    actionWidgets.add(_getActionIconButton(Icons.bar_chart, "Graphs",
+    actionWidgets.add(_getActionIconButton(context, Icons.bar_chart, "Graphs",
         () => Navigator.push(context, MaterialPageRoute(builder: (context) => GraphsPage()))));
-    actionWidgets.add(_getActionIconButton(Icons.track_changes, "Tracking",
+    actionWidgets.add(_getActionIconButton(context, Icons.track_changes, "Tracking",
         () => Navigator.push(context, MaterialPageRoute(builder: (context) => const TestRunner()))));
-    actionWidgets.add(_getActionIconButton(Icons.analytics_rounded, "Users Analytics",
+    actionWidgets.add(_getActionIconButton(context, Icons.analytics_rounded, "Users Analytics",
         () => Navigator.push(context, MaterialPageRoute(builder: (context) => const UsersAnalyticsStatsScreen()))));
     if (loggedInState.currentUserRole == 'admin') {
-      actionWidgets.add(_getActionIconButton(
-          Icons.admin_panel_settings_rounded,
-          AppLocalizations.of(context)!.appBarButtonAdminConsole,
-          () => context.goNamed(NamedRoutes.adminConsole.name)));
+      actionWidgets.add(_getActionIconButton(context, Icons.admin_panel_settings_rounded,
+          AppLocalizations.of(context)!.buttonAdminConsole, () => context.goNamed(NamedRoutes.adminConsole.name)));
     }
     actionWidgets.add(_getVerticalDivider());
     actionWidgets.add(_getLogoutButton(context));
@@ -57,17 +52,46 @@ class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
     return actionWidgets;
   }
 
+  Widget _getActionIconButton(BuildContext context, IconData icon, String tooltip, VoidCallback onPressed) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 5, right: 5),
+      child: IconButton(
+        icon: Icon(icon),
+        tooltip: tooltip,
+        onPressed: onPressed,
+        style: Theme.of(context).iconButtonTheme.style,
+      ),
+    );
+  }
+
+  Widget _getTitle(BuildContext context) {
+    return MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(
+            onTap: () => context.goNamed(NamedRoutes.home.name),
+            child: const Text(
+              'ISMS',
+              style: TextStyle(
+                fontFamily: 'Montserrat',
+                fontWeight: FontWeight.bold,
+                // color: Colors.white,
+                fontSize: 28,
+              ),
+            )));
+  }
+
   Widget _getLogoutButton(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(right: 16.0),
       child: IconButton(
         icon: const Icon(Icons.logout),
-        tooltip: AppLocalizations.of(context)!.appBarButtonLogout,
+        tooltip: AppLocalizations.of(context)!.buttonLogout,
         onPressed: () async {
           await LoggedInState.logout().then((value) {
             context.goNamed(NamedRoutes.login.name);
           });
         },
+        style: Theme.of(context).iconButtonTheme.style,
       ),
     );
   }
@@ -75,19 +99,10 @@ class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget _getVerticalDivider() {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
-      child: VerticalDivider(
-        width: 1,
-        thickness: 1,
-        color: Colors.white.withOpacity(0.5),
+      child: const VerticalDivider(
+        thickness: 2,
+        color: Colors.white60,
       ),
-    );
-  }
-
-  Widget _getActionIconButton(IconData icon, String tooltip, VoidCallback onPressed) {
-    return IconButton(
-      icon: Icon(icon),
-      tooltip: tooltip,
-      onPressed: onPressed,
     );
   }
 }

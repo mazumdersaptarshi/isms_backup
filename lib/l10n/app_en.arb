@@ -1,18 +1,23 @@
 {
-    "appBarButtonAdminConsole": "Admin Console",
-    "@appBarButtonAdminConsole": {
+    "buttonHome": "Home",
+    "@buttonHome": {
         "type": "text",
-        "description": "Tooltip for app bar Admin Console button"
+        "description": "Tooltip for Home button"
     },
-    "appBarButtonCourseList": "My Courses",
-    "@appBarButtonCourseList": {
+    "buttonAdminConsole": "Admin Console",
+    "@buttonAdminConsole": {
         "type": "text",
-        "description": "Tooltip for app bar Course List button"
+        "description": "Tooltip for Admin Console button"
     },
-    "appBarButtonLogout": "Logout",
-    "@appBarButtonLogout": {
+    "buttonCourseList": "My Courses",
+    "@buttonCourseList": {
         "type": "text",
-        "description": "Tooltip for app bar logout button"
+        "description": "Tooltip for Course List button"
+    },
+    "buttonLogout": "Logout",
+    "@buttonLogout": {
+        "type": "text",
+        "description": "Tooltip for logout button"
     },
     "buttonCheckAnswer": "Check answer",
     "@buttonCheckAnswer": {

@@ -14,6 +14,7 @@ import 'package:isms/models/course/exam.dart';
 import 'package:isms/models/course/section.dart';
 import 'package:isms/utilities/navigation.dart';
 import 'package:isms/views/widgets/shared_widgets/custom_app_bar.dart';
+import 'package:isms/views/widgets/shared_widgets/custom_drawer.dart';
 
 import 'home_screen.dart';
 
@@ -72,8 +73,7 @@ class _CourseListState extends State<CourseList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: IsmsAppBar(context: context),
-      // drawer: const SidebarWidget(),
-      // drawerScrimColor: Colors.transparent,
+      drawer: IsmsDrawer(context: context),
       // body: SingleChildScrollView(
       body: ListView(
         children: [..._getWidgets()],

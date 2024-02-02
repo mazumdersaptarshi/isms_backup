@@ -15,6 +15,7 @@ import 'package:isms/views/widgets/course_widgets/checkbox_list.dart';
 import 'package:isms/views/widgets/course_widgets/flip_card.dart';
 import 'package:isms/views/widgets/course_widgets/radio_list.dart';
 import 'package:isms/views/widgets/shared_widgets/custom_app_bar.dart';
+import 'package:isms/views/widgets/shared_widgets/custom_drawer.dart';
 
 class CoursePage extends StatefulWidget {
   const CoursePage({super.key});
@@ -94,8 +95,7 @@ class _CourseState extends State<CoursePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: IsmsAppBar(context: context),
-        // drawer: const SidebarWidget(),
-        // drawerScrimColor: Colors.transparent,
+        drawer: IsmsDrawer(context: context),
         body: Column(
           children: [..._getCurrentSectionWidgets()],
         ));

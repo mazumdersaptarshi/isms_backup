@@ -1,7 +1,8 @@
 {
-    "appBarButtonAdminConsole": "管理コンソール",
-    "appBarButtonCourseList": "コースの概要",
-    "appBarButtonLogout": "ログアウト",
+    "buttonHome": "トップページ",
+    "buttonAdminConsole": "管理コンソール",
+    "buttonCourseList": "コースの概要",
+    "buttonLogout": "ログアウト",
     "buttonCheckAnswer": "回答をチェック",
     "buttonSelectAnswer": "回答を選択してください",
     "buttonSectionContentIncomplete": "未完了の項目があります",

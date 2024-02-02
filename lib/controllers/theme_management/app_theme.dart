@@ -9,7 +9,8 @@ const Set<MaterialState> interactiveStates = <MaterialState>{
   MaterialState.hovered,
   MaterialState.focused
 };
-final Color? primary = getPrimaryColorShade(700);
+
+Color? get primary => getPrimaryColorShade(700);
 
 Color? getPrimaryColorShade(int shade) {
   return Colors.blue[shade];
@@ -37,8 +38,10 @@ ThemeData _ismsTheme() {
     textTheme: _textTheme(base.textTheme),
     appBarTheme: _appBarTheme(base.appBarTheme),
     checkboxTheme: _checkboxTheme(base.checkboxTheme),
+    drawerTheme: _drawerTheme(base.drawerTheme),
     elevatedButtonTheme: _elevatedButtonTheme(base.elevatedButtonTheme),
     expansionTileTheme: _expansionTileTheme(base.expansionTileTheme),
+    iconButtonTheme: _iconButtonTheme(base.iconButtonTheme),
     listTileTheme: _listTileTheme(base.listTileTheme),
   );
 }
@@ -76,6 +79,10 @@ AppBarTheme _appBarTheme(AppBarTheme base) =>
 CheckboxThemeData _checkboxTheme(CheckboxThemeData base) =>
     base.copyWith(checkColor: MaterialStateProperty.all<Color>(Colors.white));
 
+/// Returns app-wide [DrawerThemeData].
+DrawerThemeData _drawerTheme(DrawerThemeData base) =>
+    base.copyWith(shape: const ContinuousRectangleBorder(), scrimColor: Colors.black26, width: 350);
+
 /// Returns app-wide [ElevatedButtonThemeData].
 ///
 /// Properties `textStyle` and `shape` are overridden to be the same for all [MaterialState]s of the widget.
@@ -93,7 +100,6 @@ ElevatedButtonThemeData _elevatedButtonTheme(ElevatedButtonThemeData base) => El
     );
 
 /// Returns app-wide [ExpansionTileThemeData].
-
 ExpansionTileThemeData _expansionTileTheme(ExpansionTileThemeData base) => ExpansionTileThemeData(
       // backgroundColor: getPrimaryColor(),
       // collapsedBackgroundColor: Colors.grey[300],
@@ -106,8 +112,18 @@ ExpansionTileThemeData _expansionTileTheme(ExpansionTileThemeData base) => Expan
       collapsedShape: getRoundedRectangleBorder(),
     );
 
+/// Returns app-wide [IconButtonThemeData].
+IconButtonThemeData _iconButtonTheme(IconButtonThemeData base) => const IconButtonThemeData(
+        style: ButtonStyle(
+      iconSize: MaterialStatePropertyAll(30),
+      foregroundColor: MaterialStatePropertyAll(Colors.white),
+      // tapTargetSize: MaterialTapTargetSize.padded
+    ));
+
 /// Returns app-wide [ListTileThemeData].
-ListTileThemeData _listTileTheme(ListTileThemeData base) => const ListTileThemeData(textColor: Colors.black);
+ListTileThemeData _listTileTheme(ListTileThemeData base) => const ListTileThemeData(
+    // textColor: Colors.black
+    );
 
 // Private functions for conditional widget styling in app theme
 
