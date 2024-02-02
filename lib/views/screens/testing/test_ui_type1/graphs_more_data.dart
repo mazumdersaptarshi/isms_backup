@@ -19,9 +19,8 @@ class _DataVisualizationPageState extends State<DataVisualizationPage> {
   }
 
   Future<void> loadExamData() async {
-    String jsonString =
-        await rootBundle.loadString('assets/data/all_courses/graphs1.json');
-    print('Loaded JSON String: $jsonString');
+    String jsonString = await rootBundle.loadString('assets/data/all_courses/graphs1.json');
+    // print('Loaded JSON String: $jsonString');
 
     Map<String, dynamic> data = json.decode(jsonString);
     processExamData(data);
@@ -123,11 +122,7 @@ class LineChartWidget extends StatelessWidget {
 
   LineChartBarData _lineChartBarData(List<double> data, Color color) {
     return LineChartBarData(
-      spots: data
-          .asMap()
-          .entries
-          .map((e) => FlSpot(e.key.toDouble(), e.value))
-          .toList(),
+      spots: data.asMap().entries.map((e) => FlSpot(e.key.toDouble(), e.value)).toList(),
       isCurved: true,
       barWidth: 2,
       color: Colors.grey,

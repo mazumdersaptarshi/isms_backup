@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:isms/controllers/user_management/logged_in_state.dart';
 import 'package:isms/utilities/navigation.dart';
+import 'package:isms/views/screens/admin_screens/admin_console/users_analytics_stats_screen.dart';
 import 'package:isms/views/screens/course_page.dart';
 import 'package:isms/views/screens/testing/test_runner.dart';
 import 'package:isms/views/screens/testing/test_ui_type1/graphs.dart';
@@ -25,7 +26,7 @@ class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
         icon: const Icon(Icons.home),
         onPressed: () => context.goNamed(NamedRoutes.home.name),
       ),
-      centerTitle: true,
+      // centerTitle: true,
       actions: [..._getActionWidgets(context)],
     );
   }
@@ -34,25 +35,16 @@ class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
     final LoggedInState loggedInState = context.watch<LoggedInState>();
     List<Widget> actionWidgets = [];
 
-    actionWidgets.add(_getActionIconButton(
-        Icons.list,
-        AppLocalizations.of(context)!.appBarButtonCourseList,
+    actionWidgets.add(_getActionIconButton(Icons.list, AppLocalizations.of(context)!.appBarButtonCourseList,
         () => context.goNamed(NamedRoutes.courses.name)));
-    actionWidgets.add(_getActionIconButton(
-        Icons.article,
-        "Course Test",
-        () => Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const CoursePage()))));
-    actionWidgets.add(_getActionIconButton(
-        Icons.bar_chart,
-        "Graphs",
-        () => Navigator.push(
-            context, MaterialPageRoute(builder: (context) => GraphsPage()))));
-    actionWidgets.add(_getActionIconButton(
-        Icons.track_changes,
-        "Tracking",
-        () => Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const TestRunner()))));
+    actionWidgets.add(_getActionIconButton(Icons.article, "Course Test",
+        () => Navigator.push(context, MaterialPageRoute(builder: (context) => const CoursePage()))));
+    actionWidgets.add(_getActionIconButton(Icons.bar_chart, "Graphs",
+        () => Navigator.push(context, MaterialPageRoute(builder: (context) => GraphsPage()))));
+    actionWidgets.add(_getActionIconButton(Icons.track_changes, "Tracking",
+        () => Navigator.push(context, MaterialPageRoute(builder: (context) => const TestRunner()))));
+    actionWidgets.add(_getActionIconButton(Icons.analytics_rounded, "Users Analytics",
+        () => Navigator.push(context, MaterialPageRoute(builder: (context) => const UsersAnalyticsStatsScreen()))));
     if (loggedInState.currentUserRole == 'admin') {
       actionWidgets.add(_getActionIconButton(
           Icons.admin_panel_settings_rounded,
@@ -91,8 +83,7 @@ class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  Widget _getActionIconButton(
-      IconData icon, String tooltip, VoidCallback onPressed) {
+  Widget _getActionIconButton(IconData icon, String tooltip, VoidCallback onPressed) {
     return IconButton(
       icon: Icon(icon),
       tooltip: tooltip,

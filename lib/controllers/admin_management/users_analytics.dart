@@ -6,14 +6,28 @@ class UsersAnalytics {
     required dynamic allCoursesData,
     required dynamic allExamsData,
   }) {
-    allUsersData.forEach((key, individualUserData) {
-      individualUserData.forEach((key, value) {
-        if (key == 'courses') {}
-      });
-    });
-
     _setAllCourseIDsAsKeys(allCoursesData: allCoursesData);
     _addAllExamsToRespectiveCourses(allExamsData: allExamsData);
+
+    allUsersData.forEach((key, individualUserData) {
+      individualUserData.forEach((key, allUserProgressItems) {
+        var userId;
+
+        print(key);
+        if (key == 'userId') {
+          userId = allUserProgressItems;
+        }
+        if (key == 'exams') {
+          allUserProgressItems.forEach((key, value) {
+            print(key);
+            var valueMap = value.toMap();
+            print(valueMap);
+            var map = {userId: valueMap};
+            print(_allCoursesAllExamsMap[valueMap['courseId']][valueMap['examId']]);
+          });
+        }
+      });
+    });
     return _allCoursesAllExamsMap;
 
     print(allUsersData);
@@ -23,7 +37,7 @@ class UsersAnalytics {
     for (var course in allCoursesData) {
       _allCoursesAllExamsMap[course['courseId']] = '';
     }
-    print('_allCoursesAllExamsMap: $_allCoursesAllExamsMap');
+    // print('_allCoursesAllExamsMap: $_allCoursesAllExamsMap');
   }
 
   static void _addAllExamsToRespectiveCourses({required List allExamsData}) {
