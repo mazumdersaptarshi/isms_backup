@@ -76,7 +76,7 @@ class TestRunner extends StatelessWidget {
             ElevatedButton(
                 onPressed: () {
                   print('-----------------');
-                  print(AdminState().fetchUsersData());
+                  print(AdminState().getAllUsersData);
                 },
                 child: Text('Get all Users')),
           ],

@@ -5,9 +5,11 @@ import 'package:isms/services/hive/config/config.dart';
 class UserProgressAnalytics {
   static Map<String, dynamic> _lastLoadedUserSummaryMap = {'inProgressCourses': []};
 
-  static Future<Map<String, dynamic>> buildUserCoursesDataMap({
+  static Map<String, dynamic> buildUserCoursesDataMap({
     required Map userAllData,
-  }) async {
+    required dynamic allCoursesData,
+    required dynamic allExamsData,
+  }) {
     Map<String, dynamic> coursesDetails = {};
     int totalScore = 0;
     int numberOfAttempts = 0;
@@ -18,11 +20,23 @@ class UserProgressAnalytics {
     for (var courseProgressItem in userCourses.entries) {
       //gets the course details from the database
 
-      Map fetchedCourse = await CourseProvider.getCourseByID(courseId: courseProgressItem.key);
-      int fetchedCourseSectionsLength =
-          await CourseProvider.getSectionsCountForCourse(courseId: courseProgressItem.key);
-      List fetchedCourseExams = await ExamProvider.getExamsByCourseId(courseId: courseProgressItem.key);
-      int fetchedExamsCount = await ExamProvider.getExamsCountForCourse(courseId: courseProgressItem.key);
+      // Map fetchedCourse = await CourseProvider.getCourseByID(courseId: courseProgressItem.key);
+      Map fetchedCourse = {};
+      List fetchedCourseExams = [];
+
+      for (Map<String, dynamic> course in allCoursesData) {
+        if (course['courseId'] == courseProgressItem.key) {
+          fetchedCourse = course;
+        }
+      }
+
+      for (var exam in allExamsData) {
+        if (exam['courseId'] == courseProgressItem.key) {
+          fetchedCourseExams.add(exam);
+        }
+      }
+      int fetchedCourseSectionsLength = fetchedCourse['courseSections'].length;
+      int fetchedExamsCount = fetchedCourseExams.length;
 
       coursesDetails[courseProgressItem.key] = {
         'courseId': fetchedCourse['courseId'],
@@ -69,7 +83,7 @@ class UserProgressAnalytics {
     return userDetailsMap;
   }
 
-  static Map<String, dynamic> buildExamsProgressMapForCourseForUser(Map allUsersData, String uid, String courseId) {
+  static Map<String, dynamic> buildUserExamsDataMapForCourse(Map allUsersData, String uid, String courseId) {
     Map<String, dynamic> exams = {};
 
     try {
@@ -87,7 +101,7 @@ class UserProgressAnalytics {
 
   static Map<String, dynamic> _buildExamsMapForCourseForUser({required Map<String, dynamic> exams}) {
     Map<String, dynamic> userExamsProgress = {};
-    exams.forEach((examId, value) async {
+    exams.forEach((examId, value) {
       Map<String, dynamic> examData = ExamProvider.getExamByIDLocal(examId: examId);
       List listOfAttempts = [];
       value.forEach((key, value) {

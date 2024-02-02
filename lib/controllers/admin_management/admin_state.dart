@@ -10,53 +10,54 @@ import 'package:isms/services/hive/config/config.dart';
 class AdminState {
   static final AdminState _instance = AdminState._internal();
   Map _allUsersData = {};
-  late List _allFetchedExams;
-  late List _allFetchedCourses;
+  bool _isDataLoading = true;
+  late dynamic _allFetchedExams;
+  late dynamic _allFetchedCourses;
   Map<String, dynamic> _userAllData = {};
 
   AdminState._internal() {
-    _allUsersData = HiveService.getExistingLocalDataFromUsersBox();
-    _initializeAsync();
+    retrieveAllDataFromDatabase();
   }
 
   factory AdminState() {
     return _instance;
   }
 
-  Future<void> _initializeAsync() async {
+  bool get dataIsLoading => _isDataLoading;
+
+  dynamic get getAllFetchedExams => _allFetchedExams;
+
+  dynamic get getAllFetchedCourses => _allFetchedCourses;
+
+  Map get getAllUsersData => _allUsersData;
+
+  Future<dynamic> retrieveAllDataFromDatabase() async {
+    _isDataLoading = true;
+    _allUsersData = await HiveService.getExistingLocalDataFromUsersBox();
     _allFetchedExams = await ExamProvider.getAllExams();
     _allFetchedCourses = await CourseProvider.getAllCourses();
+
+    _isDataLoading = false;
+
+    return _allFetchedCourses;
     // Additional initialization tasks can be added here
   }
 
-  Map fetchUsersData() {
-    return _allUsersData;
-  }
-
-  Future<Map<String, dynamic>> getAllDataForUser(String uid) async {
-    await Future.delayed(Duration(seconds: 2));
-    // print('allUserData: ${_allUsersData}');
-
+  Map<String, dynamic> getAllCoursesDataForCurrentUser(String uid) {
     _userAllData = Map.from(_allUsersData[uid]);
+    Map<String, dynamic> userCoursesData = UserProgressAnalytics.buildUserCoursesDataMap(
+      userAllData: _userAllData,
+      allCoursesData: _allFetchedCourses,
+      allExamsData: _allFetchedExams,
+    );
 
-    return _userAllData;
-  }
-
-  Future<Map<String, dynamic>> fetchAllDataForCurrentUser({required Map userAllData}) async {
-    Map<String, dynamic> userData = await UserProgressAnalytics.buildUserCoursesDataMap(userAllData: userAllData);
-
-    return userData;
+    return userCoursesData;
   }
 
   ///This function gets all the Exams taken by the User for that particular  course
   Map<String, dynamic> getExamsProgressForCourseForUser(String uid, String courseId) {
-    Map<String, dynamic> exams = {};
-    exams = UserProgressAnalytics.buildExamsProgressMapForCourseForUser(_allUsersData, uid, courseId);
+    Map<String, dynamic> exams = UserProgressAnalytics.buildUserExamsDataMapForCourse(_allUsersData, uid, courseId);
 
     return exams;
-  }
-
-  dynamic getAllUsersData() {
-    return UsersAnalytics.showAllUsersData(allUsersData: _allUsersData, allCoursesData: _allFetchedCourses);
   }
 }

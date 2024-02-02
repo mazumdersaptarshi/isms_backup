@@ -43,24 +43,6 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
     Map<String, dynamic> _coursesDetails = {};
     Map _userAllData = {};
 
-    /// Returns a [Future<Map<String, dynamic>>] that fetches all course progress
-    /// data stored in the database for the given user.
-    Future<Map<String, dynamic>> _fetchAllCoursesDataForUser({required String uid}) async {
-      _userAllData = await adminState.getAllDataForUser(uid);
-      _coursesDetails = await adminState.fetchAllDataForCurrentUser(userAllData: _userAllData);
-
-      // adminState.getSummaryMap(userAllData: _userAllData, uid: uid);
-
-      // return _coursesDetails['coursesDetails'];
-      return _coursesDetails;
-    }
-
-    /// Returns a map containing the exam progress data for a specific course and user.
-    /// The map includes detailed information about each exam attempt within the specified course.
-    Map<String, dynamic> _fetchAllExamsProgressDataForCourseForUser({required String uid, required String courseId}) {
-      return adminState.getExamsProgressForCourseForUser(uid, courseId);
-    }
-
     /// Returns a DataTable Widget, each row representing an exam attempt.
     /// It takes an input List<dynamic> attempts
     /// `attempt` is a Map<String, dynamic> containing the following keys:
@@ -324,7 +306,7 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
         children: <Widget>[
           // FutureBuilder to asynchronously fetch user data.
           FutureBuilder<Map<String, dynamic>>(
-            future: AdminData.getUser(uid), // The async function call
+            future: AdminDataHandler.getUser(uid), // The async function call
             builder: (BuildContext context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 // Display a loading indicator while waiting for the data
@@ -351,9 +333,9 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
           ),
           // FutureBuilder to asynchronously fetch course data for the user.
 
-          FutureBuilder<Map<String, dynamic>>(
-            future: _fetchAllCoursesDataForUser(uid: uid), // The async function call
-            builder: (BuildContext context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
+          FutureBuilder<dynamic>(
+            future: adminState.retrieveAllDataFromDatabase(), // The async function call
+            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 // Display a loading indicator while waiting for the data
                 return CircularProgressIndicator();
@@ -366,7 +348,7 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildSectionHeader(title: 'Summary'),
-                    _buildSummarySection(snapshot.data?['summary']),
+                    _buildSummarySection(adminState.getAllCoursesDataForCurrentUser(uid)['summary']),
                     _buildSectionHeader(title: 'Progress Overview'),
                     Container(
                       margin: EdgeInsets.fromLTRB(150, 10, 150, 30),
@@ -380,25 +362,28 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
 
                           ListView.builder(
                             shrinkWrap: true,
-                            itemCount: _coursesDetails['coursesDetails'].length,
+                            itemCount: adminState.getAllCoursesDataForCurrentUser(uid)['coursesDetails'].length,
                             itemBuilder: (context, index) {
-                              // String? key = snapshot.data?.keys.elementAt(index);
-                              print(_coursesDetails['coursesDetails'].length);
                               return CustomExpansionTile(
                                 // Widget that displays header information for each course.
                                 titleWidget: _courseDetailHeaderWidget(
-                                  courseDetails: _coursesDetails['coursesDetails'].values.elementAt(index),
+                                  courseDetails: adminState
+                                      .getAllCoursesDataForCurrentUser(uid)['coursesDetails']
+                                      .values
+                                      .elementAt(index),
                                   index: index,
                                 ),
                                 contentWidget:
                                     // List of Widgets, that shows a list of exams for each course.
                                     _getCourseExamsList(
-                                        allExamsTakenByUser: _fetchAllExamsProgressDataForCourseForUser(
-                                            uid: uid,
-                                            courseId:
-                                                _coursesDetails['coursesDetails'].values.elementAt(index)['courseId'])),
+                                        allExamsTakenByUser: adminState.getExamsProgressForCourseForUser(
+                                            uid,
+                                            adminState
+                                                .getAllCoursesDataForCurrentUser(uid)['coursesDetails']
+                                                .values
+                                                .elementAt(index)['courseId'])),
                                 index: index,
-                                length: _coursesDetails['coursesDetails'].length,
+                                length: adminState.getAllCoursesDataForCurrentUser(uid)['coursesDetails'].length,
                                 hasHoverBorder: true,
                               );
                             },

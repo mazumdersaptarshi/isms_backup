@@ -13,6 +13,16 @@ class ExamProvider extends ChangeNotifier {
     return json.decode(jsonString);
   }
 
+  static Future<dynamic> getAllExams() async {
+    Map<String, dynamic> jsonCoursesData = await parseJsonAsMap();
+    _allExams = jsonCoursesData['examsList']; //for now we are using JSON data
+
+    /* For now we have alll exams in a list called 'examsList' but when we fecth the data from
+    * Firestore we will return a map of all exams. */
+
+    return _allExams;
+  }
+
   /// Searches for Course details by ID from Local storage and returns the details. For now, we get this data from JSON
   static Map<String, dynamic> getExamByIDLocal({String? examId}) {
     Map<String, dynamic> fetchedExam =
@@ -30,15 +40,6 @@ class ExamProvider extends ChangeNotifier {
       }
     }
     return fetchedExam; //returns the course fetched by Id
-  }
-
-  static Future<dynamic> getAllExams() async {
-    _allExams = await parseJsonAsMap(); //for now we are using JSON data
-
-    /* For now we have alll exams in a list called 'examsList' but when we fecth the data from
-    * Firestore we will return a map of all exams. */
-
-    return _allExams['examsList'];
   }
 
   ///This function returns a  List of all the exams associated with the given course ID
@@ -65,6 +66,6 @@ class ExamProvider extends ChangeNotifier {
         examsForCourse.add(exam);
       }
     }
-    return examsForCourse.length ?? 0;
+    return examsForCourse.length;
   }
 }

@@ -21,6 +21,11 @@ class _UsersAnalyticsStatsScreenState extends State<UsersAnalyticsStatsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Text(adminState.getAllUsersData().toString());
+    // return Text(adminState.getAllUsersData().toString());
+    return Text('${UsersAnalytics.showAllUsersData(
+      allUsersData: adminState.getAllUsersData,
+      allCoursesData: adminState.getAllFetchedCourses,
+      allExamsData: adminState.getAllFetchedExams,
+    )}');
   }
 }
