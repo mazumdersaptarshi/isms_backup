@@ -75,6 +75,8 @@ dependencies:
   flutter_html: ^3.0.0-beta.2
   json_annotation: ^4.8.1
   flip_card: ^0.7.0
+
+
   
   flutter_localizations:
     sdk: flutter
@@ -113,6 +115,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - assets/data/all_courses/graphs1.json
     - assets/images/
     - assets/images/courseIcons/
     - assets/images/moduleIcons/
