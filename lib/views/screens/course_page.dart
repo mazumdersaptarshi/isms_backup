@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:isms/models/course/answer.dart';
 
 import 'package:isms/models/enums.dart';
 import 'package:isms/models/course/course.dart';
@@ -18,15 +19,33 @@ import 'package:isms/views/widgets/shared_widgets/custom_app_bar.dart';
 import 'package:isms/views/widgets/shared_widgets/custom_drawer.dart';
 
 class CoursePage extends StatefulWidget {
-  const CoursePage({super.key});
+  final String? courseId;
+
+  const CoursePage({super.key, this.courseId});
 
   @override
   State<CoursePage> createState() => _CourseState();
 }
 
 class _CourseState extends State<CoursePage> {
+  // Widget styling related constants
+
   /// SizedBox for adding consistent spacing between widgets
   static const SizedBox _separator = SizedBox(height: 20);
+
+  /// padding on both sides of HTML and questions
+  final EdgeInsets contentPadding = const EdgeInsets.only(right: 200, left: 200, bottom: 40);
+
+  final ButtonStyle buttonStyleSectionNavigation = ElevatedButton.styleFrom(
+    backgroundColor: Colors.grey[200],
+    elevation: 0,
+    minimumSize: Size(double.infinity, 100),
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.zero,
+    ),
+  );
+
+  final TextStyle textStyleButtonSectionNavigation = TextStyle(color: Colors.grey[600]);
 
   // Data structures containing course content populated in initState() then not changed
 
@@ -61,8 +80,7 @@ class _CourseState extends State<CoursePage> {
   /// [Set] of question widget IDs which have (an) answer(s) selected
   final Set<String> _currentSectionNonEmptyQuestions = {};
 
-  /// padding on both sides of HTML and questions
-  final EdgeInsets contentPadding = EdgeInsets.only(right: 200, left: 200, bottom: 40);
+  final Map<String, dynamic> _currentSectionSelectedQuestionAnswers = {};
 
   @override
   void initState() {
@@ -95,7 +113,7 @@ class _CourseState extends State<CoursePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: IsmsAppBar(context: context),
-        drawer: IsmsDrawer(context: context),
+        // drawer: IsmsDrawer(context: context),
         body: Column(
           children: [..._getCurrentSectionWidgets()],
         ));
@@ -126,7 +144,6 @@ class _CourseState extends State<CoursePage> {
   /// Returns an ordered [List] of all content widgets (i.e. navigation buttons excluded) in the current course section.
   List<Widget> _getCurrentSectionContentWidgets() {
     _getAllCourseWidgets();
-    print(_courseWidgets[_course.courseSections[_currentSectionIndex].sectionId].toString());
     return _courseWidgets[_course.courseSections[_currentSectionIndex].sectionId];
   }
 
@@ -220,6 +237,7 @@ class _CourseState extends State<CoursePage> {
                     values: question.questionAnswers,
                     onItemSelected: (selectedValue) {
                       setState(() {
+                        _currentSectionSelectedQuestionAnswers[question.questionId] = selectedValue;
                         // Only enable the related button once an answer has been selected
                         // Radio buttons cannot be deselected so there's no need to disable the button again
                         _currentSectionNonEmptyQuestions.add(question.questionId);
@@ -230,6 +248,8 @@ class _CourseState extends State<CoursePage> {
                   _currentSectionNonEmptyQuestions.contains(question.questionId)
                       ? ElevatedButton(
                           onPressed: () {
+                            _showSingleAnswerExplanationDialog(context, question.questionAnswers,
+                                _currentSectionSelectedQuestionAnswers[question.questionId]);
                             // No need to track interactive UI element completion if revisiting the section
                             if (!_currentSectionCompleted) {
                               _currentSectionCompletedInteractiveElements.add(question.questionId);
@@ -349,32 +369,32 @@ class _CourseState extends State<CoursePage> {
                 // Return to parent screen (course list)
                 Navigator.pop(context);
               },
-              child: Text(AppLocalizations.of(context)!.buttonFinishCourse, style: MoveSectionButtonTextStyle),
-              style: MoveSectionButtonStyle,
+              style: buttonStyleSectionNavigation,
+              child: Text(AppLocalizations.of(context)!.buttonFinishCourse, style: textStyleButtonSectionNavigation),
             )
           : ElevatedButton(
               onPressed: null,
-              child:
-                  Text(AppLocalizations.of(context)!.buttonSectionContentIncomplete, style: MoveSectionButtonTextStyle),
-              style: MoveSectionButtonStyle);
+              style: buttonStyleSectionNavigation,
+              child: Text(AppLocalizations.of(context)!.buttonSectionContentIncomplete,
+                  style: textStyleButtonSectionNavigation));
     } else {
       // Only enable the button once all interactive elements in the section have been interacted with
       button = _currentSectionCompleted
           ? ElevatedButton(
               onPressed: _goToNextSection,
+              style: buttonStyleSectionNavigation,
               child: Text(
                 AppLocalizations.of(context)!
                     .buttonNextSection(_course.courseSections[_currentSectionIndex + 1].sectionTitle),
-                style: MoveSectionButtonTextStyle,
-              ),
-              style: MoveSectionButtonStyle)
+                style: textStyleButtonSectionNavigation,
+              ))
           : ElevatedButton(
               onPressed: null,
+              style: buttonStyleSectionNavigation,
               child: Text(
                 AppLocalizations.of(context)!.buttonSectionContentIncomplete,
-                style: MoveSectionButtonTextStyle,
-              ),
-              style: MoveSectionButtonStyle);
+                style: textStyleButtonSectionNavigation,
+              ));
     }
 
     return button;
@@ -384,27 +404,77 @@ class _CourseState extends State<CoursePage> {
   ElevatedButton _getSectionBeginningButton() {
     return ElevatedButton(
       onPressed: _goToPreviousSection,
+      style: buttonStyleSectionNavigation,
       child: Text(
         AppLocalizations.of(context)!
             .buttonPreviousSection(_course.courseSections[_currentSectionIndex - 1].sectionTitle),
-        style: MoveSectionButtonTextStyle,
+        style: textStyleButtonSectionNavigation,
       ),
-      style: MoveSectionButtonStyle,
     );
   }
 
-  final ButtonStyle MoveSectionButtonStyle = ElevatedButton.styleFrom(
-    backgroundColor: Colors.grey[200],
-    elevation: 0,
-    minimumSize: Size(double.infinity, 100),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.zero,
-    ),
-  );
-
-  final TextStyle MoveSectionButtonTextStyle = TextStyle(color: Colors.grey[600]);
-
   // Functions for Button onPressed events
+
+  void _showSingleAnswerExplanationDialog(BuildContext context, List<Answer> allAnswers, Answer submittedAnswer) {
+    final Answer correctAnswer = allAnswers.firstWhere((answer) => answer.answerCorrect);
+    final bool questionCorrect = submittedAnswer == correctAnswer;
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      barrierColor: Colors.black26,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: questionCorrect
+              ? Text(AppLocalizations.of(context)!.dialogAnswerCorrectTitle)
+              : Text(AppLocalizations.of(context)!.dialogAnswerIncorrectTitle),
+          content: !questionCorrect
+              ? Text(AppLocalizations.of(context)!
+                  .dialogAnswerIncorrectContentBody(submittedAnswer.answerText, submittedAnswer.answerId))
+              : null,
+          actions: [
+            TextButton(
+              child: Text(AppLocalizations.of(context)!.dialogAcknowledge),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showMultipleAnswerExplanationDialog(
+      BuildContext context, List<Answer> allAnswers, List<Answer> submittedAnswers) {
+    final List<Answer> correctAnswers = [];
+    for (Answer answer in allAnswers) {
+      if (answer.answerCorrect) {
+        correctAnswers.add(answer);
+      }
+    }
+    final bool questionCorrect = submittedAnswers == correctAnswers;
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      barrierColor: Colors.black26,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: questionCorrect
+              ? Text(AppLocalizations.of(context)!.dialogAnswerCorrectTitle)
+              : Text(AppLocalizations.of(context)!.dialogAnswerIncorrectTitle),
+          // content: !questionCorrect ? Text(correctAnswers.answerId) : null,
+          actions: [
+            TextButton(
+              child: Text(AppLocalizations.of(context)!.dialogAcknowledge),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // List<Widget> _getMultiple
 
   /// Updates [_currentSectionCompleted] to `true` only if all widgets requiring user interaction
   /// in the current section have been interacted with.

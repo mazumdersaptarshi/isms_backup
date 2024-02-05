@@ -108,7 +108,8 @@ class _CourseListState extends State<CourseList> {
                       child: Container(
                           decoration: getExpansionTileBoxDecoration(),
                           child: ElevatedButton(
-                              onPressed: () => {print(course.courseTitle)},
+                              onPressed: () => context.goNamed(NamedRoutes.course.name,
+                                  pathParameters: {NamedRoutePathParameters.courseId.name: course.courseId}),
                               child: courseId == 'c1' ? Text('Resume Course') : Text('Start Course')))),
                   _separator,
                   Container(
@@ -142,20 +143,20 @@ class _CourseListState extends State<CourseList> {
                 ? IconButton(
                     icon: Icon(Icons.check_circle_outline, color: Colors.green, shadows: [getIconBoxShadow()]),
                     padding: const EdgeInsets.only(left: 15.0),
-                    onPressed: section.sectionTitle == 'Section 1' ? () => {print(section.sectionTitle)} : null,
+                    onPressed: section.sectionTitle == 'Section 1' ? () => print(section.sectionTitle) : null,
                     style: getIconButtonStyleTransparent(),
                   )
                 : IconButton(
                     icon: Icon(Icons.highlight_off, color: Colors.red, shadows: [getIconBoxShadow()]),
                     padding: const EdgeInsets.only(left: 15.0),
-                    onPressed: section.sectionTitle == 'Section 1' ? () => {print(section.sectionTitle)} : null,
+                    onPressed: section.sectionTitle == 'Section 1' ? () => print(section.sectionTitle) : null,
                     style: getIconButtonStyleTransparent(),
                   ),
             Flexible(
                 child: ListTile(
               title: Text(section.sectionTitle),
               subtitle: Text(section.sectionSummary),
-              onTap: section.sectionTitle == 'Section 1' ? () => {print(section.sectionTitle)} : null,
+              onTap: section.sectionTitle == 'Section 1' ? () => print(section.sectionTitle) : null,
             ))
           ])));
       contentWidgets.add(_separator);
@@ -190,7 +191,7 @@ class _CourseListState extends State<CourseList> {
                   child: Container(
                       decoration: getExpansionTileBoxDecoration(),
                       child: ElevatedButton(
-                          onPressed: () => {print(exam.examTitle)},
+                          onPressed: () => print(exam.examTitle),
                           child: examId == 'e1' ? Text('Retake Exam') : Text('Start Exam')))),
             ],
           )));
