@@ -60,5 +60,65 @@
                 "example": "Previous Section"
             }
         }
+    },
+    "dialogLeavePageTitle": "Are you sure you want to leave this page?",
+    "@dialogLeavePageTitle": {
+        "type": "text",
+        "description": "Title of pop-up navigation confirmation dialog displayed when attempting to leave certain pages"
+    },
+    "dialogLeavePageContentCourse": "Course section progress will be saved, so you can resume where you left off later.",
+    "@dialogLeavePageContentCourse": {
+        "type": "text",
+        "description": "Content of pop-up navigation confirmation dialog displayed when attempting to leave course page"
+    },
+    "dialogLeavePageContentExam": "Exam answers will NOT be submitted or saved, so you will need to start over later.",
+    "@dialogLeavePageContentExam": {
+        "type": "text",
+        "description": "Content of pop-up navigation confirmation dialog displayed when attempting to leave exam page"
+    },
+    "dialogLeavePage": "Leave page",
+    "@dialogLeavePage": {
+        "type": "text",
+        "description": "Choice to leave page from pop-up navigation confirmation dialog"
+    },
+    "dialogStayHere": "Stay here",
+    "@dialogStayHere": {
+        "type": "text",
+        "description": "Choice to stay on page from pop-up navigation confirmation dialog"
+    },
+    "dialogAcknowledge": "OK",
+    "@dialogAcknowledge": {
+        "type": "text",
+        "description": "Button used in courses to acknowledge correct answer explanation and dismiss pop-up dialog"
+    },
+    "dialogAnswerCorrectTitle": "Correct!",
+    "@dialogAnswerCorrectTitle": {
+        "type": "text",
+        "description": "Title of pop-up courses answer explanation dialog when answer correct"
+    },
+    "dialogAnswerIncorrectTitle": "Incorrect...",
+    "@dialogAnswerIncorrectTitle": {
+        "type": "text",
+        "description": "Title of pop-up courses answer explanation dialog when answer incorrect"
+    },
+    "dialogAnswerIncorrectContentHeader": "Correct answer:",
+    "@dialogAnswerIncorrectContentHeader": {
+        "type": "text",
+        "description": "Content of pop-up courses answer explanation dialog when answer incorrect"
+    },
+    "dialogAnswerIncorrectContentBody": "{correctAnswer} - {answerExplanation}",
+    "@dialogAnswerIncorrectContentBody": {
+        "type": "text",
+        "description": "Content of pop-up courses answer explanation dialog when answer incorrect",
+        "placeholders": {
+            "correctAnswer": {
+                "type": "String",
+                "example": "Correct answer"
+            },
+            "answerExplanation": {
+                "type": "String",
+                "example": "Correct answer explanation"
+            }
+        }
     }
 }

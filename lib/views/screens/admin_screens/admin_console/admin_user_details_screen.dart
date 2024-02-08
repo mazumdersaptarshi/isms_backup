@@ -39,7 +39,7 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     final loggedInState = context.watch<LoggedInState>();
-    final String uid = 'gZZg3iv6e2YsoMXlMrXIVgf6Ycl2'; //Sample UserID for testing
+    final String uid = '8qu6GqSvS5bzGSx1xZqwN4nqy3C2'; //Sample UserID for testing
     Map<String, dynamic> _coursesDetails = {};
     Map _userAllData = {};
 

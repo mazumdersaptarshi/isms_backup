@@ -33,7 +33,7 @@ class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
     final List<Widget> actionWidgets = [];
 
     actionWidgets.add(_getActionIconButton(context, Icons.list, AppLocalizations.of(context)!.buttonCourseList,
-        () => context.goNamed(NamedRoutes.courses.name)));
+        () => context.goNamed(NamedRoutes.assignments.name)));
     actionWidgets.add(_getActionIconButton(context, Icons.article, "Course Test",
         () => Navigator.push(context, MaterialPageRoute(builder: (context) => const CoursePage()))));
     actionWidgets.add(_getActionIconButton(context, Icons.bar_chart, "Graphs",

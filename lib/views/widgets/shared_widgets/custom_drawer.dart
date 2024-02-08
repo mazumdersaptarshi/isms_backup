@@ -38,8 +38,8 @@ class IsmsDrawer extends StatelessWidget {
     drawerItemWidgets.add(_getDrawerHeader(context, "General"));
     drawerItemWidgets
         .add(_getDrawerItem(context, Icons.home, AppLocalizations.of(context)!.buttonHome, NamedRoutes.home.name));
-    drawerItemWidgets.add(
-        _getDrawerItem(context, Icons.list, AppLocalizations.of(context)!.buttonCourseList, NamedRoutes.courses.name));
+    drawerItemWidgets.add(_getDrawerItem(
+        context, Icons.list, AppLocalizations.of(context)!.buttonCourseList, NamedRoutes.assignments.name));
     if (loggedInState.currentUserRole == 'admin') {
       drawerItemWidgets.add(_getDrawerHeader(context, "Admin Actions"));
       drawerItemWidgets.add(_getDrawerItem(context, Icons.admin_panel_settings_rounded,
