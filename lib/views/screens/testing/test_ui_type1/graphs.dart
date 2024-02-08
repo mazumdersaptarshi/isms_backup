@@ -1,11 +1,11 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-
 import '../../../widgets/shared_widgets/custom_app_bar.dart';
 import 'bar_chart_data.dart';
 import 'graphs_more_data.dart';
+import 'quiz_result.dart';
+// import 'max_ave_min_chart.dart';
 
 class GraphsPage extends StatelessWidget {
   Widget build(BuildContext context) {
@@ -28,6 +28,18 @@ class GraphsPage extends StatelessWidget {
                   );
                 },
                 child: Text('More Graphs'),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  // Navigate to the MoreGraphsPage when the button is clicked
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => QuizResultPage()),
+                  );
+                },
+                child: Text('Quiz Result'),
               ),
               SizedBox(height: 20),
               // Added spacing between button and charts
@@ -195,7 +207,7 @@ Widget _getStudentNames(double value, TitleMeta meta) {
   });
 
   return Transform.rotate(
-    angle: -15 * (pi / 180), // -45度回転（ラジアン単位）
+    angle: -15 * (pi / 180),
     child: Text(
       studentName,
       style: TextStyle(
