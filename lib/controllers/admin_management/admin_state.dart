@@ -33,6 +33,7 @@ class AdminState {
 
   Future<dynamic> retrieveAllDataFromDatabase() async {
     _isDataLoading = true;
+    await Future.delayed(Duration(seconds: 2));
     _allUsersData = await HiveService.getExistingLocalDataFromUsersBox();
     _allFetchedExams = await ExamProvider.getAllExams();
     _allFetchedCourses = await CourseProvider.getAllCourses();

@@ -72,7 +72,10 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
         hoverColor: getPrimaryColorShade(50),
         highlightColor: getPrimaryColorShade(50),
         dividerColor: getPrimaryColorShade(50),
-        expansionTileTheme: const ExpansionTileThemeData(
+        expansionTileTheme: ExpansionTileThemeData(
+          iconColor: primary,
+          // collapsedIconColor: primary,
+
           backgroundColor: Colors.transparent,
           collapsedBackgroundColor: Colors.transparent,
         ),

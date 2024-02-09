@@ -1,6 +1,7 @@
 import 'package:isms/controllers/course_management/course_provider.dart';
 import 'package:isms/controllers/exam_management/exam_provider.dart';
 import 'package:isms/services/hive/config/config.dart';
+import 'package:isms/services/hive/hive_adapters/user_attempts.dart';
 
 class UserProgressAnalytics {
   static Map<String, dynamic> _lastLoadedUserSummaryMap = {'inProgressCourses': []};
@@ -15,12 +16,9 @@ class UserProgressAnalytics {
     int numberOfAttempts = 0;
     Map userCourses = userAllData['courses'];
     Map userExams = userAllData['exams'];
-    // List allFetchedExams = await ExamProvider.getAllExams();
-    // List allFetchedCourses = await CourseProvider.getAllCourses();
     for (var courseProgressItem in userCourses.entries) {
       //gets the course details from the database
 
-      // Map fetchedCourse = await CourseProvider.getCourseByID(courseId: courseProgressItem.key);
       Map fetchedCourse = {};
       List fetchedCourseExams = [];
 
@@ -67,7 +65,12 @@ class UserProgressAnalytics {
     }
     userExams.forEach((key, examItem) {
       examItem.attempts.forEach((key, value) {
-        int score = value.toMap()['score'];
+        int score = 0;
+        if (value is UserAttempts) {
+          score = value.toMap()['score'];
+        } else {
+          score = value['score'];
+        }
         totalScore += score;
         numberOfAttempts++;
       });
@@ -105,7 +108,11 @@ class UserProgressAnalytics {
       Map<String, dynamic> examData = ExamProvider.getExamByIDLocal(examId: examId);
       List listOfAttempts = [];
       value.forEach((key, value) {
-        listOfAttempts.add(value.toMap());
+        if (value is UserAttempts) {
+          listOfAttempts.add(value.toMap());
+        } else {
+          listOfAttempts.add(value);
+        }
       });
       userExamsProgress[examId] = {
         'examId': examId,

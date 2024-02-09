@@ -3,22 +3,19 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:footer/footer.dart';
 import 'package:footer/footer_view.dart';
-import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:isms/controllers/admin_management/admin_data.dart';
 import 'package:isms/controllers/admin_management/admin_state.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart';
-import 'package:isms/controllers/theme_management/common_theme.dart';
 import 'package:isms/controllers/user_management/logged_in_state.dart';
 import 'package:isms/utilities/platform_check.dart';
-import 'package:isms/views/widgets/admin_console/user_courses_list.dart';
 import 'package:isms/views/widgets/shared_widgets/app_footer.dart';
+import 'package:isms/views/widgets/shared_widgets/build_section_header.dart';
 import 'package:isms/views/widgets/shared_widgets/custom_expansion_tile.dart';
 import 'package:isms/views/widgets/shared_widgets/custom_linear_progress_indicator.dart';
 import 'package:isms/views/widgets/shared_widgets/drawer.dart';
 import 'package:isms/views/widgets/shared_widgets/user_profile_banner.dart';
 import 'package:provider/provider.dart';
-import 'package:line_icons/line_icons.dart';
 
 class AdminUserDetailsScreen extends StatefulWidget {
   const AdminUserDetailsScreen({super.key});
@@ -39,7 +36,7 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     final loggedInState = context.watch<LoggedInState>();
-    final String uid = '8qu6GqSvS5bzGSx1xZqwN4nqy3C2'; //Sample UserID for testing
+    final String uid = 'gZZg3iv6e2YsoMXlMrXIVgf6Ycl2'; //Sample UserID for testing
     Map<String, dynamic> _coursesDetails = {};
     Map _userAllData = {};
 
@@ -102,13 +99,6 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
                     style: TextStyle(color: getTertiaryTextColor1()),
                   ));
       }).toList();
-      // List<DataColumn> columns = List.from(attempts.first.keys.map((key) => DataColumn(
-      //         label: Text(
-      //       key,
-      //       style: TextStyle(color: getTertiaryTextColor1()),
-      //     ))))
-      //   ..add(DataColumn(
-      //       label: Text('Duration', style: TextStyle(color: getTertiaryTextColor1())))); // Add 'duration' column
 
       // Dynamically generate the DataRow list.
       List<DataRow> rows = attempts.asMap().entries.map<DataRow>((entry) {
@@ -159,7 +149,10 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
             cells: cells);
       }).toList();
 
-      return DataTable(columns: columns, rows: rows);
+      return DataTable(
+        columns: columns,
+        rows: rows,
+      );
     }
 
     /// Returns a Widget displaying details about a specific Exam, taken by the specific User.
@@ -310,7 +303,11 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
             builder: (BuildContext context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 // Display a loading indicator while waiting for the data
-                return CircularProgressIndicator();
+                return SizedBox(
+                  height: 40,
+                  width: 40,
+                  child: Center(child: CircularProgressIndicator()),
+                );
               } else if (snapshot.hasError) {
                 // Handle the error case
                 return Text('Error: ${snapshot.error}');
@@ -338,7 +335,11 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 // Display a loading indicator while waiting for the data
-                return CircularProgressIndicator();
+                return SizedBox(
+                  height: 40,
+                  width: 40,
+                  child: Center(child: CircularProgressIndicator()),
+                );
               } else if (snapshot.hasError) {
                 // Handle the error case
                 return Text('Error: ${snapshot.error}');
@@ -347,48 +348,42 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildSectionHeader(title: 'Summary'),
+                    buildSectionHeader(title: 'Summary'),
                     _buildSummarySection(adminState.getAllCoursesDataForCurrentUser(uid)['summary']),
-                    _buildSectionHeader(title: 'Progress Overview'),
+                    buildSectionHeader(title: 'Progress Overview'),
                     Container(
                       margin: EdgeInsets.fromLTRB(150, 10, 150, 30),
                       decoration: BoxDecoration(
                         border: Border.all(color: getTertiaryColor1()),
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      child: Column(
-                        children: [
-                          // ListView.builder creates a list of course and exam details.
-
-                          ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: adminState.getAllCoursesDataForCurrentUser(uid)['coursesDetails'].length,
-                            itemBuilder: (context, index) {
-                              return CustomExpansionTile(
-                                // Widget that displays header information for each course.
-                                titleWidget: _courseDetailHeaderWidget(
-                                  courseDetails: adminState
-                                      .getAllCoursesDataForCurrentUser(uid)['coursesDetails']
-                                      .values
-                                      .elementAt(index),
-                                  index: index,
-                                ),
-                                contentWidget:
-                                    // List of Widgets, that shows a list of exams for each course.
-                                    _getCourseExamsList(
-                                        allExamsTakenByUser: adminState.getExamsProgressForCourseForUser(
-                                            uid,
-                                            adminState
-                                                .getAllCoursesDataForCurrentUser(uid)['coursesDetails']
-                                                .values
-                                                .elementAt(index)['courseId'])),
-                                index: index,
-                                length: adminState.getAllCoursesDataForCurrentUser(uid)['coursesDetails'].length,
-                                hasHoverBorder: true,
-                              );
-                            },
-                          ),
-                        ],
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: adminState.getAllCoursesDataForCurrentUser(uid)['coursesDetails'].length,
+                        itemBuilder: (context, index) {
+                          return CustomExpansionTile(
+                            // Widget that displays header information for each course.
+                            titleWidget: _courseDetailHeaderWidget(
+                              courseDetails: adminState
+                                  .getAllCoursesDataForCurrentUser(uid)['coursesDetails']
+                                  .values
+                                  .elementAt(index),
+                              index: index,
+                            ),
+                            contentWidget:
+                                // List of Widgets, that shows a list of exams for each course.
+                                _getCourseExamsList(
+                                    allExamsTakenByUser: adminState.getExamsProgressForCourseForUser(
+                                        uid,
+                                        adminState
+                                            .getAllCoursesDataForCurrentUser(uid)['coursesDetails']
+                                            .values
+                                            .elementAt(index)['courseId'])),
+                            index: index,
+                            length: adminState.getAllCoursesDataForCurrentUser(uid)['coursesDetails'].length,
+                            hasHoverBorder: true,
+                          );
+                        },
                       ),
                     ),
                   ],
@@ -400,19 +395,6 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
             },
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildSectionHeader({required String title}) {
-    return Container(
-      margin: EdgeInsets.fromLTRB(150, 30, 150, 0),
-      child: Text(
-        title,
-        style: TextStyle(
-          fontSize: 30,
-          color: Colors.grey.shade600,
-        ),
       ),
     );
   }

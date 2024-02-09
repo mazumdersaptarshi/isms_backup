@@ -10,8 +10,15 @@ const Set<MaterialState> interactiveStates = <MaterialState>{
   MaterialState.focused
 };
 
+//For now this value is hard coded to 700, we can make it dynamic if needed
+///This function returns the Primary color of the App
+///It is set to shade 700 for any basic color we choose
 Color? get primary => getPrimaryColorShade(700);
 
+//For now the Color is Hard Coded as blue, but a function can be added to make it dynamic
+///This function is used to get the shades of the Primary Color all across the app
+///Provide the value of Shade in the function to get the color
+///The limitation is that It doesn't work well with Accent colors, since they don't have shades
 Color? getPrimaryColorShade(int shade) {
   return Colors.blue[shade];
 }
@@ -239,7 +246,7 @@ BoxDecoration expansionTileOn() {
 TextStyle bulletPointSymbolStyle = TextStyle(
   fontSize: 20,
   height: 1.75,
-  color: Colors.blue,
+  color: primary,
 );
 
 TextStyle bulletPointTextStyle = TextStyle(
