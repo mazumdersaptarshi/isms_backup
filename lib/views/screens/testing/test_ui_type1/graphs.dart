@@ -5,6 +5,7 @@ import '../../../widgets/shared_widgets/custom_app_bar.dart';
 import 'bar_chart_data.dart';
 import 'graphs_more_data.dart';
 import 'quiz_result.dart';
+import 'user_profile.dart';
 // import 'max_ave_min_chart.dart';
 
 class GraphsPage extends StatelessWidget {
@@ -40,6 +41,18 @@ class GraphsPage extends StatelessWidget {
                   );
                 },
                 child: Text('Quiz Result'),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  // Navigate to the MoreGraphsPage when the button is clicked
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => UserProfileTestPage()),
+                  );
+                },
+                child: Text('User Profile'),
               ),
               SizedBox(height: 20),
               // Added spacing between button and charts
