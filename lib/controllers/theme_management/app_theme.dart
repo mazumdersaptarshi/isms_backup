@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 /// App-wide font family override
-const String fontFamily = 'Poppins';
+// const String fontFamily = 'Poppins';
+const String fontFamily = '';
 
 /// Set of [MaterialStates] used to apply conditional widget style when being interacted with
 const Set<MaterialState> interactiveStates = <MaterialState>{
