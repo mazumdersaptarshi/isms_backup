@@ -8,17 +8,23 @@ part of 'user_course_progress.dart';
 
 UserCourseProgress _$UserCourseProgressFromJson(Map<String, dynamic> json) =>
     UserCourseProgress(
-      courseId: json['courseId'] as String?,
-      completionStatus: json['completionStatus'] as String?,
-      currentSection: json['currentSection'] as String?,
-      completedSections: json['completedSections'] as List<dynamic>?,
-      completedExams: json['completedExams'] as List<dynamic>?,
+      userId: json['userId'] as String,
+      courseId: json['courseId'] as String,
+      courseCompleted: json['courseCompleted'] as bool,
+      currentSection: json['currentSection'] as String,
+      completedSections: (json['completedSections'] as List<dynamic>)
+          .map((e) => e as String)
+          .toList(),
+      completedExams: (json['completedExams'] as List<dynamic>)
+          .map((e) => e as String)
+          .toList(),
     );
 
 Map<String, dynamic> _$UserCourseProgressToJson(UserCourseProgress instance) =>
     <String, dynamic>{
+      'userId': instance.userId,
       'courseId': instance.courseId,
-      'completionStatus': instance.completionStatus,
+      'courseCompleted': instance.courseCompleted,
       'currentSection': instance.currentSection,
       'completedSections': instance.completedSections,
       'completedExams': instance.completedExams,
