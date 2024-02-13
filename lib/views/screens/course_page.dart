@@ -6,7 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:isms/models/course/answer.dart';
 
-import 'package:isms/models/enums.dart';
+import 'package:isms/models/course/enums.dart';
 import 'package:isms/models/course/course.dart';
 import 'package:isms/models/course/element.dart' as element_model;
 import 'package:isms/models/course/flip_card.dart' as flip_card_model;

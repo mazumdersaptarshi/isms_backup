@@ -8,7 +8,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart';
 
 import 'package:isms/controllers/user_management/logged_in_state.dart';
-import 'package:isms/models/enums.dart';
+import 'package:isms/models/course/enums.dart';
 import 'package:isms/models/course/course.dart';
 import 'package:isms/models/course/exam.dart';
 import 'package:isms/models/course/section.dart';

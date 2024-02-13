@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
 import 'package:isms/utilities/serializable.dart';
-import 'package:isms/models/enums.dart';
+import 'package:isms/models/course/enums.dart';
 import 'package:isms/models/course/flip_card.dart';
 import 'package:isms/models/course/question.dart';
 
