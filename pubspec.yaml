@@ -86,6 +86,7 @@ dependencies:
   url_launcher: ^6.2.4
   url_strategy: ^0.2.0
   data_table_2: ^2.5.10
+  syncfusion_flutter_charts: ^24.2.5
 dev_dependencies:
   hive_generator:
   flutter_test:
