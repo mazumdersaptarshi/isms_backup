@@ -36,9 +36,33 @@ class _CourseExamSelectWidgetState extends State<CourseExamSelectWidget> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Text(
+          'Course',
+          style: TextStyle(fontSize: 12, color: Colors.grey.shade500),
+        ),
+        SizedBox(
+          height: 10,
+        ),
         CustomCourseDropdownWidget(),
-        if (selectedCourse != null) CustomExamDropdownWidget(), // Show exam dropdown only if a course is selected
+        if (selectedCourse != null)
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                'Exam',
+                style: TextStyle(fontSize: 12, color: Colors.grey.shade500),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              CustomExamDropdownWidget(),
+            ],
+          ), // Show exam dropdown only if a course is selected
       ],
     );
   }
@@ -63,10 +87,10 @@ class _CourseExamSelectWidgetState extends State<CourseExamSelectWidget> {
   }
 
   Widget CustomCourseDropdownWidget() {
-    List<String> displayItems = coursesAndExams.entries.map((entry) => "${entry.key}").toList();
+    List<String> displayItems =
+        coursesAndExams.entries.map((entry) => "${entry.key}").toList();
 
     return Container(
-      margin: EdgeInsets.all(10),
       child: ConstrainedBox(
         constraints: BoxConstraints(
           minWidth: 200, // Set your minimum width here
@@ -96,9 +120,9 @@ class _CourseExamSelectWidgetState extends State<CourseExamSelectWidget> {
   }
 
   Widget CustomExamDropdownWidget() {
-    List<String> displayItems = exams.map((entry) => "${entry['examName']}").toList();
+    List<String> displayItems =
+        exams.map((entry) => "${entry['examName']}").toList();
     return Container(
-      margin: EdgeInsets.all(10),
       child: ConstrainedBox(
         constraints: BoxConstraints(
           minWidth: 200, // Set your minimum width here

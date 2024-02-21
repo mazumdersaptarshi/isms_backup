@@ -14,30 +14,48 @@ class _CustomDataTableState extends State<CustomDataTable> {
   void initState() {
     super.initState();
     // Populate _rowColors on initialization
+    // columnHeaders = extractKeysFromUsersList(widget.usersList);
+    // widget.usersList.isNotEmpty ? widget.usersList[0].keys.toList() : [];
   }
 
+  List columnHeaders = [];
   Map<int, bool> isHoveringMap = {};
+  List extractKeysFromUsersList(List usersList) {
+    if (usersList.isNotEmpty) {
+      // Assuming all maps in the list have the same structure,
+      // we take the first item's value (which is a Map) and extract its keys.
+      Map firstItemValue = usersList.first.value;
+      List keys = firstItemValue.keys.toList();
+      print("keys: $keys");
+      return keys;
+    }
+    return [];
+  }
 
   @override
   Widget build(BuildContext context) {
     print('usersList: ${widget.usersList}');
     return Container(
-      width: MediaQuery.of(context).size.width * 0.8,
+      width: MediaQuery.of(context).size.width * 0.9,
       margin: EdgeInsets.fromLTRB(80, 12, 80, 30),
       decoration: BoxDecoration(
         border: Border.all(color: getTertiaryColor1()),
         borderRadius: BorderRadius.circular(20),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(20), // Match container's border radius
+        borderRadius:
+            BorderRadius.circular(20), // Match container's border radius
 
         child: Column(
           children: [
             _buildHeaderRow(),
             ...widget.usersList.asMap().entries.map((entry) {
-              final item = entry.value;
-              print('item $item');
-              return _buildDataRow(item: item.value, index: entry.key, listLength: widget.usersList.length);
+              int index = entry.key;
+              var value = entry.value;
+              return _buildDataRow(
+                  item: value,
+                  index: index,
+                  listLength: widget.usersList.length);
             }).toList(),
           ],
         ),
@@ -71,19 +89,44 @@ class _CustomDataTableState extends State<CustomDataTable> {
               text: 'Role',
               type: 'text',
             ),
+            _buildHeaderCell(
+              text: 'Courses Completed',
+              type: 'text',
+            ),
+            _buildHeaderCell(
+              text: 'Courses Enrolled',
+              type: 'text',
+            ),
+            _buildHeaderCell(
+              text: 'Average Score',
+              type: 'text',
+            ),
+            _buildHeaderCell(
+              text: 'Exams Taken',
+              type: 'text',
+            ),
+            _buildHeaderCell(
+              text: 'Last Login',
+              type: 'text',
+            ),
             Spacer(),
             _buildHeaderCell(
               text: '',
-              type: 'text',
+              type: 'icon',
             ),
           ],
+          // children: columnHeaders
+          //     .map((header) => _buildHeaderCell(text: header, type: 'text'))
+          //     .toList()
+          //   ..add(_buildHeaderCell(
+          //       text: '', type: 'text')), // For actions or icons column
         ),
       ),
     );
   }
 
   // Individual Data Row Builder
-  Widget _buildDataRow({required Map item, int? index, int? listLength}) {
+  Widget _buildDataRow({required dynamic item, int? index, int? listLength}) {
     return MouseRegion(
       onEnter: (_) {
         setState(() {
@@ -101,7 +144,8 @@ class _CustomDataTableState extends State<CustomDataTable> {
         padding: EdgeInsets.all(12.0),
         decoration: BoxDecoration(
           border: Border.all(
-            color: isHoveringMap[index] == true ? primary! : Colors.grey.shade200,
+            color: Colors.grey.shade200,
+            // isHoveringMap[index] == true ? primary! : Colors.grey.shade200,
           ),
           borderRadius: index == (listLength! - 1)
               ? BorderRadius.only(
@@ -110,23 +154,50 @@ class _CustomDataTableState extends State<CustomDataTable> {
                 )
               : BorderRadius.zero, // Border(
 
-          color: isHoveringMap[index ?? 0] == true ? getPrimaryColorShade(50) : Colors.transparent,
+          color: isHoveringMap[index ?? 0] == true
+              ? Colors.grey.shade100
+              : Colors.transparent,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround, // Space cells out
           children: [
             _buildDataCell(
-              text: item['username'],
+              text: item.username,
               type: 'text',
               isHovering: isHoveringMap[index ?? 0] ?? false,
             ),
             _buildDataCell(
-              text: item['email']!,
+              text: item.emailId,
               type: 'text',
               isHovering: isHoveringMap[index ?? 0] ?? false,
             ),
             _buildDataCell(
-              text: item['role']!,
+              text: item.role,
+              type: 'text',
+              isHovering: isHoveringMap[index ?? 0] ?? false,
+            ),
+            _buildDataCell(
+              text: item.coursesCompletedPercentage.toString(),
+              type: 'text',
+              isHovering: isHoveringMap[index ?? 0] ?? false,
+            ),
+            _buildDataCell(
+              text: item.coursesEnrolled.toString(),
+              type: 'text',
+              isHovering: isHoveringMap[index ?? 0] ?? false,
+            ),
+            _buildDataCell(
+              text: item.averageScore.toString(),
+              type: 'text',
+              isHovering: isHoveringMap[index ?? 0] ?? false,
+            ),
+            _buildDataCell(
+              text: item.examsTaken.toString(),
+              type: 'text',
+              isHovering: isHoveringMap[index ?? 0] ?? false,
+            ),
+            _buildDataCell(
+              text: item.lastLogin,
               type: 'text',
               isHovering: isHoveringMap[index ?? 0] ?? false,
             ),
@@ -136,16 +207,25 @@ class _CustomDataTableState extends State<CustomDataTable> {
               isHovering: isHoveringMap[index ?? 0] ?? false,
             ),
           ],
+          // children: cellValues
+          //     .map((cellValue) => _buildDataCell(
+          //         text: cellValue.toString(),
+          //         isHovering: isHoveringMap[index ?? 0] ?? false,
+          //         type: 'text'))
+          //     .toList(),
         ),
       ),
     );
   }
 
   // Helpers for Header & Data Cells
-  Widget _buildHeaderCell({String? text, required String type}) {
+  Widget _buildHeaderCell({
+    String? text,
+    required String type,
+  }) {
     return Expanded(
       // Makes sure all columns have equal width
-      child: Padding(
+      child: Container(
         padding: const EdgeInsets.all(8.0),
         child: type == 'text' ? _getHeaderCellTextWidget(text: text!) : null,
       ),
@@ -162,9 +242,13 @@ class _CustomDataTableState extends State<CustomDataTable> {
     );
   }
 
-  Widget _buildDataCell({String? text, required String type, bool? isHovering}) {
+  Widget _buildDataCell({
+    String? text,
+    required String type,
+    bool? isHovering,
+  }) {
     return Expanded(
-      child: Padding(
+      child: Container(
         padding: const EdgeInsets.all(8.0),
         child: type == 'text'
             ? _getDataCellTextWidget(
@@ -180,10 +264,16 @@ class _CustomDataTableState extends State<CustomDataTable> {
     );
   }
 
-  Widget _getDataCellTextWidget({required String text, bool? isHovering}) {
+  Widget _getDataCellTextWidget({
+    required String text,
+    bool? isHovering,
+  }) {
     return Text(
       text,
-      style: TextStyle(fontSize: 14, color: isHovering! ? primary : Colors.black),
+      style: TextStyle(
+        fontSize: 14,
+        color: isHovering! ? primary : Colors.grey.shade700,
+      ),
     );
   }
 

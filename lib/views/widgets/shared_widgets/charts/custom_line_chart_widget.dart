@@ -14,12 +14,16 @@ class CustomLineChartWidget extends StatefulWidget {
 }
 
 class _CustomLineChartWidgetState extends State<CustomLineChartWidget> {
-  String _selectedMetricType = 'all';
+  String _selectedMetricType = 'All';
   Map<String, dynamic> metricTypeData = {};
 
-  List<Color> avgScoresGradientColors = [
+  List<Color> coursesCompletedGradientColors = [
     primary!,
     Colors.deepPurpleAccent,
+  ];
+  List<Color> coursesEnrolledGradientColors = [
+    Colors.pink!,
+    Colors.orange,
   ];
   List<Color> userActivityGradientColors = [
     Colors.green,
@@ -39,6 +43,21 @@ class _CustomLineChartWidgetState extends State<CustomLineChartWidget> {
     CustomLineChartData(x: 10, y: 3),
     CustomLineChartData(x: 11, y: 7),
     CustomLineChartData(x: 12, y: 4),
+    // Add more data points as necessary
+  ];
+  List<CustomLineChartData> coursesEnrolledOverTimeData = [
+    CustomLineChartData(x: 1, y: 4),
+    CustomLineChartData(x: 2, y: 6),
+    CustomLineChartData(x: 3, y: 7),
+    CustomLineChartData(x: 4, y: 6),
+    CustomLineChartData(x: 5, y: 34),
+    CustomLineChartData(x: 6, y: 30),
+    CustomLineChartData(x: 7, y: 45),
+    CustomLineChartData(x: 8, y: 29),
+    CustomLineChartData(x: 9, y: 40),
+    CustomLineChartData(x: 10, y: 10),
+    CustomLineChartData(x: 11, y: 10),
+    CustomLineChartData(x: 12, y: 5),
     // Add more data points as necessary
   ];
   List<CustomLineChartData> activeUsersData = [
@@ -61,10 +80,10 @@ class _CustomLineChartWidgetState extends State<CustomLineChartWidget> {
     // Determine min and max y values
     double minY = data.map((e) => e.y).reduce(min);
     double maxY = data.map((e) => e.y).reduce(max);
-
+    // maxY = 80.0;
     // Calculate range and suggest intervals
     double range = maxY - minY;
-    double interval = range / 15; // For example, create 5 intervals
+    double interval = range / 10; // For example, create 5 intervals
 
     // Generate titles for these intervals
     Map<int, String> titles = {};
@@ -83,17 +102,27 @@ class _CustomLineChartWidgetState extends State<CustomLineChartWidget> {
     super.initState();
     // Initialize the metricTypeData map
     metricTypeData = {
-      'all': {
-        'data': coursesCompletedOverTimeData.map((data) => FlSpot(data.x, data.y)).toList(),
-        'colors': avgScoresGradientColors,
+      'All': {
+        'data': coursesCompletedOverTimeData
+            .map((data) => FlSpot(data.x, data.y))
+            .toList(),
+        'colors': coursesCompletedGradientColors,
       },
-      'completed courses': {
-        'data': coursesCompletedOverTimeData.map((data) => FlSpot(data.x, data.y)).toList(),
-        'colors': avgScoresGradientColors,
+      'Courses Completed': {
+        'data': coursesCompletedOverTimeData
+            .map((data) => FlSpot(data.x, data.y))
+            .toList(),
+        'colors': coursesCompletedGradientColors,
       },
-      'user activity': {
+      'Active Users': {
         'data': activeUsersData.map((data) => FlSpot(data.x, data.y)).toList(),
         'colors': userActivityGradientColors,
+      },
+      'Courses Enrolled': {
+        'data': coursesEnrolledOverTimeData
+            .map((data) => FlSpot(data.x, data.y))
+            .toList(),
+        'colors': coursesEnrolledGradientColors,
       },
     };
   }
@@ -101,13 +130,14 @@ class _CustomLineChartWidgetState extends State<CustomLineChartWidget> {
   @override
   Widget build(BuildContext context) {
     Map<String, List<Color>> dataTypesAndColors = {
-      'Completed Courses': avgScoresGradientColors,
-      'User Activity': userActivityGradientColors,
+      'Courses Completed': coursesCompletedGradientColors,
+      'Active Users': userActivityGradientColors,
+      'Courses Enrolled': coursesEnrolledGradientColors,
       // Add more data types and their colors as needed
     };
     return Container(
-      // color: Colors.red,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildMetricSelectionDropdown(),
           Row(
@@ -116,6 +146,8 @@ class _CustomLineChartWidgetState extends State<CustomLineChartWidget> {
                 // color: Colors.pink,
                 width: 600,
                 height: 300,
+                padding: EdgeInsets.all(20),
+
                 child: Stack(
                   children: <Widget>[
                     AspectRatio(
@@ -137,7 +169,8 @@ class _CustomLineChartWidgetState extends State<CustomLineChartWidget> {
   }
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
-    var style = TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Colors.grey.shade600);
+    var style = TextStyle(
+        fontWeight: FontWeight.bold, fontSize: 12, color: Colors.grey.shade600);
     Widget text;
     switch (value.toInt()) {
       case 1:
@@ -188,9 +221,9 @@ class _CustomLineChartWidgetState extends State<CustomLineChartWidget> {
   }
 
   Widget leftTitleWidgets(double value, TitleMeta meta) {
-    var titles = _calculateLeftTitles(_selectedMetricType == 'all'
+    var titles = _calculateLeftTitles(_selectedMetricType == 'All'
         ? [...coursesCompletedOverTimeData, ...activeUsersData]
-        : _selectedMetricType == 'completed courses'
+        : _selectedMetricType == 'Courses Completed'
             ? coursesCompletedOverTimeData
             : activeUsersData);
     String text = titles[value] ?? '';
@@ -204,8 +237,8 @@ class _CustomLineChartWidgetState extends State<CustomLineChartWidget> {
 
   LineChartData _buildLineChart() {
     List<LineChartBarData> lineBarsData = [];
-    if (_selectedMetricType == 'all') {
-      // Include both sets of data for 'all'
+    if (_selectedMetricType == 'All') {
+      // Include both sets of data for 'All'
       metricTypeData.forEach((key, value) {
         var spots = value['data'] as List<FlSpot>;
         var colors = value['colors'] as List<Color>;
@@ -275,7 +308,8 @@ class _CustomLineChartWidgetState extends State<CustomLineChartWidget> {
     );
   }
 
-  LineChartBarData _getLineChartBarData(List<FlSpot> activeSpots, List<Color> gradientColors) {
+  LineChartBarData _getLineChartBarData(
+      List<FlSpot> activeSpots, List<Color> gradientColors) {
     return LineChartBarData(
       spots: activeSpots,
       isCurved: false,
@@ -292,42 +326,61 @@ class _CustomLineChartWidgetState extends State<CustomLineChartWidget> {
         gradient: LinearGradient(
           begin: Alignment.bottomCenter,
           end: Alignment.topCenter,
-          colors: gradientColors.map((color) => color.withOpacity(0.3)).toList(),
+          colors:
+              gradientColors.map((color) => color.withOpacity(0.3)).toList(),
         ),
       ),
     );
   }
 
   Widget _buildMetricSelectionDropdown() {
-    List<String> displayItems =
-        <String>['all', 'completed courses', 'user activity'].map((entry) => "${entry}").toList();
+    List<String> displayItems = <String>[
+      'All',
+      'Courses Completed',
+      'Active Users',
+      'Courses Enrolled'
+    ].map((entry) => "${entry}").toList();
 
     return Container(
       margin: EdgeInsets.all(10),
       // Dropdown button to select chart data type
-      child: ConstrainedBox(
-          constraints: const BoxConstraints(
-            minWidth: 50, // Set your minimum width here
-            maxWidth: 200, // Set your maximum width here
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Metrics',
+            style: TextStyle(fontSize: 12, color: Colors.grey.shade500),
           ),
-          child: CustomDropdown<String>(
-            hintText: 'metric',
-            items: displayItems,
-            overlayHeight: 342,
-            onChanged: (String value) {
-              setState(() {
-                _selectedMetricType = value;
-              });
-            },
-            decoration: customDropdownDecoration,
-          )),
+          SizedBox(
+            height: 10,
+          ),
+          ConstrainedBox(
+              constraints: const BoxConstraints(
+                minWidth: 50, // Set your minimum width here
+                maxWidth: 200, // Set your maximum width here
+              ),
+              child: CustomDropdown<String>(
+                hintText: 'metric',
+                items: displayItems,
+                overlayHeight: 342,
+                onChanged: (String value) {
+                  setState(() {
+                    _selectedMetricType = value;
+                  });
+                },
+                decoration: customDropdownDecoration,
+              )),
+        ],
+      ),
     );
   }
 
-  Widget _buildLineChartLegend({required Map<String, List<Color>> dataTypesAndColors}) {
+  Widget _buildLineChartLegend(
+      {required Map<String, List<Color>> dataTypesAndColors}) {
     return Container(
       // color: Colors.purple,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: dataTypesAndColors.entries.map((entry) {
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 4.0),
@@ -338,9 +391,13 @@ class _CustomLineChartWidgetState extends State<CustomLineChartWidget> {
                   width: 10,
                   height: 10,
                   decoration: BoxDecoration(
-                    color: entry.value.first, // Take the first color from the gradient list
+                    color: entry.value
+                        .first, // Take the first color from the gradient list
                     shape: BoxShape.circle,
                   ),
+                ),
+                SizedBox(
+                  width: 10,
                 ),
                 Text(
                   entry.key,

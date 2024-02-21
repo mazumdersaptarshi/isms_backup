@@ -8,14 +8,17 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 class CustomBoxAndWhiskerChartWidget extends StatefulWidget {
   // ignore: prefer_const_constructors_in_immutables
-  CustomBoxAndWhiskerChartWidget({Key? key, required this.allData}) : super(key: key);
+  CustomBoxAndWhiskerChartWidget({Key? key, required this.allData})
+      : super(key: key);
   final List<CustomBoxAndWhiskerChartData> allData;
 
   @override
-  _CustomBoxAndWhiskerChartWidgetState createState() => _CustomBoxAndWhiskerChartWidgetState();
+  _CustomBoxAndWhiskerChartWidgetState createState() =>
+      _CustomBoxAndWhiskerChartWidgetState();
 }
 
-class _CustomBoxAndWhiskerChartWidgetState extends State<CustomBoxAndWhiskerChartWidget> {
+class _CustomBoxAndWhiskerChartWidgetState
+    extends State<CustomBoxAndWhiskerChartWidget> {
   late List<CustomBoxAndWhiskerChartData> data; // Data for current page
   late TooltipBehavior _tooltip;
   int currentPage = 0;
@@ -39,6 +42,7 @@ class _CustomBoxAndWhiskerChartWidgetState extends State<CustomBoxAndWhiskerChar
     return Container(
       height: 400,
       width: 800,
+      padding: EdgeInsets.all(20),
       child: Column(
         children: [
           SfCartesianChart(
@@ -48,23 +52,30 @@ class _CustomBoxAndWhiskerChartWidgetState extends State<CustomBoxAndWhiskerChar
               series: <CartesianSeries<CustomBoxAndWhiskerChartData, String>>[
                 BoxAndWhiskerSeries<CustomBoxAndWhiskerChartData, String>(
                   dataSource: data,
-                  xValueMapper: (CustomBoxAndWhiskerChartData data, _) => data.x,
-                  yValueMapper: (CustomBoxAndWhiskerChartData data, _) => data.y,
+                  xValueMapper: (CustomBoxAndWhiskerChartData data, _) =>
+                      data.x,
+                  yValueMapper: (CustomBoxAndWhiskerChartData data, _) =>
+                      data.y,
                   name: 'Users Scores',
                   color: getPrimaryColorShade(400),
                   borderWidth: 1,
                   borderColor: Colors.black,
-                  gradient: LinearGradient(
-                      colors: [Colors.redAccent, Colors.orange, Colors.lightGreen],
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter),
+                  gradient: LinearGradient(colors: [
+                    Colors.redAccent,
+                    Colors.orange,
+                    Colors.lightGreen
+                  ], begin: Alignment.bottomCenter, end: Alignment.topCenter),
                 ),
               ]),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              IconButton(
-                icon: Icon(Icons.arrow_back),
+              ElevatedButton(
+                child: Icon(
+                  Icons.arrow_back,
+                  size: 18,
+                  color: Colors.white,
+                ),
                 onPressed: currentPage > 0
                     ? () => setState(() {
                           currentPage--;
@@ -72,15 +83,26 @@ class _CustomBoxAndWhiskerChartWidgetState extends State<CustomBoxAndWhiskerChar
                         })
                     : null,
               ),
-              Text('Page ${currentPage + 1} of ${(widget.allData.length / pageSize).ceil()}'),
-              IconButton(
-                icon: Icon(Icons.arrow_forward),
-                onPressed: currentPage < (widget.allData.length / pageSize).ceil() - 1
-                    ? () => setState(() {
-                          currentPage++;
-                          setPageData();
-                        })
-                    : null,
+              Container(
+                padding: EdgeInsets.all(8),
+                child: Text(
+                  'Showing ${currentPage + 1} of ${(widget.allData.length / pageSize).ceil()}',
+                  style: TextStyle(fontSize: 14),
+                ),
+              ),
+              ElevatedButton(
+                child: Icon(
+                  Icons.arrow_forward,
+                  size: 18,
+                  color: Colors.white,
+                ),
+                onPressed:
+                    currentPage < (widget.allData.length / pageSize).ceil() - 1
+                        ? () => setState(() {
+                              currentPage++;
+                              setPageData();
+                            })
+                        : null,
               ),
             ],
           ),

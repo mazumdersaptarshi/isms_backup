@@ -3,17 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart';
 
-class ChartMetricSelect extends StatefulWidget {
-  const ChartMetricSelect({super.key, required this.onMetricSelected});
+class ChartMetricSelectWidget extends StatefulWidget {
+  const ChartMetricSelectWidget({super.key, required this.onMetricSelected});
 
   final Function(String?) onMetricSelected;
 
   @override
-  State<ChartMetricSelect> createState() => _ChartMetricSelectState();
+  State<ChartMetricSelectWidget> createState() =>
+      _ChartMetricSelectWidgetState();
 }
 
-class _ChartMetricSelectState extends State<ChartMetricSelect> {
-  Map<String, String> _chartMetrics = {'avgScore': 'Average', 'maxScore': 'Maximum', 'minScore': 'Minimum'};
+class _ChartMetricSelectWidgetState extends State<ChartMetricSelectWidget> {
+  Map<String, String> _chartMetrics = {
+    'avgScore': 'Average',
+    'maxScore': 'Maximum',
+    'minScore': 'Minimum'
+  };
 
   String? _selectedMetric;
 
@@ -49,35 +54,50 @@ class _ChartMetricSelectState extends State<ChartMetricSelect> {
   }
 
   Widget CustomDropdownButton(BuildContext context) {
-    List<String> displayItems = _chartMetrics.entries.map((entry) => "${entry.value}").toList();
+    List<String> displayItems =
+        _chartMetrics.entries.map((entry) => "${entry.value}").toList();
     int? _hoveredIndex; // To track the hovered item index
 
     return Container(
-      margin: EdgeInsets.all(10),
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          minWidth: 200, // Set your minimum width here
-          maxWidth: 500, // Set your maximum width here
-        ),
-        child: CustomDropdown<String>.search(
-          hintText: 'Select Metrics',
-          items: displayItems,
-          overlayHeight: 342,
-          onChanged: (value) {
-            String? selectedKey;
-            for (var entry in _chartMetrics.entries) {
-              if (entry.value == value) {
-                selectedKey = entry.key;
-                break;
-              }
-            }
-            setState(() {
-              _selectedMetric = selectedKey;
-              widget.onMetricSelected(selectedKey);
-            });
-          },
-          decoration: customDropdownDecoration,
-        ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: 10,
+          ),
+          Text(
+            'Metric',
+            style: TextStyle(fontSize: 12, color: Colors.grey.shade500),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          ConstrainedBox(
+            constraints: BoxConstraints(
+              minWidth: 200, // Set your minimum width here
+              maxWidth: 500, // Set your maximum width here
+            ),
+            child: CustomDropdown<String>.search(
+              hintText: 'Select Metrics',
+              items: displayItems,
+              overlayHeight: 342,
+              onChanged: (value) {
+                String? selectedKey;
+                for (var entry in _chartMetrics.entries) {
+                  if (entry.value == value) {
+                    selectedKey = entry.key;
+                    break;
+                  }
+                }
+                setState(() {
+                  _selectedMetric = selectedKey;
+                  widget.onMetricSelected(selectedKey);
+                });
+              },
+              decoration: customDropdownDecoration,
+            ),
+          ),
+        ],
       ),
     );
   }

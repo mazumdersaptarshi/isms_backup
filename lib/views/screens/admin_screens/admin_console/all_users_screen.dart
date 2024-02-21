@@ -10,7 +10,7 @@ import 'package:isms/models/charts/box_and_whisker_charts/custom_box_and_whisker
 import 'package:isms/utilities/platform_check.dart';
 import 'package:isms/views/widgets/shared_widgets/charts/custom_box_and_whisker_chart_widget.dart';
 import 'package:isms/views/widgets/shared_widgets/charts/custom_pie_chart_widget.dart';
-import 'package:isms/views/widgets/shared_widgets/charts/line_chart_widget.dart';
+import 'package:isms/views/widgets/shared_widgets/charts/custom_line_chart_widget.dart';
 import 'package:isms/views/widgets/shared_widgets/course_exam_select_widget_dropdown.dart';
 import 'package:isms/views/widgets/custom_data_table.dart';
 import 'package:isms/views/widgets/shared_widgets/chart_metric_select_widget_dropdown.dart';
@@ -36,8 +36,11 @@ class _AllUsersState extends State<AllUsers> {
     super.initState();
     adminState = AdminState();
     // Default data is set for initial display
-    _usersDataBarChart = updateUsersDataOnDifferentCourseExamSelectionBarChart('yu78nb');
-    _usersDataBoxAndWhiskerChart = updateUsersDataOnDifferentCourseExamSelectionBoxAndWhiskerChart('yu78nb');
+    _usersDataBarChart =
+        updateUsersDataOnDifferentCourseExamSelectionBarChart('yu78nb');
+    _usersDataBoxAndWhiskerChart =
+        updateUsersDataOnDifferentCourseExamSelectionBoxAndWhiskerChart(
+            'yu78nb');
   }
 
   List<CustomBarChartData> _usersDataBarChart = [];
@@ -50,7 +53,8 @@ class _AllUsersState extends State<AllUsers> {
   /// [examKey] is the key for the selected exam.
   void _updateBarDataOnExamSelection(String? examKey) {
     setState(() {
-      _usersDataBarChart = updateUsersDataOnDifferentCourseExamSelectionBarChart(examKey);
+      _usersDataBarChart =
+          updateUsersDataOnDifferentCourseExamSelectionBarChart(examKey);
     });
   }
 
@@ -66,7 +70,9 @@ class _AllUsersState extends State<AllUsers> {
   void _updateBoxDataOnExamSelection(String? examKey) {
     setState(() {
       // _usersDataBarChart = updateUsersDataOnDifferentCourseExamSelectionBarChart(examKey);
-      _usersDataBoxAndWhiskerChart = updateUsersDataOnDifferentCourseExamSelectionBoxAndWhiskerChart(examKey);
+      _usersDataBoxAndWhiskerChart =
+          updateUsersDataOnDifferentCourseExamSelectionBoxAndWhiskerChart(
+              examKey);
     });
   }
 
@@ -94,7 +100,8 @@ class _AllUsersState extends State<AllUsers> {
 
   /// Retrieves all users for display in the custom data table.
   List _getAllUsers() {
-    _allUsers = UsersAnalytics.getAllUsersList(allUsersData: adminState.getAllUsersData);
+    _allUsers = UsersAnalytics.getAllUsersList(
+        allUsersData: adminState.getAllUsersData);
     var usersList = _allUsers.entries.toList();
 
     return usersList;
@@ -105,7 +112,8 @@ class _AllUsersState extends State<AllUsers> {
     final loggedInState = context.watch<LoggedInState>();
 
     return Scaffold(
-      bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
+      bottomNavigationBar:
+          PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
       appBar: PlatformCheck.topNavBarWidget(context, loggedInState),
       body: SingleChildScrollView(
         child: Container(
@@ -113,8 +121,7 @@ class _AllUsersState extends State<AllUsers> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               buildSectionHeader(title: 'All Users'),
-              const SizedBox(height: 20),
-              CustomDataTable(usersList: _getAllUsers()),
+              CustomDataTable(usersList: usersListData),
               buildSectionHeader(title: 'Users performance overview'),
               Container(
                 width: MediaQuery.of(context).size.width * 0.9,
@@ -201,9 +208,10 @@ class _AllUsersState extends State<AllUsers> {
                                       _updateSelectedExamBarChart(selectedExam);
                                     },
                                   ),
-                                  ChartMetricSelect(
+                                  ChartMetricSelectWidget(
                                     onMetricSelected: (selectedMetric) {
-                                      _updateSelectedMetricBarChart(selectedMetric);
+                                      _updateSelectedMetricBarChart(
+                                          selectedMetric);
                                     },
                                   ),
                                   CustomBarChart(
@@ -239,7 +247,8 @@ class _AllUsersState extends State<AllUsers> {
                                   ),
                                   CourseExamSelectWidget(
                                     onExamSelected: (selectedExam) {
-                                      _updateBoxDataOnExamSelection(selectedExam);
+                                      _updateBoxDataOnExamSelection(
+                                          selectedExam);
                                     },
                                   ),
                                   CustomBoxAndWhiskerChartWidget(

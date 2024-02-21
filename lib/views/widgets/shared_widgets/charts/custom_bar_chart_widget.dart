@@ -42,7 +42,8 @@ class _CustomBarChartState extends State<CustomBarChart> {
 
   void _buildBarData() {
     for (int index = 0; index < widget.barChartValuesData.length; index++) {
-      barData.add(IndividualBar(x: index, y: widget.barChartValuesData[index].y));
+      barData
+          .add(IndividualBar(x: index, y: widget.barChartValuesData[index].y));
     }
   }
 
@@ -67,7 +68,8 @@ class _CustomBarChartState extends State<CustomBarChart> {
     return filteredData.sublist(startIndex, endIndex);
   }
 
-  BarChartGroupData _buildBarChartGroupData(IndividualBar data, int index, bool isTouched) {
+  BarChartGroupData _buildBarChartGroupData(
+      IndividualBar data, int index, bool isTouched) {
     return BarChartGroupData(
       x: data.x,
       barRods: [
@@ -89,7 +91,8 @@ class _CustomBarChartState extends State<CustomBarChart> {
             // gradient: getBarsGradientColor(),
             width: 20,
             borderRadius: BorderRadius.circular(5),
-            backDrawRodData: BackgroundBarChartRodData(show: true, toY: 100, color: Colors.grey.shade300)),
+            backDrawRodData: BackgroundBarChartRodData(
+                show: true, toY: 100, color: Colors.grey.shade300)),
       ],
     );
   }
@@ -99,16 +102,24 @@ class _CustomBarChartState extends State<CustomBarChart> {
     final _paginatedFilteredData = _getPaginatedFilteredData();
     final chartWidth = max(_paginatedFilteredData.length * 50.0, 1);
 
-    List<BarChartGroupData> _buildBarChartGroups() => List.generate(_paginatedFilteredData.length, (i) {
-          return _buildBarChartGroupData(_paginatedFilteredData[i], i, _touchedIndex == i);
+    List<BarChartGroupData> _buildBarChartGroups() =>
+        List.generate(_paginatedFilteredData.length, (i) {
+          return _buildBarChartGroupData(
+              _paginatedFilteredData[i], i, _touchedIndex == i);
         });
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        SizedBox(
+          height: 10,
+        ),
         Text(
-          'Score Less Than',
-          style: TextStyle(fontSize: 12),
+          'Score Filter',
+          style: TextStyle(fontSize: 12, color: Colors.grey.shade500),
+        ),
+        SizedBox(
+          height: 10,
         ),
         CustomScoreFilterDropdownButton(context),
         Container(
@@ -160,14 +171,17 @@ class _CustomBarChartState extends State<CustomBarChart> {
                           _touchedIndex = -1;
                           return;
                         }
-                        _touchedIndex = barTouchResponse.spot!.touchedBarGroupIndex;
+                        _touchedIndex =
+                            barTouchResponse.spot!.touchedBarGroupIndex;
                       });
                     },
                   ),
                   titlesData: FlTitlesData(
                       show: true,
-                      topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                      rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                      topTitles:
+                          AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                      rightTitles:
+                          AxisTitles(sideTitles: SideTitles(showTitles: false)),
                       leftTitles: AxisTitles(
                           sideTitles: SideTitles(
                         showTitles: true,
@@ -214,10 +228,11 @@ class _CustomBarChartState extends State<CustomBarChart> {
   }
 
   Widget CustomScoreFilterDropdownButton(BuildContext context) {
-    List<String> displayItems = <int>[30, 50, 70, 100].map((entry) => "${entry}").toList();
+    List<String> displayItems =
+        <int>[30, 50, 70, 100].map((entry) => "${entry}").toList();
 
     return Container(
-      margin: EdgeInsets.all(10),
+      // margin: EdgeInsets.all(10),
       child: ConstrainedBox(
         constraints: const BoxConstraints(
           minWidth: 50, // Set your minimum width here
@@ -254,7 +269,8 @@ class _CustomBarChartState extends State<CustomBarChart> {
         // mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ElevatedButton(
-            onPressed: _currentPage > 0 ? () => setState(() => _currentPage--) : null,
+            onPressed:
+                _currentPage > 0 ? () => setState(() => _currentPage--) : null,
             child: Icon(
               Icons.arrow_back_ios_rounded,
               size: 18,
@@ -269,7 +285,9 @@ class _CustomBarChartState extends State<CustomBarChart> {
             ),
           ),
           ElevatedButton(
-            onPressed: _currentPage < _totalPages - 1 ? () => setState(() => _currentPage++) : null,
+            onPressed: _currentPage < _totalPages - 1
+                ? () => setState(() => _currentPage++)
+                : null,
             child: Icon(
               Icons.arrow_forward_ios_rounded,
               size: 18,
