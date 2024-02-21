@@ -20,9 +20,10 @@ class _CustomDataTableState extends State<CustomDataTable> {
 
   @override
   Widget build(BuildContext context) {
+    print('usersList: ${widget.usersList}');
     return Container(
       width: MediaQuery.of(context).size.width * 0.8,
-      margin: EdgeInsets.fromLTRB(150, 12, 150, 30),
+      margin: EdgeInsets.fromLTRB(80, 12, 80, 30),
       decoration: BoxDecoration(
         border: Border.all(color: getTertiaryColor1()),
         borderRadius: BorderRadius.circular(20),
@@ -35,6 +36,7 @@ class _CustomDataTableState extends State<CustomDataTable> {
             _buildHeaderRow(),
             ...widget.usersList.asMap().entries.map((entry) {
               final item = entry.value;
+              print('item $item');
               return _buildDataRow(item: item.value, index: entry.key, listLength: widget.usersList.length);
             }).toList(),
           ],

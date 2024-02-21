@@ -1,3 +1,4 @@
+import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 
 /// App-wide font family override
@@ -22,6 +23,18 @@ Color? get primary => getPrimaryColorShade(700);
 ///The limitation is that It doesn't work well with Accent colors, since they don't have shades
 Color? getPrimaryColorShade(int shade) {
   return Colors.blue[shade];
+}
+
+LinearGradient? getBarsGradientColor() {
+  return LinearGradient(
+    colors: [
+      getPrimaryColorShade(800)!,
+      getPrimaryColorShade(400)!,
+      getPrimaryColorShade(200)!,
+    ],
+    begin: Alignment.bottomCenter,
+    end: Alignment.topCenter,
+  );
 }
 
 /// App-wide theme
@@ -132,6 +145,23 @@ IconButtonThemeData _iconButtonTheme(IconButtonThemeData base) => const IconButt
 ListTileThemeData _listTileTheme(ListTileThemeData base) => const ListTileThemeData(
     // textColor: Colors.black
     );
+
+CustomDropdownDecoration get customDropdownDecoration => CustomDropdownDecoration(
+    closedFillColor: Colors.grey.shade100,
+    expandedFillColor: Colors.white,
+    closedBorder: Border.all(color: Colors.grey.shade200, width: 1),
+    expandedBorder: Border.all(
+      color: getPrimaryColorShade(50)!,
+      width: 2,
+    ),
+    listItemStyle: TextStyle(
+      color: primary,
+      fontSize: 14,
+    ),
+    headerStyle: TextStyle(
+      fontSize: 14,
+      color: primary,
+    ));
 
 // Private functions for conditional widget styling in app theme
 
