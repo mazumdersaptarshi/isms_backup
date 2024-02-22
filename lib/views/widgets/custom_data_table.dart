@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart';
+import 'package:isms/controllers/theme_management/common_theme.dart';
 
 class CustomDataTable extends StatefulWidget {
   CustomDataTable({Key? key, required this.usersList}) : super(key: key);
@@ -13,24 +15,11 @@ class _CustomDataTableState extends State<CustomDataTable> {
   @override
   void initState() {
     super.initState();
-    // Populate _rowColors on initialization
-    // columnHeaders = extractKeysFromUsersList(widget.usersList);
-    // widget.usersList.isNotEmpty ? widget.usersList[0].keys.toList() : [];
   }
 
+  bool _isExpanded = false; // State to manage expanded/collapsed view
   List columnHeaders = [];
   Map<int, bool> isHoveringMap = {};
-  List extractKeysFromUsersList(List usersList) {
-    if (usersList.isNotEmpty) {
-      // Assuming all maps in the list have the same structure,
-      // we take the first item's value (which is a Map) and extract its keys.
-      Map firstItemValue = usersList.first.value;
-      List keys = firstItemValue.keys.toList();
-      print("keys: $keys");
-      return keys;
-    }
-    return [];
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,8 +32,7 @@ class _CustomDataTableState extends State<CustomDataTable> {
         borderRadius: BorderRadius.circular(20),
       ),
       child: ClipRRect(
-        borderRadius:
-            BorderRadius.circular(20), // Match container's border radius
+        borderRadius: BorderRadius.circular(20), // Match container's border radius
 
         child: Column(
           children: [
@@ -52,14 +40,44 @@ class _CustomDataTableState extends State<CustomDataTable> {
             ...widget.usersList.asMap().entries.map((entry) {
               int index = entry.key;
               var value = entry.value;
-              return _buildDataRow(
-                  item: value,
-                  index: index,
-                  listLength: widget.usersList.length);
+              return _buildDataRow(item: value, index: index, listLength: widget.usersList.length);
             }).toList(),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildToggleExpandButton() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        TextButton(
+          onPressed: () {
+            setState(() {
+              _isExpanded = !_isExpanded; // Toggle the state
+            });
+          },
+          style: ButtonStyle(
+              overlayColor: MaterialStateColor.resolveWith(
+            (states) => Colors.transparent,
+          )),
+          child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(5)),
+                color: primary,
+              ),
+              padding: EdgeInsets.all(10),
+              child: Text(
+                _isExpanded ? "Less details" : "More details",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
+              )),
+        ),
+      ],
     );
   }
 
@@ -74,7 +92,7 @@ class _CustomDataTableState extends State<CustomDataTable> {
       child: Padding(
         padding: const EdgeInsets.only(top: 8.0, bottom: 8),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround, // Space cells out
+          mainAxisAlignment: MainAxisAlignment.start, // Space cells out
 
           children: [
             _buildHeaderCell(
@@ -89,30 +107,35 @@ class _CustomDataTableState extends State<CustomDataTable> {
               text: 'Role',
               type: 'text',
             ),
-            _buildHeaderCell(
-              text: 'Courses Completed',
-              type: 'text',
-            ),
-            _buildHeaderCell(
-              text: 'Courses Enrolled',
-              type: 'text',
-            ),
-            _buildHeaderCell(
-              text: 'Average Score',
-              type: 'text',
-            ),
-            _buildHeaderCell(
-              text: 'Exams Taken',
-              type: 'text',
-            ),
-            _buildHeaderCell(
-              text: 'Last Login',
-              type: 'text',
-            ),
+            if (_isExpanded)
+              _buildHeaderCell(
+                text: 'Courses Completed (%)',
+                type: 'text',
+              ),
+            if (_isExpanded)
+              _buildHeaderCell(
+                text: 'Courses Enrolled',
+                type: 'text',
+              ),
+            if (_isExpanded)
+              _buildHeaderCell(
+                text: 'Average Score (%)',
+                type: 'text',
+              ),
+            if (_isExpanded)
+              _buildHeaderCell(
+                text: 'Exams Taken',
+                type: 'text',
+              ),
+            if (_isExpanded)
+              _buildHeaderCell(
+                text: 'Last Login',
+                type: 'text',
+              ),
             Spacer(),
             _buildHeaderCell(
               text: '',
-              type: 'icon',
+              type: 'button',
             ),
           ],
           // children: columnHeaders
@@ -154,17 +177,21 @@ class _CustomDataTableState extends State<CustomDataTable> {
                 )
               : BorderRadius.zero, // Border(
 
-          color: isHoveringMap[index ?? 0] == true
-              ? Colors.grey.shade100
-              : Colors.transparent,
+          color: isHoveringMap[index ?? 0] == true ? Colors.grey.shade100 : Colors.transparent,
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround, // Space cells out
+          mainAxisAlignment: MainAxisAlignment.end, // Space cells out
           children: [
             _buildDataCell(
               text: item.username,
               type: 'text',
               isHovering: isHoveringMap[index ?? 0] ?? false,
+              icon: Icon(
+                CupertinoIcons.profile_circled,
+                color: Colors.grey.shade700,
+                size: 20,
+              ),
+              iconAlignment: 'left',
             ),
             _buildDataCell(
               text: item.emailId,
@@ -176,31 +203,44 @@ class _CustomDataTableState extends State<CustomDataTable> {
               type: 'text',
               isHovering: isHoveringMap[index ?? 0] ?? false,
             ),
-            _buildDataCell(
-              text: item.coursesCompletedPercentage.toString(),
-              type: 'text',
-              isHovering: isHoveringMap[index ?? 0] ?? false,
-            ),
-            _buildDataCell(
-              text: item.coursesEnrolled.toString(),
-              type: 'text',
-              isHovering: isHoveringMap[index ?? 0] ?? false,
-            ),
-            _buildDataCell(
-              text: item.averageScore.toString(),
-              type: 'text',
-              isHovering: isHoveringMap[index ?? 0] ?? false,
-            ),
-            _buildDataCell(
-              text: item.examsTaken.toString(),
-              type: 'text',
-              isHovering: isHoveringMap[index ?? 0] ?? false,
-            ),
-            _buildDataCell(
-              text: item.lastLogin,
-              type: 'text',
-              isHovering: isHoveringMap[index ?? 0] ?? false,
-            ),
+            if (_isExpanded)
+              _buildDataCell(
+                text: item.coursesCompletedPercentage.toString(),
+                type: 'text',
+                isPercentage: true,
+                isHovering: isHoveringMap[index ?? 0] ?? false,
+              ),
+            if (_isExpanded)
+              _buildDataCell(
+                text: item.coursesEnrolled.toString(),
+                type: 'text',
+                isHovering: isHoveringMap[index ?? 0] ?? false,
+              ),
+            if (_isExpanded)
+              _buildDataCell(
+                text: item.averageScore.toString(),
+                type: 'text',
+                isHovering: isHoveringMap[index ?? 0] ?? false,
+                isPercentage: true,
+              ),
+            if (_isExpanded)
+              _buildDataCell(
+                text: item.examsTaken.toString(),
+                type: 'text',
+                isHovering: isHoveringMap[index ?? 0] ?? false,
+              ),
+            if (_isExpanded)
+              _buildDataCell(
+                text: item.lastLogin,
+                type: 'text',
+                isHovering: isHoveringMap[index ?? 0] ?? false,
+                iconAlignment: 'right',
+                icon: Icon(
+                  Icons.watch_later_outlined,
+                  size: 20,
+                  color: Colors.grey.shade700,
+                ),
+              ),
             Spacer(),
             _buildDataCell(
               type: 'icon',
@@ -219,26 +259,43 @@ class _CustomDataTableState extends State<CustomDataTable> {
   }
 
   // Helpers for Header & Data Cells
-  Widget _buildHeaderCell({
-    String? text,
-    required String type,
-  }) {
+  Widget _buildHeaderCell({String? text, required String type, Icon? icon}) {
     return Expanded(
       // Makes sure all columns have equal width
       child: Container(
         padding: const EdgeInsets.all(8.0),
-        child: type == 'text' ? _getHeaderCellTextWidget(text: text!) : null,
+        child: type == 'text' ? _getHeaderCellTextWidget(text: text!, icon: icon) : _buildToggleExpandButton(),
       ),
     );
   }
 
-  Widget _getHeaderCellTextWidget({required String text}) {
-    return Text(
-      text,
-      style: TextStyle(
-        fontWeight: FontWeight.bold,
-        color: Colors.grey.shade700,
-      ),
+  Widget _getHeaderCellTextWidget({required String text, Icon? icon}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        if (icon != null)
+          Row(
+            children: [
+              icon,
+              SizedBox(
+                width: 4,
+              ),
+            ],
+          ),
+        Flexible(
+          child: Text(
+            text,
+            textAlign: TextAlign.right,
+            overflow: TextOverflow.clip,
+            softWrap: true,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.grey.shade700,
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -246,6 +303,9 @@ class _CustomDataTableState extends State<CustomDataTable> {
     String? text,
     required String type,
     bool? isHovering,
+    Icon? icon,
+    String? iconAlignment,
+    bool? isPercentage,
   }) {
     return Expanded(
       child: Container(
@@ -254,6 +314,9 @@ class _CustomDataTableState extends State<CustomDataTable> {
             ? _getDataCellTextWidget(
                 text: text!,
                 isHovering: isHovering!,
+                icon: icon,
+                iconAlignment: iconAlignment,
+                isPercentage: isPercentage,
               )
             : type == 'icon'
                 ? _getDataCellIconsWidget(
@@ -264,16 +327,73 @@ class _CustomDataTableState extends State<CustomDataTable> {
     );
   }
 
-  Widget _getDataCellTextWidget({
-    required String text,
-    bool? isHovering,
-  }) {
-    return Text(
-      text,
-      style: TextStyle(
-        fontSize: 14,
-        color: isHovering! ? primary : Colors.grey.shade700,
-      ),
+  Widget _getDataCellTextWidget(
+      {required String text, bool? isHovering, Icon? icon, String? iconAlignment, bool? isPercentage}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        if (iconAlignment != null && iconAlignment == 'left' && icon != null) icon,
+        Spacer(),
+        if (isPercentage == null || isPercentage == false)
+          Flexible(
+            child: Container(
+              // padding: EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                  color: text == 'admin'
+                      ? getPrimaryColorShade(50)
+                      : text == 'user'
+                          ? Colors.grey.shade200
+                          : Colors.transparent,
+                  borderRadius: BorderRadius.circular(20)),
+              child: Text(
+                text,
+                textAlign: TextAlign.right,
+                overflow: TextOverflow.clip,
+                softWrap: true,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: isHovering! ? primary : Colors.grey.shade700,
+                ),
+              ),
+            ),
+          ),
+        if (iconAlignment != null && iconAlignment == 'right' && icon != null)
+          Row(
+            children: [
+              SizedBox(
+                width: 4,
+              ),
+              icon,
+            ],
+          ),
+        if (isPercentage != null || isPercentage == true)
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              SizedBox(
+                width: 45,
+                height: 45,
+                child: CircularProgressIndicator(
+                  value: double.parse(text) / 100.0,
+                  valueColor: double.parse(text) > 70
+                      ? AlwaysStoppedAnimation<Color>(Colors.lightGreen!)
+                      : double.parse(text) > 45
+                          ? AlwaysStoppedAnimation<Color>(Colors.orangeAccent!)
+                          : AlwaysStoppedAnimation<Color>(Colors.red!),
+                  backgroundColor: Colors.grey.shade200,
+                  strokeWidth: 5.0,
+                ),
+              ),
+              Text(
+                '${text}%',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey.shade700,
+                ),
+              ),
+            ],
+          )
+      ],
     );
   }
 

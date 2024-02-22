@@ -1,6 +1,7 @@
 import 'package:isms/models/admin_models/users_list_data.dart';
 import 'package:isms/models/charts/bar_charts/custom_bar_chart_data.dart';
 import 'package:isms/models/charts/box_and_whisker_charts/custom_box_and_whisker_chart_data.dart';
+import 'package:isms/models/charts/line_charts/custom_line_chart_data.dart';
 import 'package:isms/views/widgets/shared_widgets/charts/horizontal_bar_chart_widget.dart';
 
 List<HorizontalBarChartData> usersData = [
@@ -377,94 +378,70 @@ List<CustomBoxAndWhiskerChartData> usersData501 = [
   CustomBoxAndWhiskerChartData(x: 'Alex Martin', y: [69, 71, 78, 87, 96, 100]),
   CustomBoxAndWhiskerChartData(x: 'Sara Watkins', y: [58, 82, 86, 90, 94, 97]),
   CustomBoxAndWhiskerChartData(x: 'James Smith', y: [50, 55, 65, 71, 93, 94]),
-  CustomBoxAndWhiskerChartData(
-      x: 'Jennifer Brown', y: [50, 75, 80, 85, 87, 98]),
+  CustomBoxAndWhiskerChartData(x: 'Jennifer Brown', y: [50, 75, 80, 85, 87, 98]),
   CustomBoxAndWhiskerChartData(x: 'John Davis', y: [54, 78, 79, 83, 90, 99]),
-  CustomBoxAndWhiskerChartData(
-      x: 'Patricia Wilson', y: [53, 60, 70, 85, 95, 100]),
-  CustomBoxAndWhiskerChartData(
-      x: 'Michael Miller', y: [61, 65, 70, 82, 89, 96]),
+  CustomBoxAndWhiskerChartData(x: 'Patricia Wilson', y: [53, 60, 70, 85, 95, 100]),
+  CustomBoxAndWhiskerChartData(x: 'Michael Miller', y: [61, 65, 70, 82, 89, 96]),
   CustomBoxAndWhiskerChartData(x: 'Linda Taylor', y: [55, 66, 72, 85, 91, 99]),
-  CustomBoxAndWhiskerChartData(
-      x: 'Robert Anderson', y: [57, 64, 76, 84, 88, 95]),
-  CustomBoxAndWhiskerChartData(
-      x: 'Charles Thomas', y: [59, 63, 78, 81, 93, 97]),
+  CustomBoxAndWhiskerChartData(x: 'Robert Anderson', y: [57, 64, 76, 84, 88, 95]),
+  CustomBoxAndWhiskerChartData(x: 'Charles Thomas', y: [59, 63, 78, 81, 93, 97]),
   CustomBoxAndWhiskerChartData(x: 'Mary Jackson', y: [52, 67, 73, 86, 92, 100]),
   CustomBoxAndWhiskerChartData(x: 'Susan White', y: [56, 70, 75, 80, 94, 98]),
   CustomBoxAndWhiskerChartData(x: 'Joseph Harris', y: [50, 65, 77, 83, 89, 96]),
-  CustomBoxAndWhiskerChartData(
-      x: 'Margaret Clark', y: [54, 68, 74, 79, 85, 93]),
+  CustomBoxAndWhiskerChartData(x: 'Margaret Clark', y: [54, 68, 74, 79, 85, 93]),
   CustomBoxAndWhiskerChartData(x: 'Thomas Lewis', y: [51, 66, 71, 86, 90, 99]),
-  CustomBoxAndWhiskerChartData(
-      x: 'Christopher Allen', y: [53, 69, 76, 82, 88, 94]),
+  CustomBoxAndWhiskerChartData(x: 'Christopher Allen', y: [53, 69, 76, 82, 88, 94]),
   CustomBoxAndWhiskerChartData(x: 'Daniel Young', y: [57, 62, 77, 84, 91, 95]),
   CustomBoxAndWhiskerChartData(x: 'Matthew King', y: [58, 64, 79, 87, 92, 100]),
   CustomBoxAndWhiskerChartData(x: 'Donald Scott', y: [59, 67, 73, 81, 86, 93]),
-  CustomBoxAndWhiskerChartData(
-      x: 'Laura Mitchell', y: [62, 75, 78, 82, 89, 97]),
+  CustomBoxAndWhiskerChartData(x: 'Laura Mitchell', y: [62, 75, 78, 82, 89, 97]),
   CustomBoxAndWhiskerChartData(x: 'Joshua Perez', y: [50, 73, 76, 80, 85, 92]),
-  CustomBoxAndWhiskerChartData(
-      x: 'Andrew Roberts', y: [60, 74, 79, 83, 91, 95]),
+  CustomBoxAndWhiskerChartData(x: 'Andrew Roberts', y: [60, 74, 79, 83, 91, 95]),
   CustomBoxAndWhiskerChartData(x: 'Brian Turner', y: [55, 68, 72, 85, 90, 96]),
-  CustomBoxAndWhiskerChartData(
-      x: 'Rebecca Phillips', y: [57, 70, 74, 88, 93, 99]),
+  CustomBoxAndWhiskerChartData(x: 'Rebecca Phillips', y: [57, 70, 74, 88, 93, 99]),
   CustomBoxAndWhiskerChartData(x: 'Gary Ward', y: [59, 69, 77, 84, 89, 94]),
   CustomBoxAndWhiskerChartData(x: 'Jacob Moore', y: [53, 65, 71, 86, 92, 98]),
-  CustomBoxAndWhiskerChartData(
-      x: 'Shirley Murphy', y: [50, 72, 76, 80, 87, 93]),
+  CustomBoxAndWhiskerChartData(x: 'Shirley Murphy', y: [50, 72, 76, 80, 87, 93]),
   CustomBoxAndWhiskerChartData(x: 'Raymond Price', y: [58, 64, 78, 81, 85, 91]),
   CustomBoxAndWhiskerChartData(x: 'Cynthia Kelly', y: [51, 67, 73, 79, 84, 90]),
-  CustomBoxAndWhiskerChartData(
-      x: 'Charles Bennett', y: [55, 63, 70, 75, 82, 88]),
+  CustomBoxAndWhiskerChartData(x: 'Charles Bennett', y: [55, 63, 70, 75, 82, 88]),
   CustomBoxAndWhiskerChartData(x: 'Angela Rivera', y: [52, 66, 72, 86, 91, 97]),
-  CustomBoxAndWhiskerChartData(
-      x: 'Brandon Richards', y: [54, 69, 75, 80, 86, 92]),
-  CustomBoxAndWhiskerChartData(
-      x: 'Gregory Jenkins', y: [60, 71, 77, 83, 88, 94]),
+  CustomBoxAndWhiskerChartData(x: 'Brandon Richards', y: [54, 69, 75, 80, 86, 92]),
+  CustomBoxAndWhiskerChartData(x: 'Gregory Jenkins', y: [60, 71, 77, 83, 88, 94]),
   CustomBoxAndWhiskerChartData(x: 'Anna Stewart', y: [57, 68, 73, 78, 85, 91]),
   CustomBoxAndWhiskerChartData(x: 'Willie Duncan', y: [59, 64, 69, 74, 81, 87]),
   CustomBoxAndWhiskerChartData(x: 'Ruth Lane', y: [50, 65, 70, 76, 83, 89]),
   CustomBoxAndWhiskerChartData(x: 'Walter Foster', y: [58, 63, 68, 73, 80, 86]),
-  CustomBoxAndWhiskerChartData(
-      x: 'Samantha Howard', y: [56, 61, 66, 71, 78, 84]),
+  CustomBoxAndWhiskerChartData(x: 'Samantha Howard', y: [56, 61, 66, 71, 78, 84]),
   CustomBoxAndWhiskerChartData(x: 'Jerry Owens', y: [54, 59, 64, 69, 76, 82]),
-  CustomBoxAndWhiskerChartData(
-      x: 'Gregory Jenkins', y: [42, 45, 50, 55, 60, 65]),
+  CustomBoxAndWhiskerChartData(x: 'Gregory Jenkins', y: [42, 45, 50, 55, 60, 65]),
   CustomBoxAndWhiskerChartData(x: 'Anna Stewart', y: [41, 44, 49, 54, 59, 64]),
   CustomBoxAndWhiskerChartData(x: 'Willie Duncan', y: [40, 43, 48, 53, 58, 63]),
   CustomBoxAndWhiskerChartData(x: 'Ruth Lane', y: [39, 42, 47, 52, 57, 62]),
   CustomBoxAndWhiskerChartData(x: 'Walter Foster', y: [38, 41, 46, 51, 56, 61]),
-  CustomBoxAndWhiskerChartData(
-      x: 'Samantha Howard', y: [37, 40, 45, 50, 55, 60]),
+  CustomBoxAndWhiskerChartData(x: 'Samantha Howard', y: [37, 40, 45, 50, 55, 60]),
   CustomBoxAndWhiskerChartData(x: 'Jerry Owens', y: [36, 39, 44, 49, 54, 59]),
   CustomBoxAndWhiskerChartData(x: 'Marie Russell', y: [35, 38, 43, 48, 53, 58]),
-  CustomBoxAndWhiskerChartData(
-      x: 'Eugene Freeman', y: [34, 37, 42, 47, 52, 57]),
+  CustomBoxAndWhiskerChartData(x: 'Eugene Freeman', y: [34, 37, 42, 47, 52, 57]),
 ];
 List<CustomBoxAndWhiskerChartData> usersData502 = [
   CustomBoxAndWhiskerChartData(x: 'Emily Carter', y: [62, 77, 81, 85, 90, 95]),
   CustomBoxAndWhiskerChartData(x: 'Olivia Harris', y: [65, 70, 75, 80, 88, 92]),
   CustomBoxAndWhiskerChartData(x: 'Sophia Clark', y: [60, 65, 70, 76, 82, 89]),
   CustomBoxAndWhiskerChartData(x: 'Ava Wright', y: [58, 63, 68, 74, 79, 85]),
-  CustomBoxAndWhiskerChartData(
-      x: 'Isabella Johnson', y: [61, 66, 71, 77, 83, 90]),
+  CustomBoxAndWhiskerChartData(x: 'Isabella Johnson', y: [61, 66, 71, 77, 83, 90]),
   CustomBoxAndWhiskerChartData(x: 'Mia King', y: [64, 69, 73, 78, 84, 89]),
   CustomBoxAndWhiskerChartData(x: 'Amelia Brown', y: [67, 72, 76, 81, 86, 92]),
-  CustomBoxAndWhiskerChartData(
-      x: 'Harper Martinez', y: [70, 74, 79, 83, 88, 93]),
+  CustomBoxAndWhiskerChartData(x: 'Harper Martinez', y: [70, 74, 79, 83, 88, 93]),
   CustomBoxAndWhiskerChartData(x: 'Evelyn Davis', y: [56, 61, 66, 71, 76, 82]),
-  CustomBoxAndWhiskerChartData(
-      x: 'Abigail Wilson', y: [59, 64, 68, 73, 78, 84]),
+  CustomBoxAndWhiskerChartData(x: 'Abigail Wilson', y: [59, 64, 68, 73, 78, 84]),
   CustomBoxAndWhiskerChartData(x: 'Ella Anderson', y: [57, 62, 67, 72, 77, 83]),
-  CustomBoxAndWhiskerChartData(
-      x: 'Scarlett Thomas', y: [55, 60, 65, 70, 75, 80]),
+  CustomBoxAndWhiskerChartData(x: 'Scarlett Thomas', y: [55, 60, 65, 70, 75, 80]),
   CustomBoxAndWhiskerChartData(x: 'Grace Jackson', y: [53, 58, 63, 68, 74, 79]),
   CustomBoxAndWhiskerChartData(x: 'Chloe White', y: [51, 57, 62, 67, 73, 78]),
-  CustomBoxAndWhiskerChartData(
-      x: 'Isabelle Harris', y: [54, 59, 64, 69, 74, 80]),
+  CustomBoxAndWhiskerChartData(x: 'Isabelle Harris', y: [54, 59, 64, 69, 74, 80]),
   CustomBoxAndWhiskerChartData(x: 'Sophie Lewis', y: [52, 57, 62, 68, 73, 79]),
-  CustomBoxAndWhiskerChartData(
-      x: 'Charlotte Walker', y: [50, 55, 61, 66, 71, 77]),
+  CustomBoxAndWhiskerChartData(x: 'Charlotte Walker', y: [50, 55, 61, 66, 71, 77]),
   CustomBoxAndWhiskerChartData(x: 'Mila Robinson', y: [48, 54, 59, 64, 70, 75]),
   CustomBoxAndWhiskerChartData(x: 'Lucy Hall', y: [46, 52, 57, 63, 68, 74]),
   CustomBoxAndWhiskerChartData(x: 'Lily Young', y: [49, 54, 60, 65, 71, 76]),
@@ -476,25 +453,25 @@ List<UsersListData> usersListData = [
     username: 'Saptarshi Mazumder',
     emailId: 's.mazumder@pvp.co.jp',
     role: 'admin',
-    coursesCompletedPercentage: 35.6,
+    coursesCompletedPercentage: 56.6,
     coursesEnrolled: 7,
-    averageScore: 56.9,
+    averageScore: 86.9,
     examsTaken: 3,
     lastLogin: '7 Jan 2024 10:34:09',
   ),
   UsersListData(
     username: 'Aidan Pope',
-    emailId: 'aidan.pope@example.com',
-    role: 'user',
-    coursesCompletedPercentage: 42.1,
+    emailId: 'aidan.pope@pvp.co.jp',
+    role: 'admin',
+    coursesCompletedPercentage: 60.1,
     coursesEnrolled: 5,
-    averageScore: 62.3,
+    averageScore: 88.3,
     examsTaken: 5,
     lastLogin: '6 Jan 2024 14:20:17',
   ),
   UsersListData(
     username: 'Alex Martin',
-    emailId: 'alex.martin@example.com',
+    emailId: 'alex.martin@pvp.co.jp',
     role: 'user',
     coursesCompletedPercentage: 38.7,
     coursesEnrolled: 6,
@@ -503,8 +480,8 @@ List<UsersListData> usersListData = [
     lastLogin: '5 Jan 2024 16:45:56',
   ),
   UsersListData(
-    username: 'Sahitha Reddy',
-    emailId: 'sahitha.reddy@example.com',
+    username: 'Sahitha Yalamanchili',
+    emailId: 's.yalamanchili@pvp.co.jp',
     role: 'user',
     coursesCompletedPercentage: 47.9,
     coursesEnrolled: 8,
@@ -514,7 +491,7 @@ List<UsersListData> usersListData = [
   ),
   UsersListData(
     username: 'John Doe',
-    emailId: 'john.doe@example.com',
+    emailId: 'john.doe@pvp.co.jp',
     role: 'user',
     coursesCompletedPercentage: 50.3,
     coursesEnrolled: 9,
@@ -524,8 +501,8 @@ List<UsersListData> usersListData = [
   ),
   UsersListData(
     username: 'Jane Smith',
-    emailId: 'jane.smith@example.com',
-    role: 'user',
+    emailId: 'jane.smith@pvp.co.jp',
+    role: 'admin',
     coursesCompletedPercentage: 33.5,
     coursesEnrolled: 4,
     averageScore: 55.0,
@@ -534,17 +511,17 @@ List<UsersListData> usersListData = [
   ),
   UsersListData(
     username: 'Michael Brown',
-    emailId: 'michael.brown@example.com',
+    emailId: 'michael.brown@pvp.co.jp',
     role: 'user',
     coursesCompletedPercentage: 40.2,
     coursesEnrolled: 7,
-    averageScore: 65.1,
+    averageScore: 75.1,
     examsTaken: 5,
     lastLogin: '2 Jan 2024 15:55:10',
   ),
   UsersListData(
     username: 'Emily Clark',
-    emailId: 'emily.clark@example.com',
+    emailId: 'emily.clark@pvp.co.jp',
     role: 'user',
     coursesCompletedPercentage: 45.8,
     coursesEnrolled: 7,
@@ -554,7 +531,7 @@ List<UsersListData> usersListData = [
   ),
   UsersListData(
     username: 'Daniel Wilson',
-    emailId: 'daniel.wilson@example.com',
+    emailId: 'daniel.wilson@pvp.co.jp',
     role: 'user',
     coursesCompletedPercentage: 39.4,
     coursesEnrolled: 5,
@@ -564,12 +541,122 @@ List<UsersListData> usersListData = [
   ),
   UsersListData(
     username: 'Sophia Johnson',
-    emailId: 'sophia.johnson@example.com',
-    role: 'user',
-    coursesCompletedPercentage: 43.7,
+    emailId: 'sophia.johnson@pvp.co.jp',
+    role: 'admin',
+    coursesCompletedPercentage: 88.7,
     coursesEnrolled: 8,
-    averageScore: 63.7,
+    averageScore: 89.7,
     examsTaken: 4,
     lastLogin: '10 Jan 2024 14:25:47',
   ),
+];
+
+List<CustomBarChartData> userDataAllCoursesAverage = [
+  CustomBarChartData(x: 'Introduction to Python', y: 77.5),
+  CustomBarChartData(x: 'Introduction to GCP', y: 78),
+  CustomBarChartData(x: 'Fundamentals of AWS', y: 77),
+  CustomBarChartData(x: 'Fundamentals of Game Design', y: 67.5),
+  CustomBarChartData(x: 'Fundamentals of Computer Science', y: 87.5),
+  CustomBarChartData(x: 'Introduction to ReactJS', y: 70.5),
+  CustomBarChartData(x: 'Advanced Machine Learning and AI', y: 55.5),
+  CustomBarChartData(x: 'Data Analysis - Power BI', y: 66),
+];
+
+List<CustomBarChartData> userDataAllCoursesMaximum = [
+  CustomBarChartData(x: 'Introduction to Python', y: 82.5),
+  CustomBarChartData(x: 'Introduction to GCP', y: 80),
+  CustomBarChartData(x: 'Fundamentals of AWS', y: 80),
+  CustomBarChartData(x: 'Fundamentals of Game Design', y: 83.5),
+  CustomBarChartData(x: 'Fundamentals of Computer Science', y: 91.5),
+  CustomBarChartData(x: 'Introduction to ReactJS', y: 85.5),
+  CustomBarChartData(x: 'Advanced Machine Learning and AI', y: 68.5),
+  CustomBarChartData(x: 'Data Analysis - Power BI', y: 86),
+];
+
+List<CustomBarChartData> userDataAllCoursesMinimum = [
+  CustomBarChartData(x: 'Introduction to Python', y: 56.5),
+  CustomBarChartData(x: 'Introduction to GCP', y: 67),
+  CustomBarChartData(x: 'Fundamentals of AWS', y: 56),
+  CustomBarChartData(x: 'Fundamentals of Game Design', y: 67.5),
+  CustomBarChartData(x: 'Fundamentals of Computer Science', y: 76.5),
+  CustomBarChartData(x: 'Introduction to ReactJS', y: 60.5),
+  CustomBarChartData(x: 'Advanced Machine Learning and AI', y: 45.5),
+  CustomBarChartData(x: 'Data Analysis - Power BI', y: 66),
+];
+
+List<CustomLineChartData> sampleUserExamsCompletedOverTimeData = [
+  CustomLineChartData(x: 1, y: 1),
+  CustomLineChartData(x: 2, y: 2),
+  CustomLineChartData(x: 3, y: 0),
+  CustomLineChartData(x: 4, y: 0),
+  CustomLineChartData(x: 5, y: 4),
+  CustomLineChartData(x: 6, y: 6),
+  CustomLineChartData(x: 7, y: 3),
+  CustomLineChartData(x: 8, y: 0),
+  CustomLineChartData(x: 9, y: 1),
+  CustomLineChartData(x: 10, y: 2),
+  CustomLineChartData(x: 11, y: 0),
+  CustomLineChartData(x: 12, y: 1),
+  // Add more data points as necessary
+];
+List<CustomLineChartData> sampleUserCoursesEnrolledOverTimeData = [
+  CustomLineChartData(x: 1, y: 2),
+  CustomLineChartData(x: 2, y: 0),
+  CustomLineChartData(x: 3, y: 0),
+  CustomLineChartData(x: 4, y: 3),
+  CustomLineChartData(x: 5, y: 5),
+  CustomLineChartData(x: 6, y: 3),
+  CustomLineChartData(x: 7, y: 0),
+  CustomLineChartData(x: 8, y: 0),
+  CustomLineChartData(x: 9, y: 1),
+  CustomLineChartData(x: 10, y: 2),
+  CustomLineChartData(x: 11, y: 3),
+  CustomLineChartData(x: 12, y: 2),
+  // Add more data points as necessary
+];
+List<CustomLineChartData> sampleUserActivity = [
+  CustomLineChartData(x: 1, y: 5),
+  CustomLineChartData(x: 2, y: 12),
+  CustomLineChartData(x: 3, y: 7),
+  CustomLineChartData(x: 4, y: 3),
+  CustomLineChartData(x: 5, y: 36),
+  CustomLineChartData(x: 6, y: 20),
+  CustomLineChartData(x: 7, y: 50),
+  CustomLineChartData(x: 8, y: 44),
+  CustomLineChartData(x: 9, y: 26),
+  CustomLineChartData(x: 10, y: 5),
+  CustomLineChartData(x: 11, y: 8),
+  CustomLineChartData(x: 12, y: 4),
+  // Add more data points as necessary
+];
+List<CustomLineChartData> sampleUserTimeSpentStudying = [
+  CustomLineChartData(x: 1, y: 5),
+  CustomLineChartData(x: 2, y: 11),
+  CustomLineChartData(x: 3, y: 5),
+  CustomLineChartData(x: 4, y: 2),
+  CustomLineChartData(x: 5, y: 30),
+  CustomLineChartData(x: 6, y: 10),
+  CustomLineChartData(x: 7, y: 20),
+  CustomLineChartData(x: 8, y: 30),
+  CustomLineChartData(x: 9, y: 16),
+  CustomLineChartData(x: 10, y: 3),
+  CustomLineChartData(x: 11, y: 7),
+  CustomLineChartData(x: 12, y: 3),
+  // Add more data points as necessary
+];
+
+List<CustomLineChartData> sampleUserTimeSpentOnExams = [
+  CustomLineChartData(x: 1, y: 3),
+  CustomLineChartData(x: 2, y: 7),
+  CustomLineChartData(x: 3, y: 2),
+  CustomLineChartData(x: 4, y: 0),
+  CustomLineChartData(x: 5, y: 11),
+  CustomLineChartData(x: 6, y: 5),
+  CustomLineChartData(x: 7, y: 16),
+  CustomLineChartData(x: 8, y: 10),
+  CustomLineChartData(x: 9, y: 6),
+  CustomLineChartData(x: 10, y: 1),
+  CustomLineChartData(x: 11, y: 3),
+  CustomLineChartData(x: 12, y: 0),
+  // Add more data points as necessary
 ];

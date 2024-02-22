@@ -91,7 +91,6 @@ class _CustomLineChartWidgetState extends State<CustomLineChartWidget> {
       int value = int.parse((minY + i).toString());
 
       titles[value] = value.toString(); // Customize formatting as needed
-      print(value);
     }
 
     return titles;
@@ -103,25 +102,19 @@ class _CustomLineChartWidgetState extends State<CustomLineChartWidget> {
     // Initialize the metricTypeData map
     metricTypeData = {
       'All': {
-        'data': coursesCompletedOverTimeData
-            .map((data) => FlSpot(data.x, data.y))
-            .toList(),
-        'colors': coursesCompletedGradientColors,
+        // 'data': coursesCompletedOverTimeData.map((data) => FlSpot(data.x, data.y)).toList(),
+        // 'colors': coursesCompletedGradientColors,
       },
-      'Courses Completed': {
-        'data': coursesCompletedOverTimeData
-            .map((data) => FlSpot(data.x, data.y))
-            .toList(),
+      'Courses Completed over Time': {
+        'data': coursesCompletedOverTimeData.map((data) => FlSpot(data.x, data.y)).toList(),
         'colors': coursesCompletedGradientColors,
       },
       'Active Users': {
         'data': activeUsersData.map((data) => FlSpot(data.x, data.y)).toList(),
         'colors': userActivityGradientColors,
       },
-      'Courses Enrolled': {
-        'data': coursesEnrolledOverTimeData
-            .map((data) => FlSpot(data.x, data.y))
-            .toList(),
+      'Courses Enrolled over Time': {
+        'data': coursesEnrolledOverTimeData.map((data) => FlSpot(data.x, data.y)).toList(),
         'colors': coursesEnrolledGradientColors,
       },
     };
@@ -130,9 +123,9 @@ class _CustomLineChartWidgetState extends State<CustomLineChartWidget> {
   @override
   Widget build(BuildContext context) {
     Map<String, List<Color>> dataTypesAndColors = {
-      'Courses Completed': coursesCompletedGradientColors,
+      'Courses Completed over Time': coursesCompletedGradientColors,
       'Active Users': userActivityGradientColors,
-      'Courses Enrolled': coursesEnrolledGradientColors,
+      'Courses Enrolled over Time': coursesEnrolledGradientColors,
       // Add more data types and their colors as needed
     };
     return Container(
@@ -169,8 +162,7 @@ class _CustomLineChartWidgetState extends State<CustomLineChartWidget> {
   }
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
-    var style = TextStyle(
-        fontWeight: FontWeight.bold, fontSize: 12, color: Colors.grey.shade600);
+    var style = TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Colors.grey.shade600);
     Widget text;
     switch (value.toInt()) {
       case 1:
@@ -223,7 +215,7 @@ class _CustomLineChartWidgetState extends State<CustomLineChartWidget> {
   Widget leftTitleWidgets(double value, TitleMeta meta) {
     var titles = _calculateLeftTitles(_selectedMetricType == 'All'
         ? [...coursesCompletedOverTimeData, ...activeUsersData]
-        : _selectedMetricType == 'Courses Completed'
+        : _selectedMetricType == 'Courses Completed over Time'
             ? coursesCompletedOverTimeData
             : activeUsersData);
     String text = titles[value] ?? '';
@@ -240,9 +232,11 @@ class _CustomLineChartWidgetState extends State<CustomLineChartWidget> {
     if (_selectedMetricType == 'All') {
       // Include both sets of data for 'All'
       metricTypeData.forEach((key, value) {
-        var spots = value['data'] as List<FlSpot>;
-        var colors = value['colors'] as List<Color>;
-        lineBarsData.add(_getLineChartBarData(spots, colors));
+        if (key != 'All') {
+          var spots = value['data'] as List<FlSpot>;
+          var colors = value['colors'] as List<Color>;
+          lineBarsData.add(_getLineChartBarData(spots, colors));
+        }
       });
     } else {
       // Retrieve the selected metric's data and colors from the map for specific selections
@@ -253,6 +247,14 @@ class _CustomLineChartWidgetState extends State<CustomLineChartWidget> {
     }
 
     return LineChartData(
+      lineTouchData: LineTouchData(
+        enabled: true,
+        touchTooltipData: LineTouchTooltipData(
+          tooltipBgColor: Colors.white!,
+
+          // Other tooltip customizations
+        ),
+      ),
       gridData: FlGridData(
         show: true,
         drawVerticalLine: true,
@@ -308,8 +310,7 @@ class _CustomLineChartWidgetState extends State<CustomLineChartWidget> {
     );
   }
 
-  LineChartBarData _getLineChartBarData(
-      List<FlSpot> activeSpots, List<Color> gradientColors) {
+  LineChartBarData _getLineChartBarData(List<FlSpot> activeSpots, List<Color> gradientColors) {
     return LineChartBarData(
       spots: activeSpots,
       isCurved: false,
@@ -318,7 +319,7 @@ class _CustomLineChartWidgetState extends State<CustomLineChartWidget> {
       ),
       barWidth: 2,
       isStrokeCapRound: true,
-      dotData: const FlDotData(
+      dotData: FlDotData(
         show: false,
       ),
       belowBarData: BarAreaData(
@@ -326,8 +327,7 @@ class _CustomLineChartWidgetState extends State<CustomLineChartWidget> {
         gradient: LinearGradient(
           begin: Alignment.bottomCenter,
           end: Alignment.topCenter,
-          colors:
-              gradientColors.map((color) => color.withOpacity(0.3)).toList(),
+          colors: gradientColors.map((color) => color.withOpacity(0.3)).toList(),
         ),
       ),
     );
@@ -336,9 +336,9 @@ class _CustomLineChartWidgetState extends State<CustomLineChartWidget> {
   Widget _buildMetricSelectionDropdown() {
     List<String> displayItems = <String>[
       'All',
-      'Courses Completed',
+      'Courses Completed over Time',
       'Active Users',
-      'Courses Enrolled'
+      'Courses Enrolled over Time'
     ].map((entry) => "${entry}").toList();
 
     return Container(
@@ -375,8 +375,7 @@ class _CustomLineChartWidgetState extends State<CustomLineChartWidget> {
     );
   }
 
-  Widget _buildLineChartLegend(
-      {required Map<String, List<Color>> dataTypesAndColors}) {
+  Widget _buildLineChartLegend({required Map<String, List<Color>> dataTypesAndColors}) {
     return Container(
       // color: Colors.purple,
       child: Column(
@@ -384,26 +383,33 @@ class _CustomLineChartWidgetState extends State<CustomLineChartWidget> {
         children: dataTypesAndColors.entries.map((entry) {
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 4.0),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 10,
-                  height: 10,
-                  decoration: BoxDecoration(
-                    color: entry.value
-                        .first, // Take the first color from the gradient list
-                    shape: BoxShape.circle,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: 150),
+              child: Row(
+                // mainAxisSize: MainAxisSize.min
+                // mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 10,
+                    height: 10,
+                    decoration: BoxDecoration(
+                      color: entry.value.first, // Take the first color from the gradient list
+                      shape: BoxShape.circle,
+                    ),
                   ),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  entry.key,
-                  style: TextStyle(fontSize: 12),
-                ),
-              ],
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Flexible(
+                    child: Text(
+                      entry.key,
+                      overflow: TextOverflow.clip,
+                      softWrap: true,
+                      style: TextStyle(fontSize: 14),
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         }).toList(),

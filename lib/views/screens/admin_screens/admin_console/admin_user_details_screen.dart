@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -6,14 +8,21 @@ import 'package:footer/footer_view.dart';
 import 'package:intl/intl.dart';
 import 'package:isms/controllers/admin_management/admin_data.dart';
 import 'package:isms/controllers/admin_management/admin_state.dart';
+import 'package:isms/controllers/testing/testing_admin_graphs.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart';
 import 'package:isms/controllers/user_management/logged_in_state.dart';
+import 'package:isms/models/charts/bar_charts/custom_bar_chart_data.dart';
 import 'package:isms/utilities/platform_check.dart';
 import 'package:isms/views/widgets/shared_widgets/app_footer.dart';
 import 'package:isms/views/widgets/shared_widgets/build_section_header.dart';
+import 'package:isms/views/widgets/shared_widgets/chart_metric_select_widget_dropdown.dart';
+import 'package:isms/views/widgets/shared_widgets/charts/custom_bar_chart_user_widget.dart';
+import 'package:isms/views/widgets/shared_widgets/charts/custom_line_chart_user_widget.dart';
+import 'package:isms/views/widgets/shared_widgets/charts/custom_pie_chart_widget.dart';
 import 'package:isms/views/widgets/shared_widgets/custom_expansion_tile.dart';
 import 'package:isms/views/widgets/shared_widgets/custom_linear_progress_indicator.dart';
 import 'package:isms/views/widgets/shared_widgets/drawer.dart';
+import 'package:isms/views/widgets/shared_widgets/hoverable_section_container.dart';
 import 'package:isms/views/widgets/shared_widgets/user_profile_banner.dart';
 import 'package:provider/provider.dart';
 
@@ -26,11 +35,13 @@ class AdminUserDetailsScreen extends StatefulWidget {
 
 class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
   late AdminState adminState;
+  List<CustomBarChartData> _usersDataBarChart = [];
 
   @override
   void initState() {
     super.initState();
     adminState = AdminState();
+    _usersDataBarChart = updateUserDataOnDifferentMetricSelection('avgScore');
   }
 
   @override
@@ -182,6 +193,18 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
         ),
       );
       return examDescription;
+    }
+
+    void _updateBarDataOnMetricSelection(String? metricKey) {
+      setState(() {
+        _usersDataBarChart = updateUserDataOnDifferentMetricSelection(metricKey);
+      });
+    }
+
+    void _updateSelectedMetricBarChart(String? selectedMetric) {
+      setState(() {
+        _updateBarDataOnMetricSelection(selectedMetric);
+      });
     }
 
     /// Returns a list of Widgets, which contains a list of the Exams taken by the User for a specific Course, .
@@ -394,6 +417,100 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
               }
             },
           ),
+          buildSectionHeader(title: 'User Activity'),
+          Container(
+            width: MediaQuery.of(context).size.width * 0.95,
+            margin: EdgeInsets.fromLTRB(80, 10, 80, 30),
+            decoration: BoxDecoration(
+              border: Border.all(color: getTertiaryColor1()),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Container(
+              margin: EdgeInsets.all(20),
+              child: Wrap(
+                alignment: WrapAlignment.spaceBetween,
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: 800),
+                    child: HoverableSectionContainer(
+                      onHover: (bool) {},
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'User activity over time',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey.shade700,
+                            ),
+                          ),
+                          Divider(),
+                          SizedBox(
+                            height: 40,
+                          ),
+                          CustomLineChartUserWidget(),
+                        ],
+                      ),
+                    ),
+                  ),
+                  ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: 800),
+                    child: HoverableSectionContainer(
+                      onHover: (bool) {},
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Courses  performance overview',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey.shade700,
+                            ),
+                          ),
+                          Divider(),
+                          SizedBox(
+                            height: 40,
+                          ),
+                          ChartMetricSelectWidget(
+                            onMetricSelected: (selectedMetric) {
+                              _updateSelectedMetricBarChart(selectedMetric);
+                            },
+                          ),
+                          CustomBarChartUserWidget(
+                              key: ValueKey(_usersDataBarChart), barChartValuesData: _usersDataBarChart),
+                        ],
+                      ),
+                    ),
+                  ),
+                  ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: 800),
+                    child: HoverableSectionContainer(
+                      onHover: (bool) {},
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Courses progress by status',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey.shade700,
+                            ),
+                          ),
+                          Divider(),
+                          SizedBox(
+                            height: 40,
+                          ),
+                          CustomPieChartWidget(),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          )
         ],
       ),
     );

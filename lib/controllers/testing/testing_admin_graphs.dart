@@ -40,3 +40,14 @@ List<CustomBarChartData> updateUsersDataOnDifferentMetricSelection(String? metri
   _usersData = (metricKey != null ? _usersDataDifferentMetricsMap[metricKey] : [])!;
   return _usersData;
 }
+
+List<CustomBarChartData> updateUserDataOnDifferentMetricSelection(String? metricKey) {
+  _usersData = (metricKey != null ? userDifferentDataMap[metricKey] : [])!;
+  return _usersData;
+}
+
+Map<String, List<CustomBarChartData>> userDifferentDataMap = {
+  'avgScore': userDataAllCoursesAverage,
+  'maxScore': userDataAllCoursesMaximum,
+  'minScore': userDataAllCoursesMinimum,
+};

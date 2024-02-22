@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:go_router/go_router.dart';
+import 'package:isms/views/widgets/shared_widgets/custom_expansion_tile.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -89,44 +90,33 @@ class _CourseListState extends State<CourseList> {
     final List<Widget> contentWidgets = [];
 
     _courses.forEach((courseId, course) {
-      contentWidgets.add(Container(
-          padding: const EdgeInsets.fromLTRB(25.0, 25.0, 25.0, 0.0),
-          child: Container(
-              decoration: getExpansionTileBoxDecoration(),
-              child: ExpansionTile(
-                title: Text(course.courseTitle),
-                subtitle: Text(course.courseSummary),
-                childrenPadding: const EdgeInsets.fromLTRB(25.0, 10.0, 25.0, 25.0),
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(course.courseDescription, style: const TextStyle(color: Colors.white)),
-                  ),
-                  _separator,
-                  Align(
-                      alignment: Alignment.centerLeft,
-                      child: Container(
-                          decoration: getExpansionTileBoxDecoration(),
-                          child: ElevatedButton(
-                              onPressed: () => context.goNamed(NamedRoutes.course.name,
-                                  pathParameters: {NamedRoutePathParameters.courseId.name: course.courseId}),
-                              child: courseId == 'c1' ? Text('Resume Course') : Text('Start Course')))),
-                  _separator,
-                  Container(
-                      decoration: getExpansionTileBoxDecoration(),
-                      child: ExpansionTile(
-                          title: Text("Sections (1/${course.courseSections.length} Completed)"),
-                          childrenPadding: const EdgeInsets.fromLTRB(25.0, 10.0, 25.0, 25.0),
-                          children: [..._getCourseSections(courseId)])),
-                  _separator,
-                  Container(
-                      decoration: getExpansionTileBoxDecoration(),
-                      child: ExpansionTile(
-                          title: Text("Exams (0/${_exams[courseId]?.length} Completed)"),
-                          childrenPadding: const EdgeInsets.fromLTRB(25.0, 10.0, 25.0, 25.0),
-                          children: [..._getExamWidgets(courseId)]))
-                ],
-              ))));
+      contentWidgets.add(Column(
+        children: [
+          CustomExpansionTile(titleWidget: Text(course.courseTitle), contentWidget: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(course.courseDescription, style: const TextStyle(color: Colors.white)),
+            ),
+            _separator,
+            Align(
+                alignment: Alignment.centerLeft,
+                child: Container(
+                    decoration: getExpansionTileBoxDecoration(),
+                    child: ElevatedButton(
+                        onPressed: () => context.goNamed(NamedRoutes.course.name,
+                            pathParameters: {NamedRoutePathParameters.courseId.name: course.courseId}),
+                        child: courseId == 'c1' ? Text('Resume Course') : Text('Start Course')))),
+            _separator,
+            CustomExpansionTile(
+                titleWidget: Text("Sections (1/${course.courseSections.length} Completed)"),
+                contentWidget: [..._getCourseSections(courseId)]),
+            _separator,
+            CustomExpansionTile(
+                titleWidget: Text("Exams (0/${_exams[courseId]?.length} Completed)"),
+                contentWidget: [..._getExamWidgets(courseId)])
+          ])
+        ],
+      ));
     });
 
     return contentWidgets;

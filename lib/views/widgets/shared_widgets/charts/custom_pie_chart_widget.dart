@@ -23,8 +23,8 @@ class PieChart2State extends State {
   Widget build(BuildContext context) {
     List<PieChartSectionData> convertedData = List.generate(data.length, (index) {
       final isTouched = index == touchedIndex;
-      final baseRadius = 150.0;
-      final touchRadius = 165.0;
+      final baseRadius = 140.0;
+      final touchRadius = 150.0;
       final item = data[index];
 
       return PieChartSectionData(
@@ -38,10 +38,13 @@ class PieChart2State extends State {
       );
     });
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
+        buildLegend(data),
+        SizedBox(height: 20),
         Container(
-          width: 400,
-          height: 300,
+          width: 390,
+          height: 390,
           child: PieChart(
               swapAnimationDuration: const Duration(milliseconds: 200),
               swapAnimationCurve: Curves.easeInOutQuint,
@@ -61,8 +64,8 @@ class PieChart2State extends State {
                   // borderData: FlBorderData(show: true, border: Border.all(color: Colors.black, width: 2)),
                   sections: convertedData)),
         ),
-        SizedBox(height: 20),
-        buildLegend(data), // Call buildLegend here
+
+        // Call buildLegend here
       ],
     );
   }
