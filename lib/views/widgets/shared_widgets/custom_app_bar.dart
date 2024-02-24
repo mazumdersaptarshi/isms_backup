@@ -9,7 +9,7 @@ import 'package:isms/views/screens/admin_screens/admin_console/all_users_screen.
 import 'package:isms/views/screens/admin_screens/admin_console/users_analytics_stats_screen.dart';
 import 'package:isms/views/screens/course_page.dart';
 import 'package:isms/views/screens/testing/test_runner.dart';
-import 'package:isms/views/screens/testing/test_ui_type1/graphs.dart';
+import 'package:isms/views/screens/testing/test_ui_type1/user_test_responses.dart';
 
 class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
   final BuildContext? context;
@@ -33,22 +33,52 @@ class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
     final LoggedInState loggedInState = context.watch<LoggedInState>();
     final List<Widget> actionWidgets = [];
 
-    actionWidgets.add(_getActionIconButton(context, Icons.list, AppLocalizations.of(context)!.buttonCourseList,
+    actionWidgets.add(_getActionIconButton(
+        context,
+        Icons.list,
+        AppLocalizations.of(context)!.buttonCourseList,
         () => context.goNamed(NamedRoutes.assignments.name)));
-    actionWidgets.add(_getActionIconButton(context, Icons.article, "Course Test",
-        () => Navigator.push(context, MaterialPageRoute(builder: (context) => const CoursePage()))));
-    actionWidgets.add(_getActionIconButton(context, Icons.bar_chart, "Graphs",
-        () => Navigator.push(context, MaterialPageRoute(builder: (context) => GraphsPage()))));
-    actionWidgets.add(_getActionIconButton(context, Icons.track_changes, "Tracking",
-        () => Navigator.push(context, MaterialPageRoute(builder: (context) => const TestRunner()))));
-    actionWidgets.add(_getActionIconButton(context, Icons.analytics_rounded, "Users Analytics",
-        () => Navigator.push(context, MaterialPageRoute(builder: (context) => const UsersAnalyticsStatsScreen()))));
-    actionWidgets.add(_getActionIconButton(context, Icons.people_outline_rounded, "All Users",
-        () => Navigator.push(context, MaterialPageRoute(builder: (context) => const AllUsers()))));
+    actionWidgets.add(_getActionIconButton(
+        context,
+        Icons.article,
+        "Course Test",
+        () => Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const CoursePage()))));
+    // actionWidgets.add(_getActionIconButton(
+    //     context,
+    //     Icons.bar_chart,
+    //     "Graphs",
+    //     () => Navigator.push(
+    //         context,
+    //         MaterialPageRoute(
+    //             builder: (context) => AdminTestResponsesPage()))));
+    actionWidgets.add(_getActionIconButton(
+        context,
+        Icons.track_changes,
+        "Tracking",
+        () => Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const TestRunner()))));
+    // actionWidgets.add(_getActionIconButton(
+    //     context,
+    //     Icons.analytics_rounded,
+    //     "Users Analytics",
+    //     () => Navigator.push(
+    //         context,
+    //         MaterialPageRoute(
+    //             builder: (context) => const UsersAnalyticsStatsScreen()))));
+    actionWidgets.add(_getActionIconButton(
+        context,
+        Icons.people_outline_rounded,
+        "All Users",
+        () => Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const AllUsers()))));
 
     if (loggedInState.currentUserRole == 'admin') {
-      actionWidgets.add(_getActionIconButton(context, Icons.admin_panel_settings_rounded,
-          AppLocalizations.of(context)!.buttonAdminConsole, () => context.goNamed(NamedRoutes.adminConsole.name)));
+      actionWidgets.add(_getActionIconButton(
+          context,
+          Icons.admin_panel_settings_rounded,
+          AppLocalizations.of(context)!.buttonAdminConsole,
+          () => context.goNamed(NamedRoutes.adminConsole.name)));
     }
     actionWidgets.add(_getVerticalDivider());
     actionWidgets.add(_getLogoutButton(context));
@@ -56,7 +86,8 @@ class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
     return actionWidgets;
   }
 
-  Widget _getActionIconButton(BuildContext context, IconData icon, String tooltip, VoidCallback onPressed) {
+  Widget _getActionIconButton(BuildContext context, IconData icon,
+      String tooltip, VoidCallback onPressed) {
     return Padding(
       padding: const EdgeInsets.only(left: 5, right: 5),
       child: IconButton(

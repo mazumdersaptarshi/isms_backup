@@ -32,7 +32,8 @@ class _CustomDataTableState extends State<CustomDataTable> {
         borderRadius: BorderRadius.circular(20),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(20), // Match container's border radius
+        borderRadius:
+            BorderRadius.circular(20), // Match container's border radius
 
         child: Column(
           children: [
@@ -40,7 +41,10 @@ class _CustomDataTableState extends State<CustomDataTable> {
             ...widget.usersList.asMap().entries.map((entry) {
               int index = entry.key;
               var value = entry.value;
-              return _buildDataRow(item: value, index: index, listLength: widget.usersList.length);
+              return _buildDataRow(
+                  item: value,
+                  index: index,
+                  listLength: widget.usersList.length);
             }).toList(),
           ],
         ),
@@ -177,7 +181,9 @@ class _CustomDataTableState extends State<CustomDataTable> {
                 )
               : BorderRadius.zero, // Border(
 
-          color: isHoveringMap[index ?? 0] == true ? Colors.grey.shade100 : Colors.transparent,
+          color: isHoveringMap[index ?? 0] == true
+              ? Colors.grey.shade100
+              : Colors.transparent,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end, // Space cells out
@@ -264,7 +270,9 @@ class _CustomDataTableState extends State<CustomDataTable> {
       // Makes sure all columns have equal width
       child: Container(
         padding: const EdgeInsets.all(8.0),
-        child: type == 'text' ? _getHeaderCellTextWidget(text: text!, icon: icon) : _buildToggleExpandButton(),
+        child: type == 'text'
+            ? _getHeaderCellTextWidget(text: text!, icon: icon)
+            : _buildToggleExpandButton(),
       ),
     );
   }
@@ -328,11 +336,16 @@ class _CustomDataTableState extends State<CustomDataTable> {
   }
 
   Widget _getDataCellTextWidget(
-      {required String text, bool? isHovering, Icon? icon, String? iconAlignment, bool? isPercentage}) {
+      {required String text,
+      bool? isHovering,
+      Icon? icon,
+      String? iconAlignment,
+      bool? isPercentage}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        if (iconAlignment != null && iconAlignment == 'left' && icon != null) icon,
+        if (iconAlignment != null && iconAlignment == 'left' && icon != null)
+          icon,
         Spacer(),
         if (isPercentage == null || isPercentage == false)
           Flexible(

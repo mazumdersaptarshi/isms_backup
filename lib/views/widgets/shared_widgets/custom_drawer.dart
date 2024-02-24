@@ -9,7 +9,7 @@ import 'package:isms/utilities/navigation.dart';
 import 'package:isms/views/screens/admin_screens/admin_console/users_analytics_stats_screen.dart';
 import 'package:isms/views/screens/course_page.dart';
 import 'package:isms/views/screens/testing/test_runner.dart';
-import 'package:isms/views/screens/testing/test_ui_type1/graphs.dart';
+import 'package:isms/views/screens/testing/test_ui_type1/user_test_responses.dart';
 
 class IsmsDrawer extends StatelessWidget {
   final BuildContext? context;
@@ -36,14 +36,20 @@ class IsmsDrawer extends StatelessWidget {
     final List<Widget> drawerItemWidgets = [];
 
     drawerItemWidgets.add(_getDrawerHeader(context, "General"));
-    drawerItemWidgets
-        .add(_getDrawerItem(context, Icons.home, AppLocalizations.of(context)!.buttonHome, NamedRoutes.home.name));
+    drawerItemWidgets.add(_getDrawerItem(context, Icons.home,
+        AppLocalizations.of(context)!.buttonHome, NamedRoutes.home.name));
     drawerItemWidgets.add(_getDrawerItem(
-        context, Icons.list, AppLocalizations.of(context)!.buttonCourseList, NamedRoutes.assignments.name));
+        context,
+        Icons.list,
+        AppLocalizations.of(context)!.buttonCourseList,
+        NamedRoutes.assignments.name));
     if (loggedInState.currentUserRole == 'admin') {
       drawerItemWidgets.add(_getDrawerHeader(context, "Admin Actions"));
-      drawerItemWidgets.add(_getDrawerItem(context, Icons.admin_panel_settings_rounded,
-          AppLocalizations.of(context)!.buttonAdminConsole, NamedRoutes.adminConsole.name));
+      drawerItemWidgets.add(_getDrawerItem(
+          context,
+          Icons.admin_panel_settings_rounded,
+          AppLocalizations.of(context)!.buttonAdminConsole,
+          NamedRoutes.adminConsole.name));
     }
 
     return drawerItemWidgets;
@@ -62,7 +68,8 @@ class IsmsDrawer extends StatelessWidget {
     );
   }
 
-  Widget _getDrawerItem(BuildContext context, IconData icon, String label, String route) {
+  Widget _getDrawerItem(
+      BuildContext context, IconData icon, String label, String route) {
     return ListTile(
       leading: Icon(icon),
       title: Text(label),

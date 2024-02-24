@@ -33,7 +33,7 @@ class AdminState {
 
   Future<dynamic> retrieveAllDataFromDatabase() async {
     _isDataLoading = true;
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(Duration(seconds: 0));
     _allUsersData = await HiveService.getExistingLocalDataFromUsersBox();
     _allFetchedExams = await ExamProvider.getAllExams();
     _allFetchedCourses = await CourseProvider.getAllCourses();
@@ -46,7 +46,8 @@ class AdminState {
 
   Map<String, dynamic> getAllCoursesDataForCurrentUser(String uid) {
     _userAllData = Map.from(_allUsersData[uid]);
-    Map<String, dynamic> userCoursesData = UserProgressAnalytics.buildUserCoursesDataMap(
+    Map<String, dynamic> userCoursesData =
+        UserProgressAnalytics.buildUserCoursesDataMap(
       userAllData: _userAllData,
       allCoursesData: _allFetchedCourses,
       allExamsData: _allFetchedExams,
@@ -56,8 +57,11 @@ class AdminState {
   }
 
   ///This function gets all the Exams taken by the User for that particular  course
-  Map<String, dynamic> getExamsProgressForCourseForUser(String uid, String courseId) {
-    Map<String, dynamic> exams = UserProgressAnalytics.buildUserExamsDataMapForCourse(_allUsersData, uid, courseId);
+  Map<String, dynamic> getExamsProgressForCourseForUser(
+      String uid, String courseId) {
+    Map<String, dynamic> exams =
+        UserProgressAnalytics.buildUserExamsDataMapForCourse(
+            _allUsersData, uid, courseId);
 
     return exams;
   }

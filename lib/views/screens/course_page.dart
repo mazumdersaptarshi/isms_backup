@@ -34,7 +34,8 @@ class _CourseState extends State<CoursePage> {
   static const SizedBox _separator = SizedBox(height: 20);
 
   /// padding on both sides of HTML and questions
-  final EdgeInsets contentPadding = const EdgeInsets.only(right: 200, left: 200, bottom: 40);
+  final EdgeInsets contentPadding =
+      const EdgeInsets.only(right: 200, left: 200, bottom: 40);
 
   final ButtonStyle buttonStyleSectionNavigation = ElevatedButton.styleFrom(
     backgroundColor: Colors.grey[200],
@@ -45,13 +46,16 @@ class _CourseState extends State<CoursePage> {
     ),
   );
 
-  final TextStyle textStyleButtonSectionNavigation = TextStyle(color: Colors.grey[600]);
+  final TextStyle textStyleButtonSectionNavigation =
+      TextStyle(color: Colors.grey[600]);
 
   // Data structures containing course content populated in initState() then not changed
 
   /// Course data represented as a JSON [String]
   final String _jsonString =
-      '{"courseId": "ip78hd","courseTitle": "Test Course","courseSummary": "Test Course summary","courseDescription": "Test Course description","courseSections": [{"sectionId": "section1","sectionTitle": "Section 1","sectionSummary": "Section 1 summary","sectionElements": [{"elementId": "html1","elementType": "html","elementTitle": "Static HTML 1","elementContent": "<html><body><p><b><u>What is Document AI?</u></b></p><p>Learn about the fundamentals of Document AI and how it turns unstructured content into business-ready structured data. You will focus on how Document AI uses machine learning (ML) on a scalable could-based platform to help customer unlock insights. You will also learn what Document AI is, determine how it works, review its use cases, and identify its competitive differentiators.</p><p>Learn about the fundamentals of Document AI and how it turns unstructured content into business-ready structured data. You will focus on how Document AI uses machine learning (ML) on a scalable could-based platform to help customer unlock insights. You will also learn what Document AI is, determine how it works, review its use cases, and identify its competitive differentiators.</p></body></html>"},{"elementId": "question1","elementType": "question","elementTitle": "Multiple choice question with single answer selection","elementContent": [{"questionId": "ssq1","questionType": "singleSelectionQuestion","questionText": "Section 1 Question","questionAnswers": [{"answerId": "ssq1a1","answerText": "ACK","answerCorrect": true},{"answerId": "ssq1a2","answerText": "ACK","answerCorrect": false}]}]}]},{"sectionId": "section2","sectionTitle": "Section 2","sectionSummary": "Section 2 summary","sectionElements": [{"elementId": "html2","elementType": "html","elementTitle": "What is Document AI?","elementContent": "<html><body><p><b><u>Why Document AI?</u></b></p><p>Document AI helps out customers to achieve their business goals by unlocking insights from documents using machine learning. While you may think that the use of paper is dwindling, consider these stats:</p><ul><li> Over 4 trillion paper documents in the US, growing at 22% per year.</li><li>Nearly 75% of a typical workers time is spent searching for and filling paper-based information</li><li>95% of corporate information exists on paper</li><li>75% of all documents get lost; 3% of the remainder are misfiled</li><li>Companies spend 20 in labor to file a document; 120 in labor to find a misfiled document; 220 in labor to recreate a lost document</li></ul></body></html>"},{"elementId": "question2","elementType": "question","elementTitle": "Multiple choice question with single answer selection","elementContent": [{"questionId": "ssq1","questionType": "singleSelectionQuestion","questionText": "Section 2 Question","questionAnswers": [{"answerId": "ssq1a2","answerText": "ACK","answerCorrect": true}]}]}]},{"sectionId": "section3","sectionTitle": "Section 3","sectionSummary": "Section 3 summary","sectionElements": [{"elementId": "html3","elementType": "html","elementTitle": "Static HTML 3","elementContent": "<html><body><p><b><u>What is Document AI?</u></b></p><p>Almost every account you have will want to learn about new ways to serve their customers while improving how they leverage their data. You, on the other hand, also want to help your customers process documents while achieving your goals. Document AI can help you.</p><b>Select each card to learn more.</b></body></html>"},{"elementId": "flipcards1","elementType": "flipCard","elementTitle": "FlipCards","elementContent": [{"flipCardId": "fc1","flipCardFront": "Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. ","flipCardBack": "Back 1. Back 1. Back 1. Back 1. Back 1. Back 1. Back 1. Back 1. Back 1. Back 1. Back 1. Back 1. "},{"flipCardId": "fc2","flipCardFront": "Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. ","flipCardBack": "Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. "}]}]},{"sectionId": "section4","sectionTitle": "Section 4","sectionSummary": "Section 4 summary","sectionElements": [{"elementId": "html4","elementType": "html","elementTitle": "The Background on Document AI","elementContent": "<html><body><p><b><u>The Background on Document AI</u></b></p><p>For centuries, documents have been foundational to our societies. We record histories, establish laws, legitimize trade, launch companies, and confirm identities with documents.</p><p>The computer age has introduced the idea of digital documents, which now serve as the backbone of our modern societies, and the power and value of digital documents is immense.</p><p><b>Knowledge Check</b></p></body></html>"},{"elementId": "question2","elementType": "question","elementTitle": "Knowledge Check","elementContent": [{"questionId": "ssq1","questionType": "multipleSelectionQuestion","questionText": "Identify some of the industries that use Document AI to transform their businesses.","questionAnswers": [{"answerId": "ssq1a1","answerText": "Engineering, Manufacturing, and Construction","answerCorrect": true},{"answerId": "ssq1a2","answerText": "Supply Chain","answerCorrect": true},{"answerId": "ssq1a3","answerText": "Sports","answerCorrect": true},{"answerId": "ssq1a4","answerText": "Health Care an Life Sciences","answerCorrect": true}]},{"questionId": "ssq2","questionType": "multipleSelectionQuestion","questionText": "Identify some of the industries that use Document AI to transform their businesses.","questionAnswers": [{"answerId": "ssq2a1","answerText": "Engineering, Manufacturing, and Construction","answerCorrect": true},{"answerId": "ssqa2","answerText": "Supply Chain","answerCorrect": true},{"answerId": "ssq2a3","answerText": "Sports","answerCorrect": true},{"answerId": "ssq2a4","answerText": "Health Care an Life Sciences","answerCorrect": true}]}]},{"elementId": "html4","elementType": "html","elementTitle": "Document AI Use Cases","elementContent": "<html><body><p><b><u>Document AI Use Cases</u></b></p><p>Document AI aims to be the platform of choice for business-ready document processing, and we have specialized models for some of the world\'s most commonly used business documents. These specialized or pretrained document models enable higher levels of accuracy, especially with custom document layouts, and always output the same core concepts (“schema”). We have grouped some of these specialized models into bundles that address high-value use cases.</p><p>It is important to note that Document AI has been designed to address a customer’s end-to-end document workflow – but not necessarily the full business workflow. For example, Document AI can help a customer classify and extract information from an invoice, but it does not address the full accounts payable process. Customers can either integrate the Document AI API into their existing workflows (on their own, or with a systems integrator), or they can work with ISV / SaaS providers who leverage Document AI directly.</p></body></html>"}]},{"sectionId": "section5","sectionTitle": "Section 5","sectionSummary": "Section 5 summary","sectionElements": [{"elementId": "html5","elementType": "html","elementTitle": "Assessment","elementContent": "<html><body><p><b><u>Course Assessment</u></b></p></body></html>"},{"elementId": "question5","elementType": "question","elementTitle": "Assessment","elementContent": [{"questionId": "ssq1","questionType": "singleSelectionQuestion","questionText": "What is the output of print(0.1 + 0.2 == 0.3)?","questionAnswers": [{"answerId": "ssq1a1","answerText": "True","answerCorrect": false},{"answerId": "ssq1a2","answerText": "False","answerCorrect": false},{"answerId": "ssq1a3","answerText": "Error","answerCorrect": true},{"answerId": "ssq1a4","answerText": "None","answerCorrect": false}]},{"questionId": "ssq2","questionType": "singleSelectionQuestion","questionText": "How do you insert COMMENTS in Python code?","questionAnswers": [{"answerId": "ssq2a1","answerText": "# comment","answerCorrect": true},{"answerId": "ssq2a2","answerText": "// comment","answerCorrect": false},{"answerId": "ssq2a3","answerText": "/* comment */","answerCorrect": false},{"answerId": "ssq2a4","answerText": "<!-- comment -->","answerCorrect": false}]},{"questionId": "ssq3","questionType": "singleSelectionQuestion","questionText": "Which of the following is a correct variable declaration in Python?","questionAnswers": [{"answerId": "ssq3a1","answerText": "int a = 10","answerCorrect": true},{"answerId": "ssq3a2","answerText": "a = 10","answerCorrect": false},{"answerId": "ssq3a3","answerText": "var a = 10","answerCorrect": false},{"answerId": "ssq3a4","answerText": "let a = 10","answerCorrect": false}]}]}]}]}';
+      // '{"courseId": "ip78hd","courseTitle": "Test Course","courseSummary": "Test Course summary","courseDescription": "Test Course description","courseSections": [{"sectionId": "section1","sectionTitle": "Section 1","sectionSummary": "Section 1 summary","sectionElements": [{"elementId": "html1","elementType": "html","elementTitle": "Static HTML 1","elementContent": "<html><body><p><b><u>What is Document AI?</u></b></p><p>Learn about the fundamentals of Document AI and how it turns unstructured content into business-ready structured data. You will focus on how Document AI uses machine learning (ML) on a scalable could-based platform to help customer unlock insights. You will also learn what Document AI is, determine how it works, review its use cases, and identify its competitive differentiators.</p><p>Learn about the fundamentals of Document AI and how it turns unstructured content into business-ready structured data. You will focus on how Document AI uses machine learning (ML) on a scalable could-based platform to help customer unlock insights. You will also learn what Document AI is, determine how it works, review its use cases, and identify its competitive differentiators.</p></body></html>"},{"elementId": "question1","elementType": "question","elementTitle": "Multiple choice question with single answer selection","elementContent": [{"questionId": "ssq1","questionType": "singleSelectionQuestion","questionText": "Section 1 Question","questionAnswers": [{"answerId": "ssq1a1","answerText": "ACK","answerCorrect": true},{"answerId": "ssq1a2","answerText": "ACK","answerCorrect": false}]}]}]},{"sectionId": "section2","sectionTitle": "Section 2","sectionSummary": "Section 2 summary","sectionElements": [{"elementId": "html2","elementType": "html","elementTitle": "What is Document AI?","elementContent": "<html><body><p><b><u>Why Document AI?</u></b></p><p>Document AI helps out customers to achieve their business goals by unlocking insights from documents using machine learning. While you may think that the use of paper is dwindling, consider these stats:</p><ul><li> Over 4 trillion paper documents in the US, growing at 22% per year.</li><li>Nearly 75% of a typical workers time is spent searching for and filling paper-based information</li><li>95% of corporate information exists on paper</li><li>75% of all documents get lost; 3% of the remainder are misfiled</li><li>Companies spend 20 in labor to file a document; 120 in labor to find a misfiled document; 220 in labor to recreate a lost document</li></ul></body></html>"},{"elementId": "question2","elementType": "question","elementTitle": "Multiple choice question with single answer selection","elementContent": [{"questionId": "ssq1","questionType": "singleSelectionQuestion","questionText": "Section 2 Question","questionAnswers": [{"answerId": "ssq1a2","answerText": "ACK","answerCorrect": true}]}]}]},{"sectionId": "section3","sectionTitle": "Section 3","sectionSummary": "Section 3 summary","sectionElements": [{"elementId": "html3","elementType": "html","elementTitle": "Static HTML 3","elementContent": "<html><body><p><b><u>What is Document AI?</u></b></p><p>Almost every account you have will want to learn about new ways to serve their customers while improving how they leverage their data. You, on the other hand, also want to help your customers process documents while achieving your goals. Document AI can help you.</p><b>Select each card to learn more.</b></body></html>"},{"elementId": "flipcards1","elementType": "flipCard","elementTitle": "FlipCards","elementContent": [{"flipCardId": "fc1","flipCardFront": "Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. Front 1. ","flipCardBack": "Back 1. Back 1. Back 1. Back 1. Back 1. Back 1. Back 1. Back 1. Back 1. Back 1. Back 1. Back 1. "},{"flipCardId": "fc2","flipCardFront": "Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. Front 2. ","flipCardBack": "Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. Back 2. "}]}]},{"sectionId": "section4","sectionTitle": "Section 4","sectionSummary": "Section 4 summary","sectionElements": [{"elementId": "html4","elementType": "html","elementTitle": "The Background on Document AI","elementContent": "<html><body><p><b><u>The Background on Document AI</u></b></p><p>For centuries, documents have been foundational to our societies. We record histories, establish laws, legitimize trade, launch companies, and confirm identities with documents.</p><p>The computer age has introduced the idea of digital documents, which now serve as the backbone of our modern societies, and the power and value of digital documents is immense.</p><p><b>Knowledge Check</b></p></body></html>"},{"elementId": "question2","elementType": "question","elementTitle": "Knowledge Check","elementContent": [{"questionId": "ssq1","questionType": "multipleSelectionQuestion","questionText": "Identify some of the industries that use Document AI to transform their businesses.","questionAnswers": [{"answerId": "ssq1a1","answerText": "Engineering, Manufacturing, and Construction","answerCorrect": true},{"answerId": "ssq1a2","answerText": "Supply Chain","answerCorrect": true},{"answerId": "ssq1a3","answerText": "Sports","answerCorrect": true},{"answerId": "ssq1a4","answerText": "Health Care an Life Sciences","answerCorrect": true}]},{"questionId": "ssq2","questionType": "multipleSelectionQuestion","questionText": "Identify some of the industries that use Document AI to transform their businesses.","questionAnswers": [{"answerId": "ssq2a1","answerText": "Engineering, Manufacturing, and Construction","answerCorrect": true},{"answerId": "ssqa2","answerText": "Supply Chain","answerCorrect": true},{"answerId": "ssq2a3","answerText": "Sports","answerCorrect": true},{"answerId": "ssq2a4","answerText": "Health Care an Life Sciences","answerCorrect": true}]}]},{"elementId": "html4","elementType": "html","elementTitle": "Document AI Use Cases","elementContent": "<html><body><p><b><u>Document AI Use Cases</u></b></p><p>Document AI aims to be the platform of choice for business-ready document processing, and we have specialized models for some of the world\'s most commonly used business documents. These specialized or pretrained document models enable higher levels of accuracy, especially with custom document layouts, and always output the same core concepts (“schema”). We have grouped some of these specialized models into bundles that address high-value use cases.</p><p>It is important to note that Document AI has been designed to address a customer’s end-to-end document workflow – but not necessarily the full business workflow. For example, Document AI can help a customer classify and extract information from an invoice, but it does not address the full accounts payable process. Customers can either integrate the Document AI API into their existing workflows (on their own, or with a systems integrator), or they can work with ISV / SaaS providers who leverage Document AI directly.</p></body></html>"}]},{"sectionId": "section5","sectionTitle": "Section 5","sectionSummary": "Section 5 summary","sectionElements": [{"elementId": "html5","elementType": "html","elementTitle": "Assessment","elementContent": "<html><body><p><b><u>Course Assessment</u></b></p></body></html>"},{"elementId": "question5","elementType": "question","elementTitle": "Assessment","elementContent": [{"questionId": "ssq1","questionType": "singleSelectionQuestion","questionText": "What is the output of print(0.1 + 0.2 == 0.3)?","questionAnswers": [{"answerId": "ssq1a1","answerText": "True","answerCorrect": false},{"answerId": "ssq1a2","answerText": "False","answerCorrect": false},{"answerId": "ssq1a3","answerText": "Error","answerCorrect": true},{"answerId": "ssq1a4","answerText": "None","answerCorrect": false}]},{"questionId": "ssq2","questionType": "singleSelectionQuestion","questionText": "How do you insert COMMENTS in Python code?","questionAnswers": [{"answerId": "ssq2a1","answerText": "# comment","answerCorrect": true},{"answerId": "ssq2a2","answerText": "// comment","answerCorrect": false},{"answerId": "ssq2a3","answerText": "/* comment */","answerCorrect": false},{"answerId": "ssq2a4","answerText": "<!-- comment -->","answerCorrect": false}]},{"questionId": "ssq3","questionType": "singleSelectionQuestion","questionText": "Which of the following is a correct variable declaration in Python?","questionAnswers": [{"answerId": "ssq3a1","answerText": "int a = 10","answerCorrect": true},{"answerId": "ssq3a2","answerText": "a = 10","answerCorrect": false},{"answerId": "ssq3a3","answerText": "var a = 10","answerCorrect": false},{"answerId": "ssq3a4","answerText": "let a = 10","answerCorrect": false}]}]}]}]}';
+      // '{"courseId":"ip78hd","courseTitle":"Understanding Document AI","courseSummary":"Unlock the potential of Document AI technology.","courseDescription":"Dive deep into Document AI technology and explore how it transforms unstructured data into actionable insights. This course covers the basics, applications, and impact of Document AI across various industries.","courseSections":[{"sectionId":"section1","sectionTitle":"Introduction to Document AI","sectionSummary":"Overview of Document AI technology.","sectionElements":[{"elementId":"html1","elementType":"html","elementTitle":"Introduction to Document AI","elementContent":"<html><body><p>Discover the capabilities of Document AI and how it is revolutionizing data processing by transforming unstructured data into structured, actionable formats.</p></body></html>"},{"elementId":"question1","elementType":"question","elementTitle":"Quiz: Document AI Basics","elementContent":[{"questionId":"ssq1","questionType":"singleSelectionQuestion","questionText":"What is the primary function of Document AI?","questionAnswers":[{"answerId":"ssq1a1","answerText":"To play video games","answerCorrect":false},{"answerId":"ssq1a2","answerText":"To transform unstructured data into structured data","answerCorrect":true},{"answerId":"ssq1a3","answerText":"To make coffee","answerCorrect":false}]}]}]},{"sectionId":"section2","sectionTitle":"Applications of Document AI","sectionSummary":"Exploring real-world applications.","sectionElements":[{"elementId":"html2","elementType":"html","elementTitle":"Real-World Applications of Document AI","elementContent":"<html><body><p>Learn how Document AI is applied in industries such as healthcare, finance, and legal to improve efficiency and decision-making processes.</p></body></html>"},{"elementId":"question2","elementType":"question","elementTitle":"Quiz: Applications","elementContent":[{"questionId":"ssq1","questionType":"singleSelectionQuestion","questionText":"Which industry benefits significantly from Document AI?","questionAnswers":[{"answerId":"ssq1a1","answerText":"Healthcare","answerCorrect":true},{"answerId":"ssq1a2","answerText":"Gaming","answerCorrect":false}]}]}]},{"sectionId":"section3","sectionTitle":"Interacting with Document AI","sectionSummary":"Hands-on with interactive elements.","sectionElements":[{"elementId":"flipcards1","elementType":"flipCard","elementTitle":"FlipCard Example: Key Terms","elementContent":[{"flipCardId":"fc1","flipCardFront":"Machine Learning","flipCardBack":"A subset of AI that enables systems to learn and improve from experience."},{"flipCardId":"fc2","flipCardFront":"Natural Language Processing","flipCardBack":"The branch of AI that helps computers understand, interpret, and manipulate human language."}]}]},{"sectionId":"section4","sectionTitle":"The Future of Document AI","sectionSummary":"What lies ahead for Document AI technology.","sectionElements":[{"elementId":"html4","elementType":"html","elementTitle":"Looking Ahead","elementContent":"<html><body><p>Explore the future possibilities of Document AI and how it will continue to evolve and impact various sectors.</p></body></html>"}]}]}';
+      '{"courseId":"ip78hd","courseTitle":"Test Course","courseSummary":"Test Course summary","courseDescription":"Test Course description","courseSections":[{"sectionId":"section1","sectionTitle":"Section 1","sectionSummary":"Section 1 summary","sectionElements":[{"elementId":"html1","elementType":"html","elementTitle":"Static HTML 1","elementContent":"<html><body><p><b><u>What is Document AI?</u></b></p><p>Learn about the fundamentals of Document AI and how it turns unstructured content into business-ready structured data. You will focus on how Document AI uses machine learning (ML) on a scalable could-based platform to help customer unlock insights. You will also learn what Document AI is, determine how it works, review its use cases, and identify its competitive differentiators.</p><p>Learn about the fundamentals of Document AI and how it turns unstructured content into business-ready structured data. You will focus on how Document AI uses machine learning (ML) on a scalable could-based platform to help customer unlock insights. You will also learn what Document AI is, determine how it works, review its use cases, and identify its competitive differentiators.</p></body></html>"},{"elementId":"question1","elementType":"question","elementTitle":"Understanding Document AI","elementContent":[{"questionId":"ssq1","questionType":"singleSelectionQuestion","questionText":"What is the primary benefit of using Document AI technology?","questionAnswers":[{"answerId":"ssq1a1","answerText":"Improving document security","answerCorrect":false},{"answerId":"ssq1a2","answerText":"Transforming unstructured data into structured data","answerCorrect":true},{"answerId":"ssq1a3","answerText":"Reducing the need for internet connectivity","answerCorrect":false},{"answerId":"ssq1a4","answerText":"Increasing the physical storage space required","answerCorrect":false}]}]}]},{"sectionId":"section2","sectionTitle":"Section 2","sectionSummary":"Section 2 summary","sectionElements":[{"elementId":"html2","elementType":"html","elementTitle":"What is Document AI?","elementContent":"<html><body><p><b><u>Why Document AI?</u></b></p><p>Document AI helps out customers to achieve their business goals by unlocking insights from documents using machine learning. While you may think that the use of paper is dwindling, consider these stats:</p><ul><li> Over 4 trillion paper documents in the US, growing at 22% per year.</li><li>Nearly 75% of a typical workers time is spent searching for and filling paper-based information</li><li>95% of corporate information exists on paper</li><li>75% of all documents get lost; 3% of the remainder are misfiled</li><li>Companies spend 20 in labor to file a document; 120 in labor to find a misfiled document; 220 in labor to recreate a lost document</li></ul></body></html>"},{"elementId":"question2","elementType":"question","elementTitle":"Applications of Document AI","elementContent":[{"questionId":"ssq1","questionType":"singleSelectionQuestion","questionText":"Which sector is greatly impacted by Document AI in terms of process optimization?","questionAnswers":[{"answerId":"ssq1a1","answerText":"Entertainment","answerCorrect":false},{"answerId":"ssq1a2","answerText":"Manufacturing","answerCorrect":false},{"answerId":"ssq1a3","answerText":"Healthcare","answerCorrect":true},{"answerId":"ssq1a4","answerText":"Tourism","answerCorrect":false}]}]}]},{"sectionId":"section3","sectionTitle":"Section 3","sectionSummary":"Section 3 summary","sectionElements":[{"elementId":"html3","elementType":"html","elementTitle":"Static HTML 3","elementContent":"<html><body><p><b><u>What is Document AI?</u></b></p><p>Almost every account you have will want to learn about new ways to serve their customers while improving how they leverage their data. You, on the other hand, also want to help your customers process documents while achieving your goals. Document AI can help you.</p><b>Select each card to learn more.</b></body></html>"},{"elementId":"flipcards1","elementType":"flipCard","elementTitle":"Key Concepts in Document AI","elementContent":[{"flipCardId":"fc1","flipCardFront":"Machine Learning (ML)","flipCardBack":"A core technology behind Document AI, enabling the system to learn from data patterns and improve over time without being explicitly programmed."},{"flipCardId":"fc2","flipCardFront":"Natural Language Processing (NLP)","flipCardBack":"This technology helps Document AI understand, interpret, and manipulate human language, making it possible to extract meaningful information from documents."},{"flipCardId":"fc3","flipCardFront":"Optical Character Recognition (OCR)","flipCardBack":"OCR is used by Document AI to convert different types of documents, such as scanned paper documents or PDFs, into editable and searchable data."},{"flipCardId":"fc4","flipCardFront":"Data Structuring","flipCardBack":"The process of organizing unstructured data into a structured format, enabling easier access, analysis, and application of the data."}]}]},{"sectionId":"section4","sectionTitle":"Section 4","sectionSummary":"Section 4 summary","sectionElements":[{"elementId":"html4","elementType":"html","elementTitle":"The Background on Document AI","elementContent":"<html><body><p><b><u>The Background on Document AI</u></b></p><p>For centuries, documents have been foundational to our societies. We record histories, establish laws, legitimize trade, launch companies, and confirm identities with documents.</p><p>The computer age has introduced the idea of digital documents, which now serve as the backbone of our modern societies, and the power and value of digital documents is immense.</p><p><b>Knowledge Check</b></p></body></html>"},{"elementId":"question2","elementType":"question","elementTitle":"Knowledge Check","elementContent":[{"questionId":"ssq1","questionType":"multipleSelectionQuestion","questionText":"Identify some of the industries that use Document AI to transform their businesses.","questionAnswers":[{"answerId":"ssq1a1","answerText":"Engineering, Manufacturing, and Construction","answerCorrect":true},{"answerId":"ssq1a2","answerText":"Supply Chain","answerCorrect":true},{"answerId":"ssq1a3","answerText":"Sports","answerCorrect":true},{"answerId":"ssq1a4","answerText":"Health Care an Life Sciences","answerCorrect":true}]}]},{"elementId":"html4","elementType":"html","elementTitle":"Document AI Use Cases","elementContent":"<html><body><p><b><u>Document AI Use Cases</u></b></p><p>Document AI aims to be the platform of choice for business-ready document processing, and we have specialized models for some of the world\'s most commonly used business documents. These specialized or pretrained document models enable higher levels of accuracy, especially with custom document layouts, and always output the same core concepts (“schema”). We have grouped some of these specialized models into bundles that address high-value use cases.</p><p>It is important to note that Document AI has been designed to address a customer’s end-to-end document workflow – but not necessarily the full business workflow. For example, Document AI can help a customer classify and extract information from an invoice, but it does not address the full accounts payable process. Customers can either integrate the Document AI API into their existing workflows (on their own, or with a systems integrator), or they can work with ISV / SaaS providers who leverage Document AI directly.</p></body></html>"}]},{"sectionId":"section5","sectionTitle":"Section 5","sectionSummary":"Section 5 summary","sectionElements":[{"elementId":"html5","elementType":"html","elementTitle":"Assessment","elementContent":"<html><body><p><b><u>Course Assessment</u></b></p></body></html>"},{"elementId":"question5","elementType":"question","elementTitle":"Assessment","elementContent":[{"questionId":"ssq1","questionType":"singleSelectionQuestion","questionText":"What is the output of print(0.1 + 0.2 == 0.3)?","questionAnswers":[{"answerId":"ssq1a1","answerText":"True","answerCorrect":false},{"answerId":"ssq1a2","answerText":"False","answerCorrect":false},{"answerId":"ssq1a3","answerText":"Error","answerCorrect":true},{"answerId":"ssq1a4","answerText":"None","answerCorrect":false}]},{"questionId":"ssq2","questionType":"singleSelectionQuestion","questionText":"How do you insert COMMENTS in Python code?","questionAnswers":[{"answerId":"ssq2a1","answerText":"# comment","answerCorrect":true},{"answerId":"ssq2a2","answerText":" comment","answerCorrect":false},{"answerId":"ssq2a3","answerText":"/* comment */","answerCorrect":false},{"answerId":"ssq2a4","answerText":"<!-- comment -->","answerCorrect":false}]},{"questionId":"ssq3","questionType":"singleSelectionQuestion","questionText":"Which of the following is a correct variable declaration in Python?","questionAnswers":[{"answerId":"ssq3a1","answerText":"int a = 10","answerCorrect":true},{"answerId":"ssq3a2","answerText":"a = 10","answerCorrect":false},{"answerId":"ssq3a3","answerText":"var a = 10","answerCorrect":false},{"answerId":"ssq3a4","answerText":"let a = 10","answerCorrect":false}]}]}]}]}';
 
   /// Course data stored in custom [Course] object
   late final Course _course;
@@ -87,7 +91,8 @@ class _CourseState extends State<CoursePage> {
     super.initState();
 
     // Read course data JSON then create Course object
-    final Map<String, dynamic> courseMap = jsonDecode(_jsonString) as Map<String, dynamic>;
+    final Map<String, dynamic> courseMap =
+        jsonDecode(_jsonString) as Map<String, dynamic>;
     _course = Course.fromJson(courseMap);
 
     // Initialise data structures which store all course section IDs as well as widgets requiring user interaction
@@ -98,11 +103,13 @@ class _CourseState extends State<CoursePage> {
       for (element_model.Element element in section.sectionElements) {
         if (element.elementType == ElementTypeValues.question.name) {
           for (Question question in element.elementContent) {
-            _courseRequiredInteractiveElements[section.sectionId]?.add(question.questionId);
+            _courseRequiredInteractiveElements[section.sectionId]
+                ?.add(question.questionId);
           }
         } else if (element.elementType == ElementTypeValues.flipCard.name) {
           for (flip_card_model.FlipCard flipCard in element.elementContent) {
-            _courseRequiredInteractiveElements[section.sectionId]?.add(flipCard.flipCardId);
+            _courseRequiredInteractiveElements[section.sectionId]
+                ?.add(flipCard.flipCardId);
           }
         }
       }
@@ -144,13 +151,15 @@ class _CourseState extends State<CoursePage> {
   /// Returns an ordered [List] of all content widgets (i.e. navigation buttons excluded) in the current course section.
   List<Widget> _getCurrentSectionContentWidgets() {
     _getAllCourseWidgets();
-    return _courseWidgets[_course.courseSections[_currentSectionIndex].sectionId];
+    return _courseWidgets[
+        _course.courseSections[_currentSectionIndex].sectionId];
   }
 
   /// Populates data structure [_courseWidgets] with all course widgets.
   void _getAllCourseWidgets() {
     for (Section section in _course.courseSections) {
-      _courseWidgets[section.sectionId] = _getSectionContentWidgets(_course.courseSections[_currentSectionIndex]);
+      _courseWidgets[section.sectionId] = _getSectionContentWidgets(
+          _course.courseSections[_currentSectionIndex]);
     }
   }
 
@@ -208,7 +217,8 @@ class _CourseState extends State<CoursePage> {
     final List<Widget> contentWidgets = [];
 
     // Single Selection Question (Radio buttons)
-    if (question.questionType == QuestionTypeValues.singleSelectionQuestion.name) {
+    if (question.questionType ==
+        QuestionTypeValues.singleSelectionQuestion.name) {
       contentWidgets.addAll([
         Padding(
           padding: contentPadding,
@@ -237,10 +247,12 @@ class _CourseState extends State<CoursePage> {
                     values: question.questionAnswers,
                     onItemSelected: (selectedValue) {
                       setState(() {
-                        _currentSectionSelectedQuestionAnswers[question.questionId] = selectedValue;
+                        _currentSectionSelectedQuestionAnswers[
+                            question.questionId] = selectedValue;
                         // Only enable the related button once an answer has been selected
                         // Radio buttons cannot be deselected so there's no need to disable the button again
-                        _currentSectionNonEmptyQuestions.add(question.questionId);
+                        _currentSectionNonEmptyQuestions
+                            .add(question.questionId);
                       });
                     },
                   ),
@@ -248,19 +260,25 @@ class _CourseState extends State<CoursePage> {
                   _currentSectionNonEmptyQuestions.contains(question.questionId)
                       ? ElevatedButton(
                           onPressed: () {
-                            _showSingleAnswerExplanationDialog(context, question.questionAnswers,
-                                _currentSectionSelectedQuestionAnswers[question.questionId]);
+                            _showSingleAnswerExplanationDialog(
+                                context,
+                                question.questionAnswers,
+                                _currentSectionSelectedQuestionAnswers[
+                                    question.questionId]);
                             // No need to track interactive UI element completion if revisiting the section
                             if (!_currentSectionCompleted) {
-                              _currentSectionCompletedInteractiveElements.add(question.questionId);
+                              _currentSectionCompletedInteractiveElements
+                                  .add(question.questionId);
                               _checkInteractiveElementsCompleted();
                             }
                           },
-                          child: Text(AppLocalizations.of(context)!.buttonCheckAnswer),
+                          child: Text(
+                              AppLocalizations.of(context)!.buttonCheckAnswer),
                         )
                       : ElevatedButton(
                           onPressed: null,
-                          child: Text(AppLocalizations.of(context)!.buttonSelectAnswer),
+                          child: Text(
+                              AppLocalizations.of(context)!.buttonSelectAnswer),
                         ),
                 ],
               ),
@@ -270,7 +288,8 @@ class _CourseState extends State<CoursePage> {
       ]);
 
       // Multiple Selection Question (Checkboxes)
-    } else if (question.questionType == QuestionTypeValues.multipleSelectionQuestion.name) {
+    } else if (question.questionType ==
+        QuestionTypeValues.multipleSelectionQuestion.name) {
       contentWidgets.addAll([
         Padding(
           padding: contentPadding,
@@ -303,9 +322,11 @@ class _CourseState extends State<CoursePage> {
                         // Since checkboxes can be deselected, we also need to disable the button if all options are
                         // subsequently deselected
                         if (selectedValues.values.contains(true)) {
-                          _currentSectionNonEmptyQuestions.add(question.questionId);
+                          _currentSectionNonEmptyQuestions
+                              .add(question.questionId);
                         } else {
-                          _currentSectionNonEmptyQuestions.remove(question.questionId);
+                          _currentSectionNonEmptyQuestions
+                              .remove(question.questionId);
                         }
                       });
                     },
@@ -316,15 +337,18 @@ class _CourseState extends State<CoursePage> {
                           onPressed: () {
                             // No need to track interactive UI element completion if revisiting the section
                             if (!_currentSectionCompleted) {
-                              _currentSectionCompletedInteractiveElements.add(question.questionId);
+                              _currentSectionCompletedInteractiveElements
+                                  .add(question.questionId);
                               _checkInteractiveElementsCompleted();
                             }
                           },
-                          child: Text(AppLocalizations.of(context)!.buttonCheckAnswer),
+                          child: Text(
+                              AppLocalizations.of(context)!.buttonCheckAnswer),
                         )
                       : ElevatedButton(
                           onPressed: null,
-                          child: Text(AppLocalizations.of(context)!.buttonSelectAnswer),
+                          child: Text(
+                              AppLocalizations.of(context)!.buttonSelectAnswer),
                         ),
                 ],
               ),
@@ -370,12 +394,14 @@ class _CourseState extends State<CoursePage> {
                 Navigator.pop(context);
               },
               style: buttonStyleSectionNavigation,
-              child: Text(AppLocalizations.of(context)!.buttonFinishCourse, style: textStyleButtonSectionNavigation),
+              child: Text(AppLocalizations.of(context)!.buttonFinishCourse,
+                  style: textStyleButtonSectionNavigation),
             )
           : ElevatedButton(
               onPressed: null,
               style: buttonStyleSectionNavigation,
-              child: Text(AppLocalizations.of(context)!.buttonSectionContentIncomplete,
+              child: Text(
+                  AppLocalizations.of(context)!.buttonSectionContentIncomplete,
                   style: textStyleButtonSectionNavigation));
     } else {
       // Only enable the button once all interactive elements in the section have been interacted with
@@ -384,8 +410,8 @@ class _CourseState extends State<CoursePage> {
               onPressed: _goToNextSection,
               style: buttonStyleSectionNavigation,
               child: Text(
-                AppLocalizations.of(context)!
-                    .buttonNextSection(_course.courseSections[_currentSectionIndex + 1].sectionTitle),
+                AppLocalizations.of(context)!.buttonNextSection(_course
+                    .courseSections[_currentSectionIndex + 1].sectionTitle),
                 style: textStyleButtonSectionNavigation,
               ))
           : ElevatedButton(
@@ -406,8 +432,8 @@ class _CourseState extends State<CoursePage> {
       onPressed: _goToPreviousSection,
       style: buttonStyleSectionNavigation,
       child: Text(
-        AppLocalizations.of(context)!
-            .buttonPreviousSection(_course.courseSections[_currentSectionIndex - 1].sectionTitle),
+        AppLocalizations.of(context)!.buttonPreviousSection(
+            _course.courseSections[_currentSectionIndex - 1].sectionTitle),
         style: textStyleButtonSectionNavigation,
       ),
     );
@@ -415,8 +441,10 @@ class _CourseState extends State<CoursePage> {
 
   // Functions for Button onPressed events
 
-  void _showSingleAnswerExplanationDialog(BuildContext context, List<Answer> allAnswers, Answer submittedAnswer) {
-    final Answer correctAnswer = allAnswers.firstWhere((answer) => answer.answerCorrect);
+  void _showSingleAnswerExplanationDialog(
+      BuildContext context, List<Answer> allAnswers, Answer submittedAnswer) {
+    final Answer correctAnswer =
+        allAnswers.firstWhere((answer) => answer.answerCorrect);
     final bool questionCorrect = submittedAnswer == correctAnswer;
 
     showDialog(
@@ -430,7 +458,8 @@ class _CourseState extends State<CoursePage> {
               : Text(AppLocalizations.of(context)!.dialogAnswerIncorrectTitle),
           content: !questionCorrect
               ? Text(AppLocalizations.of(context)!
-                  .dialogAnswerIncorrectContentBody(submittedAnswer.answerText, submittedAnswer.answerId))
+                  .dialogAnswerIncorrectContentBody(
+                      submittedAnswer.answerText, submittedAnswer.answerId))
               : null,
           actions: [
             TextButton(
@@ -443,8 +472,8 @@ class _CourseState extends State<CoursePage> {
     );
   }
 
-  void _showMultipleAnswerExplanationDialog(
-      BuildContext context, List<Answer> allAnswers, List<Answer> submittedAnswers) {
+  void _showMultipleAnswerExplanationDialog(BuildContext context,
+      List<Answer> allAnswers, List<Answer> submittedAnswers) {
     final List<Answer> correctAnswers = [];
     for (Answer answer in allAnswers) {
       if (answer.answerCorrect) {
@@ -479,7 +508,9 @@ class _CourseState extends State<CoursePage> {
   /// Updates [_currentSectionCompleted] to `true` only if all widgets requiring user interaction
   /// in the current section have been interacted with.
   void _checkInteractiveElementsCompleted() {
-    if (setEquals(_courseRequiredInteractiveElements[_courseSections[_currentSectionIndex]],
+    if (setEquals(
+        _courseRequiredInteractiveElements[
+            _courseSections[_currentSectionIndex]],
         _currentSectionCompletedInteractiveElements)) {
       setState(() {
         _currentSectionCompleted = true;
@@ -498,7 +529,8 @@ class _CourseState extends State<CoursePage> {
   void _goToNextSection() {
     setState(() {
       // Update section progress
-      _completedSections.add(_course.courseSections[_currentSectionIndex].sectionId);
+      _completedSections
+          .add(_course.courseSections[_currentSectionIndex].sectionId);
       _currentSectionIndex++;
 
       // Reset current section interactive UI element tracking
@@ -521,7 +553,8 @@ class _CourseState extends State<CoursePage> {
   /// Add the final section to [_completedSections].
   void _recordCourseCompletion() {
     setState(() {
-      _completedSections.add(_course.courseSections[_currentSectionIndex].sectionId);
+      _completedSections
+          .add(_course.courseSections[_currentSectionIndex].sectionId);
     });
   }
 }
