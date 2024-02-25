@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart';
 import 'package:isms/controllers/theme_management/common_theme.dart';
+import 'package:isms/views/screens/admin_screens/admin_console/admin_user_details_screen.dart';
+import 'package:isms/views/screens/testing/test_ui_type1/user_test_responses.dart';
 
 class CustomDataTable extends StatefulWidget {
   CustomDataTable({Key? key, required this.usersList}) : super(key: key);
@@ -100,6 +102,11 @@ class _CustomDataTableState extends State<CustomDataTable> {
 
           children: [
             _buildHeaderCell(
+              text: '',
+              type: 'icon',
+              icon: Icon(Icons.check_box_outline_blank_rounded),
+            ),
+            _buildHeaderCell(
               text: 'Username',
               type: 'text',
             ),
@@ -189,16 +196,26 @@ class _CustomDataTableState extends State<CustomDataTable> {
           mainAxisAlignment: MainAxisAlignment.end, // Space cells out
           children: [
             _buildDataCell(
-              text: item.username,
-              type: 'text',
+              type: 'icon',
+              icon: Icon(Icons.check_box_outline_blank_rounded),
               isHovering: isHoveringMap[index ?? 0] ?? false,
-              icon: Icon(
-                CupertinoIcons.profile_circled,
-                color: Colors.grey.shade700,
-                size: 20,
-              ),
-              iconAlignment: 'left',
             ),
+            _buildDataCell(
+                text: item.username,
+                type: 'text',
+                isHovering: isHoveringMap[index ?? 0] ?? false,
+                action: 'link',
+                actionFunction: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AdminUserDetailsScreen()))
+                // icon: Icon(
+                //   CupertinoIcons.profile_circled,
+                //   color: Colors.grey.shade700,
+                //   size: 20,
+                // ),
+                // iconAlignment: 'left',
+                ),
             _buildDataCell(
               text: item.emailId,
               type: 'text',
@@ -249,7 +266,7 @@ class _CustomDataTableState extends State<CustomDataTable> {
               ),
             Spacer(),
             _buildDataCell(
-              type: 'icon',
+              type: 'action',
               isHovering: isHoveringMap[index ?? 0] ?? false,
             ),
           ],
@@ -272,9 +289,15 @@ class _CustomDataTableState extends State<CustomDataTable> {
         padding: const EdgeInsets.all(8.0),
         child: type == 'text'
             ? _getHeaderCellTextWidget(text: text!, icon: icon)
-            : _buildToggleExpandButton(),
+            : type == 'icon'
+                ? _getHeaderCellIconWidget(icon: icon!)
+                : _buildToggleExpandButton(),
       ),
     );
+  }
+
+  Widget _getHeaderCellIconWidget({required Icon icon}) {
+    return IconButton(onPressed: () {}, icon: icon);
   }
 
   Widget _getHeaderCellTextWidget({required String text, Icon? icon}) {
@@ -314,25 +337,121 @@ class _CustomDataTableState extends State<CustomDataTable> {
     Icon? icon,
     String? iconAlignment,
     bool? isPercentage,
+    String? action,
+    Function? actionFunction,
   }) {
     return Expanded(
       child: Container(
         padding: const EdgeInsets.all(8.0),
-        child: type == 'text'
-            ? _getDataCellTextWidget(
+        child: (type == 'text' && action != null && action == 'link')
+            ? _getDataCellActionLinkWidget(
                 text: text!,
                 isHovering: isHovering!,
                 icon: icon,
                 iconAlignment: iconAlignment,
                 isPercentage: isPercentage,
+                actionFunction: actionFunction,
               )
-            : type == 'icon'
-                ? _getDataCellIconsWidget(
+            : type == 'text'
+                ? _getDataCellTextWidget(
+                    text: text!,
                     isHovering: isHovering!,
+                    icon: icon,
+                    iconAlignment: iconAlignment,
+                    isPercentage: isPercentage,
                   )
-                : null,
+                : type == 'action'
+                    ? _getDataCellIconsWidget(
+                        isHovering: isHovering!,
+                      )
+                    : type == 'icon'
+                        ? _getDataCellIconWidget(icon: icon!)
+                        : null,
       ),
     );
+  }
+
+  Widget _getDataCellActionLinkWidget(
+      {required String text,
+      bool? isHovering,
+      Icon? icon,
+      String? iconAlignment,
+      bool? isPercentage,
+      Function? actionFunction}) {
+    return TextButton(
+        onPressed: () => actionFunction!(),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            if (iconAlignment != null &&
+                iconAlignment == 'left' &&
+                icon != null)
+              icon,
+            Spacer(),
+            if (isPercentage == null || isPercentage == false)
+              Flexible(
+                child: Container(
+                  // padding: EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                      color: text == 'admin'
+                          ? getPrimaryColorShade(50)
+                          : text == 'user'
+                              ? Colors.grey.shade200
+                              : Colors.transparent,
+                      borderRadius: BorderRadius.circular(20)),
+                  child: Text(
+                    text,
+                    textAlign: TextAlign.right,
+                    overflow: TextOverflow.clip,
+                    softWrap: true,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: isHovering! ? primary : Colors.grey.shade700,
+                    ),
+                  ),
+                ),
+              ),
+            if (iconAlignment != null &&
+                iconAlignment == 'right' &&
+                icon != null)
+              Row(
+                children: [
+                  SizedBox(
+                    width: 4,
+                  ),
+                  icon,
+                ],
+              ),
+            if (isPercentage != null || isPercentage == true)
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  SizedBox(
+                    width: 45,
+                    height: 45,
+                    child: CircularProgressIndicator(
+                      value: double.parse(text) / 100.0,
+                      valueColor: double.parse(text) > 70
+                          ? AlwaysStoppedAnimation<Color>(Colors.lightGreen!)
+                          : double.parse(text) > 45
+                              ? AlwaysStoppedAnimation<Color>(
+                                  Colors.orangeAccent!)
+                              : AlwaysStoppedAnimation<Color>(Colors.red!),
+                      backgroundColor: Colors.grey.shade200,
+                      strokeWidth: 5.0,
+                    ),
+                  ),
+                  Text(
+                    '${text}%',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey.shade700,
+                    ),
+                  ),
+                ],
+              )
+          ],
+        ));
   }
 
   Widget _getDataCellTextWidget(
@@ -408,6 +527,10 @@ class _CustomDataTableState extends State<CustomDataTable> {
           )
       ],
     );
+  }
+
+  Widget _getDataCellIconWidget({required Icon icon}) {
+    return IconButton(onPressed: () {}, icon: icon);
   }
 
   Widget _getDataCellIconsWidget({bool? isHovering}) {
