@@ -96,7 +96,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               SliverPadding(
-                padding: EdgeInsets.all(100),
+                padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.1),
                 // Adds padding around the content
                 sliver: SliverToBoxAdapter(
                   child: Row(
@@ -149,7 +149,7 @@ class _HomePageState extends State<HomePage> {
               ),
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: EdgeInsets.all(100.0),
+                  padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.1),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -187,7 +187,7 @@ class _HomePageState extends State<HomePage> {
               ),
               SliverToBoxAdapter(
                 child: Container(
-                  padding: EdgeInsets.all(60),
+                  padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.06),
                   color: Colors.grey[200],
                   // Sets the background color of the container to grey
                   child: Column(
@@ -269,7 +269,7 @@ class _HomePageState extends State<HomePage> {
               ),
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.all(100.0),
+                  padding: const EdgeInsets.all(50.0),
                   // Provides padding around the cards
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,

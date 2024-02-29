@@ -35,7 +35,7 @@ class _CourseState extends State<CoursePage> {
   static const SizedBox _separator = SizedBox(height: 20);
 
   /// padding on both sides of HTML and questions
-  final EdgeInsets contentPadding = const EdgeInsets.only(right: 200, left: 200, bottom: 40);
+  late EdgeInsets contentPadding;
 
   final ButtonStyle buttonStyleSectionNavigation = ElevatedButton.styleFrom(
     backgroundColor: Colors.grey[200],
@@ -128,6 +128,12 @@ class _CourseState extends State<CoursePage> {
   List<Widget> _getCurrentSectionWidgets() {
     List<Widget> widgets = [];
 
+    contentPadding = EdgeInsets.only(
+      right: MediaQuery.of(context).size.width * 0.05,
+      left: MediaQuery.of(context).size.width * 0.05,
+      bottom: MediaQuery.of(context).size.width * 0.01,
+    );
+
     // Add a previous section button (and preceding spacing) to the beginning of the widget [List]
     // only for sections after the first section
     if (_currentSectionIndex > 0) {
@@ -162,6 +168,8 @@ class _CourseState extends State<CoursePage> {
   /// with data being passed in as required for each.
   List<Widget> _getSectionContentWidgets(Section currentSection) {
     final List<Widget> contentWidgets = [];
+
+
 
     // Add widgets for all elements in the current course section, conditionally building different widget types
     // depending on `elementType` from the JSON
