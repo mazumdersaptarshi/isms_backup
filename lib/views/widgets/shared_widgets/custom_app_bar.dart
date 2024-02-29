@@ -24,7 +24,7 @@ class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       title: _getTitle(context),
-      centerTitle: true,
+      centerTitle: false,
       actions: [..._getActionWidgets(context)],
     );
   }
@@ -33,17 +33,10 @@ class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
     final LoggedInState loggedInState = context.watch<LoggedInState>();
     final List<Widget> actionWidgets = [];
 
-    actionWidgets.add(_getActionIconButton(
-        context,
-        Icons.list,
-        AppLocalizations.of(context)!.buttonCourseList,
+    actionWidgets.add(_getActionIconButton(context, Icons.list, AppLocalizations.of(context)!.buttonCourseList,
         () => context.goNamed(NamedRoutes.assignments.name)));
-    actionWidgets.add(_getActionIconButton(
-        context,
-        Icons.article,
-        "Course Test",
-        () => Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const CoursePage()))));
+    actionWidgets.add(_getActionIconButton(context, Icons.article, "Course Test",
+        () => Navigator.push(context, MaterialPageRoute(builder: (context) => const CoursePage()))));
     // actionWidgets.add(_getActionIconButton(
     //     context,
     //     Icons.bar_chart,
@@ -52,12 +45,8 @@ class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
     //         context,
     //         MaterialPageRoute(
     //             builder: (context) => AdminTestResponsesPage()))));
-    actionWidgets.add(_getActionIconButton(
-        context,
-        Icons.track_changes,
-        "Tracking",
-        () => Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const TestRunner()))));
+    actionWidgets.add(_getActionIconButton(context, Icons.track_changes, "Tracking",
+        () => Navigator.push(context, MaterialPageRoute(builder: (context) => const TestRunner()))));
     // actionWidgets.add(_getActionIconButton(
     //     context,
     //     Icons.analytics_rounded,
@@ -66,19 +55,12 @@ class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
     //         context,
     //         MaterialPageRoute(
     //             builder: (context) => const UsersAnalyticsStatsScreen()))));
-    actionWidgets.add(_getActionIconButton(
-        context,
-        Icons.people_outline_rounded,
-        "All Users",
-        () => Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const AllUsers()))));
+    actionWidgets.add(_getActionIconButton(context, Icons.people_outline_rounded, "All Users",
+        () => Navigator.push(context, MaterialPageRoute(builder: (context) => const AllUsers()))));
 
     if (loggedInState.currentUserRole == 'admin') {
-      actionWidgets.add(_getActionIconButton(
-          context,
-          Icons.admin_panel_settings_rounded,
-          AppLocalizations.of(context)!.buttonAdminConsole,
-          () => context.goNamed(NamedRoutes.adminConsole.name)));
+      actionWidgets.add(_getActionIconButton(context, Icons.admin_panel_settings_rounded,
+          AppLocalizations.of(context)!.buttonAdminConsole, () => context.goNamed(NamedRoutes.adminConsole.name)));
     }
     actionWidgets.add(_getVerticalDivider());
     actionWidgets.add(_getLogoutButton(context));
@@ -86,8 +68,7 @@ class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
     return actionWidgets;
   }
 
-  Widget _getActionIconButton(BuildContext context, IconData icon,
-      String tooltip, VoidCallback onPressed) {
+  Widget _getActionIconButton(BuildContext context, IconData icon, String tooltip, VoidCallback onPressed) {
     return Padding(
       padding: const EdgeInsets.only(left: 5, right: 5),
       child: IconButton(
@@ -104,14 +85,22 @@ class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
         cursor: SystemMouseCursors.click,
         child: GestureDetector(
             onTap: () => context.goNamed(NamedRoutes.home.name),
-            child: const Text(
-              'ISMS',
-              style: TextStyle(
-                fontFamily: 'Montserrat',
-                fontWeight: FontWeight.bold,
-                // color: Colors.white,
-                fontSize: 28,
-              ),
+            child: Row(
+              children: [
+                Icon(Icons.severe_cold_rounded),
+                SizedBox(
+                  width: 10,
+                ),
+                const Text(
+                  'ISMS Manager',
+                  style: TextStyle(
+                    // fontFamily: 'Montserrat',
+                    fontWeight: FontWeight.bold,
+                    // color: Colors.white,
+                    fontSize: 28,
+                  ),
+                ),
+              ],
             )));
   }
 

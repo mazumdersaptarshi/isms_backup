@@ -17,6 +17,7 @@ import 'package:isms/views/widgets/shared_widgets/chart_metric_select_widget_dro
 import 'package:isms/views/widgets/shared_widgets/charts/custom_bar_chart_widget.dart';
 import 'package:isms/views/widgets/shared_widgets/build_section_header.dart';
 import 'package:isms/views/widgets/shared_widgets/charts/horizontal_bar_chart_widget.dart';
+import 'package:isms/views/widgets/shared_widgets/custom_drawer.dart';
 import 'package:isms/views/widgets/shared_widgets/hoverable_section_container.dart';
 import 'package:provider/provider.dart';
 
@@ -107,6 +108,7 @@ class _AllUsersState extends State<AllUsers> {
     return Scaffold(
       bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
       appBar: PlatformCheck.topNavBarWidget(context, loggedInState),
+      drawer: IsmsDrawer(context: context),
       body: SingleChildScrollView(
         child: Container(
           child: Column(

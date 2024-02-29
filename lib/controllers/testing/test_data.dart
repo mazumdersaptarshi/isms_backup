@@ -1,7 +1,11 @@
+import 'package:isms/models/admin_models/user_summary.dart';
 import 'package:isms/models/admin_models/users_list_data.dart';
 import 'package:isms/models/charts/bar_charts/custom_bar_chart_data.dart';
 import 'package:isms/models/charts/box_and_whisker_charts/custom_box_and_whisker_chart_data.dart';
 import 'package:isms/models/charts/line_charts/custom_line_chart_data.dart';
+import 'package:isms/models/user_progress/user_course_progress.dart';
+import 'package:isms/models/user_progress/user_exam_attempt.dart';
+import 'package:isms/models/user_progress/user_exam_progress.dart';
 import 'package:isms/views/widgets/shared_widgets/charts/horizontal_bar_chart_widget.dart';
 
 List<HorizontalBarChartData> usersData = [
@@ -277,24 +281,24 @@ List<CustomBarChartData> usersDataMinScores = [
   CustomBarChartData(x: 'Patricia Wilson', y: 67),
   CustomBarChartData(x: 'Michael Miller', y: 71),
   CustomBarChartData(x: 'Linda Taylor', y: 63),
-  CustomBarChartData(x: 'Robert Anderson', y: 65),
+  CustomBarChartData(x: 'Robert Anderson', y: 45),
   CustomBarChartData(x: 'Charles Thomas', y: 66),
   CustomBarChartData(x: 'Mary Jackson', y: 69),
   CustomBarChartData(x: 'Susan White', y: 70),
   CustomBarChartData(x: 'Joseph Harris', y: 61),
   CustomBarChartData(x: 'Margaret Clark', y: 72),
   CustomBarChartData(x: 'Thomas Lewis', y: 64),
-  CustomBarChartData(x: 'Christopher Allen', y: 68),
+  CustomBarChartData(x: 'Christopher Allen', y: 38),
   CustomBarChartData(x: 'Daniel Young', y: 65),
   CustomBarChartData(x: 'Matthew King', y: 61),
   CustomBarChartData(x: 'Donald Scott', y: 63),
-  CustomBarChartData(x: 'Linda Robinson', y: 64),
+  CustomBarChartData(x: 'Linda Robinson', y: 44),
   CustomBarChartData(x: 'George Walker', y: 62),
   CustomBarChartData(x: 'Barbara Hall', y: 60),
   CustomBarChartData(x: 'Nancy Adams', y: 67),
   CustomBarChartData(x: 'Paul Baker', y: 69),
-  CustomBarChartData(x: 'Steven Hill', y: 65),
-  CustomBarChartData(x: 'Kevin Campbell', y: 60),
+  CustomBarChartData(x: 'Steven Hill', y: 55),
+  CustomBarChartData(x: 'Kevin Campbell', y: 40),
   CustomBarChartData(x: 'Laura Mitchell', y: 63),
   CustomBarChartData(x: 'Joshua Perez', y: 61),
   CustomBarChartData(x: 'Andrew Roberts', y: 62),
@@ -302,21 +306,21 @@ List<CustomBarChartData> usersDataMinScores = [
   CustomBarChartData(x: 'Rebecca Phillips', y: 67),
   CustomBarChartData(x: 'Gary Ward', y: 68),
   CustomBarChartData(x: 'Jacob Moore', y: 65),
-  CustomBarChartData(x: 'Shirley Murphy', y: 60),
-  CustomBarChartData(x: 'Raymond Price', y: 61),
+  CustomBarChartData(x: 'Shirley Murphy', y: 50),
+  CustomBarChartData(x: 'Raymond Price', y: 41),
   CustomBarChartData(x: 'Cynthia Kelly', y: 62),
   CustomBarChartData(x: 'Charles Bennett', y: 63),
   CustomBarChartData(x: 'Angela Rivera', y: 64),
   CustomBarChartData(x: 'Brandon Richards', y: 65),
   CustomBarChartData(x: 'Gregory Jenkins', y: 66),
-  CustomBarChartData(x: 'Anna Stewart', y: 67),
-  CustomBarChartData(x: 'Willie Duncan', y: 68),
+  CustomBarChartData(x: 'Anna Stewart', y: 57),
+  CustomBarChartData(x: 'Willie Duncan', y: 58),
   CustomBarChartData(x: 'Ruth Lane', y: 69),
-  CustomBarChartData(x: 'Walter Foster', y: 70),
+  CustomBarChartData(x: 'Walter Foster', y: 30),
   CustomBarChartData(x: 'Samantha Howard', y: 71),
   CustomBarChartData(x: 'Jerry Owens', y: 72),
-  CustomBarChartData(x: 'Marie Russell', y: 73),
-  CustomBarChartData(x: 'Eugene Freeman', y: 74),
+  CustomBarChartData(x: 'Marie Russell', y: 33),
+  CustomBarChartData(x: 'Eugene Freeman', y: 34),
   CustomBarChartData(x: 'Dorothy Hunter', y: 75),
 ];
 
@@ -660,3 +664,367 @@ List<CustomLineChartData> sampleUserTimeSpentOnExams = [
   CustomLineChartData(x: 12, y: 0),
   // Add more data points as necessary
 ];
+
+List<UserSummary> userSummaryData = [
+  UserSummary(summaryTitle: 'Total Courses Enrolled', value: 5, type: ValueType.number.name),
+  UserSummary(summaryTitle: 'Total Exams Taken', value: 2, type: ValueType.number.name),
+  UserSummary(summaryTitle: 'Average Score', value: 45.67, type: ValueType.number.name),
+  UserSummary(summaryTitle: 'Completed', value: 0.65, type: ValueType.percentage.name),
+];
+
+List<UserCourseProgress> userCourseDetailsList = [
+  UserCourseProgress(
+    courseId: 'ip78hd',
+    userId: 'gzza',
+    courseTitle: 'Intro to Python and Machine Learning',
+    courseCompleted: false,
+    completedSections: ['sec1', 'sec2', 'sec3'],
+    completedExams: [
+      'exm1',
+      'exm2',
+    ],
+    sectionsInCourse: ['sec1', 'sec2', 'sec3', 'sec4', 'sec5', 'sec6', 'sec7', 'sec8', 'sec9'],
+    examsInCourse: ['exm1', 'exm2', 'exm3'],
+    examsProgressList: [
+      UserExamProgress(
+        courseId: 'ip78hd',
+        examId: 'exm1',
+        examTitle: 'Intro to Python Assessment',
+        examAttempts: [
+          UserExamAttempt(
+            attemptId: 'attempt001',
+            userId: 'gzza',
+            courseId: 'ip78hd',
+            examId: 'exm1',
+            startTime: DateTime(2023, 1, 10, 9, 30),
+            endTime: DateTime(2023, 1, 10, 10, 15),
+            result: ExamAttemptResult.pass,
+            score: 85,
+            responses: {},
+            status: ExamAttemptStatus.completed,
+          ),
+          UserExamAttempt(
+            attemptId: 'attempt002',
+            userId: 'gzza',
+            courseId: 'ip78hd',
+            examId: 'exm1',
+            startTime: DateTime(2023, 1, 12, 11, 30),
+            endTime: DateTime(2023, 1, 12, 12, 15),
+            result: ExamAttemptResult.fail,
+            score: 35,
+            responses: {},
+            status: ExamAttemptStatus.aborted,
+          ),
+          UserExamAttempt(
+            attemptId: 'attempt003',
+            userId: 'gzza',
+            courseId: 'ip78hd',
+            examId: 'exm1',
+            startTime: DateTime(2023, 4, 12, 11, 33),
+            endTime: DateTime(2023, 4, 12, 13, 17),
+            result: ExamAttemptResult.fail,
+            score: 67,
+            responses: {},
+            status: ExamAttemptStatus.aborted,
+          ),
+        ],
+        examStatus: ExamStatus.completed,
+      ),
+      UserExamProgress(
+        courseId: 'ip78hd',
+        examId: 'exm2',
+        examTitle: 'Data Preprocessing',
+        examAttempts: [
+          UserExamAttempt(
+            attemptId: 'attempt003',
+            userId: 'gzza',
+            courseId: 'ip78hd',
+            examId: 'exm2',
+            startTime: DateTime(2023, 1, 15, 14, 30),
+            endTime: DateTime(2023, 1, 15, 15, 20),
+            result: ExamAttemptResult.pass,
+            score: 92,
+            responses: {},
+            status: ExamAttemptStatus.completed,
+          ),
+          UserExamAttempt(
+            attemptId: 'attempt004',
+            userId: 'gzza',
+            courseId: 'ip78hd',
+            examId: 'exm2',
+            startTime: DateTime(2023, 1, 17, 9, 30),
+            endTime: DateTime(2023, 1, 17, 10, 05),
+            result: ExamAttemptResult.fail,
+            score: 60,
+            responses: {},
+            status: ExamAttemptStatus.not_completed,
+          ),
+        ],
+        examStatus: ExamStatus.completed,
+      ),
+      UserExamProgress(
+        courseId: 'ip78hd',
+        examId: 'exm3',
+        examTitle: 'Machine Learning Models',
+        examAttempts: [
+          UserExamAttempt(
+            attemptId: 'attempt005',
+            userId: 'gzza',
+            courseId: 'ip78hd',
+            examId: 'exm3',
+            startTime: DateTime(2023, 1, 20, 10, 30),
+            endTime: DateTime(2023, 1, 20, 11, 15),
+            result: ExamAttemptResult.fail,
+            score: 45,
+            responses: {},
+            status: ExamAttemptStatus.completed,
+          ),
+        ],
+        examStatus: ExamStatus.not_completed,
+      ),
+    ],
+  ),
+
+  UserCourseProgress(
+    courseId: 'cs50x',
+    userId: 'gzza',
+    courseTitle: 'Computer Science Basics',
+    courseCompleted: true,
+    completedSections: ['sec1', 'sec2', 'sec3', 'sec4', 'sec5', 'sec6', 'sec7', 'sec8'],
+    completedExams: [
+      'exm1',
+    ],
+    sectionsInCourse: ['sec1', 'sec2', 'sec3', 'sec4', 'sec5', 'sec6', 'sec7', 'sec8'],
+    examsInCourse: [
+      'exm1',
+    ],
+    examsProgressList: [
+      UserExamProgress(
+        courseId: 'cs50x',
+        examId: 'exm1',
+        examTitle: 'Intro to CS Assessment',
+        examAttempts: [
+          UserExamAttempt(
+            attemptId: 'attempt006',
+            userId: 'gzza',
+            courseId: 'cs50x',
+            examId: 'exm1',
+            startTime: DateTime(2023, 2, 5, 15, 00),
+            endTime: DateTime(2023, 2, 5, 16, 00),
+            result: ExamAttemptResult.pass,
+            score: 95,
+            responses: {},
+            status: ExamAttemptStatus.completed,
+          ),
+        ],
+        examStatus: ExamStatus.completed,
+      ),
+      // Add more UserExamProgress instances for other exams
+    ],
+  ),
+
+  // Second course
+  UserCourseProgress(
+    courseId: 'js101',
+    userId: 'gzza',
+    courseTitle: 'JavaScript for Beginners',
+    courseCompleted: false,
+    completedSections: ['sec1', 'sec2'],
+    completedExams: ['exm1'],
+    sectionsInCourse: ['sec1', 'sec2', 'sec3', 'sec4'],
+    examsInCourse: ['exm1', 'exm2'],
+    examsProgressList: [
+      UserExamProgress(
+        courseId: 'js101',
+        examId: 'exm1',
+        examTitle: 'Basics of JavaScript',
+        examAttempts: [
+          UserExamAttempt(
+            attemptId: 'attempt101',
+            userId: 'gzza',
+            courseId: 'js101',
+            examId: 'exm1',
+            startTime: DateTime(2023, 2, 10, 9, 0),
+            endTime: DateTime(2023, 2, 10, 10, 0),
+            result: ExamAttemptResult.pass,
+            score: 80,
+            responses: {},
+            status: ExamAttemptStatus.completed,
+          ),
+          UserExamAttempt(
+            attemptId: 'attempt102',
+            userId: 'gzza',
+            courseId: 'js101',
+            examId: 'exm1',
+            startTime: DateTime(2023, 2, 15, 10, 30),
+            endTime: DateTime(2023, 2, 15, 11, 30),
+            result: ExamAttemptResult.fail,
+            score: 60,
+            responses: {},
+            status: ExamAttemptStatus.aborted,
+          ),
+        ],
+        examStatus: ExamStatus.completed,
+      ),
+      UserExamProgress(
+        courseId: 'js101',
+        examId: 'exm2',
+        examTitle: 'JavaScript Functions and Arrays',
+        examAttempts: [
+          UserExamAttempt(
+            attemptId: 'attempt103',
+            userId: 'gzza',
+            courseId: 'js101',
+            examId: 'exm2',
+            startTime: DateTime(2023, 2, 20, 11, 0),
+            endTime: DateTime(2023, 2, 20, 12, 0),
+            result: ExamAttemptResult.fail,
+            score: 65,
+            responses: {},
+            status: ExamAttemptStatus.completed,
+          ),
+        ],
+        examStatus: ExamStatus.not_completed,
+      ),
+    ],
+  ),
+
+// Third course
+  UserCourseProgress(
+    courseId: 'htmlcss',
+    userId: 'gzza',
+    courseTitle: 'Introduction to HTML and CSS',
+    courseCompleted: true,
+    completedSections: ['sec1', 'sec2', 'sec3', 'sec4'],
+    completedExams: ['exm1', 'exm2'],
+    sectionsInCourse: ['sec1', 'sec2', 'sec3', 'sec4', 'sec5'],
+    examsInCourse: ['exm1', 'exm2'],
+    examsProgressList: [
+      UserExamProgress(
+        courseId: 'htmlcss',
+        examId: 'exm1',
+        examTitle: 'HTML Fundamentals',
+        examAttempts: [
+          UserExamAttempt(
+            attemptId: 'attempt201',
+            userId: 'gzza',
+            courseId: 'htmlcss',
+            examId: 'exm1',
+            startTime: DateTime(2023, 3, 1, 9, 0),
+            endTime: DateTime(2023, 3, 1, 10, 0),
+            result: ExamAttemptResult.pass,
+            score: 90,
+            responses: {},
+            status: ExamAttemptStatus.completed,
+          ),
+        ],
+        examStatus: ExamStatus.completed,
+      ),
+      UserExamProgress(
+        courseId: 'htmlcss',
+        examId: 'exm2',
+        examTitle: 'CSS Styling Techniques',
+        examAttempts: [
+          UserExamAttempt(
+            attemptId: 'attempt202',
+            userId: 'gzza',
+            courseId: 'htmlcss',
+            examId: 'exm2',
+            startTime: DateTime(2023, 3, 5, 11, 0),
+            endTime: DateTime(2023, 3, 5, 12, 30),
+            result: ExamAttemptResult.pass,
+            score: 88,
+            responses: {},
+            status: ExamAttemptStatus.completed,
+          ),
+        ],
+        examStatus: ExamStatus.completed,
+      ),
+    ],
+  ),
+
+// Fourth course
+  UserCourseProgress(
+    courseId: 'dataSci101',
+    userId: 'gzza',
+    courseTitle: 'Data Science Fundamentals',
+    courseCompleted: false,
+    completedSections: ['sec1', 'sec2'],
+    completedExams: [],
+    sectionsInCourse: ['sec1', 'sec2', 'sec3', 'sec4'],
+    examsInCourse: ['exm1', 'exm2', 'exm3'],
+    examsProgressList: [
+      UserExamProgress(
+        courseId: 'dataSci101',
+        examId: 'exm1',
+        examTitle: 'Statistics and Probability',
+        examAttempts: [
+          UserExamAttempt(
+            attemptId: 'attempt301',
+            userId: 'gzza',
+            courseId: 'dataSci101',
+            examId: 'exm1',
+            startTime: DateTime(2023, 3, 10, 14, 0),
+            endTime: DateTime(2023, 3, 10, 15, 0),
+            result: ExamAttemptResult.pass,
+            score: 70,
+            responses: {},
+            status: ExamAttemptStatus.completed,
+          ),
+        ],
+        examStatus: ExamStatus.completed,
+      ),
+      UserExamProgress(
+        courseId: 'dataSci101',
+        examId: 'exm2',
+        examTitle: 'Data Visualization',
+        examAttempts: [],
+        examStatus: ExamStatus.not_completed,
+      ),
+      UserExamProgress(
+        courseId: 'dataSci101',
+        examId: 'exm3',
+        examTitle: 'Machine Learning Basics',
+        examAttempts: [],
+        examStatus: ExamStatus.not_completed,
+      ),
+    ],
+  ),
+
+// Fifth course
+  UserCourseProgress(
+    courseId: 'webDevAdv',
+    userId: 'gzza',
+    courseTitle: 'Advanced Web Development',
+    courseCompleted: false,
+    completedSections: ['sec1'],
+    completedExams: [],
+    sectionsInCourse: ['sec1', 'sec2', 'sec3', 'sec4', 'sec5'],
+    examsInCourse: ['exm1', 'exm2', 'exm3', 'exm4'],
+    examsProgressList: [
+      UserExamProgress(
+        courseId: 'webDevAdv',
+        examId: 'exm1',
+        examTitle: 'Responsive Design',
+        examAttempts: [
+          UserExamAttempt(
+            attemptId: 'attempt401',
+            userId: 'gzza',
+            courseId: 'webDevAdv',
+            examId: 'exm1',
+            startTime: DateTime(2023, 4, 15, 10, 0),
+            endTime: DateTime(2023, 4, 15, 11, 0),
+            result: ExamAttemptResult.pass,
+            score: 75,
+            responses: {},
+            status: ExamAttemptStatus.completed,
+          ),
+        ],
+        examStatus: ExamStatus.completed,
+      ),
+      // Add more UserExamProgress instances for other exams
+    ],
+  ),
+];
+
+// Continue adding other UserCourseProgress objects

@@ -37,37 +37,37 @@ class FirebaseService {
   /// passed to the function as optional named parameters:
   ///  - [userId]
   ///  - [courseId]
-  static Future<List<QueryDocumentSnapshot<UserCourseProgress>>> getUserCourseProgress(
-      {String? userId, String? courseId}) async {
-    /// Base query which specifies only the target collection and custom object converters to use
-    Query<UserCourseProgress> query =
-        _firestore.collection(FirebaseCollections.userCourseProgress.name).withConverter<UserCourseProgress>(
-              fromFirestore: (snapshot, _) => UserCourseProgress.fromJson(snapshot.data()!),
-              toFirestore: (userCourseProgress, _) => userCourseProgress.toJson(),
-            );
-    _logger.info("Initialised base query for collection '${FirebaseCollections.userCourseProgress.name}'");
-
-    // Append conditions to the base query as needed, depending on the parameters passed to the function
-    if (userId != null) {
-      query = query.where(UserCourseProgressFields.userId.name, isEqualTo: userId);
-      _logger.info("Adding condition to filter on user ID '$userId'");
-    }
-    if (courseId != null) {
-      query = query.where(UserCourseProgressFields.courseId.name, isEqualTo: courseId);
-      _logger.info("Adding condition to filter on course ID '$courseId'");
-    }
-
-    // Execute the query, handling exceptions as necessary
-    try {
-      final List<QueryDocumentSnapshot<UserCourseProgress>> docs = await query.get().then((snapshot) => snapshot.docs);
-      _logger.info('Query executed successfully; ${docs.length} total document(s) fetched');
-
-      return docs;
-    } on Exception catch (e) {
-      _logger.severe('Error fetching data from Firestore: $e');
-      rethrow;
-    }
-  }
+  // static Future<List<QueryDocumentSnapshot<UserCourseProgress>>> getUserCourseProgress(
+  //     {String? userId, String? courseId}) async {
+  //   /// Base query which specifies only the target collection and custom object converters to use
+  //   // Query<UserCourseProgress> query =
+  //   //     _firestore.collection(FirebaseCollections.userCourseProgress.name).withConverter<UserCourseProgress>(
+  //   //           fromFirestore: (snapshot, _) => UserCourseProgress.fromJson(snapshot.data()!),
+  //   //           toFirestore: (userCourseProgress, _) => userCourseProgress.toJson(),
+  //   //         );
+  //   _logger.info("Initialised base query for collection '${FirebaseCollections.userCourseProgress.name}'");
+  //
+  //   // Append conditions to the base query as needed, depending on the parameters passed to the function
+  //   // if (userId != null) {
+  //   //   query = query.where(UserCourseProgressFields.userId.name, isEqualTo: userId);
+  //   //   _logger.info("Adding condition to filter on user ID '$userId'");
+  //   // }
+  //   // if (courseId != null) {
+  //   //   query = query.where(UserCourseProgressFields.courseId.name, isEqualTo: courseId);
+  //   //   _logger.info("Adding condition to filter on course ID '$courseId'");
+  //   // }
+  //
+  //   // Execute the query, handling exceptions as necessary
+  //   // try {
+  //   //   final List<QueryDocumentSnapshot<UserCourseProgress>> docs = await query.get().then((snapshot) => snapshot.docs);
+  //   //   _logger.info('Query executed successfully; ${docs.length} total document(s) fetched');
+  //   //
+  //   //   return docs;
+  //   // } on Exception catch (e) {
+  //   //   _logger.severe('Error fetching data from Firestore: $e');
+  //   //   rethrow;
+  //   // }
+  // }
 
   /// Returns a List of [QuerySnapshot]s stored in custom [UserExamAttempt] objects.
   ///

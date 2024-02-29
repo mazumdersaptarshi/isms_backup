@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:isms/controllers/storage/hive_service/hive_service.dart';
-
 // import 'package:isms/projectModules/domain_management/domain_provider.dart';
 import 'package:logging/logging.dart';
 
@@ -32,16 +31,19 @@ class LoggedInState extends _UserDataGetterMaster {
     //_auth.setPersistence(Persistence.NONE);
     _auth.authStateChanges().listen((User? user) async {
       if (user == null) {
-        _logger.info("auth state changed: no account currently signed into Firebase");
+        _logger.info(
+            "auth state changed: no account currently signed into Firebase");
         clear();
         // this needs to be called at the end og this branch, because we
         // should only refresh the fisplay after `clear()` has
         // completed,
         notifyListeners();
       } else {
-        _logger.info("auth state changed: ${user.email} currently signed into Firebase");
+        _logger.info(
+            "auth state changed: ${user.email} currently signed into Firebase");
         // ensure the app has a user entry for this account
-        await _UserDataGetterMaster.ensureUserDataExists(FirebaseAuth.instance.currentUser);
+        await _UserDataGetterMaster.ensureUserDataExists(
+            FirebaseAuth.instance.currentUser);
         _fetchFromFirestore(user).then((value) {
           // this needs to be called in `then()`, because we should only
           // refresh the fisplay after `storeUserCoursesData()` has
@@ -72,7 +74,8 @@ class LoggedInState extends _UserDataGetterMaster {
     );
     // sign into the corresponding Firebase account
     // ignore: unused_local_variable
-    UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+    UserCredential userCredential =
+        await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
   ///This function logout a user from the database and from the GCP authentication
@@ -121,20 +124,26 @@ class _UserDataGetterMaster with ChangeNotifier {
   static Future<void> ensureUserDataExists(User? user) async {
     if (user == null) return;
 
-    final DocumentSnapshot userSnapshot = await db.collection('users').doc(user.uid).get();
+    final DocumentSnapshot userSnapshot =
+        await db.collection('users').doc(user.uid).get();
 
     if (userSnapshot.exists) {
       DomainProvider domainProvider = DomainProvider();
 
-      await HiveService.ensureLocalDataExists(user); //function call to check if local user data exists or not
+      await HiveService.ensureLocalDataExists(
+          user); //function call to check if local user data exists or not
     }
 
     if (!userSnapshot.exists) {
       DomainProvider domainProvider = DomainProvider();
       String domain = await domainProvider.getUserDomain(user.uid);
 
-      await createUserData(
-          CustomUser(username: user!.displayName!, email: user!.email!, role: 'user', uid: user.uid, domain: domain!));
+      await createUserData(CustomUser(
+          username: user!.displayName!,
+          email: user!.email!,
+          role: 'user',
+          uid: user.uid,
+          domain: domain!));
       await HiveService.ensureLocalDataExists(user);
     }
   }
@@ -164,7 +173,8 @@ class _UserDataGetterMaster with ChangeNotifier {
   // field
   CustomUser get loggedInUser => _customUserObject!;
 
-  String get currentUserRole => _customUserObject != null ? _customUserObject!.role : "";
+  String get currentUserRole =>
+      _customUserObject != null ? _customUserObject!.role : "";
 
   ///This function fetch the current user's information from the app and store it in the current user variable accessed with the getter
   ///
@@ -176,11 +186,13 @@ class _UserDataGetterMaster with ChangeNotifier {
     if (userSnapshot.exists) {
       _logger.info('data fetched from Firestore for user ${user.email}');
       _currentUserSnapshot = userSnapshot;
-      Map<String, dynamic>? userData = userSnapshot.data() as Map<String, dynamic>?;
+      Map<String, dynamic>? userData =
+          userSnapshot.data() as Map<String, dynamic>?;
       _customUserObject = CustomUser.fromMap(userData!);
       //correction for domain
       if ((!userData.containsKey("domain")) || (userData["domain"] == "")) {
-        CreateUserReferenceForAdmin userRefForAdmin = CreateUserReferenceForAdmin();
+        CreateUserReferenceForAdmin userRefForAdmin =
+            CreateUserReferenceForAdmin();
         userRefForAdmin.updateUserRef(user.uid);
         DomainProvider domainProvider = DomainProvider();
         String domain = await domainProvider.getUserDomain(loggedInUser.uid);
@@ -244,6 +256,9 @@ class _UserDataGetterMaster with ChangeNotifier {
   ///input : none
   ///return: null
   setUserData() async {
-    FirebaseFirestore.instance.collection("users").doc(loggedInUser.uid).set(loggedInUser.toMap());
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(loggedInUser.uid)
+        .set(loggedInUser.toMap());
   }
 }

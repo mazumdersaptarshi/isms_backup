@@ -10,13 +10,12 @@
       ],
       "predeploy": [
         ""
-
       ],
       "codebase": "default"
     }
   ],
   "hosting": {
-    "public": "build/web",
+    "public": "public",
     "ignore": [
       "firebase.json",
       "**/.*",

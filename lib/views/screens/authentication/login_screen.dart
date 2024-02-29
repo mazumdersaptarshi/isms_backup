@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:isms/controllers/theme_management/app_theme.dart';
 import 'package:provider/provider.dart';
 import "package:universal_html/html.dart" as html;
 
@@ -59,7 +60,7 @@ class LoginPageState extends State<LoginPage> {
         double verticalPadding = 20;
 
         return Container(
-          color: Colors.deepPurpleAccent.shade100,
+          color: primary,
           child: Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: maxWidthForContent),

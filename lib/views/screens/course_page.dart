@@ -12,6 +12,7 @@ import 'package:isms/models/course/element.dart' as element_model;
 import 'package:isms/models/course/flip_card.dart' as flip_card_model;
 import 'package:isms/models/course/question.dart';
 import 'package:isms/models/course/section.dart';
+import 'package:isms/views/screens/testing/test_course1_exam1_page.dart';
 import 'package:isms/views/widgets/course_widgets/checkbox_list.dart';
 import 'package:isms/views/widgets/course_widgets/flip_card.dart';
 import 'package:isms/views/widgets/course_widgets/radio_list.dart';
@@ -34,8 +35,7 @@ class _CourseState extends State<CoursePage> {
   static const SizedBox _separator = SizedBox(height: 20);
 
   /// padding on both sides of HTML and questions
-  final EdgeInsets contentPadding =
-      const EdgeInsets.only(right: 200, left: 200, bottom: 40);
+  final EdgeInsets contentPadding = const EdgeInsets.only(right: 200, left: 200, bottom: 40);
 
   final ButtonStyle buttonStyleSectionNavigation = ElevatedButton.styleFrom(
     backgroundColor: Colors.grey[200],
@@ -46,8 +46,7 @@ class _CourseState extends State<CoursePage> {
     ),
   );
 
-  final TextStyle textStyleButtonSectionNavigation =
-      TextStyle(color: Colors.grey[600]);
+  final TextStyle textStyleButtonSectionNavigation = TextStyle(color: Colors.grey[600]);
 
   // Data structures containing course content populated in initState() then not changed
 
@@ -91,8 +90,7 @@ class _CourseState extends State<CoursePage> {
     super.initState();
 
     // Read course data JSON then create Course object
-    final Map<String, dynamic> courseMap =
-        jsonDecode(_jsonString) as Map<String, dynamic>;
+    final Map<String, dynamic> courseMap = jsonDecode(_jsonString) as Map<String, dynamic>;
     _course = Course.fromJson(courseMap);
 
     // Initialise data structures which store all course section IDs as well as widgets requiring user interaction
@@ -103,13 +101,11 @@ class _CourseState extends State<CoursePage> {
       for (element_model.Element element in section.sectionElements) {
         if (element.elementType == ElementTypeValues.question.name) {
           for (Question question in element.elementContent) {
-            _courseRequiredInteractiveElements[section.sectionId]
-                ?.add(question.questionId);
+            _courseRequiredInteractiveElements[section.sectionId]?.add(question.questionId);
           }
         } else if (element.elementType == ElementTypeValues.flipCard.name) {
           for (flip_card_model.FlipCard flipCard in element.elementContent) {
-            _courseRequiredInteractiveElements[section.sectionId]
-                ?.add(flipCard.flipCardId);
+            _courseRequiredInteractiveElements[section.sectionId]?.add(flipCard.flipCardId);
           }
         }
       }
@@ -151,15 +147,13 @@ class _CourseState extends State<CoursePage> {
   /// Returns an ordered [List] of all content widgets (i.e. navigation buttons excluded) in the current course section.
   List<Widget> _getCurrentSectionContentWidgets() {
     _getAllCourseWidgets();
-    return _courseWidgets[
-        _course.courseSections[_currentSectionIndex].sectionId];
+    return _courseWidgets[_course.courseSections[_currentSectionIndex].sectionId];
   }
 
   /// Populates data structure [_courseWidgets] with all course widgets.
   void _getAllCourseWidgets() {
     for (Section section in _course.courseSections) {
-      _courseWidgets[section.sectionId] = _getSectionContentWidgets(
-          _course.courseSections[_currentSectionIndex]);
+      _courseWidgets[section.sectionId] = _getSectionContentWidgets(_course.courseSections[_currentSectionIndex]);
     }
   }
 
@@ -217,8 +211,7 @@ class _CourseState extends State<CoursePage> {
     final List<Widget> contentWidgets = [];
 
     // Single Selection Question (Radio buttons)
-    if (question.questionType ==
-        QuestionTypeValues.singleSelectionQuestion.name) {
+    if (question.questionType == QuestionTypeValues.singleSelectionQuestion.name) {
       contentWidgets.addAll([
         Padding(
           padding: contentPadding,
@@ -247,12 +240,10 @@ class _CourseState extends State<CoursePage> {
                     values: question.questionAnswers,
                     onItemSelected: (selectedValue) {
                       setState(() {
-                        _currentSectionSelectedQuestionAnswers[
-                            question.questionId] = selectedValue;
+                        _currentSectionSelectedQuestionAnswers[question.questionId] = selectedValue;
                         // Only enable the related button once an answer has been selected
                         // Radio buttons cannot be deselected so there's no need to disable the button again
-                        _currentSectionNonEmptyQuestions
-                            .add(question.questionId);
+                        _currentSectionNonEmptyQuestions.add(question.questionId);
                       });
                     },
                   ),
@@ -260,25 +251,19 @@ class _CourseState extends State<CoursePage> {
                   _currentSectionNonEmptyQuestions.contains(question.questionId)
                       ? ElevatedButton(
                           onPressed: () {
-                            _showSingleAnswerExplanationDialog(
-                                context,
-                                question.questionAnswers,
-                                _currentSectionSelectedQuestionAnswers[
-                                    question.questionId]);
+                            _showSingleAnswerExplanationDialog(context, question.questionAnswers,
+                                _currentSectionSelectedQuestionAnswers[question.questionId]);
                             // No need to track interactive UI element completion if revisiting the section
                             if (!_currentSectionCompleted) {
-                              _currentSectionCompletedInteractiveElements
-                                  .add(question.questionId);
+                              _currentSectionCompletedInteractiveElements.add(question.questionId);
                               _checkInteractiveElementsCompleted();
                             }
                           },
-                          child: Text(
-                              AppLocalizations.of(context)!.buttonCheckAnswer),
+                          child: Text(AppLocalizations.of(context)!.buttonCheckAnswer),
                         )
                       : ElevatedButton(
                           onPressed: null,
-                          child: Text(
-                              AppLocalizations.of(context)!.buttonSelectAnswer),
+                          child: Text(AppLocalizations.of(context)!.buttonSelectAnswer),
                         ),
                 ],
               ),
@@ -288,8 +273,7 @@ class _CourseState extends State<CoursePage> {
       ]);
 
       // Multiple Selection Question (Checkboxes)
-    } else if (question.questionType ==
-        QuestionTypeValues.multipleSelectionQuestion.name) {
+    } else if (question.questionType == QuestionTypeValues.multipleSelectionQuestion.name) {
       contentWidgets.addAll([
         Padding(
           padding: contentPadding,
@@ -322,11 +306,9 @@ class _CourseState extends State<CoursePage> {
                         // Since checkboxes can be deselected, we also need to disable the button if all options are
                         // subsequently deselected
                         if (selectedValues.values.contains(true)) {
-                          _currentSectionNonEmptyQuestions
-                              .add(question.questionId);
+                          _currentSectionNonEmptyQuestions.add(question.questionId);
                         } else {
-                          _currentSectionNonEmptyQuestions
-                              .remove(question.questionId);
+                          _currentSectionNonEmptyQuestions.remove(question.questionId);
                         }
                       });
                     },
@@ -337,18 +319,15 @@ class _CourseState extends State<CoursePage> {
                           onPressed: () {
                             // No need to track interactive UI element completion if revisiting the section
                             if (!_currentSectionCompleted) {
-                              _currentSectionCompletedInteractiveElements
-                                  .add(question.questionId);
+                              _currentSectionCompletedInteractiveElements.add(question.questionId);
                               _checkInteractiveElementsCompleted();
                             }
                           },
-                          child: Text(
-                              AppLocalizations.of(context)!.buttonCheckAnswer),
+                          child: Text(AppLocalizations.of(context)!.buttonCheckAnswer),
                         )
                       : ElevatedButton(
                           onPressed: null,
-                          child: Text(
-                              AppLocalizations.of(context)!.buttonSelectAnswer),
+                          child: Text(AppLocalizations.of(context)!.buttonSelectAnswer),
                         ),
                 ],
               ),
@@ -391,17 +370,17 @@ class _CourseState extends State<CoursePage> {
               onPressed: () {
                 _recordCourseCompletion;
                 // Return to parent screen (course list)
-                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (context) => TestCourse1Exam1Page()));
+
+                // Navigator.pop(context);
               },
               style: buttonStyleSectionNavigation,
-              child: Text(AppLocalizations.of(context)!.buttonFinishCourse,
-                  style: textStyleButtonSectionNavigation),
+              child: Text(AppLocalizations.of(context)!.buttonFinishCourse, style: textStyleButtonSectionNavigation),
             )
           : ElevatedButton(
               onPressed: null,
               style: buttonStyleSectionNavigation,
-              child: Text(
-                  AppLocalizations.of(context)!.buttonSectionContentIncomplete,
+              child: Text(AppLocalizations.of(context)!.buttonSectionContentIncomplete,
                   style: textStyleButtonSectionNavigation));
     } else {
       // Only enable the button once all interactive elements in the section have been interacted with
@@ -410,8 +389,8 @@ class _CourseState extends State<CoursePage> {
               onPressed: _goToNextSection,
               style: buttonStyleSectionNavigation,
               child: Text(
-                AppLocalizations.of(context)!.buttonNextSection(_course
-                    .courseSections[_currentSectionIndex + 1].sectionTitle),
+                AppLocalizations.of(context)!
+                    .buttonNextSection(_course.courseSections[_currentSectionIndex + 1].sectionTitle),
                 style: textStyleButtonSectionNavigation,
               ))
           : ElevatedButton(
@@ -432,8 +411,8 @@ class _CourseState extends State<CoursePage> {
       onPressed: _goToPreviousSection,
       style: buttonStyleSectionNavigation,
       child: Text(
-        AppLocalizations.of(context)!.buttonPreviousSection(
-            _course.courseSections[_currentSectionIndex - 1].sectionTitle),
+        AppLocalizations.of(context)!
+            .buttonPreviousSection(_course.courseSections[_currentSectionIndex - 1].sectionTitle),
         style: textStyleButtonSectionNavigation,
       ),
     );
@@ -441,10 +420,8 @@ class _CourseState extends State<CoursePage> {
 
   // Functions for Button onPressed events
 
-  void _showSingleAnswerExplanationDialog(
-      BuildContext context, List<Answer> allAnswers, Answer submittedAnswer) {
-    final Answer correctAnswer =
-        allAnswers.firstWhere((answer) => answer.answerCorrect);
+  void _showSingleAnswerExplanationDialog(BuildContext context, List<Answer> allAnswers, Answer submittedAnswer) {
+    final Answer correctAnswer = allAnswers.firstWhere((answer) => answer.answerCorrect);
     final bool questionCorrect = submittedAnswer == correctAnswer;
 
     showDialog(
@@ -458,8 +435,7 @@ class _CourseState extends State<CoursePage> {
               : Text(AppLocalizations.of(context)!.dialogAnswerIncorrectTitle),
           content: !questionCorrect
               ? Text(AppLocalizations.of(context)!
-                  .dialogAnswerIncorrectContentBody(
-                      submittedAnswer.answerText, submittedAnswer.answerId))
+                  .dialogAnswerIncorrectContentBody(submittedAnswer.answerText, submittedAnswer.answerId))
               : null,
           actions: [
             TextButton(
@@ -472,8 +448,8 @@ class _CourseState extends State<CoursePage> {
     );
   }
 
-  void _showMultipleAnswerExplanationDialog(BuildContext context,
-      List<Answer> allAnswers, List<Answer> submittedAnswers) {
+  void _showMultipleAnswerExplanationDialog(
+      BuildContext context, List<Answer> allAnswers, List<Answer> submittedAnswers) {
     final List<Answer> correctAnswers = [];
     for (Answer answer in allAnswers) {
       if (answer.answerCorrect) {
@@ -508,9 +484,7 @@ class _CourseState extends State<CoursePage> {
   /// Updates [_currentSectionCompleted] to `true` only if all widgets requiring user interaction
   /// in the current section have been interacted with.
   void _checkInteractiveElementsCompleted() {
-    if (setEquals(
-        _courseRequiredInteractiveElements[
-            _courseSections[_currentSectionIndex]],
+    if (setEquals(_courseRequiredInteractiveElements[_courseSections[_currentSectionIndex]],
         _currentSectionCompletedInteractiveElements)) {
       setState(() {
         _currentSectionCompleted = true;
@@ -529,8 +503,7 @@ class _CourseState extends State<CoursePage> {
   void _goToNextSection() {
     setState(() {
       // Update section progress
-      _completedSections
-          .add(_course.courseSections[_currentSectionIndex].sectionId);
+      _completedSections.add(_course.courseSections[_currentSectionIndex].sectionId);
       _currentSectionIndex++;
 
       // Reset current section interactive UI element tracking
@@ -553,8 +526,7 @@ class _CourseState extends State<CoursePage> {
   /// Add the final section to [_completedSections].
   void _recordCourseCompletion() {
     setState(() {
-      _completedSections
-          .add(_course.courseSections[_currentSectionIndex].sectionId);
+      _completedSections.add(_course.courseSections[_currentSectionIndex].sectionId);
     });
   }
 }

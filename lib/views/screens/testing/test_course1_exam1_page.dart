@@ -12,18 +12,18 @@ class TestCourse1Exam1Page extends StatefulWidget {
 }
 
 class _TestCourse1Exam1PageState extends State<TestCourse1Exam1Page> {
-  final List<Question> questions = [
-    Question(
+  final List<TestQuestion> questions = [
+    TestQuestion(
       questionText: 'Which HTML tag is used to define an internal style sheet?',
       options: ['<style>', '<script>', '<css>', '<link>'],
       correctAnswerIndex: 0,
     ),
-    Question(
+    TestQuestion(
       questionText: 'Which is not a JavaScript data type?',
       options: ['Undefined', 'Number', 'Boolean', 'Float'],
       correctAnswerIndex: 3,
     ),
-    Question(
+    TestQuestion(
       questionText: 'What does CSS stand for?',
       options: ['Colorful Style Sheets', 'Computer Style Sheets', 'Cascading Style Sheets', 'Creative Style Sheets'],
       correctAnswerIndex: 2,
@@ -134,10 +134,10 @@ class _TestCourse1Exam1PageState extends State<TestCourse1Exam1Page> {
   }
 }
 
-class Question {
+class TestQuestion {
   String questionText;
   List<String> options;
   int correctAnswerIndex;
 
-  Question({required this.questionText, required this.options, required this.correctAnswerIndex});
+  TestQuestion({required this.questionText, required this.options, required this.correctAnswerIndex});
 }

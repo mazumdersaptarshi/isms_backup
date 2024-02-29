@@ -74,31 +74,25 @@ ThemeData _ismsTheme() {
 /// Each individual [TextStyle] from the base theme has at least the property `fontFamily` overridden,
 /// with other properties also overridden as needed.
 TextTheme _textTheme(TextTheme base) => base.copyWith(
-    displayLarge: base.displayLarge!.copyWith(
-        fontFamily: fontFamily, fontSize: 36, fontWeight: FontWeight.bold),
-    displayMedium: base.displayMedium!.copyWith(
-        fontFamily: fontFamily, fontSize: 30, fontWeight: FontWeight.bold),
-    displaySmall: base.displaySmall!.copyWith(
-        fontFamily: fontFamily, fontSize: 26, fontWeight: FontWeight.bold),
+    displayLarge: base.displayLarge!.copyWith(fontFamily: fontFamily, fontSize: 36, fontWeight: FontWeight.bold),
+    displayMedium: base.displayMedium!.copyWith(fontFamily: fontFamily, fontSize: 30, fontWeight: FontWeight.bold),
+    displaySmall: base.displaySmall!.copyWith(fontFamily: fontFamily, fontSize: 26, fontWeight: FontWeight.bold),
     headlineLarge: base.headlineLarge!.copyWith(fontFamily: fontFamily),
     headlineMedium: base.headlineMedium!.copyWith(fontFamily: fontFamily),
     headlineSmall: base.headlineSmall!.copyWith(fontFamily: fontFamily),
     titleLarge: base.titleLarge!.copyWith(fontFamily: fontFamily),
     titleMedium: base.titleMedium!.copyWith(fontFamily: fontFamily),
     titleSmall: base.titleSmall!.copyWith(fontFamily: fontFamily),
-    bodyLarge: base.bodyLarge!.copyWith(
-        fontFamily: fontFamily, fontSize: 20, fontWeight: FontWeight.normal),
-    bodyMedium: base.bodyMedium!.copyWith(
-        fontFamily: fontFamily, fontSize: 18, fontWeight: FontWeight.normal),
-    bodySmall: base.bodySmall!.copyWith(
-        fontFamily: fontFamily, fontSize: 16, fontWeight: FontWeight.normal),
+    bodyLarge: base.bodyLarge!.copyWith(fontFamily: fontFamily, fontSize: 20, fontWeight: FontWeight.normal),
+    bodyMedium: base.bodyMedium!.copyWith(fontFamily: fontFamily, fontSize: 18, fontWeight: FontWeight.normal),
+    bodySmall: base.bodySmall!.copyWith(fontFamily: fontFamily, fontSize: 16, fontWeight: FontWeight.normal),
     labelLarge: base.labelLarge!.copyWith(fontFamily: fontFamily),
     labelMedium: base.labelMedium!.copyWith(fontFamily: fontFamily),
     labelSmall: base.labelSmall!.copyWith(fontFamily: fontFamily));
 
 /// Returns app-wide [AppBarTheme].
-AppBarTheme _appBarTheme(AppBarTheme base) => base.copyWith(
-    backgroundColor: primary, foregroundColor: Colors.white, elevation: 0);
+AppBarTheme _appBarTheme(AppBarTheme base) =>
+    base.copyWith(backgroundColor: primary, foregroundColor: Colors.white, elevation: 0);
 
 /// Returns app-wide [CheckboxThemeData].
 ///
@@ -107,26 +101,20 @@ CheckboxThemeData _checkboxTheme(CheckboxThemeData base) =>
     base.copyWith(checkColor: MaterialStateProperty.all<Color>(Colors.white));
 
 /// Returns app-wide [DrawerThemeData].
-DrawerThemeData _drawerTheme(DrawerThemeData base) => base.copyWith(
-    shape: const ContinuousRectangleBorder(),
-    scrimColor: Colors.black26,
-    width: 350);
+DrawerThemeData _drawerTheme(DrawerThemeData base) =>
+    base.copyWith(shape: const ContinuousRectangleBorder(), scrimColor: Colors.black26, width: 350);
 
 /// Returns app-wide [ElevatedButtonThemeData].
 ///
 /// Properties `textStyle` and `shape` are overridden to be the same for all [MaterialState]s of the widget.
 /// Properties `backgroundColor` and `foregroundColor` are overridden to update conditionally
 /// based on the [MaterialState] of the widget.
-ElevatedButtonThemeData _elevatedButtonTheme(ElevatedButtonThemeData base) =>
-    ElevatedButtonThemeData(
+ElevatedButtonThemeData _elevatedButtonTheme(ElevatedButtonThemeData base) => ElevatedButtonThemeData(
       style: ButtonStyle(
         elevation: const MaterialStatePropertyAll(0),
-        textStyle: const MaterialStatePropertyAll(
-            TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-        backgroundColor:
-            MaterialStateProperty.resolveWith(_getButtonBackgroundColor),
-        foregroundColor:
-            MaterialStateProperty.resolveWith(_getButtonForegroundColor),
+        textStyle: const MaterialStatePropertyAll(TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+        backgroundColor: MaterialStateProperty.resolveWith(_getButtonBackgroundColor),
+        foregroundColor: MaterialStateProperty.resolveWith(_getButtonForegroundColor),
         shape: MaterialStatePropertyAll(
           getRoundedRectangleBorder(),
         ),
@@ -134,8 +122,7 @@ ElevatedButtonThemeData _elevatedButtonTheme(ElevatedButtonThemeData base) =>
     );
 
 /// Returns app-wide [ExpansionTileThemeData].
-ExpansionTileThemeData _expansionTileTheme(ExpansionTileThemeData base) =>
-    ExpansionTileThemeData(
+ExpansionTileThemeData _expansionTileTheme(ExpansionTileThemeData base) => ExpansionTileThemeData(
       // backgroundColor: getPrimaryColor(),
       // collapsedBackgroundColor: Colors.grey[300],
 
@@ -148,8 +135,7 @@ ExpansionTileThemeData _expansionTileTheme(ExpansionTileThemeData base) =>
     );
 
 /// Returns app-wide [IconButtonThemeData].
-IconButtonThemeData _iconButtonTheme(IconButtonThemeData base) =>
-    const IconButtonThemeData(
+IconButtonThemeData _iconButtonTheme(IconButtonThemeData base) => const IconButtonThemeData(
         style: ButtonStyle(
       iconSize: MaterialStatePropertyAll(30),
       foregroundColor: MaterialStatePropertyAll(Colors.white),
@@ -157,28 +143,26 @@ IconButtonThemeData _iconButtonTheme(IconButtonThemeData base) =>
     ));
 
 /// Returns app-wide [ListTileThemeData].
-ListTileThemeData _listTileTheme(ListTileThemeData base) =>
-    const ListTileThemeData(
-        // textColor: Colors.black
-        );
+ListTileThemeData _listTileTheme(ListTileThemeData base) => const ListTileThemeData(
+    // textColor: Colors.black
+    );
 
-CustomDropdownDecoration get customDropdownDecoration =>
-    CustomDropdownDecoration(
-        closedFillColor: Colors.grey.shade100,
-        expandedFillColor: Colors.white,
-        closedBorder: Border.all(color: Colors.grey.shade200, width: 1),
-        expandedBorder: Border.all(
-          color: getPrimaryColorShade(50)!,
-          width: 2,
-        ),
-        listItemStyle: TextStyle(
-          color: primary,
-          fontSize: 14,
-        ),
-        headerStyle: TextStyle(
-          fontSize: 14,
-          color: primary,
-        ));
+CustomDropdownDecoration get customDropdownDecoration => CustomDropdownDecoration(
+    closedFillColor: Colors.grey.shade100,
+    expandedFillColor: Colors.white,
+    closedBorder: Border.all(color: Colors.grey.shade200, width: 1),
+    expandedBorder: Border.all(
+      color: getPrimaryColorShade(50)!,
+      width: 2,
+    ),
+    listItemStyle: TextStyle(
+      color: primary,
+      fontSize: 14,
+    ),
+    headerStyle: TextStyle(
+      fontSize: 14,
+      color: primary,
+    ));
 
 // Private functions for conditional widget styling in app theme
 
@@ -203,9 +187,7 @@ Color _getButtonBackgroundColor(Set<MaterialState> states) {
 
 /// Returns button foreground [Color] depending on the [MaterialState] of the widget (tracked in [states]).
 Color _getButtonForegroundColor(Set<MaterialState> states) {
-  return states.any((state) => state == MaterialState.disabled)
-      ? Colors.white54
-      : Colors.white;
+  return states.any((state) => state == MaterialState.disabled) ? Colors.white54 : Colors.white;
 }
 
 // Public functions for styling which either lives outside the app theme or
@@ -234,10 +216,7 @@ BorderRadius _getBorderRadius() {
 
 /// Returns [BoxDecoration] used for styling [ExpansionTile]s
 BoxDecoration getExpansionTileBoxDecoration() {
-  return BoxDecoration(
-      color: primary,
-      borderRadius: _getBorderRadius(),
-      boxShadow: [getTileBoxShadow()]);
+  return BoxDecoration(color: primary, borderRadius: _getBorderRadius(), boxShadow: [getTileBoxShadow()]);
 }
 
 /// Returns [BoxShadow] used for styling [ExpansionTile]s and [ListTile]s
@@ -261,8 +240,7 @@ BoxShadow getIconBoxShadow() {
 /// Returns [ButtonStyle] used for styling [IconButton]s by removing on hover and on select colours
 /// to hide the fact that they are separate widgets
 ButtonStyle getIconButtonStyleTransparent() {
-  return const ButtonStyle(
-      overlayColor: MaterialStatePropertyAll(Colors.transparent));
+  return const ButtonStyle(overlayColor: MaterialStatePropertyAll(Colors.transparent));
 }
 
 /// Returns [BoxDecoration] used for styling [FlipCard]s
@@ -280,11 +258,9 @@ RoundedRectangleBorder getRoundedRectangleBorder() {
 
 BoxDecoration getFlipCardBoxDecorationBack() {
   return BoxDecoration(
-    color: Colors.grey[300],
+    color: Colors.grey[200],
     borderRadius: _getBorderRadius(),
-    border: Border.all(
-        color: Colors.deepPurpleAccent.shade100,
-        width: 3), // Blue border added for flipped state
+    border: Border.all(color: primary!, width: 3), // Blue border added for flipped state
   );
 }
 
@@ -296,10 +272,7 @@ BoxDecoration expansionTileOff() {
 
 BoxDecoration expansionTileOn() {
   return BoxDecoration(
-      color: Colors.grey[300],
-      border: Border(
-          left:
-              BorderSide(width: 3.0, color: Colors.deepPurpleAccent.shade100)));
+      color: Colors.grey[300], border: Border(left: BorderSide(width: 3.0, color: Colors.deepPurpleAccent.shade100)));
 }
 
 TextStyle bulletPointSymbolStyle = TextStyle(

@@ -16,7 +16,6 @@ class UserProfileBanner extends StatelessWidget {
     required this.userEmail,
     required this.userRole,
     required this.adminState,
-    required Map userAllData,
     required String uid,
   });
 
@@ -24,8 +23,6 @@ class UserProfileBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // print(adminState.getSummaryMap(userAllData: userAllData, uid: uid));
-
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

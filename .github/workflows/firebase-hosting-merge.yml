@@ -2,7 +2,7 @@ name: Deploy to Firebase Hosting on Push
 'on':
   push:
     branches:
-      - beta-app-v1-demo-env
+      - new-course-structure
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
