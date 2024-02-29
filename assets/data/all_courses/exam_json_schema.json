@@ -1,0 +1,272 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema",
+    "definitions": {
+        "nonEmptyStringWithEscapedSingleQuotes": {
+            "type": "string",
+            "minLength": 1,
+            "$comment": "In order to allow the JSON document to be directly inserted into the PostegreSQL database, any single quotes present in strings need to be escaped.",
+            "pattern": "^((?:[^']+|'')*)$"
+        },
+        "nonEmptyArrayWithUniqueItems": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true
+        },
+        "questionAnswersArray": {
+            "title": "Question answers",
+            "description": "An array containing all question answer objects, ordered as they should be presented to the user.",
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+                "title": "Answer",
+                "description": "A question answer object.",
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                    "answerId",
+                    "answerText",
+                    "answerCorrect"
+                ],
+                "properties": {
+                    "answerId": {
+                        "title": "Answer ID",
+                        "description": "The internal identifier of the answer, used in code logic but not displayed to the user. Must be unique within the JSON document.",
+                        "$ref": "#/definitions/nonEmptyStringWithEscapedSingleQuotes"
+                    },
+                    "answerText": {
+                        "title": "Answer text",
+                        "description": "The text for the answer.",
+                        "$ref": "#/definitions/nonEmptyStringWithEscapedSingleQuotes"
+                    },
+                    "answerCorrect": {
+                        "title": "Answer correct?",
+                        "description": "Whether the answer is correct or not.",
+                        "type": "boolean"
+                    }
+                }
+            }
+        }
+    },
+    "title": "Exam",
+    "description": "An exam to test user understanding of related course material.",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "examLanguage",
+        "examVersion",
+        "examTitle",
+        "examSummary",
+        "examDescription",
+        "examPassMark",
+        "examEstimatedTime",
+        "examSections"
+    ],
+    "properties": {
+        "examLanguage": {
+            "title": "Exam language",
+            "description": "Enumerated list of all possible exam languages.",
+            "enum": [
+                "en",
+                "ja"
+            ]
+        },
+        "examVersion": {
+            "title": "Exam version",
+            "description": "The revision version of the exam as either an integer or a double, to be incremented in the case of large changes to the content or structure which would render logged exam completion invalid.",
+            "type": "number",
+            "minimum": 0,
+            "exclusiveMinimum": true,
+            "examples": [
+                1,
+                1.2
+            ]
+        },
+        "examTitle": {
+            "title": "Exam title",
+            "description": "The title of the exam.",
+            "$ref": "#/definitions/nonEmptyStringWithEscapedSingleQuotes"
+        },
+        "examSummary": {
+            "title": "Exam summary",
+            "description": "A short, one-line summary of the exam.",
+            "$ref": "#/definitions/nonEmptyStringWithEscapedSingleQuotes"
+        },
+        "examDescription": {
+            "title": "Exam description",
+            "description": "A full description of the exam, detailing its content and aim.",
+            "$ref": "#/definitions/nonEmptyStringWithEscapedSingleQuotes"
+        },
+        "examPassMark": {
+            "title": "Exam pass mark",
+            "description": "The score required to pass the exam.",
+            "type": "integer",
+            "minimum": 0,
+            "exclusiveMinimum": true
+        },
+        "examEstimatedTime": {
+            "title": "Exam estimated time",
+            "description": "The guideline for how long the exam should take to complete, specified as a string in the format HH:MM:SS.",
+            "type": "string",
+            "format": "time",
+            "examples": [
+                "00:25:00",
+                "01:23:45"
+            ]
+        },
+        "examSections": {
+            "title": "Exam sections",
+            "description": "An array containing all exam section objects, ordered as they should be presented to the user.",
+            "$ref": "#/definitions/nonEmptyArrayWithUniqueItems",
+            "items": {
+                "title": "Section",
+                "description": "A section object.",
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                    "sectionId",
+                    "sectionTitle",
+                    "sectionSummary",
+                    "sectionElements"
+                ],
+                "properties": {
+                    "sectionId": {
+                        "title": "Section ID",
+                        "description": "The internal identifier of the section, used in code logic but not displayed to the user. Must be unique within the JSON document.",
+                        "$ref": "#/definitions/nonEmptyStringWithEscapedSingleQuotes"
+                    },
+                    "sectionTitle": {
+                        "title": "Section title",
+                        "description": "The title of the section.",
+                        "$ref": "#/definitions/nonEmptyStringWithEscapedSingleQuotes"
+                    },
+                    "sectionSummary": {
+                        "title": "Section summary",
+                        "description": "A short, one-line summary of the section.",
+                        "$ref": "#/definitions/nonEmptyStringWithEscapedSingleQuotes"
+                    },
+                    "sectionElements": {
+                        "title": "Section elements",
+                        "description": "An array containing all section element objects, ordered as they should be presented to the user.",
+                        "$ref": "#/definitions/nonEmptyArrayWithUniqueItems",
+                        "items": {
+                            "title": "Element",
+                            "description": "A section element object.",
+                            "type": "object",
+                            "additionalProperties": false,
+                            "required": [
+                                "elementId",
+                                "elementType",
+                                "elementTitle",
+                                "elementContent"
+                            ],
+                            "properties": {
+                                "elementId": {
+                                    "title": "Element ID",
+                                    "description": "The internal identifier of the element, used in code logic but not displayed to the user. Must be unique within the JSON document.",
+                                    "$ref": "#/definitions/nonEmptyStringWithEscapedSingleQuotes"
+                                },
+                                "elementType": {
+                                    "title": "Element type",
+                                    "description": "The element type (only questions are allowed in exams).",
+                                    "const": "question"
+                                },
+                                "elementTitle": {
+                                    "title": "Element title",
+                                    "description": "The title of the element.",
+                                    "$ref": "#/definitions/nonEmptyStringWithEscapedSingleQuotes"
+                                },
+                                "elementContent": {
+                                    "title": "Element content",
+                                    "description": "The content of the element.",
+                                    "$ref": "#/definitions/nonEmptyArrayWithUniqueItems",
+                                    "items": {
+                                        "title": "Question",
+                                        "description": "A question object.",
+                                        "type": "object",
+                                        "additionalProperties": false,
+                                        "required": [
+                                            "questionId",
+                                            "questionType",
+                                            "questionText",
+                                            "questionAnswers"
+                                        ],
+                                        "properties": {
+                                            "questionId": {
+                                                "title": "Question ID",
+                                                "description": "The internal identifier of the question, used in code logic but not displayed to the user. Must be unique within the JSON document.",
+                                                "$ref": "#/definitions/nonEmptyStringWithEscapedSingleQuotes"
+                                            },
+                                            "questionType": {
+                                                "title": "Question type",
+                                                "description": "Enumerated list of all possible question types.",
+                                                "enum": [
+                                                    "singleSelectionQuestion",
+                                                    "multipleSelectionQuestion"
+                                                ]
+                                            },
+                                            "questionText": {
+                                                "title": "Question text",
+                                                "description": "The text for the question.",
+                                                "$ref": "#/definitions/nonEmptyStringWithEscapedSingleQuotes"
+                                            },
+                                            "questionAnswers": {
+                                                "title": "Question answers",
+                                                "description": "An array containing all question answer objects, ordered as they should be presented to the user.",
+                                                "$comment": "Further restrictions for each questionType value specified in conditions below.",
+                                                "type": "array"
+                                            }
+                                        },
+                                        "allOf": [
+                                            {
+                                                "$comment": "Conditional case for a single selection (radio button) question.",
+                                                "if": {
+                                                    "properties": {
+                                                        "questionType": {
+                                                            "const": "singleSelectionQuestion"
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "questionType"
+                                                    ]
+                                                },
+                                                "then": {
+                                                    "properties": {
+                                                        "questionAnswers": {
+                                                            "$ref": "#/definitions/questionAnswersArray",
+                                                            "minItems": 2
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "$comment": "Conditional case for a multiple selection (checkbox) question.",
+                                                "if": {
+                                                    "properties": {
+                                                        "questionType": {
+                                                            "const": "multipleSelectionQuestion"
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "questionType"
+                                                    ]
+                                                },
+                                                "then": {
+                                                    "properties": {
+                                                        "questionAnswers": {
+                                                            "$ref": "#/definitions/questionAnswersArray",
+                                                            "minItems": 3
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,358 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema",
+    "definitions": {
+        "nonEmptyStringWithEscapedSingleQuotes": {
+            "type": "string",
+            "minLength": 1,
+            "$comment": "In order to allow the JSON document to be directly inserted into the PostegreSQL database, any single quotes present in strings need to be escaped.",
+            "pattern": "^((?:[^']+|'')*)$"
+        },
+        "nonEmptyArrayWithUniqueItems": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true
+        },
+        "questionAnswersArray": {
+            "title": "Question answers",
+            "description": "An array containing all question answer objects, ordered as they should be presented to the user.",
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+                "title": "Answer",
+                "description": "A question answer object.",
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                    "answerId",
+                    "answerText",
+                    "answerCorrect",
+                    "answerExplanation"
+                ],
+                "properties": {
+                    "answerId": {
+                        "title": "Answer ID",
+                        "description": "The internal identifier of the answer, used in code logic but not displayed to the user. Must be unique within the JSON document.",
+                        "$ref": "#/definitions/nonEmptyStringWithEscapedSingleQuotes"
+                    },
+                    "answerText": {
+                        "title": "Answer text",
+                        "description": "The text for the answer.",
+                        "$ref": "#/definitions/nonEmptyStringWithEscapedSingleQuotes"
+                    },
+                    "answerCorrect": {
+                        "title": "Answer correct?",
+                        "description": "Whether the answer is correct or not.",
+                        "type": "boolean"
+                    },
+                    "answerExplanation": {
+                        "title": "Answer explanation",
+                        "description": "The explanation for why the answer is correct or not.",
+                        "$ref": "#/definitions/nonEmptyStringWithEscapedSingleQuotes"
+                    }
+                }
+            }
+        }
+    },
+    "title": "Course",
+    "description": "A course to deliver required learning before users take related exam(s).",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "courseLanguage",
+        "courseVersion",
+        "courseTitle",
+        "courseSummary",
+        "courseDescription",
+        "courseSections"
+    ],
+    "properties": {
+        "courseLanguage": {
+            "title": "Course language",
+            "description": "Enumerated list of all possible course languages.",
+            "enum": [
+                "en",
+                "ja"
+            ]
+        },
+        "courseVersion": {
+            "title": "Course version",
+            "description": "The revision version of the course as either an integer or a double, to be incremented in the case of large changes to the content or structure which would render logged course completion invalid.",
+            "type": "number",
+            "minimum": 0,
+            "exclusiveMinimum": true,
+            "examples": [
+                1,
+                1.2
+            ]
+        },
+        "courseTitle": {
+            "title": "Course title",
+            "description": "The title of the course.",
+            "$ref": "#/definitions/nonEmptyStringWithEscapedSingleQuotes"
+        },
+        "courseSummary": {
+            "title": "Course summary",
+            "description": "A short, one-line summary of the course.",
+            "$ref": "#/definitions/nonEmptyStringWithEscapedSingleQuotes"
+        },
+        "courseDescription": {
+            "title": "Course description",
+            "description": "A full description of the course, detailing its content and aim.",
+            "$ref": "#/definitions/nonEmptyStringWithEscapedSingleQuotes"
+        },
+        "courseSections": {
+            "title": "Course sections",
+            "description": "An array containing all course section objects, ordered as they should be presented to the user.",
+            "$ref": "#/definitions/nonEmptyArrayWithUniqueItems",
+            "items": {
+                "title": "Section",
+                "description": "A section object.",
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                    "sectionId",
+                    "sectionTitle",
+                    "sectionSummary",
+                    "sectionElements"
+                ],
+                "properties": {
+                    "sectionId": {
+                        "title": "Section ID",
+                        "description": "The internal identifier of the section, used in code logic but not displayed to the user. Must be unique within the JSON document.",
+                        "$ref": "#/definitions/nonEmptyStringWithEscapedSingleQuotes"
+                    },
+                    "sectionTitle": {
+                        "title": "Section title",
+                        "description": "The title of the section.",
+                        "$ref": "#/definitions/nonEmptyStringWithEscapedSingleQuotes"
+                    },
+                    "sectionSummary": {
+                        "title": "Section summary",
+                        "description": "A short, one-line summary of the section.",
+                        "$ref": "#/definitions/nonEmptyStringWithEscapedSingleQuotes"
+                    },
+                    "sectionElements": {
+                        "title": "Section elements",
+                        "description": "An array containing all section element objects, ordered as they should be presented to the user.",
+                        "$ref": "#/definitions/nonEmptyArrayWithUniqueItems",
+                        "items": {
+                            "title": "Element",
+                            "description": "A section element object.",
+                            "type": "object",
+                            "additionalProperties": false,
+                            "required": [
+                                "elementId",
+                                "elementType",
+                                "elementTitle",
+                                "elementContent"
+                            ],
+                            "properties": {
+                                "elementId": {
+                                    "title": "Element ID",
+                                    "description": "The internal identifier of the element, used in code logic but not displayed to the user. Must be unique within the JSON document.",
+                                    "$ref": "#/definitions/nonEmptyStringWithEscapedSingleQuotes"
+                                },
+                                "elementType": {
+                                    "title": "Element type",
+                                    "description": "Enumerated list of all possible element types. The type of the element indicates what data is present in the element content.",
+                                    "enum": [
+                                        "html",
+                                        "question",
+                                        "flipCard"
+                                    ]
+                                },
+                                "elementTitle": {
+                                    "title": "Element title",
+                                    "description": "The title of the element.",
+                                    "$ref": "#/definitions/nonEmptyStringWithEscapedSingleQuotes"
+                                },
+                                "elementContent": {
+                                    "title": "Element content",
+                                    "description": "The content of the element which differs depending on the element type.",
+                                    "$comment": "Further restrictions for each elementType value specified in conditions below.",
+                                    "type": [
+                                        "string",
+                                        "array"
+                                    ]
+                                }
+                            },
+                            "allOf": [
+                                {
+                                    "$comment": "Conditional case for an HTML element.",
+                                    "if": {
+                                        "properties": {
+                                            "elementType": {
+                                                "const": "html"
+                                            }
+                                        },
+                                        "required": [
+                                            "elementType"
+                                        ]
+                                    },
+                                    "then": {
+                                        "properties": {
+                                            "elementContent": {
+                                                "$ref": "#/definitions/nonEmptyStringWithEscapedSingleQuotes",
+                                                "pattern": "^<html>.*<\/html>$"
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "$comment": "Conditional case for a question element.",
+                                    "if": {
+                                        "properties": {
+                                            "elementType": {
+                                                "const": "question"
+                                            }
+                                        },
+                                        "required": [
+                                            "elementType"
+                                        ]
+                                    },
+                                    "then": {
+                                        "properties": {
+                                            "elementContent": {
+                                                "$ref": "#/definitions/nonEmptyArrayWithUniqueItems",
+                                                "items": {
+                                                    "title": "Question",
+                                                    "description": "A question object.",
+                                                    "type": "object",
+                                                    "additionalProperties": false,
+                                                    "required": [
+                                                        "questionId",
+                                                        "questionType",
+                                                        "questionText",
+                                                        "questionAnswers"
+                                                    ],
+                                                    "properties": {
+                                                        "questionId": {
+                                                            "title": "Question ID",
+                                                            "description": "The internal identifier of the question, used in code logic but not displayed to the user. Must be unique within the JSON document.",
+                                                            "$ref": "#/definitions/nonEmptyStringWithEscapedSingleQuotes"
+                                                        },
+                                                        "questionType": {
+                                                            "title": "Question type",
+                                                            "description": "Enumerated list of all possible question types.",
+                                                            "enum": [
+                                                                "singleSelectionQuestion",
+                                                                "multipleSelectionQuestion"
+                                                            ]
+                                                        },
+                                                        "questionText": {
+                                                            "title": "Question text",
+                                                            "description": "The text for the question.",
+                                                            "$ref": "#/definitions/nonEmptyStringWithEscapedSingleQuotes"
+                                                        },
+                                                        "questionAnswers": {
+                                                            "title": "Question answers",
+                                                            "description": "An array containing all question answer objects, ordered as they should be presented to the user.",
+                                                            "$comment": "Further restrictions for each questionType value specified in conditions below.",
+                                                            "type": "array"
+                                                        }
+                                                    },
+                                                    "allOf": [
+                                                        {
+                                                            "$comment": "Conditional case for a single selection (radio button) question.",
+                                                            "if": {
+                                                                "properties": {
+                                                                    "questionType": {
+                                                                        "const": "singleSelectionQuestion"
+                                                                    }
+                                                                },
+                                                                "required": [
+                                                                    "questionType"
+                                                                ]
+                                                            },
+                                                            "then": {
+                                                                "properties": {
+                                                                    "questionAnswers": {
+                                                                        "$ref": "#/definitions/questionAnswersArray",
+                                                                        "minItems": 2
+                                                                    }
+                                                                }
+                                                            }
+                                                        },
+                                                        {
+                                                            "$comment": "Conditional case for a multiple selection (checkbox) question.",
+                                                            "if": {
+                                                                "properties": {
+                                                                    "questionType": {
+                                                                        "const": "multipleSelectionQuestion"
+                                                                    }
+                                                                },
+                                                                "required": [
+                                                                    "questionType"
+                                                                ]
+                                                            },
+                                                            "then": {
+                                                                "properties": {
+                                                                    "questionAnswers": {
+                                                                        "$ref": "#/definitions/questionAnswersArray",
+                                                                        "minItems": 3
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "$comment": "Conditional case for a flipcard element.",
+                                    "if": {
+                                        "properties": {
+                                            "elementType": {
+                                                "const": "flipCard"
+                                            }
+                                        },
+                                        "required": [
+                                            "elementType"
+                                        ]
+                                    },
+                                    "then": {
+                                        "properties": {
+                                            "elementContent": {
+                                                "$ref": "#/definitions/nonEmptyArrayWithUniqueItems",
+                                                "items": {
+                                                    "title": "FlipCard",
+                                                    "description": "A flipcard object.",
+                                                    "type": "object",
+                                                    "additionalProperties": false,
+                                                    "required": [
+                                                        "flipCardId",
+                                                        "flipCardFront",
+                                                        "flipCardBack"
+                                                    ],
+                                                    "properties": {
+                                                        "flipCardId": {
+                                                            "title": "FlipCard ID",
+                                                            "description": "The internal identifier of the flipcard, used in code logic but not displayed to the user. Must be unique within the JSON document.",
+                                                            "$ref": "#/definitions/nonEmptyStringWithEscapedSingleQuotes"
+                                                        },
+                                                        "flipCardFront": {
+                                                            "title": "FlipCard front",
+                                                            "description": "The text for the front of the flipcard.",
+                                                            "$ref": "#/definitions/nonEmptyStringWithEscapedSingleQuotes"
+                                                        },
+                                                        "flipCardBack": {
+                                                            "title": "FlipCard back",
+                                                            "description": "The text for the back of the flipcard.",
+                                                            "$ref": "#/definitions/nonEmptyStringWithEscapedSingleQuotes"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
