@@ -3,17 +3,20 @@ import 'dart:math';
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:isms/controllers/testing/test_data.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart';
-import 'package:isms/models/charts/line_charts/custom_line_chart_data.dart';
+import 'package:isms/models/charts/line_charts/custom_line_chart_data_point.dart';
 
-class CustomLineChartWidget extends StatefulWidget {
-  const CustomLineChartWidget({super.key});
+class CustomLineChartAllUsersWidget extends StatefulWidget {
+  final Map<String, dynamic> metricAndData;
+
+  CustomLineChartAllUsersWidget({super.key, required this.metricAndData});
 
   @override
-  State<CustomLineChartWidget> createState() => _CustomLineChartWidgetState();
+  State<CustomLineChartAllUsersWidget> createState() => _CustomLineChartAllUsersWidgetState();
 }
 
-class _CustomLineChartWidgetState extends State<CustomLineChartWidget> {
+class _CustomLineChartAllUsersWidgetState extends State<CustomLineChartAllUsersWidget> {
   String _selectedMetricType = 'All';
   Map<String, dynamic> metricTypeData = {};
 
@@ -30,53 +33,7 @@ class _CustomLineChartWidgetState extends State<CustomLineChartWidget> {
     Colors.orangeAccent,
   ];
 
-  List<CustomLineChartData> coursesCompletedOverTimeData = [
-    CustomLineChartData(x: 1, y: 3),
-    CustomLineChartData(x: 2, y: 5),
-    CustomLineChartData(x: 3, y: 6),
-    CustomLineChartData(x: 4, y: 2),
-    CustomLineChartData(x: 5, y: 24),
-    CustomLineChartData(x: 6, y: 12),
-    CustomLineChartData(x: 7, y: 43),
-    CustomLineChartData(x: 8, y: 34),
-    CustomLineChartData(x: 9, y: 20),
-    CustomLineChartData(x: 10, y: 3),
-    CustomLineChartData(x: 11, y: 7),
-    CustomLineChartData(x: 12, y: 4),
-    // Add more data points as necessary
-  ];
-  List<CustomLineChartData> coursesEnrolledOverTimeData = [
-    CustomLineChartData(x: 1, y: 4),
-    CustomLineChartData(x: 2, y: 6),
-    CustomLineChartData(x: 3, y: 7),
-    CustomLineChartData(x: 4, y: 6),
-    CustomLineChartData(x: 5, y: 34),
-    CustomLineChartData(x: 6, y: 30),
-    CustomLineChartData(x: 7, y: 45),
-    CustomLineChartData(x: 8, y: 29),
-    CustomLineChartData(x: 9, y: 40),
-    CustomLineChartData(x: 10, y: 10),
-    CustomLineChartData(x: 11, y: 10),
-    CustomLineChartData(x: 12, y: 5),
-    // Add more data points as necessary
-  ];
-  List<CustomLineChartData> activeUsersData = [
-    CustomLineChartData(x: 1, y: 5),
-    CustomLineChartData(x: 2, y: 12),
-    CustomLineChartData(x: 3, y: 7),
-    CustomLineChartData(x: 4, y: 3),
-    CustomLineChartData(x: 5, y: 36),
-    CustomLineChartData(x: 6, y: 20),
-    CustomLineChartData(x: 7, y: 50),
-    CustomLineChartData(x: 8, y: 44),
-    CustomLineChartData(x: 9, y: 26),
-    CustomLineChartData(x: 10, y: 5),
-    CustomLineChartData(x: 11, y: 8),
-    CustomLineChartData(x: 12, y: 4),
-    // Add more data points as necessary
-  ];
-
-  Map<int, String> _calculateLeftTitles(List<CustomLineChartData> data) {
+  Map<int, String> _calculateLeftTitles(List<CustomLineChartDataPoint> data) {
     // Determine min and max y values
     double minY = data.map((e) => e.y).reduce(min);
     double maxY = data.map((e) => e.y).reduce(max);
@@ -100,24 +57,8 @@ class _CustomLineChartWidgetState extends State<CustomLineChartWidget> {
   void initState() {
     super.initState();
     // Initialize the metricTypeData map
-    metricTypeData = {
-      'All': {
-        // 'data': coursesCompletedOverTimeData.map((data) => FlSpot(data.x, data.y)).toList(),
-        // 'colors': coursesCompletedGradientColors,
-      },
-      'Courses Completed over Time': {
-        'data': coursesCompletedOverTimeData.map((data) => FlSpot(data.x, data.y)).toList(),
-        'colors': coursesCompletedGradientColors,
-      },
-      'Active Users': {
-        'data': activeUsersData.map((data) => FlSpot(data.x, data.y)).toList(),
-        'colors': userActivityGradientColors,
-      },
-      'Courses Enrolled over Time': {
-        'data': coursesEnrolledOverTimeData.map((data) => FlSpot(data.x, data.y)).toList(),
-        'colors': coursesEnrolledGradientColors,
-      },
-    };
+
+    metricTypeData = widget.metricAndData;
   }
 
   @override

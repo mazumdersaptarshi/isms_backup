@@ -134,6 +134,27 @@ class _CourseState extends State<CoursePage> {
       widgets.add(_getSectionBeginningButton());
     }
 
+    List<Widget> sectionContentWidgets = _getCurrentSectionContentWidgets();
+
+    int itemCount = sectionContentWidgets.length + 1; // +1 for the end button
+
+    // widgets.add(
+    //   ListView.builder(
+    //     scrollDirection: Axis.vertical,
+    //     shrinkWrap: true,
+    //     itemCount: itemCount,
+    //     itemBuilder: (BuildContext context, int index) {
+    //       // Check if it's the last item
+    //       if (index == sectionContentWidgets.length) {
+    //         // Return the end button for the last item
+    //         return _getSectionEndButton();
+    //       } else {
+    //         // Return the item from the list
+    //         return sectionContentWidgets[index];
+    //       }
+    //     },
+    //   ),
+    // );
     widgets.add(Expanded(
       child: ListView(
         children: [..._getCurrentSectionContentWidgets()],
@@ -172,7 +193,7 @@ class _CourseState extends State<CoursePage> {
       if (element.elementType == ElementTypeValues.html.name) {
         contentWidgets.add(Padding(
           padding: contentPadding,
-          child: Flexible(child: Html(data: element.elementContent)),
+          child: Html(data: element.elementContent),
         ));
 
         // Questions

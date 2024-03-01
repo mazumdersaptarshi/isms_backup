@@ -1,3 +1,4 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/controllers/admin_management/admin_state.dart';
 import 'package:isms/controllers/admin_management/users_analytics.dart';
@@ -101,10 +102,40 @@ class _AllUsersState extends State<AllUsers> {
     return usersList;
   }
 
+  List<Color> coursesCompletedGradientColors = [
+    primary!,
+    Colors.deepPurpleAccent,
+  ];
+  List<Color> coursesEnrolledGradientColors = [
+    Colors.pink!,
+    Colors.orange,
+  ];
+  List<Color> userActivityGradientColors = [
+    Colors.green,
+    Colors.orangeAccent,
+  ];
+
   @override
   Widget build(BuildContext context) {
     final loggedInState = context.watch<LoggedInState>();
-
+    Map<String, dynamic> metricTypeDataForLineChartWidget = {
+      'All': {
+        // 'data': coursesCompletedOverTimeData.map((data) => FlSpot(data.x, data.y)).toList(),
+        // 'colors': coursesCompletedGradientColors,
+      },
+      'Courses Completed over Time': {
+        'data': coursesCompletedOverTimeData.map((data) => FlSpot(data.x, data.y)).toList(),
+        'colors': coursesCompletedGradientColors,
+      },
+      'Active Users': {
+        'data': activeUsersData.map((data) => FlSpot(data.x, data.y)).toList(),
+        'colors': userActivityGradientColors,
+      },
+      'Courses Enrolled over Time': {
+        'data': coursesEnrolledOverTimeData.map((data) => FlSpot(data.x, data.y)).toList(),
+        'colors': coursesEnrolledGradientColors,
+      },
+    };
     return Scaffold(
       bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
       appBar: PlatformCheck.topNavBarWidget(context, loggedInState),
@@ -149,7 +180,9 @@ class _AllUsersState extends State<AllUsers> {
                               SizedBox(
                                 height: 40,
                               ),
-                              CustomLineChartWidget(),
+                              CustomLineChartAllUsersWidget(
+                                metricAndData: metricTypeDataForLineChartWidget,
+                              ),
                             ],
                           ),
                         ),

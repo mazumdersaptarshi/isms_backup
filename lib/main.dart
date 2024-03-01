@@ -6,16 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:logging/logging.dart';
-import 'package:provider/provider.dart';
-
-import 'package:isms/firebase_options.dart';
-import 'package:isms/controllers/storage/hive_service/hive_service.dart';
 import 'package:isms/controllers/reminders_management/reminders_provider.dart';
+import 'package:isms/controllers/storage/hive_service/hive_service.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart';
 import 'package:isms/controllers/user_management/logged_in_state.dart';
 import 'package:isms/controllers/user_management/user_progress_tracker.dart';
+import 'package:isms/firebase_options.dart';
 import 'package:isms/utilities/navigation.dart';
+import 'package:logging/logging.dart';
+import 'package:postgres/postgres.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   // logging setup
@@ -47,6 +47,24 @@ void main() async {
       );
     },
   );
+
+  // final conn = await Connection.open(
+  //   Endpoint(
+  //     host: '10.0.2.2',
+  //     port: 5432,
+  //     database: 'postgres',
+  //     username: 'postgres',
+  //     password: '',
+  //   ),
+  //   // The postgres server hosted locally doesn't have SSL by default. If you're
+  //   // accessing a postgres server over the Internet, the server should support
+  //   // SSL and you should swap out the mode with `SslMode.verifyFull`.
+  //   settings: ConnectionSettings(sslMode: SslMode.disable),
+  // );
+  //
+  // final result0 = await conn
+  //     .execute('SELECT * FROM public.courses ORDER BY course_id ASC ;');
+  // print(result0[0]); // first row, first column
 
   runApp(const IsmsApp());
 }

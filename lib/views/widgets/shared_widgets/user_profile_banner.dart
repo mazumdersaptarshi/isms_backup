@@ -10,6 +10,7 @@ class UserProfileBanner extends StatelessWidget {
   AdminState adminState;
   Map userAllData = {};
   String uid = '';
+  String? note;
 
   UserProfileBanner({
     required this.userName,
@@ -17,6 +18,7 @@ class UserProfileBanner extends StatelessWidget {
     required this.userRole,
     required this.adminState,
     required String uid,
+    this.note,
   });
 
   String get profileImageUrl => '';
@@ -73,6 +75,7 @@ class UserProfileBanner extends StatelessWidget {
                           fontSize: 14,
                         ),
                       ),
+                      if (note != null) Text('${note}'),
                     ],
                   ),
                 ),

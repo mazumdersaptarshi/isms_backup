@@ -22,6 +22,7 @@ import 'package:isms/views/widgets/shared_widgets/chart_metric_select_widget_dro
 import 'package:isms/views/widgets/shared_widgets/charts/custom_bar_chart_user_widget.dart';
 import 'package:isms/views/widgets/shared_widgets/charts/custom_line_chart_user_widget.dart';
 import 'package:isms/views/widgets/shared_widgets/charts/custom_pie_chart_widget.dart';
+import 'package:isms/views/widgets/shared_widgets/custom_app_bar.dart';
 import 'package:isms/views/widgets/shared_widgets/custom_drawer.dart';
 import 'package:isms/views/widgets/shared_widgets/custom_expansion_tile.dart';
 import 'package:isms/views/widgets/shared_widgets/custom_linear_progress_indicator.dart';
@@ -556,7 +557,9 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
 
     return Scaffold(
       bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
-      appBar: PlatformCheck.topNavBarWidget(context, loggedInState),
+      appBar: IsmsAppBar(
+        context: context,
+      ),
       drawer: IsmsDrawer(context: context),
       body: FooterView(
         footer: kIsWeb

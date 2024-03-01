@@ -55,13 +55,13 @@ class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
     //         context,
     //         MaterialPageRoute(
     //             builder: (context) => const UsersAnalyticsStatsScreen()))));
-    actionWidgets.add(_getActionIconButton(context, Icons.people_outline_rounded, "All Users",
-        () => Navigator.push(context, MaterialPageRoute(builder: (context) => const AllUsers()))));
-
-    if (loggedInState.currentUserRole == 'admin') {
-      actionWidgets.add(_getActionIconButton(context, Icons.admin_panel_settings_rounded,
-          AppLocalizations.of(context)!.buttonAdminConsole, () => context.goNamed(NamedRoutes.adminConsole.name)));
-    }
+    // actionWidgets.add(_getActionIconButton(context, Icons.people_outline_rounded, "All Users",
+    //     () => Navigator.push(context, MaterialPageRoute(builder: (context) => const AllUsers()))));
+    //
+    // if (loggedInState.currentUserRole == 'admin') {
+    //   actionWidgets.add(_getActionIconButton(context, Icons.admin_panel_settings_rounded,
+    //       AppLocalizations.of(context)!.buttonAdminConsole, () => context.goNamed(NamedRoutes.adminConsole.name)));
+    // }
     actionWidgets.add(_getVerticalDivider());
     actionWidgets.add(_getLogoutButton(context));
 

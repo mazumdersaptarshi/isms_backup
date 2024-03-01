@@ -42,8 +42,7 @@ class _CustomBarChartState extends State<CustomBarChart> {
 
   void _buildBarData() {
     for (int index = 0; index < widget.barChartValuesData.length; index++) {
-      barData
-          .add(IndividualBar(x: index, y: widget.barChartValuesData[index].y));
+      barData.add(IndividualBar(x: index, y: widget.barChartValuesData[index].y));
     }
   }
 
@@ -68,8 +67,7 @@ class _CustomBarChartState extends State<CustomBarChart> {
     return filteredData.sublist(startIndex, endIndex);
   }
 
-  BarChartGroupData _buildBarChartGroupData(
-      IndividualBar data, int index, bool isTouched) {
+  BarChartGroupData _buildBarChartGroupData(IndividualBar data, int index, bool isTouched) {
     return BarChartGroupData(
       x: data.x,
       barRods: [
@@ -91,8 +89,7 @@ class _CustomBarChartState extends State<CustomBarChart> {
             // gradient: getBarsGradientColor(),
             width: 20,
             borderRadius: BorderRadius.circular(5),
-            backDrawRodData: BackgroundBarChartRodData(
-                show: true, toY: 100, color: Colors.grey.shade300)),
+            backDrawRodData: BackgroundBarChartRodData(show: true, toY: 100, color: Colors.grey.shade300)),
       ],
     );
   }
@@ -102,10 +99,8 @@ class _CustomBarChartState extends State<CustomBarChart> {
     final _paginatedFilteredData = _getPaginatedFilteredData();
     final chartWidth = max(_paginatedFilteredData.length * 50.0, 1);
 
-    List<BarChartGroupData> _buildBarChartGroups() =>
-        List.generate(_paginatedFilteredData.length, (i) {
-          return _buildBarChartGroupData(
-              _paginatedFilteredData[i], i, _touchedIndex == i);
+    List<BarChartGroupData> _buildBarChartGroups() => List.generate(_paginatedFilteredData.length, (i) {
+          return _buildBarChartGroupData(_paginatedFilteredData[i], i, _touchedIndex == i);
         });
 
     return Column(
@@ -128,97 +123,90 @@ class _CustomBarChartState extends State<CustomBarChart> {
           //     borderRadius: BorderRadius.circular(20),
           //     border: Border.all(color: Colors.grey.shade200)),
           height: 400,
-          child: Expanded(
+          child: Container(
+            padding: EdgeInsets.all(20),
             child: Container(
-              padding: EdgeInsets.all(20),
-              child: Container(
-                // width: widget.barData.length * 50.0,
-                // width: _limitedBarData.length * 50.0,
-                width: max(_paginatedFilteredData.length * 50.0, 1),
+              // width: widget.barData.length * 50.0,
+              // width: _limitedBarData.length * 50.0,
+              width: max(_paginatedFilteredData.length * 50.0, 1),
 
-                child: BarChart(BarChartData(
-                  maxY: 100,
-                  minY: 0,
-                  gridData: FlGridData(
-                    show: true,
-                    drawVerticalLine: false,
-                  ),
-                  borderData: FlBorderData(
-                    show: false,
-                  ),
-                  barTouchData: BarTouchData(
-                    touchTooltipData: BarTouchTooltipData(
-                      tooltipBgColor: primary,
-                      tooltipPadding: EdgeInsets.fromLTRB(4, 2, 4, 0),
-                      fitInsideVertically: true,
-                      tooltipHorizontalAlignment: FLHorizontalAlignment.center,
-                      getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                        return BarTooltipItem(
-                          rod.toY.toString(),
-                          TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        );
-                      },
-                    ),
-                    touchCallback: (FlTouchEvent event, barTouchResponse) {
-                      setState(() {
-                        if (!event.isInterestedForInteractions ||
-                            barTouchResponse == null ||
-                            barTouchResponse.spot == null) {
-                          _touchedIndex = -1;
-                          return;
-                        }
-                        _touchedIndex =
-                            barTouchResponse.spot!.touchedBarGroupIndex;
-                      });
+              child: BarChart(BarChartData(
+                maxY: 100,
+                minY: 0,
+                gridData: FlGridData(
+                  show: true,
+                  drawVerticalLine: false,
+                ),
+                borderData: FlBorderData(
+                  show: false,
+                ),
+                barTouchData: BarTouchData(
+                  touchTooltipData: BarTouchTooltipData(
+                    tooltipBgColor: primary,
+                    tooltipPadding: EdgeInsets.fromLTRB(4, 2, 4, 0),
+                    fitInsideVertically: true,
+                    tooltipHorizontalAlignment: FLHorizontalAlignment.center,
+                    getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                      return BarTooltipItem(
+                        rod.toY.toString(),
+                        TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      );
                     },
                   ),
-                  titlesData: FlTitlesData(
-                      show: true,
-                      topTitles:
-                          AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                      rightTitles:
-                          AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                      leftTitles: AxisTitles(
-                          sideTitles: SideTitles(
-                        showTitles: true,
-                        interval: 20,
-                        getTitlesWidget: (value, meta) {
-                          return Expanded(
-                            child: Text(
-                              value.toString(),
-                              style: TextStyle(fontSize: 12),
-                            ),
-                          );
-                        },
-                      )),
-                      bottomTitles: AxisTitles(
-                          sideTitles: SideTitles(
-                              showTitles: true,
-                              getTitlesWidget: (value, meta) {
-                                return Transform.rotate(
-                                  angle: -45 * (pi / 180),
-                                  alignment: Alignment.bottomCenter,
-                                  child: Padding(
-                                    padding: EdgeInsets.only(top: 6),
-                                    child: Text(
-                                      '${widget.barChartValuesData[value.toInt()].x} ',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.grey.shade600,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                  touchCallback: (FlTouchEvent event, barTouchResponse) {
+                    setState(() {
+                      if (!event.isInterestedForInteractions ||
+                          barTouchResponse == null ||
+                          barTouchResponse.spot == null) {
+                        _touchedIndex = -1;
+                        return;
+                      }
+                      _touchedIndex = barTouchResponse.spot!.touchedBarGroupIndex;
+                    });
+                  },
+                ),
+                titlesData: FlTitlesData(
+                    show: true,
+                    topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                    rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                    leftTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                      showTitles: true,
+                      interval: 20,
+                      getTitlesWidget: (value, meta) {
+                        return Text(
+                          value.toString(),
+                          style: TextStyle(fontSize: 12),
+                        );
+                      },
+                    )),
+                    bottomTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                            showTitles: true,
+                            getTitlesWidget: (value, meta) {
+                              return Transform.rotate(
+                                angle: -45 * (pi / 180),
+                                alignment: Alignment.bottomCenter,
+                                child: Padding(
+                                  padding: EdgeInsets.only(top: 6),
+                                  child: Text(
+                                    '${widget.barChartValuesData[value.toInt()].x} ',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.grey.shade600,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                );
-                              }))),
-                  // barGroups: _limitedBarData.map((data) => buildBarChartGroupData(data, 0)).toList(),
-                  barGroups: _buildBarChartGroups(),
-                )),
-              ),
+                                ),
+                              );
+                            }))),
+                // barGroups: _limitedBarData.map((data) => buildBarChartGroupData(data, 0)).toList(),
+                barGroups: _buildBarChartGroups(),
+              )),
             ),
           ),
         ),
@@ -228,8 +216,7 @@ class _CustomBarChartState extends State<CustomBarChart> {
   }
 
   Widget CustomScoreFilterDropdownButton(BuildContext context) {
-    List<String> displayItems =
-        <int>[30, 50, 70, 100].map((entry) => "${entry}").toList();
+    List<String> displayItems = <int>[30, 50, 70, 100].map((entry) => "${entry}").toList();
 
     return Container(
       // margin: EdgeInsets.all(10),
@@ -269,8 +256,7 @@ class _CustomBarChartState extends State<CustomBarChart> {
         // mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ElevatedButton(
-            onPressed:
-                _currentPage > 0 ? () => setState(() => _currentPage--) : null,
+            onPressed: _currentPage > 0 ? () => setState(() => _currentPage--) : null,
             child: Icon(
               Icons.arrow_back_ios_rounded,
               size: 18,
@@ -285,9 +271,7 @@ class _CustomBarChartState extends State<CustomBarChart> {
             ),
           ),
           ElevatedButton(
-            onPressed: _currentPage < _totalPages - 1
-                ? () => setState(() => _currentPage++)
-                : null,
+            onPressed: _currentPage < _totalPages - 1 ? () => setState(() => _currentPage++) : null,
             child: Icon(
               Icons.arrow_forward_ios_rounded,
               size: 18,

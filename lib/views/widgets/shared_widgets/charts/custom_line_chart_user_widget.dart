@@ -5,7 +5,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/controllers/testing/test_data.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart';
-import 'package:isms/models/charts/line_charts/custom_line_chart_data.dart';
+import 'package:isms/models/charts/line_charts/custom_line_chart_data_point.dart';
 
 class CustomLineChartUserWidget extends StatefulWidget {
   const CustomLineChartUserWidget({super.key});
@@ -41,7 +41,7 @@ class _CustomLineChartUserWidgetState extends State<CustomLineChartUserWidget> {
   double _maxY = 0;
   double _minY = 0;
 
-  Map<int, String> _calculateLeftTitles(List<CustomLineChartData> data) {
+  Map<int, String> _calculateLeftTitles(List<CustomLineChartDataPoint> data) {
     print('Entered Here');
     // Determine min and max y values
     _minY = data.map((e) => e.y).reduce(min);

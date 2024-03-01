@@ -123,102 +123,96 @@ class _CustomBarChartUserWidgetState extends State<CustomBarChartUserWidget> {
           //     borderRadius: BorderRadius.circular(20),
           //     border: Border.all(color: Colors.grey.shade200)),
           height: 400,
-          child: Expanded(
+          child: Container(
+            padding: EdgeInsets.all(20),
             child: Container(
-              padding: EdgeInsets.all(20),
-              child: Container(
-                // width: widget.barData.length * 50.0,
-                // width: _limitedBarData.length * 50.0,
-                width: max(_paginatedFilteredData.length * 130.0, 1),
+              // width: widget.barData.length * 50.0,
+              // width: _limitedBarData.length * 50.0,
+              width: max(_paginatedFilteredData.length * 130.0, 1),
 
-                child: BarChart(BarChartData(
-                  maxY: 100,
-                  minY: 0,
-                  gridData: FlGridData(
-                    show: true,
-                    drawVerticalLine: false,
-                  ),
-                  borderData: FlBorderData(
-                    show: false,
-                  ),
-                  barTouchData: BarTouchData(
-                    touchTooltipData: BarTouchTooltipData(
-                      tooltipBgColor: primary,
-                      tooltipPadding: EdgeInsets.fromLTRB(4, 2, 4, 0),
-                      fitInsideVertically: true,
-                      tooltipHorizontalAlignment: FLHorizontalAlignment.center,
-                      getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                        return BarTooltipItem(
-                          rod.toY.toString(),
-                          TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        );
-                      },
-                    ),
-                    touchCallback: (FlTouchEvent event, barTouchResponse) {
-                      setState(() {
-                        if (!event.isInterestedForInteractions ||
-                            barTouchResponse == null ||
-                            barTouchResponse.spot == null) {
-                          _touchedIndex = -1;
-                          return;
-                        }
-                        _touchedIndex = barTouchResponse.spot!.touchedBarGroupIndex;
-                      });
+              child: BarChart(BarChartData(
+                maxY: 100,
+                minY: 0,
+                gridData: FlGridData(
+                  show: true,
+                  drawVerticalLine: false,
+                ),
+                borderData: FlBorderData(
+                  show: false,
+                ),
+                barTouchData: BarTouchData(
+                  touchTooltipData: BarTouchTooltipData(
+                    tooltipBgColor: primary,
+                    tooltipPadding: EdgeInsets.fromLTRB(4, 2, 4, 0),
+                    fitInsideVertically: true,
+                    tooltipHorizontalAlignment: FLHorizontalAlignment.center,
+                    getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                      return BarTooltipItem(
+                        rod.toY.toString(),
+                        TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      );
                     },
                   ),
-                  titlesData: FlTitlesData(
-                      show: true,
-                      topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                      rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                      leftTitles: AxisTitles(
-                          sideTitles: SideTitles(
-                        showTitles: true,
-                        interval: 20,
-                        getTitlesWidget: (value, meta) {
-                          return Expanded(
-                            child: Text(
-                              value.toString(),
-                              style: TextStyle(fontSize: 12),
-                            ),
-                          );
-                        },
-                      )),
-                      bottomTitles: AxisTitles(
-                          drawBelowEverything: false,
-                          sideTitles: SideTitles(
-                              showTitles: true,
-                              getTitlesWidget: (value, meta) {
-                                return Container(
-                                  width: 200,
-                                  height: 80,
-                                  padding: EdgeInsets.only(top: 6),
-                                  child: Transform.rotate(
-                                    angle: -30 * (pi / 180),
-                                    alignment: Alignment.bottomCenter,
-                                    child: Flexible(
-                                      child: Text(
-                                        '${widget.barChartValuesData[value.toInt()].x} ',
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.center,
-                                        softWrap: true,
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: Colors.grey.shade600,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
+                  touchCallback: (FlTouchEvent event, barTouchResponse) {
+                    setState(() {
+                      if (!event.isInterestedForInteractions ||
+                          barTouchResponse == null ||
+                          barTouchResponse.spot == null) {
+                        _touchedIndex = -1;
+                        return;
+                      }
+                      _touchedIndex = barTouchResponse.spot!.touchedBarGroupIndex;
+                    });
+                  },
+                ),
+                titlesData: FlTitlesData(
+                    show: true,
+                    topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                    rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                    leftTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                      showTitles: true,
+                      interval: 20,
+                      getTitlesWidget: (value, meta) {
+                        return Text(
+                          value.toString(),
+                          style: TextStyle(fontSize: 12),
+                        );
+                      },
+                    )),
+                    bottomTitles: AxisTitles(
+                        drawBelowEverything: false,
+                        sideTitles: SideTitles(
+                            showTitles: true,
+                            getTitlesWidget: (value, meta) {
+                              return Container(
+                                width: 200,
+                                height: 80,
+                                padding: EdgeInsets.only(top: 6),
+                                child: Transform.rotate(
+                                  angle: -30 * (pi / 180),
+                                  alignment: Alignment.bottomCenter,
+                                  child: Text(
+                                    '${widget.barChartValuesData[value.toInt()].x} ',
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.center,
+                                    softWrap: true,
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.grey.shade600,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                );
-                              }))),
-                  // barGroups: _limitedBarData.map((data) => buildBarChartGroupData(data, 0)).toList(),
-                  barGroups: _buildBarChartGroups(),
-                )),
-              ),
+                                ),
+                              );
+                            }))),
+                // barGroups: _limitedBarData.map((data) => buildBarChartGroupData(data, 0)).toList(),
+                barGroups: _buildBarChartGroups(),
+              )),
             ),
           ),
         ),

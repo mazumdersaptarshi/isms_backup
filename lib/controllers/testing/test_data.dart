@@ -2,7 +2,7 @@ import 'package:isms/models/admin_models/user_summary.dart';
 import 'package:isms/models/admin_models/users_list_data.dart';
 import 'package:isms/models/charts/bar_charts/custom_bar_chart_data.dart';
 import 'package:isms/models/charts/box_and_whisker_charts/custom_box_and_whisker_chart_data.dart';
-import 'package:isms/models/charts/line_charts/custom_line_chart_data.dart';
+import 'package:isms/models/charts/line_charts/custom_line_chart_data_point.dart';
 import 'package:isms/models/user_progress/user_course_progress.dart';
 import 'package:isms/models/user_progress/user_exam_attempt.dart';
 import 'package:isms/models/user_progress/user_exam_progress.dart';
@@ -452,6 +452,52 @@ List<CustomBoxAndWhiskerChartData> usersData502 = [
   // Add more entries as needed
 ];
 
+List<CustomLineChartDataPoint> coursesCompletedOverTimeData = [
+  CustomLineChartDataPoint(x: 1, y: 3),
+  CustomLineChartDataPoint(x: 2, y: 5),
+  CustomLineChartDataPoint(x: 3, y: 6),
+  CustomLineChartDataPoint(x: 4, y: 2),
+  CustomLineChartDataPoint(x: 5, y: 24),
+  CustomLineChartDataPoint(x: 6, y: 12),
+  CustomLineChartDataPoint(x: 7, y: 43),
+  CustomLineChartDataPoint(x: 8, y: 34),
+  CustomLineChartDataPoint(x: 9, y: 20),
+  CustomLineChartDataPoint(x: 10, y: 3),
+  CustomLineChartDataPoint(x: 11, y: 7),
+  CustomLineChartDataPoint(x: 12, y: 4),
+  // Add more data points as necessary
+];
+List<CustomLineChartDataPoint> coursesEnrolledOverTimeData = [
+  CustomLineChartDataPoint(x: 1, y: 4),
+  CustomLineChartDataPoint(x: 2, y: 6),
+  CustomLineChartDataPoint(x: 3, y: 7),
+  CustomLineChartDataPoint(x: 4, y: 6),
+  CustomLineChartDataPoint(x: 5, y: 34),
+  CustomLineChartDataPoint(x: 6, y: 30),
+  CustomLineChartDataPoint(x: 7, y: 45),
+  CustomLineChartDataPoint(x: 8, y: 29),
+  CustomLineChartDataPoint(x: 9, y: 40),
+  CustomLineChartDataPoint(x: 10, y: 10),
+  CustomLineChartDataPoint(x: 11, y: 10),
+  CustomLineChartDataPoint(x: 12, y: 5),
+  // Add more data points as necessary
+];
+List<CustomLineChartDataPoint> activeUsersData = [
+  CustomLineChartDataPoint(x: 1, y: 5),
+  CustomLineChartDataPoint(x: 2, y: 12),
+  CustomLineChartDataPoint(x: 3, y: 7),
+  CustomLineChartDataPoint(x: 4, y: 3),
+  CustomLineChartDataPoint(x: 5, y: 36),
+  CustomLineChartDataPoint(x: 6, y: 20),
+  CustomLineChartDataPoint(x: 7, y: 50),
+  CustomLineChartDataPoint(x: 8, y: 44),
+  CustomLineChartDataPoint(x: 9, y: 26),
+  CustomLineChartDataPoint(x: 10, y: 5),
+  CustomLineChartDataPoint(x: 11, y: 8),
+  CustomLineChartDataPoint(x: 12, y: 4),
+  // Add more data points as necessary
+];
+
 List<UsersListData> usersListData = [
   UsersListData(
     username: 'Saptarshi Mazumder',
@@ -588,80 +634,80 @@ List<CustomBarChartData> userDataAllCoursesMinimum = [
   CustomBarChartData(x: 'Data Analysis - Power BI', y: 66),
 ];
 
-List<CustomLineChartData> sampleUserExamsCompletedOverTimeData = [
-  CustomLineChartData(x: 1, y: 1),
-  CustomLineChartData(x: 2, y: 2),
-  CustomLineChartData(x: 3, y: 0),
-  CustomLineChartData(x: 4, y: 0),
-  CustomLineChartData(x: 5, y: 4),
-  CustomLineChartData(x: 6, y: 6),
-  CustomLineChartData(x: 7, y: 3),
-  CustomLineChartData(x: 8, y: 0),
-  CustomLineChartData(x: 9, y: 1),
-  CustomLineChartData(x: 10, y: 2),
-  CustomLineChartData(x: 11, y: 0),
-  CustomLineChartData(x: 12, y: 1),
+List<CustomLineChartDataPoint> sampleUserExamsCompletedOverTimeData = [
+  CustomLineChartDataPoint(x: 1, y: 1),
+  CustomLineChartDataPoint(x: 2, y: 2),
+  CustomLineChartDataPoint(x: 3, y: 0),
+  CustomLineChartDataPoint(x: 4, y: 0),
+  CustomLineChartDataPoint(x: 5, y: 4),
+  CustomLineChartDataPoint(x: 6, y: 6),
+  CustomLineChartDataPoint(x: 7, y: 3),
+  CustomLineChartDataPoint(x: 8, y: 0),
+  CustomLineChartDataPoint(x: 9, y: 1),
+  CustomLineChartDataPoint(x: 10, y: 2),
+  CustomLineChartDataPoint(x: 11, y: 0),
+  CustomLineChartDataPoint(x: 12, y: 1),
   // Add more data points as necessary
 ];
-List<CustomLineChartData> sampleUserCoursesEnrolledOverTimeData = [
-  CustomLineChartData(x: 1, y: 2),
-  CustomLineChartData(x: 2, y: 0),
-  CustomLineChartData(x: 3, y: 0),
-  CustomLineChartData(x: 4, y: 3),
-  CustomLineChartData(x: 5, y: 5),
-  CustomLineChartData(x: 6, y: 3),
-  CustomLineChartData(x: 7, y: 0),
-  CustomLineChartData(x: 8, y: 0),
-  CustomLineChartData(x: 9, y: 1),
-  CustomLineChartData(x: 10, y: 2),
-  CustomLineChartData(x: 11, y: 3),
-  CustomLineChartData(x: 12, y: 2),
+List<CustomLineChartDataPoint> sampleUserCoursesEnrolledOverTimeData = [
+  CustomLineChartDataPoint(x: 1, y: 2),
+  CustomLineChartDataPoint(x: 2, y: 0),
+  CustomLineChartDataPoint(x: 3, y: 0),
+  CustomLineChartDataPoint(x: 4, y: 3),
+  CustomLineChartDataPoint(x: 5, y: 5),
+  CustomLineChartDataPoint(x: 6, y: 3),
+  CustomLineChartDataPoint(x: 7, y: 0),
+  CustomLineChartDataPoint(x: 8, y: 0),
+  CustomLineChartDataPoint(x: 9, y: 1),
+  CustomLineChartDataPoint(x: 10, y: 2),
+  CustomLineChartDataPoint(x: 11, y: 3),
+  CustomLineChartDataPoint(x: 12, y: 2),
   // Add more data points as necessary
 ];
-List<CustomLineChartData> sampleUserActivity = [
-  CustomLineChartData(x: 1, y: 5),
-  CustomLineChartData(x: 2, y: 12),
-  CustomLineChartData(x: 3, y: 7),
-  CustomLineChartData(x: 4, y: 3),
-  CustomLineChartData(x: 5, y: 36),
-  CustomLineChartData(x: 6, y: 20),
-  CustomLineChartData(x: 7, y: 50),
-  CustomLineChartData(x: 8, y: 44),
-  CustomLineChartData(x: 9, y: 26),
-  CustomLineChartData(x: 10, y: 5),
-  CustomLineChartData(x: 11, y: 8),
-  CustomLineChartData(x: 12, y: 4),
+List<CustomLineChartDataPoint> sampleUserActivity = [
+  CustomLineChartDataPoint(x: 1, y: 5),
+  CustomLineChartDataPoint(x: 2, y: 12),
+  CustomLineChartDataPoint(x: 3, y: 7),
+  CustomLineChartDataPoint(x: 4, y: 3),
+  CustomLineChartDataPoint(x: 5, y: 36),
+  CustomLineChartDataPoint(x: 6, y: 20),
+  CustomLineChartDataPoint(x: 7, y: 50),
+  CustomLineChartDataPoint(x: 8, y: 44),
+  CustomLineChartDataPoint(x: 9, y: 26),
+  CustomLineChartDataPoint(x: 10, y: 5),
+  CustomLineChartDataPoint(x: 11, y: 8),
+  CustomLineChartDataPoint(x: 12, y: 4),
   // Add more data points as necessary
 ];
-List<CustomLineChartData> sampleUserTimeSpentStudying = [
-  CustomLineChartData(x: 1, y: 5),
-  CustomLineChartData(x: 2, y: 11),
-  CustomLineChartData(x: 3, y: 5),
-  CustomLineChartData(x: 4, y: 2),
-  CustomLineChartData(x: 5, y: 30),
-  CustomLineChartData(x: 6, y: 10),
-  CustomLineChartData(x: 7, y: 20),
-  CustomLineChartData(x: 8, y: 30),
-  CustomLineChartData(x: 9, y: 16),
-  CustomLineChartData(x: 10, y: 3),
-  CustomLineChartData(x: 11, y: 7),
-  CustomLineChartData(x: 12, y: 3),
+List<CustomLineChartDataPoint> sampleUserTimeSpentStudying = [
+  CustomLineChartDataPoint(x: 1, y: 5),
+  CustomLineChartDataPoint(x: 2, y: 11),
+  CustomLineChartDataPoint(x: 3, y: 5),
+  CustomLineChartDataPoint(x: 4, y: 2),
+  CustomLineChartDataPoint(x: 5, y: 30),
+  CustomLineChartDataPoint(x: 6, y: 10),
+  CustomLineChartDataPoint(x: 7, y: 20),
+  CustomLineChartDataPoint(x: 8, y: 30),
+  CustomLineChartDataPoint(x: 9, y: 16),
+  CustomLineChartDataPoint(x: 10, y: 3),
+  CustomLineChartDataPoint(x: 11, y: 7),
+  CustomLineChartDataPoint(x: 12, y: 3),
   // Add more data points as necessary
 ];
 
-List<CustomLineChartData> sampleUserTimeSpentOnExams = [
-  CustomLineChartData(x: 1, y: 3),
-  CustomLineChartData(x: 2, y: 7),
-  CustomLineChartData(x: 3, y: 2),
-  CustomLineChartData(x: 4, y: 0),
-  CustomLineChartData(x: 5, y: 11),
-  CustomLineChartData(x: 6, y: 5),
-  CustomLineChartData(x: 7, y: 16),
-  CustomLineChartData(x: 8, y: 10),
-  CustomLineChartData(x: 9, y: 6),
-  CustomLineChartData(x: 10, y: 1),
-  CustomLineChartData(x: 11, y: 3),
-  CustomLineChartData(x: 12, y: 0),
+List<CustomLineChartDataPoint> sampleUserTimeSpentOnExams = [
+  CustomLineChartDataPoint(x: 1, y: 3),
+  CustomLineChartDataPoint(x: 2, y: 7),
+  CustomLineChartDataPoint(x: 3, y: 2),
+  CustomLineChartDataPoint(x: 4, y: 0),
+  CustomLineChartDataPoint(x: 5, y: 11),
+  CustomLineChartDataPoint(x: 6, y: 5),
+  CustomLineChartDataPoint(x: 7, y: 16),
+  CustomLineChartDataPoint(x: 8, y: 10),
+  CustomLineChartDataPoint(x: 9, y: 6),
+  CustomLineChartDataPoint(x: 10, y: 1),
+  CustomLineChartDataPoint(x: 11, y: 3),
+  CustomLineChartDataPoint(x: 12, y: 0),
   // Add more data points as necessary
 ];
 
@@ -687,6 +733,7 @@ List<UserCourseProgress> userCourseDetailsList = [
     examsInCourse: ['exm1', 'exm2', 'exm3'],
     examsProgressList: [
       UserExamProgress(
+        userId: 'gzza',
         courseId: 'ip78hd',
         examId: 'exm1',
         examTitle: 'Intro to Python Assessment',
@@ -731,6 +778,7 @@ List<UserCourseProgress> userCourseDetailsList = [
         examStatus: ExamStatus.completed,
       ),
       UserExamProgress(
+        userId: 'gzza',
         courseId: 'ip78hd',
         examId: 'exm2',
         examTitle: 'Data Preprocessing',
@@ -763,6 +811,7 @@ List<UserCourseProgress> userCourseDetailsList = [
         examStatus: ExamStatus.completed,
       ),
       UserExamProgress(
+        userId: 'gzza',
         courseId: 'ip78hd',
         examId: 'exm3',
         examTitle: 'Machine Learning Models',
@@ -800,6 +849,7 @@ List<UserCourseProgress> userCourseDetailsList = [
     ],
     examsProgressList: [
       UserExamProgress(
+        userId: 'gzza',
         courseId: 'cs50x',
         examId: 'exm1',
         examTitle: 'Intro to CS Assessment',
@@ -835,6 +885,7 @@ List<UserCourseProgress> userCourseDetailsList = [
     examsInCourse: ['exm1', 'exm2'],
     examsProgressList: [
       UserExamProgress(
+        userId: 'gzza',
         courseId: 'js101',
         examId: 'exm1',
         examTitle: 'Basics of JavaScript',
@@ -867,6 +918,7 @@ List<UserCourseProgress> userCourseDetailsList = [
         examStatus: ExamStatus.completed,
       ),
       UserExamProgress(
+        userId: 'gzza',
         courseId: 'js101',
         examId: 'exm2',
         examTitle: 'JavaScript Functions and Arrays',
@@ -901,6 +953,7 @@ List<UserCourseProgress> userCourseDetailsList = [
     examsInCourse: ['exm1', 'exm2'],
     examsProgressList: [
       UserExamProgress(
+        userId: 'gzza',
         courseId: 'htmlcss',
         examId: 'exm1',
         examTitle: 'HTML Fundamentals',
@@ -921,6 +974,7 @@ List<UserCourseProgress> userCourseDetailsList = [
         examStatus: ExamStatus.completed,
       ),
       UserExamProgress(
+        userId: 'gzza',
         courseId: 'htmlcss',
         examId: 'exm2',
         examTitle: 'CSS Styling Techniques',
@@ -955,6 +1009,7 @@ List<UserCourseProgress> userCourseDetailsList = [
     examsInCourse: ['exm1', 'exm2', 'exm3'],
     examsProgressList: [
       UserExamProgress(
+        userId: 'gzza',
         courseId: 'dataSci101',
         examId: 'exm1',
         examTitle: 'Statistics and Probability',
@@ -975,6 +1030,7 @@ List<UserCourseProgress> userCourseDetailsList = [
         examStatus: ExamStatus.completed,
       ),
       UserExamProgress(
+        userId: 'gzza',
         courseId: 'dataSci101',
         examId: 'exm2',
         examTitle: 'Data Visualization',
@@ -982,6 +1038,7 @@ List<UserCourseProgress> userCourseDetailsList = [
         examStatus: ExamStatus.not_completed,
       ),
       UserExamProgress(
+        userId: 'gzza',
         courseId: 'dataSci101',
         examId: 'exm3',
         examTitle: 'Machine Learning Basics',
@@ -1003,6 +1060,7 @@ List<UserCourseProgress> userCourseDetailsList = [
     examsInCourse: ['exm1', 'exm2', 'exm3', 'exm4'],
     examsProgressList: [
       UserExamProgress(
+        userId: 'gzza',
         courseId: 'webDevAdv',
         examId: 'exm1',
         examTitle: 'Responsive Design',
@@ -1028,3 +1086,105 @@ List<UserCourseProgress> userCourseDetailsList = [
 ];
 
 // Continue adding other UserCourseProgress objects
+
+List<UserExamProgress> examsProgressList1 = [
+  UserExamProgress(
+    courseId: 'ip78hd',
+    examId: 'exm1',
+    examTitle: 'Intro to Python Assessment',
+    examAttempts: [
+      UserExamAttempt(
+        attemptId: 'attempt001',
+        userId: 'gzza',
+        courseId: 'ip78hd',
+        examId: 'exm1',
+        startTime: DateTime(2023, 1, 10, 9, 30),
+        endTime: DateTime(2023, 1, 10, 10, 15),
+        result: ExamAttemptResult.pass,
+        score: 85,
+        responses: {},
+        status: ExamAttemptStatus.completed,
+      ),
+      UserExamAttempt(
+        attemptId: 'attempt002',
+        userId: 'gzza',
+        courseId: 'ip78hd',
+        examId: 'exm1',
+        startTime: DateTime(2023, 1, 12, 11, 30),
+        endTime: DateTime(2023, 1, 12, 12, 15),
+        result: ExamAttemptResult.fail,
+        score: 35,
+        responses: {},
+        status: ExamAttemptStatus.aborted,
+      ),
+      UserExamAttempt(
+        attemptId: 'attempt003',
+        userId: 'gzza',
+        courseId: 'ip78hd',
+        examId: 'exm1',
+        startTime: DateTime(2023, 4, 12, 11, 33),
+        endTime: DateTime(2023, 4, 12, 13, 17),
+        result: ExamAttemptResult.fail,
+        score: 67,
+        responses: {},
+        status: ExamAttemptStatus.aborted,
+      ),
+    ],
+    examStatus: ExamStatus.completed,
+    userId: 'gzza',
+  ),
+  UserExamProgress(
+    userId: 'gzza',
+    courseId: 'ip78hd',
+    examId: 'exm2',
+    examTitle: 'Data Preprocessing',
+    examAttempts: [
+      UserExamAttempt(
+        attemptId: 'attempt003',
+        userId: 'gzza',
+        courseId: 'ip78hd',
+        examId: 'exm2',
+        startTime: DateTime(2023, 1, 15, 14, 30),
+        endTime: DateTime(2023, 1, 15, 15, 20),
+        result: ExamAttemptResult.pass,
+        score: 92,
+        responses: {},
+        status: ExamAttemptStatus.completed,
+      ),
+      UserExamAttempt(
+        attemptId: 'attempt004',
+        userId: 'gzza',
+        courseId: 'ip78hd',
+        examId: 'exm2',
+        startTime: DateTime(2023, 1, 17, 9, 30),
+        endTime: DateTime(2023, 1, 17, 10, 05),
+        result: ExamAttemptResult.fail,
+        score: 60,
+        responses: {},
+        status: ExamAttemptStatus.not_completed,
+      ),
+    ],
+    examStatus: ExamStatus.completed,
+  ),
+  UserExamProgress(
+    userId: 'gzza',
+    courseId: 'ip78hd',
+    examId: 'exm3',
+    examTitle: 'Machine Learning Models',
+    examAttempts: [
+      UserExamAttempt(
+        attemptId: 'attempt005',
+        userId: 'gzza',
+        courseId: 'ip78hd',
+        examId: 'exm3',
+        startTime: DateTime(2023, 1, 20, 10, 30),
+        endTime: DateTime(2023, 1, 20, 11, 15),
+        result: ExamAttemptResult.fail,
+        score: 45,
+        responses: {},
+        status: ExamAttemptStatus.completed,
+      ),
+    ],
+    examStatus: ExamStatus.not_completed,
+  ),
+];

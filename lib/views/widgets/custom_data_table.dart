@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart';
 import 'package:isms/controllers/theme_management/common_theme.dart';
+import 'package:isms/utilities/navigation.dart';
 import 'package:isms/views/screens/admin_screens/admin_console/admin_user_details_screen.dart';
 import 'package:isms/views/screens/testing/test_ui_type1/user_test_responses.dart';
 
@@ -34,8 +36,7 @@ class _CustomDataTableState extends State<CustomDataTable> {
         borderRadius: BorderRadius.circular(20),
       ),
       child: ClipRRect(
-        borderRadius:
-            BorderRadius.circular(20), // Match container's border radius
+        borderRadius: BorderRadius.circular(20), // Match container's border radius
 
         child: Column(
           children: [
@@ -43,10 +44,7 @@ class _CustomDataTableState extends State<CustomDataTable> {
             ...widget.usersList.asMap().entries.map((entry) {
               int index = entry.key;
               var value = entry.value;
-              return _buildDataRow(
-                  item: value,
-                  index: index,
-                  listLength: widget.usersList.length);
+              return _buildDataRow(item: value, index: index, listLength: widget.usersList.length);
             }).toList(),
           ],
         ),
@@ -188,9 +186,7 @@ class _CustomDataTableState extends State<CustomDataTable> {
                 )
               : BorderRadius.zero, // Border(
 
-          color: isHoveringMap[index ?? 0] == true
-              ? Colors.grey.shade100
-              : Colors.transparent,
+          color: isHoveringMap[index ?? 0] == true ? Colors.grey.shade100 : Colors.transparent,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end, // Space cells out
@@ -201,21 +197,28 @@ class _CustomDataTableState extends State<CustomDataTable> {
               isHovering: isHoveringMap[index ?? 0] ?? false,
             ),
             _buildDataCell(
-                text: item.username,
-                type: 'text',
-                isHovering: isHoveringMap[index ?? 0] ?? false,
-                action: 'link',
-                actionFunction: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => AdminUserDetailsScreen()))
-                // icon: Icon(
-                //   CupertinoIcons.profile_circled,
-                //   color: Colors.grey.shade700,
-                //   size: 20,
-                // ),
-                // iconAlignment: 'left',
-                ),
+              text: item.username,
+              type: 'text',
+              isHovering: isHoveringMap[index ?? 0] ?? false,
+              action: 'link',
+              actionFunction: () =>
+                  // Navigator.push(
+                  // context,
+                  // MaterialPageRoute(
+                  //     builder: (context) => AdminUserDetailsScreen()))
+                  {
+                context.goNamed(
+                  NamedRoutes.adminConsole.name,
+                )
+                // Then close the drawer
+              },
+              // icon: Icon(
+              //   CupertinoIcons.profile_circled,
+              //   color: Colors.grey.shade700,
+              //   size: 20,
+              // ),
+              // iconAlignment: 'left',
+            ),
             _buildDataCell(
               text: item.emailId,
               type: 'text',
@@ -383,10 +386,7 @@ class _CustomDataTableState extends State<CustomDataTable> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            if (iconAlignment != null &&
-                iconAlignment == 'left' &&
-                icon != null)
-              icon,
+            if (iconAlignment != null && iconAlignment == 'left' && icon != null) icon,
             Spacer(),
             if (isPercentage == null || isPercentage == false)
               Flexible(
@@ -411,9 +411,7 @@ class _CustomDataTableState extends State<CustomDataTable> {
                   ),
                 ),
               ),
-            if (iconAlignment != null &&
-                iconAlignment == 'right' &&
-                icon != null)
+            if (iconAlignment != null && iconAlignment == 'right' && icon != null)
               Row(
                 children: [
                   SizedBox(
@@ -434,8 +432,7 @@ class _CustomDataTableState extends State<CustomDataTable> {
                       valueColor: double.parse(text) > 70
                           ? AlwaysStoppedAnimation<Color>(Colors.lightGreen!)
                           : double.parse(text) > 45
-                              ? AlwaysStoppedAnimation<Color>(
-                                  Colors.orangeAccent!)
+                              ? AlwaysStoppedAnimation<Color>(Colors.orangeAccent!)
                               : AlwaysStoppedAnimation<Color>(Colors.red!),
                       backgroundColor: Colors.grey.shade200,
                       strokeWidth: 5.0,
@@ -455,16 +452,11 @@ class _CustomDataTableState extends State<CustomDataTable> {
   }
 
   Widget _getDataCellTextWidget(
-      {required String text,
-      bool? isHovering,
-      Icon? icon,
-      String? iconAlignment,
-      bool? isPercentage}) {
+      {required String text, bool? isHovering, Icon? icon, String? iconAlignment, bool? isPercentage}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        if (iconAlignment != null && iconAlignment == 'left' && icon != null)
-          icon,
+        if (iconAlignment != null && iconAlignment == 'left' && icon != null) icon,
         Spacer(),
         if (isPercentage == null || isPercentage == false)
           Flexible(
