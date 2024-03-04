@@ -186,8 +186,13 @@ class _CourseListState extends State<CourseList> {
             children: [
               buildSectionHeader(title: 'Courses'),
               Container(
-                width: MediaQuery.of(context).size.width * 0.9,
-                margin: EdgeInsets.fromLTRB(80, 12, 80, 30),
+                width: MediaQuery.of(context).size.width * 0.95,
+                margin: EdgeInsets.fromLTRB(
+                    MediaQuery.of(context).size.width * 0.04,
+                    MediaQuery.of(context).size.width * 0.006,
+                    MediaQuery.of(context).size.width * 0.04,
+                  MediaQuery.of(context).size.width * 0.015,
+                ),
                 decoration: BoxDecoration(
                   border: Border.all(color: getTertiaryColor1()),
                   borderRadius: BorderRadius.circular(20),
