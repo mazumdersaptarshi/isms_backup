@@ -52,35 +52,12 @@
     "type": "object",
     "additionalProperties": false,
     "required": [
-        "examLanguage",
-        "examVersion",
         "examTitle",
         "examSummary",
         "examDescription",
-        "examPassMark",
-        "examEstimatedTime",
         "examSections"
     ],
     "properties": {
-        "examLanguage": {
-            "title": "Exam language",
-            "description": "Enumerated list of all possible exam languages.",
-            "enum": [
-                "en",
-                "ja"
-            ]
-        },
-        "examVersion": {
-            "title": "Exam version",
-            "description": "The revision version of the exam as either an integer or a double, to be incremented in the case of large changes to the content or structure which would render logged exam completion invalid.",
-            "type": "number",
-            "minimum": 0,
-            "exclusiveMinimum": true,
-            "examples": [
-                1,
-                1.2
-            ]
-        },
         "examTitle": {
             "title": "Exam title",
             "description": "The title of the exam.",
@@ -95,23 +72,6 @@
             "title": "Exam description",
             "description": "A full description of the exam, detailing its content and aim.",
             "$ref": "#/definitions/nonEmptyStringWithEscapedSingleQuotes"
-        },
-        "examPassMark": {
-            "title": "Exam pass mark",
-            "description": "The score required to pass the exam.",
-            "type": "integer",
-            "minimum": 0,
-            "exclusiveMinimum": true
-        },
-        "examEstimatedTime": {
-            "title": "Exam estimated time",
-            "description": "The guideline for how long the exam should take to complete, specified as a string in the format HH:MM:SS.",
-            "type": "string",
-            "format": "time",
-            "examples": [
-                "00:25:00",
-                "01:23:45"
-            ]
         },
         "examSections": {
             "title": "Exam sections",

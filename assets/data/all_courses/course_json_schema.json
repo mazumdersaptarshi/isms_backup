@@ -58,33 +58,12 @@
     "type": "object",
     "additionalProperties": false,
     "required": [
-        "courseLanguage",
-        "courseVersion",
         "courseTitle",
         "courseSummary",
         "courseDescription",
         "courseSections"
     ],
     "properties": {
-        "courseLanguage": {
-            "title": "Course language",
-            "description": "Enumerated list of all possible course languages.",
-            "enum": [
-                "en",
-                "ja"
-            ]
-        },
-        "courseVersion": {
-            "title": "Course version",
-            "description": "The revision version of the course as either an integer or a double, to be incremented in the case of large changes to the content or structure which would render logged course completion invalid.",
-            "type": "number",
-            "minimum": 0,
-            "exclusiveMinimum": true,
-            "examples": [
-                1,
-                1.2
-            ]
-        },
         "courseTitle": {
             "title": "Course title",
             "description": "The title of the course.",
