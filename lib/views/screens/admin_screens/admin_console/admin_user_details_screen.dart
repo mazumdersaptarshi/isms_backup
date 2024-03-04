@@ -28,6 +28,7 @@ import 'package:isms/views/widgets/shared_widgets/custom_linear_progress_indicat
 import 'package:isms/views/widgets/shared_widgets/hoverable_section_container.dart';
 import 'package:isms/views/widgets/shared_widgets/user_profile_banner.dart';
 import 'package:provider/provider.dart';
+import 'package:isms/views/widgets/shared_widgets/custom_app_bar.dart';
 
 class AdminUserDetailsScreen extends StatefulWidget {
   const AdminUserDetailsScreen({super.key});
@@ -556,7 +557,7 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
 
     return Scaffold(
       bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
-      appBar: PlatformCheck.topNavBarWidget(context, loggedInState),
+      appBar: IsmsAppBar(context: context),
       drawer: IsmsDrawer(context: context),
       body: FooterView(
         footer: kIsWeb

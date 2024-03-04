@@ -20,6 +20,7 @@ import 'package:isms/views/widgets/shared_widgets/charts/horizontal_bar_chart_wi
 import 'package:isms/views/widgets/shared_widgets/custom_drawer.dart';
 import 'package:isms/views/widgets/shared_widgets/hoverable_section_container.dart';
 import 'package:provider/provider.dart';
+import 'package:isms/views/widgets/shared_widgets/custom_app_bar.dart';
 
 class AllUsers extends StatefulWidget {
   const AllUsers({super.key});
@@ -107,7 +108,7 @@ class _AllUsersState extends State<AllUsers> {
 
     return Scaffold(
       bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
-      appBar: PlatformCheck.topNavBarWidget(context, loggedInState),
+      appBar: IsmsAppBar(context: context),
       drawer: IsmsDrawer(context: context),
       body: SingleChildScrollView(
         child: Container(
