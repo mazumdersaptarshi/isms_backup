@@ -7,11 +7,11 @@ import 'package:isms/views/screens/testing/test_course1_page.dart';
 import 'package:isms/views/screens/testing/test_course2_page.dart';
 import 'package:isms/views/screens/testing/test_course3_exam1_page.dart';
 import 'package:isms/views/screens/testing/test_course3_page.dart';
-
 // import 'package:isms/views/screens/testing/test_ui/test_course3_page.dart';
 import 'package:isms/views/screens/testing/test_ui_type1/test_course3_page.dart';
 import 'package:isms/views/screens/testing/test_ui_type2/first_page.dart';
 import 'package:provider/provider.dart';
+import 'package:isms/views/widgets/shared_widgets/custom_app_bar.dart';
 
 class TestRunner extends StatelessWidget {
   const TestRunner({super.key});
@@ -21,7 +21,8 @@ class TestRunner extends StatelessWidget {
     final loggedInState = context.watch<LoggedInState>();
 
     return Scaffold(
-      appBar: PlatformCheck.topNavBarWidget(context, loggedInState),
+      bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
+      appBar: IsmsAppBar(context: context),
       body: Container(
         child: Column(
           children: [

@@ -34,7 +34,7 @@ class _HoverableSectionContainerState extends State<HoverableSectionContainer> {
       onHover: _onHover,
       onExit: _onExit,
       child: Container(
-        padding: EdgeInsets.all(20),
+        padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.015),
         decoration: BoxDecoration(
           border: Border.all(color: getTertiaryColor1()),
           borderRadius: BorderRadius.circular(10),

@@ -21,6 +21,7 @@ import 'package:isms/utilities/navigation.dart';
 import 'package:isms/views/widgets/shared_widgets/custom_app_bar.dart';
 import 'package:isms/views/widgets/shared_widgets/custom_drawer.dart';
 
+import '../../utilities/platform_check.dart';
 import 'home_screen.dart';
 
 class CourseList extends StatefulWidget {
@@ -175,10 +176,11 @@ class _CourseListState extends State<CourseList> {
 
   @override
   Widget build(BuildContext context) {
+    final loggedInState = context.watch<LoggedInState>();
     return Scaffold(
+      bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
       appBar: IsmsAppBar(context: context),
       drawer: IsmsDrawer(context: context),
-      // body: SingleChildScrollView(
       body: SingleChildScrollView(
         child: Container(
           child: Column(
@@ -186,19 +188,19 @@ class _CourseListState extends State<CourseList> {
             children: [
               buildSectionHeader(title: 'Courses'),
               Container(
-                width: MediaQuery.of(context).size.width * 0.95,
+                width: MediaQuery.of(context).size.width * 1,
                 margin: EdgeInsets.fromLTRB(
-                    MediaQuery.of(context).size.width * 0.04,
+                    MediaQuery.of(context).size.width * 0.02,
                     MediaQuery.of(context).size.width * 0.006,
-                    MediaQuery.of(context).size.width * 0.04,
-                  MediaQuery.of(context).size.width * 0.015,
+                    MediaQuery.of(context).size.width * 0.02,
+                    MediaQuery.of(context).size.width * 0.006,
                 ),
                 decoration: BoxDecoration(
                   border: Border.all(color: getTertiaryColor1()),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Container(
-                  margin: EdgeInsets.all(20),
+                  margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.01),
                   child: ListView(
                     shrinkWrap: true,
                     children: [..._getWidgets()],
@@ -243,21 +245,18 @@ class _CourseListState extends State<CourseList> {
                     _separator,
                     Align(
                         alignment: Alignment.centerLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                              // decoration: getExpansionTileBoxDecoration(),
-                              child: ElevatedButton(
-                                  onPressed: () => context.goNamed(
-                                          NamedRoutes.course.name,
-                                          pathParameters: {
-                                            NamedRoutePathParameters
-                                                .courseId.name: course.courseId
-                                          }),
-                                  child: courseId == 'webdev101'
-                                      ? Text('Resume Course')
-                                      : Text('Start Course'))),
-                        )),
+                        child: Container(
+                            // decoration: getExpansionTileBoxDecoration(),
+                            child: ElevatedButton(
+                                onPressed: () => context.goNamed(
+                                        NamedRoutes.course.name,
+                                        pathParameters: {
+                                          NamedRoutePathParameters
+                                              .courseId.name: course.courseId
+                                        }),
+                                child: courseId == 'webdev101'
+                                    ? Text('Resume Course')
+                                    : Text('Start Course')))),
                     _separator,
                     Card(
                       color: Theme.of(context).scaffoldBackgroundColor,
@@ -297,7 +296,7 @@ class _CourseListState extends State<CourseList> {
                                 height: 10,
                               ),
                               Container(
-                                width: MediaQuery.of(context).size.width * 0.3,
+                                width: MediaQuery.of(context).size.width * 0.03,
                                 child: CustomLinearProgressIndicator(
                                     value: (0 / _exams[courseId]!.length ?? 3),
                                     backgroundColor: Colors.grey.shade200,
