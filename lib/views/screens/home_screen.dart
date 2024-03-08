@@ -10,6 +10,9 @@ import 'package:isms/utilities/platform_check.dart';
 import 'package:isms/views/widgets/shared_widgets/app_footer.dart';
 import 'package:isms/views/widgets/shared_widgets/custom_app_bar.dart';
 import 'package:isms/views/widgets/shared_widgets/custom_drawer.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'course_page.dart';
+import 'package:isms/views/widgets/shared_widgets/custom_linear_progress_indicator.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -19,6 +22,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int _currentCarouselIndex = 0;
+
   @override
   void initState() {
     super.initState();
@@ -44,15 +49,66 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  // Define the courseTitle list
+  final List<String> courseTitle = [
+    "Data Visualization for Storytellers",
+    "Astrobiology: Life Beyond Earth",
+    "Ethical Hacking: Defending Your Data",
+    "The History of Chocolate: From Bean to Bar",
+    "The Science of Happiness",
+    "3D Printing: From Design to Prototype",
+    "Sparkling Idol Songwriting 101",
+    "Napping Techniques for Maximum Cuteness",
+    "Kawaii Cuisine: Mastering Bento Boxes",
+    "Magical Girl History: From Folklore to Franchise",
+  ];
+
   @override
   Widget build(BuildContext context) {
-    // double homePageContainerHeight = MediaQuery.of(context).size.width < SCREEN_COLLAPSE_WIDTH ? 1050 : 400;
     final LoggedInState loggedInState = context.watch<LoggedInState>();
+
+    /// Card widget for non-carousel situation (1 to 3 items in the list)
+    final courseCard = (course) => GestureDetector(
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => CoursePage()),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20.0),
+            child: Card(
+              child: Container(
+                height: 200,
+                width: MediaQuery.of(context).size.width * 0.3,
+                decoration: BoxDecoration(color: Colors.grey[200]),
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    Expanded(
+                      flex: 6,
+                      child: Text(
+                        course, // Display the course title
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: CustomLinearProgressIndicator(
+                        value: (1 / 3),
+                        backgroundColor: Colors.blue.shade100,
+                        valueColor: Colors.blue.shade300,
+                      ),
+                    ),
+                    // Add additional content based on course information
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
 
     return Scaffold(
       backgroundColor: Colors.white,
       bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
-      // appBar: PlatformCheck.topNavBarWidget(context, loggedInState),
       appBar: IsmsAppBar(context: context),
       drawer: IsmsDrawer(context: context),
       body: FooterView(
@@ -95,6 +151,129 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
+
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    top: 20.0,
+                    right: MediaQuery.of(context).size.width * 0.08,
+                    left: MediaQuery.of(context).size.width * 0.08,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Remaining courses:",
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      if (courseTitle.isEmpty)
+                        Text("No remaining courses")
+                      else if (courseTitle.length == 1)
+                        courseCard(courseTitle[0]) // Use the courseCard function for single card
+                      else if (courseTitle.length <= 3)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            for (int i = 0; i < courseTitle.length; i++)
+                              courseCard(courseTitle[i]) // Use courseCard within loop for 2 or 3 cards
+                          ],
+                        )
+                      else
+                        Padding(
+                          padding: const EdgeInsets.only(top: 20.0),
+                          child: Builder(
+                            builder: (context) {
+                              // Calculate viewportFraction based on courseTitle length
+                              double viewportFraction = courseTitle.length <= 1
+                                  ? 1.0
+                                  : courseTitle.length <= 2
+                                      ? 0.4
+                                      : 0.3;
+                              return CarouselSlider.builder(
+                                itemCount: courseTitle.length,
+                                itemBuilder: (context, index, realIndex) {
+                                  final course = courseTitle[index]; // Get the current course title
+                                  return GestureDetector(
+                                    onTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => CoursePage()),
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(20.0), // Apply 20 point radius
+                                      child: Card(
+                                        child: Container(
+                                          width: MediaQuery.of(context).size.width * 0.3,
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey[200],
+                                          ),
+                                          padding: EdgeInsets.all(16),
+                                          child: Column(
+                                            children: [
+                                              Expanded(
+                                                flex: 6,
+                                                child: Text(
+                                                  course, // Display the course title
+                                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: SizedBox(height: 8),
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: CustomLinearProgressIndicator(
+                                                  value: (1 / 3),
+                                                  backgroundColor: Colors.blue.shade100,
+                                                  valueColor: Colors.blue.shade300,
+                                                ),
+                                              ),
+                                              // Add additional content based on course information
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                                options: CarouselOptions(
+                                  height: 200.0,
+                                  viewportFraction: viewportFraction,
+                                  scrollDirection: Axis.horizontal,
+                                  enlargeCenterPage: false,
+                                  onPageChanged: (index, reason) {
+                                    setState(() {
+                                      _currentCarouselIndex = index;
+                                    });
+                                  },
+                                  // Add other options as desired (e.g., autoPlay, scrollDirection)
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          for (int i = 0; i < courseTitle.length; i++)
+                            Container(
+                              width: 8.0,
+                              height: 8.0,
+                              margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: i == _currentCarouselIndex ? Colors.blue : Colors.grey,
+                              ),
+                            ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              /// Carousel
+
               SliverPadding(
                 padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.1),
                 // Adds padding around the content

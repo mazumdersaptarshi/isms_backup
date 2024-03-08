@@ -275,7 +275,7 @@ class _CourseListState extends State<CourseList> {
                                 child: CustomLinearProgressIndicator(
                                     value:
                                         (1 / course.courseSections.length ?? 3),
-                                    backgroundColor: Colors.grey.shade200,
+                                    backgroundColor: Colors.grey.shade300,
                                     valueColor: primary!),
                               ),
                             ],
@@ -296,10 +296,10 @@ class _CourseListState extends State<CourseList> {
                                 height: 10,
                               ),
                               Container(
-                                width: MediaQuery.of(context).size.width * 0.03,
+                                width: MediaQuery.of(context).size.width * 0.3,
                                 child: CustomLinearProgressIndicator(
                                     value: (0 / _exams[courseId]!.length ?? 3),
-                                    backgroundColor: Colors.grey.shade200,
+                                    backgroundColor: Colors.grey.shade300,
                                     valueColor: primary!),
                               ),
                             ],
@@ -383,46 +383,60 @@ class _CourseListState extends State<CourseList> {
 
     courseExams?.forEach((examId, exam) {
       contentWidgets.add(Container(
-          // decoration: getExpansionTileBoxDecoration(),
-          child: ExpansionTile(
-        title: Text(
-          exam.examTitle,
-          style: TextStyle(
-            fontSize: 14,
-          ),
-        ),
-        subtitle: Row(children: [
-          Text(
-            exam.examSummary,
-            style: TextStyle(fontSize: 13, color: Colors.grey.shade700),
-          ),
-          Text("Estimated time: ${exam.examEstimatedTime}",
-              style: TextStyle(fontSize: 13, color: Colors.grey.shade700)),
-          Text("Pass mark: ${exam.examPassMark}",
-              style: TextStyle(fontSize: 13, color: Colors.grey.shade700))
-        ]),
-        childrenPadding: const EdgeInsets.fromLTRB(25.0, 10.0, 25.0, 25.0),
-        children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Text(exam.examDescription,
+        padding: const EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 40.0), // Adjust padding for spacing
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              exam.examTitle,
+              style: TextStyle(fontSize: 14),
+            ),
+            SizedBox(height: 10.0), // Add spacing between title and summary
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  exam.examSummary,
+                  style: TextStyle(fontSize: 13, color: Colors.grey.shade700),
+                ),
+                SizedBox(height: 5.0), // Add spacing between summary and icons
+                Row(
+                  children: [
+                    Icon(Icons.access_time), // Timer icon
+                    SizedBox(width: 16),
+                    Text("Estimated time: ${exam.examEstimatedTime} hours",
+                        style: TextStyle(fontSize: 13, color: Colors.grey.shade700)),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Icon(Icons.school_outlined), // Score icon
+                    SizedBox(width: 16),
+                    Text("Pass mark: ${exam.examPassMark}",
+                        style: TextStyle(fontSize: 13, color: Colors.grey.shade700)),
+                  ],
+                ),
+              ],
+            ),
+            SizedBox(height: 15.0), // Add spacing before description
+            Text(exam.examDescription,
                 style: TextStyle(fontSize: 13, color: Colors.grey.shade700)),
-          ),
-          _separator,
-          Align(
-              alignment: Alignment.centerLeft,
-              child: Container(
-                  // decoration: getExpansionTileBoxDecoration(),
-                  child: ElevatedButton(
-                      onPressed: () => print(exam.examTitle),
-                      child: examId == 'e1'
-                          ? Text('Retake Exam')
-                          : Text('Start Exam')))),
-        ],
-      )));
+            _separator,
+            Align(
+                alignment: Alignment.centerLeft,
+                child: ElevatedButton(
+                    onPressed: () => print(exam.examTitle),
+                    child: examId == 'e1'
+                        ? Text('Retake Exam')
+                        : Text('Start Exam'))),
+          ],
+        ),
+      ));
       contentWidgets.add(_separator);
     });
 
     return contentWidgets;
   }
+
+
 }
