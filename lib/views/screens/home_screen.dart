@@ -184,11 +184,13 @@ class _HomePageState extends State<HomePage> {
                           child: Builder(
                             builder: (context) {
                               // Calculate viewportFraction based on courseTitle length
-                              double viewportFraction = courseTitle.length <= 1
+                              double viewportFraction = MediaQuery.of(context).size.width <= 600
+                                  ? 1.0 // Force viewportFraction to 1 on mobile
+                                  : courseTitle.length <= 1
                                   ? 1.0
                                   : courseTitle.length <= 2
-                                      ? 0.4
-                                      : 0.3;
+                                  ? 0.4
+                                  : 0.3;
                               return CarouselSlider.builder(
                                 itemCount: courseTitle.length,
                                 itemBuilder: (context, index, realIndex) {
@@ -202,7 +204,9 @@ class _HomePageState extends State<HomePage> {
                                       borderRadius: BorderRadius.circular(20.0), // Apply 20 point radius
                                       child: Card(
                                         child: Container(
-                                          width: MediaQuery.of(context).size.width * 0.3,
+                                          width: MediaQuery.of(context).size.width <= 600 // Mobile breakpoint
+                                              ? MediaQuery.of(context).size.width * 0.8 // Set width to 80% on mobile
+                                              : MediaQuery.of(context).size.width * 0.3, // Maintain 30% width on web
                                           decoration: BoxDecoration(
                                             color: Colors.grey[200],
                                           ),
