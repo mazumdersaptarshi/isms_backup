@@ -275,7 +275,7 @@ class _CourseListState extends State<CourseList> {
                                 child: CustomLinearProgressIndicator(
                                     value:
                                         (1 / course.courseSections.length ?? 3),
-                                    backgroundColor: Colors.grey.shade200,
+                                    backgroundColor: Colors.grey.shade300,
                                     valueColor: primary!),
                               ),
                             ],
@@ -296,10 +296,10 @@ class _CourseListState extends State<CourseList> {
                                 height: 10,
                               ),
                               Container(
-                                width: MediaQuery.of(context).size.width * 0.03,
+                                width: MediaQuery.of(context).size.width * 0.3,
                                 child: CustomLinearProgressIndicator(
                                     value: (0 / _exams[courseId]!.length ?? 3),
-                                    backgroundColor: Colors.grey.shade200,
+                                    backgroundColor: Colors.grey.shade300,
                                     valueColor: primary!),
                               ),
                             ],
