@@ -78,7 +78,13 @@ class _HomePageState extends State<HomePage> {
             child: Card(
               child: Container(
                 height: 200,
-                width: MediaQuery.of(context).size.width * 0.3,
+                width: (MediaQuery.of(context).size.width * (
+                    courseTitle.length == 1
+                        ? (MediaQuery.of(context).size.width <= 600 ? 0.8 : 0.7)
+                        : courseTitle.length <= 3
+                        ? (MediaQuery.of(context).size.width <= 600 ? 0.8 : (courseTitle.length == 2 ? 0.35 : 0.25))
+                        : 0.25 // Default width for 4 or more items
+                )),
                 decoration: BoxDecoration(color: Colors.grey[200]),
                 padding: EdgeInsets.all(16),
                 child: Column(
@@ -170,6 +176,69 @@ class _HomePageState extends State<HomePage> {
                         Text("No remaining courses")
                       else if (courseTitle.length == 1)
                         courseCard(courseTitle[0]) // Use the courseCard function for single card
+                      else if (MediaQuery.of(context).size.width <= 600)
+                        CarouselSlider.builder(
+                          itemCount: courseTitle.length,
+                          itemBuilder: (context, index, realIndex) {
+                            final course = courseTitle[index]; // Get the current course title
+                            return GestureDetector(
+                              onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => CoursePage()),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(20.0), // Apply 20 point radius
+                                child: Card(
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width <= 600 // Mobile breakpoint
+                                        ? MediaQuery.of(context).size.width * 0.8 // Set width to 80% on mobile
+                                        : MediaQuery.of(context).size.width * 0.3, // Maintain 30% width on web
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[200],
+                                    ),
+                                    padding: EdgeInsets.all(16),
+                                    child: Column(
+                                      children: [
+                                        Expanded(
+                                          flex: 6,
+                                          child: Text(
+                                            course, // Display the course title
+                                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 1,
+                                          child: SizedBox(height: 8),
+                                        ),
+                                        Expanded(
+                                          flex: 1,
+                                          child: CustomLinearProgressIndicator(
+                                            value: (1 / 3),
+                                            backgroundColor: Colors.blue.shade100,
+                                            valueColor: Colors.blue.shade300,
+                                          ),
+                                        ),
+                                        // Add additional content based on course information
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                          options: CarouselOptions(
+                            height: 200.0,
+                            viewportFraction: 0.9,
+                            scrollDirection: Axis.horizontal,
+                            enlargeCenterPage: false,
+                            onPageChanged: (index, reason) {
+                              setState(() {
+                                _currentCarouselIndex = index;
+                              });
+                            },
+                            // Add other options as desired (e.g., autoPlay, scrollDirection)
+                          ),
+                        )
                       else if (courseTitle.length <= 3)
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -185,11 +254,7 @@ class _HomePageState extends State<HomePage> {
                             builder: (context) {
                               // Calculate viewportFraction based on courseTitle length
                               double viewportFraction = MediaQuery.of(context).size.width <= 600
-                                  ? 1.0 // Force viewportFraction to 1 on mobile
-                                  : courseTitle.length <= 1
-                                  ? 1.0
-                                  : courseTitle.length <= 2
-                                  ? 0.4
+                                  ? 0.9 // Force viewportFraction to 1 on mobile
                                   : 0.3;
                               return CarouselSlider.builder(
                                 itemCount: courseTitle.length,
@@ -256,21 +321,26 @@ class _HomePageState extends State<HomePage> {
                             },
                           ),
                         ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          for (int i = 0; i < courseTitle.length; i++)
-                            Container(
-                              width: 8.0,
-                              height: 8.0,
-                              margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: i == _currentCarouselIndex ? Colors.blue : Colors.grey,
+                      Visibility(
+                        visible: courseTitle.length >= 4 ||
+                            (courseTitle.length >= 2 && MediaQuery.of(context).size.width <= 600),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            for (int i = 0; i < courseTitle.length; i++)
+                              Container(
+                                width: 8.0,
+                                height: 8.0,
+                                margin: EdgeInsets.symmetric(vertical: 10, horizontal: 2.0),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: i == _currentCarouselIndex ? Colors.blue : Colors.grey,
+                                ),
                               ),
-                            ),
-                        ],
+                          ],
+                        ),
                       ),
+
                     ],
                   ),
                 ),
