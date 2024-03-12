@@ -1,6 +1,5 @@
 -- Types
 CREATE TYPE account_role AS ENUM ('admin', 'user');
-
 CREATE TYPE content_language AS ENUM ('en', 'ja');
 
 
@@ -197,6 +196,75 @@ CREATE TABLE IF NOT EXISTS user_exam_attempts
     FOREIGN KEY (exam_id, exam_version) REFERENCES exam_versions (exam_id, content_version) ON UPDATE CASCADE ON DELETE RESTRICT,
     CONSTRAINT valid_attempt_time_range CHECK (started_at < finished_at)
 );
+
+
+-- Indices
+-- domains
+CREATE INDEX domains_domain_id_index ON domains (domain_id);
+CREATE INDEX domains_enabled_index ON domains (enabled);
+
+-- users
+CREATE INDEX users_user_id_index ON users (user_id);
+CREATE INDEX users_domain_id_index ON users (domain_id);
+CREATE INDEX users_enabled_index ON users (enabled);
+CREATE INDEX users_account_role_index ON users (account_role);
+
+-- courses
+CREATE INDEX courses_course_id_index ON courses (course_id);
+CREATE INDEX courses_enabled_index ON courses (enabled);
+
+-- course_versions
+CREATE INDEX course_versions_course_id_index ON course_versions (course_id);
+CREATE INDEX course_versions_content_version_index ON course_versions (content_version);
+
+-- course_content
+CREATE INDEX course_content_course_id_index ON course_content (course_id);
+CREATE INDEX course_content_content_version_index ON course_content (content_version);
+CREATE INDEX course_content_content_language_index ON course_content (content_language);
+
+-- exams
+CREATE INDEX exams_exam_id_index ON exams (exam_id);
+CREATE INDEX exams_enabled_index ON exams (enabled);
+
+-- exam_versions
+CREATE INDEX exam_versions_exam_id_index ON exam_versions (exam_id);
+CREATE INDEX exam_versions_content_version_index ON exam_versions (content_version);
+
+-- exam_content
+CREATE INDEX exam_content_exam_id_index ON exam_content (exam_id);
+CREATE INDEX exam_content_content_version_index ON exam_content (content_version);
+CREATE INDEX exam_content_content_language_index ON exam_content (content_language);
+
+-- course_exam_relationships
+CREATE INDEX course_exam_relationships_course_id_index ON course_exam_relationships (course_id);
+CREATE INDEX course_exam_relationships_exam_id_index ON course_exam_relationships (exam_id);
+CREATE INDEX course_exam_relationships_enabled_index ON course_exam_relationships (enabled);
+
+-- domain_course_assignments
+CREATE INDEX domain_course_assignments_domain_id_index ON domain_course_assignments (domain_id);
+CREATE INDEX domain_course_assignments_course_id_index ON domain_course_assignments (course_id);
+CREATE INDEX domain_course_assignments_enabled_index ON domain_course_assignments (enabled);
+
+-- user_course_assignments
+CREATE INDEX user_course_assignments_user_id_index ON user_course_assignments (user_id);
+CREATE INDEX user_course_assignments_course_id_index ON user_course_assignments (course_id);
+CREATE INDEX user_course_assignments_enabled_index ON user_course_assignments (enabled);
+CREATE INDEX user_course_assignments_completion_deadline_index ON user_course_assignments (completion_deadline);
+CREATE INDEX user_course_assignments_completion_tracking_period_start_index ON user_course_assignments (completion_tracking_period_start);
+
+-- user_course_progress
+CREATE INDEX user_course_progress_user_id_index ON user_course_progress (user_id);
+CREATE INDEX user_course_progress_course_id_index ON user_course_progress (course_id);
+CREATE INDEX user_course_progress_course_learning_version_index ON user_course_progress (course_learning_version);
+CREATE INDEX user_course_progress_course_learning_completed_at_index ON user_course_progress (course_learning_completed_at);
+
+-- user_exam_attempts
+CREATE INDEX user_exam_attempts_user_id_index ON user_exam_attempts (user_id);
+CREATE INDEX user_exam_attempts_course_id_index ON user_exam_attempts (course_id);
+CREATE INDEX user_exam_attempts_exam_id_index ON user_exam_attempts (exam_id);
+CREATE INDEX user_exam_attempts_exam_version_index ON user_exam_attempts (exam_version);
+CREATE INDEX user_exam_attempts_passed_index ON user_exam_attempts (passed);
+CREATE INDEX user_exam_attempts_finished_at_index ON user_exam_attempts (finished_at);
 
 
 -- Trigger functions
