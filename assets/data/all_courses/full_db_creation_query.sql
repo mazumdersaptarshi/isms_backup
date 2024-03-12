@@ -1,6 +1,7 @@
 -- Types
 CREATE TYPE account_role AS ENUM ('admin', 'user');
 CREATE TYPE content_language AS ENUM ('en', 'ja');
+CREATE TYPE app_theme AS ENUM ('light', 'dark');
 
 
 -- Tables
@@ -35,6 +36,17 @@ CREATE TABLE IF NOT EXISTS users
     email text NOT NULL,
     last_login timestamptz,
     note text,
+    row_created_at timestamptz NOT NULL,
+    row_created_by text NOT NULL,
+    row_modified_at timestamptz NOT NULL,
+    row_modified_by text NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS user_settings
+(
+    user_id text NOT NULL REFERENCES users (user_id) ON UPDATE CASCADE ON DELETE RESTRICT,
+    preferred_language content_language NOT NULL,
+    app_theme app_theme NOT NULL,
     row_created_at timestamptz NOT NULL,
     row_created_by text NOT NULL,
     row_modified_at timestamptz NOT NULL,
@@ -193,7 +205,7 @@ CREATE TABLE IF NOT EXISTS user_exam_attempts
     row_modified_at timestamptz NOT NULL,
     row_modified_by text NOT NULL,
     PRIMARY KEY (attempt_id, user_id, course_id, exam_id),
-    FOREIGN KEY (exam_id, exam_version) REFERENCES exam_versions (exam_id, content_version) ON UPDATE CASCADE ON DELETE RESTRICT,
+	FOREIGN KEY (exam_id, exam_version) REFERENCES exam_versions (exam_id, content_version) ON UPDATE CASCADE ON DELETE RESTRICT,
     CONSTRAINT valid_attempt_time_range CHECK (started_at < finished_at)
 );
 
@@ -208,6 +220,10 @@ CREATE INDEX users_user_id_index ON users (user_id);
 CREATE INDEX users_domain_id_index ON users (domain_id);
 CREATE INDEX users_enabled_index ON users (enabled);
 CREATE INDEX users_account_role_index ON users (account_role);
+
+-- user_settings
+CREATE INDEX user_settings_user_id_index ON user_settings (user_id);
+CREATE INDEX user_settings_preferred_language_index ON user_settings (preferred_language);
 
 -- courses
 CREATE INDEX courses_course_id_index ON courses (course_id);
@@ -444,6 +460,31 @@ CREATE TRIGGER aa_prevent_row_modification_user_manual_update
 
 CREATE TRIGGER update_row_modification_audit_columns
     BEFORE UPDATE ON users
+    FOR EACH ROW EXECUTE PROCEDURE update_row_modification_audit_columns();
+
+-- user_settings
+CREATE TRIGGER populate_row_audit_columns
+    BEFORE INSERT ON user_settings
+    FOR EACH ROW EXECUTE PROCEDURE populate_row_audit_columns();
+
+CREATE TRIGGER aa_prevent_row_creation_timestamp_manual_update
+    BEFORE UPDATE OF row_created_at ON user_settings
+    FOR EACH ROW EXECUTE PROCEDURE prevent_row_creation_timestamp_manual_update();
+
+CREATE TRIGGER aa_prevent_row_creation_user_manual_update
+    BEFORE UPDATE OF row_created_by ON user_settings
+    FOR EACH ROW EXECUTE PROCEDURE prevent_row_creation_user_manual_update();
+
+CREATE TRIGGER aa_prevent_row_modification_timestamp_manual_update
+    BEFORE UPDATE OF row_modified_at ON user_settings
+    FOR EACH ROW EXECUTE PROCEDURE prevent_row_modification_timestamp_manual_update();
+
+CREATE TRIGGER aa_prevent_row_modification_user_manual_update
+    BEFORE UPDATE OF row_modified_by ON user_settings
+    FOR EACH ROW EXECUTE PROCEDURE prevent_row_modification_user_manual_update();
+
+CREATE TRIGGER update_row_modification_audit_columns
+    BEFORE UPDATE ON user_settings
     FOR EACH ROW EXECUTE PROCEDURE update_row_modification_audit_columns();
 
 -- courses
