@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS users
 
 CREATE TABLE IF NOT EXISTS user_settings
 (
-    user_id text NOT NULL REFERENCES users (user_id) ON UPDATE CASCADE ON DELETE RESTRICT,
+    user_id text PRIMARY KEY REFERENCES users (user_id) ON UPDATE CASCADE ON DELETE RESTRICT,
     preferred_language content_language NOT NULL,
     app_theme app_theme NOT NULL,
     row_created_at timestamptz NOT NULL,
