@@ -1,7 +1,7 @@
 -- Types
 CREATE TYPE account_role AS ENUM ('admin', 'user');
-
 CREATE TYPE content_language AS ENUM ('en', 'ja');
+CREATE TYPE app_theme AS ENUM ('light', 'dark');
 
 
 -- Tables
@@ -36,6 +36,17 @@ CREATE TABLE IF NOT EXISTS users
     email text NOT NULL,
     last_login timestamptz,
     note text,
+    row_created_at timestamptz NOT NULL,
+    row_created_by text NOT NULL,
+    row_modified_at timestamptz NOT NULL,
+    row_modified_by text NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS user_settings
+(
+    user_id text PRIMARY KEY REFERENCES users (user_id) ON UPDATE CASCADE ON DELETE RESTRICT,
+    preferred_language content_language NOT NULL,
+    app_theme app_theme NOT NULL,
     row_created_at timestamptz NOT NULL,
     row_created_by text NOT NULL,
     row_modified_at timestamptz NOT NULL,
@@ -194,9 +205,82 @@ CREATE TABLE IF NOT EXISTS user_exam_attempts
     row_modified_at timestamptz NOT NULL,
     row_modified_by text NOT NULL,
     PRIMARY KEY (attempt_id, user_id, course_id, exam_id),
-    FOREIGN KEY (exam_id, exam_version) REFERENCES exam_versions (exam_id, content_version) ON UPDATE CASCADE ON DELETE RESTRICT,
+	FOREIGN KEY (exam_id, exam_version) REFERENCES exam_versions (exam_id, content_version) ON UPDATE CASCADE ON DELETE RESTRICT,
     CONSTRAINT valid_attempt_time_range CHECK (started_at < finished_at)
 );
+
+
+-- Indices
+-- domains
+CREATE INDEX domains_domain_id_index ON domains (domain_id);
+CREATE INDEX domains_enabled_index ON domains (enabled);
+
+-- users
+CREATE INDEX users_user_id_index ON users (user_id);
+CREATE INDEX users_domain_id_index ON users (domain_id);
+CREATE INDEX users_enabled_index ON users (enabled);
+CREATE INDEX users_account_role_index ON users (account_role);
+
+-- user_settings
+CREATE INDEX user_settings_user_id_index ON user_settings (user_id);
+CREATE INDEX user_settings_preferred_language_index ON user_settings (preferred_language);
+
+-- courses
+CREATE INDEX courses_course_id_index ON courses (course_id);
+CREATE INDEX courses_enabled_index ON courses (enabled);
+
+-- course_versions
+CREATE INDEX course_versions_course_id_index ON course_versions (course_id);
+CREATE INDEX course_versions_content_version_index ON course_versions (content_version);
+
+-- course_content
+CREATE INDEX course_content_course_id_index ON course_content (course_id);
+CREATE INDEX course_content_content_version_index ON course_content (content_version);
+CREATE INDEX course_content_content_language_index ON course_content (content_language);
+
+-- exams
+CREATE INDEX exams_exam_id_index ON exams (exam_id);
+CREATE INDEX exams_enabled_index ON exams (enabled);
+
+-- exam_versions
+CREATE INDEX exam_versions_exam_id_index ON exam_versions (exam_id);
+CREATE INDEX exam_versions_content_version_index ON exam_versions (content_version);
+
+-- exam_content
+CREATE INDEX exam_content_exam_id_index ON exam_content (exam_id);
+CREATE INDEX exam_content_content_version_index ON exam_content (content_version);
+CREATE INDEX exam_content_content_language_index ON exam_content (content_language);
+
+-- course_exam_relationships
+CREATE INDEX course_exam_relationships_course_id_index ON course_exam_relationships (course_id);
+CREATE INDEX course_exam_relationships_exam_id_index ON course_exam_relationships (exam_id);
+CREATE INDEX course_exam_relationships_enabled_index ON course_exam_relationships (enabled);
+
+-- domain_course_assignments
+CREATE INDEX domain_course_assignments_domain_id_index ON domain_course_assignments (domain_id);
+CREATE INDEX domain_course_assignments_course_id_index ON domain_course_assignments (course_id);
+CREATE INDEX domain_course_assignments_enabled_index ON domain_course_assignments (enabled);
+
+-- user_course_assignments
+CREATE INDEX user_course_assignments_user_id_index ON user_course_assignments (user_id);
+CREATE INDEX user_course_assignments_course_id_index ON user_course_assignments (course_id);
+CREATE INDEX user_course_assignments_enabled_index ON user_course_assignments (enabled);
+CREATE INDEX user_course_assignments_completion_deadline_index ON user_course_assignments (completion_deadline);
+CREATE INDEX user_course_assignments_completion_tracking_period_start_index ON user_course_assignments (completion_tracking_period_start);
+
+-- user_course_progress
+CREATE INDEX user_course_progress_user_id_index ON user_course_progress (user_id);
+CREATE INDEX user_course_progress_course_id_index ON user_course_progress (course_id);
+CREATE INDEX user_course_progress_course_learning_version_index ON user_course_progress (course_learning_version);
+CREATE INDEX user_course_progress_course_learning_completed_at_index ON user_course_progress (course_learning_completed_at);
+
+-- user_exam_attempts
+CREATE INDEX user_exam_attempts_user_id_index ON user_exam_attempts (user_id);
+CREATE INDEX user_exam_attempts_course_id_index ON user_exam_attempts (course_id);
+CREATE INDEX user_exam_attempts_exam_id_index ON user_exam_attempts (exam_id);
+CREATE INDEX user_exam_attempts_exam_version_index ON user_exam_attempts (exam_version);
+CREATE INDEX user_exam_attempts_passed_index ON user_exam_attempts (passed);
+CREATE INDEX user_exam_attempts_finished_at_index ON user_exam_attempts (finished_at);
 
 
 -- Trigger functions
@@ -376,6 +460,31 @@ CREATE TRIGGER aa_prevent_row_modification_user_manual_update
 
 CREATE TRIGGER update_row_modification_audit_columns
     BEFORE UPDATE ON users
+    FOR EACH ROW EXECUTE PROCEDURE update_row_modification_audit_columns();
+
+-- user_settings
+CREATE TRIGGER populate_row_audit_columns
+    BEFORE INSERT ON user_settings
+    FOR EACH ROW EXECUTE PROCEDURE populate_row_audit_columns();
+
+CREATE TRIGGER aa_prevent_row_creation_timestamp_manual_update
+    BEFORE UPDATE OF row_created_at ON user_settings
+    FOR EACH ROW EXECUTE PROCEDURE prevent_row_creation_timestamp_manual_update();
+
+CREATE TRIGGER aa_prevent_row_creation_user_manual_update
+    BEFORE UPDATE OF row_created_by ON user_settings
+    FOR EACH ROW EXECUTE PROCEDURE prevent_row_creation_user_manual_update();
+
+CREATE TRIGGER aa_prevent_row_modification_timestamp_manual_update
+    BEFORE UPDATE OF row_modified_at ON user_settings
+    FOR EACH ROW EXECUTE PROCEDURE prevent_row_modification_timestamp_manual_update();
+
+CREATE TRIGGER aa_prevent_row_modification_user_manual_update
+    BEFORE UPDATE OF row_modified_by ON user_settings
+    FOR EACH ROW EXECUTE PROCEDURE prevent_row_modification_user_manual_update();
+
+CREATE TRIGGER update_row_modification_audit_columns
+    BEFORE UPDATE ON user_settings
     FOR EACH ROW EXECUTE PROCEDURE update_row_modification_audit_columns();
 
 -- courses
