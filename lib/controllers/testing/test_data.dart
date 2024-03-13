@@ -1,5 +1,5 @@
 import 'package:isms/models/admin_models/user_summary.dart';
-import 'package:isms/models/admin_models/users_list_data.dart';
+import 'package:isms/models/admin_models/users_summary_data.dart';
 import 'package:isms/models/charts/bar_charts/custom_bar_chart_data.dart';
 import 'package:isms/models/charts/box_and_whisker_charts/custom_box_and_whisker_chart_data.dart';
 import 'package:isms/models/charts/line_charts/custom_line_chart_data_point.dart';
@@ -498,103 +498,113 @@ List<CustomLineChartDataPoint> activeUsersData = [
   // Add more data points as necessary
 ];
 
-List<UsersListData> usersListData = [
-  UsersListData(
-    username: 'Saptarshi Mazumder',
+List<UsersSummaryData> usersListData = [
+  UsersSummaryData(
+    name: 'Saptarshi Mazumder',
     emailId: 's.mazumder@pvp.co.jp',
     role: 'admin',
     coursesCompletedPercentage: 56.6,
-    coursesEnrolled: 7,
+    coursesAssigned: 7,
     averageScore: 86.9,
     examsTaken: 3,
     lastLogin: '7 Jan 2024 10:34:09',
+    uid: 'gZZg3iv6e2YsoMXlMrXIVgf6Ycl2',
   ),
-  UsersListData(
-    username: 'Aidan Pope',
+  UsersSummaryData(
+    name: 'Aidan Pope',
     emailId: 'aidan.pope@pvp.co.jp',
     role: 'admin',
     coursesCompletedPercentage: 60.1,
-    coursesEnrolled: 5,
+    coursesAssigned: 5,
     averageScore: 88.3,
     examsTaken: 5,
     lastLogin: '6 Jan 2024 14:20:17',
+    uid: 'gZZg3iv6e2YsoMXlMrXIVgf6Ycl2',
   ),
-  UsersListData(
-    username: 'Alex Martin',
+  UsersSummaryData(
+    uid: 'gZZg3iv6e2YsoMXlMrXIVgf6Ycl2',
+    name: 'Alex Martin',
     emailId: 'alex.martin@pvp.co.jp',
     role: 'user',
     coursesCompletedPercentage: 38.7,
-    coursesEnrolled: 6,
+    coursesAssigned: 6,
     averageScore: 59.4,
     examsTaken: 4,
     lastLogin: '5 Jan 2024 16:45:56',
   ),
-  UsersListData(
-    username: 'Sahitha Yalamanchili',
+  UsersSummaryData(
+    uid: 'gZZg3iv6e2YsoMXlMrXIVgf6Ycl2',
+    name: 'Sahitha Yalamanchili',
     emailId: 's.yalamanchili@pvp.co.jp',
     role: 'user',
     coursesCompletedPercentage: 47.9,
-    coursesEnrolled: 8,
+    coursesAssigned: 8,
     averageScore: 68.2,
     examsTaken: 6,
     lastLogin: '8 Jan 2024 09:12:34',
   ),
-  UsersListData(
-    username: 'John Doe',
+  UsersSummaryData(
+    uid: 'gZZg3iv6e2YsoMXlMrXIVgf6Ycl2',
+    name: 'John Doe',
     emailId: 'john.doe@pvp.co.jp',
     role: 'user',
     coursesCompletedPercentage: 50.3,
-    coursesEnrolled: 9,
+    coursesAssigned: 9,
     averageScore: 70.5,
     examsTaken: 7,
     lastLogin: '4 Jan 2024 11:30:45',
   ),
-  UsersListData(
-    username: 'Jane Smith',
+  UsersSummaryData(
+    uid: 'gZZg3iv6e2YsoMXlMrXIVgf6Ycl2',
+    name: 'Jane Smith',
     emailId: 'jane.smith@pvp.co.jp',
     role: 'admin',
     coursesCompletedPercentage: 33.5,
-    coursesEnrolled: 4,
+    coursesAssigned: 4,
     averageScore: 55.0,
     examsTaken: 2,
     lastLogin: '3 Jan 2024 13:40:25',
   ),
-  UsersListData(
-    username: 'Michael Brown',
+  UsersSummaryData(
+    uid: 'gZZg3iv6e2YsoMXlMrXIVgf6Ycl2',
+    name: 'Michael Brown',
     emailId: 'michael.brown@pvp.co.jp',
     role: 'user',
     coursesCompletedPercentage: 40.2,
-    coursesEnrolled: 7,
+    coursesAssigned: 7,
     averageScore: 75.1,
     examsTaken: 5,
     lastLogin: '2 Jan 2024 15:55:10',
   ),
-  UsersListData(
-    username: 'Emily Clark',
+  UsersSummaryData(
+    uid: 'gZZg3iv6e2YsoMXlMrXIVgf6Ycl2',
+    name: 'Emily Clark',
     emailId: 'emily.clark@pvp.co.jp',
     role: 'user',
     coursesCompletedPercentage: 45.8,
-    coursesEnrolled: 7,
+    coursesAssigned: 7,
     averageScore: 60.6,
     examsTaken: 4,
     lastLogin: '1 Jan 2024 17:05:55',
   ),
-  UsersListData(
-    username: 'Daniel Wilson',
+  UsersSummaryData(
+    uid: 'gZZg3iv6e2YsoMXlMrXIVgf6Ycl2',
+    name: 'Daniel Wilson',
     emailId: 'daniel.wilson@pvp.co.jp',
     role: 'user',
     coursesCompletedPercentage: 39.4,
-    coursesEnrolled: 5,
+    coursesAssigned: 5,
     averageScore: 58.3,
     examsTaken: 3,
     lastLogin: '9 Jan 2024 12:15:30',
   ),
-  UsersListData(
-    username: 'Sophia Johnson',
+  UsersSummaryData(
+    uid: 'gZZg3iv6e2YsoMXlMrXIVgf6Ycl2',
+    name: 'Sophia Johnson',
     emailId: 'sophia.johnson@pvp.co.jp',
     role: 'admin',
     coursesCompletedPercentage: 88.7,
-    coursesEnrolled: 8,
+    coursesAssigned: 8,
     averageScore: 89.7,
     examsTaken: 4,
     lastLogin: '10 Jan 2024 14:25:47',
@@ -711,19 +721,19 @@ List<CustomLineChartDataPoint> sampleUserTimeSpentOnExams = [
   // Add more data points as necessary
 ];
 
-List<UserSummary> userSummaryData = [
-  UserSummary(summaryTitle: 'Total Courses Enrolled', value: 5, type: ValueType.number.name),
-  UserSummary(summaryTitle: 'Total Exams Taken', value: 2, type: ValueType.number.name),
-  UserSummary(summaryTitle: 'Average Score', value: 45.67, type: ValueType.number.name),
-  UserSummary(summaryTitle: 'Completed', value: 0.65, type: ValueType.percentage.name),
-];
+// List<UserSummary> userSummaryData = [
+//   UserSummary(summaryTitle: 'Total Courses Enrolled', value: 5, type: ValueType.number.name),
+//   UserSummary(summaryTitle: 'Total Exams Taken', value: 2, type: ValueType.number.name),
+//   UserSummary(summaryTitle: 'Average Score', value: 45.67, type: ValueType.number.name),
+//   UserSummary(summaryTitle: 'Completed', value: 0.65, type: ValueType.percentage.name),
+// ];
 
 List<UserCourseProgress> userCourseDetailsList = [
   UserCourseProgress(
     courseId: 'ip78hd',
     userId: 'gzza',
     courseTitle: 'Intro to Python and Machine Learning',
-    courseCompleted: false,
+    courseLearningCompleted: false,
     completedSections: ['sec1', 'sec2', 'sec3'],
     completedExams: [
       'exm1',
@@ -838,7 +848,7 @@ List<UserCourseProgress> userCourseDetailsList = [
     courseId: 'cs50x',
     userId: 'gzza',
     courseTitle: 'Computer Science Basics',
-    courseCompleted: true,
+    courseLearningCompleted: true,
     completedSections: ['sec1', 'sec2', 'sec3', 'sec4', 'sec5', 'sec6', 'sec7', 'sec8'],
     completedExams: [
       'exm1',
@@ -878,7 +888,7 @@ List<UserCourseProgress> userCourseDetailsList = [
     courseId: 'js101',
     userId: 'gzza',
     courseTitle: 'JavaScript for Beginners',
-    courseCompleted: false,
+    courseLearningCompleted: false,
     completedSections: ['sec1', 'sec2'],
     completedExams: ['exm1'],
     sectionsInCourse: ['sec1', 'sec2', 'sec3', 'sec4'],
@@ -946,7 +956,7 @@ List<UserCourseProgress> userCourseDetailsList = [
     courseId: 'htmlcss',
     userId: 'gzza',
     courseTitle: 'Introduction to HTML and CSS',
-    courseCompleted: true,
+    courseLearningCompleted: true,
     completedSections: ['sec1', 'sec2', 'sec3', 'sec4'],
     completedExams: ['exm1', 'exm2'],
     sectionsInCourse: ['sec1', 'sec2', 'sec3', 'sec4', 'sec5'],
@@ -1002,7 +1012,7 @@ List<UserCourseProgress> userCourseDetailsList = [
     courseId: 'dataSci101',
     userId: 'gzza',
     courseTitle: 'Data Science Fundamentals',
-    courseCompleted: false,
+    courseLearningCompleted: false,
     completedSections: ['sec1', 'sec2'],
     completedExams: [],
     sectionsInCourse: ['sec1', 'sec2', 'sec3', 'sec4'],
@@ -1053,7 +1063,7 @@ List<UserCourseProgress> userCourseDetailsList = [
     courseId: 'webDevAdv',
     userId: 'gzza',
     courseTitle: 'Advanced Web Development',
-    courseCompleted: false,
+    courseLearningCompleted: false,
     completedSections: ['sec1'],
     completedExams: [],
     sectionsInCourse: ['sec1', 'sec2', 'sec3', 'sec4', 'sec5'],

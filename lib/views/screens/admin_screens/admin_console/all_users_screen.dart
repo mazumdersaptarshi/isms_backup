@@ -6,8 +6,10 @@ import 'package:isms/controllers/testing/test_data.dart';
 import 'package:isms/controllers/testing/testing_admin_graphs.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart';
 import 'package:isms/controllers/user_management/logged_in_state.dart';
+import 'package:isms/models/admin_models/users_summary_data.dart';
 import 'package:isms/models/charts/bar_charts/custom_bar_chart_data.dart';
 import 'package:isms/models/charts/box_and_whisker_charts/custom_box_and_whisker_chart_data.dart';
+import 'package:isms/sql/queries/query1.dart';
 import 'package:isms/utilities/platform_check.dart';
 import 'package:isms/views/widgets/shared_widgets/charts/custom_box_and_whisker_chart_widget.dart';
 import 'package:isms/views/widgets/shared_widgets/charts/custom_pie_chart_widget.dart';
@@ -21,6 +23,7 @@ import 'package:isms/views/widgets/shared_widgets/charts/horizontal_bar_chart_wi
 import 'package:isms/views/widgets/shared_widgets/custom_drawer.dart';
 import 'package:isms/views/widgets/shared_widgets/hoverable_section_container.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 import 'package:isms/views/widgets/shared_widgets/custom_app_bar.dart';
 
 class AllUsers extends StatefulWidget {
@@ -47,6 +50,9 @@ class _AllUsersState extends State<AllUsers> {
   List<CustomBoxAndWhiskerChartData> _usersDataBoxAndWhiskerChart = [];
   Map _allUsers = {};
   bool isHoveringOverSection = false;
+
+  late dynamic _allUsersSummaryData;
+  String url = 'http://127.0.0.1:5000/api?query=';
 
   /// Updates the chart data based on the selected exam.
   ///
@@ -96,12 +102,6 @@ class _AllUsersState extends State<AllUsers> {
   }
 
   /// Retrieves all users for display in the custom data table.
-  List _getAllUsers() {
-    _allUsers = UsersAnalytics.getAllUsersList(allUsersData: adminState.getAllUsersData);
-    var usersList = _allUsers.entries.toList();
-
-    return usersList;
-  }
 
   List<Color> coursesCompletedGradientColors = [
     primary!,
@@ -147,7 +147,25 @@ class _AllUsersState extends State<AllUsers> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               buildSectionHeader(title: 'All Users'),
-              CustomDataTable(usersList: usersListData),
+              FutureBuilder(
+                  future: adminState.getAllUsers(),
+                  builder: (BuildContext context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(
+                        child: CircularProgressIndicator(
+                          color: primary,
+                        ),
+                      );
+                    } else if (snapshot.hasData) {
+                      final data = snapshot.data;
+                      // return CustomDataTable(usersList: snapshot.data);
+                      return CustomDataTable(usersList: snapshot.data);
+                    }
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }),
+              // CustomDataTable(usersList: usersListData),
               buildSectionHeader(title: 'Users performance overview'),
               Container(
                 width: MediaQuery.of(context).size.width * 0.9,

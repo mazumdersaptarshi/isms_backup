@@ -42,7 +42,6 @@ class _CustomLineChartUserWidgetState extends State<CustomLineChartUserWidget> {
   double _minY = 0;
 
   Map<int, String> _calculateLeftTitles(List<CustomLineChartDataPoint> data) {
-    print('Entered Here');
     // Determine min and max y values
     _minY = data.map((e) => e.y).reduce(min);
     _maxY = data.map((e) => e.y).reduce(max);
@@ -58,7 +57,6 @@ class _CustomLineChartUserWidgetState extends State<CustomLineChartUserWidget> {
 
       titles[value] = value.toString(); // Customize formatting as needed
     }
-    print(_maxY);
     return titles;
   }
 

@@ -55,7 +55,6 @@ class _HorizontalBarChartWidgetState extends State<HorizontalBarChartWidget> {
     //Here we are setting the chart height to handle various heights of the charts.
     double chartHeight = min(_getDataSourceBasedOnSelectedRange().length * (perBarHeight) * 27, 400);
     chartHeight = max(chartHeight, 200);
-    print('_filteredData length: ${chartHeight}');
     return Column(
       children: [
         _buildScoreFilterDropdown(),

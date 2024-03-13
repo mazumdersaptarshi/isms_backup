@@ -14,26 +14,35 @@ class UserCourseProgress {
   final String courseId;
 
   final String? courseTitle;
-  final bool? courseCompleted;
+  final bool? courseLearningCompleted;
   final String? currentSection;
   final List<String>? completedSections;
+
+  final int? completedSectionsCount;
+  final int? sectionsInCourseCount;
+  final int? passedExamsCount;
   final List<String>? completedExams;
 
   final List<String>? sectionsInCourse;
 
   final List<String>? examsInCourse;
+  final int? examsInCourseCount;
 
   final List<UserExamProgress>? examsProgressList;
 
   UserCourseProgress(
       {required this.userId,
       required this.courseId,
-      this.courseCompleted,
+      this.courseLearningCompleted,
       this.currentSection,
       this.completedSections,
       this.completedExams,
       this.courseTitle,
       this.sectionsInCourse,
       this.examsInCourse,
-      this.examsProgressList});
+      this.examsProgressList,
+      this.completedSectionsCount,
+      this.passedExamsCount,
+      this.sectionsInCourseCount,
+      this.examsInCourseCount});
 }

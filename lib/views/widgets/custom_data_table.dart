@@ -27,7 +27,6 @@ class _CustomDataTableState extends State<CustomDataTable> {
 
   @override
   Widget build(BuildContext context) {
-    print('usersList: ${widget.usersList}');
     return Container(
       width: MediaQuery.of(context).size.width * 0.9,
       margin: EdgeInsets.fromLTRB(80, 12, 80, 30),
@@ -43,6 +42,7 @@ class _CustomDataTableState extends State<CustomDataTable> {
             _buildHeaderRow(),
             ...widget.usersList.asMap().entries.map((entry) {
               int index = entry.key;
+
               var value = entry.value;
               return _buildDataRow(item: value, index: index, listLength: widget.usersList.length);
             }).toList(),
@@ -88,7 +88,7 @@ class _CustomDataTableState extends State<CustomDataTable> {
   // Header Row Builder
   Widget _buildHeaderRow() {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         // Styling of the header row
         color: Colors.grey.shade200,
@@ -118,12 +118,12 @@ class _CustomDataTableState extends State<CustomDataTable> {
             ),
             if (_isExpanded)
               _buildHeaderCell(
-                text: 'Courses Completed (%)',
+                text: 'Courses Learning Completed (%)',
                 type: 'text',
               ),
             if (_isExpanded)
               _buildHeaderCell(
-                text: 'Courses Enrolled',
+                text: 'Courses Assigned',
                 type: 'text',
               ),
             if (_isExpanded)
@@ -134,6 +134,11 @@ class _CustomDataTableState extends State<CustomDataTable> {
             if (_isExpanded)
               _buildHeaderCell(
                 text: 'Exams Taken',
+                type: 'text',
+              ),
+            if (_isExpanded)
+              _buildHeaderCell(
+                text: 'Exams Pending',
                 type: 'text',
               ),
             if (_isExpanded)
@@ -173,7 +178,7 @@ class _CustomDataTableState extends State<CustomDataTable> {
         });
       },
       child: Container(
-        padding: EdgeInsets.all(12.0),
+        // padding: EdgeInsets.all(2.0),
         decoration: BoxDecoration(
           border: Border.all(
             color: Colors.grey.shade200,
@@ -197,7 +202,7 @@ class _CustomDataTableState extends State<CustomDataTable> {
               isHovering: isHoveringMap[index ?? 0] ?? false,
             ),
             _buildDataCell(
-              text: item.username,
+              text: item.name,
               type: 'text',
               isHovering: isHoveringMap[index ?? 0] ?? false,
               action: 'link',
@@ -207,9 +212,7 @@ class _CustomDataTableState extends State<CustomDataTable> {
                   // MaterialPageRoute(
                   //     builder: (context) => AdminUserDetailsScreen()))
                   {
-                context.goNamed(
-                  NamedRoutes.adminConsole.name,
-                )
+                context.goNamed(NamedRoutes.adminConsole.name, pathParameters: {'uid': item.uid})
                 // Then close the drawer
               },
               // icon: Icon(
@@ -231,14 +234,14 @@ class _CustomDataTableState extends State<CustomDataTable> {
             ),
             if (_isExpanded)
               _buildDataCell(
-                text: item.coursesCompletedPercentage.toString(),
+                text: item.coursesLearningCompletedPercentage.toString(),
                 type: 'text',
                 isPercentage: true,
                 isHovering: isHoveringMap[index ?? 0] ?? false,
               ),
             if (_isExpanded)
               _buildDataCell(
-                text: item.coursesEnrolled.toString(),
+                text: item.coursesAssigned.toString(),
                 type: 'text',
                 isHovering: isHoveringMap[index ?? 0] ?? false,
               ),
@@ -252,6 +255,12 @@ class _CustomDataTableState extends State<CustomDataTable> {
             if (_isExpanded)
               _buildDataCell(
                 text: item.examsTaken.toString(),
+                type: 'text',
+                isHovering: isHoveringMap[index ?? 0] ?? false,
+              ),
+            if (_isExpanded)
+              _buildDataCell(
+                text: item.examsPending.toString(),
                 type: 'text',
                 isHovering: isHoveringMap[index ?? 0] ?? false,
               ),
@@ -345,7 +354,7 @@ class _CustomDataTableState extends State<CustomDataTable> {
   }) {
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(4.0),
         child: (type == 'text' && action != null && action == 'link')
             ? _getDataCellActionLinkWidget(
                 text: text!,
@@ -453,6 +462,7 @@ class _CustomDataTableState extends State<CustomDataTable> {
 
   Widget _getDataCellTextWidget(
       {required String text, bool? isHovering, Icon? icon, String? iconAlignment, bool? isPercentage}) {
+    text = text == 'null' ? '0' : text;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -505,7 +515,7 @@ class _CustomDataTableState extends State<CustomDataTable> {
                           ? AlwaysStoppedAnimation<Color>(Colors.orangeAccent!)
                           : AlwaysStoppedAnimation<Color>(Colors.red!),
                   backgroundColor: Colors.grey.shade200,
-                  strokeWidth: 5.0,
+                  strokeWidth: 8.0,
                 ),
               ),
               Text(

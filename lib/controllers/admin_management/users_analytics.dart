@@ -20,8 +20,7 @@ class UsersAnalytics {
       allCoursesExamsMap: _allCoursesExamsMap,
       usersData: convertedMap,
     );
-    print('___________________');
-    print(finalData);
+
     return finalData;
   }
 

@@ -33,7 +33,6 @@ class _CustomBarChartState extends State<CustomBarChart> {
 
   @override
   void initState() {
-    print(widget.key);
     super.initState();
 
     _buildBarData();

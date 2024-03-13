@@ -14,88 +14,65 @@ import 'package:isms/views/screens/course_page.dart';
 import 'package:isms/views/screens/home_screen.dart';
 
 /// All named routes defined in the [GoRouter] configuration below
-enum NamedRoutes {
-  home,
-  login,
-  adminConsole,
-  assignments,
-  course,
-  exam,
-  allUsers
-}
+enum NamedRoutes { home, login, adminConsole, assignments, course, exam, allUsers }
 
 /// All parameter names used in child named routes defined in the [GoRouter] configuration below
-enum NamedRoutePathParameters { courseId, examId }
+enum NamedRoutePathParameters { courseId, examId, uid }
 
 /// Named [RouterConfig] object used to enable direct linking to and access of pages within the app by URL.
 /// This is returned as [GoRouter] from package `go_router`, which allows more fine-tuned control than base Flutter classes.
 final GoRouter ismsRouter = GoRouter(
   initialLocation: '/',
   redirect: (BuildContext context, GoRouterState state) =>
-      Provider.of<LoggedInState>(context, listen: false).currentUser == null
-          ? '/login'
-          : null,
+      Provider.of<LoggedInState>(context, listen: false).currentUser == null ? '/login' : null,
   routes: [
     GoRoute(
         name: NamedRoutes.home.name,
         path: '/',
-        builder: (BuildContext context, GoRouterState state) =>
-            const HomePage()),
+        builder: (BuildContext context, GoRouterState state) => const HomePage()),
     GoRoute(
       name: NamedRoutes.login.name,
       path: '/login',
       builder: (BuildContext context, GoRouterState state) => const LoginPage(),
       redirect: (BuildContext context, GoRouterState state) =>
-          Provider.of<LoggedInState>(context, listen: false).currentUser != null
-              ? '/'
-              : null,
+          Provider.of<LoggedInState>(context, listen: false).currentUser != null ? '/' : null,
     ),
     GoRoute(
       name: NamedRoutes.adminConsole.name,
-      path: '/admin_console',
-      builder: (BuildContext context, GoRouterState state) =>
-          const AdminUserDetailsScreen(),
+      path: '/admin_console/:uid',
+      builder: (BuildContext context, GoRouterState state) {
+        final uid = state.pathParameters['uid']; // Extracting the UID passed in the route
+        return AdminUserDetailsScreen(uid: uid!);
+      },
       redirect: (BuildContext context, GoRouterState state) =>
-          Provider.of<LoggedInState>(context, listen: false).currentUserRole !=
-                  'admin'
-              ? '/'
-              : null,
+          Provider.of<LoggedInState>(context, listen: false).currentUserRole != 'admin' ? '/' : null,
     ),
     GoRoute(
       name: NamedRoutes.allUsers.name,
       path: '/all_users',
       builder: (BuildContext context, GoRouterState state) => const AllUsers(),
       redirect: (BuildContext context, GoRouterState state) =>
-          Provider.of<LoggedInState>(context, listen: false).currentUserRole !=
-                  'admin'
-              ? '/'
-              : null,
+          Provider.of<LoggedInState>(context, listen: false).currentUserRole != 'admin' ? '/' : null,
     ),
     GoRoute(
       name: NamedRoutes.assignments.name,
       path: '/assignments',
-      builder: (BuildContext context, GoRouterState state) =>
-          const CourseList(),
+      builder: (BuildContext context, GoRouterState state) => const CourseList(),
       routes: [
         GoRoute(
           name: NamedRoutes.course.name,
           path: 'course/:courseId',
-          builder: (context, state) => CoursePage(
-              courseId:
-                  state.pathParameters[NamedRoutePathParameters.courseId.name]),
-          onExit: (BuildContext context) => _getNavigationConfirmationDialog(
-              context,
-              AppLocalizations.of(context)!.dialogLeavePageContentCourse),
+          builder: (context, state) =>
+              CoursePage(courseId: state.pathParameters[NamedRoutePathParameters.courseId.name]),
+          onExit: (BuildContext context) =>
+              _getNavigationConfirmationDialog(context, AppLocalizations.of(context)!.dialogLeavePageContentCourse),
         ),
         GoRoute(
           name: NamedRoutes.exam.name,
           path: 'exam/:examId',
-          builder: (context, state) => CoursePage(
-              courseId:
-                  state.pathParameters[NamedRoutePathParameters.examId.name]),
-          onExit: (BuildContext context) => _getNavigationConfirmationDialog(
-              context,
-              AppLocalizations.of(context)!.dialogLeavePageContentExam),
+          builder: (context, state) => CoursePage(courseId: state.pathParameters[NamedRoutePathParameters.examId.name]),
+          onExit: (BuildContext context) =>
+              _getNavigationConfirmationDialog(context, AppLocalizations.of(context)!.dialogLeavePageContentExam),
         ),
       ],
     ),
@@ -106,8 +83,7 @@ final GoRouter ismsRouter = GoRouter(
 ///
 /// Used in the `onExit` parameter of certain [GoRoute]s
 /// (those for pages which track user progress/input, such as course and exam pages).
-FutureOr<bool> _getNavigationConfirmationDialog(
-    BuildContext context, String dialogContent) async {
+FutureOr<bool> _getNavigationConfirmationDialog(BuildContext context, String dialogContent) async {
   final bool? confirmed = await showDialog<bool>(
     context: context,
     barrierColor: Colors.black26,
