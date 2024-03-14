@@ -10,9 +10,7 @@ import 'package:isms/utilities/platform_check.dart';
 import 'package:isms/views/widgets/shared_widgets/app_footer.dart';
 import 'package:isms/views/widgets/shared_widgets/custom_app_bar.dart';
 import 'package:isms/views/widgets/shared_widgets/custom_drawer.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'course_page.dart';
-import 'package:isms/views/widgets/shared_widgets/custom_linear_progress_indicator.dart';
+import '../widgets/course_widgets/carousel.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -22,7 +20,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _currentCarouselIndex = 0;
 
   @override
   void initState() {
@@ -67,51 +64,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final LoggedInState loggedInState = context.watch<LoggedInState>();
 
-    /// Card widget for non-carousel situation (1 to 3 items in the list)
-    final courseCard = (course) => GestureDetector(
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => CoursePage()),
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(20.0),
-            child: Card(
-              child: Container(
-                height: 200,
-                width: (MediaQuery.of(context).size.width * (
-                    courseTitle.length == 1
-                        ? (MediaQuery.of(context).size.width <= 600 ? 0.8 : 0.7)
-                        : courseTitle.length <= 3
-                        ? (MediaQuery.of(context).size.width <= 600 ? 0.8 : (courseTitle.length == 2 ? 0.35 : 0.25))
-                        : 0.25 // Default width for 4 or more items
-                )),
-                decoration: BoxDecoration(color: Colors.grey[200]),
-                padding: EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    Expanded(
-                      flex: 6,
-                      child: Text(
-                        course, // Display the course title
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: CustomLinearProgressIndicator(
-                        value: (1 / 3),
-                        backgroundColor: Colors.blue.shade100,
-                        valueColor: Colors.blue.shade300,
-                      ),
-                    ),
-                    // Add additional content based on course information
-                  ],
-                ),
-              ),
-            ),
-          ),
-        );
-
     return Scaffold(
       backgroundColor: Colors.white,
       bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
@@ -144,7 +96,10 @@ class _HomePageState extends State<HomePage> {
                         flex: 1,
                         // The flex factor. You can adjust this number to take more or less space in the Row or Column.
                         child: SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.2, // 50% of screen width
+                          width: MediaQuery
+                              .of(context)
+                              .size
+                              .width * 0.2, // 50% of screen width
 
                           child: Image.asset(
                             "assets/images/security.png",
@@ -158,193 +113,49 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
 
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    top: 20.0,
-                    right: MediaQuery.of(context).size.width * 0.08,
-                    left: MediaQuery.of(context).size.width * 0.08,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Remaining courses:",
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      if (courseTitle.isEmpty)
-                        Text("No remaining courses")
-                      else if (courseTitle.length == 1)
-                        courseCard(courseTitle[0]) // Use the courseCard function for single card
-                      else if (MediaQuery.of(context).size.width <= 600)
-                        CarouselSlider.builder(
-                          itemCount: courseTitle.length,
-                          itemBuilder: (context, index, realIndex) {
-                            final course = courseTitle[index]; // Get the current course title
-                            return GestureDetector(
-                              onTap: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => CoursePage()),
-                              ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(20.0), // Apply 20 point radius
-                                child: Card(
-                                  child: Container(
-                                    width: MediaQuery.of(context).size.width <= 600 // Mobile breakpoint
-                                        ? MediaQuery.of(context).size.width * 0.8 // Set width to 80% on mobile
-                                        : MediaQuery.of(context).size.width * 0.3, // Maintain 30% width on web
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey[200],
-                                    ),
-                                    padding: EdgeInsets.all(16),
-                                    child: Column(
-                                      children: [
-                                        Expanded(
-                                          flex: 6,
-                                          child: Text(
-                                            course, // Display the course title
-                                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          flex: 1,
-                                          child: SizedBox(height: 8),
-                                        ),
-                                        Expanded(
-                                          flex: 1,
-                                          child: CustomLinearProgressIndicator(
-                                            value: (1 / 3),
-                                            backgroundColor: Colors.blue.shade100,
-                                            valueColor: Colors.blue.shade300,
-                                          ),
-                                        ),
-                                        // Add additional content based on course information
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                          options: CarouselOptions(
-                            height: 200.0,
-                            viewportFraction: 0.9,
-                            scrollDirection: Axis.horizontal,
-                            enlargeCenterPage: false,
-                            onPageChanged: (index, reason) {
-                              setState(() {
-                                _currentCarouselIndex = index;
-                              });
-                            },
-                            // Add other options as desired (e.g., autoPlay, scrollDirection)
-                          ),
-                        )
-                      else if (courseTitle.length <= 3)
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            for (int i = 0; i < courseTitle.length; i++)
-                              courseCard(courseTitle[i]) // Use courseCard within loop for 2 or 3 cards
-                          ],
-                        )
-                      else
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20.0),
-                          child: Builder(
-                            builder: (context) {
-                              // Calculate viewportFraction based on courseTitle length
-                              double viewportFraction = MediaQuery.of(context).size.width <= 600
-                                  ? 0.9 // Force viewportFraction to 1 on mobile
-                                  : 0.3;
-                              return CarouselSlider.builder(
-                                itemCount: courseTitle.length,
-                                itemBuilder: (context, index, realIndex) {
-                                  final course = courseTitle[index]; // Get the current course title
-                                  return GestureDetector(
-                                    onTap: () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => CoursePage()),
-                                    ),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(20.0), // Apply 20 point radius
-                                      child: Card(
-                                        child: Container(
-                                          width: MediaQuery.of(context).size.width <= 600 // Mobile breakpoint
-                                              ? MediaQuery.of(context).size.width * 0.8 // Set width to 80% on mobile
-                                              : MediaQuery.of(context).size.width * 0.3, // Maintain 30% width on web
-                                          decoration: BoxDecoration(
-                                            color: Colors.grey[200],
-                                          ),
-                                          padding: EdgeInsets.all(16),
-                                          child: Column(
-                                            children: [
-                                              Expanded(
-                                                flex: 6,
-                                                child: Text(
-                                                  course, // Display the course title
-                                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                                                ),
-                                              ),
-                                              Expanded(
-                                                flex: 1,
-                                                child: SizedBox(height: 8),
-                                              ),
-                                              Expanded(
-                                                flex: 1,
-                                                child: CustomLinearProgressIndicator(
-                                                  value: (1 / 3),
-                                                  backgroundColor: Colors.blue.shade100,
-                                                  valueColor: Colors.blue.shade300,
-                                                ),
-                                              ),
-                                              // Add additional content based on course information
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                },
-                                options: CarouselOptions(
-                                  height: 200.0,
-                                  viewportFraction: viewportFraction,
-                                  scrollDirection: Axis.horizontal,
-                                  enlargeCenterPage: false,
-                                  onPageChanged: (index, reason) {
-                                    setState(() {
-                                      _currentCarouselIndex = index;
-                                    });
-                                  },
-                                  // Add other options as desired (e.g., autoPlay, scrollDirection)
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      Visibility(
-                        visible: courseTitle.length >= 4 ||
-                            (courseTitle.length >= 2 && MediaQuery.of(context).size.width <= 600),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            for (int i = 0; i < courseTitle.length; i++)
-                              Container(
-                                width: 8.0,
-                                height: 8.0,
-                                margin: EdgeInsets.symmetric(vertical: 10, horizontal: 2.0),
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: i == _currentCarouselIndex ? Colors.blue : Colors.grey,
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
+              /// Carousel
 
-                    ],
+              SliverToBoxAdapter(
+                child: Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(
+                      MediaQuery.of(context).size.width * 0.05,
+                      10.0,
+                      MediaQuery.of(context).size.width * 0.05,
+                      10.0,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 20),
+                        Row(
+                          children: [
+                            SizedBox(width: 20),
+                            Text(
+                              "Remaining courses:",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                        if (courseTitle.isNotEmpty) // Check if courseTitle is not empty
+                          Carousel(
+                            courseTitle: courseTitle,
+                          ),
+                        if (courseTitle.isEmpty) // Check if courseTitle is empty
+                          Row(
+                            children: [
+                              SizedBox(width: 20),
+                              Text(
+                                "There is no remaining course",
+                              ),
+                            ],
+                          ),
+                      ],
+                    ),
                   ),
                 ),
               ),
+
 
               /// Carousel
 
@@ -611,8 +422,11 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           ),
+
         ],
       ),
     );
   }
+
+
 }
