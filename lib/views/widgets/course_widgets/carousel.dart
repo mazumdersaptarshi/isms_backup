@@ -19,6 +19,11 @@ class Carousel extends StatefulWidget {
 class _CarouselState extends State<Carousel> {
   ScrollController _scrollController = ScrollController();
 
+  Color _leftHoverColor = Colors.grey.withOpacity(0.5);
+  Color _rightHoverColor = Colors.grey.withOpacity(0.5);
+
+  int _hoveredCardIndex = -1;
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -36,10 +41,11 @@ class _CarouselState extends State<Carousel> {
             child: Row(
               children: List.generate(
                 widget.courseTitle.length,
-                (index) => LayoutBuilder(
+                    (index) => LayoutBuilder(
                   builder: (context, constraints) => _buildCarouselItem(
                     widget.courseTitle[index],
                     constraints.maxWidth,
+                    index,
                   ),
                 ),
               ),
@@ -49,38 +55,54 @@ class _CarouselState extends State<Carousel> {
         // Positioned arrow buttons with GestureDetector
         Positioned(
           left: 10.0,
-          top: 80.0, // Adjust position based on your design
-          child: GestureDetector(
-            onTap: () => _scrollToLeft(),
-            child: Container(
-              decoration: ShapeDecoration(
-                color: Colors.grey.withOpacity(0.5),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50.0),
+          top: 80.0,
+          child: MouseRegion(
+            onEnter: (event) => setState(() {
+              _leftHoverColor = Colors.grey.withOpacity(0.3);
+            }),
+            onExit: (event) => setState(() {
+              _leftHoverColor = Colors.grey.withOpacity(0.5);
+            }),
+            child: GestureDetector(
+              onTap: () => _scrollToLeft(),
+              child: Container(
+                decoration: ShapeDecoration(
+                  color: _leftHoverColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50.0),
+                  ),
                 ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Icon(Icons.arrow_back_rounded, color: Colors.white),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Icon(Icons.arrow_back_rounded, color: Colors.white),
+                ),
               ),
             ),
           ),
         ),
         Positioned(
           right: 10.0,
-          top: 80.0, // Adjust position based on your design
-          child: GestureDetector(
-            onTap: () => _scrollToRight(),
-            child: Container(
-              decoration: ShapeDecoration(
-                color: Colors.grey.withOpacity(0.5),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50.0),
+          top: 80.0,
+          child: MouseRegion(
+            onEnter: (event) => setState(() {
+              _rightHoverColor = Colors.grey.withOpacity(0.3);
+            }),
+            onExit: (event) => setState(() {
+              _rightHoverColor = Colors.grey.withOpacity(0.5);
+            }),
+            child: GestureDetector(
+              onTap: () => _scrollToRight(),
+              child: Container(
+                decoration: ShapeDecoration(
+                  color: _rightHoverColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50.0),
+                  ),
                 ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Icon(Icons.arrow_forward_rounded, color: Colors.white),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Icon(Icons.arrow_forward_rounded, color: Colors.white),
+                ),
               ),
             ),
           ),
@@ -89,8 +111,19 @@ class _CarouselState extends State<Carousel> {
     );
   }
 
-  Widget _buildCarouselItem(String title, double width) {
-    return GestureDetector(
+  Widget _buildCarouselItem(String title, double width, int cardIndex) {
+    final defaultCardColor = Colors.grey.shade100; // Very light grey, close to white
+    final hoverCardColor = Colors.grey.shade50;
+
+    Color cardColor = _hoveredCardIndex == cardIndex ? hoverCardColor : defaultCardColor;
+    return MouseRegion(
+      onEnter: (event) => setState(() {
+        _hoveredCardIndex = cardIndex;
+      }),
+      onExit: (event) => setState(() {
+        _hoveredCardIndex = -1; // Reset when no card is hovered
+      }),
+      child: GestureDetector(
       onTap: () {
         // Navigate to CoursePage
         Navigator.push(
@@ -99,6 +132,7 @@ class _CarouselState extends State<Carousel> {
         );
       },
       child: Card(
+        color: cardColor,
         child: Container(
           width: widget.cardWidth, // Use provided cardWidth
           height: 200,
@@ -128,6 +162,7 @@ class _CarouselState extends State<Carousel> {
           ),
         ),
       ),
+    ),
     );
   }
 
