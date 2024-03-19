@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-
 import 'package:isms/controllers/user_management/logged_in_state.dart';
 import 'package:isms/utilities/navigation.dart';
 import 'package:isms/views/screens/admin_screens/admin_console/all_users_screen.dart';
@@ -10,6 +9,7 @@ import 'package:isms/views/screens/admin_screens/admin_console/users_analytics_s
 import 'package:isms/views/screens/course_page.dart';
 import 'package:isms/views/screens/testing/test_runner.dart';
 import 'package:isms/views/screens/testing/test_ui_type1/user_test_responses.dart';
+import 'package:isms/views/screens/user_screens/notification_page.dart';
 
 class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
   final BuildContext? context;
@@ -47,6 +47,9 @@ class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
     //             builder: (context) => AdminTestResponsesPage()))));
     actionWidgets.add(_getActionIconButton(context, Icons.track_changes, "Tracking",
         () => Navigator.push(context, MaterialPageRoute(builder: (context) => const TestRunner()))));
+
+    actionWidgets.add(_getActionIconButton(context, Icons.circle_notifications, "Notification",
+            () => Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationPage()))));
     // actionWidgets.add(_getActionIconButton(
     //     context,
     //     Icons.analytics_rounded,
