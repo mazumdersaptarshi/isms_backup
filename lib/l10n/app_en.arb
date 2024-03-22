@@ -14,6 +14,21 @@
         "type": "text",
         "description": "Tooltip for Course List button"
     },
+    "buttonCourseTest": "Courses　Test",
+        "@buttonCourseTest": {
+            "type": "text",
+            "description": "Tooltip for Course Test button"
+        },
+    "buttonTracking": "Tracking",
+            "@buttonTracking": {
+                "type": "text",
+                "description": "Tooltip for Tracking button"
+            },
+    "buttonNotificationPage": "Notification Page",
+        "@buttonNotificationPage": {
+            "type": "text",
+            "description": "Tooltip for Notification Page button"
+        },
     "buttonLogout": "Logout",
     "@buttonLogout": {
         "type": "text",
@@ -120,5 +135,75 @@
                 "example": "Correct answer explanation"
             }
         }
-    }
+    },
+    "homeWelcomeBack": "Welcome back,",
+        "@homeWelcomeBack": {
+            "type": "text",
+            "description": "Welcome back message on home screen"
+        },
+    "remainingCourses": "Remaining Courses:",
+        "@remainingCourses": {
+            "type": "text",
+            "description": "Remaining Courses message on home screen"
+            },
+    "noRemainingCourses": "There is no remaining course",
+        "@noRemainingCourses": {
+            "type": "text",
+            "description": "There is no remaining course message on home screen"
+            },
+    "selectAll": "Select All",
+        "@selectAll": {
+            "type": "text",
+            "description": "Select All on Notification page"
+            },
+    "deleteSelected": "Delete Selected",
+        "@deleteSelected": {
+            "type": "text",
+            "description": "Delete Selected on Notification page"
+            },
+    "markUnreadSelected": "Mark Unread Selected",
+        "@markUnreadSelected": {
+            "type": "text",
+            "description": "Mark Unread Selected on Notification page"
+            },
+    "courses": "Courses",
+        "@courses": {
+            "type": "text",
+            "description": "Courses on course list page"
+            },
+    "resumeCourse": "Resume Course",
+        "@resumeCourse": {
+            "type": "text",
+            "description": "Resume Course on course list page"
+            },
+    "startCourse": "Start Course",
+        "@startCourse": {
+            "type": "text",
+            "description": "Start Course on course list page"
+            },
+    "retakeExam": "Retake Exam",
+        "@retakeExam": {
+            "type": "text",
+            "description": "Retake Exam on course list page"
+            },
+    "startExam": "Start Exam",
+        "@startExam": {
+            "type": "text",
+            "description": "Start Exam on course list page"
+            },
+    "sections": "Sections",
+        "@sections": {
+            "type": "text",
+            "description": "Sections on course list page"
+            },
+    "exams": "Exams",
+        "@exams": {
+            "type": "text",
+            "description": "Exams on course list page"
+            },
+    "completed": "Completed",
+        "@startExam": {
+            "type": "text",
+            "description": "Start Exam on course list page"
+            }
 }
