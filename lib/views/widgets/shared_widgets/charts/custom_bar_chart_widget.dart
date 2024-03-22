@@ -40,9 +40,25 @@ class _CustomBarChartState extends State<CustomBarChart> {
   }
 
   void _buildBarData() {
+    if (widget.barChartValuesData.isEmpty) _scoreLimit = 0;
+    int maxValue = 0;
     for (int index = 0; index < widget.barChartValuesData.length; index++) {
       barData.add(IndividualBar(x: index, y: widget.barChartValuesData[index].y));
+
+      if (maxValue <= widget.barChartValuesData[index].y) maxValue = widget.barChartValuesData[index].y;
     }
+    if (maxValue <= 5) {
+      _scoreLimit = 5; // If the max value is less than 10, set the limit to 10
+    } else if (maxValue < 10) {
+      _scoreLimit = 10; // If the max value is less than 10, set the limit to 10
+    } else if (maxValue <= 100) {
+      _scoreLimit = 100; // If the max value is between 10 and 100, set the limit to 100
+    } else {
+      // If the max value is greater than 100, round up to the nearest multiple of 5
+      _scoreLimit = maxValue;
+    }
+
+    print('bnr: ${_scoreLimit}');
   }
 
   void _calculateTotalPages() {
@@ -75,20 +91,22 @@ class _CustomBarChartState extends State<CustomBarChart> {
               color: getPrimaryColorShade(200)!,
               width: isTouched ? 3 : 0,
             ),
-            toY: isTouched ? data.y + 2 : data.y,
+            // toY: isTouched ? data.y : data.y,
+            toY: data.y,
             color: isTouched
                 ? primary
-                : data.y <= 50
+                : data.y <= _scoreLimit.toDouble() * 0.5
                     ? Colors.redAccent
-                    : (data.y > 50 && data.y <= 70)
+                    : (data.y > _scoreLimit.toDouble() * 0.5 && data.y <= _scoreLimit.toDouble() * 0.8)
                         ? Colors.orangeAccent
-                        : (data.y > 70)
+                        : (data.y > _scoreLimit.toDouble() * 0.8)
                             ? Colors.lightGreen
                             : primary,
             // gradient: getBarsGradientColor(),
             width: 20,
             borderRadius: BorderRadius.circular(5),
-            backDrawRodData: BackgroundBarChartRodData(show: true, toY: 100, color: Colors.grey.shade300)),
+            backDrawRodData:
+                BackgroundBarChartRodData(show: true, toY: _scoreLimit.toDouble(), color: Colors.grey.shade300)),
       ],
     );
   }
@@ -97,7 +115,6 @@ class _CustomBarChartState extends State<CustomBarChart> {
   Widget build(BuildContext context) {
     final _paginatedFilteredData = _getPaginatedFilteredData();
     final chartWidth = max(_paginatedFilteredData.length * 50.0, 1);
-
     List<BarChartGroupData> _buildBarChartGroups() => List.generate(_paginatedFilteredData.length, (i) {
           return _buildBarChartGroupData(_paginatedFilteredData[i], i, _touchedIndex == i);
         });
@@ -125,12 +142,9 @@ class _CustomBarChartState extends State<CustomBarChart> {
           child: Container(
             padding: EdgeInsets.all(20),
             child: Container(
-              // width: widget.barData.length * 50.0,
-              // width: _limitedBarData.length * 50.0,
               width: max(_paginatedFilteredData.length * 50.0, 1),
-
               child: BarChart(BarChartData(
-                maxY: 100,
+                maxY: _scoreLimit.toDouble(),
                 minY: 0,
                 gridData: FlGridData(
                   show: true,
@@ -203,7 +217,6 @@ class _CustomBarChartState extends State<CustomBarChart> {
                                 ),
                               );
                             }))),
-                // barGroups: _limitedBarData.map((data) => buildBarChartGroupData(data, 0)).toList(),
                 barGroups: _buildBarChartGroups(),
               )),
             ),

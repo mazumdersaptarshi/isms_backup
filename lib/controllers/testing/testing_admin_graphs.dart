@@ -4,23 +4,23 @@ import 'package:isms/models/charts/box_and_whisker_charts/custom_box_and_whisker
 import 'test_data.dart';
 
 Map<String, List<CustomBarChartData>> _usersDataDifferentExamsMap = {
-  'yu78nb': usersData23,
-  'tr56bb': usersData24,
-  'vc34fv': usersData23,
-  'io90hj': usersData24
+  'py102ex': usersData23,
+  'cv101ex': usersData24,
+  'py103ds': usersData23,
+  'js101ex': usersData24
 };
 
 Map<String, List<CustomBarChartData>> _usersDataDifferentMetricsMap = {
-  'avgScore': usersDataAvgScores,
+  // 'avgScore': usersDataAvgScores,
   'maxScore': usersDataMaxScores,
   'minScore': usersDataMinScores,
 };
 
 Map<String, List<CustomBoxAndWhiskerChartData>> _usersDataDifferentExamsMapBoxWhisker = {
-  'yu78nb': usersData501,
-  'tr56bb': usersData502,
-  'vc34fv': usersData501,
-  'io90hj': usersData502
+  'py102ex': usersData501,
+  'cv101ex': usersData502,
+  'py103ds': usersData501,
+  'js101ex': usersData502
 };
 
 List<CustomBarChartData> _usersData = [];
@@ -41,13 +41,13 @@ List<CustomBarChartData> updateUsersDataOnDifferentMetricSelection(String? metri
   return _usersData;
 }
 
-List<CustomBarChartData> updateUserDataOnDifferentMetricSelection(String? metricKey) {
-  _usersData = (metricKey != null ? userDifferentDataMap[metricKey] : [])!;
-  return _usersData;
-}
+// List<CustomBarChartData> updateUserDataOnDifferentMetricSelection(String? metricKey) {
+//   _usersData = (metricKey != null ? userDifferentDataMap[metricKey] : [])!;
+//   return _usersData;
+// }
 
 Map<String, List<CustomBarChartData>> userDifferentDataMap = {
-  'avgScore': userDataAllCoursesAverage,
-  'maxScore': userDataAllCoursesMaximum,
-  'minScore': userDataAllCoursesMinimum,
+  // 'avgScore': userDataAllCoursesAverage,
+  // 'maxScore': userDataAllCoursesMaximum,
+  // 'minScore': userDataAllCoursesMinimum,
 };

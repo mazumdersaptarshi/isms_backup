@@ -1,6 +1,7 @@
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart';
+import 'package:isms/models/course/course_exam_relationship.dart';
 
 class CourseExamSelectWidget extends StatefulWidget {
   final Function(String?) onExamSelected;
@@ -14,15 +15,17 @@ class CourseExamSelectWidget extends StatefulWidget {
 class _CourseExamSelectWidgetState extends State<CourseExamSelectWidget> {
   Map<String, dynamic> coursesAndExams = {
     'Intro to Python 1': [
-      {'examId': 'yu78nb', 'examName': 'Assesment 1'},
-      {'examId': 'tr56bb', 'examName': 'Assesment 2'},
+      {'examId': 'py102ex', 'examName': 'Assesment 1'},
+      {'examId': 'cv101ex', 'examName': 'Assesment 2'},
     ],
     'Intro to Data Science': [
-      {'examId': 'vc34fv', 'examName': 'Assesment 1'},
-      {'examId': 'io90hj', 'examName': 'Assesment 2'},
+      {'examId': 'py103ds', 'examName': 'Assesment 1'},
+      {'examId': 'js101ex', 'examName': 'Assesment 2'},
     ],
     // Add more courses and exams as needed
   };
+
+  List<CourseExamRelationship> courseExams = [];
 
   String? selectedCourse;
   String? selectedExam;
@@ -45,6 +48,7 @@ class _CourseExamSelectWidgetState extends State<CourseExamSelectWidget> {
         SizedBox(
           height: 10,
         ),
+
         CustomCourseDropdownWidget(),
         if (selectedCourse != null)
           Column(
@@ -67,28 +71,8 @@ class _CourseExamSelectWidgetState extends State<CourseExamSelectWidget> {
     );
   }
 
-  DropdownButton<String> CoursesDropdownWidget() {
-    return DropdownButton<String>(
-      value: selectedCourse,
-      hint: Text("Select Course"),
-      items: coursesAndExams.keys.map((String course) {
-        return DropdownMenuItem<String>(
-          value: course,
-          child: Text(course),
-        );
-      }).toList(),
-      onChanged: (value) {
-        setState(() {
-          selectedCourse = value;
-          updateExams(value);
-        });
-      },
-    );
-  }
-
   Widget CustomCourseDropdownWidget() {
-    List<String> displayItems =
-        coursesAndExams.entries.map((entry) => "${entry.key}").toList();
+    List<String> displayItems = coursesAndExams.entries.map((entry) => "${entry.key}").toList();
 
     return Container(
       child: ConstrainedBox(
@@ -120,8 +104,7 @@ class _CourseExamSelectWidgetState extends State<CourseExamSelectWidget> {
   }
 
   Widget CustomExamDropdownWidget() {
-    List<String> displayItems =
-        exams.map((entry) => "${entry['examName']}").toList();
+    List<String> displayItems = exams.map((entry) => "${entry['examName']}").toList();
     return Container(
       child: ConstrainedBox(
         constraints: BoxConstraints(

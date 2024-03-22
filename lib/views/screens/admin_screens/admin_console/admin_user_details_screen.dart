@@ -47,7 +47,23 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
   void initState() {
     super.initState();
     adminState = AdminState();
-    _usersDataBarChart = updateUserDataOnDifferentMetricSelection('avgScore');
+    // _fetchCoursesForUser();
+    _fetchUserExamOverallResults(uid: widget.uid);
+    // _usersDataBarChart = updateUserDataOnDifferentMetricSelection('avgScore');
+  }
+
+  Future<void> _fetchCoursesForUser() async {
+    adminState.getCoursesListForUser(uid: widget.uid);
+  }
+
+  var _pieChartExamsData;
+
+  Future<void> _fetchUserExamOverallResults({required String uid}) async {
+    var userExamResults = await adminState.getExamOverallResultsForUser(uid: uid);
+    setState(() {
+      _pieChartExamsData = userExamResults;
+    });
+    print(_pieChartExamsData);
   }
 
   @override
@@ -211,17 +227,17 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
       return examDescription;
     }
 
-    void _updateBarDataOnMetricSelection(String? metricKey) {
-      setState(() {
-        _usersDataBarChart = updateUserDataOnDifferentMetricSelection(metricKey);
-      });
-    }
+    // void _updateBarDataOnMetricSelection(String? metricKey) {
+    //   setState(() {
+    //     _usersDataBarChart = updateUserDataOnDifferentMetricSelection(metricKey);
+    //   });
+    // }
 
-    void _updateSelectedMetricBarChart(String? selectedMetric) {
-      setState(() {
-        _updateBarDataOnMetricSelection(selectedMetric);
-      });
-    }
+    // void _updateSelectedMetricBarChart(String? selectedMetric) {
+    //   setState(() {
+    //     _updateBarDataOnMetricSelection(selectedMetric);
+    //   });
+    // }
 
     /// Returns a list of Widgets, which contains a list of the Exams taken by the User for a specific Course, .
     /// It takes an input List<dynamic> attempts
@@ -277,80 +293,6 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
     ///   - 'completedExams': A list of exams that have been completed by the user.
     ///   - 'courseSections': A list of all sections in the course.
     ///   - 'courseExams': A list of all exams in the course.
-
-    Widget _courseDetailsHeaderWidget({required UserCourseProgress userCourseProgress, int? index}) {
-      double completionPercentage =
-          ((userCourseProgress.completedSections!.length + userCourseProgress.completedExams!.length) /
-              (userCourseProgress.sectionsInCourse!.length + userCourseProgress.examsInCourse!.length));
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start, // Aligns children to the start (left)
-
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Icon(
-                  userCourseProgress.courseLearningCompleted == true
-                      ? Icons.check_circle_rounded // Icon for 'completed' status
-                      : Icons.pending, // Icon for other statuses
-                  color: userCourseProgress.courseLearningCompleted == true
-                      ? Colors.green // Color for 'completed' status
-                      : Colors.amber, // Color for other statuses
-                ),
-                SizedBox(width: 20),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Icon(Icons.menu_book_rounded, color: Colors.black),
-                          SizedBox(width: 20),
-                          Text(
-                            userCourseProgress.courseTitle.toString(),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.3, // 40% of screen width
-
-                          child: CustomLinearProgressIndicator(
-                            value: completionPercentage,
-                            backgroundColor: Colors.grey[300]!,
-                            valueColor: primary!,
-                          ),
-                        ),
-                        SizedBox(width: 8),
-
-                        // Text widget to display the percentage
-                        Text(
-                          '${(completionPercentage * 100).toStringAsFixed(2)}%',
-                          style: TextStyle(color: primary),
-                        ),
-                        SizedBox(width: 4),
-                        Text(
-                          '(${(userCourseProgress.completedSections!.length + userCourseProgress.completedExams!.length).toString()}'
-                          '/${(userCourseProgress.sectionsInCourse!.length + userCourseProgress.examsInCourse!.length).toString()})',
-                          style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: getSecondaryTextColor()),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          // Widget to display the progress information.
-          // It calculates the total number of completed sections and exams and
-          // compares them with the total number of sections and exams in the course.
-        ],
-      );
-    }
 
     Widget _courseDetailsTitleWidget({required UserCourseProgress userCourseProgress, int? index}) {
       double completionPercentage = 0;
@@ -533,27 +475,11 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
 
                       itemBuilder: (context, index) {
                         return CustomExpansionTile(
-                          // Widget that displays header information for each course.
-                          // titleWidget: _courseDetailHeaderWidget(
-                          //   courseDetails: adminState
-                          //       .getAllCoursesDataForCurrentUser(uid)['coursesDetails']
-                          //       .values
-                          //       .elementAt(index),
-                          //   index: index,
-                          // ),
                           titleWidget: _courseDetailsTitleWidget(
                             userCourseProgress: snapshot.data[index],
                             index: index,
                           ),
                           contentWidget:
-                              // List of Widgets, that shows a list of exams for each course.
-                              // _getCourseExamsList(
-                              //     allExamsTakenByUser: adminState.getExamsProgressForCourseForUser(
-                              //         uid,
-                              //         adminState
-                              //             .getAllCoursesDataForCurrentUser(uid)['coursesDetails']
-                              //             .values
-                              //             .elementAt(index)['courseId'])),
                               _getCourseExamsListOfWidgets(examsProgressList: snapshot.data[index].examsProgressList!),
                           index: index,
                           length: userCourseDetailsList.length,
@@ -602,58 +528,60 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
                       ),
                     ),
                   ),
-                  ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: 800),
-                    child: HoverableSectionContainer(
-                      onHover: (bool) {},
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Courses  performance overview',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey.shade700,
-                            ),
-                          ),
-                          Divider(),
-                          SizedBox(
-                            height: 40,
-                          ),
-                          ChartMetricSelectWidget(
-                            onMetricSelected: (selectedMetric) {
-                              _updateSelectedMetricBarChart(selectedMetric);
-                            },
-                          ),
-                          CustomBarChartUserWidget(
-                              key: ValueKey(_usersDataBarChart), barChartValuesData: _usersDataBarChart),
-                        ],
-                      ),
-                    ),
-                  ),
-                  ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: 800),
-                    child: HoverableSectionContainer(
-                      onHover: (bool) {},
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Courses progress by status',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey.shade700,
-                            ),
-                          ),
-                          Divider(),
-                          SizedBox(
-                            height: 40,
-                          ),
-                          CustomPieChartWidget(),
-                        ],
-                      ),
-                    ),
-                  ),
+                  // ConstrainedBox(
+                  //   constraints: BoxConstraints(maxWidth: 800),
+                  //   child: HoverableSectionContainer(
+                  //     onHover: (bool) {},
+                  //     child: Column(
+                  //       crossAxisAlignment: CrossAxisAlignment.start,
+                  //       children: [
+                  //         Text(
+                  //           'Courses  performance overview',
+                  //           style: TextStyle(
+                  //             fontSize: 14,
+                  //             color: Colors.grey.shade700,
+                  //           ),
+                  //         ),
+                  //         Divider(),
+                  //         SizedBox(
+                  //           height: 40,
+                  //         ),
+                  //         ChartMetricSelectWidget(
+                  //           onMetricSelected: (selectedMetric) {
+                  //             _updateSelectedMetricBarChart(selectedMetric);
+                  //           },
+                  //         ),
+                  //         CustomBarChartUserWidget(
+                  //             key: ValueKey(_usersDataBarChart), barChartValuesData: _usersDataBarChart),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
+                  // ConstrainedBox(
+                  //   constraints: BoxConstraints(maxWidth: 800),
+                  //   child: HoverableSectionContainer(
+                  //     onHover: (bool) {},
+                  //     child: Column(
+                  //       crossAxisAlignment: CrossAxisAlignment.start,
+                  //       children: [
+                  //         Text(
+                  //           'Courses progress by status',
+                  //           style: TextStyle(
+                  //             fontSize: 14,
+                  //             color: Colors.grey.shade700,
+                  //           ),
+                  //         ),
+                  //         Divider(),
+                  //         SizedBox(
+                  //           height: 40,
+                  //         ),
+                  //         CustomPieChartWidget(
+                  //           pieData: _pieChartExamsData,
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),

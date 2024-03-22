@@ -7,15 +7,15 @@ import 'package:isms/utilities/navigation.dart';
 import 'package:isms/views/screens/admin_screens/admin_console/admin_user_details_screen.dart';
 import 'package:isms/views/screens/testing/test_ui_type1/user_test_responses.dart';
 
-class CustomDataTable extends StatefulWidget {
-  CustomDataTable({Key? key, required this.usersList}) : super(key: key);
+class UsersSummaryTable extends StatefulWidget {
+  UsersSummaryTable({Key? key, required this.usersList}) : super(key: key);
   List usersList = [];
 
   @override
-  State<CustomDataTable> createState() => _CustomDataTableState();
+  State<UsersSummaryTable> createState() => _UsersSummaryTableState();
 }
 
-class _CustomDataTableState extends State<CustomDataTable> {
+class _UsersSummaryTableState extends State<UsersSummaryTable> {
   @override
   void initState() {
     super.initState();

@@ -78,6 +78,7 @@ FROM
     LEFT JOIN ExamsCompleted ec ON u.user_id = ec.user_id
     LEFT JOIN AllAssignedExams aae ON u.user_id = aae.user_id
     LEFT JOIN AverageScore avs ON u.user_id = avs.user_id
+WHERE u.domain_id = 'domain01'
 ORDER BY 
     u.user_id) 
 
@@ -95,5 +96,4 @@ SELECT jsonb_build_object('userId', us.user_id,
 						 ) AS users_summary_json
 						 
 FROM UsersSummary us
-
 ''';

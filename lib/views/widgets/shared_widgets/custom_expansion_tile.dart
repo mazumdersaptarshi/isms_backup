@@ -8,6 +8,8 @@ class CustomExpansionTile extends StatefulWidget {
   final int? length;
   final bool? hasHoverBorder;
 
+  final Future<void> Function()? onDataFetch;
+
   const CustomExpansionTile({
     Key? key,
     required this.titleWidget,
@@ -15,6 +17,7 @@ class CustomExpansionTile extends StatefulWidget {
     this.index,
     this.length,
     this.hasHoverBorder,
+    this.onDataFetch,
   }) : super(key: key);
 
   @override
@@ -90,7 +93,15 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
           child: widget.titleWidget,
         ),
         children: widget.contentWidget is List<Widget> ? widget.contentWidget : [widget.contentWidget],
-        onExpansionChanged: (bool expanded) => setState(() => _isExpanded = expanded),
+        onExpansionChanged: (bool expanded) async {
+          if (widget.onDataFetch != null) {
+            await widget.onDataFetch!();
+            // After the data fetch function is called, you might want to fetch data again
+            // Or update the state if needed, depending on what your onDataFetch does
+            // For example, if it updates _dataWidgets, you might not need to do anything
+          }
+          setState(() => _isExpanded = expanded);
+        },
       ),
     );
   }

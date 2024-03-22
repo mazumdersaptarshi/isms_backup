@@ -90,6 +90,7 @@ dependencies:
   syncfusion_flutter_charts: 22.2.12
   animated_custom_dropdown: ^3.0.0
   postgres: ^3.1.1
+  custom_searchable_dropdown: ^2.1.1
 dev_dependencies:
   hive_generator:
   flutter_test:

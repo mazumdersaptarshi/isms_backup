@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import "package:universal_html/html.dart" as html;
 
@@ -111,9 +112,17 @@ class LoginPageState extends State<LoginPage> {
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                       ),
-                      child: Text(
-                        'LOGIN',
-                        style: TextStyle(fontSize: buttonFontSize),
+                      child: Row(
+                        children: [
+                          Icon(LineIcons.googleLogo),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Text(
+                            'LOGIN',
+                            style: TextStyle(fontSize: buttonFontSize),
+                          ),
+                        ],
                       ),
                     ),
                   ],

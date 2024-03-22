@@ -1,4 +1,6 @@
-class UsersSummaryData {
+import 'package:isms/views/widgets/shared_widgets/selectable_item.dart';
+
+class UsersSummaryData implements SelectableItem {
   String uid;
   String? name;
 
@@ -29,4 +31,10 @@ class UsersSummaryData {
     this.examsPending,
     this.lastLogin,
   });
+
+  @override
+  String get itemId => uid;
+
+  @override
+  String get itemName => name ?? 'n/a';
 }

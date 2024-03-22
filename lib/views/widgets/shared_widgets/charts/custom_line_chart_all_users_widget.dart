@@ -94,7 +94,7 @@ class _CustomLineChartAllUsersWidgetState extends State<CustomLineChartAllUsersW
                   ],
                 ),
               ),
-              _buildLineChartLegend(dataTypesAndColors: dataTypesAndColors),
+              // _buildLineChartLegend(dataTypesAndColors: dataTypesAndColors),
             ],
           ),
         ],

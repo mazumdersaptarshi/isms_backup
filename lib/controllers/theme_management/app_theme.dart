@@ -211,7 +211,7 @@ Color getTertiaryTextColor1() {
 
 /// Returns app-wide widget [BorderRadius]
 BorderRadius _getBorderRadius() {
-  return BorderRadius.circular(10);
+  return BorderRadius.circular(5);
 }
 
 /// Returns [BoxDecoration] used for styling [ExpansionTile]s
