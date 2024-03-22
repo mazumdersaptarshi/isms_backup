@@ -48,7 +48,7 @@ class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
     actionWidgets.add(_getActionIconButton(context, Icons.track_changes, "Tracking",
         () => Navigator.push(context, MaterialPageRoute(builder: (context) => const TestRunner()))));
 
-    actionWidgets.add(_getActionIconButton(context, Icons.circle_notifications, "Notification",
+    actionWidgets.add(_getActionIconButton(context, Icons.notifications, "Notification",
             () => Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationPage()))));
     // actionWidgets.add(_getActionIconButton(
     //     context,

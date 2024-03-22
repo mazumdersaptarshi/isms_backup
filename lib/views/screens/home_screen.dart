@@ -96,11 +96,7 @@ class _HomePageState extends State<HomePage> {
                         flex: 1,
                         // The flex factor. You can adjust this number to take more or less space in the Row or Column.
                         child: SizedBox(
-                          width: MediaQuery
-                              .of(context)
-                              .size
-                              .width * 0.2, // 50% of screen width
-
+                          width: MediaQuery.of(context).size.width * 0.2,
                           child: Image.asset(
                             "assets/images/security.png",
                             fit: BoxFit
