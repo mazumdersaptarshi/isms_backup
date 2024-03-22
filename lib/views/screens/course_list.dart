@@ -359,7 +359,7 @@ SELECT jsonb_build_object(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              buildSectionHeader(title: 'Courses'),
+              buildSectionHeader(title: AppLocalizations.of(context)!.courses),
               Container(
                 width: MediaQuery.of(context).size.width * 1,
                 margin: EdgeInsets.fromLTRB(
@@ -420,7 +420,7 @@ SELECT jsonb_build_object(
                         child: ElevatedButton(
                             onPressed: () => context.goNamed(NamedRoutes.course.name,
                                 pathParameters: {NamedRoutePathParameters.courseId.name: course.courseId}),
-                            child: courseId == 'webdev101' ? Text('Resume Course') : Text('Start Course')))),
+                            child: courseId == 'webdev101' ? Text(AppLocalizations.of(context)!.resumeCourse) : Text(AppLocalizations.of(context)!.startCourse)))),
                 _separator,
                 Card(
                   color: Theme.of(context).scaffoldBackgroundColor,
@@ -429,7 +429,7 @@ SELECT jsonb_build_object(
                       titleWidget: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Sections (1/${course.courseSections.length} Completed)"),
+                          Text("${AppLocalizations.of(context)!.sections} (1/${course.courseSections.length} ${AppLocalizations.of(context)!.completed})"),
                           SizedBox(
                             height: 10,
                           ),
@@ -452,7 +452,7 @@ SELECT jsonb_build_object(
                       titleWidget: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Exams (0/${_exams[courseId]?.length} Completed)"),
+                          Text("${AppLocalizations.of(context)!.exams} (0/${_exams[courseId]?.length} ${AppLocalizations.of(context)!.completed})"),
                           SizedBox(
                             height: 10,
                           ),
@@ -580,7 +580,7 @@ SELECT jsonb_build_object(
                 alignment: Alignment.centerLeft,
                 child: ElevatedButton(
                     onPressed: () => print(exam.examTitle),
-                    child: examId == 'e1' ? Text('Retake Exam') : Text('Start Exam'))),
+                    child: examId == 'e1' ? Text(AppLocalizations.of(context)!.retakeExam) : Text(AppLocalizations.of(context)!.startExam))),
           ],
         ),
       ));

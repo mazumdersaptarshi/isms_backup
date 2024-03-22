@@ -35,7 +35,7 @@ class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
 
     actionWidgets.add(_getActionIconButton(context, Icons.list, AppLocalizations.of(context)!.buttonCourseList,
         () => context.goNamed(NamedRoutes.assignments.name)));
-    actionWidgets.add(_getActionIconButton(context, Icons.article, "Course Test",
+    actionWidgets.add(_getActionIconButton(context, Icons.article, AppLocalizations.of(context)!.buttonCourseTest,
         () => Navigator.push(context, MaterialPageRoute(builder: (context) => const CoursePage()))));
     // actionWidgets.add(_getActionIconButton(
     //     context,
@@ -45,10 +45,10 @@ class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
     //         context,
     //         MaterialPageRoute(
     //             builder: (context) => AdminTestResponsesPage()))));
-    actionWidgets.add(_getActionIconButton(context, Icons.track_changes, "Tracking",
+    actionWidgets.add(_getActionIconButton(context, Icons.track_changes, AppLocalizations.of(context)!.buttonTracking,
         () => Navigator.push(context, MaterialPageRoute(builder: (context) => const TestRunner()))));
 
-    actionWidgets.add(_getActionIconButton(context, Icons.notifications, "Notification",
+    actionWidgets.add(_getActionIconButton(context, Icons.notifications, AppLocalizations.of(context)!.buttonNotificationPage,
             () => Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationPage()))));
     // actionWidgets.add(_getActionIconButton(
     //     context,

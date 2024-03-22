@@ -4,6 +4,7 @@ import '../../widgets/shared_widgets/custom_app_bar.dart';
 import 'package:isms/utilities/platform_check.dart';
 import 'package:isms/controllers/user_management/logged_in_state.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Notification {
   final String title;
@@ -130,13 +131,13 @@ class _NotificationPageState extends State<NotificationPage> {
                       // Make "Select All" text clickable
                       onTap: () => handleSelectAll(!selectAll),
                       // Toggle selection
-                      child: Text('Select All'),
+                      child: Text(AppLocalizations.of(context)!.selectAll,),
                     ),
                     Expanded(
                       child: SizedBox(),
                     ),
                     Tooltip(
-                      message: 'Delete Selected',
+                      message: AppLocalizations.of(context)!.deleteSelected,
                       child: IconButton(
                           icon: Icon(Icons.delete),
                           onPressed: handleDeleteSelected,
@@ -147,7 +148,7 @@ class _NotificationPageState extends State<NotificationPage> {
                     ),
                     SizedBox(width: 10),
                     Tooltip(
-                      message: 'Mark Unread Selected',
+                      message: AppLocalizations.of(context)!.markUnreadSelected,
                       child: IconButton(
                         icon: Icon(Icons.mark_as_unread_outlined),
                         onPressed: handleMarkUnread,

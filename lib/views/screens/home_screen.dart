@@ -11,6 +11,7 @@ import 'package:isms/views/widgets/shared_widgets/app_footer.dart';
 import 'package:isms/views/widgets/shared_widgets/custom_app_bar.dart';
 import 'package:isms/views/widgets/shared_widgets/custom_drawer.dart';
 import '../widgets/course_widgets/carousel.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -89,7 +90,7 @@ class _HomePageState extends State<HomePage> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Text(
-                        "Welcome back, \n${loggedInState.currentUserName}",
+                        "${AppLocalizations.of(context)!.homeWelcomeBack} \n${loggedInState.currentUserName}",
                         style: customTheme.textTheme.bodyMedium?.copyWith(fontSize: 30, color: Colors.white),
                       ),
                       Flexible(
@@ -128,7 +129,7 @@ class _HomePageState extends State<HomePage> {
                           children: [
                             SizedBox(width: 20),
                             Text(
-                              "Remaining courses:",
+                              AppLocalizations.of(context)!.remainingCourses,
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ],
@@ -142,7 +143,7 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               SizedBox(width: 20),
                               Text(
-                                "There is no remaining course",
+                                AppLocalizations.of(context)!.noRemainingCourses,
                               ),
                             ],
                           ),
