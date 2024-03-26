@@ -11,6 +11,8 @@ import 'package:isms/views/screens/testing/test_runner.dart';
 import 'package:isms/views/screens/testing/test_ui_type1/user_test_responses.dart';
 import 'package:isms/views/screens/user_screens/notification_page.dart';
 
+import '../../screens/user_screens/settings_page.dart';
+
 class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
   final BuildContext? context;
   final double _paddingValue = 20;
@@ -33,38 +35,25 @@ class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
     final LoggedInState loggedInState = context.watch<LoggedInState>();
     final List<Widget> actionWidgets = [];
 
+    /// ↓↓↓ To be removed ///
+
     actionWidgets.add(_getActionIconButton(context, Icons.list, AppLocalizations.of(context)!.buttonCourseList,
         () => context.goNamed(NamedRoutes.assignments.name)));
+
     actionWidgets.add(_getActionIconButton(context, Icons.article, AppLocalizations.of(context)!.buttonCourseTest,
         () => Navigator.push(context, MaterialPageRoute(builder: (context) => const CoursePage()))));
-    // actionWidgets.add(_getActionIconButton(
-    //     context,
-    //     Icons.bar_chart,
-    //     "Graphs",
-    //     () => Navigator.push(
-    //         context,
-    //         MaterialPageRoute(
-    //             builder: (context) => AdminTestResponsesPage()))));
+
     actionWidgets.add(_getActionIconButton(context, Icons.track_changes, AppLocalizations.of(context)!.buttonTracking,
         () => Navigator.push(context, MaterialPageRoute(builder: (context) => const TestRunner()))));
 
+    /// ↑↑↑ To be removed ///
+
     actionWidgets.add(_getActionIconButton(context, Icons.notifications, AppLocalizations.of(context)!.buttonNotificationPage,
-            () => Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationPage()))));
-    // actionWidgets.add(_getActionIconButton(
-    //     context,
-    //     Icons.analytics_rounded,
-    //     "Users Analytics",
-    //     () => Navigator.push(
-    //         context,
-    //         MaterialPageRoute(
-    //             builder: (context) => const UsersAnalyticsStatsScreen()))));
-    // actionWidgets.add(_getActionIconButton(context, Icons.people_outline_rounded, "All Users",
-    //     () => Navigator.push(context, MaterialPageRoute(builder: (context) => const AllUsers()))));
-    //
-    // if (loggedInState.currentUserRole == 'admin') {
-    //   actionWidgets.add(_getActionIconButton(context, Icons.admin_panel_settings_rounded,
-    //       AppLocalizations.of(context)!.buttonAdminConsole, () => context.goNamed(NamedRoutes.adminConsole.name)));
-    // }
+        () => Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationPage()))));
+
+    actionWidgets.add(_getActionIconButton(context, Icons.settings, AppLocalizations.of(context)!.buttonSettings,
+        () => Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingsPage()))));
+
     actionWidgets.add(_getVerticalDivider());
     actionWidgets.add(_getLogoutButton(context));
 

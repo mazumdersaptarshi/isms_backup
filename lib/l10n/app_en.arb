@@ -24,15 +24,35 @@
                 "type": "text",
                 "description": "Tooltip for Tracking button"
             },
-    "buttonNotificationPage": "Notification Page",
+    "buttonNotificationPage": "Notifications",
         "@buttonNotificationPage": {
             "type": "text",
             "description": "Tooltip for Notification Page button"
         },
+    "buttonSettings": "Settings",
+        "@buttonSettings": {
+            "type": "text",
+            "description": "Tooltip for Settings button"
+            },
     "buttonLogout": "Logout",
     "@buttonLogout": {
         "type": "text",
         "description": "Tooltip for logout button"
+    },
+    "buttonLanguage": "Language",
+    "@buttonLanguage": {
+        "type": "text",
+        "description": "Tooltip for language button"
+    },
+    "localeEnglish": "English",
+    "@localeEnglish": {
+        "type": "text",
+        "description": "Dropdown item for locale English"
+    },
+    "localeJapanese": "Japanese",
+    "@localeJapanese": {
+        "type": "text",
+        "description": "Dropdown item for locale Japanese"
     },
     "buttonCheckAnswer": "Check answer",
     "@buttonCheckAnswer": {
@@ -202,8 +222,28 @@
             "description": "Exams on course list page"
             },
     "completed": "Completed",
-        "@startExam": {
+        "@completed": {
             "type": "text",
-            "description": "Start Exam on course list page"
-            }
+            "description": "Completed on course list page"
+            },
+    "themes": "Themes:",
+        "@themes": {
+            "type": "text",
+            "description": "Themes on Settings page"
+            },
+    "lightTheme": "Light Theme",
+        "@lightTheme": {
+            "type": "text",
+            "description": "Light theme on Settings page"
+            },
+    "darkTheme": "Dark Theme",
+        "@darkTheme": {
+            "type": "text",
+            "description": "Dark theme on Settings page"
+            },
+    "languageSetting": "Language:",
+        "@languageSetting": {
+            "type": "text",
+            "description": "Language setting on Settings page"
+        }
 }

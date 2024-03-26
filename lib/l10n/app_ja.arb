@@ -5,7 +5,11 @@
     "buttonCourseTest": "コーステスト",
     "buttonTracking": "トラッキング",
     "buttonNotificationPage": "通知",
+    "buttonSettings": "設定",
     "buttonLogout": "ログアウト",
+    "buttonLanguage": "言語",
+    "localeEnglish": "英語",
+    "localeJapanese": "日本語",
     "buttonCheckAnswer": "回答をチェック",
     "buttonSelectAnswer": "回答を選択してください",
     "buttonSectionContentIncomplete": "未完了の項目があります",
@@ -33,5 +37,9 @@
     "startExam": "試験を開始",
     "sections": "セクション",
     "exams": "試験",
-    "completed": "完了"
+    "completed": "完了",
+    "themes": "テーマ：",
+    "lightTheme": "ライトテーマ",
+    "darkTheme": "ダークテーマ",
+    "languageSetting": "言語"
 }

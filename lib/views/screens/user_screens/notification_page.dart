@@ -120,18 +120,24 @@ class _NotificationPageState extends State<NotificationPage> {
               right: MediaQuery.of(context).size.width * 0.05,
             ),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Text(AppLocalizations.of(context)!.buttonNotificationPage,
+                style: TextStyle(fontSize: 30, color: Colors.grey.shade600)),
+                SizedBox(height: 20),
                 Row(
                   children: [
                     Checkbox(
                       value: selectAll,
                       onChanged: handleSelectAll,
                     ),
+                    SizedBox(width: 16),
                     InkWell(
                       // Make "Select All" text clickable
                       onTap: () => handleSelectAll(!selectAll),
                       // Toggle selection
-                      child: Text(AppLocalizations.of(context)!.selectAll,),
+                      child: Text(AppLocalizations.of(context)!.selectAll,
+                      style: TextStyle(fontSize: 18, color: Colors.grey.shade700),),
                     ),
                     Expanded(
                       child: SizedBox(),
@@ -179,15 +185,37 @@ class _NotificationPageState extends State<NotificationPage> {
                           child: InkWell(
                             onTap: () => handleListItemClick(index),
                             child: ListTile(
-                              title: Text(notification.title),
                               subtitle: notification.deadline != null
-                                  ? Text(DateFormat('y MMMM d')
-                                      .format(notification.deadline!))
-                                  : Text(''),
+                                  ? RichText(
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: notification.title,
+                                      style: TextStyle(fontSize: 16, color: Colors.grey.shade700),
+                                    ),
+                                    TextSpan(
+                                      text: '\n', // Add a newline character for separation
+                                      style: TextStyle(fontSize: 12, color: Colors.grey), // Adjust font size and color here
+                                    ),
+                                    TextSpan(
+                                      text: DateFormat('y MMMM d').format(notification.deadline!),
+                                      style: TextStyle(fontSize: 12, color: Colors.grey), // Adjust font size and color here
+                                    ),
+                                  ],
+                                ),
+                              )
+                                  : ListTile(
+                                title: Text(
+                                  notification.title,
+                                  style: TextStyle(fontSize: 16, color: Colors.grey.shade700),
+                                ),
+                                contentPadding: EdgeInsets.zero, // Remove padding to align left
+                                horizontalTitleGap: 0.0, // Remove horizontal gap for title
+                              ), // Removed extra parenthesis here
                               // Set background color based on isRead
                               tileColor: notification.isRead
                                   ? Colors.grey[300]
-                                  : Colors.white,
+                                  : Colors.grey.shade100.withAlpha(10),
                             ),
                           ),
                         ),
