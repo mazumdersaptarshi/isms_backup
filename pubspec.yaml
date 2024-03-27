@@ -124,6 +124,7 @@ flutter:
   assets:
     - assets/images/
     - assets/images/courseIcons/
+    - assets/images/course_images/
     - assets/images/moduleIcons/
     - assets/data/domain01/
     - assets/data/all_courses/

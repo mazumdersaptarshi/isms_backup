@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import '../../screens/course_page.dart';
 import '../shared_widgets/custom_linear_progress_indicator.dart';
+import 'package:isms/views/screens/home_screen.dart';
 
 class Carousel extends StatefulWidget {
-  final List<String> courseTitle;
+  List<CourseData> courseData;
   double cardWidth; // Make cardWidth a non-final property
 
   Carousel({
     Key? key,
-    required this.courseTitle,
+    required this.courseData,
     this.cardWidth = 400.0,
   }) : super(key: key);
 
@@ -40,10 +41,10 @@ class _CarouselState extends State<Carousel> {
             controller: _scrollController,
             child: Row(
               children: List.generate(
-                widget.courseTitle.length,
+                widget.courseData.length,
                     (index) => LayoutBuilder(
                   builder: (context, constraints) => _buildCarouselItem(
-                    widget.courseTitle[index],
+                    widget.courseData[index],
                     constraints.maxWidth,
                     index,
                   ),
@@ -111,7 +112,7 @@ class _CarouselState extends State<Carousel> {
     );
   }
 
-  Widget _buildCarouselItem(String title, double width, int cardIndex) {
+  Widget _buildCarouselItem(courseData, double width, int cardIndex) {
     final defaultCardColor = Colors.grey.shade100; // Very light grey, close to white
     final hoverCardColor = Colors.grey.shade50;
 
@@ -128,36 +129,47 @@ class _CarouselState extends State<Carousel> {
         // Navigate to CoursePage
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => CoursePage()),
+          MaterialPageRoute(
+            builder: (context) => CoursePage(courseId: "ip78hd"),
+          ),
         );
       },
-      child: Card(
-        color: cardColor,
-        child: Container(
-          width: widget.cardWidth, // Use provided cardWidth
-          height: 200,
-          padding: const EdgeInsets.symmetric(horizontal: 40.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(height: 30),
-              Expanded(
-                flex: 3,
-                child: Text(
-                  title,
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
+        child: Card(
+          color: cardColor,
+          child: Container(
+            width: widget.cardWidth,
+            height: 200,
+            padding: const EdgeInsets.symmetric(horizontal: 40.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(height: 10),
+              Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Image.asset(
+                  courseData?.image ?? "assets/images/course_images/3D_Printing_From_Design_to_Prototype.jpeg",
+                  height: 80,
+                  width: 80,
+                  fit: BoxFit.cover, // Ensure image fills the space
                 ),
-              ),
-              const SizedBox(height: 10.0), // Add spacing between title and progress bar
-              Expanded(
-                flex: 1,
-                child: CustomLinearProgressIndicator(
+                SizedBox(width: 16),
+                Expanded(
+                  child: Text(
+                    courseData?.title ?? "No Title",
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 4, // Allow up to 3 lines before fading
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 30.0),
+                CustomLinearProgressIndicator(
                   value: (2 / 5), // Assuming progress of 1/3 for demonstration
                   backgroundColor: Colors.blue.shade100,
                   valueColor: Colors.blue.shade300,
                 ),
-              ),
             ],
           ),
         ),
