@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import '../../screens/course_page.dart';
 import '../shared_widgets/custom_linear_progress_indicator.dart';
-import 'package:isms/views/screens/home_screen.dart';
 
 class Carousel extends StatefulWidget {
-  List<CourseData> courseData;
+  final List<String> courseTitle;
   double cardWidth; // Make cardWidth a non-final property
 
   Carousel({
     Key? key,
-    required this.courseData,
+    required this.courseTitle,
     this.cardWidth = 400.0,
   }) : super(key: key);
 
@@ -41,10 +40,10 @@ class _CarouselState extends State<Carousel> {
             controller: _scrollController,
             child: Row(
               children: List.generate(
-                widget.courseData.length,
+                widget.courseTitle.length,
                     (index) => LayoutBuilder(
                   builder: (context, constraints) => _buildCarouselItem(
-                    widget.courseData[index],
+                    widget.courseTitle[index],
                     constraints.maxWidth,
                     index,
                   ),
@@ -112,7 +111,7 @@ class _CarouselState extends State<Carousel> {
     );
   }
 
-  Widget _buildCarouselItem(courseData, double width, int cardIndex) {
+  Widget _buildCarouselItem(String title, double width, int cardIndex) {
     final defaultCardColor = Colors.grey.shade100; // Very light grey, close to white
     final hoverCardColor = Colors.grey.shade50;
 
@@ -125,15 +124,13 @@ class _CarouselState extends State<Carousel> {
         _hoveredCardIndex = -1; // Reset when no card is hovered
       }),
       child: GestureDetector(
-      onTap: () {
-        // Navigate to CoursePage
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => CoursePage(courseId: "ip78hd"),
-          ),
-        );
-      },
+        onTap: () {
+          // Navigate to CoursePage
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => CoursePage()),
+          );
+        },
         child: Card(
           color: cardColor,
           child: Container(
@@ -143,38 +140,41 @@ class _CarouselState extends State<Carousel> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 10),
-              Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Image.asset(
-                  courseData?.image ?? "assets/images/course_images/3D_Printing_From_Design_to_Prototype.jpeg",
-                  height: 80,
-                  width: 80,
-                  fit: BoxFit.cover, // Ensure image fills the space
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      "assets/images/course_images/image4.png",
+                      height: 80,
+                      width: 80,
+                      fit: BoxFit.cover, // Ensure image fills the space
+                    ),
+                    SizedBox(width: 16),
+                    Expanded(
+                      child: Text(
+                        title ?? "No Title",
+                        style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black54,
+                        ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 4,
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(width: 16),
-                Expanded(
-                  child: Text(
-                    courseData?.title ?? "No Title",
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 4, // Allow up to 3 lines before fading
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 30.0),
+                const SizedBox(height: 30.0),
                 CustomLinearProgressIndicator(
                   value: (2 / 5), // Assuming progress of 1/3 for demonstration
                   backgroundColor: Colors.blue.shade100,
                   valueColor: Colors.blue.shade300,
                 ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
-    ),
     );
   }
 

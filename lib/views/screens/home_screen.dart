@@ -10,15 +10,8 @@ import 'package:isms/utilities/platform_check.dart';
 import 'package:isms/views/widgets/shared_widgets/app_footer.dart';
 import 'package:isms/views/widgets/shared_widgets/custom_app_bar.dart';
 import 'package:isms/views/widgets/shared_widgets/custom_drawer.dart';
-import 'package:isms/views/widgets/course_widgets/carousel.dart';
+import '../widgets/course_widgets/carousel.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-class CourseData {
-  final String title;
-  final String image;
-
-  CourseData({required this.title, required this.image});
-}
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -36,12 +29,12 @@ class _HomePageState extends State<HomePage> {
 
   // Utility function to check and potentially create the admin document
   Future<void> checkAndCreateUserDocument(
-    String uid,
-    String currentUserEmail,
-    String currentUserName,
-  ) async {
+      String uid,
+      String currentUserEmail,
+      String currentUserName,
+      ) async {
     DocumentReference adminDocRef =
-        FirebaseFirestore.instance.collection('adminconsole').doc('allAdmins').collection('admins').doc(uid);
+    FirebaseFirestore.instance.collection('adminconsole').doc('allAdmins').collection('admins').doc(uid);
 
     bool docExists = await adminDocRef.get().then((doc) => doc.exists);
 
@@ -55,17 +48,17 @@ class _HomePageState extends State<HomePage> {
   }
 
   // Define the courseTitle list
-  final List<CourseData> courseData = [
-    CourseData(title: "Data Visualization for Storytellers Data Visualization for Storytellers Data Visualization for Storytellers Data Visualization for Storytellers Data Visualization for Storytellers Data Visualization for Storytellers Data Visualization for Storytellers Data Visualization for Storytellers ", image: "assets/images/course_images/Data_Visualization_for_Storytellers.jpeg"),
-    CourseData(title: "Astrobiology: Life Beyond Earth", image: "assets/images/course_images/Astrobiology_Life_Beyond_Earth.jpeg"),
-    CourseData(title: "Ethical Hacking: Defending Your Data", image: "assets/images/course_images/Ethical_Hacking_Defending_Your_Data.jpeg"),
-    CourseData(title: "The History of Chocolate: From Bean to Bar", image: "assets/images/course_images/The_History_of_Chocolate_From_Bean_to_Bar.jpeg"),
-    CourseData(title: "The Science of Happiness", image: "assets/images/course_images/The_Science_of_Happiness.jpeg"),
-    CourseData(title: "3D Printing: From Design to Prototype", image: "assets/images/course_images/3D_Printing_From_Design_to_Prototype.jpeg"),
-    CourseData(title: "Sparkling Idol Songwriting 101", image: "assets/images/course_images/Sparkling_Idol_Songwriting_101.jpeg"),
-    CourseData(title: "Napping Techniques for Maximum Cuteness", image: "assets/images/course_images/Napping_Techniques_for_Maximum_Cuteness.jpeg"),
-    CourseData(title: "Kawaii Cuisine: Mastering Bento Boxes", image: "assets/images/course_images/Kawaii_Cuisine_Mastering_Bento_Boxes.jpeg"),
-    CourseData(title: "Magical Girl History: From Folklore to Franchise", image: "assets/images/course_images/Magical_Girl_History_From_Folklore_to_Franchise.jpeg"),
+  final List<String> courseTitle = [
+    "Data Visualization for Storytellers Data Visualization for Storytellers Data Visualization for Storytellers Data Visualization for Storytellers Data Visualization for Storytellers Data Visualization for Storytellers Data Visualization for Storytellers ",
+    "Astrobiology: Life Beyond Earth",
+    "Ethical Hacking: Defending Your Data",
+    "The History of Chocolate: From Bean to Bar",
+    "The Science of Happiness",
+    "3D Printing: From Design to Prototype",
+    "Sparkling Idol Songwriting 101",
+    "Napping Techniques for Maximum Cuteness",
+    "Kawaii Cuisine: Mastering Bento Boxes",
+    "Magical Girl History: From Folklore to Franchise",
   ];
 
   @override
@@ -136,21 +129,20 @@ class _HomePageState extends State<HomePage> {
                             SizedBox(width: 20),
                             Text(
                               AppLocalizations.of(context)!.remainingCourses,
-                              style: TextStyle(fontSize: 30, color: Colors.grey.shade600)),
+                                style: TextStyle(fontSize: 30, color: Colors.grey.shade600)),
                           ],
                         ),
-                        if (courseData.isNotEmpty) // Check if courseTitle is not empty
+                        if (courseTitle.isNotEmpty) // Check if courseTitle is not empty
                           Carousel(
-                            courseData: courseData,
+                            courseTitle: courseTitle,
                           ),
-                        if (courseData.isEmpty) // Check if courseTitle is empty
+                        if (courseTitle.isEmpty) // Check if courseTitle is empty
                           Row(
                             children: [
                               SizedBox(width: 20),
                               Text(
                                 AppLocalizations.of(context)!.noRemainingCourses,
-                                style: TextStyle(fontSize: 18, color: Colors.grey.shade700)),
-
+                                  style: TextStyle(fontSize: 18, color: Colors.grey.shade700)),
                             ],
                           ),
                       ],
