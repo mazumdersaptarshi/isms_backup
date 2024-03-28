@@ -72,7 +72,7 @@ class _NotificationPageState extends State<NotificationPage> {
     setState(() {
       selectAll = value ?? false;
       selectedNotification =
-          value! ? notifications.map((e) => notifications.indexOf(e)).toList() : [];
+      value! ? notifications.map((e) => notifications.indexOf(e)).toList() : [];
     });
   }
 
@@ -109,124 +109,124 @@ class _NotificationPageState extends State<NotificationPage> {
   Widget build(BuildContext context) {
     final loggedInState = context.watch<LoggedInState>();
     return Scaffold(
-        appBar: IsmsAppBar(context: context),
-        bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.only(
-              top: 20.0,
-              bottom: 20.0,
-              left: MediaQuery.of(context).size.width * 0.03,
-              right: MediaQuery.of(context).size.width * 0.05,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(AppLocalizations.of(context)!.buttonNotificationPage,
-                style: TextStyle(fontSize: 30, color: Colors.grey.shade600)),
-                SizedBox(height: 20),
-                Row(
-                  children: [
-                    Checkbox(
-                      value: selectAll,
-                      onChanged: handleSelectAll,
-                    ),
-                    SizedBox(width: 16),
-                    InkWell(
-                      // Make "Select All" text clickable
-                      onTap: () => handleSelectAll(!selectAll),
-                      // Toggle selection
-                      child: Text(AppLocalizations.of(context)!.selectAll,
+      appBar: IsmsAppBar(context: context),
+      bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.only(
+            top: 20.0,
+            bottom: 20.0,
+            left: MediaQuery.of(context).size.width * 0.03,
+            right: MediaQuery.of(context).size.width * 0.05,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(AppLocalizations.of(context)!.buttonNotificationPage,
+                  style: TextStyle(fontSize: 30, color: Colors.grey.shade600)),
+              SizedBox(height: 20),
+              Row(
+                children: [
+                  Checkbox(
+                    value: selectAll,
+                    onChanged: handleSelectAll,
+                  ),
+                  SizedBox(width: 16),
+                  InkWell(
+                    // Make "Select All" text clickable
+                    onTap: () => handleSelectAll(!selectAll),
+                    // Toggle selection
+                    child: Text(AppLocalizations.of(context)!.selectAll,
                       style: TextStyle(fontSize: 18, color: Colors.grey.shade700),),
+                  ),
+                  Expanded(
+                    child: SizedBox(),
+                  ),
+                  Tooltip(
+                    message: AppLocalizations.of(context)!.deleteSelected,
+                    child: IconButton(
+                      icon: Icon(Icons.delete),
+                      onPressed: handleDeleteSelected,
+                      color: selectedNotification.isEmpty
+                          ? Colors.grey[300]
+                          : Colors.grey,
                     ),
-                    Expanded(
-                      child: SizedBox(),
+                  ),
+                  SizedBox(width: 10),
+                  Tooltip(
+                    message: AppLocalizations.of(context)!.markUnreadSelected,
+                    child: IconButton(
+                      icon: Icon(Icons.mark_as_unread_outlined),
+                      onPressed: handleMarkUnread,
+                      color: selectedNotification.isEmpty
+                          ? Colors.grey[300]
+                          : Colors.grey,
                     ),
-                    Tooltip(
-                      message: AppLocalizations.of(context)!.deleteSelected,
-                      child: IconButton(
-                          icon: Icon(Icons.delete),
-                          onPressed: handleDeleteSelected,
-                          color: selectedNotification.isEmpty
-                              ? Colors.grey[300]
-                              : Colors.grey,
+                  ),
+                  SizedBox(width: 20),
+                ],
+              ),
+              Divider(),
+              // Add a divider to separate "Select All" from the list
+              ListView.builder(
+                shrinkWrap: true, // Prevent list from expanding unnecessarily
+                itemCount: notifications.length,
+                itemBuilder: (context, index) {
+                  final notification = notifications[index];
+                  return Row(
+                    children: [
+                      Checkbox(
+                        value: selectedNotification.contains(index),
+                        // Check if selected
+                        onChanged: (bool? value) => handleNotificationClick(index),
                       ),
-                    ),
-                    SizedBox(width: 10),
-                    Tooltip(
-                      message: AppLocalizations.of(context)!.markUnreadSelected,
-                      child: IconButton(
-                        icon: Icon(Icons.mark_as_unread_outlined),
-                        onPressed: handleMarkUnread,
-                        color: selectedNotification.isEmpty
-                            ? Colors.grey[300]
-                            : Colors.grey,
-                      ),
-                    ),
-                    SizedBox(width: 20),
-                  ],
-                ),
-                Divider(),
-                // Add a divider to separate "Select All" from the list
-                ListView.builder(
-                  shrinkWrap: true, // Prevent list from expanding unnecessarily
-                  itemCount: notifications.length,
-                  itemBuilder: (context, index) {
-                    final notification = notifications[index];
-                    return Row(
-                      children: [
-                        Checkbox(
-                          value: selectedNotification.contains(index),
-                          // Check if selected
-                          onChanged: (bool? value) => handleNotificationClick(index),
-                        ),
-                        Expanded(
-                          // Make remaining space clickable
-                          child: InkWell(
-                            onTap: () => handleListItemClick(index),
-                            child: ListTile(
-                              subtitle: notification.deadline != null
-                                  ? RichText(
-                                text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: notification.title,
-                                      style: TextStyle(fontSize: 16, color: Colors.grey.shade700),
-                                    ),
-                                    TextSpan(
-                                      text: '\n', // Add a newline character for separation
-                                      style: TextStyle(fontSize: 12, color: Colors.grey), // Adjust font size and color here
-                                    ),
-                                    TextSpan(
-                                      text: DateFormat('y MMMM d').format(notification.deadline!),
-                                      style: TextStyle(fontSize: 12, color: Colors.grey), // Adjust font size and color here
-                                    ),
-                                  ],
-                                ),
-                              )
-                                  : ListTile(
-                                title: Text(
-                                  notification.title,
-                                  style: TextStyle(fontSize: 16, color: Colors.grey.shade700),
-                                ),
-                                contentPadding: EdgeInsets.zero, // Remove padding to align left
-                                horizontalTitleGap: 0.0, // Remove horizontal gap for title
-                              ), // Removed extra parenthesis here
-                              // Set background color based on isRead
-                              tileColor: notification.isRead
-                                  ? Colors.grey[300]
-                                  : Colors.grey.shade100.withAlpha(10),
-                            ),
+                      Expanded(
+                        // Make remaining space clickable
+                        child: InkWell(
+                          onTap: () => handleListItemClick(index),
+                          child: ListTile(
+                            subtitle: notification.deadline != null
+                                ? RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: notification.title,
+                                    style: TextStyle(fontSize: 16, color: Colors.grey.shade700),
+                                  ),
+                                  TextSpan(
+                                    text: '\n', // Add a newline character for separation
+                                    style: TextStyle(fontSize: 12, color: Colors.grey), // Adjust font size and color here
+                                  ),
+                                  TextSpan(
+                                    text: DateFormat('y MMMM d').format(notification.deadline!),
+                                    style: TextStyle(fontSize: 12, color: Colors.grey), // Adjust font size and color here
+                                  ),
+                                ],
+                              ),
+                            )
+                                : ListTile(
+                              title: Text(
+                                notification.title,
+                                style: TextStyle(fontSize: 16, color: Colors.grey.shade700),
+                              ),
+                              contentPadding: EdgeInsets.zero, // Remove padding to align left
+                              horizontalTitleGap: 0.0, // Remove horizontal gap for title
+                            ), // Removed extra parenthesis here
+                            // Set background color based on isRead
+                            tileColor: notification.isRead
+                                ? Colors.grey[300]
+                                : Colors.grey.shade100.withAlpha(10),
                           ),
                         ),
-                      ],
-                    );
-                  },
-                ),
-              ],
-            ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ],
           ),
         ),
-      );
+      ),
+    );
   }
 }
