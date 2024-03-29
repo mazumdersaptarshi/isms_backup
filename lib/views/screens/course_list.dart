@@ -195,7 +195,7 @@ SELECT jsonb_build_object(
   void initState() {
     super.initState();
 
-    fetchCourseListData('8qu6GqSvS5bzGSx1xZqwN4nqy3C2').then((List<dynamic> responseData) {
+    fetchCourseListData('u1').then((List<dynamic> responseData) {
       for (List<dynamic> jsonCourse in responseData) {
         Map<String, dynamic> courseMap = jsonCourse.first as Map<String, dynamic>;
         CourseOverview course = CourseOverview.fromJson(courseMap);
@@ -340,7 +340,9 @@ SELECT jsonb_build_object(
                           ),
                         ],
                       ),
-                      contentWidget: [..._getCourseSections(course.courseSections, completedSectionTotal)]),
+                      contentWidget: [
+                        ..._getCourseSections(course.courseId, course.courseSections, completedSectionTotal)
+                      ]),
                 ),
                 _separator,
                 Card(
@@ -376,7 +378,7 @@ SELECT jsonb_build_object(
     return contentWidgets;
   }
 
-  List<Widget> _getCourseSections(List<SectionOverview> sections, int completedSectionTotal) {
+  List<Widget> _getCourseSections(String courseId, List<SectionOverview> sections, int completedSectionTotal) {
     final List<Widget> contentWidgets = [];
 
     for (int i = 0; i < sections.length; i++) {
@@ -397,7 +399,11 @@ SELECT jsonb_build_object(
                   color: Colors.orange,
                 ),
                 padding: const EdgeInsets.only(left: 15.0),
-                onPressed: i == completedSectionTotal ? () => print(sections[i].sectionTitle) : null,
+                onPressed: i == completedSectionTotal
+                    ? () => context.goNamed(NamedRoutes.course.name,
+                        pathParameters: {NamedRoutePathParameters.courseId.name: courseId},
+                        queryParameters: {NamedRouteQueryParameters.section.name: (i + 1).toString()})
+                    : null,
                 // style: getIconButtonStyleTransparent(),
               ),
         Flexible(
@@ -415,7 +421,9 @@ SELECT jsonb_build_object(
                   style: TextStyle(fontSize: 13),
                 ),
                 onTap: sections[i].sectionCompleted || i == completedSectionTotal
-                    ? () => print(sections[i].sectionTitle)
+                    ? () => context.goNamed(NamedRoutes.course.name,
+                        pathParameters: {NamedRoutePathParameters.courseId.name: courseId},
+                        queryParameters: {NamedRouteQueryParameters.section.name: (i + 1).toString()})
                     : null,
               ),
               Divider(

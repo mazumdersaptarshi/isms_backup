@@ -19,6 +19,8 @@ enum NamedRoutes { home, login, adminConsole, assignments, course, exam, allUser
 /// All parameter names used in child named routes defined in the [GoRouter] configuration below
 enum NamedRoutePathParameters { courseId, examId, uid }
 
+enum NamedRouteQueryParameters { section }
+
 /// Named [RouterConfig] object used to enable direct linking to and access of pages within the app by URL.
 /// This is returned as [GoRouter] from package `go_router`, which allows more fine-tuned control than base Flutter classes.
 final GoRouter ismsRouter = GoRouter(
@@ -62,19 +64,20 @@ final GoRouter ismsRouter = GoRouter(
         GoRoute(
           name: NamedRoutes.course.name,
           path: 'course/:courseId',
-          builder: (context, state) =>
-              CoursePage(courseId: state.pathParameters[NamedRoutePathParameters.courseId.name]!),
+          builder: (context, state) => CoursePage(
+              courseId: state.pathParameters[NamedRoutePathParameters.courseId.name]!,
+              section: state.uri.queryParameters[NamedRouteQueryParameters.section.name]),
           // onExit: (BuildContext context) =>
           //     _getNavigationConfirmationDialog(context, AppLocalizations.of(context)!.dialogLeavePageContentCourse),
         ),
-        GoRoute(
-          name: NamedRoutes.exam.name,
-          path: 'exam/:examId',
-          builder: (context, state) =>
-              CoursePage(courseId: state.pathParameters[NamedRoutePathParameters.examId.name]!),
-          // onExit: (BuildContext context) =>
-          //     _getNavigationConfirmationDialog(context, AppLocalizations.of(context)!.dialogLeavePageContentExam),
-        ),
+        // GoRoute(
+        //   name: NamedRoutes.exam.name,
+        //   path: 'exam/:examId',
+        //   builder: (context, state) =>
+        //       CoursePage(courseId: state.pathParameters[NamedRoutePathParameters.examId.name]!),
+        //   // onExit: (BuildContext context) =>
+        //   //     _getNavigationConfirmationDialog(context, AppLocalizations.of(context)!.dialogLeavePageContentExam),
+        // ),
       ],
     ),
   ],

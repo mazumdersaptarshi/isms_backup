@@ -22,8 +22,9 @@ import 'package:isms/views/widgets/shared_widgets/custom_drawer.dart';
 
 class CoursePage extends StatefulWidget {
   final String courseId;
+  String? section;
 
-  const CoursePage({super.key, required this.courseId});
+  CoursePage({super.key, required this.courseId, this.section});
 
   @override
   State<CoursePage> createState() => _CourseState();
@@ -56,6 +57,11 @@ class _CourseState extends State<CoursePage> {
     SELECT preferred_language
     FROM user_settings
     WHERE user_id = {0}
+), assigned_courses AS (
+	SELECT course_id
+	FROM user_course_assignments
+	WHERE enabled = true
+	AND user_id = {0}
 ), highest_course_version AS (
 	SELECT MAX(cv.content_version) AS content_version
 	FROM course_versions cv
@@ -64,6 +70,7 @@ class _CourseState extends State<CoursePage> {
 SELECT cc.content_jdoc
 	FROM course_content cc
 	WHERE cc.course_id = {1}
+  AND cc.course_id IN (SELECT course_id FROM assigned_courses)
 	AND cc.content_version = (SELECT content_version FROM highest_course_version)
 	AND cc.content_language = (SELECT preferred_language FROM user_preferred_language);
 	''';
@@ -105,7 +112,10 @@ SELECT cc.content_jdoc
   @override
   void initState() {
     super.initState();
-    _responseFuture = _fetchCourseData('8qu6GqSvS5bzGSx1xZqwN4nqy3C2', widget.courseId);
+    _responseFuture = _fetchCourseData('u1', widget.courseId);
+    if (widget.section != null) {
+      _currentSectionIndex = int.parse(widget.section!) - 1;
+    }
   }
 
   Future<http.Response> _fetchCourseData(String uid, String courseId) async {
@@ -113,7 +123,7 @@ SELECT cc.content_jdoc
     return http.get(Uri.parse('$url$sqlQuery'));
   }
 
-  void _initialiseCourseDataStructures(AsyncSnapshot snapshot) {
+  List<dynamic> _parseJsonResponse(AsyncSnapshot snapshot) {
     List<dynamic> jsonResponse = [];
     if (snapshot.data.statusCode == 200) {
       // Check if the request was successful
@@ -121,6 +131,10 @@ SELECT cc.content_jdoc
       jsonResponse = jsonDecode(snapshot.data.body);
     }
 
+    return jsonResponse;
+  }
+
+  void _initialiseCourseDataStructures(List<dynamic> jsonResponse) {
     CourseFull course = CourseFull.fromJson(jsonResponse.first.first);
     _course = course;
 
@@ -169,7 +183,24 @@ SELECT cc.content_jdoc
             ]);
           } else {
             if (!_courseDataStructuresInitialised) {
-              _initialiseCourseDataStructures(snapshot);
+              List<dynamic> jsonResponse = _parseJsonResponse(snapshot);
+              if (jsonResponse.isEmpty) {
+                return Scaffold(
+                    appBar: IsmsAppBar(context: context),
+                    drawer: IsmsDrawer(context: context),
+                    body: Center(
+                        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                      const Icon(
+                        Icons.error_outline,
+                        color: Colors.red,
+                        size: 60,
+                      ),
+                      Text(
+                          'Error: Course with ID "${widget.courseId}" does not exist or you do not have permission to access it.')
+                    ])));
+              } else {
+                _initialiseCourseDataStructures(jsonResponse);
+              }
             }
             return Scaffold(
                 appBar: IsmsAppBar(context: context),
