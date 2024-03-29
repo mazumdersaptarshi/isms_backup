@@ -1,8 +1,9 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:isms/controllers/theme_management/app_theme.dart';
+import 'package:isms/controllers/theme_management/theme_config.dart';
 
-import '../../../controllers/theme_management/common_theme.dart';
 // import '../../controllers/themes/common_theme.dart';
 
 // import '../controllers/themes/common_theme.dart';
@@ -27,10 +28,7 @@ class AppFooter extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text("Support ",
-                      style: customTheme.textTheme.labelMedium!.copyWith(
-                          fontSize: 12,
-                          color: Theme.of(context).colorScheme.primary)),
+                  Text("Support ", style: TextStyle(color: ThemeConfig.primaryColor)),
                   Icon(
                     Icons.open_in_new_rounded,
                     color: Theme.of(context).colorScheme.primary,
@@ -43,10 +41,7 @@ class AppFooter extends StatelessWidget {
               ),
               Row(
                 children: [
-                  Text("Terms and Conditions ",
-                      style: customTheme.textTheme.labelMedium!.copyWith(
-                          fontSize: 12,
-                          color: Theme.of(context).colorScheme.primary)),
+                  Text("Terms and Conditions ", style: TextStyle(color: ThemeConfig.primaryColor)),
                   Icon(
                     Icons.open_in_new_rounded,
                     color: Theme.of(context).colorScheme.primary,
@@ -59,10 +54,7 @@ class AppFooter extends StatelessWidget {
               ),
               Row(
                 children: [
-                  Text("Privacy Policy ",
-                      style: customTheme.textTheme.labelMedium!.copyWith(
-                          fontSize: 12,
-                          color: Theme.of(context).colorScheme.primary)),
+                  Text("Privacy Policy ", style: TextStyle(color: ThemeConfig.primaryColor)),
                   Icon(
                     Icons.open_in_new_rounded,
                     color: Theme.of(context).colorScheme.primary,

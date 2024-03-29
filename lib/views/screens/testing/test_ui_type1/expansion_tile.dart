@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 // import 'package:isms/views/screens/testing/test_ui/themes.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart';
+import 'package:isms/controllers/theme_management/theme_config.dart';
 
 class ExpansionTileCard extends StatefulWidget {
   @override
@@ -18,8 +19,8 @@ class _ExpansionTileCardState extends State<ExpansionTileCard> {
       shadowColor: Colors.black45,
       child: Container(
         decoration: _isExpanded
-            ? expansionTileOn() // Use the theme when the tile is expanded
-            : expansionTileOff(),
+            ? ThemeConfig.expansionTileOn() // Use the theme when the tile is expanded
+            : ThemeConfig.expansionTileOff(),
         child: ExpansionTile(
           title: Text(
             'Click to know more about Document AI',

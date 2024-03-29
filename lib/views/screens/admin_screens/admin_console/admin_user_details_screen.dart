@@ -9,6 +9,7 @@ import 'package:isms/controllers/query_builder/query_builder.dart';
 import 'package:isms/controllers/testing/test_data.dart';
 import 'package:isms/controllers/testing/testing_admin_graphs.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart';
+import 'package:isms/controllers/theme_management/theme_config.dart';
 import 'package:isms/controllers/user_management/logged_in_state.dart';
 import 'package:isms/models/charts/bar_charts/custom_bar_chart_data.dart';
 import 'package:isms/models/user_progress/user_course_progress.dart';
@@ -157,7 +158,7 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
               Duration duration = attempt.endTime.difference(attempt.startTime);
 
               String formattedDuration = '${duration.inHours}h ${duration.inMinutes.remainder(60)}m';
-              Color bgColor = index % 2 == 1 ? Colors.transparent : Colors.grey.shade200;
+              Color bgColor = index % 2 == 1 ? Colors.transparent : ThemeConfig.secondaryColor;
 
               return MapEntry(
                   index,
@@ -166,9 +167,18 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
                         return bgColor; // Use the bgColor for this row
                       }),
                       cells: [
-                        DataCell(Text(attempt.examId)),
-                        DataCell(Text(formattedStartTime)),
-                        DataCell(Text(formattedEndTime)),
+                        DataCell(Text(
+                          attempt.examId,
+                          style: TextStyle(color: ThemeConfig.primaryTextColor),
+                        )),
+                        DataCell(Text(
+                          formattedStartTime,
+                          style: TextStyle(color: ThemeConfig.primaryTextColor),
+                        )),
+                        DataCell(Text(
+                          formattedEndTime,
+                          style: TextStyle(color: ThemeConfig.primaryTextColor),
+                        )),
                         DataCell(Container(
                             padding: EdgeInsets.all(8),
                             decoration: BoxDecoration(
@@ -183,8 +193,14 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
                               style: TextStyle(color: Colors.white),
                               textAlign: TextAlign.right,
                             ))),
-                        DataCell(Text('${attempt.score}')),
-                        DataCell(Text(formattedDuration)),
+                        DataCell(Text(
+                          '${attempt.score}',
+                          style: TextStyle(color: ThemeConfig.primaryTextColor),
+                        )),
+                        DataCell(Text(
+                          formattedDuration,
+                          style: TextStyle(color: ThemeConfig.primaryTextColor),
+                        )),
                       ]));
             })
             .values
@@ -325,10 +341,11 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: [
-                          Icon(Icons.menu_book_rounded, color: Colors.black),
+                          Icon(Icons.menu_book_rounded, color: ThemeConfig.primaryTextColor),
                           SizedBox(width: 20),
                           Text(
                             userCourseProgress.courseTitle.toString(),
+                            style: TextStyle(color: ThemeConfig.primaryTextColor),
                           ),
                         ],
                       ),
@@ -341,7 +358,7 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
                           child: CustomLinearProgressIndicator(
                             value: completionPercentage,
                             backgroundColor: Colors.grey[300]!,
-                            valueColor: primary!,
+                            valueColor: ThemeConfig.primaryColor!,
                           ),
                         ),
                         SizedBox(width: 8),
@@ -349,13 +366,14 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
                         // Text widget to display the percentage
                         Text(
                           '${(completionPercentage * 100).toStringAsFixed(2)}%',
-                          style: TextStyle(color: primary),
+                          style: TextStyle(color: ThemeConfig.primaryTextColor),
                         ),
                         SizedBox(width: 4),
                         Text(
                           '(${(userCourseProgress.completedSectionsCount! + userCourseProgress.passedExamsCount!).toString()}'
                           '/${(userCourseProgress.sectionsInCourseCount! + userCourseProgress.examsInCourseCount!).toString()})',
-                          style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: getSecondaryTextColor()),
+                          style: TextStyle(
+                              fontSize: 10, fontWeight: FontWeight.bold, color: ThemeConfig.secondaryTextColor),
                         )
                         // Text('${userCourseProgress.completedSectionsCount! + userCourseProgress.passedExamsCount!}'),
                       ],
@@ -464,7 +482,7 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
                   return Container(
                     margin: EdgeInsets.fromLTRB(80, 10, 80, 30),
                     decoration: BoxDecoration(
-                      border: Border.all(color: getTertiaryColor1()),
+                      border: Border.all(color: ThemeConfig.borderColor1!, width: 2),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: ListView.builder(
@@ -495,7 +513,7 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
             width: MediaQuery.of(context).size.width * 0.95,
             margin: EdgeInsets.fromLTRB(80, 10, 80, 30),
             decoration: BoxDecoration(
-              border: Border.all(color: getTertiaryColor1()),
+              border: Border.all(color: ThemeConfig.borderColor1!, width: 2),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Container(
@@ -516,7 +534,7 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
                             'User activity over time',
                             style: TextStyle(
                               fontSize: 14,
-                              color: Colors.grey.shade700,
+                              color: ThemeConfig.primaryTextColor,
                             ),
                           ),
                           Divider(),
@@ -528,60 +546,6 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
                       ),
                     ),
                   ),
-                  // ConstrainedBox(
-                  //   constraints: BoxConstraints(maxWidth: 800),
-                  //   child: HoverableSectionContainer(
-                  //     onHover: (bool) {},
-                  //     child: Column(
-                  //       crossAxisAlignment: CrossAxisAlignment.start,
-                  //       children: [
-                  //         Text(
-                  //           'Courses  performance overview',
-                  //           style: TextStyle(
-                  //             fontSize: 14,
-                  //             color: Colors.grey.shade700,
-                  //           ),
-                  //         ),
-                  //         Divider(),
-                  //         SizedBox(
-                  //           height: 40,
-                  //         ),
-                  //         ChartMetricSelectWidget(
-                  //           onMetricSelected: (selectedMetric) {
-                  //             _updateSelectedMetricBarChart(selectedMetric);
-                  //           },
-                  //         ),
-                  //         CustomBarChartUserWidget(
-                  //             key: ValueKey(_usersDataBarChart), barChartValuesData: _usersDataBarChart),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
-                  // ConstrainedBox(
-                  //   constraints: BoxConstraints(maxWidth: 800),
-                  //   child: HoverableSectionContainer(
-                  //     onHover: (bool) {},
-                  //     child: Column(
-                  //       crossAxisAlignment: CrossAxisAlignment.start,
-                  //       children: [
-                  //         Text(
-                  //           'Courses progress by status',
-                  //           style: TextStyle(
-                  //             fontSize: 14,
-                  //             color: Colors.grey.shade700,
-                  //           ),
-                  //         ),
-                  //         Divider(),
-                  //         SizedBox(
-                  //           height: 40,
-                  //         ),
-                  //         CustomPieChartWidget(
-                  //           pieData: _pieChartExamsData,
-                  //         ),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               ),
             ),
@@ -596,7 +560,7 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
     return Container(
       margin: EdgeInsets.fromLTRB(80, 10, 80, 30),
       decoration: BoxDecoration(
-        border: Border.all(color: getTertiaryColor1()),
+        border: Border.all(color: ThemeConfig.borderColor1!, width: 2),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
@@ -667,9 +631,9 @@ class _SummaryItemWidgetState extends State<SummaryItemWidget> {
         onExit: (_) => setState(() => _isHovered = false),
         child: Container(
           decoration: BoxDecoration(
-            color: _isHovered ? getPrimaryColorShade(50) : Colors.transparent, // Change color on hover
+            color: _isHovered ? ThemeConfig.hoverFillColor1 : Colors.transparent, // Change color on hover
             borderRadius: _getBorderRadius(), // Set the border radius based on index
-            border: _isHovered ? Border.all(color: primary!) : null,
+            border: _isHovered ? Border.all(color: ThemeConfig.hoverBorderColor!) : null,
           ),
           child: Padding(
             padding: const EdgeInsets.all(10.0),
@@ -678,7 +642,7 @@ class _SummaryItemWidgetState extends State<SummaryItemWidget> {
                 Text(
                   widget.title,
                   style: TextStyle(
-                    color: Colors.black,
+                    color: ThemeConfig.primaryTextColor,
                     fontSize: 14,
                   ),
                 ),
@@ -690,8 +654,8 @@ class _SummaryItemWidgetState extends State<SummaryItemWidget> {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(
-                        color: getTertiaryColor1(),
-                        width: 1,
+                        color: ThemeConfig.borderColor2!,
+                        width: 2,
                       ),
                     ),
                     child: FittedBox(
@@ -701,7 +665,7 @@ class _SummaryItemWidgetState extends State<SummaryItemWidget> {
                         child: Text(
                           widget.value,
                           style: TextStyle(
-                            color: primary,
+                            color: ThemeConfig.primaryTextColor,
                             fontSize: 40,
                           ),
                         ),
@@ -721,15 +685,18 @@ class _SummaryItemWidgetState extends State<SummaryItemWidget> {
                             width: 80,
                             height: 80,
                             child: CircularProgressIndicator(
-                              value: double.parse(widget.value) / 100, // Convert percentage to a value between 0 and 1
-                              strokeWidth: 6.0, // The thickness of the progress bar
-                              backgroundColor: getPrimaryColorShade(50), // Background color of the progress bar
-                              color: primary, // Progress color
+                              value: double.parse(widget.value) / 100,
+                              // Convert percentage to a value between 0 and 1
+                              strokeWidth: 6.0,
+                              // The thickness of the progress bar
+                              backgroundColor: ThemeConfig.percentageIconBackgroundFillColor,
+                              // Background color of the progress bar
+                              color: ThemeConfig.primaryColor, // Progress color
                             ),
                           ),
                           Text(
                             '${(double.parse(widget.value)).toStringAsFixed(0)}%', // The percentage text
-                            style: TextStyle(fontSize: 30, color: primary),
+                            style: TextStyle(fontSize: 30, color: ThemeConfig.primaryTextColor),
                           ),
                         ],
                       ),

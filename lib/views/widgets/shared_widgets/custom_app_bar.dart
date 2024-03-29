@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:isms/controllers/theme_management/app_theme.dart';
+import 'package:isms/controllers/theme_management/theme_config.dart';
 import 'package:provider/provider.dart';
 import 'package:isms/controllers/user_management/logged_in_state.dart';
 import 'package:isms/utilities/navigation.dart';
@@ -25,6 +27,7 @@ class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      backgroundColor: ThemeConfig.primaryColor,
       title: _getTitle(context),
       centerTitle: false,
       actions: [..._getActionWidgets(context)],
@@ -46,9 +49,32 @@ class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
     actionWidgets.add(_getActionIconButton(context, Icons.track_changes, AppLocalizations.of(context)!.buttonTracking,
         () => Navigator.push(context, MaterialPageRoute(builder: (context) => const TestRunner()))));
 
+    actionWidgets.add(_getActionIconButton(
+        context,
+        Icons.notifications,
+        AppLocalizations.of(context)!.buttonNotificationPage,
+        () => Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationPage()))));
+    // actionWidgets.add(_getActionIconButton(
+    //     context,
+    //     Icons.analytics_rounded,
+    //     "Users Analytics",
+    //     () => Navigator.push(
+    //         context,
+    //         MaterialPageRoute(
+    //             builder: (context) => const UsersAnalyticsStatsScreen()))));
+    // actionWidgets.add(_getActionIconButton(context, Icons.people_outline_rounded, "All Users",
+    //     () => Navigator.push(context, MaterialPageRoute(builder: (context) => const AllUsers()))));
+    //
+    // if (loggedInState.currentUserRole == 'admin') {
+    //   actionWidgets.add(_getActionIconButton(context, Icons.admin_panel_settings_rounded,
+    //       AppLocalizations.of(context)!.buttonAdminConsole, () => context.goNamed(NamedRoutes.adminConsole.name)));
+    // }
     /// ↑↑↑ To be removed ///
 
-    actionWidgets.add(_getActionIconButton(context, Icons.notifications, AppLocalizations.of(context)!.buttonNotificationPage,
+    actionWidgets.add(_getActionIconButton(
+        context,
+        Icons.notifications,
+        AppLocalizations.of(context)!.buttonNotificationPage,
         () => Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationPage()))));
 
     actionWidgets.add(_getActionIconButton(context, Icons.settings, AppLocalizations.of(context)!.buttonSettings,

@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 
 class AppThemes {
-  static const Color primaryColor = Colors.deepPurpleAccent;
-  static const Color secondaryColor = Colors.green;
-  static const Color tertiaryColor = Colors.orange;
-
   static const TextStyle headingStyle = TextStyle(
     fontSize: 40,
     fontWeight: FontWeight.bold,

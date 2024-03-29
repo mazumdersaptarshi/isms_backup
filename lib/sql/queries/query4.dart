@@ -1,5 +1,4 @@
 String query4 = '''
-
 With UsersSummary AS
 (WITH CompletedCourses AS (
     SELECT 
@@ -41,10 +40,13 @@ ExamsCompleted AS (
     FROM 
         user_exam_attempts uea
     JOIN 
-        (SELECT exam_id, MAX(content_version) AS latest_version FROM exam_versions GROUP BY exam_id) lv 
-        ON uea.exam_id = lv.exam_id AND uea.exam_version = lv.latest_version
+        public.user_course_assignments uca ON uea.user_id = uca.user_id
+    JOIN 
+        public.course_exam_relationships cer ON uca.course_id = cer.course_id AND uea.exam_id = cer.exam_id
+    JOIN 
+        LatestExamVersion lev ON uea.exam_id = lev.exam_id AND uea.exam_version = lev.latest_exam_version
     WHERE 
-        uea.passed = true  
+        uea.passed = true
     GROUP BY 
         uea.user_id
 ),

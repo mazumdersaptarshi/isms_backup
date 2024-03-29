@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:isms/controllers/admin_management/admin_state.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart';
+import 'package:isms/controllers/theme_management/theme_config.dart';
 
 class UserProfileBanner extends StatelessWidget {
   final String userName;
@@ -54,7 +55,7 @@ class UserProfileBanner extends StatelessWidget {
                       Text(
                         userName,
                         style: TextStyle(
-                          color: Colors.black,
+                          color: ThemeConfig.primaryTextColor,
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
@@ -63,7 +64,7 @@ class UserProfileBanner extends StatelessWidget {
                       Text(
                         userEmail,
                         style: TextStyle(
-                          color: Colors.black,
+                          color: ThemeConfig.primaryTextColor,
                           fontSize: 16,
                         ),
                       ),

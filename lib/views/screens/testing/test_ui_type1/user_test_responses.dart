@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart';
+import 'package:isms/controllers/theme_management/theme_config.dart';
 
 import '../../../../models/admin_models/user_responses.dart';
 
@@ -77,8 +78,7 @@ class AdminTestResponsesPage extends StatelessWidget {
         userSelectedAnswerIndex: 2, // Incorrect
       ),
       Question(
-        questionText:
-            "Which operator is used in Python to check if two variables are equal?",
+        questionText: "Which operator is used in Python to check if two variables are equal?",
         answers: [
           Answer(answerText: "=", isCorrect: false),
           Answer(answerText: "==", isCorrect: true),
@@ -128,8 +128,7 @@ class AdminTestResponsesPage extends StatelessWidget {
         userSelectedAnswerIndex: 3, // Incorrect
       ),
       Question(
-        questionText:
-            "Which method is used to add an item to the end of a list?",
+        questionText: "Which method is used to add an item to the end of a list?",
         answers: [
           Answer(answerText: "list.add()", isCorrect: false),
           Answer(answerText: "list.append()", isCorrect: true),
@@ -139,8 +138,7 @@ class AdminTestResponsesPage extends StatelessWidget {
         userSelectedAnswerIndex: 1, // Incorrect
       ),
       Question(
-        questionText:
-            "What will be the output of the following code: print('Python'[-1])?",
+        questionText: "What will be the output of the following code: print('Python'[-1])?",
         answers: [
           Answer(answerText: "'P'", isCorrect: false),
           Answer(answerText: "'n'", isCorrect: true),
@@ -170,8 +168,7 @@ class AdminTestResponsesPage extends StatelessWidget {
         correctAnswers++;
       }
     });
-    return (correctAnswers / questions.length) *
-        100; // Return score as a percentage
+    return (correctAnswers / questions.length) * 100; // Return score as a percentage
   }
 
   @override
@@ -182,11 +179,11 @@ class AdminTestResponsesPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("User Test Responses"),
-        backgroundColor: primary,
+        backgroundColor: ThemeConfig.primaryColor,
       ),
       body: Container(
-        margin: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width * 0.1, 10,
-            MediaQuery.of(context).size.width * 0.1, 10),
+        margin: EdgeInsets.fromLTRB(
+            MediaQuery.of(context).size.width * 0.1, 10, MediaQuery.of(context).size.width * 0.1, 10),
         child: ListView(
           children: [
             Padding(
@@ -201,7 +198,7 @@ class AdminTestResponsesPage extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
-                          color: primary,
+                          color: ThemeConfig.primaryColor,
                         ),
                       ),
                       SizedBox(
@@ -214,18 +211,12 @@ class AdminTestResponsesPage extends StatelessWidget {
                             width: 50,
                             height: 50,
                             child: CircularProgressIndicator(
-                              value: double.parse(score.toStringAsFixed(2)) /
-                                  100.0,
-                              valueColor:
-                                  double.parse(score.toStringAsFixed(2)) > 70
-                                      ? AlwaysStoppedAnimation<Color>(
-                                          Colors.lightGreen!)
-                                      : double.parse(score.toStringAsFixed(2)) >
-                                              45
-                                          ? AlwaysStoppedAnimation<Color>(
-                                              Colors.orangeAccent!)
-                                          : AlwaysStoppedAnimation<Color>(
-                                              Colors.red!),
+                              value: double.parse(score.toStringAsFixed(2)) / 100.0,
+                              valueColor: double.parse(score.toStringAsFixed(2)) > 70
+                                  ? AlwaysStoppedAnimation<Color>(Colors.lightGreen!)
+                                  : double.parse(score.toStringAsFixed(2)) > 45
+                                      ? AlwaysStoppedAnimation<Color>(Colors.orangeAccent!)
+                                      : AlwaysStoppedAnimation<Color>(Colors.red!),
                               backgroundColor: Colors.grey.shade200,
                               strokeWidth: 5.0,
                             ),
@@ -246,10 +237,7 @@ class AdminTestResponsesPage extends StatelessWidget {
                   ),
                   Text(
                     "Time Taken: ${Duration(seconds: timeTakenInSeconds).inMinutes} minutes",
-                    style: TextStyle(
-                        fontSize: 14,
-                        color: primary,
-                        fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 14, color: ThemeConfig.primaryColor, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 20),
                 ],
@@ -257,8 +245,7 @@ class AdminTestResponsesPage extends StatelessWidget {
             ),
             ListView.builder(
               shrinkWrap: true,
-              physics:
-                  NeverScrollableScrollPhysics(), // Add this to ensure scrolling works correctly
+              physics: NeverScrollableScrollPhysics(), // Add this to ensure scrolling works correctly
               itemCount: getSampleQuestions().length,
               itemBuilder: (context, index) {
                 final question = getSampleQuestions()[index];
@@ -277,15 +264,14 @@ class AdminTestResponsesPage extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
-                            color: primary,
+                            color: ThemeConfig.primaryColor,
                           ),
                         ),
                         SizedBox(height: 10),
                         ...question.answers.asMap().entries.map((entry) {
                           int idx = entry.key;
                           Answer answer = entry.value;
-                          bool isSelected =
-                              idx == question.userSelectedAnswerIndex;
+                          bool isSelected = idx == question.userSelectedAnswerIndex;
                           return Container(
                             margin: EdgeInsets.symmetric(vertical: 4),
                             child: Row(
@@ -295,36 +281,26 @@ class AdminTestResponsesPage extends StatelessWidget {
                                   value: isSelected,
                                   groupValue: true,
                                   onChanged: null,
-                                  activeColor: answer.isCorrect
-                                      ? Colors.green
-                                      : Colors.red,
-                                  materialTapTargetSize:
-                                      MaterialTapTargetSize.shrinkWrap,
+                                  activeColor: answer.isCorrect ? Colors.green : Colors.red,
+                                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                 ),
                                 Expanded(
                                   child: Container(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 8.0, horizontal: 12.0),
+                                    padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
                                     decoration: BoxDecoration(
                                       color: isSelected
-                                          ? (answer.isCorrect
-                                              ? Colors.lightGreen
-                                              : Colors.red.shade400)
+                                          ? (answer.isCorrect ? Colors.lightGreen : Colors.red.shade400)
                                           : null,
                                       borderRadius: BorderRadius.circular(5.0),
                                       border: answer.isCorrect && !isSelected
-                                          ? Border.all(
-                                              color: Colors.lightGreen,
-                                              width: 2)
+                                          ? Border.all(color: Colors.lightGreen, width: 2)
                                           : null,
                                     ),
                                     child: Text(
                                       answer.answerText,
                                       style: TextStyle(
                                         fontSize: 14,
-                                        color: isSelected
-                                            ? Colors.white
-                                            : Colors.grey.shade700,
+                                        color: isSelected ? Colors.white : Colors.grey.shade700,
                                       ),
                                     ),
                                   ),

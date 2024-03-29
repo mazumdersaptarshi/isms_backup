@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart';
+import 'package:isms/controllers/theme_management/theme_config.dart';
 
 class HoverableSectionContainer extends StatefulWidget {
   final Widget child;
@@ -36,13 +37,13 @@ class _HoverableSectionContainerState extends State<HoverableSectionContainer> {
       child: Container(
         padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.015),
         decoration: BoxDecoration(
-          border: Border.all(color: getTertiaryColor1()),
+          border: Border.all(color: ThemeConfig.borderColor1!, width: 2),
           borderRadius: BorderRadius.circular(10),
           color: Theme.of(context).scaffoldBackgroundColor,
           boxShadow: _isHovered
               ? [
                   BoxShadow(
-                    color: Colors.grey.withOpacity(0.2),
+                    color: ThemeConfig.hoverShadowColor!,
                     spreadRadius: 3,
                     blurRadius: 40,
                     offset: Offset(0, 3),

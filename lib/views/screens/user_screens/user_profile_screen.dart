@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:isms/controllers/theme_management/app_theme.dart';
 import 'package:isms/views/widgets/user_screens_widgets/user_actions.dart';
 
 // import 'package:isms/screens/analyticsSharedWidgets/course_dropdown_widget.dart';
@@ -12,7 +13,6 @@ import 'package:isms/views/widgets/user_screens_widgets/user_actions.dart';
 // import 'package:isms/utilityFunctions/platform_check.dart';
 import 'package:provider/provider.dart';
 
-import '../../../controllers/theme_management/common_theme.dart';
 import '../../../controllers/user_management/logged_in_state.dart';
 
 // import '../../../sharedWidgets/analyticsSharedWidgets/course_dropdown_widget.dart';
@@ -75,13 +75,11 @@ class _UserProfilePageState extends State<UserProfilePage> {
     }
 
     return Scaffold(
-      backgroundColor: Colors.deepPurpleAccent.shade100,
       // appBar: PlatformCheck.topNavBarWidget(loggedInState, context: context),
       bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            backgroundColor: Colors.deepPurpleAccent.shade100,
             expandedHeight: 300.0,
             automaticallyImplyLeading: false,
             flexibleSpace: FlexibleSpaceBar(

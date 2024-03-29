@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:isms/controllers/theme_management/theme_config.dart';
 import 'package:isms/views/screens/testing/test_ui_type1/themes.dart';
 
 import '../../../controllers/theme_management/app_theme.dart'; // Adjust the import path to your themes file
@@ -29,13 +30,12 @@ class BulletPointsWidget extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text('•', style: bulletPointSymbolStyle),
-                  SizedBox(
-                      width: 8), // Add space between the bullet and the text
+                  Text('•', style: ThemeConfig.bulletPointSymbolStyle),
+                  SizedBox(width: 8), // Add space between the bullet and the text
                   Expanded(
                     child: Text(
                       point,
-                      style: bulletPointTextStyle,
+                      style: ThemeConfig.bulletPointTextStyle,
                     ),
                   ),
                 ],

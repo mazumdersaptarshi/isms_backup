@@ -5,6 +5,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/controllers/testing/test_data.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart';
+import 'package:isms/controllers/theme_management/theme_config.dart';
 import 'package:isms/models/charts/bar_charts/custom_bar_chart_data.dart';
 import 'package:isms/models/charts/bar_charts/individual_bar.dart';
 
@@ -88,20 +89,20 @@ class _CustomBarChartState extends State<CustomBarChart> {
       barRods: [
         BarChartRodData(
             borderSide: BorderSide(
-              color: getPrimaryColorShade(200)!,
+              color: ThemeConfig.getPrimaryColorShade(200)!,
               width: isTouched ? 3 : 0,
             ),
             // toY: isTouched ? data.y : data.y,
             toY: data.y,
             color: isTouched
-                ? primary
+                ? ThemeConfig.primaryColor!
                 : data.y <= _scoreLimit.toDouble() * 0.5
                     ? Colors.redAccent
                     : (data.y > _scoreLimit.toDouble() * 0.5 && data.y <= _scoreLimit.toDouble() * 0.8)
                         ? Colors.orangeAccent
                         : (data.y > _scoreLimit.toDouble() * 0.8)
                             ? Colors.lightGreen
-                            : primary,
+                            : ThemeConfig.primaryColor,
             // gradient: getBarsGradientColor(),
             width: 20,
             borderRadius: BorderRadius.circular(5),
@@ -155,7 +156,7 @@ class _CustomBarChartState extends State<CustomBarChart> {
                 ),
                 barTouchData: BarTouchData(
                   touchTooltipData: BarTouchTooltipData(
-                    tooltipBgColor: primary,
+                    tooltipBgColor: ThemeConfig.primaryColor,
                     tooltipPadding: EdgeInsets.fromLTRB(4, 2, 4, 0),
                     fitInsideVertically: true,
                     tooltipHorizontalAlignment: FLHorizontalAlignment.center,
@@ -255,7 +256,6 @@ class _CustomBarChartState extends State<CustomBarChart> {
               _currentPage = 0;
             });
           },
-          decoration: customDropdownDecoration,
         ),
       ),
     );

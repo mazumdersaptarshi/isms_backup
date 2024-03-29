@@ -2,12 +2,12 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart';
+import 'package:isms/controllers/theme_management/theme_config.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import "package:universal_html/html.dart" as html;
 
 import 'package:isms/controllers/notification_management/init_link_handler.dart';
-import 'package:isms/controllers/theme_management/common_theme.dart';
 import 'package:isms/controllers/user_management/logged_in_state.dart';
 import 'package:isms/views/screens/home_screen.dart';
 import 'package:isms/views/widgets/shared_widgets/loading_screen_widget.dart';
@@ -61,7 +61,7 @@ class LoginPageState extends State<LoginPage> {
         double verticalPadding = 20;
 
         return Container(
-          color: primary,
+          color: ThemeConfig.primaryColor,
           child: Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: maxWidthForContent),

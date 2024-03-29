@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:isms/controllers/theme_management/app_theme.dart';
+import 'package:isms/controllers/theme_management/theme_config.dart';
 
 // import 'package:isms/userManagement/logged_in_state.dart';
 // import 'package:isms/utilityFunctions/platform_check.dart';
@@ -287,14 +289,14 @@ class _ReminderLineState extends State<ReminderLine> {
                 if (expiryDate != null && !DateTime.now().isAfter(widget.initialExpiryDate!))
                   Icon(
                     Icons.check,
-                    color: Colors.deepPurpleAccent.shade100,
+                    color: ThemeConfig.primaryColor,
                   ),
                 if (expiryDate == null &&
                     widget.initialExpiryDate != null &&
                     !DateTime.now().isAfter(widget.initialExpiryDate!))
                   Icon(
                     Icons.check,
-                    color: Colors.deepPurpleAccent.shade100,
+                    color: ThemeConfig.primaryColor,
                   ),
                 if (expiryDate == null && widget.initialExpiryDate == null)
                   const Icon(

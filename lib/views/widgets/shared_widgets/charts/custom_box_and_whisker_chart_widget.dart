@@ -3,22 +3,20 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:isms/controllers/testing/test_data.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart';
+import 'package:isms/controllers/theme_management/theme_config.dart';
 import 'package:isms/models/charts/box_and_whisker_charts/custom_box_and_whisker_chart_data.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class CustomBoxAndWhiskerChartWidget extends StatefulWidget {
   // ignore: prefer_const_constructors_in_immutables
-  CustomBoxAndWhiskerChartWidget({Key? key, required this.allData})
-      : super(key: key);
+  CustomBoxAndWhiskerChartWidget({Key? key, required this.allData}) : super(key: key);
   final List<CustomBoxAndWhiskerChartData> allData;
 
   @override
-  _CustomBoxAndWhiskerChartWidgetState createState() =>
-      _CustomBoxAndWhiskerChartWidgetState();
+  _CustomBoxAndWhiskerChartWidgetState createState() => _CustomBoxAndWhiskerChartWidgetState();
 }
 
-class _CustomBoxAndWhiskerChartWidgetState
-    extends State<CustomBoxAndWhiskerChartWidget> {
+class _CustomBoxAndWhiskerChartWidgetState extends State<CustomBoxAndWhiskerChartWidget> {
   late List<CustomBoxAndWhiskerChartData> data; // Data for current page
   late TooltipBehavior _tooltip;
   int currentPage = 0;
@@ -52,19 +50,16 @@ class _CustomBoxAndWhiskerChartWidgetState
               series: <CartesianSeries<CustomBoxAndWhiskerChartData, String>>[
                 BoxAndWhiskerSeries<CustomBoxAndWhiskerChartData, String>(
                   dataSource: data,
-                  xValueMapper: (CustomBoxAndWhiskerChartData data, _) =>
-                      data.x,
-                  yValueMapper: (CustomBoxAndWhiskerChartData data, _) =>
-                      data.y,
+                  xValueMapper: (CustomBoxAndWhiskerChartData data, _) => data.x,
+                  yValueMapper: (CustomBoxAndWhiskerChartData data, _) => data.y,
                   name: 'Users Scores',
-                  color: getPrimaryColorShade(400),
+                  color: ThemeConfig.getPrimaryColorShade(400),
                   borderWidth: 1,
                   borderColor: Colors.black,
-                  gradient: LinearGradient(colors: [
-                    Colors.redAccent,
-                    Colors.orange,
-                    Colors.lightGreen
-                  ], begin: Alignment.bottomCenter, end: Alignment.topCenter),
+                  gradient: LinearGradient(
+                      colors: [Colors.redAccent, Colors.orange, Colors.lightGreen],
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter),
                 ),
               ]),
           Row(
@@ -96,13 +91,12 @@ class _CustomBoxAndWhiskerChartWidgetState
                   size: 18,
                   color: Colors.white,
                 ),
-                onPressed:
-                    currentPage < (widget.allData.length / pageSize).ceil() - 1
-                        ? () => setState(() {
-                              currentPage++;
-                              setPageData();
-                            })
-                        : null,
+                onPressed: currentPage < (widget.allData.length / pageSize).ceil() - 1
+                    ? () => setState(() {
+                          currentPage++;
+                          setPageData();
+                        })
+                    : null,
               ),
             ],
           ),

@@ -1,6 +1,8 @@
 // ignore_for_file: file_names, non_constant_identifier_names, unused_element
 
 import 'package:flutter/material.dart';
+import 'package:isms/controllers/theme_management/app_theme.dart';
+import 'package:isms/controllers/theme_management/theme_config.dart';
 
 // import 'package:isms/screens/home_screen.dart';
 // import 'package:isms/screens/learningModuleScreens/courseScreens/myLearningScreen.dart';
@@ -22,20 +24,23 @@ import 'package:flutter/material.dart';
 // import '../views/screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
 // import '../views/screens/learningModuleScreens/courseScreens/myLearningScreen.dart';
 // import '../views/screens/userInfo/user_profile_screen.dart';
-import '../../../controllers/theme_management/common_theme.dart';
 import '../../../controllers/user_management/logged_in_state.dart';
 import '../../screens/home_screen.dart';
+
 // import '../../screens/userInfo/user_profile_screen.dart';
 import '../../screens/user_screens/user_profile_screen.dart';
 import 'nav_index_tracker.dart';
+
 // import '../screens/adminScreens/AdminConsole/admin_console_page.dart';
 // import '../screens/learningModuleScreens/courseScreens/coursesListScreen.dart';
 // import '../screens/userInfo/user_profile_screen.dart';
 
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({super.key, this.loggedInState});
+
   // final int selectedIndex;
   final LoggedInState? loggedInState;
+
   @override
   Widget build(BuildContext context) {
     void navigateToUserProfilePage() {
@@ -46,8 +51,7 @@ class BottomNavBar extends StatelessWidget {
     }
 
     void navigateToHomePage() {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const HomePage()));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage()));
     }
 
     void navigateToCoursesPage() {}
@@ -64,22 +68,18 @@ class BottomNavBar extends StatelessWidget {
         return;
       }
       if (index == 0) {
-        NavIndexTracker.setNavDestination(
-            navDestination: NavDestinations.HomePage);
+        NavIndexTracker.setNavDestination(navDestination: NavDestinations.HomePage);
         navigateToHomePage();
       }
 
       if (index == 1) {
-        NavIndexTracker.setNavDestination(
-            navDestination: NavDestinations.UserProfile);
+        NavIndexTracker.setNavDestination(navDestination: NavDestinations.UserProfile);
         navigateToUserProfilePage();
       } else if (index == 2) {
-        NavIndexTracker.setNavDestination(
-            navDestination: NavDestinations.MyLearning);
+        NavIndexTracker.setNavDestination(navDestination: NavDestinations.MyLearning);
         NavigateToMyLearningPage();
       } else if (index == 3) {
-        NavIndexTracker.setNavDestination(
-            navDestination: NavDestinations.AllCourses);
+        NavIndexTracker.setNavDestination(navDestination: NavDestinations.AllCourses);
         navigateToCoursesPage();
       }
     }
@@ -109,18 +109,15 @@ class BottomNavBar extends StatelessWidget {
               label: 'Home',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons
-                  .account_circle_outlined), // Fallback icon if no image is available
+              icon: Icon(Icons.account_circle_outlined), // Fallback icon if no image is available
               label: 'Account',
             ),
             BottomNavigationBarItem(
-              icon: Icon(
-                  Icons.lightbulb), // Fallback icon if no image is available
+              icon: Icon(Icons.lightbulb), // Fallback icon if no image is available
               label: 'My learning',
             ),
             BottomNavigationBarItem(
-              icon:
-                  Icon(Icons.explore), // Fallback icon if no image is available
+              icon: Icon(Icons.explore), // Fallback icon if no image is available
               label: 'Explore',
             ),
           ],
@@ -128,7 +125,7 @@ class BottomNavBar extends StatelessWidget {
           // currentIndex: selectedIndex,
           selectedItemColor: Colors.white,
 
-          backgroundColor: primaryColor.shade100,
+          backgroundColor: ThemeConfig.primaryColor,
           unselectedItemColor: const Color.fromARGB(255, 234, 234, 234),
           type: BottomNavigationBarType.fixed,
           elevation: 5,

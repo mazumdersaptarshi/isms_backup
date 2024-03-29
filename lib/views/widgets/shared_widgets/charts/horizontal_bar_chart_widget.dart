@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:isms/controllers/testing/test_data.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart';
+import 'package:isms/controllers/theme_management/theme_config.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 // Define the ChartData class outside to make it reusable.
@@ -32,7 +33,8 @@ class _HorizontalBarChartWidgetState extends State<HorizontalBarChartWidget> {
   @override
   void initState() {
     super.initState();
-    _tooltipBehavior = TooltipBehavior(enable: true, color: primary, textStyle: TextStyle(color: Colors.white));
+    _tooltipBehavior =
+        TooltipBehavior(enable: true, color: ThemeConfig.primaryColor, textStyle: TextStyle(color: Colors.white));
     _updateFilteredData(); // Initialize the filtered data based on the default score limit
   }
 

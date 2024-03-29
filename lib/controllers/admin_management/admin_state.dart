@@ -14,7 +14,8 @@ import 'package:isms/models/admin_models/users_summary_data.dart';
 import 'package:isms/models/charts/bar_charts/custom_bar_chart_data.dart';
 import 'package:isms/models/charts/box_and_whisker_charts/custom_box_and_whisker_chart_data.dart';
 import 'package:isms/models/charts/pie_charts/custom_pie_chart_data.dart';
-import 'package:isms/models/course/course_exam_relationship.dart';
+import 'package:isms/models/course/course_info.dart';
+import 'package:isms/models/course/exam_info.dart';
 import 'package:isms/models/user_progress/user_course_progress.dart';
 import 'package:isms/models/user_progress/user_exam_attempt.dart';
 import 'package:isms/models/user_progress/user_exam_progress.dart';
@@ -36,6 +37,7 @@ import 'package:isms/sql/queries/query7.dart';
 import 'package:isms/sql/queries/query8.dart';
 import 'package:isms/sql/queries/query9.dart';
 import 'package:isms/views/widgets/shared_widgets/selectable_item.dart';
+import 'package:logging/logging.dart';
 
 class AdminState {
   static final AdminState _instance = AdminState._internal();
@@ -61,8 +63,11 @@ class AdminState {
   Map get getAllUsersData => _allUsersData;
 
   String url = 'http://127.0.0.1:5000/api?query=';
-
-  // String url = 'http://127.0.0.1:5000/api?query=';
+  String localGetURL = 'http://127.0.0.1:5000/get?flag=';
+  String remoteGetURL =
+      'https://asia-northeast1-isms-billing-resources-dev.cloudfunctions.net/cf_isms_db_endpoint_noauth/get?flag=';
+  List<dynamic> _allUsersCoursesOverviewJSON = [];
+  static final Logger _logger = Logger('AdminState');
 
   Future<dynamic> getUserProfileData(String uid) async {
     String sqlQuery = QueryBuilder.buildSqlQuery(query3, [uid]);
@@ -99,7 +104,9 @@ class AdminState {
   Future<dynamic> getAllUsers() async {
     List<UsersSummaryData> usersSummary = [];
     // await Future.delayed(Duration(seconds: 10));
-    http.Response response = await http.get(Uri.parse(url + '${query4}'));
+    // http.Response response = await http.get(Uri.parse(url + '${query4}'));
+    // http.Response response = await http.get(Uri.parse(localGetURL + 'summary'));
+    http.Response response = await http.get(Uri.parse(remoteGetURL + 'summary'));
 
     if (response.statusCode == 200) {
       // Check if the request was successful
@@ -109,7 +116,6 @@ class AdminState {
         return UsersSummaryData(
           uid: user[0]['userId'],
           name: "${user[0]['givenName']} ${user[0]['familyName']}",
-          // Assuming second and third elements are first and last name
           emailId: user[0]['email'],
           role: user[0]['accountRole'],
           coursesLearningCompletedPercentage: (user[0]['assignedCourses'] != null &&
@@ -128,7 +134,7 @@ class AdminState {
       }).toList();
     } else {
       // Handle the case when the server did not return a 200 OK response
-      print('Failed to load data');
+      _logger.info('Failed to load data');
     }
     // for (var userData in _allUsersSummaryData) {
     // }
@@ -238,13 +244,38 @@ class AdminState {
             : metric;
     if (response.statusCode == 200) {
       List<dynamic> jsonResponse = jsonDecode(response.body);
+      _allUsersCoursesOverviewJSON = jsonResponse;
       jsonResponse.forEach((element) {
         usersExamData.add(CustomBarChartData(
             x: '${element[0]['givenName']} ${element[0]['familyName']}', y: (element[0][metric]).round()));
       });
     }
-    usersExamData.forEach((element) {});
     return usersExamData;
+  }
+
+  List<CustomBarChartData> getFilteredUsersCoursesStatusOverview({
+    required String examId,
+    required String metric,
+    required List<String> userIds,
+  }) {
+    List<CustomBarChartData> filteredUsersExamData = [];
+    if (_allUsersCoursesOverviewJSON.isNotEmpty && userIds.isEmpty) {
+      filteredUsersExamData = [];
+      _allUsersCoursesOverviewJSON.forEach((element) {
+        filteredUsersExamData.add(CustomBarChartData(
+            x: '${element[0]['givenName']} ${element[0]['familyName']}', y: (element[0][metric]).round()));
+      });
+    } else if (_allUsersCoursesOverviewJSON.isNotEmpty) {
+      filteredUsersExamData = [];
+
+      _allUsersCoursesOverviewJSON.forEach((element) {
+        if (userIds.contains(element[0]['userId'])) {
+          filteredUsersExamData.add(CustomBarChartData(
+              x: '${element[0]['givenName']} ${element[0]['familyName']}', y: (element[0][metric]).round()));
+        }
+      });
+    }
+    return filteredUsersExamData;
   }
 
   Future<dynamic> getAllUsersCoursesBW({required String examId}) async {
@@ -254,10 +285,8 @@ class AdminState {
     if (response.statusCode == 200) {
       List<dynamic> jsonResponse = jsonDecode(response.body);
       jsonResponse.forEach((element) {
-        print(element[0]);
         List<double> scoresList = [];
         element[0]['scores'].forEach((e) {
-          print(e);
           scoresList.add(e.toDouble());
         });
         while (scoresList.length < 5) {
@@ -269,20 +298,17 @@ class AdminState {
         ));
       });
     }
-    print(usersExamDataBW);
     return usersExamDataBW;
   }
 
   Future<dynamic> getCoursesList() async {
-    print('in here');
     String sqlQuery = QueryBuilder.buildSqlQuery(query8, []);
     http.Response response = await http.get(Uri.parse(url + '${sqlQuery}'));
-    List<CourseExamRelationship> coursesList = [];
+    List<CourseInfo> coursesList = [];
     if (response.statusCode == 200) {
       List<dynamic> jsonResponse = jsonDecode(response.body);
       jsonResponse.forEach((element) {
-        coursesList
-            .add(CourseExamRelationship(courseId: element[0]['courseId'], courseTitle: element[0]['courseTitle']));
+        coursesList.add(CourseInfo(courseId: element[0]['courseId'], courseTitle: element[0]['courseTitle']));
       });
     }
 
@@ -294,25 +320,20 @@ class AdminState {
     http.Response response = await http.get(Uri.parse(url + '${sqlQuery}'));
     if (response.statusCode == 200) {
       List<dynamic> jsonResponse = jsonDecode(response.body);
-      // print('nmn: ${jsonResponse}');
     }
   }
 
   Future<dynamic> getExamsListForCourse({required String courseId}) async {
     String sqlQuery = QueryBuilder.buildSqlQuery(query9, [courseId]);
     http.Response response = await http.get(Uri.parse(url + '${sqlQuery}'));
-    List<dynamic> examsList = [];
+    List<ExamInfo> examsListForCourse = [];
     if (response.statusCode == 200) {
       List<dynamic> jsonResponse = jsonDecode(response.body);
       jsonResponse.forEach((element) {
-        Map<String, String> examDetails = {
-          'examId': element[0]['examId'],
-          'examTitle': element[0]['examTitle'],
-        };
-        examsList.add(examDetails);
+        examsListForCourse.add(ExamInfo(examId: element[0]['examId'], examTitle: element[0]['examTitle']));
       });
     }
-    return examsList;
+    return examsListForCourse;
   }
 
   Future<dynamic> getExamOverallResults({required String examId}) async {
@@ -328,7 +349,6 @@ class AdminState {
             CustomPieChartData(label: 'Not  Started', percent: element[0]['not_started'], color: Colors.orangeAccent));
       });
     }
-    print(pieChartData);
     return pieChartData;
   }
 
@@ -349,41 +369,10 @@ class AdminState {
     return pieChartData;
   }
 
-  Future<dynamic> getAllCoursesAssignedToDomain() async {
-    String sqlQuery = QueryBuilder.buildSqlQuery(query14, []);
-    http.Response response = await http.get(Uri.parse(url + '${sqlQuery}'));
-    // if (response.statusCode == 200) {
-    //   // print('${response.body}');
-    // }
-  }
-
   Future<dynamic> getAllDomainUsers() async {
     String sqlQuery = QueryBuilder.buildSqlQuery(query15, []);
     http.Response response = await http.get(Uri.parse(url + '${sqlQuery}'));
     if (response.statusCode == 200) {}
-  }
-
-  Future<dynamic> createOrUpdateUserCourseAssignment({
-    required String courseId,
-    required String userId,
-    required bool enabled,
-    required String deadline,
-    required String recurringInterval,
-  }) async {
-    String sqlQuery = QueryBuilder.buildSqlQuery(query16, [
-      userId,
-      courseId,
-      enabled,
-      deadline,
-      recurringInterval,
-    ]);
-    // print(sqlQuery);
-    // executePostSqlQuery(sqlQuery);
-    // http.Response response = await http.get(Uri.parse(url + '${sqlQuery}'));
-    // print('pol: ${response.body}');
-    // if (response.statusCode == 200) {
-    //   // print('pol: ${response.body}');
-    // }
   }
 
   Future<dynamic> createOrUpdateUserCourseAssignments({
@@ -432,7 +421,7 @@ class AdminState {
         recurring_completion_required_interval = EXCLUDED.recurring_completion_required_interval;
     """;
 
-    print(sqlQuery);
+    _logger.info(sqlQuery);
     var message = executePostSqlQuery(sqlQuery);
     return message;
     // Note: This should be replaced with actual database operation logic.
@@ -446,9 +435,8 @@ class AdminState {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         body: {'query': sqlQuery},
       );
-      // print(json.decode(response.body));
       final responseBody = json.decode(response.body);
-      print('vvvv: ${responseBody}');
+      _logger.info(' ${responseBody}');
       if (responseBody.toString().contains('error') || responseBody.toString().contains('invalid')) {
         return '''Error :( 
 Please select all the appropriate fields properly!''';
@@ -456,7 +444,7 @@ Please select all the appropriate fields properly!''';
         return responseBody;
       }
     } catch (error) {
-      print('An error occurred: $error');
+      _logger.info('An error occurred: $error');
     }
     return 'An Unexpected error Occured :(';
   }

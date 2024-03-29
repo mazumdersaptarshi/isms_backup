@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:isms/controllers/theme_management/app_theme.dart';
 
 import 'package:isms/views/widgets/shared_widgets/bottom_nav_bar.dart';
 import 'package:isms/views/widgets/shared_widgets/custom_app_bar.dart';
-import 'package:isms/controllers/theme_management/common_theme.dart';
 import 'package:isms/controllers/user_management/logged_in_state.dart';
 
 class PlatformCheck {

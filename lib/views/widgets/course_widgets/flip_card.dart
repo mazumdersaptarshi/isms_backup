@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flip_card/flip_card.dart';
 
 import 'package:isms/controllers/theme_management/app_theme.dart';
+import 'package:isms/controllers/theme_management/theme_config.dart';
 import 'package:isms/models/course/flip_card.dart' as flip_card_model;
 
 class CustomFlipCard extends StatelessWidget {
@@ -10,9 +11,7 @@ class CustomFlipCard extends StatelessWidget {
 
   // final String imagePath;
 
-  const CustomFlipCard(
-      {Key? key, required this.content, required this.onCardFlipped})
-      : super(key: key);
+  const CustomFlipCard({Key? key, required this.content, required this.onCardFlipped}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +28,7 @@ class CustomFlipCard extends StatelessWidget {
     return Container(
       height: 300,
       width: 200,
-      decoration: getFlipCardBoxDecorationFront(),
+      decoration: ThemeConfig.flipCardBoxDecorationBack,
       child: Center(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -58,7 +57,7 @@ class CustomFlipCard extends StatelessWidget {
     return Container(
       height: 300,
       width: 200,
-      decoration: getFlipCardBoxDecorationBack(),
+      decoration: ThemeConfig.flipCardBoxDecorationBack,
       child: Center(
         child: Padding(
           padding: const EdgeInsets.all(20.0),

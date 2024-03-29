@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:footer/footer.dart';
 import 'package:footer/footer_view.dart';
 import 'package:provider/provider.dart';
-import 'package:isms/controllers/theme_management/common_theme.dart';
 import 'package:isms/controllers/user_management/logged_in_state.dart';
 import 'package:isms/utilities/platform_check.dart';
 import 'package:isms/views/widgets/shared_widgets/app_footer.dart';
@@ -21,7 +20,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   @override
   void initState() {
     super.initState();
@@ -29,12 +27,12 @@ class _HomePageState extends State<HomePage> {
 
   // Utility function to check and potentially create the admin document
   Future<void> checkAndCreateUserDocument(
-      String uid,
-      String currentUserEmail,
-      String currentUserName,
-      ) async {
+    String uid,
+    String currentUserEmail,
+    String currentUserName,
+  ) async {
     DocumentReference adminDocRef =
-    FirebaseFirestore.instance.collection('adminconsole').doc('allAdmins').collection('admins').doc(uid);
+        FirebaseFirestore.instance.collection('adminconsole').doc('allAdmins').collection('admins').doc(uid);
 
     bool docExists = await adminDocRef.get().then((doc) => doc.exists);
 
@@ -91,7 +89,7 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       Text(
                         "${AppLocalizations.of(context)!.homeWelcomeBack} \n${loggedInState.currentUserName}",
-                        style: customTheme.textTheme.bodyMedium?.copyWith(fontSize: 30, color: Colors.white),
+                        // style: customTheme.textTheme.bodyMedium?.copyWith(fontSize: 30, color: Colors.white),
                       ),
                       Flexible(
                         flex: 1,
@@ -127,8 +125,7 @@ class _HomePageState extends State<HomePage> {
                         Row(
                           children: [
                             SizedBox(width: 20),
-                            Text(
-                              AppLocalizations.of(context)!.remainingCourses,
+                            Text(AppLocalizations.of(context)!.remainingCourses,
                                 style: TextStyle(fontSize: 30, color: Colors.grey.shade600)),
                           ],
                         ),
@@ -140,8 +137,7 @@ class _HomePageState extends State<HomePage> {
                           Row(
                             children: [
                               SizedBox(width: 20),
-                              Text(
-                                AppLocalizations.of(context)!.noRemainingCourses,
+                              Text(AppLocalizations.of(context)!.noRemainingCourses,
                                   style: TextStyle(fontSize: 18, color: Colors.grey.shade700)),
                             ],
                           ),
@@ -150,6 +146,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
+
               /// Carousel
 
               SliverPadding(
@@ -415,11 +412,8 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           ),
-
         ],
       ),
     );
   }
-
-
 }

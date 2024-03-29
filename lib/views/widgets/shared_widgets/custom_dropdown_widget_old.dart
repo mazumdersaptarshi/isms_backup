@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart';
 import 'package:isms/controllers/theme_management/theme_config.dart';
-import 'package:isms/models/shared_widgets/custom_dropdown_item.dart';
 
-// 'T' here will allow the dropdown to hold any type of value,
-// but now within the structured format of CustomDropdownItem.
-class CustomDropdownWidget<T> extends StatelessWidget {
+// The 'T' here declares that CustomDropdown is a generic class.
+class CustomDropdownWidgetOld<T> extends StatelessWidget {
   final String? hintText;
-  final CustomDropdownItem<T>? value; // Changed to CustomDropdownItem<T>
-  final List<CustomDropdownItem<T>>? items; // Changed to List<CustomDropdownItem<T>>
-  final ValueChanged<CustomDropdownItem<T>?>? onChanged; // Changed to ValueChanged<CustomDropdownItem<T>?>
+  final T? value;
+  final List<T>? items;
+  final ValueChanged<T?>? onChanged;
   final String? label;
 
-  const CustomDropdownWidget({
+  const CustomDropdownWidgetOld({
     Key? key,
     this.hintText,
     this.value,
@@ -33,7 +31,7 @@ class CustomDropdownWidget<T> extends StatelessWidget {
               label!,
               style: TextStyle(
                 fontSize: 12,
-                color: ThemeConfig.tertiaryTextColor1!, // Adjust the color to match your theme
+                color: ThemeConfig.tertiaryTextColor1!,
               ),
             ),
           ),
@@ -41,7 +39,7 @@ class CustomDropdownWidget<T> extends StatelessWidget {
         Container(
           padding: EdgeInsets.symmetric(horizontal: 10),
           decoration: BoxDecoration(
-            border: Border.all(color: ThemeConfig.borderColor1!, width: 2), // Border color
+            border: Border.all(color: ThemeConfig.tertiaryColor1!), // Border color
             borderRadius: BorderRadius.circular(5), // Border radius
           ),
           child: ConstrainedBox(
@@ -49,31 +47,30 @@ class CustomDropdownWidget<T> extends StatelessWidget {
             child: DropdownButtonHideUnderline(
               child: Theme(
                 data: ThemeData(
-                  hoverColor: ThemeConfig.hoverFillColor2,
-                  focusColor: ThemeConfig.hoverFillColor3,
+                  hoverColor: ThemeConfig.getPrimaryColorShade(50),
+                  focusColor: ThemeConfig.getPrimaryColorShade(100),
                 ),
-                child: DropdownButton<CustomDropdownItem<T>>(
-                  dropdownColor: ThemeConfig.secondaryColor,
+                child: DropdownButton<T>(
                   borderRadius: BorderRadius.circular(5),
                   hint: Text(
                     hintText ?? '',
                     style: TextStyle(
-                      color: ThemeConfig.tertiaryTextColor1!, // Adjust the color to fit your theme
+                      color: ThemeConfig.tertiaryTextColor1!,
                     ),
                   ),
                   value: value,
                   onChanged: onChanged,
-                  items: items?.map((CustomDropdownItem<T> item) {
-                    return DropdownMenuItem<CustomDropdownItem<T>>(
-                      value: item,
+                  items: items?.map((T value) {
+                    return DropdownMenuItem<T>(
+                      value: value,
                       child: Text(
-                        item.key, // Displaying 'key' instead of 'value.toString()'
-                        style: TextStyle(color: ThemeConfig.tertiaryTextColor1!), // Text color inside the dropdown
+                        value.toString(),
+                        style: TextStyle(color: ThemeConfig.tertiaryTextColor1!),
                       ),
                     );
                   }).toList(),
                   isExpanded: true,
-                  icon: Icon(Icons.arrow_drop_down_rounded, color: ThemeConfig.tertiaryTextColor1!),
+                  icon: Icon(Icons.arrow_drop_down, color: ThemeConfig.tertiaryTextColor1!),
                 ),
               ),
             ),

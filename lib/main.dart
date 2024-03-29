@@ -9,6 +9,7 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:isms/controllers/reminders_management/reminders_provider.dart';
 import 'package:isms/controllers/storage/hive_service/hive_service.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart';
+import 'package:isms/controllers/theme_management/theme_config.dart';
 import 'package:isms/controllers/user_management/logged_in_state.dart';
 import 'package:isms/controllers/user_management/user_progress_tracker.dart';
 import 'package:isms/firebase_options.dart';
@@ -90,7 +91,7 @@ class IsmsApp extends StatelessWidget {
       ],
       child: MaterialApp.router(
         title: 'ISMS',
-        theme: ismsTheme,
+        theme: ThemeConfig.ismsTheme,
         scrollBehavior: CustomScrollBehavior(),
         debugShowCheckedModeBanner: false,
         // Required for localisation functionality

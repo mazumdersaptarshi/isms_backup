@@ -5,6 +5,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/controllers/testing/test_data.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart';
+import 'package:isms/controllers/theme_management/theme_config.dart';
 import 'package:isms/models/charts/line_charts/custom_line_chart_data_point.dart';
 
 class CustomLineChartAllUsersWidget extends StatefulWidget {
@@ -21,8 +22,8 @@ class _CustomLineChartAllUsersWidgetState extends State<CustomLineChartAllUsersW
   Map<String, dynamic> metricTypeData = {};
 
   List<Color> coursesCompletedGradientColors = [
-    primary!,
-    Colors.deepPurpleAccent,
+    ThemeConfig.primaryColor!,
+    Colors.redAccent,
   ];
   List<Color> coursesEnrolledGradientColors = [
     Colors.pink!,
@@ -309,7 +310,7 @@ class _CustomLineChartAllUsersWidgetState extends State<CustomLineChartAllUsersW
                     _selectedMetricType = value;
                   });
                 },
-                decoration: customDropdownDecoration,
+                // decoration: customDropdownDecoration,
               )),
         ],
       ),

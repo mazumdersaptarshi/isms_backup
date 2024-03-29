@@ -3,14 +3,14 @@ import 'package:isms/views/widgets/shared_widgets/selectable_item.dart';
 
 import 'course.dart';
 
-class CourseExamRelationship implements SelectableItem {
+class CourseInfo implements SelectableItem {
   String courseId;
 
   String? courseTitle;
 
   // List<dynamic>? exams;
 
-  CourseExamRelationship({
+  CourseInfo({
     required this.courseId,
     this.courseTitle,
   });

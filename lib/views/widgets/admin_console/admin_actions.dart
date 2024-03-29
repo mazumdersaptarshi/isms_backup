@@ -5,14 +5,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/controllers/admin_management/admin_state.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart';
+import 'package:isms/controllers/theme_management/theme_config.dart';
 import 'package:isms/models/admin_models/users_summary_data.dart';
-import 'package:isms/models/course/course_exam_relationship.dart';
+import 'package:isms/models/course/course_info.dart';
+import 'package:isms/models/shared_widgets/custom_dropdown_item.dart';
+import 'package:isms/views/widgets/shared_widgets/custom_dropdown_button_widget.dart';
+import 'package:isms/views/widgets/shared_widgets/custom_dropdown_widget_old.dart';
 import 'package:isms/views/widgets/shared_widgets/custom_dropdown_widget.dart';
 import 'package:isms/views/widgets/shared_widgets/custom_searchable_dropdown.dart';
 import 'package:isms/views/widgets/shared_widgets/hoverable_section_container.dart';
 import 'package:custom_searchable_dropdown/custom_searchable_dropdown.dart';
 import 'package:isms/views/widgets/shared_widgets/multi_select_search_widget.dart';
 import 'package:isms/views/widgets/shared_widgets/selectable_item.dart';
+import 'package:isms/views/widgets/shared_widgets/selected_items_display_widget.dart';
 
 class AdminActions extends StatefulWidget {
   AdminActions({
@@ -21,7 +26,7 @@ class AdminActions extends StatefulWidget {
     required this.allDomainUsersSummary,
   });
 
-  List<CourseExamRelationship> courses = [CourseExamRelationship(courseId: 'ip78hd', courseTitle: 'oplkj')];
+  List<CourseInfo> courses = [CourseInfo(courseId: 'ip78hd', courseTitle: 'oplkj')];
   List<UsersSummaryData> allDomainUsersSummary = [];
 
   @override
@@ -40,14 +45,47 @@ class _AdminActionsState extends State<AdminActions> {
   List<String> _selectedCoursesForAssignmentAction = [];
   String? _selectedUserIdForAssignmentAction = 'none';
   String? _selectedCourseEnableDisableValue = 'disable';
+  CustomDropdownItem<String>? _selectedCourseEnableDisable;
+
+  CustomDropdownItem<int>? _selectedYearsItem;
+  CustomDropdownItem<int>? _selectedMonthsItem;
+
+  List<CustomDropdownItem<String>> enableDisableDropdownItems = [
+    CustomDropdownItem(key: 'Enable', value: 'enable'),
+    CustomDropdownItem(key: 'Disable', value: 'disable'),
+  ];
+  List<CustomDropdownItem<int>> _years = [
+    CustomDropdownItem(key: '1', value: 1),
+    CustomDropdownItem(key: '2', value: 2),
+    CustomDropdownItem(key: '3', value: 3),
+    CustomDropdownItem(key: '4', value: 4),
+    CustomDropdownItem(key: '5', value: 5),
+    CustomDropdownItem(key: '6', value: 6),
+    CustomDropdownItem(key: '7', value: 7),
+    CustomDropdownItem(key: '8', value: 8),
+    CustomDropdownItem(key: '9', value: 9),
+    CustomDropdownItem(key: '10', value: 10),
+  ];
+
+  List<CustomDropdownItem<int>> _months = [
+    CustomDropdownItem(key: '1', value: 1),
+    CustomDropdownItem(key: '2', value: 2),
+    CustomDropdownItem(key: '3', value: 3),
+    CustomDropdownItem(key: '4', value: 4),
+    CustomDropdownItem(key: '5', value: 5),
+    CustomDropdownItem(key: '6', value: 6),
+    CustomDropdownItem(key: '7', value: 7),
+    CustomDropdownItem(key: '8', value: 8),
+    CustomDropdownItem(key: '9', value: 9),
+    CustomDropdownItem(key: '10', value: 10),
+    CustomDropdownItem(key: '11', value: 11),
+    CustomDropdownItem(key: '12', value: 12),
+  ];
   int? _selectedYears;
   int? _selectedMonths;
   List<SelectableItem> _selectedCoursesList = [];
   List<SelectableItem> _selectedUsersList = [];
 
-  // List<Map<String, dynamic>> allDomainUsersDropdown = [
-  //   {'userId': 'none', 'name': 'none'}
-  // ];
   TextEditingController _deadlineDateController = TextEditingController();
 
   Future<void> _selectDate() async {
@@ -68,6 +106,14 @@ class _AdminActionsState extends State<AdminActions> {
     return items;
   }
 
+  List<CustomDropdownItem<int>> _buildIntervalMenuItems(int count) {
+    List<CustomDropdownItem<int>> items = [];
+    for (int i = 0; i <= count; i++) {
+      items.add(CustomDropdownItem(key: i.toString(), value: i));
+    }
+    return items;
+  }
+
   Future<String> _createOrUpdateUserCourseAssignments({
     required List<SelectableItem> courses,
     required List<SelectableItem> users,
@@ -79,16 +125,15 @@ class _AdminActionsState extends State<AdminActions> {
     var message = await adminState.createOrUpdateUserCourseAssignments(
       courses: courses,
       users: users,
-      enabled: enabledOrDisabled == 'enabled' ? true : false,
+      enabled: enabledOrDisabled == 'enable' ? true : false,
       deadline: deadline!,
       years: years.toString(),
       months: months.toString(),
     );
-    print(message);
     return message.toString();
   }
 
-  void _showMultiSelectCoursesModal(List<CourseExamRelationship> courses) async {
+  void _showMultiSelectCoursesModal(List<CourseInfo> courses) async {
     final List<SelectableItem> selected = await showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -136,7 +181,7 @@ class _AdminActionsState extends State<AdminActions> {
       width: MediaQuery.of(context).size.width * 0.9,
       margin: EdgeInsets.fromLTRB(80, 12, 80, 30),
       decoration: BoxDecoration(
-        border: Border.all(color: getTertiaryColor1()),
+        border: Border.all(color: ThemeConfig.borderColor1!, width: 2),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Container(
@@ -152,7 +197,7 @@ class _AdminActionsState extends State<AdminActions> {
                     'Assign course to user',
                     style: TextStyle(
                       fontSize: 14,
-                      color: getTertiaryTextColor1(),
+                      color: ThemeConfig.tertiaryTextColor1!,
                     ),
                   ),
                   Divider(),
@@ -164,72 +209,25 @@ class _AdminActionsState extends State<AdminActions> {
                     runSpacing: 20, // Vertical space between runs
                     alignment: WrapAlignment.start,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 10, bottom: 8),
-                            child: Text(
-                              'Courses',
-                              style: TextStyle(
-                                fontSize: 12,
-                                // fontWeight: FontWeight.bold,
-                                color: getTertiaryTextColor1(), // Adjust the color to match your theme
-                              ),
-                            ),
-                          ),
-                          ElevatedButton(
-                            onPressed: () => _showMultiSelectCoursesModal(widget.courses),
-                            child: Container(
-                              width: 150,
-                              padding: EdgeInsets.symmetric(vertical: 13),
-                              child: Row(
-                                children: [
-                                  Text('Select Courses'),
-                                  Spacer(),
-                                  Icon(Icons.arrow_drop_down_rounded),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 10, bottom: 8),
-                            child: Text(
-                              'Users',
-                              style: TextStyle(
-                                fontSize: 12,
-                                // fontWeight: FontWeight.bold,
-                                color: getTertiaryTextColor1(), // Adjust the color to match your theme
-                              ),
-                            ),
-                          ),
-                          ElevatedButton(
-                            onPressed: () => _showMultiSelectUsersModal(widget.allDomainUsersSummary),
-                            child: Container(
-                                width: 150,
-                                padding: EdgeInsets.symmetric(vertical: 13),
-                                child: Row(
-                                  children: [
-                                    Text('Select Users'),
-                                    Spacer(),
-                                    Icon(Icons.arrow_drop_down_rounded),
-                                  ],
-                                )),
-                          ),
-                        ],
+                      CustomDropdownButton(
+                          label: 'Courses',
+                          buttonText: 'Select Courses',
+                          onButtonPressed: () => _showMultiSelectCoursesModal(widget.courses)),
+                      CustomDropdownButton(
+                        label: 'Users',
+                        buttonText: 'Select Users',
+                        onButtonPressed: () => _showMultiSelectUsersModal(widget.allDomainUsersSummary),
                       ),
                       CustomDropdownWidget<String>(
                         label: 'Status',
                         hintText: 'Status',
-                        value: _selectedCourseEnableDisableValue,
-                        items: ['enable', 'disable'],
-                        onChanged: (value) {
-                          setState(() => _selectedCourseEnableDisableValue = value);
+                        value: _selectedCourseEnableDisable,
+                        items: enableDisableDropdownItems,
+                        onChanged: (CustomDropdownItem<String>? value) {
+                          setState(() {
+                            _selectedCourseEnableDisable = value!;
+                            _selectedCourseEnableDisableValue = _selectedCourseEnableDisable?.value;
+                          });
                         },
                       ),
                       Column(
@@ -242,7 +240,7 @@ class _AdminActionsState extends State<AdminActions> {
                               style: TextStyle(
                                 fontSize: 12,
                                 // fontWeight: FontWeight.bold,
-                                color: getTertiaryTextColor1(), // Adjust the color to match your theme
+                                color: ThemeConfig.tertiaryTextColor1!, // Adjust the color to match your theme
                               ),
                             ),
                           ),
@@ -252,7 +250,7 @@ class _AdminActionsState extends State<AdminActions> {
                               width: 200,
                               padding: EdgeInsets.symmetric(horizontal: 12, vertical: 15),
                               decoration: BoxDecoration(
-                                border: Border.all(color: getTertiaryColor1()),
+                                border: Border.all(color: ThemeConfig.borderColor1!, width: 2),
                                 borderRadius: BorderRadius.circular(5),
                               ),
                               child: Row(
@@ -271,26 +269,25 @@ class _AdminActionsState extends State<AdminActions> {
                           ),
                         ],
                       ),
-                      // Text('Recurring Interval'),
                       CustomDropdownWidget<int>(
-                        label: 'Recurring Interval',
+                        label: 'Rec Interval',
                         hintText: 'Years',
-                        value: _selectedYears,
-                        items: _buildTimeIntervalMenuItems(10),
-                        onChanged: (value) {
+                        value: _selectedYearsItem,
+                        items: _years,
+                        onChanged: (CustomDropdownItem<int>? value) {
                           setState(() {
-                            _selectedYears = value!;
+                            _selectedYearsItem = value!;
                           });
                         },
                       ),
                       CustomDropdownWidget<int>(
                         label: '',
                         hintText: 'Months',
-                        value: _selectedMonths,
-                        items: _buildTimeIntervalMenuItems(12),
-                        onChanged: (value) {
+                        value: _selectedMonthsItem,
+                        items: _months,
+                        onChanged: (CustomDropdownItem<int>? value) {
                           setState(() {
-                            _selectedMonths = value!;
+                            _selectedMonthsItem = value!;
                           });
                         },
                       ),
@@ -312,18 +309,17 @@ class _AdminActionsState extends State<AdminActions> {
                   ),
                   Center(
                     child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: ThemeConfig.primaryColor,
+                        ),
                         onPressed: () async {
-                          print('${_selectedCourseForAssignmentAction} $_selectedUserIdForAssignmentAction '
-                              '$_selectedCourseEnableDisableValue  ${_deadlineDateController.text} $_selectedYears'
-                              ' $_selectedMonths');
-
                           var message = await _createOrUpdateUserCourseAssignments(
                             courses: _selectedCoursesList,
                             users: _selectedUsersList,
-                            enabledOrDisabled: _selectedCourseEnableDisableValue!,
+                            enabledOrDisabled: _selectedCourseEnableDisable!.value,
                             deadline: _deadlineDateController.text,
-                            years: _selectedYears,
-                            months: _selectedMonths,
+                            years: _selectedYearsItem?.value,
+                            months: _selectedMonthsItem?.value,
                           );
                           showDialog(
                             context: context,
@@ -386,58 +382,6 @@ class _AdminActionsState extends State<AdminActions> {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class SelectedItemsWidget extends StatelessWidget {
-  SelectedItemsWidget({
-    super.key,
-    required this.label,
-    required this.selectedItemsList,
-  });
-
-  final List<SelectableItem> selectedItemsList;
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      // height: 100, // Set a fixed height for the list of selected courses
-      width: 500,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: Text("$label:",
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: primary,
-                  fontSize: 14,
-                )),
-          ),
-          SizedBox(
-            height: 5,
-          ),
-          ListView.builder(
-            shrinkWrap: true,
-            itemCount: selectedItemsList.length,
-            itemBuilder: (context, index) {
-              return Text(
-                selectedItemsList[index].itemName,
-                style: TextStyle(
-                  // fontWeight: FontWeight.bold,
-                  color: getTertiaryTextColor1(),
-                  fontSize: 14,
-                ),
-              );
-            },
-          ),
-        ],
       ),
     );
   }

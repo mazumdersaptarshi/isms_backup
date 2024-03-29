@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:go_router/go_router.dart';
+import 'package:isms/controllers/theme_management/theme_config.dart';
 import 'package:isms/views/widgets/shared_widgets/build_section_header.dart';
 import 'package:isms/views/widgets/shared_widgets/custom_expansion_tile.dart';
 import 'package:isms/views/widgets/shared_widgets/custom_linear_progress_indicator.dart';
@@ -369,7 +370,7 @@ SELECT jsonb_build_object(
                   MediaQuery.of(context).size.width * 0.006,
                 ),
                 decoration: BoxDecoration(
-                  border: Border.all(color: getTertiaryColor1()),
+                  border: Border.all(color: ThemeConfig.tertiaryColor1!),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Container(
@@ -420,7 +421,9 @@ SELECT jsonb_build_object(
                         child: ElevatedButton(
                             onPressed: () => context.goNamed(NamedRoutes.course.name,
                                 pathParameters: {NamedRoutePathParameters.courseId.name: course.courseId}),
-                            child: courseId == 'webdev101' ? Text(AppLocalizations.of(context)!.resumeCourse) : Text(AppLocalizations.of(context)!.startCourse)))),
+                            child: courseId == 'webdev101'
+                                ? Text(AppLocalizations.of(context)!.resumeCourse)
+                                : Text(AppLocalizations.of(context)!.startCourse)))),
                 _separator,
                 Card(
                   color: Theme.of(context).scaffoldBackgroundColor,
@@ -429,7 +432,8 @@ SELECT jsonb_build_object(
                       titleWidget: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("${AppLocalizations.of(context)!.sections} (1/${course.courseSections.length} ${AppLocalizations.of(context)!.completed})"),
+                          Text(
+                              "${AppLocalizations.of(context)!.sections} (1/${course.courseSections.length} ${AppLocalizations.of(context)!.completed})"),
                           SizedBox(
                             height: 10,
                           ),
@@ -438,7 +442,7 @@ SELECT jsonb_build_object(
                             child: CustomLinearProgressIndicator(
                                 value: (1 / course.courseSections.length ?? 3),
                                 backgroundColor: Colors.grey.shade300,
-                                valueColor: primary!),
+                                valueColor: ThemeConfig.primaryColor!),
                           ),
                         ],
                       ),
@@ -452,7 +456,8 @@ SELECT jsonb_build_object(
                       titleWidget: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("${AppLocalizations.of(context)!.exams} (0/${_exams[courseId]?.length} ${AppLocalizations.of(context)!.completed})"),
+                          Text(
+                              "${AppLocalizations.of(context)!.exams} (0/${_exams[courseId]?.length} ${AppLocalizations.of(context)!.completed})"),
                           SizedBox(
                             height: 10,
                           ),
@@ -461,7 +466,7 @@ SELECT jsonb_build_object(
                             child: CustomLinearProgressIndicator(
                                 value: (0 / _exams[courseId]!.length ?? 3),
                                 backgroundColor: Colors.grey.shade300,
-                                valueColor: primary!),
+                                valueColor: ThemeConfig.primaryColor!),
                           ),
                         ],
                       ),
@@ -580,7 +585,9 @@ SELECT jsonb_build_object(
                 alignment: Alignment.centerLeft,
                 child: ElevatedButton(
                     onPressed: () => print(exam.examTitle),
-                    child: examId == 'e1' ? Text(AppLocalizations.of(context)!.retakeExam) : Text(AppLocalizations.of(context)!.startExam))),
+                    child: examId == 'e1'
+                        ? Text(AppLocalizations.of(context)!.retakeExam)
+                        : Text(AppLocalizations.of(context)!.startExam))),
           ],
         ),
       ));

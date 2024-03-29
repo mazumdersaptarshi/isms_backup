@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:isms/models/course/course_exam_relationship.dart'; // Ensure this import matches your project structure.
+import 'package:isms/models/course/course_info.dart'; // Ensure this import matches your project structure.
 
 class MultiSelectDropdown extends StatefulWidget {
-  final List<CourseExamRelationship> courses;
+  final List<CourseInfo> courses;
 
   const MultiSelectDropdown({Key? key, required this.courses}) : super(key: key);
 
@@ -11,7 +11,7 @@ class MultiSelectDropdown extends StatefulWidget {
 }
 
 class _MultiSelectDropdownState extends State<MultiSelectDropdown> {
-  List<CourseExamRelationship> _selectedCourses = [];
+  List<CourseInfo> _selectedCourses = [];
   final TextEditingController _controller = TextEditingController();
 
   @override
@@ -39,7 +39,7 @@ class _MultiSelectDropdownState extends State<MultiSelectDropdown> {
               shrinkWrap: true, // Needed to make the ListView behave in the modal
               itemCount: widget.courses.length,
               itemBuilder: (context, index) {
-                CourseExamRelationship course = widget.courses[index];
+                CourseInfo course = widget.courses[index];
                 return _controller.text.isEmpty ||
                         course.courseTitle!.toLowerCase().contains(_controller.text.toLowerCase())
                     ? CheckboxListTile(
