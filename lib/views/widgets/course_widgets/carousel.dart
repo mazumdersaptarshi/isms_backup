@@ -41,7 +41,7 @@ class _CarouselState extends State<Carousel> {
             child: Row(
               children: List.generate(
                 widget.courseTitle.length,
-                    (index) => LayoutBuilder(
+                (index) => LayoutBuilder(
                   builder: (context, constraints) => _buildCarouselItem(
                     widget.courseTitle[index],
                     constraints.maxWidth,
@@ -126,10 +126,10 @@ class _CarouselState extends State<Carousel> {
       child: GestureDetector(
         onTap: () {
           // Navigate to CoursePage
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => CoursePage()),
-          );
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(builder: (context) => CoursePage()),
+          // );
         },
         child: Card(
           color: cardColor,
@@ -154,12 +154,12 @@ class _CarouselState extends State<Carousel> {
                       child: Text(
                         title ?? "No Title",
                         style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black54,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black54,
                         ),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 4,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 4,
                       ),
                     ),
                   ],

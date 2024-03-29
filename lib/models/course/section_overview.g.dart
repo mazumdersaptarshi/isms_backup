@@ -1,24 +1,23 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'section.dart';
+part of 'section_overview.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Section _$SectionFromJson(Map<String, dynamic> json) => Section(
+SectionOverview _$SectionOverviewFromJson(Map<String, dynamic> json) =>
+    SectionOverview(
       sectionId: json['sectionId'] as String,
       sectionTitle: json['sectionTitle'] as String,
       sectionSummary: json['sectionSummary'] as String,
-      sectionElements: (json['sectionElements'] as List<dynamic>)
-          .map((e) => Element<dynamic>.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      sectionCompleted: json['sectionCompleted'] as bool,
     );
 
-Map<String, dynamic> _$SectionToJson(Section instance) => <String, dynamic>{
+Map<String, dynamic> _$SectionOverviewToJson(SectionOverview instance) =>
+    <String, dynamic>{
       'sectionId': instance.sectionId,
       'sectionTitle': instance.sectionTitle,
       'sectionSummary': instance.sectionSummary,
-      'sectionElements':
-          instance.sectionElements.map((e) => e.toJson()).toList(),
+      'sectionCompleted': instance.sectionCompleted,
     };

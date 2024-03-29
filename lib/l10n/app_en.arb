@@ -14,26 +14,21 @@
         "type": "text",
         "description": "Tooltip for Course List button"
     },
-    "buttonCourseTest": "Courses　Test",
-        "@buttonCourseTest": {
-            "type": "text",
-            "description": "Tooltip for Course Test button"
-        },
     "buttonTracking": "Tracking",
-            "@buttonTracking": {
-                "type": "text",
-                "description": "Tooltip for Tracking button"
-            },
+    "@buttonTracking": {
+        "type": "text",
+        "description": "Tooltip for Tracking button"
+    },
     "buttonNotificationPage": "Notifications",
-        "@buttonNotificationPage": {
-            "type": "text",
-            "description": "Tooltip for Notification Page button"
-        },
+    "@buttonNotificationPage": {
+        "type": "text",
+        "description": "Tooltip for Notification Page button"
+    },
     "buttonSettings": "Settings",
-        "@buttonSettings": {
-            "type": "text",
-            "description": "Tooltip for Settings button"
-            },
+    "@buttonSettings": {
+        "type": "text",
+        "description": "Tooltip for Settings button"
+    },
     "buttonLogout": "Logout",
     "@buttonLogout": {
         "type": "text",
@@ -136,114 +131,119 @@
         "type": "text",
         "description": "Title of pop-up courses answer explanation dialog when answer incorrect"
     },
-    "dialogAnswerIncorrectContentHeader": "Correct answer:",
-    "@dialogAnswerIncorrectContentHeader": {
+    "dialogAnswerIncorrectContentSelected": "Selected answer \"{incorrectAnswerText}\" is incorrect.\nExplanation: {incorrectAnswerExplanation}\n",
+    "@dialogAnswerIncorrectContentSelected": {
         "type": "text",
-        "description": "Content of pop-up courses answer explanation dialog when answer incorrect"
-    },
-    "dialogAnswerIncorrectContentBody": "{correctAnswer} - {answerExplanation}",
-    "@dialogAnswerIncorrectContentBody": {
-        "type": "text",
-        "description": "Content of pop-up courses answer explanation dialog when answer incorrect",
+        "description": "Content of pop-up courses answer explanation dialog when answer incorrect explaining selected incorrect answers",
         "placeholders": {
-            "correctAnswer": {
+            "incorrectAnswerText": {
                 "type": "String",
-                "example": "Correct answer"
+                "example": "Incorrect answer text"
             },
-            "answerExplanation": {
+            "incorrectAnswerExplanation": {
+                "type": "String",
+                "example": "Incorrect answer explanation"
+            }
+        }
+    },
+    "dialogAnswerIncorrectContentCorrect": "Answer \"{correctAnswerText}\" is correct.\nExplanation: {correctAnswerExplanation}\n",
+    "@dialogAnswerIncorrectContentCorrect": {
+        "type": "text",
+        "description": "Content of pop-up courses answer explanation dialog when answer incorrect explaining correct answers",
+        "placeholders": {
+            "correctAnswerText": {
+                "type": "String",
+                "example": "Correct answer text"
+            },
+            "correctAnswerExplanation": {
                 "type": "String",
                 "example": "Correct answer explanation"
             }
         }
     },
     "homeWelcomeBack": "Welcome back,",
-        "@homeWelcomeBack": {
-            "type": "text",
-            "description": "Welcome back message on home screen"
-        },
+    "@homeWelcomeBack": {
+        "type": "text",
+        "description": "Welcome back message on home screen"
+    },
     "remainingCourses": "Remaining Courses:",
-        "@remainingCourses": {
-            "type": "text",
-            "description": "Remaining Courses message on home screen"
-            },
+    "@remainingCourses": {
+        "type": "text",
+        "description": "Remaining Courses message on home screen"
+    },
     "noRemainingCourses": "There is no remaining course",
-        "@noRemainingCourses": {
-            "type": "text",
-            "description": "There is no remaining course message on home screen"
-            },
+    "@noRemainingCourses": {
+        "type": "text",
+        "description": "There is no remaining course message on home screen"
+    },
     "selectAll": "Select All",
-        "@selectAll": {
-            "type": "text",
-            "description": "Select All on Notification page"
-            },
+    "@selectAll": {
+        "type": "text",
+        "description": "Select All on Notification page"
+    },
     "deleteSelected": "Delete Selected",
-        "@deleteSelected": {
-            "type": "text",
-            "description": "Delete Selected on Notification page"
-            },
+    "@deleteSelected": {
+        "type": "text",
+        "description": "Delete Selected on Notification page"
+    },
     "markUnreadSelected": "Mark Unread Selected",
-        "@markUnreadSelected": {
-            "type": "text",
-            "description": "Mark Unread Selected on Notification page"
-            },
+    "@markUnreadSelected": {
+        "type": "text",
+        "description": "Mark Unread Selected on Notification page"
+    },
     "courses": "Courses",
-        "@courses": {
-            "type": "text",
-            "description": "Courses on course list page"
-            },
+    "@courses": {
+        "type": "text",
+        "description": "Courses on course list page"
+    },
     "resumeCourse": "Resume Course",
-        "@resumeCourse": {
-            "type": "text",
-            "description": "Resume Course on course list page"
-            },
+    "@resumeCourse": {
+        "type": "text",
+        "description": "Resume Course on course list page"
+    },
     "startCourse": "Start Course",
-        "@startCourse": {
-            "type": "text",
-            "description": "Start Course on course list page"
-            },
-    "retakeExam": "Retake Exam",
-        "@retakeExam": {
-            "type": "text",
-            "description": "Retake Exam on course list page"
-            },
+    "@startCourse": {
+        "type": "text",
+        "description": "Start Course on course list page"
+    },
     "startExam": "Start Exam",
-        "@startExam": {
-            "type": "text",
-            "description": "Start Exam on course list page"
-            },
+    "@startExam": {
+        "type": "text",
+        "description": "Start Exam on course list page"
+    },
     "sections": "Sections",
-        "@sections": {
-            "type": "text",
-            "description": "Sections on course list page"
-            },
+    "@sections": {
+        "type": "text",
+        "description": "Sections on course list page"
+    },
     "exams": "Exams",
-        "@exams": {
-            "type": "text",
-            "description": "Exams on course list page"
-            },
+    "@exams": {
+        "type": "text",
+        "description": "Exams on course list page"
+    },
     "completed": "Completed",
-        "@completed": {
-            "type": "text",
-            "description": "Completed on course list page"
-            },
+    "@completed": {
+        "type": "text",
+        "description": "Completed on course list page"
+    },
     "themes": "Themes:",
-        "@themes": {
-            "type": "text",
-            "description": "Themes on Settings page"
-            },
+    "@themes": {
+        "type": "text",
+        "description": "Themes on Settings page"
+    },
     "lightTheme": "Light Theme",
-        "@lightTheme": {
-            "type": "text",
-            "description": "Light theme on Settings page"
-            },
+    "@lightTheme": {
+        "type": "text",
+        "description": "Light theme on Settings page"
+    },
     "darkTheme": "Dark Theme",
-        "@darkTheme": {
-            "type": "text",
-            "description": "Dark theme on Settings page"
-            },
+    "@darkTheme": {
+        "type": "text",
+        "description": "Dark theme on Settings page"
+    },
     "languageSetting": "Language:",
-        "@languageSetting": {
-            "type": "text",
-            "description": "Language setting on Settings page"
-        }
+    "@languageSetting": {
+        "type": "text",
+        "description": "Language setting on Settings page"
+    }
 }
