@@ -1,38 +1,15 @@
-import 'package:json_annotation/json_annotation.dart';
+abstract class Exam {
+  String get examId;
 
-import 'package:isms/models/course/section.dart';
+  double get examVersion;
 
-/// This allows the class to access private members in the generated file.
-/// The value for this is `*.g.dart`, where the asterisk denotes the source file name.
-part 'exam.g.dart';
+  String get examTitle;
 
-/// An annotation for the code generator to know that this class needs the JSON serialisation logic to be generated.
-@JsonSerializable(explicitToJson: true)
-class Exam {
-  final String courseId;
-  final String examId;
-  final String examTitle;
-  final String examSummary;
-  final String examDescription;
-  final int examPassMark;
-  final int examEstimatedTime;
-  final List<Section> examSections;
+  String get examSummary;
 
-  Exam(
-      {required this.courseId,
-      required this.examId,
-      required this.examTitle,
-      required this.examSummary,
-      required this.examDescription,
-      required this.examPassMark,
-      required this.examEstimatedTime,
-      required this.examSections});
+  String get examDescription;
 
-  /// A necessary factory constructor for creating a new class instance from a map.
-  /// Pass the map to the generated constructor, which is named after the source class.
-  factory Exam.fromJson(Map<String, dynamic> json) => _$ExamFromJson(json);
+  int get examPassMark;
 
-  /// `toJson` is the convention for a class to declare support for serialisation to JSON.
-  /// The implementation simply calls the private, generated helper method.
-  Map<String, dynamic> toJson() => _$ExamToJson(this);
+  String get examEstimatedCompletionTime;
 }

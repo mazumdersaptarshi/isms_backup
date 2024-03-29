@@ -63,16 +63,17 @@ final GoRouter ismsRouter = GoRouter(
           name: NamedRoutes.course.name,
           path: 'course/:courseId',
           builder: (context, state) =>
-              CoursePage(courseId: state.pathParameters[NamedRoutePathParameters.courseId.name]),
-          onExit: (BuildContext context) =>
-              _getNavigationConfirmationDialog(context, AppLocalizations.of(context)!.dialogLeavePageContentCourse),
+              CoursePage(courseId: state.pathParameters[NamedRoutePathParameters.courseId.name]!),
+          // onExit: (BuildContext context) =>
+          //     _getNavigationConfirmationDialog(context, AppLocalizations.of(context)!.dialogLeavePageContentCourse),
         ),
         GoRoute(
           name: NamedRoutes.exam.name,
           path: 'exam/:examId',
-          builder: (context, state) => CoursePage(courseId: state.pathParameters[NamedRoutePathParameters.examId.name]),
-          onExit: (BuildContext context) =>
-              _getNavigationConfirmationDialog(context, AppLocalizations.of(context)!.dialogLeavePageContentExam),
+          builder: (context, state) =>
+              CoursePage(courseId: state.pathParameters[NamedRoutePathParameters.examId.name]!),
+          // onExit: (BuildContext context) =>
+          //     _getNavigationConfirmationDialog(context, AppLocalizations.of(context)!.dialogLeavePageContentExam),
         ),
       ],
     ),

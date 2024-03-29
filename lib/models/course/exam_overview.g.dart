@@ -1,31 +1,31 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'exam.dart';
+part of 'exam_overview.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Exam _$ExamFromJson(Map<String, dynamic> json) => Exam(
-      courseId: json['courseId'] as String,
+ExamOverview _$ExamOverviewFromJson(Map<String, dynamic> json) => ExamOverview(
       examId: json['examId'] as String,
+      examVersion: (json['examVersion'] as num).toDouble(),
       examTitle: json['examTitle'] as String,
       examSummary: json['examSummary'] as String,
       examDescription: json['examDescription'] as String,
       examPassMark: json['examPassMark'] as int,
-      examEstimatedTime: json['examEstimatedTime'] as int,
-      examSections: (json['examSections'] as List<dynamic>)
-          .map((e) => Section.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      examEstimatedCompletionTime:
+          json['examEstimatedCompletionTime'] as String,
+      examPassed: json['examPassed'] as bool,
     );
 
-Map<String, dynamic> _$ExamToJson(Exam instance) => <String, dynamic>{
-      'courseId': instance.courseId,
+Map<String, dynamic> _$ExamOverviewToJson(ExamOverview instance) =>
+    <String, dynamic>{
       'examId': instance.examId,
+      'examVersion': instance.examVersion,
       'examTitle': instance.examTitle,
       'examSummary': instance.examSummary,
       'examDescription': instance.examDescription,
       'examPassMark': instance.examPassMark,
-      'examEstimatedTime': instance.examEstimatedTime,
-      'examSections': instance.examSections.map((e) => e.toJson()).toList(),
+      'examEstimatedCompletionTime': instance.examEstimatedCompletionTime,
+      'examPassed': instance.examPassed,
     };
