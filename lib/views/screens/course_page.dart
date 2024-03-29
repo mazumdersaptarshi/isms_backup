@@ -105,7 +105,7 @@ SELECT cc.content_jdoc
   @override
   void initState() {
     super.initState();
-    _responseFuture = _fetchCourseData('u1', widget.courseId);
+    _responseFuture = _fetchCourseData('8qu6GqSvS5bzGSx1xZqwN4nqy3C2', widget.courseId);
   }
 
   Future<http.Response> _fetchCourseData(String uid, String courseId) async {

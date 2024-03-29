@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
+import 'package:isms/controllers/theme_management/theme_config.dart';
 import 'package:provider/provider.dart';
 
 import 'package:isms/controllers/theme_management/app_theme.dart';
@@ -194,7 +195,7 @@ SELECT jsonb_build_object(
   void initState() {
     super.initState();
 
-    fetchCourseListData('u1').then((List<dynamic> responseData) {
+    fetchCourseListData('8qu6GqSvS5bzGSx1xZqwN4nqy3C2').then((List<dynamic> responseData) {
       for (List<dynamic> jsonCourse in responseData) {
         Map<String, dynamic> courseMap = jsonCourse.first as Map<String, dynamic>;
         CourseOverview course = CourseOverview.fromJson(courseMap);
@@ -239,7 +240,7 @@ SELECT jsonb_build_object(
                 MediaQuery.of(context).size.width * 0.006,
               ),
               decoration: BoxDecoration(
-                border: Border.all(color: getTertiaryColor1()),
+                border: Border.all(color: ThemeConfig.tertiaryColor1!),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Container(
@@ -335,7 +336,7 @@ SELECT jsonb_build_object(
                             child: CustomLinearProgressIndicator(
                                 value: (completedSectionTotal / course.courseSections.length),
                                 backgroundColor: Colors.grey.shade300,
-                                valueColor: primary!),
+                                valueColor: ThemeConfig.primaryColor!),
                           ),
                         ],
                       ),
@@ -359,7 +360,7 @@ SELECT jsonb_build_object(
                             child: CustomLinearProgressIndicator(
                                 value: (completedExamTotal / course.courseExams.length),
                                 backgroundColor: Colors.grey.shade300,
-                                valueColor: primary!),
+                                valueColor: ThemeConfig.primaryColor!),
                           ),
                         ],
                       ),

@@ -143,7 +143,9 @@ class AdminState {
 
   Future<dynamic> getUserSummary(String uid) async {
     String sqlQuery = QueryBuilder.buildSqlQuery(query2, [uid]);
-    http.Response response = await http.get(Uri.parse(url + '${sqlQuery}'));
+    // http.Response response = await http.get(Uri.parse(localGetURL + 'user_summary' + '&param1=$uid'));
+    http.Response response = await http.get(Uri.parse(remoteGetURL + 'user_summary' + '&param1=$uid'));
+
     List<UserSummary> userSummaryList = [];
     if (response.statusCode == 200) {
       // Check if the request was successful
@@ -173,7 +175,12 @@ class AdminState {
       {required String userId, required String courseId, required String examId}) async {
     List<UserExamAttempt> userExamAttemptList = [];
     String sqlQuery = QueryBuilder.buildSqlQuery(query6, [userId, courseId, examId]);
-    http.Response response = await http.get(Uri.parse(url + '${sqlQuery}'));
+    // http.Response response = await http.get(Uri.parse(url + '${sqlQuery}'));
+    // http.Response response = await http
+    //     .get(Uri.parse(localGetURL + 'get_exam_attempts' + '&param1=$userId&param2=$courseId&param3=$examId'));
+    http.Response response = await http
+        .get(Uri.parse(remoteGetURL + 'get_exam_attempts' + '&param1=$userId&param2=$courseId&param3=$examId'));
+
     if (response.statusCode == 200) {
       List<dynamic> jsonResponse = jsonDecode(response.body);
       jsonResponse.forEach((element) {
@@ -197,7 +204,10 @@ class AdminState {
     await Future.delayed(Duration(seconds: 1));
 
     String sqlQuery = QueryBuilder.buildSqlQuery(query5, [uid]);
-    http.Response response = await http.get(Uri.parse(url + '${sqlQuery}'));
+    // http.Response response = await http.get(Uri.parse(url + '${sqlQuery}'));
+    // http.Response response = await http.get(Uri.parse(localGetURL + 'user_course_progress' + '&param1=$uid'));
+    http.Response response = await http.get(Uri.parse(remoteGetURL + 'user_course_progress' + '&param1=$uid'));
+
     List<UserCourseProgress> userCourseProgressList = [];
     if (response.statusCode == 200) {
       List<dynamic> jsonResponse = jsonDecode(response.body);
@@ -235,7 +245,10 @@ class AdminState {
 
   Future<dynamic> getAllUsersCoursesStatusOverview({required String examId, required String metric}) async {
     String sqlQuery = QueryBuilder.buildSqlQuery(query7, [examId]);
-    http.Response response = await http.get(Uri.parse(url + '${sqlQuery}'));
+    // http.Response response = await http.get(Uri.parse(url + '${sqlQuery}'));
+    // http.Response response = await http.get(Uri.parse(localGetURL + 'exams_scores_overview' '&param1=$examId'));
+    http.Response response = await http.get(Uri.parse(remoteGetURL + 'exams_scores_overview' '&param1=$examId'));
+
     List<CustomBarChartData> usersExamData = [];
     metric = (metric == '')
         ? 'avgScore'

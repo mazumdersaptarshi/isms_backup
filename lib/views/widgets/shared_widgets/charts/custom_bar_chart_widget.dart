@@ -8,6 +8,8 @@ import 'package:isms/controllers/theme_management/app_theme.dart';
 import 'package:isms/controllers/theme_management/theme_config.dart';
 import 'package:isms/models/charts/bar_charts/custom_bar_chart_data.dart';
 import 'package:isms/models/charts/bar_charts/individual_bar.dart';
+import 'package:isms/models/shared_widgets/custom_dropdown_item.dart';
+import 'package:isms/views/widgets/shared_widgets/custom_dropdown_widget.dart';
 
 class CustomBarChart extends StatefulWidget {
   CustomBarChart({
@@ -23,6 +25,14 @@ class CustomBarChart extends StatefulWidget {
 
 class _CustomBarChartState extends State<CustomBarChart> {
   int _scoreLimit = 100;
+  CustomDropdownItem<int>? scoreLimit;
+
+  List<CustomDropdownItem<int>> scoreFilterList = [
+    CustomDropdownItem(key: '30', value: 30),
+    CustomDropdownItem(key: '50', value: 50),
+    CustomDropdownItem(key: '70', value: 70),
+    CustomDropdownItem(key: '100', value: 100),
+  ];
   int _touchedIndex = -1;
 
   int _currentPage = 0;
@@ -95,7 +105,7 @@ class _CustomBarChartState extends State<CustomBarChart> {
             // toY: isTouched ? data.y : data.y,
             toY: data.y,
             color: isTouched
-                ? ThemeConfig.primaryColor!
+                ? ThemeConfig.primaryColor
                 : data.y <= _scoreLimit.toDouble() * 0.5
                     ? Colors.redAccent
                     : (data.y > _scoreLimit.toDouble() * 0.5 && data.y <= _scoreLimit.toDouble() * 0.8)
@@ -107,7 +117,7 @@ class _CustomBarChartState extends State<CustomBarChart> {
             width: 20,
             borderRadius: BorderRadius.circular(5),
             backDrawRodData:
-                BackgroundBarChartRodData(show: true, toY: _scoreLimit.toDouble(), color: Colors.grey.shade300)),
+                BackgroundBarChartRodData(show: true, toY: _scoreLimit.toDouble(), color: ThemeConfig.tertiaryColor2)),
       ],
     );
   }
@@ -126,14 +136,21 @@ class _CustomBarChartState extends State<CustomBarChart> {
         SizedBox(
           height: 10,
         ),
-        Text(
-          'Score Filter',
-          style: TextStyle(fontSize: 12, color: Colors.grey.shade500),
+        CustomDropdownWidget<int>(
+          label: 'Filter',
+          hintText: '<=',
+          value: scoreLimit,
+          items: scoreFilterList,
+          onChanged: (value) {
+            setState(() {
+              scoreLimit = value;
+              _scoreLimit = scoreLimit!.value;
+              _calculateTotalPages();
+              _currentPage = 0;
+            });
+          },
         ),
-        SizedBox(
-          height: 10,
-        ),
-        CustomScoreFilterDropdownButton(context),
+        // CustomScoreFilterDropdownButton(context),
         Container(
           // decoration: BoxDecoration(
           //     color: Colors.grey.shade100,
@@ -211,7 +228,7 @@ class _CustomBarChartState extends State<CustomBarChart> {
                                     '${widget.barChartValuesData[value.toInt()].x} ',
                                     style: TextStyle(
                                       fontSize: 12,
-                                      color: Colors.grey.shade600,
+                                      color: ThemeConfig.primaryTextColor!,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -228,38 +245,39 @@ class _CustomBarChartState extends State<CustomBarChart> {
     );
   }
 
-  Widget CustomScoreFilterDropdownButton(BuildContext context) {
-    List<String> displayItems = <int>[30, 50, 70, 100].map((entry) => "${entry}").toList();
-
-    return Container(
-      // margin: EdgeInsets.all(10),
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(
-          minWidth: 50, // Set your minimum width here
-          maxWidth: 100, // Set your maximum width here
-        ),
-        child: CustomDropdown<String>(
-          hintText: '<=',
-          items: displayItems,
-          overlayHeight: 342,
-          onChanged: (value) {
-            int? selectedKey;
-            for (var entry in <int>[30, 50, 70, 100]) {
-              if (entry == int.parse(value)) {
-                selectedKey = int.parse(value);
-                break;
-              }
-            }
-            setState(() {
-              _scoreLimit = selectedKey!;
-              _calculateTotalPages();
-              _currentPage = 0;
-            });
-          },
-        ),
-      ),
-    );
-  }
+  // Widget CustomScoreFilterDropdownButton(BuildContext context) {
+  //   List<String> displayItems = <int>[30, 50, 70, 100].map((entry) => "${entry}").toList();
+  //
+  //   return Container(
+  //     // margin: EdgeInsets.all(10),
+  //     child: ConstrainedBox(
+  //       constraints: const BoxConstraints(
+  //         minWidth: 50, // Set your minimum width here
+  //         maxWidth: 100, // Set your maximum width here
+  //       ),
+  //       child: CustomDropdown<String>(
+  //         hintText: '<=',
+  //         items: displayItems,
+  //         overlayHeight: 342,
+  //         onChanged: (value) {
+  //           int? selectedKey;
+  //           for (var entry in <int>[30, 50, 70, 100]) {
+  //             if (entry == int.parse(value)) {
+  //               selectedKey = int.parse(value);
+  //               break;
+  //             }
+  //           }
+  //           setState(() {
+  //             _scoreLimit = selectedKey!;
+  //             _calculateTotalPages();
+  //             _currentPage = 0;
+  //           });
+  //         },
+  //         decoration: customDropdownDecoration,
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget _buildPaginationControls() {
     return Container(
