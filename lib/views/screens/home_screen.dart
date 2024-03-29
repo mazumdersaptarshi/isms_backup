@@ -168,6 +168,7 @@ class _HomePageState extends State<HomePage> {
                             padding: EdgeInsets.all(8.0),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: const [
                                 Icon(Icons.security, size: 50),
                                 SizedBox(
@@ -377,8 +378,10 @@ class _HomePageState extends State<HomePage> {
                               // Colored icon
                               Text(
                                   "In euismod, dui id tristique consectetur, quam nisi tincidunt nunc, ut semper magna velit fermentum libero. Suspendisse in diam at quam venenatis mattis. Pellentesque sodales lacinia tempor. Pellentesque vehicula tincidunt lobortis. Fusce molestie justo eget convallis tempor. Donec aliquet erat a enim pretium, vitae imperdiet nulla ornare. ",
-                                  style: TextStyle(fontSize: 16)),
-                              // Text
+                                  style: TextStyle(fontSize: 16),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 6,
+                              ),
                             ],
                           ),
                         ),
