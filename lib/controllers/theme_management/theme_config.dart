@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ThemeConfig {
-  static bool isDarkMode = true;
+  static bool isDarkMode = false;
   static ThemeData ismsTheme = isDarkMode ? _ismsThemeDark() : _ismsThemeLight();
 
   static ThemeData _ismsThemeLight() {
@@ -33,9 +33,9 @@ class ThemeConfig {
     return Colors.blue[shade] ?? Colors.blue[700];
   }
 
-  static Color? get primaryColor => getPrimaryColorShade(700);
+  static Color? get primaryColor => isDarkMode ? getPrimaryColorShade(900) : getPrimaryColorShade(700);
 
-  static Color? get hoverFillColor1 => isDarkMode ? Colors.grey.shade800 : getPrimaryColorShade(50);
+  static Color? get hoverFillColor1 => isDarkMode ? primaryColor : getPrimaryColorShade(50);
 
   static Color? get hoverFillColor2 => isDarkMode ? Colors.grey.shade700 : getPrimaryColorShade(100);
 

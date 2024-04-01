@@ -192,7 +192,9 @@ class _UsersSummaryTableState extends State<UsersSummaryTable> {
                   bottomLeft: Radius.circular(20),
                   bottomRight: Radius.circular(20),
                 )
-              : BorderRadius.zero, // Border(
+              : isHoveringMap[index ?? 0] == true
+                  ? BorderRadius.all(Radius.circular(4))
+                  : BorderRadius.zero, // Border(
 
           color: isHoveringMap[index ?? 0] == true ? ThemeConfig.hoverFillColor1 : Colors.transparent,
         ),

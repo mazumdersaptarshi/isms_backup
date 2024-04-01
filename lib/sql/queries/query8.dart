@@ -12,7 +12,4 @@ SELECT jsonb_build_object('courseId', cl.course_id,
 						 ) AS courses_list_json
 FROM courses_list AS cl
 
-
-
-
 ''';

@@ -247,7 +247,7 @@ class AdminState {
     String sqlQuery = QueryBuilder.buildSqlQuery(query7, [examId]);
     // http.Response response = await http.get(Uri.parse(url + '${sqlQuery}'));
     // http.Response response = await http.get(Uri.parse(localGetURL + 'exams_scores_overview' '&param1=$examId'));
-    http.Response response = await http.get(Uri.parse(remoteGetURL + 'exams_scores_overview' '&param1=$examId'));
+    http.Response response = await http.get(Uri.parse(remoteGetURL + 'exams_scores_overview' + '&param1=$examId'));
 
     List<CustomBarChartData> usersExamData = [];
     metric = (metric == '')
@@ -293,7 +293,10 @@ class AdminState {
 
   Future<dynamic> getAllUsersCoursesBW({required String examId}) async {
     String sqlQuery = QueryBuilder.buildSqlQuery(query10, [examId]);
-    http.Response response = await http.get(Uri.parse(url + '${sqlQuery}'));
+    // http.Response response = await http.get(Uri.parse(url + '${sqlQuery}'));
+    // http.Response response = await http.get(Uri.parse(localGetURL + 'users_scores_variation' '&param1=$examId'));
+    http.Response response = await http.get(Uri.parse(remoteGetURL + 'users_scores_variation' + '&param1=$examId'));
+
     List<CustomBoxAndWhiskerChartData> usersExamDataBW = [];
     if (response.statusCode == 200) {
       List<dynamic> jsonResponse = jsonDecode(response.body);
@@ -316,7 +319,9 @@ class AdminState {
 
   Future<dynamic> getCoursesList() async {
     String sqlQuery = QueryBuilder.buildSqlQuery(query8, []);
-    http.Response response = await http.get(Uri.parse(url + '${sqlQuery}'));
+    // http.Response response = await http.get(Uri.parse(url + '${sqlQuery}'));
+    http.Response response = await http.get(Uri.parse(localGetURL + 'all_courses'));
+
     List<CourseInfo> coursesList = [];
     if (response.statusCode == 200) {
       List<dynamic> jsonResponse = jsonDecode(response.body);
@@ -330,7 +335,9 @@ class AdminState {
 
   Future<dynamic> getCoursesListForUser({required String uid}) async {
     String sqlQuery = QueryBuilder.buildSqlQuery(query12, [uid]);
-    http.Response response = await http.get(Uri.parse(url + '${sqlQuery}'));
+    // http.Response response = await http.get(Uri.parse(url + '${sqlQuery}'));
+    http.Response response = await http.get(Uri.parse(localGetURL + 'courses_list_for_user' + '&param1=$uid'));
+
     if (response.statusCode == 200) {
       List<dynamic> jsonResponse = jsonDecode(response.body);
     }
@@ -338,7 +345,9 @@ class AdminState {
 
   Future<dynamic> getExamsListForCourse({required String courseId}) async {
     String sqlQuery = QueryBuilder.buildSqlQuery(query9, [courseId]);
-    http.Response response = await http.get(Uri.parse(url + '${sqlQuery}'));
+    // http.Response response = await http.get(Uri.parse(url + '${sqlQuery}'));
+    http.Response response = await http.get(Uri.parse(localGetURL + 'exams_list_for_course' + '&param1=$courseId'));
+
     List<ExamInfo> examsListForCourse = [];
     if (response.statusCode == 200) {
       List<dynamic> jsonResponse = jsonDecode(response.body);
@@ -351,7 +360,9 @@ class AdminState {
 
   Future<dynamic> getExamOverallResults({required String examId}) async {
     String sqlQuery = QueryBuilder.buildSqlQuery(query11, [examId]);
-    http.Response response = await http.get(Uri.parse(url + '${sqlQuery}'));
+    // http.Response response = await http.get(Uri.parse(url + '${sqlQuery}'));
+    http.Response response = await http.get(Uri.parse(localGetURL + 'exams_overall_results' + '&param1=$examId'));
+
     List<CustomPieChartData> pieChartData = [];
     if (response.statusCode == 200) {
       List<dynamic> jsonResponse = jsonDecode(response.body);
@@ -367,7 +378,9 @@ class AdminState {
 
   Future<dynamic> getExamOverallResultsForUser({required String uid}) async {
     String sqlQuery = QueryBuilder.buildSqlQuery(query13, [uid]);
-    http.Response response = await http.get(Uri.parse(url + '${sqlQuery}'));
+    // http.Response response = await http.get(Uri.parse(url + '${sqlQuery}'));
+    http.Response response = await http.get(Uri.parse(localGetURL + 'user_exams_overall_results' + '&param1=$uid'));
+
     List<CustomPieChartData> pieChartData = [];
 
     if (response.statusCode == 200) {
@@ -384,7 +397,9 @@ class AdminState {
 
   Future<dynamic> getAllDomainUsers() async {
     String sqlQuery = QueryBuilder.buildSqlQuery(query15, []);
-    http.Response response = await http.get(Uri.parse(url + '${sqlQuery}'));
+    // http.Response response = await http.get(Uri.parse(url + '${sqlQuery}'));
+    http.Response response = await http.get(Uri.parse(localGetURL + 'domain_users'));
+
     if (response.statusCode == 200) {}
   }
 
@@ -397,6 +412,9 @@ class AdminState {
     String? months,
   }) async {
     List<String> valueRows = [];
+    List<String> userIDs = [];
+    List<String> courseIDs = [];
+
     for (SelectableItem user in users) {
       for (SelectableItem course in courses) {
         // Construct the recurring interval part based on what's provided
@@ -408,7 +426,8 @@ class AdminState {
           recurringIntervalValue += '$months months';
         }
         recurringIntervalValue = recurringIntervalValue.trim(); // Remove trailing space
-
+        userIDs.add(user.itemId);
+        courseIDs.add(course.itemId);
         String valueRow =
             "('${user.itemId}', '${course.itemId}', ${enabled ? 'TRUE' : 'FALSE'}, ${deadline != null ? '\'$deadline\'::date' : 'NULL'}, NOW(), ${recurringIntervalValue.isNotEmpty ? 'INTERVAL \'$recurringIntervalValue\'' : 'NULL'})";
         valueRows.add(valueRow);
@@ -437,7 +456,6 @@ class AdminState {
     _logger.info(sqlQuery);
     var message = executePostSqlQuery(sqlQuery);
     return message;
-    // Note: This should be replaced with actual database operation logic.
   }
 
   Future<dynamic> executePostSqlQuery(String sqlQuery) async {
@@ -469,5 +487,51 @@ Please select all the appropriate fields properly!''';
       return response.body;
     }
     return [];
+  }
+
+  Future<dynamic> createOrUpdateUserCourseAssignmentss({
+    required List<SelectableItem> courses,
+    required List<SelectableItem> users,
+    required bool enabled,
+    String? deadline, // Now nullable
+    String? years, // Separate years and months, both nullable
+    String? months,
+  }) async {
+    List<String> valueRows = [];
+    for (SelectableItem user in users) {
+      for (SelectableItem course in courses) {
+        // Construct the recurring interval part based on what's provided
+        String recurringIntervalValue = '';
+        if (years != null && years.isNotEmpty && years != 'null') {
+          recurringIntervalValue += '$years years ';
+        }
+        if (months != null && months.isNotEmpty && months != 'null') {
+          recurringIntervalValue += '$months months';
+        }
+        recurringIntervalValue = recurringIntervalValue.trim(); // Remove trailing space
+        String localGetURL = 'http://127.0.0.1:5000/test?flag=';
+        http.Response response = await http.get(Uri.parse(localGetURL +
+            'insert_update_user_course_assignment' +
+            '&param1=${[
+              users,
+              courses,
+              enabled ? 'TRUE' : 'FALSE',
+              deadline != null ? '\'$deadline\'::date' : 'NULL',
+              'NOW()',
+              months
+            ]}'));
+
+        String valueRow =
+            "('${user.itemId}', '${course.itemId}', ${enabled ? 'TRUE' : 'FALSE'}, ${deadline != null ? '\'$deadline\'::date' : 'NULL'}, NOW(), ${recurringIntervalValue.isNotEmpty ? 'INTERVAL \'$recurringIntervalValue\'' : 'NULL'})";
+        valueRows.add(valueRow);
+      }
+    }
+
+    String values = valueRows.join(", ");
+
+    http.Response response = await http.get(Uri.parse(localGetURL + 'domain_users'));
+
+    // var message = executePostSqlQuery(sqlQuery);
+    // return message;
   }
 }

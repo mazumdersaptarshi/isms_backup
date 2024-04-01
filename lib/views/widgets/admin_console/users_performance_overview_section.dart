@@ -118,9 +118,9 @@ class _UsersPerformanceOverviewSectionState extends State<UsersPerformanceOvervi
             //Courses Status Pie Chart
             CoursesStatusOverview(courses: widget.courses),
 
-            // UsersScoresVariationByAttempts(
-            //   courses: widget.courses,
-            // ),
+            UsersScoresVariationByAttempts(
+              courses: widget.courses,
+            ),
           ],
         ),
       ),
