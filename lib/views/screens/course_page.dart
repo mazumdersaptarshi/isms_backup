@@ -22,9 +22,9 @@ import 'package:isms/views/widgets/shared_widgets/custom_drawer.dart';
 
 class CoursePage extends StatefulWidget {
   final String courseId;
-  String? section;
+  final String? section;
 
-  CoursePage({super.key, required this.courseId, this.section});
+  const CoursePage({super.key, required this.courseId, this.section});
 
   @override
   State<CoursePage> createState() => _CourseState();
@@ -53,7 +53,7 @@ class _CourseState extends State<CoursePage> {
   // Data structures containing course content populated in initState() then not changed
 
   static const String query = r'''
-  WITH user_preferred_language AS (
+WITH user_preferred_language AS (
     SELECT preferred_language
     FROM user_settings
     WHERE user_id = {0}
@@ -66,13 +66,23 @@ class _CourseState extends State<CoursePage> {
 	SELECT MAX(cv.content_version) AS content_version
 	FROM course_versions cv
 	WHERE cv.course_id = {1}
-)
-SELECT cc.content_jdoc
+), course_content_and_completion AS (
+SELECT cc.content_jdoc,
+        ucp.completed_sections
 	FROM course_content cc
+    LEFT JOIN user_course_progress ucp
+	ON (cc.course_id = ucp.course_id AND cc.content_version = ucp.course_learning_version)
 	WHERE cc.course_id = {1}
-  AND cc.course_id IN (SELECT course_id FROM assigned_courses)
+    AND cc.course_id IN (SELECT course_id FROM assigned_courses)
 	AND cc.content_version = (SELECT content_version FROM highest_course_version)
-	AND cc.content_language = (SELECT preferred_language FROM user_preferred_language);
+	AND cc.content_language = (SELECT preferred_language FROM user_preferred_language)
+    AND ucp.user_id = {0}
+)
+SELECT jsonb_build_object(
+        'courseContent', ccac.content_jdoc,
+        'courseCompletedSections', ccac.completed_sections
+    )
+    FROM course_content_and_completion ccac;
 	''';
 
   static const String url = 'http://127.0.0.1:5000/api?query=';
@@ -99,7 +109,7 @@ SELECT cc.content_jdoc
   bool _courseDataStructuresInitialised = false;
 
   /// [Set] of completed section IDs
-  final Set<String> _completedSections = {};
+  late Set<String> _completedSections;
 
   /// [Set] of interactive widget IDs which have been interacted with
   final Set<String> _currentSectionCompletedInteractiveElements = {};
@@ -113,16 +123,30 @@ SELECT cc.content_jdoc
   void initState() {
     super.initState();
     _responseFuture = _fetchCourseData('u1', widget.courseId);
+
+    // Update _currentSectionIndex to section index passed as query parameter
     if (widget.section != null) {
-      _currentSectionIndex = int.parse(widget.section!) - 1;
+      try {
+        _currentSectionIndex = int.parse(widget.section!) - 1;
+      } on FormatException catch (_) {}
+
+      // Reset _currentSectionIndex to 0 if above parse resulted in a negative integer
+      if (_currentSectionIndex < 0) {
+        _currentSectionIndex = 0;
+      }
     }
   }
 
+  /// Returns a [Future] for the GET request to fetch course content and user progress
+  /// to be used in the `build()` function.
   Future<http.Response> _fetchCourseData(String uid, String courseId) async {
     String sqlQuery = QueryBuilder.buildSqlQuery(query, [uid, courseId]);
     return http.get(Uri.parse('$url$sqlQuery'));
   }
 
+  /// Returns a [List] of objects returned by the [FutureBuilder] in `build()`.
+  ///
+  /// This returned List can be empty, which indicates that the course does not exist or it is not assigned to the user.
   List<dynamic> _parseJsonResponse(AsyncSnapshot snapshot) {
     List<dynamic> jsonResponse = [];
     if (snapshot.data.statusCode == 200) {
@@ -134,8 +158,10 @@ SELECT cc.content_jdoc
     return jsonResponse;
   }
 
+  /// Initialises all data structures which store course content and user progress.
   void _initialiseCourseDataStructures(List<dynamic> jsonResponse) {
-    CourseFull course = CourseFull.fromJson(jsonResponse.first.first);
+    // Read course content
+    CourseFull course = CourseFull.fromJson(jsonResponse.first.first[CourseKeys.courseContent.name]);
     _course = course;
 
     // Initialise data structures which store all course section IDs as well as widgets requiring user interaction
@@ -156,6 +182,34 @@ SELECT cc.content_jdoc
       }
     }
 
+    // Reset _currentSectionIndex if invalid index passed as query parameter
+    if (_currentSectionIndex >= _courseSections.length) {
+      _currentSectionIndex = 0;
+    }
+
+    // Read course section completion
+    if (jsonResponse.first.first[CourseKeys.courseCompletedSections.name] != null) {
+      // Initialise _completedSections with fetched section completion
+      _completedSections = {...jsonResponse.first.first[CourseKeys.courseCompletedSections.name]};
+
+      // Override _currentSectionCompleted to enable next section button if section index passed as query parameter has been completed
+      if (_completedSections.contains(_course.courseSections[_currentSectionIndex].sectionId)) {
+        _currentSectionCompleted = true;
+      } else if (_currentSectionIndex > 0) {
+        // If the section index before the one passed as query parameter has not been completed, reset _currentSectionIndex to 0
+        // However, since we have *some* completion recorded, we can assume that at least the very first section has been completed so also override _currentSectionCompleted
+        if (!_completedSections.contains(_course.courseSections[_currentSectionIndex - 1].sectionId)) {
+          _currentSectionIndex = 0;
+          _currentSectionCompleted = true;
+        }
+      }
+    } else {
+      // Initialise _completedSections as an empty Set and reset _currentSectionIndex to 0 in case any section index was passed as a query parameter
+      _completedSections = {};
+      _currentSectionIndex = 0;
+    }
+
+    // Mark data structures as initialised to avoid this function being called again for the lifetime of this CourseState
     _courseDataStructuresInitialised = true;
   }
 
@@ -170,17 +224,21 @@ SELECT cc.content_jdoc
                   backgroundColor: Colors.red, valueColor: AlwaysStoppedAnimation<Color>(Colors.blue)),
             );
           } else if (snapshot.hasError) {
-            return Column(children: [
-              const Icon(
-                Icons.error_outline,
-                color: Colors.red,
-                size: 60,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 16),
-                child: Text('Error: ${snapshot.error}'),
-              ),
-            ]);
+            return Scaffold(
+                appBar: IsmsAppBar(context: context),
+                drawer: IsmsDrawer(context: context),
+                body: Center(
+                    child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  const Icon(
+                    Icons.error_outline,
+                    color: Colors.red,
+                    size: 60,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16),
+                    child: Text('Error: ${snapshot.error}'),
+                  ),
+                ])));
           } else {
             if (!_courseDataStructuresInitialised) {
               List<dynamic> jsonResponse = _parseJsonResponse(snapshot);

@@ -42,10 +42,8 @@ final GoRouter ismsRouter = GoRouter(
     GoRoute(
       name: NamedRoutes.adminConsole.name,
       path: '/admin_console/:uid',
-      builder: (BuildContext context, GoRouterState state) {
-        final uid = state.pathParameters['uid']; // Extracting the UID passed in the route
-        return AdminUserDetailsScreen(uid: uid!);
-      },
+      builder: (BuildContext context, GoRouterState state) =>
+          AdminUserDetailsScreen(uid: state.pathParameters[NamedRoutePathParameters.uid.name]!),
       redirect: (BuildContext context, GoRouterState state) =>
           Provider.of<LoggedInState>(context, listen: false).currentUserRole != 'admin' ? '/' : null,
     ),
@@ -64,9 +62,15 @@ final GoRouter ismsRouter = GoRouter(
         GoRoute(
           name: NamedRoutes.course.name,
           path: 'course/:courseId',
-          builder: (context, state) => CoursePage(
-              courseId: state.pathParameters[NamedRoutePathParameters.courseId.name]!,
-              section: state.uri.queryParameters[NamedRouteQueryParameters.section.name]),
+          pageBuilder: (context, state) {
+            // Return a new page with a unique key to allow URL bar navigation to a sibling route with different path/query parameters
+            return MaterialPage(
+              key: UniqueKey(),
+              child: CoursePage(
+                  courseId: state.pathParameters[NamedRoutePathParameters.courseId.name]!,
+                  section: state.uri.queryParameters[NamedRouteQueryParameters.section.name]),
+            );
+          },
           // onExit: (BuildContext context) =>
           //     _getNavigationConfirmationDialog(context, AppLocalizations.of(context)!.dialogLeavePageContentCourse),
         ),
