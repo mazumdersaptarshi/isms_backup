@@ -285,23 +285,31 @@ WITH user_preferred_language AS (
 	SELECT MAX(cv.content_version) AS content_version
 	FROM course_versions cv
 	WHERE cv.course_id = 'c1'
-), course_content_and_completion AS (
-SELECT cc.content_jdoc,
-        ucp.completed_sections
-	FROM course_content cc
-    LEFT JOIN user_course_progress ucp
-	ON (cc.course_id = ucp.course_id AND cc.content_version = ucp.course_learning_version)
-	WHERE cc.course_id = 'c1'
-    AND cc.course_id IN (SELECT course_id FROM assigned_courses)
-	AND cc.content_version = (SELECT content_version FROM highest_course_version)
-	AND cc.content_language = (SELECT preferred_language FROM user_preferred_language)
-    AND ucp.user_id = 'u1'
+), course_content AS (
+SELECT course_id,
+        content_version,
+        content_jdoc
+	FROM course_content
+	WHERE course_id = 'c1'
+    AND course_id IN (SELECT course_id FROM assigned_courses)
+	AND content_version = (SELECT content_version FROM highest_course_version)
+	AND content_language = (SELECT preferred_language FROM user_preferred_language)
+), course_section_completion AS (
+SELECT course_id,
+        course_learning_version,
+        completed_sections
+    FROM user_course_progress
+	WHERE course_id = 'c1'
+    AND course_learning_version = (SELECT content_version FROM highest_course_version)
+    AND user_id = 'u1'
 )
 SELECT jsonb_build_object(
-        'courseContent', ccac.content_jdoc,
-        'courseCompletedSections', ccac.completed_sections
-    )
-    FROM course_content_and_completion ccac;
+            'courseContent', cc.content_jdoc,
+            'courseCompletedSections', csc.completed_sections
+        )
+    FROM course_content cc
+    LEFT JOIN course_section_completion csc
+	ON (cc.course_id = csc.course_id AND cc.content_version = csc.course_learning_version);
 
 -- All exams for assigned courses for a given user
 WITH assigned_courses AS (
