@@ -271,6 +271,38 @@ SELECT cc.content_jdoc
 	AND cc.content_version = (SELECT content_version FROM highest_course_version)
 	AND cc.content_language = (SELECT preferred_language FROM user_preferred_language);
 
+-- Course content with completed sections
+WITH user_preferred_language AS (
+    SELECT preferred_language
+    FROM user_settings
+    WHERE user_id = 'u1'
+), assigned_courses AS (
+	SELECT course_id
+	FROM user_course_assignments
+	WHERE enabled = true
+	AND user_id = 'u1'
+), highest_course_version AS (
+	SELECT MAX(cv.content_version) AS content_version
+	FROM course_versions cv
+	WHERE cv.course_id = 'c1'
+), course_content_and_completion AS (
+SELECT cc.content_jdoc,
+        ucp.completed_sections
+	FROM course_content cc
+    LEFT JOIN user_course_progress ucp
+	ON (cc.course_id = ucp.course_id AND cc.content_version = ucp.course_learning_version)
+	WHERE cc.course_id = 'c1'
+    AND cc.course_id IN (SELECT course_id FROM assigned_courses)
+	AND cc.content_version = (SELECT content_version FROM highest_course_version)
+	AND cc.content_language = (SELECT preferred_language FROM user_preferred_language)
+    AND ucp.user_id = 'u1'
+)
+SELECT jsonb_build_object(
+        'courseContent', ccac.content_jdoc,
+        'courseCompletedSections', ccac.completed_sections
+    )
+    FROM course_content_and_completion ccac;
+
 -- All exams for assigned courses for a given user
 WITH assigned_courses AS (
 	SELECT course_id

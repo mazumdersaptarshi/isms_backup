@@ -1,7 +1,15 @@
 // ignore_for_file: constant_identifier_names
 
 /// All possible JSON schema keys for courses
-enum CourseKeys { courseId, courseTitle, courseSummary, courseDescription, courseSections }
+enum CourseKeys {
+  courseId,
+  courseTitle,
+  courseSummary,
+  courseDescription,
+  courseSections,
+  courseContent,
+  courseCompletedSections
+}
 
 /// All possible JSON schema keys for exams
 enum ExamKeys {

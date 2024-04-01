@@ -195,7 +195,7 @@ SELECT jsonb_build_object(
   void initState() {
     super.initState();
 
-    fetchCourseListData('8qu6GqSvS5bzGSx1xZqwN4nqy3C2').then((List<dynamic> responseData) {
+    fetchCourseListData('u1').then((List<dynamic> responseData) {
       for (List<dynamic> jsonCourse in responseData) {
         Map<String, dynamic> courseMap = jsonCourse.first as Map<String, dynamic>;
         CourseOverview course = CourseOverview.fromJson(courseMap);
@@ -312,12 +312,18 @@ SELECT jsonb_build_object(
                 _separator,
                 Align(
                     alignment: Alignment.centerLeft,
-                    child: ElevatedButton(
-                        onPressed: () => context.goNamed(NamedRoutes.course.name,
-                            pathParameters: {NamedRoutePathParameters.courseId.name: course.courseId}),
-                        child: completedSectionTotal > 0 && completedSectionTotal < course.courseSections.length
-                            ? Text(AppLocalizations.of(context)!.resumeCourse)
-                            : Text(AppLocalizations.of(context)!.startCourse))),
+                    child: completedSectionTotal > 0 && completedSectionTotal < course.courseSections.length
+                        ? ElevatedButton(
+                            onPressed: () => context.goNamed(NamedRoutes.course.name, pathParameters: {
+                                  NamedRoutePathParameters.courseId.name: course.courseId
+                                }, queryParameters: {
+                                  NamedRouteQueryParameters.section.name: (completedSectionTotal + 1).toString()
+                                }),
+                            child: Text(AppLocalizations.of(context)!.resumeCourse))
+                        : ElevatedButton(
+                            onPressed: () => context.goNamed(NamedRoutes.course.name,
+                                pathParameters: {NamedRoutePathParameters.courseId.name: course.courseId}),
+                            child: Text(AppLocalizations.of(context)!.startCourse))),
                 _separator,
                 Card(
                   color: Theme.of(context).scaffoldBackgroundColor,
@@ -340,7 +346,9 @@ SELECT jsonb_build_object(
                           ),
                         ],
                       ),
-                      contentWidget: [..._getCourseSections(course.courseSections, completedSectionTotal)]),
+                      contentWidget: [
+                        ..._getCourseSections(course.courseId, course.courseSections, completedSectionTotal)
+                      ]),
                 ),
                 _separator,
                 Card(
@@ -364,7 +372,9 @@ SELECT jsonb_build_object(
                           ),
                         ],
                       ),
-                      contentWidget: [..._getExamWidgets(course.courseExams)]),
+                      contentWidget: [
+                        ..._getExamWidgets(course.courseExams, course.courseSections.length, completedSectionTotal)
+                      ]),
                 )
               ]),
             ),
@@ -376,7 +386,7 @@ SELECT jsonb_build_object(
     return contentWidgets;
   }
 
-  List<Widget> _getCourseSections(List<SectionOverview> sections, int completedSectionTotal) {
+  List<Widget> _getCourseSections(String courseId, List<SectionOverview> sections, int completedSectionTotal) {
     final List<Widget> contentWidgets = [];
 
     for (int i = 0; i < sections.length; i++) {
@@ -397,7 +407,11 @@ SELECT jsonb_build_object(
                   color: Colors.orange,
                 ),
                 padding: const EdgeInsets.only(left: 15.0),
-                onPressed: i == completedSectionTotal ? () => print(sections[i].sectionTitle) : null,
+                onPressed: i == completedSectionTotal
+                    ? () => context.goNamed(NamedRoutes.course.name,
+                        pathParameters: {NamedRoutePathParameters.courseId.name: courseId},
+                        queryParameters: {NamedRouteQueryParameters.section.name: (i + 1).toString()})
+                    : null,
                 // style: getIconButtonStyleTransparent(),
               ),
         Flexible(
@@ -415,7 +429,9 @@ SELECT jsonb_build_object(
                   style: TextStyle(fontSize: 13),
                 ),
                 onTap: sections[i].sectionCompleted || i == completedSectionTotal
-                    ? () => print(sections[i].sectionTitle)
+                    ? () => context.goNamed(NamedRoutes.course.name,
+                        pathParameters: {NamedRoutePathParameters.courseId.name: courseId},
+                        queryParameters: {NamedRouteQueryParameters.section.name: (i + 1).toString()})
                     : null,
               ),
               Divider(
@@ -432,7 +448,7 @@ SELECT jsonb_build_object(
     return contentWidgets;
   }
 
-  List<Widget> _getExamWidgets(List<ExamOverview> exams) {
+  List<Widget> _getExamWidgets(List<ExamOverview> exams, int sectionTotal, int completedSectionTotal) {
     final List<Widget> contentWidgets = [];
 
     for (ExamOverview exam in exams) {
@@ -477,8 +493,10 @@ SELECT jsonb_build_object(
             _separator,
             Align(
                 alignment: Alignment.centerLeft,
-                child: ElevatedButton(
-                    onPressed: () => print(exam.examTitle), child: Text(AppLocalizations.of(context)!.startExam))),
+                child: sectionTotal == completedSectionTotal
+                    ? ElevatedButton(
+                        onPressed: () => print(exam.examTitle), child: Text(AppLocalizations.of(context)!.startExam))
+                    : ElevatedButton(onPressed: null, child: Text('Complete all course sections to take exam'))),
           ],
         ),
       ));
