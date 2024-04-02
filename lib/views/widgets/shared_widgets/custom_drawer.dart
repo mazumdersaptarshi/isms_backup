@@ -131,7 +131,7 @@ class IsmsDrawer extends StatelessWidget {
           iconColor,
           textColor,
           fontSize));
-
+    }
       drawerItemWidgets.add(_getDrawerItem(
           context,
           Icons.settings,
@@ -140,7 +140,7 @@ class IsmsDrawer extends StatelessWidget {
           iconColor,
           textColor,
           fontSize));
-    }
+
     return drawerItemWidgets;
   }
 
