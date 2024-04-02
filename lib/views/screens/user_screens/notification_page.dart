@@ -5,6 +5,7 @@ import 'package:isms/utilities/platform_check.dart';
 import 'package:isms/controllers/user_management/logged_in_state.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:isms/views/widgets/shared_widgets/custom_drawer.dart';
 
 class Notification {
   final String title;
@@ -110,6 +111,7 @@ class _NotificationPageState extends State<NotificationPage> {
     final loggedInState = context.watch<LoggedInState>();
     return Scaffold(
       appBar: IsmsAppBar(context: context),
+      drawer: IsmsDrawer(context: context),
       bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
       body: SingleChildScrollView(
         child: Padding(

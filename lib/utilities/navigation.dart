@@ -13,8 +13,11 @@ import 'package:isms/views/screens/course_list.dart';
 import 'package:isms/views/screens/course_page.dart';
 import 'package:isms/views/screens/home_screen.dart';
 
+import '../views/screens/user_screens/settings_page.dart';
+import 'package:isms/views/screens/user_screens/notification_page.dart';
+
 /// All named routes defined in the [GoRouter] configuration below
-enum NamedRoutes { home, login, adminConsole, assignments, course, exam, allUsers }
+enum NamedRoutes { home, login, adminConsole, assignments, course, exam, allUsers, notifications, settings }
 
 /// All parameter names used in child named routes defined in the [GoRouter] configuration below
 enum NamedRoutePathParameters { courseId, examId, uid }
@@ -53,6 +56,24 @@ final GoRouter ismsRouter = GoRouter(
       builder: (BuildContext context, GoRouterState state) => const AllUsers(),
       redirect: (BuildContext context, GoRouterState state) =>
           Provider.of<LoggedInState>(context, listen: false).currentUserRole != 'admin' ? '/' : null,
+    ),
+    GoRoute(
+      name: NamedRoutes.notifications.name,
+      path: '/notifications',
+      builder: (BuildContext context, GoRouterState state) {
+        return const NotificationPage();
+      },
+      redirect: (BuildContext context, GoRouterState state) =>
+      Provider.of<LoggedInState>(context, listen: false).currentUserRole != 'admin' ? '/' : null,
+    ),
+    GoRoute(
+      name: NamedRoutes.settings.name,
+      path: '/settings',
+      builder: (BuildContext context, GoRouterState state) {
+        return const SettingsPage();
+      },
+      redirect: (BuildContext context, GoRouterState state) =>
+      Provider.of<LoggedInState>(context, listen: false).currentUserRole != 'admin' ? '/' : null,
     ),
     GoRoute(
       name: NamedRoutes.assignments.name,
@@ -117,3 +138,5 @@ FutureOr<bool> _getNavigationConfirmationDialog(BuildContext context, String dia
   /// Otherwise, return false whether user explicitly cancels the navigation action or dismisses the dialog.
   return confirmed ?? false;
 }
+
+

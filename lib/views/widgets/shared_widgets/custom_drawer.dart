@@ -19,17 +19,20 @@ class IsmsDrawer extends StatelessWidget {
     Color backgroundColor = Colors.grey.shade200;
     Color iconColor = Colors.grey.shade700!;
     Color textColor = Colors.grey.shade700!;
-    double _fontSize = 14;
+    double _fontSize = 16;
 
     return Drawer(
       child: Container(
-        color: backgroundColor, // Adding a background color to the drawer
-        child: ListView(
-          physics: const ClampingScrollPhysics(),
-          padding: EdgeInsets.zero,
-          children: [
-            ..._getDrawerItems(context, iconColor, textColor, _fontSize)
-          ],
+        color: backgroundColor,
+        child: Padding(
+          padding: const EdgeInsets.only(top: 60.0, bottom: 60, right: 20, left: 20),
+          child: Column(
+            children: [
+              ..._getDrawerItems(context, iconColor, textColor, _fontSize),
+              Expanded(child: Container()),
+              _getLogoutItem(context, iconColor, textColor, _fontSize),
+            ],
+          ),
         ),
       ),
     );
@@ -62,17 +65,17 @@ class IsmsDrawer extends StatelessWidget {
     //     ),
     //   ),
     // );
-    drawerItemWidgets.add(
-      Container(
-        padding: const EdgeInsets.all(18),
-        child: Text(
-          "General",
-          textAlign: TextAlign.left,
-          style: TextStyle(
-              fontSize: 16, fontWeight: FontWeight.bold, color: textColor),
-        ),
-      ),
-    );
+    // drawerItemWidgets.add(
+    //   Container(
+    //     padding: const EdgeInsets.all(18),
+    //     child: Text(
+    //       "General",
+    //       textAlign: TextAlign.left,
+    //       style: TextStyle(
+    //           fontSize: 16, fontWeight: FontWeight.bold, color: textColor),
+    //     ),
+    //   ),
+    // );
     drawerItemWidgets.add(_getDrawerItem(
         context,
         Icons.home,
@@ -89,20 +92,20 @@ class IsmsDrawer extends StatelessWidget {
         iconColor,
         textColor,
         fontSize));
-    drawerItemWidgets.add(Divider());
+    // drawerItemWidgets.add(Divider());
     if (loggedInState.currentUserRole == 'admin') {
       // Admin actions are grouped under a visually distinct header
-      drawerItemWidgets.add(
-        Container(
-          padding: const EdgeInsets.all(18),
-          child: Text(
-            "Admin Actions",
-            textAlign: TextAlign.left,
-            style: TextStyle(
-                fontSize: 16, fontWeight: FontWeight.bold, color: textColor),
-          ),
-        ),
-      );
+      // drawerItemWidgets.add(
+      //   Container(
+      //     padding: const EdgeInsets.all(18),
+      //     child: Text(
+      //       "Admin Actions",
+      //       textAlign: TextAlign.left,
+      //       style: TextStyle(
+      //           fontSize: 16, fontWeight: FontWeight.bold, color: textColor),
+      //     ),
+      //   ),
+      // );
       drawerItemWidgets.add(_getDrawerItem(
           context,
           Icons.admin_panel_settings_rounded,
@@ -119,8 +122,25 @@ class IsmsDrawer extends StatelessWidget {
           iconColor,
           textColor,
           fontSize));
-    }
 
+      drawerItemWidgets.add(_getDrawerItem(
+          context,
+          Icons.notifications,
+          AppLocalizations.of(context)!.buttonNotificationPage,
+          NamedRoutes.notifications.name,
+          iconColor,
+          textColor,
+          fontSize));
+
+      drawerItemWidgets.add(_getDrawerItem(
+          context,
+          Icons.settings,
+          AppLocalizations.of(context)!.buttonSettings,
+          NamedRoutes.settings.name,
+          iconColor,
+          textColor,
+          fontSize));
+    }
     return drawerItemWidgets;
   }
 
@@ -136,4 +156,18 @@ class IsmsDrawer extends StatelessWidget {
       },
     );
   }
+
+Widget _getLogoutItem(
+    BuildContext context, Color iconColor, Color textColor, double fontSize) {
+  return ListTile(
+    leading: Icon(Icons.logout, color: iconColor),
+    title: Text(AppLocalizations.of(context)!.buttonLogout,
+        style: TextStyle(color: textColor, fontSize: fontSize)),
+    onTap: () async{
+      await LoggedInState.logout().then((value) {
+        context.goNamed(NamedRoutes.login.name);
+      });
+    },
+  );
+}
 }
