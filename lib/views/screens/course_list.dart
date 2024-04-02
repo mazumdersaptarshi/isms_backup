@@ -398,7 +398,9 @@ SELECT jsonb_build_object(
                   color: Colors.green,
                 ),
                 padding: const EdgeInsets.only(left: 15.0),
-                onPressed: () => print(sections[i].sectionTitle),
+                onPressed: () => context.goNamed(NamedRoutes.course.name,
+                    pathParameters: {NamedRoutePathParameters.courseId.name: courseId},
+                    queryParameters: {NamedRouteQueryParameters.section.name: (i + 1).toString()}),
                 // style: getIconButtonStyleTransparent(),
               )
             : IconButton(
