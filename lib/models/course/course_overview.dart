@@ -12,6 +12,7 @@ part 'course_overview.g.dart';
 @JsonSerializable(explicitToJson: true)
 class CourseOverview implements Course {
   final String courseId;
+  @override
   final double courseVersion;
   @override
   final String courseTitle;

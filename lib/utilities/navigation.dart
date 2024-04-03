@@ -78,7 +78,11 @@ final GoRouter ismsRouter = GoRouter(
     GoRoute(
       name: NamedRoutes.assignments.name,
       path: '/assignments',
-      builder: (BuildContext context, GoRouterState state) => const CourseList(),
+      // builder: (BuildContext context, GoRouterState state) => const CourseList(),
+      pageBuilder: (context, state) {
+        // Return a new page with a unique key to allow URL bar navigation to a sibling route with different path/query parameters
+        return MaterialPage(key: UniqueKey(), child: const CourseList());
+      },
       routes: [
         GoRoute(
           name: NamedRoutes.course.name,

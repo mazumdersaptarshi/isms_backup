@@ -11,6 +11,8 @@ part 'course_full.g.dart';
 @JsonSerializable(explicitToJson: true)
 class CourseFull implements Course {
   @override
+  final double courseVersion;
+  @override
   final String courseTitle;
   @override
   final String courseSummary;
@@ -20,7 +22,8 @@ class CourseFull implements Course {
   final List<SectionFull> courseSections;
 
   CourseFull(
-      {required this.courseTitle,
+      {required this.courseVersion,
+      required this.courseTitle,
       required this.courseSummary,
       required this.courseDescription,
       required this.courseSections});

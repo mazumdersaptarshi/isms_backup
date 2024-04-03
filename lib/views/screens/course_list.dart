@@ -8,7 +8,6 @@ import 'package:isms/controllers/theme_management/theme_config.dart';
 import 'package:provider/provider.dart';
 
 import 'package:isms/controllers/theme_management/app_theme.dart';
-import 'package:isms/controllers/query_builder/query_builder.dart';
 import 'package:isms/controllers/user_management/logged_in_state.dart';
 import 'package:isms/models/course/course_overview.dart';
 import 'package:isms/models/course/exam_overview.dart';
@@ -33,161 +32,11 @@ class _CourseListState extends State<CourseList> {
   /// SizedBox for adding consistent spacing between widgets
   static const SizedBox _separator = SizedBox(height: 20);
 
-  static const String query = r'''
-  WITH user_preferred_language AS (
-    SELECT preferred_language
-    FROM user_settings
-    WHERE user_id = {0}
-), assigned_courses AS (
-	SELECT course_id
-	FROM user_course_assignments
-	WHERE enabled = true
-	AND user_id = {0}
-), highest_course_versions AS (
-	SELECT DISTINCT ON (course_id)
-			course_id,
-			content_version	FROM course_versions
-	WHERE course_id IN (SELECT course_id FROM assigned_courses)
-	ORDER BY course_id ASC, content_version DESC
-), section_completion AS (
-	SELECT hcv.course_id,
-			hcv.content_version,
-			ucp.completed_sections
-	FROM highest_course_versions hcv
-	LEFT JOIN user_course_progress ucp
-	ON (hcv.course_id = ucp.course_id AND hcv.content_version = ucp.course_learning_version)
-), course_sections AS (
-	SELECT cc.course_id,
-			cc.content_version,
-			jsonb_build_object(
-				'sectionId', jsonb_path_query(cc.content_jdoc, '$.courseSections[*].sectionId'::jsonpath),
-				'sectionTitle', jsonb_path_query(cc.content_jdoc, '$.courseSections[*].sectionTitle'::jsonpath),
-				'sectionSummary', jsonb_path_query(cc.content_jdoc, '$.courseSections[*].sectionSummary'::jsonpath)
-			) AS section_metadata
-	FROM course_content cc
-	INNER JOIN highest_course_versions hcv
-	ON (cc.course_id = hcv.course_id AND cc.content_version = hcv.content_version)
-	WHERE cc.content_language = (SELECT preferred_language FROM user_preferred_language)
-), course_sections_and_completion AS (
-	SELECT cs.course_id,
-			cs.content_version,
-			jsonb_set(cs.section_metadata, '{sectionCompleted}', to_jsonb(COALESCE((SELECT cs.section_metadata->>'sectionId' = ANY(sc.completed_sections)), false))) AS section_details
-	FROM course_sections cs
-	LEFT JOIN section_completion sc
-	ON (cs.course_id = sc.course_id AND cs.content_version = sc.content_version)
-	GROUP BY cs.course_id,
-			cs.content_version,
-			cs.section_metadata,
-			sc.completed_sections
-	ORDER BY cs.course_id
-), assigned_exams AS (
-	SELECT course_id,
-			exam_id
-	FROM course_exam_relationships
-	WHERE enabled = true
-	AND course_id IN (SELECT course_id FROM assigned_courses)
-), exam_assignment_deadlines AS (
-	SELECT cer.exam_id,
-			uca.completion_deadline,
-			uca.completion_tracking_period_start
-	FROM user_course_assignments uca
-	INNER JOIN course_exam_relationships cer
-	ON (uca.course_id = cer.course_id)
-	WHERE uca.enabled = true
-	AND cer.enabled = true
-), highest_exam_versions AS (
-	SELECT DISTINCT ON (exam_id)
-			exam_id,
-			content_version,
-			pass_mark,
-			estimated_completion_time
-	FROM exam_versions
-	WHERE exam_id IN (SELECT exam_id FROM assigned_exams)
-	ORDER BY exam_id ASC, content_version DESC
-), exam_details AS (
-	SELECT ec.exam_id,
-			ec.content_version,
-			ec.content_jdoc->>'examTitle' AS exam_title,
-			ec.content_jdoc->>'examSummary' AS exam_summary,
-			ec.content_jdoc->>'examDescription' AS exam_description,
-			hev.pass_mark,
-			hev.estimated_completion_time
-	FROM exam_content ec
-	INNER JOIN highest_exam_versions hev
-	ON (ec.exam_id = hev.exam_id AND ec.content_version = hev.content_version)
-	WHERE ec.content_language = (SELECT preferred_language FROM user_preferred_language)
-), exam_completion AS (
-	SELECT DISTINCT ON (uea.exam_id)
-			uea.exam_id,
-			uea.exam_version,
-			uea.passed
-	FROM user_exam_attempts uea
-	INNER JOIN highest_exam_versions hev
-	ON (uea.exam_id = hev.exam_id AND uea.exam_version = hev.content_version)
-	INNER JOIN exam_assignment_deadlines ead
-	ON (uea.exam_id = ead.exam_id)
-	WHERE uea.user_id = {0}
-    AND uea.passed = true
-	AND uea.finished_at <= ead.completion_deadline
-	AND uea.finished_at >= ead.completion_tracking_period_start
-	ORDER BY uea.exam_id ASC, uea.exam_version DESC
-), exam_details_and_completion AS (
-	SELECT ae.course_id,
-			jsonb_build_object(
-				'examId', ed.exam_id,
-				'examVersion', ed.content_version,
-				'examTitle', ed.exam_title,
-				'examSummary', ed.exam_summary,
-				'examDescription', ed.exam_description,
-				'examPassMark', ed.pass_mark,
-				'examEstimatedCompletionTime', ed.estimated_completion_time,
-				'examPassed', COALESCE(ec.passed, false)
-			) AS exam_details_and_completion
-	FROM exam_details ed
-	INNER JOIN assigned_exams ae
-	ON (ed.exam_id = ae.exam_id)
-	LEFT JOIN exam_completion ec
-	ON (ed.exam_id = ec.exam_id AND ed.content_version = ec.exam_version)
-	GROUP BY ae.course_id,
-			ed.exam_id,
-			ed.content_version,
-			ed.exam_title,
-			ed.exam_summary,
-			ed.exam_description,
-			ed.pass_mark,
-			ed.estimated_completion_time,
-			ec.passed
-	ORDER BY ed.exam_id ASC
-), course_exams AS (
-	SELECT edac.course_id,
-		jsonb_agg(edac.exam_details_and_completion ORDER BY edac.course_id ASC) AS course_exams
-	FROM exam_details_and_completion edac
-	GROUP BY edac.course_id
-	ORDER BY edac.course_id
-)
-SELECT jsonb_build_object(
-			'courseId', csac.course_id,
-			'courseVersion', csac.content_version,
-            'courseTitle', cc.content_jdoc->>'courseTitle',
-            'courseSummary', cc.content_jdoc->>'courseSummary',
-            'courseDescription', cc.content_jdoc->>'courseDescription',
-			'courseSections', jsonb_agg(csac.section_details ORDER BY csac.course_id ASC),
-			'courseExams', ce.course_exams
-		)
-	FROM course_sections_and_completion csac
-    INNER JOIN course_content cc
-    ON (csac.course_id = cc.course_id AND csac.content_version = cc.content_version)
-	INNER JOIN course_exams ce
-	ON (csac.course_id = ce.course_id)
-    WHERE cc.content_language = (SELECT preferred_language FROM user_preferred_language)
-	GROUP BY csac.course_id,
-            csac.content_version,
-            cc.content_jdoc,
-            ce.course_exams
-	ORDER BY csac.course_id ASC;
-	''';
+  static const String localFetchUrl = 'http://127.0.0.1:5000/get2';
+  static const String remoteFetchUrl =
+      'https://asia-northeast1-isms-billing-resources-dev.cloudfunctions.net/cf_isms_db_endpoint_noauth/get2';
 
-  static const String url = 'http://127.0.0.1:5000/api?query=';
+  late String _loggedInUserUid;
 
   final List<CourseOverview> _courses = [];
 
@@ -195,7 +44,9 @@ SELECT jsonb_build_object(
   void initState() {
     super.initState();
 
-    fetchCourseListData('u1').then((List<dynamic> responseData) {
+    _loggedInUserUid = Provider.of<LoggedInState>(context, listen: false).currentUserUid!;
+
+    _fetchCourseOverviewData().then((List<dynamic> responseData) {
       for (List<dynamic> jsonCourse in responseData) {
         Map<String, dynamic> courseMap = jsonCourse.first as Map<String, dynamic>;
         CourseOverview course = CourseOverview.fromJson(courseMap);
@@ -207,9 +58,12 @@ SELECT jsonb_build_object(
     });
   }
 
-  Future<List<dynamic>> fetchCourseListData(String uid) async {
-    String sqlQuery = QueryBuilder.buildSqlQuery(query, [uid]);
-    http.Response response = await http.get(Uri.parse('$url$sqlQuery'));
+  Future<List<dynamic>> _fetchCourseOverviewData() async {
+    Map<String, dynamic> requestParams = {'user_id': _loggedInUserUid};
+    String jsonString = jsonEncode(requestParams);
+    String encodedJsonString = Uri.encodeComponent(jsonString);
+    http.Response response = await http
+        .get(Uri.parse('$remoteFetchUrl?flag=get_course_and_exam_overview_for_user&params=$encodedJsonString'));
     List<dynamic> jsonResponse = [];
     if (response.statusCode == 200) {
       // Check if the request was successful
@@ -221,7 +75,7 @@ SELECT jsonb_build_object(
 
   @override
   Widget build(BuildContext context) {
-    final loggedInState = context.watch<LoggedInState>();
+    final LoggedInState loggedInState = context.watch<LoggedInState>();
     return Scaffold(
       bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
       appBar: IsmsAppBar(context: context),
@@ -319,11 +173,11 @@ SELECT jsonb_build_object(
                                 }, queryParameters: {
                                   NamedRouteQueryParameters.section.name: (completedSectionTotal + 1).toString()
                                 }),
-                            child: Text(AppLocalizations.of(context)!.resumeCourse))
+                            child: Text(AppLocalizations.of(context)!.buttonResumeCourse))
                         : ElevatedButton(
                             onPressed: () => context.goNamed(NamedRoutes.course.name,
                                 pathParameters: {NamedRoutePathParameters.courseId.name: course.courseId}),
-                            child: Text(AppLocalizations.of(context)!.startCourse))),
+                            child: Text(AppLocalizations.of(context)!.buttonStartCourse))),
                 _separator,
                 Card(
                   color: Theme.of(context).scaffoldBackgroundColor,
@@ -332,8 +186,8 @@ SELECT jsonb_build_object(
                       titleWidget: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                              "${AppLocalizations.of(context)!.sections} ($completedSectionTotal/${course.courseSections.length} ${AppLocalizations.of(context)!.completed})"),
+                          Text(AppLocalizations.of(context)!
+                              .sectionCompletion(completedSectionTotal, course.courseSections.length)),
                           SizedBox(
                             height: 10,
                           ),
@@ -358,8 +212,8 @@ SELECT jsonb_build_object(
                       titleWidget: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                              "${AppLocalizations.of(context)!.exams} ($completedExamTotal/${course.courseExams.length} ${AppLocalizations.of(context)!.completed})"),
+                          Text(AppLocalizations.of(context)!
+                              .examCompletion(completedExamTotal, course.courseExams.length)),
                           SizedBox(
                             height: 10,
                           ),
@@ -476,7 +330,7 @@ SELECT jsonb_build_object(
                   children: [
                     const Icon(Icons.access_time), // Timer icon
                     SizedBox(width: 16),
-                    Text("Estimated completion time: ${exam.examEstimatedCompletionTime}",
+                    Text(AppLocalizations.of(context)!.examEstimatedCompletionTime(exam.examEstimatedCompletionTime),
                         style: TextStyle(fontSize: 13, color: Colors.grey.shade700)),
                   ],
                 ),
@@ -484,7 +338,7 @@ SELECT jsonb_build_object(
                   children: [
                     const Icon(Icons.school_outlined), // Score icon
                     SizedBox(width: 16),
-                    Text("Pass mark: ${exam.examPassMark}",
+                    Text(AppLocalizations.of(context)!.examPassMark(exam.examPassMark),
                         style: TextStyle(fontSize: 13, color: Colors.grey.shade700)),
                   ],
                 ),
@@ -497,8 +351,10 @@ SELECT jsonb_build_object(
                 alignment: Alignment.centerLeft,
                 child: sectionTotal == completedSectionTotal
                     ? ElevatedButton(
-                        onPressed: () => print(exam.examTitle), child: Text(AppLocalizations.of(context)!.startExam))
-                    : ElevatedButton(onPressed: null, child: Text('Complete all course sections to take exam'))),
+                        onPressed: () => print(exam.examTitle),
+                        child: Text(AppLocalizations.of(context)!.buttonStartExam))
+                    : ElevatedButton(
+                        onPressed: null, child: Text(AppLocalizations.of(context)!.buttonStartExamDisabled))),
           ],
         ),
       ));

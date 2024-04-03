@@ -5,8 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
-import 'package:isms/controllers/query_builder/query_builder.dart';
+import 'package:isms/controllers/user_management/logged_in_state.dart';
 import 'package:isms/models/course/answer.dart';
 import 'package:isms/models/course/enums.dart';
 import 'package:isms/models/course/course_full.dart';
@@ -52,49 +53,14 @@ class _CourseState extends State<CoursePage> {
 
   // Data structures containing course content populated in initState() then not changed
 
-  static const String query = r'''
-WITH user_preferred_language AS (
-    SELECT preferred_language
-    FROM user_settings
-    WHERE user_id = {0}
-), assigned_courses AS (
-	SELECT course_id
-	FROM user_course_assignments
-	WHERE enabled = true
-	AND user_id = {0}
-), highest_course_version AS (
-	SELECT MAX(cv.content_version) AS content_version
-	FROM course_versions cv
-	WHERE cv.course_id = {1}
-), course_content AS (
-SELECT course_id,
-        content_version,
-        content_jdoc
-	FROM course_content
-	WHERE course_id = {1}
-    AND course_id IN (SELECT course_id FROM assigned_courses)
-	AND content_version = (SELECT content_version FROM highest_course_version)
-	AND content_language = (SELECT preferred_language FROM user_preferred_language)
-), course_section_completion AS (
-SELECT course_id,
-        course_learning_version,
-        completed_sections
-    FROM user_course_progress
-	WHERE course_id = {1}
-    AND course_learning_version = (SELECT content_version FROM highest_course_version)
-    AND user_id = {0}
-)
-SELECT jsonb_build_object(
-            'courseContent', cc.content_jdoc,
-            'courseCompletedSections', csc.completed_sections
-        )
-    FROM course_content cc
-    LEFT JOIN course_section_completion csc
-	ON (cc.course_id = csc.course_id AND cc.content_version = csc.course_learning_version);
-	''';
+  static const String localFetchUrl = 'http://127.0.0.1:5000/get2';
+  static const String remoteFetchUrl =
+      'https://asia-northeast1-isms-billing-resources-dev.cloudfunctions.net/cf_isms_db_endpoint_noauth/get2';
+  static const String localInsertUrl = 'http://127.0.0.1:5000/insert_update_user_course_progress';
+  static const String remoteInsertUrl =
+      'https://asia-northeast1-isms-billing-resources-dev.cloudfunctions.net/cf_isms_db_endpoint_noauth/insert_update_user_course_progress';
 
-  static const String url = 'http://127.0.0.1:5000/api?query=';
-
+  late String _loggedInUserUid;
   late Future<http.Response> _responseFuture;
 
   /// Course data stored in custom [CourseFull] object
@@ -116,8 +82,8 @@ SELECT jsonb_build_object(
   bool _currentSectionCompleted = false;
   bool _courseDataStructuresInitialised = false;
 
-  /// [Set] of completed section IDs
-  late Set<String> _completedSections;
+  /// [List] of completed section IDs
+  final List<dynamic> _completedSections = [];
 
   /// [Set] of interactive widget IDs which have been interacted with
   final Set<String> _currentSectionCompletedInteractiveElements = {};
@@ -130,13 +96,17 @@ SELECT jsonb_build_object(
   @override
   void initState() {
     super.initState();
-    _responseFuture = _fetchCourseData('u1', widget.courseId);
+
+    _loggedInUserUid = Provider.of<LoggedInState>(context, listen: false).currentUserUid!;
+    _responseFuture = _fetchCourseAndCompletionData();
 
     // Update _currentSectionIndex to section index passed as query parameter
     if (widget.section != null) {
       try {
         _currentSectionIndex = int.parse(widget.section!) - 1;
-      } on FormatException catch (_) {}
+      } on FormatException catch (_) {
+        // _currentSectionIndex is initialised as 0 so no action required if non-integer passed as section index
+      }
 
       // Reset _currentSectionIndex to 0 if above parse resulted in a negative integer
       if (_currentSectionIndex < 0) {
@@ -147,9 +117,12 @@ SELECT jsonb_build_object(
 
   /// Returns a [Future] for the GET request to fetch course content and user progress
   /// to be used in the `build()` function.
-  Future<http.Response> _fetchCourseData(String uid, String courseId) async {
-    String sqlQuery = QueryBuilder.buildSqlQuery(query, [uid, courseId]);
-    return http.get(Uri.parse('$url$sqlQuery'));
+  Future<http.Response> _fetchCourseAndCompletionData() async {
+    Map<String, dynamic> requestParams = {'user_id': _loggedInUserUid, 'course_id': widget.courseId};
+    String jsonString = jsonEncode(requestParams);
+    String encodedJsonString = Uri.encodeComponent(jsonString);
+    return http
+        .get(Uri.parse('$remoteFetchUrl?flag=get_course_content_and_completion_for_user&params=$encodedJsonString'));
   }
 
   /// Returns a [List] of objects returned by the [FutureBuilder] in `build()`.
@@ -198,7 +171,7 @@ SELECT jsonb_build_object(
     // Read course section completion
     if (jsonResponse.first.first[CourseKeys.courseCompletedSections.name] != null) {
       // Initialise _completedSections with fetched section completion
-      _completedSections = {...jsonResponse.first.first[CourseKeys.courseCompletedSections.name]};
+      _completedSections.addAll(jsonResponse.first.first[CourseKeys.courseCompletedSections.name]);
 
       // Override _currentSectionCompleted to enable next section button if section index passed as query parameter has been completed
       if (_completedSections.contains(_course.courseSections[_currentSectionIndex].sectionId)) {
@@ -212,8 +185,7 @@ SELECT jsonb_build_object(
         }
       }
     } else {
-      // Initialise _completedSections as an empty Set and reset _currentSectionIndex to 0 in case any section index was passed as a query parameter
-      _completedSections = {};
+      // Reset _currentSectionIndex to 0 in case any section index was passed as a query parameter
       _currentSectionIndex = 0;
     }
 
@@ -534,7 +506,7 @@ SELECT jsonb_build_object(
       button = _currentSectionCompleted
           ? ElevatedButton(
               onPressed: () {
-                _recordCourseCompletion;
+                _recordCourseCompletion();
                 // Return to parent screen (course list)
                 Navigator.pop(context);
               },
@@ -695,10 +667,14 @@ SELECT jsonb_build_object(
   ///  - [_currentSectionCompleted]
   ///  - [_currentSectionCompletedInteractiveElements]
   ///  - [_currentSectionNonEmptyQuestions]
-  void _goToNextSection() {
+  Future<void> _goToNextSection() async {
+    bool newlyCompletedSection = false;
     setState(() {
       // Update section progress
-      _completedSections.add(_course.courseSections[_currentSectionIndex].sectionId);
+      if (!_completedSections.contains(_course.courseSections[_currentSectionIndex].sectionId)) {
+        _completedSections.add(_course.courseSections[_currentSectionIndex].sectionId);
+        newlyCompletedSection = true;
+      }
       _currentSectionIndex++;
 
       // Reset variable used to conditionally enable next section button if section has not already been completed
@@ -710,6 +686,11 @@ SELECT jsonb_build_object(
       _currentSectionCompletedInteractiveElements.clear();
       _currentSectionNonEmptyQuestions.clear();
     });
+
+    if (newlyCompletedSection) {
+      var message = await _writeCourseProgress(false);
+      print(message);
+    }
   }
 
   /// Decrements [_currentSectionIndex], while also overriding [_currentSectionCompleted]
@@ -723,9 +704,47 @@ SELECT jsonb_build_object(
   }
 
   /// Add the final section to [_completedSections].
-  void _recordCourseCompletion() {
+  Future<void> _recordCourseCompletion() async {
+    bool newlyCompletedSection = false;
     setState(() {
-      _completedSections.add(_course.courseSections[_currentSectionIndex].sectionId);
+      if (!_completedSections.contains(_course.courseSections[_currentSectionIndex].sectionId)) {
+        _completedSections.add(_course.courseSections[_currentSectionIndex].sectionId);
+        newlyCompletedSection = true;
+      }
     });
+
+    if (newlyCompletedSection) {
+      var message = await _writeCourseProgress(true);
+      print(message);
+    }
+  }
+
+  Future<dynamic> _writeCourseProgress(bool courseCompleted) async {
+    Map<String, dynamic> requestBody = {
+      'user_id': _loggedInUserUid,
+      'course_id': widget.courseId,
+      'course_version': _course.courseVersion,
+      'completed_sections': _completedSections,
+      'course_completed': courseCompleted
+    };
+    String jsonString = jsonEncode(requestBody);
+    String encodedJsonString = Uri.encodeComponent(jsonString);
+    try {
+      final response = await http.get(
+        Uri.parse('$remoteInsertUrl?params=$encodedJsonString'),
+      );
+      final responseBody = json.decode(response.body);
+      // _logger.info(' ${responseBody}');
+      if (responseBody.toString().contains('error') || responseBody.toString().contains('invalid')) {
+        return '''Error :( 
+Please select all the appropriate fields properly!''';
+      } else {
+        return responseBody;
+      }
+    } catch (error) {
+      print('error: $error');
+      // _logger.info('An error occurred: $error');
+    }
+    return 'An Unexpected error occurred :(';
   }
 }

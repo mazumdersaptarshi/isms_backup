@@ -288,7 +288,7 @@ WITH user_preferred_language AS (
 ), course_content AS (
 SELECT course_id,
         content_version,
-        content_jdoc
+        jsonb_set(content_jdoc, '{courseVersion}', to_jsonb(content_version)) AS course_content
 	FROM course_content
 	WHERE course_id = 'c1'
     AND course_id IN (SELECT course_id FROM assigned_courses)
@@ -304,7 +304,7 @@ SELECT course_id,
     AND user_id = 'u1'
 )
 SELECT jsonb_build_object(
-            'courseContent', cc.content_jdoc,
+            'courseContent', cc.course_content,
             'courseCompletedSections', csc.completed_sections
         )
     FROM course_content cc

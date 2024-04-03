@@ -196,35 +196,77 @@
         "type": "text",
         "description": "Courses on course list page"
     },
-    "resumeCourse": "Resume Course",
-    "@resumeCourse": {
+    "buttonResumeCourse": "Resume Course",
+    "@buttonResumeCourse": {
         "type": "text",
-        "description": "Resume Course on course list page"
+        "description": "Resume Course button on course list page"
     },
-    "startCourse": "Start Course",
-    "@startCourse": {
+    "buttonStartCourse": "Start Course",
+    "@buttonStartCourse": {
         "type": "text",
-        "description": "Start Course on course list page"
+        "description": "Start Course button on course list page"
     },
-    "startExam": "Start Exam",
-    "@startExam": {
+    "buttonStartExam": "Start Exam",
+    "@buttonStartExam": {
         "type": "text",
-        "description": "Start Exam on course list page"
+        "description": "Start Exam button on course list page"
     },
-    "sections": "Sections",
-    "@sections": {
+    "buttonStartExamDisabled": "Complete all course sections to take exam",
+    "@buttonStartExamDisabled": {
         "type": "text",
-        "description": "Sections on course list page"
+        "description": "Start Exam button disabled on course list page"
     },
-    "exams": "Exams",
-    "@exams": {
+    "sectionCompletion": "Sections ({completedSections}/{totalSections} Completed)",
+    "@sectionCompletion": {
         "type": "text",
-        "description": "Exams on course list page"
+        "description": "Section completion ExpansionListTile on course list page",
+        "placeholders": {
+            "completedSections": {
+                "type": "int",
+                "example": "2"
+            },
+            "totalSections": {
+                "type": "int",
+                "example": "5"
+            }
+        }
     },
-    "completed": "Completed",
-    "@completed": {
+    "examCompletion": "Exams ({completedExams}/{totalExams} Completed)",
+    "@examCompletion": {
         "type": "text",
-        "description": "Completed on course list page"
+        "description": "Exam completion ExpansionListTile on course list page",
+        "placeholders": {
+            "completedExams": {
+                "type": "int",
+                "example": "0"
+            },
+            "totalExams": {
+                "type": "int",
+                "example": "2"
+            }
+        }
+    },
+    "examEstimatedCompletionTime": "Estimated completion time: {estimatedCompletionTime}",
+    "@examEstimatedCompletionTime": {
+        "type": "text",
+        "description": "Exam estimated completion time on course list page",
+        "placeholders": {
+            "estimatedCompletionTime": {
+                "type": "String",
+                "example": "00:30:00"
+            }
+        }
+    },
+    "examPassMark": "Pass mark: {passMark}",
+    "@examPassMark": {
+        "type": "text",
+        "description": "Exam pass mark on course list page",
+        "placeholders": {
+            "passMark": {
+                "type": "int",
+                "example": "30"
+            }
+        }
     },
     "themes": "Themes:",
     "@themes": {
