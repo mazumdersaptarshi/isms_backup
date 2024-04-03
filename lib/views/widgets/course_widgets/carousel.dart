@@ -144,10 +144,10 @@ class _CarouselState extends State<Carousel> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Image.asset(
-                      "assets/images/course_images/ISMS1.png",
+                      "assets/images/course_images/ISMS3.png",
                       height: 100,
                       width: 100,
-                      fit: BoxFit.cover, // Ensure image fills the space
+                      fit: BoxFit.scaleDown,
                     ),
                     SizedBox(width: 16),
                     Expanded(
