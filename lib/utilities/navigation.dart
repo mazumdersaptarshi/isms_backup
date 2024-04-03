@@ -13,8 +13,11 @@ import 'package:isms/views/screens/course_list.dart';
 import 'package:isms/views/screens/course_page.dart';
 import 'package:isms/views/screens/home_screen.dart';
 
+import '../views/screens/user_screens/settings_page.dart';
+import 'package:isms/views/screens/user_screens/notification_page.dart';
+
 /// All named routes defined in the [GoRouter] configuration below
-enum NamedRoutes { home, login, adminConsole, assignments, course, exam, allUsers }
+enum NamedRoutes { home, login, adminConsole, assignments, course, exam, allUsers, notifications, settings }
 
 /// All parameter names used in child named routes defined in the [GoRouter] configuration below
 enum NamedRoutePathParameters { courseId, examId, uid }
@@ -55,9 +58,31 @@ final GoRouter ismsRouter = GoRouter(
           Provider.of<LoggedInState>(context, listen: false).currentUserRole != 'admin' ? '/' : null,
     ),
     GoRoute(
+      name: NamedRoutes.notifications.name,
+      path: '/notifications',
+      builder: (BuildContext context, GoRouterState state) {
+        return const NotificationPage();
+      },
+      redirect: (BuildContext context, GoRouterState state) =>
+      Provider.of<LoggedInState>(context, listen: false).currentUserRole != 'admin' ? '/' : null,
+    ),
+    GoRoute(
+      name: NamedRoutes.settings.name,
+      path: '/settings',
+      builder: (BuildContext context, GoRouterState state) {
+        return const SettingsPage();
+      },
+      redirect: (BuildContext context, GoRouterState state) =>
+      Provider.of<LoggedInState>(context, listen: false).currentUserRole != 'admin' ? '/' : null,
+    ),
+    GoRoute(
       name: NamedRoutes.assignments.name,
       path: '/assignments',
-      builder: (BuildContext context, GoRouterState state) => const CourseList(),
+      // builder: (BuildContext context, GoRouterState state) => const CourseList(),
+      pageBuilder: (context, state) {
+        // Return a new page with a unique key to allow URL bar navigation to a sibling route with different path/query parameters
+        return MaterialPage(key: UniqueKey(), child: const CourseList());
+      },
       routes: [
         GoRoute(
           name: NamedRoutes.course.name,
@@ -117,3 +142,5 @@ FutureOr<bool> _getNavigationConfirmationDialog(BuildContext context, String dia
   /// Otherwise, return false whether user explicitly cancels the navigation action or dismisses the dialog.
   return confirmed ?? false;
 }
+
+

@@ -4,6 +4,7 @@ import 'package:isms/controllers/user_management/logged_in_state.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../widgets/shared_widgets/custom_app_bar.dart';
 import 'package:isms/utilities/platform_check.dart';
+import 'package:isms/views/widgets/shared_widgets/custom_drawer.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key}); // Const constructor
@@ -21,6 +22,7 @@ class _SettingsPageState extends State<SettingsPage> {
     final loggedInState = context.watch<LoggedInState>();
     return Scaffold(
       appBar: IsmsAppBar(context: context), // Actual implementation
+      drawer: IsmsDrawer(context: context),
       bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState, context: context), // Assuming PlatformCheck is accessible
       body: SingleChildScrollView(
         child: Padding(

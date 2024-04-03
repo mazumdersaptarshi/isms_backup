@@ -40,17 +40,17 @@ class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
 
     /// ↓↓↓ To be removed ///
 
-    actionWidgets.add(_getActionIconButton(context, Icons.list, AppLocalizations.of(context)!.buttonCourseList,
-        () => context.goNamed(NamedRoutes.assignments.name)));
+    // actionWidgets.add(_getActionIconButton(context, Icons.list, AppLocalizations.of(context)!.buttonCourseList,
+    //     () => context.goNamed(NamedRoutes.assignments.name)));
+    //
+    // actionWidgets.add(_getActionIconButton(context, Icons.track_changes, AppLocalizations.of(context)!.buttonTracking,
+    //     () => Navigator.push(context, MaterialPageRoute(builder: (context) => const TestRunner()))));
 
-    actionWidgets.add(_getActionIconButton(context, Icons.track_changes, AppLocalizations.of(context)!.buttonTracking,
-        () => Navigator.push(context, MaterialPageRoute(builder: (context) => const TestRunner()))));
-
-    actionWidgets.add(_getActionIconButton(
-        context,
-        Icons.notifications,
-        AppLocalizations.of(context)!.buttonNotificationPage,
-        () => Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationPage()))));
+    // actionWidgets.add(_getActionIconButton(
+    //     context,
+    //     Icons.notifications,
+    //     AppLocalizations.of(context)!.buttonNotificationPage,
+    //     () => Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationPage()))));
     // actionWidgets.add(_getActionIconButton(
     //     context,
     //     Icons.analytics_rounded,
@@ -68,17 +68,17 @@ class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
     // }
     /// ↑↑↑ To be removed ///
 
-    actionWidgets.add(_getActionIconButton(
-        context,
-        Icons.notifications,
-        AppLocalizations.of(context)!.buttonNotificationPage,
-        () => Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationPage()))));
-
-    actionWidgets.add(_getActionIconButton(context, Icons.settings, AppLocalizations.of(context)!.buttonSettings,
-        () => Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingsPage()))));
-
-    actionWidgets.add(_getVerticalDivider());
-    actionWidgets.add(_getLogoutButton(context));
+    // actionWidgets.add(_getActionIconButton(
+    //     context,
+    //     Icons.notifications,
+    //     AppLocalizations.of(context)!.buttonNotificationPage,
+    //     () => Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationPage()))));
+    //
+    // actionWidgets.add(_getActionIconButton(context, Icons.settings, AppLocalizations.of(context)!.buttonSettings,
+    //     () => Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingsPage()))));
+    //
+    // actionWidgets.add(_getVerticalDivider());
+    // actionWidgets.add(_getLogoutButton(context));
 
     return actionWidgets;
   }
