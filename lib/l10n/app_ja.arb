@@ -43,5 +43,6 @@
     "themes": "テーマ：",
     "lightTheme": "ライトテーマ",
     "darkTheme": "ダークテーマ",
-    "languageSetting": "言語"
+    "languageSetting": "言語",
+    "searchHint": "検索"
 }

@@ -123,14 +123,14 @@ class IsmsDrawer extends StatelessWidget {
           textColor,
           fontSize));
 
-      drawerItemWidgets.add(_getDrawerItem(
-          context,
-          Icons.notifications,
-          AppLocalizations.of(context)!.buttonNotificationPage,
-          NamedRoutes.notifications.name,
-          iconColor,
-          textColor,
-          fontSize));
+      // drawerItemWidgets.add(_getDrawerItem(
+      //     context,
+      //     Icons.notifications,
+      //     AppLocalizations.of(context)!.buttonNotificationPage,
+      //     NamedRoutes.notifications.name,
+      //     iconColor,
+      //     textColor,
+      //     fontSize));
     }
       drawerItemWidgets.add(_getDrawerItem(
           context,

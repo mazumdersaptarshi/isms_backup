@@ -287,5 +287,15 @@
     "@languageSetting": {
         "type": "text",
         "description": "Language setting on Settings page"
-    }
+    },
+    "searchHint": "Search",
+        "@searchHint": {
+            "type": "text",
+            "description": "Search Hint text on search box on AppBar"
+        }
+
+
+
+
+
 }
