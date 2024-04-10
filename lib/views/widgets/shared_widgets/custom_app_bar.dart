@@ -11,10 +11,10 @@ import 'package:isms/views/screens/admin_screens/admin_console/users_analytics_s
 import 'package:isms/views/screens/course_page.dart';
 import 'package:isms/views/screens/testing/test_runner.dart';
 import 'package:isms/views/screens/testing/test_ui_type1/user_test_responses.dart';
-import 'package:isms/views/screens/user_screens/notification_page.dart';
+import 'package:isms/views/screens/admin_screens/notification_page.dart';
 
 import '../../screens/home_screen.dart';
-import '../../screens/user_screens/settings_page.dart';
+import '../../screens/admin_screens/settings_page.dart';
 
 class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
   final BuildContext? context;
