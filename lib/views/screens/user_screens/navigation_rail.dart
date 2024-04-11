@@ -130,23 +130,28 @@ class _NavigationRailWidgetState extends State<NavigationRailWidget> {
   // Define destinations for NavigationRail
   List<NavigationRailDestination> _buildDestinations() => [
         NavigationRailDestination(
-          icon: Icon(Icons.home),
+          icon: Icon(Icons.home_outlined),
+          selectedIcon: Icon(Icons.home),
           label: Text(AppLocalizations.of(context)!.buttonHome),
         ),
         NavigationRailDestination(
-          icon: Icon(Icons.list),
+          icon: Icon(Icons.list_outlined),
+          selectedIcon: Icon(Icons.list),
           label: Text(AppLocalizations.of(context)!.buttonCourseList),
         ),
         NavigationRailDestination(
-          icon: Icon(Icons.settings),
+          icon: Icon(Icons.settings_outlined),
+          selectedIcon: Icon(Icons.settings),
           label: Text(AppLocalizations.of(context)!.buttonSettings),
         ),
         NavigationRailDestination(
-          icon: Icon(Icons.supervisor_account),
+          icon: Icon(Icons.admin_panel_settings_outlined),
+          selectedIcon: Icon(Icons.admin_panel_settings),
           label: Text(AppLocalizations.of(context)!.buttonAdminConsole),
         ),
         NavigationRailDestination(
-          icon: Icon(Icons.notifications),
+          icon: Icon(Icons.notifications_active_outlined),
+          selectedIcon: Icon(Icons.notifications_active),
           label: Text(AppLocalizations.of(context)!.buttonNotificationPage),
         ),
       ];
