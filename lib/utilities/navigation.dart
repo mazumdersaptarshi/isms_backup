@@ -19,7 +19,7 @@ import 'package:isms/views/screens/admin_screens/notification_page.dart';
 import '../views/screens/user_screens/navigation_rail.dart';
 
 /// All named routes defined in the [GoRouter] configuration below
-enum NamedRoutes { home, login, adminConsole, assignments, course, exam, allUsers, notifications, settings }
+enum NamedRoutes { home, login, adminConsole, assignments, course, exam, allUsers, notifications, settings, navigationRail}
 
 /// All parameter names used in child named routes defined in the [GoRouter] configuration below
 enum NamedRoutePathParameters { courseId, examId, uid }
@@ -71,6 +71,15 @@ final GoRouter ismsRouter = GoRouter(
     GoRoute(
       name: NamedRoutes.settings.name,
       path: '/settings',
+      builder: (BuildContext context, GoRouterState state) {
+        return const SettingsPage();
+      },
+      redirect: (BuildContext context, GoRouterState state) =>
+      Provider.of<LoggedInState>(context, listen: false).currentUserRole != 'admin' ? '/' : null,
+    ),
+    GoRoute(
+      name: NamedRoutes.navigationRail.name,
+      path: '/navigationrail',
       builder: (BuildContext context, GoRouterState state) {
         return const NavigationRailWidget(title: "NavigationRail Test");
       },

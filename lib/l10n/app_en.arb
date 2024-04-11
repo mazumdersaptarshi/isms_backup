@@ -39,6 +39,11 @@
         "type": "text",
         "description": "Tooltip for language button"
     },
+    "buttonMenu": "Menu",
+        "@buttonLanguage": {
+            "type": "text",
+            "description": "Menu button on NavigationRail"
+        },
     "localeEnglish": "English",
     "@localeEnglish": {
         "type": "text",

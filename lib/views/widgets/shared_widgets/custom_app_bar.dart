@@ -12,7 +12,7 @@ import 'package:isms/views/screens/course_page.dart';
 import 'package:isms/views/screens/testing/test_runner.dart';
 import 'package:isms/views/screens/testing/test_ui_type1/user_test_responses.dart';
 import 'package:isms/views/screens/admin_screens/notification_page.dart';
-
+import 'package:isms/views/screens/user_screens/navigation_rail.dart';
 import '../../screens/home_screen.dart';
 import '../../screens/admin_screens/settings_page.dart';
 
@@ -151,14 +151,14 @@ class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
     // }
     /// ↑↑↑ To be removed ///
 
-    actionWidgets.add(_getActionIconButton(
-        context,
-        Icons.notifications,
-        AppLocalizations.of(context)!.buttonNotificationPage,
-        () => Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationPage()))));
-
-    actionWidgets.add(_getActionIconButton(context, Icons.settings, AppLocalizations.of(context)!.buttonSettings,
-        () => Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingsPage()))));
+    // actionWidgets.add(_getActionIconButton(
+    //     context,
+    //     Icons.notifications,
+    //     AppLocalizations.of(context)!.buttonNotificationPage,
+    //     () => Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationPage()))));
+    //
+    // actionWidgets.add(_getActionIconButton(context, Icons.settings, AppLocalizations.of(context)!.buttonSettings,
+    //     () => Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingsPage()))));
     //
     // actionWidgets.add(_getVerticalDivider());
     // actionWidgets.add(_getLogoutButton(context));

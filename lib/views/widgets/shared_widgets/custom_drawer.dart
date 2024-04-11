@@ -140,6 +140,14 @@ class IsmsDrawer extends StatelessWidget {
           iconColor,
           textColor,
           fontSize));
+    drawerItemWidgets.add(_getDrawerItem(
+        context,
+        Icons.add_to_queue,
+        'NavigationRail',
+        NamedRoutes.navigationRail.name,
+        iconColor,
+        textColor,
+        fontSize));
 
     return drawerItemWidgets;
   }

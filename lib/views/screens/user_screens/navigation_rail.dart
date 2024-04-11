@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:isms/views/screens/admin_screens/settings_page.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:isms/controllers/user_management/logged_in_state.dart';
 import '../admin_screens/admin_console/all_users_screen.dart';
-import '../admin_screens/notification_page.dart';
+import 'package:isms/views/screens/admin_screens/notification_page.dart';
+import 'package:isms/views/screens/admin_screens/settings_page.dart';
+import 'package:isms/views/widgets/shared_widgets/custom_app_bar.dart';
 import '../course_list.dart';
 import '../home_screen.dart';
 
@@ -12,11 +15,11 @@ class NavigationRailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => MaterialApp(
-    debugShowCheckedModeBanner: false,
-    title: title,
-    theme: ThemeData(primaryColor: Colors.black),
-    home: NavigationRailWidget(title: title), // Provide the required title argument
-  );
+        debugShowCheckedModeBanner: false,
+        title: title,
+        theme: ThemeData(primaryColor: Colors.black),
+        home: NavigationRailWidget(title: title),
+      );
 }
 
 class NavigationRailWidget extends StatefulWidget {
@@ -34,75 +37,119 @@ class _NavigationRailWidgetState extends State<NavigationRailWidget> {
   int index = 0;
   bool isExtended = false;
 
-  final selectedColor = Colors.white;
-  final unselectedColor = Colors.white60;
+  final selectedColor = Colors.grey[800];
+  final unselectedColor = Colors.grey[600];
   final labelStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 16);
+  final Color iconColor = Colors.white;
+  final Color textColor = Colors.white;
+  final double fontSize = 16.0;
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    // appBar: AppBar(
-    //   title: Text(widget.title),
-    //   leading: Container(
-    //     padding: EdgeInsets.only(left: 16.0),
-    //     child: IconButton(
-    //       icon: Icon(Icons.menu, size: 30),
-    //       onPressed: () => setState(() => isExtended = !isExtended),
-    //     ),
-    //   ),
-    // ),
-    body: LayoutBuilder(
-      builder: (context, constraints) => Row(
-        children: [
-          NavigationRail(
-            backgroundColor: Theme.of(context).primaryColor,
-            // labelType: isExtended ? null : NavigationRailLabelType.all,
-            selectedIndex: index,
-            extended: isExtended,
-            selectedLabelTextStyle: labelStyle.copyWith(color: selectedColor),
-            unselectedLabelTextStyle: labelStyle.copyWith(color: unselectedColor),
-            selectedIconTheme: IconThemeData(color: selectedColor, size: 30),
-            unselectedIconTheme: IconThemeData(color: unselectedColor, size: 30),
-            onDestinationSelected: (index) => setState(() => this.index = index),
-            groupAlignment: -1,
-            useIndicator: false,
-            leading: IconButton(
-              icon: Icon(Icons.menu, size: 30),
-              onPressed: () => setState(() => isExtended = !isExtended),
-            ),
-            destinations: [
-              NavigationRailDestination(
-                icon: Icon(Icons.home_outlined),
-                selectedIcon: Icon(Icons.home),
-                label: Text('Home'),
+        // appBar: IsmsAppBar(context: context),
+        body: LayoutBuilder(
+          builder: (context, constraints) => Row(
+            children: [
+              Stack(
+                children: [
+                  NavigationRail(
+                    backgroundColor: Colors.grey[50],
+                    // labelType: isExtended ? null : NavigationRailLabelType.all,
+                    selectedIndex: index,
+                    extended: isExtended,
+                    selectedLabelTextStyle: labelStyle.copyWith(color: selectedColor),
+                    unselectedLabelTextStyle: labelStyle.copyWith(color: unselectedColor),
+                    selectedIconTheme: IconThemeData(color: selectedColor, size: 25),
+                    unselectedIconTheme: IconThemeData(color: unselectedColor, size: 25),
+                    onDestinationSelected: (index) => setState(() => this.index = index),
+                    useIndicator: true,
+                    indicatorColor: Colors.grey[300],
+                    destinations: _buildDestinations(),
+                    leading: isExtended
+                        ? Row(
+                            mainAxisSize: MainAxisSize.min, // Set MainAxisSize
+                            children: [
+                              IconButton(
+                                icon: Icon(Icons.menu, size: 30, color: unselectedColor),
+                                onPressed: () => setState(() => isExtended = !isExtended),
+                              ),
+                              TextButton(
+                                child: Text(
+                                  AppLocalizations.of(context)!.buttonMenu,
+                                  style: TextStyle(fontWeight: FontWeight.bold ,fontSize: 16.0, color: unselectedColor),
+                                ),
+                                onPressed: () => setState(() => isExtended = !isExtended),
+                              ),
+                            ],
+                          )
+                        : IconButton(
+                            icon: Icon(Icons.menu, size: 30, color: unselectedColor),
+                            onPressed: () => setState(() => isExtended = !isExtended),
+                          ),
+                  ),
+                  Positioned(
+                    bottom: 20.0,
+                    left: 20.0,
+                    child: isExtended
+                        ? InkWell(
+                      onTap: () async {
+                        await LoggedInState.logout();
+                        Navigator.pushReplacementNamed(context, '/login');
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min, // Allow Row to shrink
+                        children: [
+                          IconButton(
+                            icon: Icon(Icons.logout, color: unselectedColor), // Use unselectedColor
+                            onPressed: () async {
+                            },
+                          ),
+                          Text(
+                            AppLocalizations.of(context)!.buttonLogout,
+                            style: labelStyle.copyWith(color: unselectedColor), // Use unselectedColor
+                          ),
+                        ],
+                      ),
+                    )
+                        : IconButton(
+                      icon: Icon(Icons.logout, color: unselectedColor), // Use unselectedColor
+                      onPressed: () async {
+                        await LoggedInState.logout();
+                        Navigator.pushReplacementNamed(context, '/login');
+                      },
+                          ),
+                  ),
+                ],
               ),
-              NavigationRailDestination(
-                icon: Icon(Icons.list_outlined),
-                selectedIcon: Icon(Icons.list),
-                label: Text('Course list'),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.people_outline),
-                selectedIcon: Icon(Icons.people),
-                label: Text('All users'),
-              ),
-
-              NavigationRailDestination(
-                icon: Icon(Icons.settings_outlined),
-                selectedIcon: Icon(Icons.settings),
-                label: Text('Settings'),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.notifications_none_outlined),
-                selectedIcon: Icon(Icons.notifications_active),
-                label: Text('Notifications'),
-              ),
+              Expanded(child: buildPages()),
             ],
           ),
-          Expanded(child: buildPages()),
-        ],
-      ),
-    ),
-  );
+        ),
+      );
+
+  // Define destinations for NavigationRail
+  List<NavigationRailDestination> _buildDestinations() => [
+        NavigationRailDestination(
+          icon: Icon(Icons.home),
+          label: Text(AppLocalizations.of(context)!.buttonHome),
+        ),
+        NavigationRailDestination(
+          icon: Icon(Icons.list),
+          label: Text(AppLocalizations.of(context)!.buttonCourseList),
+        ),
+        NavigationRailDestination(
+          icon: Icon(Icons.settings),
+          label: Text(AppLocalizations.of(context)!.buttonSettings),
+        ),
+        NavigationRailDestination(
+          icon: Icon(Icons.supervisor_account),
+          label: Text(AppLocalizations.of(context)!.buttonAdminConsole),
+        ),
+        NavigationRailDestination(
+          icon: Icon(Icons.notifications),
+          label: Text(AppLocalizations.of(context)!.buttonNotificationPage),
+        ),
+      ];
 
   Widget buildPages() {
     switch (index) {
@@ -111,13 +158,15 @@ class _NavigationRailWidgetState extends State<NavigationRailWidget> {
       case 1:
         return CourseList();
       case 2:
-        return AllUsers();
-      case 3:
         return SettingsPage();
+      case 3:
+        return AllUsers();
       case 4:
         return NotificationPage();
       default:
-        return HomePage();
+        return NavigationRailWidget(
+          title: "title",
+        );
     }
   }
 }

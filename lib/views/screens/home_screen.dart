@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Colors.white,
       bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
       appBar: IsmsAppBar(context: context),
-      drawer: IsmsDrawer(context: context),
+      // drawer: IsmsDrawer(context: context),
       body: FooterView(
         footer: kIsWeb
             ? Footer(backgroundColor: Colors.transparent, child: const AppFooter())
@@ -146,7 +146,6 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-
               /// Carousel
 
               SliverPadding(
