@@ -79,7 +79,7 @@ class _CourseListState extends State<CourseList> {
     return Scaffold(
       bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
       appBar: IsmsAppBar(context: context),
-      drawer: IsmsDrawer(context: context),
+      // drawer: IsmsDrawer(context: context),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

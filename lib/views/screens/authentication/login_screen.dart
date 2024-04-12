@@ -12,6 +12,7 @@ import 'package:isms/controllers/notification_management/init_link_handler.dart'
 import 'package:isms/controllers/user_management/logged_in_state.dart';
 import 'package:isms/views/screens/home_screen.dart';
 import 'package:isms/views/widgets/shared_widgets/loading_screen_widget.dart';
+import 'package:isms/views/screens/user_screens/navigation_rail.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -30,7 +31,8 @@ class LoginPageState extends State<LoginPage> {
     if (loggedInState.currentUser != null) {
       InitLinkHandler.initLinks(context: context);
       html.window.history.pushState({}, '', '');
-      return const HomePage();
+      // Replace HomePage with NavigationRailWidget
+      return const NavigationRailWidget(title: "title",);
     }
     // Provider.of<CsrfTokenProvider>(context, listen: false).setCsrfToken(_newToken);
 
@@ -38,14 +40,15 @@ class LoginPageState extends State<LoginPage> {
       body: Center(
         child: _isLoading
             ? SizedBox(
-                height: 200,
-                width:
-                    MediaQuery.of(context).size.width > SCREEN_COLLAPSE_WIDTH ? 300 : MediaQuery.of(context).size.width,
-                child: loadingWidget())
+            height: 200,
+            width:
+            MediaQuery.of(context).size.width > SCREEN_COLLAPSE_WIDTH ? 300 : MediaQuery.of(context).size.width,
+            child: loadingWidget())
             : _getLoginPageUI(),
       ),
     );
   }
+
 
   Widget _getLoginPageUI() {
     return LayoutBuilder(

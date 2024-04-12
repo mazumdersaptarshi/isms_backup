@@ -8,6 +8,7 @@
     "buttonSettings": "設定",
     "buttonLogout": "ログアウト",
     "buttonLanguage": "言語",
+    "buttonMenu": "メニュー",
     "localeEnglish": "英語",
     "localeJapanese": "日本語",
     "buttonCheckAnswer": "回答をチェック",
@@ -44,5 +45,6 @@
     "themes": "テーマ：",
     "lightTheme": "ライトテーマ",
     "darkTheme": "ダークテーマ",
-    "languageSetting": "言語"
+    "languageSetting": "言語",
+    "searchHint": "検索"
 }
