@@ -15,9 +15,13 @@ class CustomBarChart extends StatefulWidget {
   CustomBarChart({
     super.key,
     required this.barChartValuesData,
+    required this.scoreLimit,
+    required this.totalPages,
   });
 
   final List<dynamic> barChartValuesData;
+  int scoreLimit;
+  int totalPages;
 
   @override
   State<CustomBarChart> createState() => _CustomBarChartState();
@@ -51,6 +55,8 @@ class _CustomBarChartState extends State<CustomBarChart> {
   }
 
   void _buildBarData() {
+    _scoreLimit = widget.scoreLimit;
+    _totalPages = widget.totalPages;
     if (widget.barChartValuesData.isEmpty) _scoreLimit = 0;
     int maxValue = 0;
     for (int index = 0; index < widget.barChartValuesData.length; index++) {
@@ -58,17 +64,17 @@ class _CustomBarChartState extends State<CustomBarChart> {
 
       if (maxValue <= widget.barChartValuesData[index].y) maxValue = widget.barChartValuesData[index].y;
     }
-    if (maxValue <= 5) {
-      _scoreLimit = 5; // If the max value is less than 10, set the limit to 10
-    } else if (maxValue < 10) {
-      _scoreLimit = 10; // If the max value is less than 10, set the limit to 10
-    } else if (maxValue <= 100) {
-      _scoreLimit = 100; // If the max value is between 10 and 100, set the limit to 100
-    } else {
-      // If the max value is greater than 100, round up to the nearest multiple of 5
-      _scoreLimit = maxValue;
-    }
-
+    // if (maxValue <= 5) {
+    //   _scoreLimit = 5; // If the max value is less than 10, set the limit to 10
+    // } else if (maxValue < 10) {
+    //   _scoreLimit = 10; // If the max value is less than 10, set the limit to 10
+    // } else if (maxValue <= 100) {
+    //   _scoreLimit = 100; // If the max value is between 10 and 100, set the limit to 100
+    // } else {
+    //   // If the max value is greater than 100, round up to the nearest multiple of 5
+    //   _scoreLimit = maxValue;
+    // }
+    _calculateTotalPages();
     print('bnr: ${_scoreLimit}');
   }
 
@@ -107,17 +113,18 @@ class _CustomBarChartState extends State<CustomBarChart> {
             color: isTouched
                 ? ThemeConfig.primaryColor
                 : data.y <= _scoreLimit.toDouble() * 0.5
-                    ? Colors.redAccent
-                    : (data.y > _scoreLimit.toDouble() * 0.5 && data.y <= _scoreLimit.toDouble() * 0.8)
-                        ? Colors.orangeAccent
-                        : (data.y > _scoreLimit.toDouble() * 0.8)
-                            ? Colors.lightGreen
+                    ? ThemeConfig.getPrimaryColorShade(100)
+                    : (data.y > _scoreLimit.toDouble() * 0.5 && data.y <= _scoreLimit.toDouble() * 0.7)
+                        ? ThemeConfig.getPrimaryColorShade(400)
+                        : (data.y > _scoreLimit.toDouble() * 0.7)
+                            ? ThemeConfig.primaryColor
                             : ThemeConfig.primaryColor,
             // gradient: getBarsGradientColor(),
             width: 20,
-            borderRadius: BorderRadius.circular(5),
+            borderRadius: BorderRadius.circular(20),
             backDrawRodData:
-                BackgroundBarChartRodData(show: true, toY: _scoreLimit.toDouble(), color: ThemeConfig.tertiaryColor2)),
+                // BackgroundBarChartRodData(show: true, toY: _scoreLimit.toDouble(), color: ThemeConfig.tertiaryColor2)),
+                BackgroundBarChartRodData(show: true, toY: _scoreLimit.toDouble(), color: Colors.transparent)),
       ],
     );
   }
@@ -136,26 +143,22 @@ class _CustomBarChartState extends State<CustomBarChart> {
         SizedBox(
           height: 10,
         ),
-        CustomDropdownWidget<int>(
-          label: 'Filter',
-          hintText: '<=',
-          value: scoreLimit,
-          items: scoreFilterList,
-          onChanged: (value) {
-            setState(() {
-              scoreLimit = value;
-              _scoreLimit = scoreLimit!.value;
-              _calculateTotalPages();
-              _currentPage = 0;
-            });
-          },
-        ),
+        // CustomDropdownWidget<int>(
+        //   label: 'Filter',
+        //   hintText: '<=',
+        //   value: scoreLimit,
+        //   items: scoreFilterList,
+        //   onChanged: (value) {
+        //     setState(() {
+        //       scoreLimit = value;
+        //       _scoreLimit = scoreLimit!.value;
+        //       _calculateTotalPages();
+        //       _currentPage = 0;
+        //     });
+        //   },
+        // ),
         // CustomScoreFilterDropdownButton(context),
         Container(
-          // decoration: BoxDecoration(
-          //     color: Colors.grey.shade100,
-          //     borderRadius: BorderRadius.circular(20),
-          //     border: Border.all(color: Colors.grey.shade200)),
           height: 400,
           child: Container(
             padding: EdgeInsets.all(20),
@@ -166,6 +169,7 @@ class _CustomBarChartState extends State<CustomBarChart> {
                 minY: 0,
                 gridData: FlGridData(
                   show: true,
+                  drawHorizontalLine: false,
                   drawVerticalLine: false,
                 ),
                 borderData: FlBorderData(

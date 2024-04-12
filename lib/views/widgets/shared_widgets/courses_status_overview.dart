@@ -1,3 +1,4 @@
+import 'package:animated_pie_chart/animated_pie_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/controllers/admin_management/admin_state.dart';
@@ -37,6 +38,29 @@ class _CoursesStatusOverviewState extends State<CoursesStatusOverview> {
   SelectableItem? _selectedCourse;
   SelectableItem? _selectedExam;
   List<SelectableItem> _examsPieChartData = [];
+
+  // List<PieData> _piesData = [];
+  // final List<PieData> piesData2 = [
+  //   PieData(value: 30, color: Colors.red),
+  //   PieData(value: 50, color: Colors.blue),
+  //   PieData(value: 30, color: Colors.yellow),
+  //   PieData(value: 30, color: Colors.lightGreen),
+  // ];
+  String tapIndex = '';
+
+  String _passedValue = '';
+
+  // void setPieData(List<CustomPieChartData> pieChartData) {
+  //   _piesData = [];
+  //   pieChartData.forEach((element) {
+  //     if (element.label == 'Passed') {
+  //       print(element.label);
+  //
+  //       _passedValue = element.percent.toString();
+  //     }
+  //     _piesData.add(PieData(value: element.percent, color: element.color!));
+  //   });
+  // }
 
   Future<void> _fetchExamsPie(String courseId) async {
     var exams = await adminState.getExamsListForCourse(courseId: courseId);
@@ -87,7 +111,34 @@ class _CoursesStatusOverviewState extends State<CoursesStatusOverview> {
     var pieChartData = await adminState.getExamOverallResults(examId: examId);
     setState(() {
       _pieChartData = pieChartData;
+      // setPieData(_pieChartData);
     });
+  }
+
+  Widget buildLegend(List<CustomPieChartData> data) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: data.map((item) {
+        return Container(
+          padding: EdgeInsets.all(4),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 16,
+                height: 16,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: item.color, // Assuming item.color is already defined
+                ),
+              ),
+              SizedBox(width: 8),
+              Text(item.label, style: TextStyle(fontSize: 14)),
+            ],
+          ),
+        );
+      }).toList(),
+    );
   }
 
   @override
@@ -132,9 +183,41 @@ class _CoursesStatusOverviewState extends State<CoursesStatusOverview> {
                 SelectedItemsWidget(label: 'Selected Course', selectedItemsList: [_selectedCourse!]),
               if (_selectedExam != null)
                 SelectedItemsWidget(label: 'Selected Exam', selectedItemsList: [_selectedExam!]),
-              CustomPieChartWidget(
-                pieData: _pieChartData,
-              ),
+
+              // CustomPieChartWidget(
+              //   pieData: _pieChartData,
+              // ),
+
+              // if (_piesData.isNotEmpty)
+              //   EasyPieChart(
+              //     key: const Key('pie 2'),
+              //     children: _piesData,
+              //     borderEdge: StrokeCap.round,
+              //
+              //     pieType: PieType.crust,
+              //     showValue: true,
+              //     centerText: 'Passed Status',
+              //     onTap: (index) {
+              //       tapIndex = index.toString();
+              //       setState(() {});
+              //     },
+              //     gap: 5,
+              //     borderWidth: 20,
+              //     start: 10,
+              //     animateFromEnd: true,
+              //     size: 190,
+              //     child: Center(
+              //         child: Column(
+              //       mainAxisAlignment: MainAxisAlignment.center,
+              //       children: [
+              //         Text('${_passedValue.toString()}%'),
+              //         Text('Passed'),
+              //       ],
+              //     )),
+              //     // child: Center(child: Text('')),
+              //   ),
+
+              // if (_piesData.isNotEmpty) buildLegend(_pieChartData),
             ],
           ),
         ));

@@ -9,6 +9,7 @@ class ThemeConfig {
 
     return base.copyWith(
       colorScheme: base.colorScheme,
+      scaffoldBackgroundColor: Colors.grey.shade100,
     );
   }
 
@@ -35,6 +36,8 @@ class ThemeConfig {
 
   static Color? get primaryColor => isDarkMode ? getPrimaryColorShade(900) : getPrimaryColorShade(700);
 
+  static Color? get primaryCardColor => isDarkMode ? Colors.black : Colors.white;
+
   static Color? get hoverFillColor1 => isDarkMode ? primaryColor : getPrimaryColorShade(50);
 
   static Color? get hoverFillColor2 => isDarkMode ? Colors.grey.shade700 : getPrimaryColorShade(100);
@@ -47,7 +50,7 @@ class ThemeConfig {
 
   static Color? get secondaryTextColor => isDarkMode ? Colors.grey.shade500 : primaryColor;
 
-  static Color get tertiaryTextColor1 => isDarkMode ? Colors.grey.shade300 : Colors.grey.shade700;
+  static Color get tertiaryTextColor1 => isDarkMode ? Colors.grey.shade300 : Colors.grey.shade600;
 
   static Color get tertiaryTextColor2 => isDarkMode ? Colors.grey.shade300 : Colors.grey.shade700;
 
@@ -57,11 +60,11 @@ class ThemeConfig {
 
   static Color get tertiaryColor2 => isDarkMode ? Colors.grey.shade800 : Colors.grey.shade300;
 
-  static Color get borderColor1 => isDarkMode ? Colors.grey.shade800 : Colors.grey.shade200;
+  static Color get borderColor1 => isDarkMode ? Colors.grey.shade800 : getPrimaryColorShade(600)!;
 
   static Color get borderColor2 => isDarkMode ? Colors.grey.shade700 : Colors.grey.shade200;
 
-  static Color? get hoverBorderColor => isDarkMode ? Colors.grey.shade600 : primaryColor;
+  static Color? get hoverBorderColor => isDarkMode ? Colors.grey.shade600 : getPrimaryColorShade(400);
 
   static Color? get hoverShadowColor => isDarkMode ? Colors.black.withOpacity(0.7) : Colors.grey.withOpacity(0.2);
 

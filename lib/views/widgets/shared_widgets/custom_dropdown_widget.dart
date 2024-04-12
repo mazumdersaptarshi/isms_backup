@@ -44,36 +44,44 @@ class CustomDropdownWidget<T> extends StatelessWidget {
             border: Border.all(color: ThemeConfig.borderColor1!, width: 2), // Border color
             borderRadius: BorderRadius.circular(5), // Border radius
           ),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: 200, minWidth: 150),
-            child: DropdownButtonHideUnderline(
-              child: Theme(
-                data: ThemeData(
-                  hoverColor: ThemeConfig.hoverFillColor2,
-                  focusColor: ThemeConfig.hoverFillColor3,
-                ),
-                child: DropdownButton<CustomDropdownItem<T>>(
-                  dropdownColor: ThemeConfig.secondaryColor,
-                  borderRadius: BorderRadius.circular(5),
-                  hint: Text(
-                    hintText ?? '',
-                    style: TextStyle(
-                      color: ThemeConfig.tertiaryTextColor1!, // Adjust the color to fit your theme
-                    ),
+          child: IntrinsicWidth(
+            stepWidth: 50,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: 400, minWidth: 200),
+              child: DropdownButtonHideUnderline(
+                child: Theme(
+                  data: ThemeData(
+                    hoverColor: ThemeConfig.hoverFillColor2,
+                    focusColor: ThemeConfig.hoverFillColor3,
                   ),
-                  value: value,
-                  onChanged: onChanged,
-                  items: items?.map((CustomDropdownItem<T> item) {
-                    return DropdownMenuItem<CustomDropdownItem<T>>(
-                      value: item,
-                      child: Text(
-                        item.key, // Displaying 'key' instead of 'value.toString()'
-                        style: TextStyle(color: ThemeConfig.tertiaryTextColor1!), // Text color inside the dropdown
+                  child: DropdownButton<CustomDropdownItem<T>>(
+                    dropdownColor: ThemeConfig.primaryCardColor,
+                    borderRadius: BorderRadius.circular(5),
+                    hint: Text(
+                      hintText ?? '',
+                      style: TextStyle(
+                        color: ThemeConfig.primaryColor!,
+                        fontSize: 14,
                       ),
-                    );
-                  }).toList(),
-                  isExpanded: true,
-                  icon: Icon(Icons.arrow_drop_down_rounded, color: ThemeConfig.tertiaryTextColor1!),
+                    ),
+                    value: value,
+                    onChanged: onChanged,
+                    items: items?.map((CustomDropdownItem<T> item) {
+                      return DropdownMenuItem<CustomDropdownItem<T>>(
+                        value: item,
+                        child: Container(
+                          padding: EdgeInsets.all(4),
+                          child: Text(
+                            item.key, // Displaying 'key' instead of 'value.toString()'
+                            style: TextStyle(
+                                color: ThemeConfig.primaryColor!, fontSize: 14), // Text color inside the dropdown
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                    isExpanded: true,
+                    icon: Icon(Icons.arrow_drop_down_rounded, color: ThemeConfig.tertiaryTextColor1!),
+                  ),
                 ),
               ),
             ),

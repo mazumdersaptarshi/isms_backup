@@ -9,6 +9,11 @@
         "type": "text",
         "description": "Tooltip for Admin Console button"
     },
+     "buttonAdminPanel": "Admin Panel",
+        "@buttonAdminPanel": {
+            "type": "text",
+            "description": "Tooltip for Admin Panel button"
+    },
     "buttonCourseList": "My Courses",
     "@buttonCourseList": {
         "type": "text",

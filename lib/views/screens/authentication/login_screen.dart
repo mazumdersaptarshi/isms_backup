@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:isms/controllers/auth_token_management/csrf_token_provider.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart';
 import 'package:isms/controllers/theme_management/theme_config.dart';
 import 'package:line_icons/line_icons.dart';
@@ -31,6 +32,7 @@ class LoginPageState extends State<LoginPage> {
       html.window.history.pushState({}, '', '');
       return const HomePage();
     }
+    // Provider.of<CsrfTokenProvider>(context, listen: false).setCsrfToken(_newToken);
 
     return Scaffold(
       body: Center(

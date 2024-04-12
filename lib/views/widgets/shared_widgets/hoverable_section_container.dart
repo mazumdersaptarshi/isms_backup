@@ -19,14 +19,14 @@ class _HoverableSectionContainerState extends State<HoverableSectionContainer> {
     setState(() {
       _isHovered = true;
     });
-    widget.onHover(true);
+    // widget.onHover(true);
   }
 
   void _onExit(PointerEvent details) {
     setState(() {
       _isHovered = false;
     });
-    widget.onHover(false);
+    // widget.onHover(false);
   }
 
   @override
@@ -37,19 +37,29 @@ class _HoverableSectionContainerState extends State<HoverableSectionContainer> {
       child: Container(
         padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.015),
         decoration: BoxDecoration(
-          border: Border.all(color: ThemeConfig.borderColor1!, width: 2),
-          borderRadius: BorderRadius.circular(10),
-          color: Theme.of(context).scaffoldBackgroundColor,
-          boxShadow: _isHovered
-              ? [
-                  BoxShadow(
-                    color: ThemeConfig.hoverShadowColor!,
-                    spreadRadius: 3,
-                    blurRadius: 40,
-                    offset: Offset(0, 3),
-                  ),
-                ]
-              : [],
+          border: Border.all(color: _isHovered ? ThemeConfig.hoverBorderColor! : Colors.transparent, width: 2
+              // isHoveringMap[index] == true ? primary! : Colors.grey.shade200,
+              ),
+          borderRadius: BorderRadius.circular(6),
+          color: ThemeConfig.primaryCardColor,
+          // boxShadow: _isHovered
+          //     ? [
+          //         BoxShadow(
+          //           color: ThemeConfig.hoverShadowColor!,
+          //           spreadRadius: 3,
+          //           blurRadius: 40,
+          //           offset: Offset(0, 3),
+          //         ),
+          //       ]
+          //     : [],
+          boxShadow: [
+            BoxShadow(
+              color: ThemeConfig.hoverShadowColor!,
+              spreadRadius: 1,
+              blurRadius: 5,
+              offset: Offset(0, 3),
+            ),
+          ],
         ),
         child: widget.child,
       ),

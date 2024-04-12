@@ -18,6 +18,8 @@ import 'package:logging/logging.dart';
 import 'package:postgres/postgres.dart';
 import 'package:provider/provider.dart';
 
+import 'controllers/auth_token_management/csrf_token_provider.dart';
+
 void main() async {
   // logging setup
   // lowest level that will be logged (default: Level.INFO)
@@ -77,6 +79,9 @@ class IsmsApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider<CsrfTokenProvider>(create: (context) {
+          return CsrfTokenProvider();
+        }),
         ChangeNotifierProvider<LoggedInState>(create: (context) {
           return LoggedInState();
         }),

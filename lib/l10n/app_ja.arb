@@ -1,6 +1,7 @@
 {
     "buttonHome": "トップページ",
     "buttonAdminConsole": "管理コンソール",
+    "buttonAdminPanel": "管理パネル",
     "buttonCourseList": "コースの概要",
     "buttonTracking": "トラッキング",
     "buttonNotificationPage": "通知",

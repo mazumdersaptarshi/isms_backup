@@ -7,6 +7,7 @@ import 'package:isms/utilities/navigation.dart';
 import 'package:isms/views/screens/admin_screens/admin_console/admin_user_details_screen.dart';
 import 'package:isms/views/screens/testing/test_ui_type1/user_test_responses.dart';
 import 'package:isms/views/widgets/shared_widgets/build_section_header.dart';
+import 'package:isms/views/widgets/shared_widgets/search_bar_widget.dart';
 
 class UsersSummaryTable extends StatefulWidget {
   UsersSummaryTable({Key? key, required this.usersList}) : super(key: key);
@@ -33,29 +34,26 @@ class _UsersSummaryTableState extends State<UsersSummaryTable> {
       children: [
         buildSectionHeader(
           title: 'All Users',
-          actionWidget: _buildToggleExpandButton(),
+          actionWidget1: SearchBarWidget(),
+          actionWidget2: _buildToggleExpandButton(),
         ),
         Container(
           width: MediaQuery.of(context).size.width * 0.9,
           margin: EdgeInsets.fromLTRB(80, 12, 80, 30),
-          decoration: BoxDecoration(
-            border: Border.all(color: ThemeConfig.secondaryColor),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(20), // Match container's border radius
+          // decoration: BoxDecoration(
+          //   border: Border.all(color: ThemeConfig.secondaryColor),
+          //   borderRadius: BorderRadius.circular(6),
+          // ),
+          child: Column(
+            children: [
+              _buildHeaderRow(),
+              ...widget.usersList.asMap().entries.map((entry) {
+                int index = entry.key;
 
-            child: Column(
-              children: [
-                _buildHeaderRow(),
-                ...widget.usersList.asMap().entries.map((entry) {
-                  int index = entry.key;
-
-                  var value = entry.value;
-                  return _buildDataRow(item: value, index: index, listLength: widget.usersList.length);
-                }).toList(),
-              ],
-            ),
+                var value = entry.value;
+                return _buildDataRow(item: value, index: index, listLength: widget.usersList.length);
+              }).toList(),
+            ],
           ),
         ),
       ],
@@ -69,24 +67,31 @@ class _UsersSummaryTableState extends State<UsersSummaryTable> {
           _isExpanded = !_isExpanded; // Toggle the state
         });
       },
-      style: ButtonStyle(
-          overlayColor: MaterialStateColor.resolveWith(
-        (states) => Colors.transparent,
-      )),
-      child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(5)),
-            color: ThemeConfig.primaryColor,
-          ),
-          padding: EdgeInsets.all(10),
-          child: Text(
-            _isExpanded ? "Less details" : "More details",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            Icon(
+              _isExpanded
+                  ? CupertinoIcons.arrow_down_right_arrow_up_left
+                  : CupertinoIcons.arrow_up_left_arrow_down_right,
+              size: 18,
             ),
-          )),
+            SizedBox(
+              width: 14,
+            ),
+            Text(
+              _isExpanded ? "Less details" : "More details",
+            ),
+          ],
+        ),
+      ),
+      style: TextButton.styleFrom(
+        side: BorderSide(color: Colors.blue, width: 2), // Blue border of width 2
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(6), // Rounded corners with a radius of 6
+        ),
+      ),
     );
   }
 
@@ -94,10 +99,10 @@ class _UsersSummaryTableState extends State<UsersSummaryTable> {
   Widget _buildHeaderRow() {
     return Container(
       padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        // Styling of the header row
-        color: ThemeConfig.secondaryColor,
-      ),
+      // decoration: BoxDecoration(
+      //     // Styling of the header row
+      //     // color: ThemeConfig.secondaryColor,
+      //     ),
       child: Padding(
         padding: const EdgeInsets.only(top: 8.0, bottom: 8),
         child: Row(
@@ -181,10 +186,12 @@ class _UsersSummaryTableState extends State<UsersSummaryTable> {
         });
       },
       child: Container(
+        margin: EdgeInsets.only(bottom: 8),
         // padding: EdgeInsets.all(2.0),
         decoration: BoxDecoration(
           border: Border.all(
-            color: isHoveringMap[index ?? 0] == true ? ThemeConfig.hoverBorderColor! : ThemeConfig.secondaryColor,
+            color: isHoveringMap[index ?? 0] == true ? ThemeConfig.hoverBorderColor! : Colors.transparent,
+            width: 2,
             // isHoveringMap[index] == true ? primary! : Colors.grey.shade200,
           ),
           borderRadius: index == (listLength! - 1)
@@ -193,10 +200,21 @@ class _UsersSummaryTableState extends State<UsersSummaryTable> {
                   bottomRight: Radius.circular(20),
                 )
               : isHoveringMap[index ?? 0] == true
-                  ? BorderRadius.all(Radius.circular(4))
-                  : BorderRadius.zero, // Border(
-
-          color: isHoveringMap[index ?? 0] == true ? ThemeConfig.hoverFillColor1 : Colors.transparent,
+                  ? BorderRadius.all(Radius.circular(6))
+                  // : BorderRadius.zero,
+                  : BorderRadius.all(Radius.circular(6)),
+          // color: isHoveringMap[index ?? 0] == true
+          //     ? ThemeConfig.hoverFillColor1
+          //     : Theme.of(context).scaffoldBackgroundColor,
+          color: ThemeConfig.primaryCardColor,
+          boxShadow: [
+            BoxShadow(
+              color: ThemeConfig.hoverShadowColor!,
+              spreadRadius: 1,
+              blurRadius: 5,
+              offset: Offset(0, 3),
+            ),
+          ],
         ),
         child: Row(
           children: [
@@ -316,9 +334,9 @@ class _UsersSummaryTableState extends State<UsersSummaryTable> {
             overflow: TextOverflow.clip,
             softWrap: true,
             style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: ThemeConfig.primaryTextColor,
+              fontSize: 16,
+              // fontWeight: FontWeight.bold,
+              color: ThemeConfig.tertiaryTextColor1,
             ),
           ),
         ),

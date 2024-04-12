@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
-import 'package:isms/views/screens/admin_screens/admin_console/all_users_screen.dart';
+import 'package:isms/views/screens/admin_screens/admin_console/admin_panel.dart';
 import 'package:provider/provider.dart';
 
 import 'package:isms/controllers/user_management/logged_in_state.dart';
@@ -13,11 +13,8 @@ import 'package:isms/views/screens/course_list.dart';
 import 'package:isms/views/screens/course_page.dart';
 import 'package:isms/views/screens/home_screen.dart';
 
-import '../views/screens/user_screens/settings_page.dart';
-import 'package:isms/views/screens/user_screens/notification_page.dart';
-
 /// All named routes defined in the [GoRouter] configuration below
-enum NamedRoutes { home, login, adminConsole, assignments, course, exam, allUsers, notifications, settings }
+enum NamedRoutes { home, login, adminConsole, assignments, course, exam, adminPanel, notifications, settings }
 
 /// All parameter names used in child named routes defined in the [GoRouter] configuration below
 enum NamedRoutePathParameters { courseId, examId, uid }
@@ -51,29 +48,11 @@ final GoRouter ismsRouter = GoRouter(
           Provider.of<LoggedInState>(context, listen: false).currentUserRole != 'admin' ? '/' : null,
     ),
     GoRoute(
-      name: NamedRoutes.allUsers.name,
+      name: NamedRoutes.adminPanel.name,
       path: '/all_users',
-      builder: (BuildContext context, GoRouterState state) => const AllUsers(),
+      builder: (BuildContext context, GoRouterState state) => const AdminPanel(),
       redirect: (BuildContext context, GoRouterState state) =>
           Provider.of<LoggedInState>(context, listen: false).currentUserRole != 'admin' ? '/' : null,
-    ),
-    GoRoute(
-      name: NamedRoutes.notifications.name,
-      path: '/notifications',
-      builder: (BuildContext context, GoRouterState state) {
-        return const NotificationPage();
-      },
-      redirect: (BuildContext context, GoRouterState state) =>
-      Provider.of<LoggedInState>(context, listen: false).currentUserRole != 'admin' ? '/' : null,
-    ),
-    GoRoute(
-      name: NamedRoutes.settings.name,
-      path: '/settings',
-      builder: (BuildContext context, GoRouterState state) {
-        return const SettingsPage();
-      },
-      redirect: (BuildContext context, GoRouterState state) =>
-      Provider.of<LoggedInState>(context, listen: false).currentUserRole != 'admin' ? '/' : null,
     ),
     GoRoute(
       name: NamedRoutes.assignments.name,
@@ -142,5 +121,3 @@ FutureOr<bool> _getNavigationConfirmationDialog(BuildContext context, String dia
   /// Otherwise, return false whether user explicitly cancels the navigation action or dismisses the dialog.
   return confirmed ?? false;
 }
-
-

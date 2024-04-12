@@ -6,7 +6,7 @@ import 'package:isms/controllers/theme_management/theme_config.dart';
 import 'package:provider/provider.dart';
 import 'package:isms/controllers/user_management/logged_in_state.dart';
 import 'package:isms/utilities/navigation.dart';
-import 'package:isms/views/screens/admin_screens/admin_console/all_users_screen.dart';
+import 'package:isms/views/screens/admin_screens/admin_console/admin_panel.dart';
 import 'package:isms/views/screens/admin_screens/admin_console/users_analytics_stats_screen.dart';
 import 'package:isms/views/screens/course_page.dart';
 import 'package:isms/views/screens/testing/test_runner.dart';
@@ -66,19 +66,20 @@ class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
     //   actionWidgets.add(_getActionIconButton(context, Icons.admin_panel_settings_rounded,
     //       AppLocalizations.of(context)!.buttonAdminConsole, () => context.goNamed(NamedRoutes.adminConsole.name)));
     // }
+
     /// ↑↑↑ To be removed ///
 
-    // actionWidgets.add(_getActionIconButton(
-    //     context,
-    //     Icons.notifications,
-    //     AppLocalizations.of(context)!.buttonNotificationPage,
-    //     () => Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationPage()))));
-    //
-    // actionWidgets.add(_getActionIconButton(context, Icons.settings, AppLocalizations.of(context)!.buttonSettings,
-    //     () => Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingsPage()))));
-    //
-    // actionWidgets.add(_getVerticalDivider());
-    // actionWidgets.add(_getLogoutButton(context));
+    actionWidgets.add(_getActionIconButton(
+        context,
+        Icons.notifications,
+        AppLocalizations.of(context)!.buttonNotificationPage,
+        () => Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationPage()))));
+
+    actionWidgets.add(_getActionIconButton(context, Icons.settings, AppLocalizations.of(context)!.buttonSettings,
+        () => Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingsPage()))));
+
+    actionWidgets.add(_getVerticalDivider());
+    actionWidgets.add(_getLogoutButton(context));
 
     return actionWidgets;
   }

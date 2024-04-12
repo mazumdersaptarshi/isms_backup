@@ -97,32 +97,29 @@ class _UsersPerformanceOverviewSectionState extends State<UsersPerformanceOvervi
     return Container(
       width: MediaQuery.of(context).size.width * 0.9,
       margin: EdgeInsets.fromLTRB(80, 12, 80, 30),
-      decoration: BoxDecoration(
-        border: Border.all(color: ThemeConfig.borderColor1!, width: 2),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Container(
-        margin: EdgeInsets.all(20),
-        child: Wrap(
-          alignment: WrapAlignment.spaceBetween,
-          spacing: 8,
-          runSpacing: 8,
-          children: [
-            //Bar Graph
-            CoursesScoresOverview(
-              courses: widget.courses,
-              domainUsers: widget.domainUsers,
-            ),
-            // User Activity Over Time
-            // UserActivityOverTime(),
-            //Courses Status Pie Chart
-            CoursesStatusOverview(courses: widget.courses),
+      child: Column(
+        children: [
+          Wrap(
+            alignment: WrapAlignment.spaceBetween,
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              CoursesStatusOverview(courses: widget.courses),
 
-            UsersScoresVariationByAttempts(
-              courses: widget.courses,
-            ),
-          ],
-        ),
+              UsersScoresVariationByAttempts(
+                courses: widget.courses,
+              ),
+              //Bar Graph
+              CoursesScoresOverview(
+                courses: widget.courses,
+                domainUsers: widget.domainUsers,
+              ),
+              // User Activity Over Time
+              // UserActivityOverTime(),
+              //Courses Status Pie Chart
+            ],
+          ),
+        ],
       ),
     );
   }
