@@ -38,8 +38,7 @@ class IsmsDrawer extends StatelessWidget {
     );
   }
 
-  List<Widget> _getDrawerItems(
-      BuildContext context, Color iconColor, Color textColor, double fontSize) {
+  List<Widget> _getDrawerItems(BuildContext context, Color iconColor, Color textColor, double fontSize) {
     final LoggedInState loggedInState = context.watch<LoggedInState>();
     final List<Widget> drawerItemWidgets = [];
 
@@ -76,22 +75,10 @@ class IsmsDrawer extends StatelessWidget {
     //     ),
     //   ),
     // );
-    drawerItemWidgets.add(_getDrawerItem(
-        context,
-        Icons.home,
-        AppLocalizations.of(context)!.buttonHome,
-        NamedRoutes.home.name,
-        iconColor,
-        textColor,
-        fontSize));
-    drawerItemWidgets.add(_getDrawerItem(
-        context,
-        Icons.list,
-        AppLocalizations.of(context)!.buttonCourseList,
-        NamedRoutes.assignments.name,
-        iconColor,
-        textColor,
-        fontSize));
+    drawerItemWidgets.add(_getDrawerItem(context, Icons.home, AppLocalizations.of(context)!.buttonHome,
+        NamedRoutes.home.name, iconColor, textColor, fontSize));
+    drawerItemWidgets.add(_getDrawerItem(context, Icons.list, AppLocalizations.of(context)!.buttonCourseList,
+        NamedRoutes.assignments.name, iconColor, textColor, fontSize));
     // drawerItemWidgets.add(Divider());
     if (loggedInState.currentUserRole == 'admin') {
       // Admin actions are grouped under a visually distinct header
@@ -106,22 +93,10 @@ class IsmsDrawer extends StatelessWidget {
       //     ),
       //   ),
       // );
+      drawerItemWidgets.add(_getDrawerItem(context, Icons.admin_panel_settings_rounded,
+          AppLocalizations.of(context)!.buttonAdminPanel, NamedRoutes.adminPanel.name, iconColor, textColor, fontSize));
       drawerItemWidgets.add(_getDrawerItem(
-          context,
-          Icons.admin_panel_settings_rounded,
-          AppLocalizations.of(context)!.buttonAdminConsole,
-          NamedRoutes.adminConsole.name,
-          iconColor,
-          textColor,
-          fontSize));
-      drawerItemWidgets.add(_getDrawerItem(
-          context,
-          Icons.people_rounded,
-          'All Users',
-          NamedRoutes.allUsers.name,
-          iconColor,
-          textColor,
-          fontSize));
+          context, Icons.people_rounded, 'All Users', NamedRoutes.adminPanel.name, iconColor, textColor, fontSize));
 
       // drawerItemWidgets.add(_getDrawerItem(
       //     context,
@@ -132,32 +107,25 @@ class IsmsDrawer extends StatelessWidget {
       //     textColor,
       //     fontSize));
     }
-      drawerItemWidgets.add(_getDrawerItem(
-          context,
-          Icons.settings,
-          AppLocalizations.of(context)!.buttonSettings,
-          NamedRoutes.settings.name,
-          iconColor,
-          textColor,
-          fontSize));
-    drawerItemWidgets.add(_getDrawerItem(
-        context,
-        Icons.add_to_queue,
-        'NavigationRail',
-        NamedRoutes.navigationRail.name,
-        iconColor,
-        textColor,
-        fontSize));
+    drawerItemWidgets.add(_getDrawerItem(context, Icons.settings, AppLocalizations.of(context)!.buttonSettings,
+        NamedRoutes.settings.name, iconColor, textColor, fontSize));
+    // drawerItemWidgets.add(_getDrawerItem(
+    //     context,
+    //     Icons.add_to_queue,
+    //     'NavigationRail',
+    //     NamedRoutes.navigationRail.name,
+    //     iconColor,
+    //     textColor,
+    //     fontSize));
 
     return drawerItemWidgets;
   }
 
-  Widget _getDrawerItem(BuildContext context, IconData icon, String label,
-      String route, Color iconColor, Color textColor, double fontSize) {
+  Widget _getDrawerItem(BuildContext context, IconData icon, String label, String route, Color iconColor,
+      Color textColor, double fontSize) {
     return ListTile(
       leading: Icon(icon, color: iconColor),
-      title:
-          Text(label, style: TextStyle(color: textColor, fontSize: fontSize)),
+      title: Text(label, style: TextStyle(color: textColor, fontSize: fontSize)),
       onTap: () {
         context.goNamed(route);
         Navigator.pop(context); // Then close the drawer
@@ -165,17 +133,15 @@ class IsmsDrawer extends StatelessWidget {
     );
   }
 
-Widget _getLogoutItem(
-    BuildContext context, Color iconColor, Color textColor, double fontSize) {
-  return ListTile(
-    leading: Icon(Icons.logout, color: iconColor),
-    title: Text(AppLocalizations.of(context)!.buttonLogout,
-        style: TextStyle(color: textColor, fontSize: fontSize)),
-    onTap: () async{
-      await LoggedInState.logout().then((value) {
-        context.goNamed(NamedRoutes.login.name);
-      });
-    },
-  );
-}
+  Widget _getLogoutItem(BuildContext context, Color iconColor, Color textColor, double fontSize) {
+    return ListTile(
+      leading: Icon(Icons.logout, color: iconColor),
+      title: Text(AppLocalizations.of(context)!.buttonLogout, style: TextStyle(color: textColor, fontSize: fontSize)),
+      onTap: () async {
+        await LoggedInState.logout().then((value) {
+          context.goNamed(NamedRoutes.login.name);
+        });
+      },
+    );
+  }
 }

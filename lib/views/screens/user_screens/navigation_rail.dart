@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:isms/controllers/user_management/logged_in_state.dart';
-import '../admin_screens/admin_console/all_users_screen.dart';
+
+// import '../admin_screens/admin_console/all_users_screen.dart';
 import 'package:isms/views/screens/admin_screens/notification_page.dart';
 import 'package:isms/views/screens/admin_screens/settings_page.dart';
 import 'package:isms/views/widgets/shared_widgets/custom_app_bar.dart';
@@ -76,7 +77,7 @@ class _NavigationRailWidgetState extends State<NavigationRailWidget> {
                               TextButton(
                                 child: Text(
                                   AppLocalizations.of(context)!.buttonMenu,
-                                  style: TextStyle(fontWeight: FontWeight.bold ,fontSize: 16.0, color: unselectedColor),
+                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0, color: unselectedColor),
                                 ),
                                 onPressed: () => setState(() => isExtended = !isExtended),
                               ),
@@ -92,31 +93,30 @@ class _NavigationRailWidgetState extends State<NavigationRailWidget> {
                     left: 20.0,
                     child: isExtended
                         ? InkWell(
-                      onTap: () async {
-                        await LoggedInState.logout();
-                        Navigator.pushReplacementNamed(context, '/login');
-                      },
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min, // Allow Row to shrink
-                        children: [
-                          IconButton(
+                            onTap: () async {
+                              await LoggedInState.logout();
+                              Navigator.pushReplacementNamed(context, '/login');
+                            },
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min, // Allow Row to shrink
+                              children: [
+                                IconButton(
+                                  icon: Icon(Icons.logout, color: unselectedColor), // Use unselectedColor
+                                  onPressed: () async {},
+                                ),
+                                Text(
+                                  AppLocalizations.of(context)!.buttonLogout,
+                                  style: labelStyle.copyWith(color: unselectedColor), // Use unselectedColor
+                                ),
+                              ],
+                            ),
+                          )
+                        : IconButton(
                             icon: Icon(Icons.logout, color: unselectedColor), // Use unselectedColor
                             onPressed: () async {
+                              await LoggedInState.logout();
+                              Navigator.pushReplacementNamed(context, '/login');
                             },
-                          ),
-                          Text(
-                            AppLocalizations.of(context)!.buttonLogout,
-                            style: labelStyle.copyWith(color: unselectedColor), // Use unselectedColor
-                          ),
-                        ],
-                      ),
-                    )
-                        : IconButton(
-                      icon: Icon(Icons.logout, color: unselectedColor), // Use unselectedColor
-                      onPressed: () async {
-                        await LoggedInState.logout();
-                        Navigator.pushReplacementNamed(context, '/login');
-                      },
                           ),
                   ),
                 ],
@@ -165,7 +165,7 @@ class _NavigationRailWidgetState extends State<NavigationRailWidget> {
       case 2:
         return SettingsPage();
       case 3:
-        return AllUsers();
+        return HomePage();
       case 4:
         return NotificationPage();
       default:
