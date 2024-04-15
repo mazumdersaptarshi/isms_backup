@@ -86,43 +86,43 @@ class UserProgressAnalytics {
     return userDetailsMap;
   }
 
-  static Map<String, dynamic> buildUserExamsDataMapForCourse(Map allUsersData, String uid, String courseId) {
-    Map<String, dynamic> exams = {};
+  // static Map<String, dynamic> buildUserExamsDataMapForCourse(Map allUsersData, String uid, String courseId) {
+  //   Map<String, dynamic> exams = {};
+  //
+  //   try {
+  //     Map all_exams = allUsersData[uid][DatabaseFields.exams.name];
+  //     all_exams.forEach((key, value) {
+  //       if (value.courseId == courseId) {
+  //         exams[value.examId] = value.attempts;
+  //       }
+  //     });
+  //   } catch (e) {}
+  //
+  //   exams = _buildExamsMapForCourseForUser(exams: exams);
+  //   return exams;
+  // }
 
-    try {
-      Map all_exams = allUsersData[uid][DatabaseFields.exams.name];
-      all_exams.forEach((key, value) {
-        if (value.courseId == courseId) {
-          exams[value.examId] = value.attempts;
-        }
-      });
-    } catch (e) {}
-
-    exams = _buildExamsMapForCourseForUser(exams: exams);
-    return exams;
-  }
-
-  static Map<String, dynamic> _buildExamsMapForCourseForUser({required Map<String, dynamic> exams}) {
-    Map<String, dynamic> userExamsProgress = {};
-    exams.forEach((examId, value) {
-      Map<String, dynamic> examData = ExamProvider.getExamByIDLocal(examId: examId);
-      List listOfAttempts = [];
-      value.forEach((key, value) {
-        if (value is UserAttempts) {
-          listOfAttempts.add(value.toMap());
-        } else {
-          listOfAttempts.add(value);
-        }
-      });
-      userExamsProgress[examId] = {
-        'examId': examId,
-        'examTitle': examData['examTitle'],
-        'attempts': listOfAttempts,
-      };
-    });
-
-    return userExamsProgress;
-  }
+  // static Map<String, dynamic> _buildExamsMapForCourseForUser({required Map<String, dynamic> exams}) {
+  //   Map<String, dynamic> userExamsProgress = {};
+  //   exams.forEach((examId, value) {
+  //     Map<String, dynamic> examData = ExamProvider.getExamByIDLocal(examId: examId);
+  //     List listOfAttempts = [];
+  //     value.forEach((key, value) {
+  //       if (value is UserAttempts) {
+  //         listOfAttempts.add(value.toMap());
+  //       } else {
+  //         listOfAttempts.add(value);
+  //       }
+  //     });
+  //     userExamsProgress[examId] = {
+  //       'examId': examId,
+  //       'examTitle': examData['examTitle'],
+  //       'attempts': listOfAttempts,
+  //     };
+  //   });
+  //
+  //   return userExamsProgress;
+  // }
 
   static Map<String, dynamic> getSummaryMapForUser(
       {required Map allUsersData, required Map userAllData, required String uid}) {

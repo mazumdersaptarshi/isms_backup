@@ -193,182 +193,185 @@ class _CoursesScoresOverviewState extends State<CoursesScoresOverview> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        HoverableSectionContainer(
-          onHover: (bool) {},
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Scores Drilldown',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: ThemeConfig.primaryTextColor,
-                ),
-              ),
-              Divider(),
-              SizedBox(
-                height: 40,
-              ),
-              Wrap(
-                spacing: 20, // Horizontal space between children
-                runSpacing: 20, // Vertical space between runs
-                alignment: WrapAlignment.start,
-                children: [
-                  CustomDropdownButton(
-                    label: 'Course',
-                    buttonText: 'Select Course',
-                    onButtonPressed: () => _showCourseSingleSelectModalForBarChart(context, items: widget.courses),
+        ConstrainedBox(
+          constraints: BoxConstraints(minWidth: double.infinity),
+          child: HoverableSectionContainer(
+            onHover: (bool) {},
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Scores Drilldown',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: ThemeConfig.primaryTextColor,
                   ),
-                  if (_examsBarChartData.isNotEmpty)
-                    CustomDropdownButton(
-                      label: 'Exam',
-                      buttonText: 'Select Exam',
-                      onButtonPressed: () => _showExamSingleSelectModalForBarChart(context, items: _examsBarChartData),
-                    ),
-                  // if (_selectedExamBarChart != null)
-                  //   CustomDropdownWidget(
-                  //     label: 'Metrics',
-                  //     hintText: 'Select Metrics',
-                  //     value: _selectedMetricForBarChart,
-                  //     items: barChartMetrics,
-                  //     onChanged: (newValue) {
-                  //       setState(() {
-                  //         _selectedMetricForBarChart = newValue;
-                  //       });
-                  //       _fetchBarChartData(_selectedExamBarChart!, newValue!.key);
-                  //     },
-                  //   ),
-                ],
-              ),
-              if (_selectedCourse != null)
-                SelectedItemsWidget(label: 'Selected Course', selectedItemsList: [_selectedCourse!]),
-              if (_selectedExam != null)
-                SelectedItemsWidget(label: 'Selected Exam', selectedItemsList: [_selectedExam!]),
-              if (_selectedUsersList.isNotEmpty)
-                SelectedItemsWidget(
-                    key: ValueKey(_selectedUsersList), label: 'Selected Users', selectedItemsList: _selectedUsersList),
-              SizedBox(
-                height: 20,
-              ),
-              // CustomBarChart(key: ValueKey(_barChartData), barChartValuesData: _barChartData),
-            ],
-          ),
-        ),
-        if (_selectedExamBarChart != null)
-          Column(
-            children: [
-              SizedBox(
-                height: 20,
-              ),
-              HoverableSectionContainer(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                ),
+                // Divider(),
+                SizedBox(
+                  height: 20,
+                ),
+                Wrap(
+                  spacing: 20, // Horizontal space between children
+                  runSpacing: 20, // Vertical space between runs
+                  alignment: WrapAlignment.start,
                   children: [
-                    CustomBarChart(
-                      key: ValueKey([_filteredBarChartData, _scoreLimit, _currentPage]),
-                      barChartValuesData: _filteredBarChartData,
-                      scoreLimit: _scoreLimit,
-                      totalPages: _totalPages,
+                    CustomDropdownButton(
+                      label: 'Course',
+                      buttonText: _selectedCourse != null ? _selectedCourse!.itemName : 'Select Course',
+                      onButtonPressed: () => _showCourseSingleSelectModalForBarChart(context, items: widget.courses),
                     ),
-                    Spacer(),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text('Refine Data'),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        CustomDropdownWidget<int>(
-                          // label: 'Filter',
-                          hintText: 'Filter Score Range',
-                          value: scoreLimit,
-                          items: scoreFilterList,
-                          onChanged: (value) {
-                            setState(() {
-                              scoreLimit = value;
-                              _scoreLimit = scoreLimit!.value;
-                              _applyScoreFilter(scoreLimit: _scoreLimit);
-                              // calculateTotalPagesBasedOnFilter(_scoreLimit);
-                              _currentPage = 0;
-                            });
-                          },
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        CustomDropdownWidget(
-                          // label: 'Metrics',
-                          hintText: 'Select Metrics',
-                          value: _selectedMetricForBarChart,
-                          items: barChartMetrics,
-                          onChanged: (newValue) {
-                            setState(() {
-                              _selectedMetricForBarChart = newValue;
-                            });
-                            _fetchBarChartData(_selectedExamBarChart!, newValue!.value);
-                          },
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        CustomDropdownButton(
-                          // label: 'View and Select Users',
-                          buttonText: 'View and Select Users',
-                          onButtonPressed: () => _showMultiSelectUsersModal(widget.domainUsers),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 10, bottom: 8),
-                              child: Text(
-                                '',
-                              ),
-                            ),
-                            if (_selectedUsersList.length > 0)
-                              TextButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      setState(() {
-                                        _selectedUsersList = [];
-                                        _userIdsForFilter = [];
-                                      });
-                                    });
-                                    if (_selectedMetricForBarChart == null) {
-                                      _applyUserFiltersBarChartData(
-                                        examId: _selectedExamBarChart!,
-                                        metric: 'avgScore',
-                                        userIds: _userIdsForFilter,
-                                      );
-                                    } else {
-                                      _applyUserFiltersBarChartData(
-                                        examId: _selectedExamBarChart!,
-                                        metric: _selectedMetricForBarChart!.key,
-                                        userIds: _userIdsForFilter,
-                                      );
-                                    }
-                                  },
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.close_rounded),
-                                      SizedBox(
-                                        width: 4,
-                                      ),
-                                      Text('Clear Selection'),
-                                    ],
-                                  )),
-                          ],
-                        ),
-                      ],
-                    ),
+                    if (_examsBarChartData.isNotEmpty)
+                      CustomDropdownButton(
+                        label: 'Exam',
+                        buttonText: _selectedExam != null ? _selectedExam!.itemName : 'Select Exam',
+                        onButtonPressed: () =>
+                            _showExamSingleSelectModalForBarChart(context, items: _examsBarChartData),
+                      ),
+                    // if (_selectedExamBarChart != null)
+                    //   CustomDropdownWidget(
+                    //     label: 'Metrics',
+                    //     hintText: 'Select Metrics',
+                    //     value: _selectedMetricForBarChart,
+                    //     items: barChartMetrics,
+                    //     onChanged: (newValue) {
+                    //       setState(() {
+                    //         _selectedMetricForBarChart = newValue;
+                    //       });
+                    //       _fetchBarChartData(_selectedExamBarChart!, newValue!.key);
+                    //     },
+                    //   ),
                   ],
                 ),
-                onHover: (bool) {},
-              ),
-            ],
+                // if (_selectedCourse != null)
+                //   SelectedItemsWidget(label: 'Selected Course', selectedItemsList: [_selectedCourse!]),
+                // if (_selectedExam != null)
+                //   SelectedItemsWidget(label: 'Selected Exam', selectedItemsList: [_selectedExam!]),
+                if (_selectedUsersList.isNotEmpty)
+                  SelectedItemsWidget(
+                      key: ValueKey(_selectedUsersList),
+                      label: 'Selected Users',
+                      selectedItemsList: _selectedUsersList),
+                SizedBox(
+                  height: 20,
+                ),
+                if (_selectedExamBarChart != null)
+                  Column(
+                    children: [
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CustomBarChart(
+                            key: ValueKey([_filteredBarChartData, _scoreLimit, _currentPage]),
+                            barChartValuesData: _filteredBarChartData,
+                            scoreLimit: _scoreLimit,
+                            totalPages: _totalPages,
+                          ),
+                          Spacer(),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text('Refine Data'),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              CustomDropdownWidget<int>(
+                                // label: 'Filter',
+                                hintText: 'Filter Score Range',
+                                value: scoreLimit,
+                                items: scoreFilterList,
+                                onChanged: (value) {
+                                  setState(() {
+                                    scoreLimit = value;
+                                    _scoreLimit = scoreLimit!.value;
+                                    _applyScoreFilter(scoreLimit: _scoreLimit);
+                                    // calculateTotalPagesBasedOnFilter(_scoreLimit);
+                                    _currentPage = 0;
+                                  });
+                                },
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              CustomDropdownWidget(
+                                // label: 'Metrics',
+                                hintText: 'Select Metrics',
+                                value: _selectedMetricForBarChart,
+                                items: barChartMetrics,
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    _selectedMetricForBarChart = newValue;
+                                  });
+                                  _fetchBarChartData(_selectedExamBarChart!, newValue!.value);
+                                },
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              CustomDropdownButton(
+                                // label: 'View and Select Users',
+                                buttonText: 'View and Select Users',
+                                onButtonPressed: () => _showMultiSelectUsersModal(widget.domainUsers),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 10, bottom: 8),
+                                    child: Text(
+                                      '',
+                                    ),
+                                  ),
+                                  if (_selectedUsersList.length > 0)
+                                    TextButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            setState(() {
+                                              _selectedUsersList = [];
+                                              _userIdsForFilter = [];
+                                            });
+                                          });
+                                          if (_selectedMetricForBarChart == null) {
+                                            _applyUserFiltersBarChartData(
+                                              examId: _selectedExamBarChart!,
+                                              metric: 'avgScore',
+                                              userIds: _userIdsForFilter,
+                                            );
+                                          } else {
+                                            _applyUserFiltersBarChartData(
+                                              examId: _selectedExamBarChart!,
+                                              metric: _selectedMetricForBarChart!.key,
+                                              userIds: _userIdsForFilter,
+                                            );
+                                          }
+                                        },
+                                        child: Row(
+                                          children: [
+                                            Icon(Icons.close_rounded),
+                                            SizedBox(
+                                              width: 4,
+                                            ),
+                                            Text('Clear Selection'),
+                                          ],
+                                        )),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                // CustomBarChart(key: ValueKey(_barChartData), barChartValuesData: _barChartData),
+              ],
+            ),
           ),
+        ),
       ],
     );
   }

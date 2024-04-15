@@ -99,25 +99,30 @@ class _UsersPerformanceOverviewSectionState extends State<UsersPerformanceOvervi
       margin: EdgeInsets.fromLTRB(80, 12, 80, 30),
       child: Column(
         children: [
-          Wrap(
-            alignment: WrapAlignment.spaceBetween,
-            spacing: 8,
-            runSpacing: 8,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               CoursesStatusOverview(courses: widget.courses),
-
+              SizedBox(
+                width: 20,
+              ),
               UsersScoresVariationByAttempts(
                 courses: widget.courses,
               ),
               //Bar Graph
-              CoursesScoresOverview(
-                courses: widget.courses,
-                domainUsers: widget.domainUsers,
-              ),
+
               // User Activity Over Time
               // UserActivityOverTime(),
               //Courses Status Pie Chart
             ],
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          CoursesScoresOverview(
+            courses: widget.courses,
+            domainUsers: widget.domainUsers,
           ),
         ],
       ),

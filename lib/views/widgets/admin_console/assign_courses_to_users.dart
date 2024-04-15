@@ -181,6 +181,17 @@ class _AssignCoursesToUserSectionState extends State<AssignCoursesToUserSection>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text(
+            'Assign course to users',
+            style: TextStyle(
+              fontSize: 16,
+              color: ThemeConfig.primaryTextColor,
+            ),
+          ),
+          // Divider(),
+          SizedBox(
+            height: 20,
+          ),
           // Text(
           //   'Assign course to user',
           //   style: TextStyle(

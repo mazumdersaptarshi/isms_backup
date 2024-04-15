@@ -9,7 +9,7 @@ import 'package:isms/models/course/course_info.dart';
 import 'package:isms/views/widgets/shared_widgets/selectable_item.dart';
 import 'package:isms/views/widgets/shared_widgets/selected_items_display_widget.dart';
 import 'package:isms/views/widgets/shared_widgets/single_select_search_widget.dart';
-
+import 'package:easy_pie_chart/easy_pie_chart.dart';
 import 'charts/custom_pie_chart_widget.dart';
 import 'custom_dropdown_button_widget.dart';
 import 'hoverable_section_container.dart';
@@ -39,28 +39,28 @@ class _CoursesStatusOverviewState extends State<CoursesStatusOverview> {
   SelectableItem? _selectedExam;
   List<SelectableItem> _examsPieChartData = [];
 
-  // List<PieData> _piesData = [];
-  // final List<PieData> piesData2 = [
-  //   PieData(value: 30, color: Colors.red),
-  //   PieData(value: 50, color: Colors.blue),
-  //   PieData(value: 30, color: Colors.yellow),
-  //   PieData(value: 30, color: Colors.lightGreen),
-  // ];
+  List<PieData> _piesData = [];
+  final List<PieData> piesData2 = [
+    PieData(value: 30, color: Colors.red),
+    PieData(value: 50, color: Colors.blue),
+    PieData(value: 30, color: Colors.yellow),
+    PieData(value: 30, color: Colors.lightGreen),
+  ];
   String tapIndex = '';
 
   String _passedValue = '';
 
-  // void setPieData(List<CustomPieChartData> pieChartData) {
-  //   _piesData = [];
-  //   pieChartData.forEach((element) {
-  //     if (element.label == 'Passed') {
-  //       print(element.label);
-  //
-  //       _passedValue = element.percent.toString();
-  //     }
-  //     _piesData.add(PieData(value: element.percent, color: element.color!));
-  //   });
-  // }
+  void setPieData(List<CustomPieChartData> pieChartData) {
+    _piesData = [];
+    pieChartData.forEach((element) {
+      if (element.label == 'Passed') {
+        print(element.label);
+
+        _passedValue = element.percent.toString();
+      }
+      _piesData.add(PieData(value: element.percent, color: element.color!));
+    });
+  }
 
   Future<void> _fetchExamsPie(String courseId) async {
     var exams = await adminState.getExamsListForCourse(courseId: courseId);
@@ -111,7 +111,7 @@ class _CoursesStatusOverviewState extends State<CoursesStatusOverview> {
     var pieChartData = await adminState.getExamOverallResults(examId: examId);
     setState(() {
       _pieChartData = pieChartData;
-      // setPieData(_pieChartData);
+      setPieData(_pieChartData);
     });
   }
 
@@ -143,83 +143,99 @@ class _CoursesStatusOverviewState extends State<CoursesStatusOverview> {
 
   @override
   Widget build(BuildContext context) {
-    return ConstrainedBox(
-        constraints: BoxConstraints(maxWidth: 800),
+    return Expanded(
         child: HoverableSectionContainer(
-          onHover: (bool) {},
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+      onHover: (bool) {},
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Courses status overview',
+            style: TextStyle(
+              fontSize: 16,
+              color: ThemeConfig.primaryTextColor!,
+            ),
+          ),
+          // Divider(),
+          SizedBox(
+            height: 20,
+          ),
+          Wrap(
+            spacing: 20, // Horizontal space between children
+            runSpacing: 20, // Vertical space between runs
+            alignment: WrapAlignment.start,
             children: [
-              Text(
-                'Courses status overview',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: ThemeConfig.primaryTextColor!,
+              CustomDropdownButton(
+                label: 'Course',
+                buttonText: _selectedCourse != null ? _selectedCourse!.itemName : 'Select Course',
+                onButtonPressed: () => _showCourseSingleSelectModalForPieChart(context, items: widget.courses),
+              ),
+              if (_examsPieChartData.isNotEmpty)
+                CustomDropdownButton(
+                  label: 'Exam',
+                  buttonText: _selectedExam != null ? _selectedExam!.itemName : 'Select Exam',
+                  onButtonPressed: () => _showExamSingleSelectModalForPieChart(context, items: _examsPieChartData),
                 ),
-              ),
-              Divider(),
-              SizedBox(
-                height: 40,
-              ),
-              Wrap(
-                spacing: 20, // Horizontal space between children
-                runSpacing: 20, // Vertical space between runs
-                alignment: WrapAlignment.start,
-                children: [
-                  CustomDropdownButton(
-                    label: 'Course',
-                    buttonText: 'Select Course',
-                    onButtonPressed: () => _showCourseSingleSelectModalForPieChart(context, items: widget.courses),
-                  ),
-                  if (_examsPieChartData.isNotEmpty)
-                    CustomDropdownButton(
-                      label: 'Exam',
-                      buttonText: 'Select Exam',
-                      onButtonPressed: () => _showExamSingleSelectModalForPieChart(context, items: _examsPieChartData),
-                    ),
-                ],
-              ),
-              if (_selectedCourse != null)
-                SelectedItemsWidget(label: 'Selected Course', selectedItemsList: [_selectedCourse!]),
-              if (_selectedExam != null)
-                SelectedItemsWidget(label: 'Selected Exam', selectedItemsList: [_selectedExam!]),
-
-              // CustomPieChartWidget(
-              //   pieData: _pieChartData,
-              // ),
-
-              // if (_piesData.isNotEmpty)
-              //   EasyPieChart(
-              //     key: const Key('pie 2'),
-              //     children: _piesData,
-              //     borderEdge: StrokeCap.round,
-              //
-              //     pieType: PieType.crust,
-              //     showValue: true,
-              //     centerText: 'Passed Status',
-              //     onTap: (index) {
-              //       tapIndex = index.toString();
-              //       setState(() {});
-              //     },
-              //     gap: 5,
-              //     borderWidth: 20,
-              //     start: 10,
-              //     animateFromEnd: true,
-              //     size: 190,
-              //     child: Center(
-              //         child: Column(
-              //       mainAxisAlignment: MainAxisAlignment.center,
-              //       children: [
-              //         Text('${_passedValue.toString()}%'),
-              //         Text('Passed'),
-              //       ],
-              //     )),
-              //     // child: Center(child: Text('')),
-              //   ),
-
-              // if (_piesData.isNotEmpty) buildLegend(_pieChartData),
             ],
           ),
-        ));
+          // if (_selectedCourse != null)
+          //   SelectedItemsWidget(label: 'Selected Course', selectedItemsList: [_selectedCourse!]),
+          // if (_selectedExam != null) SelectedItemsWidget(label: 'Selected Exam', selectedItemsList: [_selectedExam!]),
+
+          // CustomPieChartWidget(
+          //   pieData: _pieChartData,
+          // ),
+
+          if (_piesData.isNotEmpty)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  padding: EdgeInsets.all(20),
+                  child: EasyPieChart(
+                    key: const Key('pie 2'),
+                    children: _piesData,
+                    borderEdge: StrokeCap.round,
+
+                    pieType: PieType.crust,
+                    showValue: false,
+                    centerText: 'Passed Status',
+                    onTap: (index) {
+                      tapIndex = index.toString();
+                      setState(() {});
+                    },
+                    gap: 3,
+                    borderWidth: 20,
+                    start: 10,
+                    animateFromEnd: true,
+                    size: 250,
+                    child: Center(
+                        child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('${_passedValue.toString()}%',
+                            style: TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold,
+                            )),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          'Passed',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                      ],
+                    )),
+                    // child: Center(child: Text('')),
+                  ),
+                ),
+                SizedBox(width: 20),
+                buildLegend(_pieChartData),
+              ],
+            ),
+        ],
+      ),
+    ));
   }
 }

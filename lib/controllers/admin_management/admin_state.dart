@@ -17,6 +17,8 @@ import 'package:isms/models/charts/bar_charts/custom_bar_chart_data.dart';
 import 'package:isms/models/charts/box_and_whisker_charts/custom_box_and_whisker_chart_data.dart';
 import 'package:isms/models/charts/pie_charts/custom_pie_chart_data.dart';
 import 'package:isms/models/course/course_info.dart';
+import 'package:isms/models/course/exam.dart';
+import 'package:isms/models/course/exam_full.dart';
 import 'package:isms/models/course/exam_info.dart';
 import 'package:isms/models/user_progress/course_assignment_info.dart';
 import 'package:isms/models/user_progress/user_course_assignment.dart';
@@ -182,6 +184,19 @@ class AdminState {
       });
     }
     return userSummaryList;
+  }
+
+  Future<dynamic> getExam(String examId) async {
+    // Exam exam = Exam();
+    // return exam;
+    Map<String, dynamic> params = {
+      "examID": examId,
+    };
+    String jsonStringParams = jsonEncode(params);
+    String encodedJsonStringParams = Uri.encodeComponent(jsonStringParams);
+    http.Response response = await http
+        .get(Uri.parse(localGetURL3 + 'exam_content' + '&param1=$examId' + '&params=$encodedJsonStringParams'));
+    print(response.body);
   }
 
   Future<List<UserExamAttempt>> getExamAttemptsList(
@@ -691,8 +706,8 @@ Please select all the appropriate fields properly!''';
       'Content-Type': 'application/json',
       'X-CSRF-Token': CSRFToken,
     };
-
-    var response = await http.post(url, headers: headers, body: jsonStringParams);
+    // http.Response response = await http.get(Uri.parse(localGetURL + 'domain_users'));
+    var response = await http.post(remoteURL, headers: headers, body: jsonStringParams);
 
     return response.statusCode;
   }

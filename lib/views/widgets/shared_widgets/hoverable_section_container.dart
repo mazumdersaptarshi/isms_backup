@@ -35,23 +35,13 @@ class _HoverableSectionContainerState extends State<HoverableSectionContainer> {
       onHover: _onHover,
       onExit: _onExit,
       child: Container(
-        padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.015),
+        padding: EdgeInsets.fromLTRB(20, 15, 20, 10), // EdgeInsets.all(10),
         decoration: BoxDecoration(
           border: Border.all(color: _isHovered ? ThemeConfig.hoverBorderColor! : Colors.transparent, width: 2
               // isHoveringMap[index] == true ? primary! : Colors.grey.shade200,
               ),
           borderRadius: BorderRadius.circular(6),
           color: ThemeConfig.primaryCardColor,
-          // boxShadow: _isHovered
-          //     ? [
-          //         BoxShadow(
-          //           color: ThemeConfig.hoverShadowColor!,
-          //           spreadRadius: 3,
-          //           blurRadius: 40,
-          //           offset: Offset(0, 3),
-          //         ),
-          //       ]
-          //     : [],
           boxShadow: [
             BoxShadow(
               color: ThemeConfig.hoverShadowColor!,

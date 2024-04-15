@@ -49,29 +49,11 @@ class _AdminActionsState extends State<AdminActions> {
       width: MediaQuery.of(context).size.width * 0.9,
       margin: EdgeInsets.fromLTRB(80, 12, 80, 30),
       // margin: EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            margin: const EdgeInsets.only(left: 20.0),
-            child: buildSecondaryHeader(title: 'Assign Courses to Users'),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          AssignCoursesToUserSection(
-            courses: widget.courses,
-            allDomainUsersSummary: widget.allDomainUsersSummary,
-            CSRFToken: widget.CSRFToken,
-            JWT: widget.JWT,
-          ),
-          // ViewUsersCoursesAssignmentsSection(allDomainUsersSummary: widget.allDomainUsersSummary),
-          // ElevatedButton(
-          //     onPressed: () async {
-          //       var response = adminState.getUsersCourseAssignments(uid: '');
-          //     },
-          //     child: Text('Get Users Course Assignments')),
-        ],
+      child: AssignCoursesToUserSection(
+        courses: widget.courses,
+        allDomainUsersSummary: widget.allDomainUsersSummary,
+        CSRFToken: widget.CSRFToken,
+        JWT: widget.JWT,
       ),
     );
   }

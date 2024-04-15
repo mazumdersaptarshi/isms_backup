@@ -6,15 +6,9 @@ import 'package:isms/controllers/theme_management/theme_config.dart';
 import 'package:provider/provider.dart';
 import 'package:isms/controllers/user_management/logged_in_state.dart';
 import 'package:isms/utilities/navigation.dart';
-import 'package:isms/views/screens/admin_screens/admin_console/admin_panel.dart';
-import 'package:isms/views/screens/admin_screens/admin_console/users_analytics_stats_screen.dart';
-import 'package:isms/views/screens/course_page.dart';
-import 'package:isms/views/screens/testing/test_runner.dart';
-import 'package:isms/views/screens/testing/test_ui_type1/user_test_responses.dart';
+import 'package:isms/views/screens/home_screen.dart';
+import 'package:isms/views/screens/admin_screens/settings_page.dart';
 import 'package:isms/views/screens/admin_screens/notification_page.dart';
-import 'package:isms/views/screens/user_screens/navigation_rail.dart';
-import '../../screens/home_screen.dart';
-import '../../screens/admin_screens/settings_page.dart';
 
 class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
   final BuildContext? context;
@@ -28,15 +22,18 @@ class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: ThemeConfig.primaryColor,
+      elevation: 0,
+      iconTheme: IconThemeData(color: ThemeConfig.primaryTextColor),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       title: _buildTitleWithSearch(context),
-      centerTitle: false,
+      centerTitle: true,
       actions: [..._getActionWidgets(context)],
     );
   }
 
   Widget _buildTitleWithSearch(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         GestureDetector(
           onTap: () {
@@ -44,113 +41,86 @@ class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
           },
           child: Row(
             children: [
-              Icon(Icons.severe_cold_rounded),
+              Icon(
+                Icons.severe_cold_rounded,
+                color: ThemeConfig.primaryTextColor,
+              ),
               SizedBox(
                 width: 10,
               ),
               Text(
-                'ISMS',
+                'ISMS Manager',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 28,
-                ),
-              ),
-              // Conditionally show or hide the text based on screen width
-              Visibility(
-                visible: MediaQuery.of(context).size.width >= 550,
-                child: Text(
-                  ' Manager',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 28,
-                  ),
+                  fontSize: 24,
+                  color: ThemeConfig.primaryTextColor,
                 ),
               ),
             ],
           ),
         ),
-        const Spacer(), // Add a spacer to push the search box to the right
-        Row(
-          children: [
-            // Search box
-            Container(
-              height: 30,
-              width: MediaQuery.of(context).size.width * 0.20 < 300
-                  ? MediaQuery.of(context).size.width * 0.20
-                  : 300,
+        Expanded(
+          child: Center(
+            child: Container(
+              height: 40,
+              width: MediaQuery.of(context).size.width * 0.20 < 300 ? MediaQuery.of(context).size.width * 0.20 : 500,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15.0),
-                color: Colors.grey.shade200,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(width: 8),
-                  // Search icon
-                  Icon(
-                    Icons.search,
-                    size: 20.0,
-                    color: Colors.grey,
+                borderRadius: BorderRadius.circular(6.0),
+                color: ThemeConfig.primaryCardColor,
+                boxShadow: [
+                  BoxShadow(
+                    color: ThemeConfig.hoverShadowColor!,
+                    spreadRadius: 1,
+                    blurRadius: 5,
+                    offset: Offset(0, 3),
                   ),
-                  SizedBox(width: 8),
-                  // Hint text
-                  Expanded(
-                    child: TextField(
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: AppLocalizations.of(context)!.searchHint,
-                        hintStyle: TextStyle(color: Colors.grey, fontSize: 16.0),
-                      ),
-                      style: TextStyle(color: Colors.black, fontSize: 16), // Input text color
-                    ),
-                  ),
-                  SizedBox(width: 16),
                 ],
               ),
+              child: TextField(
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: AppLocalizations.of(context)!.searchHint,
+                  hintStyle: TextStyle(color: Colors.grey, fontSize: 16.0),
+                  prefixIcon: Icon(Icons.search, color: Colors.grey),
+                ),
+                style: TextStyle(color: Colors.black, fontSize: 16), // Input text color
+              ),
             ),
-          ],
+          ),
+        ),
+        // Placeholder to balance the title position
+        Opacity(
+          opacity: 0,
+          child: GestureDetector(
+            onTap: () {},
+            child: Row(
+              children: [
+                Icon(
+                  Icons.severe_cold_rounded,
+                  color: ThemeConfig.primaryTextColor,
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  'ISMS Manager',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                    color: ThemeConfig.primaryTextColor,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ],
     );
   }
 
-
-
   List<Widget> _getActionWidgets(BuildContext context) {
     final LoggedInState loggedInState = context.watch<LoggedInState>();
     final List<Widget> actionWidgets = [];
-
-    /// ↓↓↓ To be removed ///
-
-    // actionWidgets.add(_getActionIconButton(context, Icons.list, AppLocalizations.of(context)!.buttonCourseList,
-    //     () => context.goNamed(NamedRoutes.assignments.name)));
-    //
-    // actionWidgets.add(_getActionIconButton(context, Icons.track_changes, AppLocalizations.of(context)!.buttonTracking,
-    //     () => Navigator.push(context, MaterialPageRoute(builder: (context) => const TestRunner()))));
-
-    // actionWidgets.add(_getActionIconButton(
-    //     context,
-    //     Icons.notifications,
-    //     AppLocalizations.of(context)!.buttonNotificationPage,
-    //     () => Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationPage()))));
-    // actionWidgets.add(_getActionIconButton(
-    //     context,
-    //     Icons.analytics_rounded,
-    //     "Users Analytics",
-    //     () => Navigator.push(
-    //         context,
-    //         MaterialPageRoute(
-    //             builder: (context) => const UsersAnalyticsStatsScreen()))));
-    // actionWidgets.add(_getActionIconButton(context, Icons.people_outline_rounded, "All Users",
-    //     () => Navigator.push(context, MaterialPageRoute(builder: (context) => const AllUsers()))));
-    //
-    // if (loggedInState.currentUserRole == 'admin') {
-    //   actionWidgets.add(_getActionIconButton(context, Icons.admin_panel_settings_rounded,
-    //       AppLocalizations.of(context)!.buttonAdminConsole, () => context.goNamed(NamedRoutes.adminConsole.name)));
-    // }
-
-    /// ↑↑↑ To be removed ///
 
     actionWidgets.add(_getActionIconButton(
         context,
@@ -178,30 +148,6 @@ class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
     );
   }
-
-  // Widget _getTitle(BuildContext context) {
-  //   return MouseRegion(
-  //       cursor: SystemMouseCursors.click,
-  //       child: GestureDetector(
-  //           onTap: () => context.goNamed(NamedRoutes.home.name),
-  //           child: Row(
-  //             children: [
-  //               Icon(Icons.severe_cold_rounded),
-  //               SizedBox(
-  //                 width: 10,
-  //               ),
-  //               const Text(
-  //                 'ISMS Manager',
-  //                 style: TextStyle(
-  //                   // fontFamily: 'Montserrat',
-  //                   fontWeight: FontWeight.bold,
-  //                   // color: Colors.white,
-  //                   fontSize: 28,
-  //                 ),
-  //               ),
-  //             ],
-  //           )));
-  // }
 
   Widget _getLogoutButton(BuildContext context) {
     return Padding(

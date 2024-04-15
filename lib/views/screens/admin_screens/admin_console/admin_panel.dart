@@ -111,12 +111,12 @@ class _AdminPanelState extends State<AdminPanel> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                buildSectionHeader(title: 'Team'),
+                buildSectionHeader(title: 'Overview'),
                 // SizedBox(
                 //   height: 10,
                 // ),
                 Container(
-                  margin: const EdgeInsets.fromLTRB(100, 30, 100, 0), // Margin for the whole container
+                  margin: const EdgeInsets.fromLTRB(80, 30, 100, 0), // Margin for the whole container
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal, // Enable horizontal scrolling
                     child: Row(
@@ -130,13 +130,12 @@ class _AdminPanelState extends State<AdminPanel> {
                         AdminPanelItemCard(
                           height: 200,
                           width: 800,
-                          title: 'Assign Courses',
+                          title: 'Some Sick Graph',
                         ),
                       ],
                     ),
                   ),
                 ),
-                buildSectionHeader(title: 'Admin Actions'),
                 SizedBox(
                   height: 20,
                 ),
@@ -148,6 +147,7 @@ class _AdminPanelState extends State<AdminPanel> {
                         domainUsers: _allDomainUsersSummary,
                       )
                     : CircularProgressIndicator(),
+                buildSectionHeader(title: 'Admin Actions'),
 
                 _coursesLoaded
                     ? AdminActions(

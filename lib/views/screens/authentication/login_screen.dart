@@ -32,7 +32,7 @@ class LoginPageState extends State<LoginPage> {
       InitLinkHandler.initLinks(context: context);
       html.window.history.pushState({}, '', '');
       // Replace HomePage with NavigationRailWidget
-      return const NavigationRailWidget(title: "title",);
+      return HomePage();
     }
     // Provider.of<CsrfTokenProvider>(context, listen: false).setCsrfToken(_newToken);
 
@@ -40,15 +40,14 @@ class LoginPageState extends State<LoginPage> {
       body: Center(
         child: _isLoading
             ? SizedBox(
-            height: 200,
-            width:
-            MediaQuery.of(context).size.width > SCREEN_COLLAPSE_WIDTH ? 300 : MediaQuery.of(context).size.width,
-            child: loadingWidget())
+                height: 200,
+                width:
+                    MediaQuery.of(context).size.width > SCREEN_COLLAPSE_WIDTH ? 300 : MediaQuery.of(context).size.width,
+                child: loadingWidget())
             : _getLoginPageUI(),
       ),
     );
   }
-
 
   Widget _getLoginPageUI() {
     return LayoutBuilder(

@@ -9,7 +9,7 @@ class ThemeConfig {
 
     return base.copyWith(
       colorScheme: base.colorScheme,
-      scaffoldBackgroundColor: Colors.grey.shade100,
+      scaffoldBackgroundColor: Colors.grey.shade50,
     );
   }
 
@@ -46,7 +46,7 @@ class ThemeConfig {
 
   static Color? get hoverFillColor4 => isDarkMode ? Colors.grey.shade700 : getPrimaryColorShade(50);
 
-  static Color get primaryTextColor => isDarkMode ? Colors.grey.shade300 : Colors.grey.shade700;
+  static Color get primaryTextColor => isDarkMode ? Colors.grey.shade300 : Colors.grey.shade800;
 
   static Color? get secondaryTextColor => isDarkMode ? Colors.grey.shade500 : primaryColor;
 

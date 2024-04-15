@@ -351,7 +351,11 @@ class _CourseListState extends State<CourseList> {
                 alignment: Alignment.centerLeft,
                 child: sectionTotal == completedSectionTotal
                     ? ElevatedButton(
-                        onPressed: () => print(exam.examTitle),
+                        onPressed: () {
+                          print('${exam.examTitle}, ${exam.examId}');
+                          context.goNamed(NamedRoutes.exam.name,
+                              pathParameters: {NamedRoutePathParameters.examId.name: exam.examId});
+                        },
                         child: Text(AppLocalizations.of(context)!.buttonStartExam))
                     : ElevatedButton(
                         onPressed: null, child: Text(AppLocalizations.of(context)!.buttonStartExamDisabled))),

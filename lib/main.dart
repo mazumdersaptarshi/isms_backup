@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:isms/controllers/exam_management/exam_provider.dart';
 import 'package:isms/controllers/reminders_management/reminders_provider.dart';
 import 'package:isms/controllers/storage/hive_service/hive_service.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart';
@@ -92,6 +93,9 @@ class IsmsApp extends StatelessWidget {
             }),
         ChangeNotifierProvider<RemindersProvider>(create: (context) {
           return RemindersProvider();
+        }),
+        ChangeNotifierProvider<ExamProvider>(create: (context) {
+          return ExamProvider();
         }),
       ],
       child: MaterialApp.router(

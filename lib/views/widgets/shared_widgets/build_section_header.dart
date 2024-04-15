@@ -15,7 +15,7 @@ Widget buildSectionHeader({
           title,
           style: TextStyle(
             fontSize: 26,
-            color: ThemeConfig.primaryColor,
+            color: ThemeConfig.primaryTextColor,
             // color: Colors.grey.shade600,
           ),
         ),
