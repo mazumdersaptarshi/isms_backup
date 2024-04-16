@@ -10,14 +10,15 @@ ExamFull _$ExamFullFromJson(Map<String, dynamic> json) => ExamFull(
       courseId: json['courseId'] as String,
       examId: json['examId'] as String,
       examVersion: (json['examVersion'] as num).toDouble(),
-      examTitle: json['examTitle'] as String,
-      examSummary: json['examSummary'] as String,
-      examDescription: json['examDescription'] as String,
-      examPassMark: json['examPassMark'] as int,
+      examTitle: json['examTitle'] as String? ?? "No Title Available",
+      examSummary: json['examSummary'] as String? ?? "No summary available",
+      examDescription:
+          json['examDescription'] as String? ?? "No description available",
+      examPassMark: json['examPassMark'] as int? ?? 0,
       examEstimatedCompletionTime:
-          json['examEstimatedCompletionTime'] as String,
-      examSections: (json['examSections'] as List<dynamic>)
-          .map((e) => SectionFull.fromJson(e as Map<String, dynamic>))
+          json['examEstimatedCompletionTime'] as String? ?? "Unknown duration",
+      examSections: (json['examSections'] as List<dynamic>?)
+          ?.map((e) => SectionFull.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
@@ -30,5 +31,5 @@ Map<String, dynamic> _$ExamFullToJson(ExamFull instance) => <String, dynamic>{
       'examDescription': instance.examDescription,
       'examPassMark': instance.examPassMark,
       'examEstimatedCompletionTime': instance.examEstimatedCompletionTime,
-      'examSections': instance.examSections.map((e) => e.toJson()).toList(),
+      'examSections': instance.examSections?.map((e) => e.toJson()).toList(),
     };

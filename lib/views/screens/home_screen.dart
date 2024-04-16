@@ -73,11 +73,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<dynamic> _fetchJWTandCSRFToken() async {
-    String url =
-        'http://127.0.0.1:5000/api/auth?uid=${Provider.of<LoggedInState>(context, listen: false).currentUser!.uid}';
-    var response = await http.get(Uri.parse(url));
+    // String url =
+    //     'http://127.0.0.1:5000/api/auth?uid=${Provider.of<LoggedInState>(context, listen: false).currentUser!.uid}';
+    String remoteURL =
+        'https://asia-northeast1-isms-billing-resources-dev.cloudfunctions.net/cf_isms_db_endpoint_noauth/api/auth?uid=${Provider.of<LoggedInState>(context, listen: false).currentUser!.uid}';
+    var response = await http.get(Uri.parse(remoteURL));
     var jsonResponse = jsonDecode(response.body);
-    print('mkl: ${jsonResponse}');
     Provider.of<CsrfTokenProvider>(context, listen: false).setTokens(jsonResponse['jwt'], jsonResponse['csrf_token']);
   }
 

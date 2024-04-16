@@ -14,11 +14,12 @@ class Question {
   final String questionText;
   final List<Answer> questionAnswers;
 
-  Question(
-      {required this.questionId,
-      required this.questionType,
-      required this.questionText,
-      required this.questionAnswers});
+  Question({
+    required this.questionId,
+    required this.questionType,
+    required this.questionText,
+    required this.questionAnswers,
+  });
 
   /// A necessary factory constructor for creating a new class instance from a map.
   /// Pass the map to the generated constructor, which is named after the source class.

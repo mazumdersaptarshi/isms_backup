@@ -3,6 +3,10 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:isms/models/course/enums.dart';
+import 'package:isms/models/course/exam_full.dart';
+import 'package:isms/models/course/section_full.dart';
+import 'package:isms/models/course/element.dart' as ExamElement;
 
 class ExamProvider extends ChangeNotifier {
   static dynamic _allExams = {};
@@ -15,7 +19,7 @@ class ExamProvider extends ChangeNotifier {
     return json.decode(jsonString);
   }
 
-  Future<dynamic> getExam({required String examId}) async {
+  Future<dynamic> getExamContent({required String examId}) async {
     Map<String, dynamic> params = {
       "examID": examId,
     };
@@ -23,7 +27,45 @@ class ExamProvider extends ChangeNotifier {
     String encodedJsonStringParams = Uri.encodeComponent(jsonStringParams);
     http.Response response = await http
         .get(Uri.parse(localGetURL3 + 'exam_content' + '&param1=$examId' + '&params=$encodedJsonStringParams'));
-    print(response.body);
+    List<dynamic> jsonResponse = jsonDecode(response.body);
+
+    print(jsonResponse[0][0]);
+
+    List<SectionFull> sections = [];
+    jsonResponse.first.first['contentJdoc']['examSections'].forEach((element) {
+      List<ExamElement.Element> sectionElements = [];
+      element['sectionElements'].forEach((element) {
+        sectionElements.add(ExamElement.Element(
+          elementId: element['elementId'],
+          elementType: element['elementType'],
+          elementContent: element['elementContent'],
+          elementTitle: element['elementTitle'],
+        ));
+      });
+      SectionFull sf = SectionFull(
+        sectionElements: sectionElements,
+        sectionId: element['sectionId'],
+        sectionSummary: element['sectionSummary'],
+        sectionTitle: element['sectionTitle'],
+      );
+      sections.add(sf);
+    });
+
+    print(sections);
+    ExamFull ef = ExamFull(
+      courseId: jsonResponse.first.first['contentJdoc']['courseId'],
+      examId: jsonResponse.first.first['contentJdoc']['examId'],
+      examVersion: jsonResponse.first.first['contentVersion'],
+      examTitle: jsonResponse.first.first['contentJdoc']['examTitle'],
+      examSummary: jsonResponse.first.first['contentJdoc']['examSummary'],
+      examDescription: jsonResponse.first.first['contentJdoc']['examDescription'],
+      examPassMark: jsonResponse.first.first['passMark'],
+      examEstimatedCompletionTime: jsonResponse.first.first['estimatedCompletionTime'],
+      examSections: sections,
+    );
+    // ExamFull examFull = ExamFull.fromJson(jsonResponse.first.first['contentJdoc']);
+    print(ef);
+    return ef;
   }
 
 // static Future<dynamic> getAllExams() async {
