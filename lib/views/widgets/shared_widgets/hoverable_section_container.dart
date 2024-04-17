@@ -44,10 +44,10 @@ class _HoverableSectionContainerState extends State<HoverableSectionContainer> {
           color: ThemeConfig.primaryCardColor,
           boxShadow: [
             BoxShadow(
-              color: ThemeConfig.hoverShadowColor!,
+              color: ThemeConfig.hoverShadowColor!.withOpacity(0.4),
               spreadRadius: 1,
-              blurRadius: 5,
-              offset: Offset(0, 3),
+              blurRadius: 3,
+              offset: Offset(0, 2),
             ),
           ],
         ),

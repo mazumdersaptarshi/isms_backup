@@ -123,13 +123,13 @@ class _UsersScoresVariationByAttemptsState extends State<UsersScoresVariationByA
               alignment: WrapAlignment.start,
               children: [
                 CustomDropdownButton(
-                  label: 'Course',
+                  // label: 'Course',
                   buttonText: _selectedCourse != null ? _selectedCourse!.itemName : 'Select Course',
                   onButtonPressed: () => _showCourseSingleSelectModalForBWChart(context, items: widget.courses),
                 ),
                 if (_examsBWChartData.isNotEmpty)
                   CustomDropdownButton(
-                    label: 'Exam',
+                    // label: 'Exam',
                     buttonText: _selectedExam != null ? _selectedExam!.itemName : 'Select Exam',
                     onButtonPressed: () => _showExamSingleSelectModalForBWChart(context, items: _examsBWChartData),
                   ),

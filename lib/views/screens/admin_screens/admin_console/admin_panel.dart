@@ -6,11 +6,10 @@ import 'package:isms/controllers/user_management/logged_in_state.dart';
 import 'package:isms/models/admin_models/users_summary_data.dart';
 import 'package:isms/models/course/course_info.dart';
 import 'package:isms/utilities/platform_check.dart';
-import 'package:isms/views/screens/admin_screens/admin_console/build_admin_panel_item_card.dart';
+import 'package:isms/views/screens/admin_screens/admin_console/overview_section.dart';
 import 'package:isms/views/widgets/admin_console/admin_actions.dart';
 import 'package:isms/views/widgets/admin_console/users_performance_overview_section.dart';
 import 'package:isms/views/widgets/custom_data_table.dart';
-import 'package:isms/views/widgets/shared_widgets/build_secondary_header.dart';
 import 'package:isms/views/widgets/shared_widgets/build_section_header.dart';
 import 'package:isms/views/widgets/shared_widgets/custom_app_bar.dart';
 import 'package:isms/views/widgets/shared_widgets/custom_drawer.dart';
@@ -115,27 +114,7 @@ class _AdminPanelState extends State<AdminPanel> {
                 // SizedBox(
                 //   height: 10,
                 // ),
-                Container(
-                  margin: const EdgeInsets.fromLTRB(80, 30, 100, 0), // Margin for the whole container
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal, // Enable horizontal scrolling
-                    child: Row(
-                      children: [
-                        AdminPanelItemCard(
-                          height: 200,
-                          width: 400,
-                          title: 'Upcoming Deadlines',
-                        ),
-                        SizedBox(width: 20),
-                        AdminPanelItemCard(
-                          height: 200,
-                          width: 800,
-                          title: 'Some Sick Graph',
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                OverviewSection(),
                 SizedBox(
                   height: 20,
                 ),

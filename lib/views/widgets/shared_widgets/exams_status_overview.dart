@@ -14,8 +14,8 @@ import 'charts/custom_pie_chart_widget.dart';
 import 'custom_dropdown_button_widget.dart';
 import 'hoverable_section_container.dart';
 
-class CoursesStatusOverview extends StatefulWidget {
-  CoursesStatusOverview({
+class ExamsStatusOverview extends StatefulWidget {
+  ExamsStatusOverview({
     super.key,
     required this.courses,
   });
@@ -23,10 +23,10 @@ class CoursesStatusOverview extends StatefulWidget {
   List<CourseInfo> courses = [CourseInfo(courseId: 'none')];
 
   @override
-  State<CoursesStatusOverview> createState() => _CoursesStatusOverviewState();
+  State<ExamsStatusOverview> createState() => _ExamsStatusOverviewState();
 }
 
-class _CoursesStatusOverviewState extends State<CoursesStatusOverview> {
+class _ExamsStatusOverviewState extends State<ExamsStatusOverview> {
   @override
   void initState() {
     super.initState();
@@ -150,7 +150,7 @@ class _CoursesStatusOverviewState extends State<CoursesStatusOverview> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Courses status overview',
+            'Exams status overview',
             style: TextStyle(
               fontSize: 16,
               color: ThemeConfig.primaryTextColor!,
@@ -166,13 +166,13 @@ class _CoursesStatusOverviewState extends State<CoursesStatusOverview> {
             alignment: WrapAlignment.start,
             children: [
               CustomDropdownButton(
-                label: 'Course',
+                // label: 'Course',
                 buttonText: _selectedCourse != null ? _selectedCourse!.itemName : 'Select Course',
                 onButtonPressed: () => _showCourseSingleSelectModalForPieChart(context, items: widget.courses),
               ),
               if (_examsPieChartData.isNotEmpty)
                 CustomDropdownButton(
-                  label: 'Exam',
+                  // label: 'Exam',
                   buttonText: _selectedExam != null ? _selectedExam!.itemName : 'Select Exam',
                   onButtonPressed: () => _showExamSingleSelectModalForPieChart(context, items: _examsPieChartData),
                 ),
@@ -187,51 +187,61 @@ class _CoursesStatusOverviewState extends State<CoursesStatusOverview> {
           // ),
 
           if (_piesData.isNotEmpty)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            Column(
               children: [
-                Container(
-                  padding: EdgeInsets.all(20),
-                  child: EasyPieChart(
-                    key: const Key('pie 2'),
-                    children: _piesData,
-                    borderEdge: StrokeCap.round,
-
-                    pieType: PieType.crust,
-                    showValue: false,
-                    centerText: 'Passed Status',
-                    onTap: (index) {
-                      tapIndex = index.toString();
-                      setState(() {});
-                    },
-                    gap: 3,
-                    borderWidth: 20,
-                    start: 10,
-                    animateFromEnd: true,
-                    size: 250,
-                    child: Center(
-                        child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('${_passedValue.toString()}%',
-                            style: TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold,
-                            )),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          'Passed',
-                          style: TextStyle(fontSize: 20),
-                        ),
-                      ],
-                    )),
-                    // child: Center(child: Text('')),
-                  ),
+                SizedBox(
+                  height: 60,
                 ),
-                SizedBox(width: 20),
-                buildLegend(_pieChartData),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(20),
+                      child: EasyPieChart(
+                        key: const Key('pie 2'),
+                        children: _piesData,
+                        borderEdge: StrokeCap.round,
+
+                        pieType: PieType.crust,
+                        showValue: false,
+                        centerText: 'Passed Status',
+                        onTap: (index) {
+                          tapIndex = index.toString();
+                          setState(() {});
+                        },
+                        gap: 3,
+                        borderWidth: 20,
+                        start: 10,
+                        animateFromEnd: true,
+                        size: 250,
+                        child: Center(
+                            child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('${_passedValue.toString()}%',
+                                style: TextStyle(
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold,
+                                )),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              'Passed',
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          ],
+                        )),
+                        // child: Center(child: Text('')),
+                      ),
+                    ),
+                    SizedBox(width: 60),
+                    buildLegend(_pieChartData),
+                  ],
+                ),
+                SizedBox(
+                  height: 50,
+                ),
               ],
             ),
         ],

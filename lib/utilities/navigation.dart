@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:isms/controllers/exam_management/exam_provider.dart';
 import 'package:isms/views/screens/admin_screens/admin_console/admin_panel.dart';
 import 'package:isms/views/screens/exam_page.dart';
 import 'package:provider/provider.dart';
@@ -80,14 +81,18 @@ final GoRouter ismsRouter = GoRouter(
           //     _getNavigationConfirmationDialog(context, AppLocalizations.of(context)!.dialogLeavePageContentCourse),
         ),
         GoRoute(
-          name: NamedRoutes.exam.name,
-          path: 'exam/:examId',
-          builder: (context, state) => ExamPage(
-            examId: state.pathParameters[NamedRoutePathParameters.examId.name]!,
-          ),
-          onExit: (BuildContext context) =>
-              _getNavigationConfirmationDialog(context, AppLocalizations.of(context)!.dialogLeavePageContentExam),
-        ),
+            name: NamedRoutes.exam.name,
+            path: 'exam/:examId',
+            builder: (context, state) => ExamPage(
+                  examId: state.pathParameters[NamedRoutePathParameters.examId.name]!,
+                ),
+            onExit: (BuildContext context) {
+              if (Provider.of<ExamProvider>(context, listen: false).examInProgress == true) {
+                return _getNavigationConfirmationDialog(
+                    context, AppLocalizations.of(context)!.dialogLeavePageContentExam);
+              }
+              return true;
+            }),
       ],
     ),
   ],

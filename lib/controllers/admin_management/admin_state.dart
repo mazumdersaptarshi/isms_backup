@@ -65,7 +65,7 @@ class AdminState {
   AdminState._internal() {
     // retrieveAllDataFromDatabase();
 
-    getURL = remoteGetURL;
+    // getURL = remoteGetURL;
     // getURL = localGetURL;
   }
 
@@ -310,7 +310,7 @@ class AdminState {
       _allUsersCoursesOverviewJSON = jsonResponse;
       jsonResponse.forEach((element) {
         usersExamData.add(CustomBarChartData(
-            x: '${element[0]['givenName']} ${element[0]['familyName']}', y: (element[0][metric]).round()));
+            x: ' ${element[0]['familyName']}. ${element[0]['givenName'][0]}', y: (element[0][metric]).round()));
       });
     }
     return usersExamData;
@@ -334,7 +334,7 @@ class AdminState {
       _allUsersCoursesOverviewJSON.forEach((element) {
         if (userIds.contains(element[0]['userId'])) {
           filteredUsersExamData.add(CustomBarChartData(
-              x: '${element[0]['givenName']} ${element[0]['familyName']}', y: (element[0][metric]).round()));
+              x: ' ${element[0]['familyName']}. ${element[0]['givenName'][0]}', y: (element[0][metric]).round()));
         }
       });
     }
@@ -518,79 +518,79 @@ class AdminState {
     if (response.statusCode == 200) {}
   }
 
-  Future<dynamic> createOrUpdateUserCourseAssignments({
-    required List<SelectableItem> courses,
-    required List<SelectableItem> users,
-    required bool enabled,
-    String? deadline, // Now nullable
-    String? years, // Separate years and months, both nullable
-    String? months,
-  }) async {
-    List<String> valueRows = [];
-
-    for (SelectableItem user in users) {
-      for (SelectableItem course in courses) {
-        // Construct the recurring interval part based on what's provided
-        String recurringIntervalValue = '';
-        if (years != null && years.isNotEmpty && years != 'null') {
-          recurringIntervalValue += '$years years ';
-        }
-        if (months != null && months.isNotEmpty && months != 'null') {
-          recurringIntervalValue += '$months months';
-        }
-        recurringIntervalValue = recurringIntervalValue.trim(); // Remove trailing space
-
-        String valueRow =
-            "('${user.itemId}', '${course.itemId}', ${enabled ? 'TRUE' : 'FALSE'}, ${deadline != null ? '\'$deadline\'::date' : 'NULL'}, NOW(), ${recurringIntervalValue.isNotEmpty ? 'INTERVAL \'$recurringIntervalValue\'' : 'NULL'})";
-        valueRows.add(valueRow);
-      }
-    }
-
-    String values = valueRows.join(", ");
-    String sqlQuery = """
-    INSERT INTO user_course_assignments (
-        user_id,
-        course_id,
-        enabled,
-        completion_deadline,
-        completion_tracking_period_start,
-        recurring_completion_required_interval
-    ) VALUES
-    $values
-    ON CONFLICT (user_id, course_id) DO UPDATE
-    SET
-        enabled = EXCLUDED.enabled,
-        completion_deadline = EXCLUDED.completion_deadline,
-        completion_tracking_period_start = EXCLUDED.completion_tracking_period_start,
-        recurring_completion_required_interval = EXCLUDED.recurring_completion_required_interval;
-    """;
-
-    _logger.info(sqlQuery);
-    var message = executePostSqlQuery(sqlQuery);
-    return message;
-  }
-
-  Future<dynamic> executePostSqlQuery(String sqlQuery) async {
-    const url = 'http://127.0.0.1:5000/post';
-    try {
-      final response = await http.post(
-        Uri.parse(url),
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        body: {'query': sqlQuery},
-      );
-      final responseBody = json.decode(response.body);
-      _logger.info(' ${responseBody}');
-      if (responseBody.toString().contains('error') || responseBody.toString().contains('invalid')) {
-        return '''Error :( 
-Please select all the appropriate fields properly!''';
-      } else {
-        return responseBody;
-      }
-    } catch (error) {
-      _logger.info('An error occurred: $error');
-    }
-    return 'An Unexpected error Occured :(';
-  }
+//   Future<dynamic> createOrUpdateUserCourseAssignments({
+//     required List<SelectableItem> courses,
+//     required List<SelectableItem> users,
+//     required bool enabled,
+//     String? deadline, // Now nullable
+//     String? years, // Separate years and months, both nullable
+//     String? months,
+//   }) async {
+//     List<String> valueRows = [];
+//
+//     for (SelectableItem user in users) {
+//       for (SelectableItem course in courses) {
+//         // Construct the recurring interval part based on what's provided
+//         String recurringIntervalValue = '';
+//         if (years != null && years.isNotEmpty && years != 'null') {
+//           recurringIntervalValue += '$years years ';
+//         }
+//         if (months != null && months.isNotEmpty && months != 'null') {
+//           recurringIntervalValue += '$months months';
+//         }
+//         recurringIntervalValue = recurringIntervalValue.trim(); // Remove trailing space
+//
+//         String valueRow =
+//             "('${user.itemId}', '${course.itemId}', ${enabled ? 'TRUE' : 'FALSE'}, ${deadline != null ? '\'$deadline\'::date' : 'NULL'}, NOW(), ${recurringIntervalValue.isNotEmpty ? 'INTERVAL \'$recurringIntervalValue\'' : 'NULL'})";
+//         valueRows.add(valueRow);
+//       }
+//     }
+//
+//     String values = valueRows.join(", ");
+//     String sqlQuery = """
+//     INSERT INTO user_course_assignments (
+//         user_id,
+//         course_id,
+//         enabled,
+//         completion_deadline,
+//         completion_tracking_period_start,
+//         recurring_completion_required_interval
+//     ) VALUES
+//     $values
+//     ON CONFLICT (user_id, course_id) DO UPDATE
+//     SET
+//         enabled = EXCLUDED.enabled,
+//         completion_deadline = EXCLUDED.completion_deadline,
+//         completion_tracking_period_start = EXCLUDED.completion_tracking_period_start,
+//         recurring_completion_required_interval = EXCLUDED.recurring_completion_required_interval;
+//     """;
+//
+//     _logger.info(sqlQuery);
+//     var message = executePostSqlQuery(sqlQuery);
+//     return message;
+//   }
+//
+//   Future<dynamic> executePostSqlQuery(String sqlQuery) async {
+//     const url = 'http://127.0.0.1:5000/post';
+//     try {
+//       final response = await http.post(
+//         Uri.parse(url),
+//         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+//         body: {'query': sqlQuery},
+//       );
+//       final responseBody = json.decode(response.body);
+//       _logger.info(' ${responseBody}');
+//       if (responseBody.toString().contains('error') || responseBody.toString().contains('invalid')) {
+//         return '''Error :(
+// Please select all the appropriate fields properly!''';
+//       } else {
+//         return responseBody;
+//       }
+//     } catch (error) {
+//       _logger.info('An error occurred: $error');
+//     }
+//     return 'An Unexpected error Occured :(';
+//   }
 
   // Future<dynamic> getUserCourseAssignments({required String uid}) async {
   //   String sqlQuery = QueryBuilder.buildSqlQuery(query17, [uid]);
@@ -601,77 +601,77 @@ Please select all the appropriate fields properly!''';
   //   return [];
   // }
 
+  // Future<dynamic> insertOrUpdateUserCourseAssignments({
+  //   required List<SelectableItem> courses,
+  //   required List<SelectableItem> users,
+  //   required bool enabled,
+  //   String? deadline, // Now nullable
+  //   String? years, // Separate years and months, both nullable
+  //   String? months,
+  // }) async {
+  //   List<String> userIDs = [];
+  //   List<String> courseIDs = [];
+  //   for (SelectableItem user in users) {
+  //     for (SelectableItem course in courses) {
+  //       // Construct the recurring interval part based on what's provided
+  //
+  //       userIDs.add(user.itemId);
+  //       courseIDs.add(course.itemId);
+  //       // String valueRow =
+  //       //     "('${user.itemId}', '${course.itemId}', ${enabled ? 'TRUE' : 'FALSE'}, ${deadline != null ? '\'$deadline\'::date' : 'NULL'}, NOW(), ${recurringIntervalValue.isNotEmpty ? 'INTERVAL \'$recurringIntervalValue\'' : 'NULL'})";
+  //       // valueRows.add(valueRow);
+  //     }
+  //   }
+  //   String recurringIntervalValue = '';
+  //   if (years != null && years.isNotEmpty && years != 'null') {
+  //     recurringIntervalValue += '$years years ';
+  //   }
+  //   if (months != null && months.isNotEmpty && months != 'null') {
+  //     recurringIntervalValue += '$months months';
+  //   }
+  //   recurringIntervalValue = recurringIntervalValue.trim();
+  //   String localURL = 'http://127.0.0.1:5000/insert-update-course-assignments?flag=';
+  //   String remoteURL =
+  //       'https://asia-northeast1-isms-billing-resources-dev.cloudfunctions.net/cf_isms_db_endpoint_noauth/insert-update-course-assignments?flag=';
+  //   Map<String, dynamic> params = {
+  //     "userIDs": userIDs.toSet().toList(),
+  //     "courseIDs": courseIDs.toSet().toList(),
+  //     "enabled": enabled ? 'TRUE' : 'FALSE',
+  //     "deadline": deadline != null ? '\'$deadline\'' : 'NULL',
+  //     "assignTime": 'NOW()',
+  //     // Pass empty string if deadline is null
+  //     "interval": recurringIntervalValue,
+  //   };
+  //   String jsonString = jsonEncode(params);
+  //   String encodedJsonString = Uri.encodeComponent(jsonString);
+  //   List<Map<String, dynamic>> rows = [];
+  //
+  //   for (String userId in userIDs.toSet()) {
+  //     for (String courseId in courseIDs.toSet()) {
+  //       Map<String, dynamic> row = {
+  //         "userID": userId,
+  //         "courseID": courseId,
+  //         "enabled": enabled ? 'TRUE' : 'FALSE',
+  //         "deadline": deadline != null ? '\'$deadline\'' : 'NULL',
+  //         "assignTime": 'NOW()',
+  //         "interval": recurringIntervalValue,
+  //       };
+  //       rows.add(row);
+  //     }
+  //   }
+  //
+  //   String jsonStringParams = jsonEncode(rows);
+  //   String encodedJsonStringParams = Uri.encodeComponent(jsonStringParams);
+  //
+  //   // http.Response response = await http.get(Uri.parse(localGetURL + 'domain_users'));
+  //   http.Response response = await http
+  //       .get(Uri.parse(localURL + 'insert_update_user_course_assignment' + '&params=$encodedJsonStringParams'));
+  //   // var message = executePostSqlQuery(sqlQuery);
+  //   // return message;
+  //   return response.statusCode;
+  // }
+
   Future<dynamic> insertOrUpdateUserCourseAssignments({
-    required List<SelectableItem> courses,
-    required List<SelectableItem> users,
-    required bool enabled,
-    String? deadline, // Now nullable
-    String? years, // Separate years and months, both nullable
-    String? months,
-  }) async {
-    List<String> userIDs = [];
-    List<String> courseIDs = [];
-    for (SelectableItem user in users) {
-      for (SelectableItem course in courses) {
-        // Construct the recurring interval part based on what's provided
-
-        userIDs.add(user.itemId);
-        courseIDs.add(course.itemId);
-        // String valueRow =
-        //     "('${user.itemId}', '${course.itemId}', ${enabled ? 'TRUE' : 'FALSE'}, ${deadline != null ? '\'$deadline\'::date' : 'NULL'}, NOW(), ${recurringIntervalValue.isNotEmpty ? 'INTERVAL \'$recurringIntervalValue\'' : 'NULL'})";
-        // valueRows.add(valueRow);
-      }
-    }
-    String recurringIntervalValue = '';
-    if (years != null && years.isNotEmpty && years != 'null') {
-      recurringIntervalValue += '$years years ';
-    }
-    if (months != null && months.isNotEmpty && months != 'null') {
-      recurringIntervalValue += '$months months';
-    }
-    recurringIntervalValue = recurringIntervalValue.trim();
-    String localURL = 'http://127.0.0.1:5000/insert-update-course-assignments?flag=';
-    String remoteURL =
-        'https://asia-northeast1-isms-billing-resources-dev.cloudfunctions.net/cf_isms_db_endpoint_noauth/insert-update-course-assignments?flag=';
-    Map<String, dynamic> params = {
-      "userIDs": userIDs.toSet().toList(),
-      "courseIDs": courseIDs.toSet().toList(),
-      "enabled": enabled ? 'TRUE' : 'FALSE',
-      "deadline": deadline != null ? '\'$deadline\'' : 'NULL',
-      "assignTime": 'NOW()',
-      // Pass empty string if deadline is null
-      "interval": recurringIntervalValue,
-    };
-    String jsonString = jsonEncode(params);
-    String encodedJsonString = Uri.encodeComponent(jsonString);
-    List<Map<String, dynamic>> rows = [];
-
-    for (String userId in userIDs.toSet()) {
-      for (String courseId in courseIDs.toSet()) {
-        Map<String, dynamic> row = {
-          "userID": userId,
-          "courseID": courseId,
-          "enabled": enabled ? 'TRUE' : 'FALSE',
-          "deadline": deadline != null ? '\'$deadline\'' : 'NULL',
-          "assignTime": 'NOW()',
-          "interval": recurringIntervalValue,
-        };
-        rows.add(row);
-      }
-    }
-
-    String jsonStringParams = jsonEncode(rows);
-    String encodedJsonStringParams = Uri.encodeComponent(jsonStringParams);
-
-    // http.Response response = await http.get(Uri.parse(localGetURL + 'domain_users'));
-    http.Response response = await http
-        .get(Uri.parse(localURL + 'insert_update_user_course_assignment' + '&params=$encodedJsonStringParams'));
-    // var message = executePostSqlQuery(sqlQuery);
-    // return message;
-    return response.statusCode;
-  }
-
-  Future<dynamic> insertOrUpdateUserCourseAssignmentss({
     required String CSRFToken,
     required String JWT,
     required List<SelectableItem> courses,

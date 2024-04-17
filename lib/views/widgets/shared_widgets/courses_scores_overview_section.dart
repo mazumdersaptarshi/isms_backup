@@ -217,13 +217,13 @@ class _CoursesScoresOverviewState extends State<CoursesScoresOverview> {
                   alignment: WrapAlignment.start,
                   children: [
                     CustomDropdownButton(
-                      label: 'Course',
+                      // label: 'Course',
                       buttonText: _selectedCourse != null ? _selectedCourse!.itemName : 'Select Course',
                       onButtonPressed: () => _showCourseSingleSelectModalForBarChart(context, items: widget.courses),
                     ),
                     if (_examsBarChartData.isNotEmpty)
                       CustomDropdownButton(
-                        label: 'Exam',
+                        // label: 'Exam',
                         buttonText: _selectedExam != null ? _selectedExam!.itemName : 'Select Exam',
                         onButtonPressed: () =>
                             _showExamSingleSelectModalForBarChart(context, items: _examsBarChartData),

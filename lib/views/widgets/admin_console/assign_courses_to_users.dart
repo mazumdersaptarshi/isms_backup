@@ -162,7 +162,7 @@ class _AssignCoursesToUserSectionState extends State<AssignCoursesToUserSection>
     //   years: years.toString(),
     //   months: months.toString(),
     // );
-    var message = await adminState.insertOrUpdateUserCourseAssignmentss(
+    var message = await adminState.insertOrUpdateUserCourseAssignments(
       CSRFToken: widget.CSRFToken,
       JWT: widget.JWT,
       courses: courses,
@@ -311,7 +311,15 @@ class _AssignCoursesToUserSectionState extends State<AssignCoursesToUserSection>
           Center(
             child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: ThemeConfig.primaryColor,
+                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                  // foregroundColor: Theme.of(context).primaryColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                    side: BorderSide(
+                      width: 2,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
                 ),
                 onPressed: () async {
                   var message = await _createOrUpdateUserCourseAssignments(
@@ -369,11 +377,17 @@ class _AssignCoursesToUserSectionState extends State<AssignCoursesToUserSection>
                     padding: EdgeInsets.all(10),
                     child: Row(
                       children: [
-                        Icon(Icons.save),
+                        Icon(
+                          Icons.save,
+                          color: ThemeConfig.primaryColor,
+                        ),
                         SizedBox(
                           width: 10,
                         ),
-                        Text('Save'),
+                        Text(
+                          'Save',
+                          style: TextStyle(color: ThemeConfig.primaryColor),
+                        ),
                       ],
                     ))),
           ),

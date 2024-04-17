@@ -227,7 +227,7 @@ class _CustomBarChartState extends State<CustomBarChart> {
                                 angle: -45 * (pi / 180),
                                 alignment: Alignment.bottomCenter,
                                 child: Padding(
-                                  padding: EdgeInsets.only(top: 6),
+                                  padding: EdgeInsets.only(top: 10),
                                   child: Text(
                                     '${widget.barChartValuesData[value.toInt()].x} ',
                                     style: TextStyle(

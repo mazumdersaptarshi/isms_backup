@@ -17,7 +17,7 @@ import 'package:isms/views/widgets/shared_widgets/charts/custom_line_chart_all_u
 import 'package:isms/views/widgets/shared_widgets/charts/custom_pie_chart_widget.dart';
 import 'package:isms/views/widgets/shared_widgets/course_exam_select_widget_dropdown.dart';
 import 'package:isms/views/widgets/shared_widgets/courses_scores_overview_section.dart';
-import 'package:isms/views/widgets/shared_widgets/courses_status_overview.dart';
+import 'package:isms/views/widgets/shared_widgets/exams_status_overview.dart';
 import 'package:isms/views/widgets/shared_widgets/custom_dropdown_button_widget.dart';
 import 'package:isms/views/widgets/shared_widgets/custom_dropdown_widget.dart';
 import 'package:isms/views/widgets/shared_widgets/custom_dropdown_widget_old.dart';
@@ -103,7 +103,7 @@ class _UsersPerformanceOverviewSectionState extends State<UsersPerformanceOvervi
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              CoursesStatusOverview(courses: widget.courses),
+              ExamsStatusOverview(courses: widget.courses),
               SizedBox(
                 width: 20,
               ),
