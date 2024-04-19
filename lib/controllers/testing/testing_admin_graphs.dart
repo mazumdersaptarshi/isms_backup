@@ -1,5 +1,5 @@
 import 'package:isms/models/charts/bar_charts/custom_bar_chart_data.dart';
-import 'package:isms/models/charts/box_and_whisker_charts/custom_box_and_whisker_chart_data.dart';
+import 'package:isms/models/charts/box_and_whisker_charts/custom_scores_variation_data.dart';
 
 import 'test_data.dart';
 

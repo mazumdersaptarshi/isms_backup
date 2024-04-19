@@ -1,8 +1,10 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:isms/controllers/admin_management/admin_state.dart';
 import 'package:isms/controllers/theme_management/theme_config.dart';
-import 'package:isms/models/charts/box_and_whisker_charts/custom_box_and_whisker_chart_data.dart';
+import 'package:isms/models/charts/box_and_whisker_charts/custom_scores_variation_data.dart';
 import 'package:isms/models/course/course_info.dart';
 import 'package:isms/views/widgets/shared_widgets/charts/custom_scatter_chart_widget.dart';
 import 'package:isms/views/widgets/shared_widgets/custom_dropdown_button_widget.dart';
@@ -39,6 +41,9 @@ class _ExamAttemptsAnalysisState extends State<ExamAttemptsAnalysis> {
   SelectableItem? _selectedCourse;
   SelectableItem? _selectedExam;
   List<CustomScoresVariationData> _scatterChartData = [];
+  int _currentPage = 0;
+  final int _pageSize = 10;
+  List<CustomScoresVariationData> _paginatedUsersExamScoresScatterData = [];
 
   Color _getColorForScore(double score) {
     if (score < 40) {
@@ -106,6 +111,16 @@ class _ExamAttemptsAnalysisState extends State<ExamAttemptsAnalysis> {
     }
   }
 
+  void _getPaginatedData(int currentPage) {
+    int startIndex = currentPage * _pageSize;
+    int endIndex = min(startIndex + _pageSize, _scatterChartData.length);
+
+    for (int i = startIndex; i < endIndex; i++) {
+      _paginatedUsersExamScoresScatterData.add(_scatterChartData[i]);
+    }
+    print(_paginatedUsersExamScoresScatterData);
+  }
+
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
@@ -147,7 +162,7 @@ class _ExamAttemptsAnalysisState extends State<ExamAttemptsAnalysis> {
               if (_scatterChartData.isNotEmpty)
                 Container(
                     padding: EdgeInsets.fromLTRB(20, 20, 20, 40),
-                    height: 500,
+                    height: 700,
                     child: CustomScatterChartWidget(
                       key: ValueKey(_scatterChartData),
                       usersExamScoresScatterData: _scatterChartData,

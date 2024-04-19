@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:isms/controllers/admin_management/admin_state.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart';
 import 'package:isms/controllers/theme_management/theme_config.dart';
-import 'package:isms/models/charts/box_and_whisker_charts/custom_box_and_whisker_chart_data.dart';
+import 'package:isms/models/charts/box_and_whisker_charts/custom_scores_variation_data.dart';
 import 'package:isms/models/course/course_info.dart';
 import 'package:isms/views/widgets/shared_widgets/selectable_item.dart';
 import 'package:isms/views/widgets/shared_widgets/selected_items_display_widget.dart';

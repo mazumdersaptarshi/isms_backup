@@ -87,9 +87,9 @@ class _IsmsDrawerState extends State<IsmsDrawer> {
             // Wrap InkWell with Expanded
             child: Column(
               children: [
-                Icon(icon, color: Colors.white, size: 30),
+                Icon(icon, color: Colors.white, size: 25),
                 SizedBox(height: 0), // Adjust the spacing between icon and text
-                Text(label, style: TextStyle(color: Colors.white, fontSize: 16)),
+                Text(label, style: TextStyle(color: Colors.white, fontSize: 14)),
               ],
             ),
           ),
@@ -127,9 +127,9 @@ class _IsmsDrawerState extends State<IsmsDrawer> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.logout_outlined, color: Colors.white, size: 30),
+              Icon(Icons.logout_outlined, color: Colors.white, size: 25),
               SizedBox(height: 0),
-              Text(AppLocalizations.of(context)!.buttonLogout, style: TextStyle(color: Colors.white, fontSize: 16)),
+              Text(AppLocalizations.of(context)!.buttonLogout, style: TextStyle(color: Colors.white, fontSize: 14)),
             ],
           ),
         ),
@@ -158,28 +158,19 @@ class _IsmsDrawerState extends State<IsmsDrawer> {
         child: Container(
           width: 120,
           height: 120,
-          padding: EdgeInsets.only(top: 15, bottom: 15),
+          // padding: EdgeInsets.only(top: 15, bottom: 15),
           decoration: BoxDecoration(
             color: isHovered ? Colors.white.withOpacity(0.1) : Colors.transparent,
             borderRadius: BorderRadius.circular(6),
           ),
-          child: Center(
-            child: Container(
-              width: 60.0,
-              height: 60.0,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: Colors.white,
-                  width: 3.0,
-                ),
-              ),
-              child: ClipOval(
-                child: Image.asset(
-                  'assets/images/Mona_Lisa_mini.jpg',
-                  fit: BoxFit.cover, // Resize image to fit inside the circle container
-                ),
-              ),
+          child: IconButton(
+            onPressed: () {},
+            icon: Icon(
+              Icons.account_circle_outlined,
+              color: Colors.white,
+              weight: 0.1,
+              fill: 1,
+              size: 40,
             ),
           ),
         ),

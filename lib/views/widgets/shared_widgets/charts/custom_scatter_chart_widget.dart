@@ -1,145 +1,197 @@
 import 'dart:math';
-import 'package:isms/controllers/theme_management/theme_config.dart';
-
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:isms/models/charts/box_and_whisker_charts/custom_box_and_whisker_chart_data.dart';
+import 'package:fl_chart/fl_chart.dart';
+import 'package:isms/controllers/theme_management/theme_config.dart';
+import 'package:isms/models/charts/box_and_whisker_charts/custom_scores_variation_data.dart';
 
 class CustomScatterChartWidget extends StatefulWidget {
-  CustomScatterChartWidget(
-      {super.key, required this.usersExamScoresScatterData, this.getColorForScore, this.dottedLineIndicatorValue});
+  final List<CustomScoresVariationData> usersExamScoresScatterData;
+  final Color Function(double)? getColorForScore; // Optional function to determine color
+  final int? dottedLineIndicatorValue;
 
-  final blue1 = ThemeConfig.getPrimaryColorShade(400)!;
-  final blue2 = ThemeConfig.getPrimaryColorShade(700)!;
-  List<CustomScoresVariationData> usersExamScoresScatterData = [];
-  final Color Function(double)? getColorForScore; // Make this function optional
-  int? dottedLineIndicatorValue = 0;
+  CustomScatterChartWidget({
+    super.key,
+    required this.usersExamScoresScatterData,
+    this.getColorForScore,
+    this.dottedLineIndicatorValue,
+  });
 
   @override
-  State<StatefulWidget> createState() => CustomScatterChartWidgetState();
+  State<StatefulWidget> createState() => _CustomScatterChartWidgetState();
 }
 
-class CustomScatterChartWidgetState extends State<CustomScatterChartWidget> {
-  final maxX = 25.0;
+class _CustomScatterChartWidgetState extends State<CustomScatterChartWidget> {
   final maxY = 100.0;
-  final radius = 8.0;
-  List<String> names = [];
-  bool showFlutter = true;
-  List<String> g = [
-    'a',
-    'a',
-    'a',
-    'a',
-    'a',
-  ];
-  List<ScatterSpot> _scatterSpotsData = [];
+  final int _pageSize = 10;
+  int _currentPage = 0;
+  int _totalPages = 0;
+  int _endIndex = 0;
 
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {},
-      child: AspectRatio(
-        aspectRatio: 2.5,
-        child: ScatterChart(
-          ScatterChartData(
-            scatterSpots: _buildScatterSpotsData(),
-            minX: 0,
-            maxX: (widget.usersExamScoresScatterData.length - 1).toDouble(),
-            minY: 0,
-            maxY: maxY,
-            borderData: FlBorderData(
-              show: false,
-              border: Border(
-                bottom: BorderSide(color: Colors.grey.shade200, width: 1),
-                top: BorderSide.none,
-                left: BorderSide.none,
-                right: BorderSide.none,
-              ),
-            ),
-            gridData: FlGridData(
-              show: true,
-              drawHorizontalLine: true,
-              drawVerticalLine: false,
-              getDrawingHorizontalLine: (value) {
-                if (value == widget.dottedLineIndicatorValue!) {
-                  return FlLine(
-                    color: Colors.blue, // Color of the grid line at y=70
-                    strokeWidth: 1, // Thickness of the grid line
-                    dashArray: [5, 5], // Optional: Make it dashed, remove if we want solid line
-                  );
-                }
-                return FlLine(
-                  color: Colors.transparent, // Hiding other lines by making them transparent
-                  strokeWidth: 0,
-                );
-              },
-            ),
-            titlesData: FlTitlesData(
-              show: true,
-              leftTitles: AxisTitles(
-                sideTitles: SideTitles(
-                    reservedSize: 60,
-                    showTitles: true,
-                    getTitlesWidget: (value, meta) {
-                      return Text(
-                        value.toString(),
-                        style: TextStyle(color: ThemeConfig.primaryTextColor),
-                      );
-                    }),
-              ),
-              topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-              rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-              bottomTitles: AxisTitles(
-                  sideTitles: SideTitles(
-                      reservedSize: 60,
-                      showTitles: true,
-                      getTitlesWidget: (value, meta) {
-                        return Transform.rotate(
-                          angle: -45 * (pi / 180),
-                          alignment: Alignment.bottomCenter,
-                          child: Container(
-                            padding: EdgeInsets.only(top: 20),
-                            child: Text(
-                              '${widget.usersExamScoresScatterData[value.toInt()].x}',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: ThemeConfig.primaryTextColor!,
-                                // fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        );
-                      })),
-            ),
-            scatterTouchData: ScatterTouchData(
-              enabled: false,
-            ),
-          ),
-          swapAnimationDuration: const Duration(milliseconds: 600),
-          swapAnimationCurve: Curves.fastOutSlowIn,
-        ),
-      ),
-    );
+  void initState() {
+    super.initState();
+    _calculateTotalPages();
+  }
+
+  void _calculateTotalPages() {
+    _totalPages = (widget.usersExamScoresScatterData.length / _pageSize).ceil();
   }
 
   List<ScatterSpot> _buildScatterSpotsData() {
-    Map<String, double> xIndexes = {};
-
-    for (int i = 0; i < widget.usersExamScoresScatterData.length; i++) {
-      names.add(widget.usersExamScoresScatterData[i].x);
-
-      xIndexes[widget.usersExamScoresScatterData[i].x] = i.toDouble(); // Map each name to an index
-      for (double score in widget.usersExamScoresScatterData[i].y) {
+    List<ScatterSpot> spots = [];
+    int start = _currentPage * _pageSize;
+    int end = min(start + _pageSize, widget.usersExamScoresScatterData.length);
+    _endIndex = end;
+    for (int i = start; i < end; i++) {
+      int pageIndex = i - start; // Adjust index for current page
+      var userData = widget.usersExamScoresScatterData[i];
+      double xIndex = pageIndex.toDouble(); // Use local index for x-axis
+      for (double score in userData.y) {
         Color spotColor = widget.getColorForScore != null
             ? widget.getColorForScore!(score)
-            : Colors.primaries[((i.toDouble() * score) % Colors.primaries.length).toInt()];
-        _scatterSpotsData.add(ScatterSpot(i.toDouble(), score, color: spotColor));
+            : Colors.primaries[(pageIndex % Colors.primaries.length)];
+        spots.add(ScatterSpot(xIndex, score, color: spotColor));
+        // break;
       }
-      // _scatterSpotsData.add(ScatterSpot(i.toDouble(), widget.usersExamScoresScatterData[i].y[0]));
     }
+    print(spots);
+    return spots;
+  }
 
-    // print(_scatterSpotsData.length);
-    // print(names.length);
-    return _scatterSpotsData;
+  Widget _buildPaginationControls() {
+    return Row(
+      // mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ElevatedButton(
+          onPressed: _currentPage > 0
+              ? () {
+                  setState(() {
+                    _currentPage--;
+                  });
+                }
+              : null,
+          child: Icon(
+            Icons.arrow_back_ios_rounded,
+            size: 18,
+            color: Colors.white,
+          ),
+        ),
+        Container(padding: EdgeInsets.all(8), child: Text('Showing ${_currentPage + 1} of $_totalPages')),
+        ElevatedButton(
+          onPressed: _currentPage < _totalPages - 1
+              ? () {
+                  setState(() {
+                    _currentPage++;
+                  });
+                }
+              : null,
+          child: Icon(
+            Icons.arrow_forward_ios_rounded,
+            size: 18,
+            color: Colors.white,
+          ),
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          GestureDetector(
+            onTap: () {},
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.5,
+              height: 500,
+              child: AspectRatio(
+                aspectRatio: 2,
+                child: ScatterChart(
+                  ScatterChartData(
+                    scatterSpots: _buildScatterSpotsData(),
+                    minX: 0,
+                    maxX: _pageSize - 1,
+                    // Adjusted to local page index
+                    minY: 0,
+                    maxY: maxY,
+                    borderData: FlBorderData(show: false),
+                    gridData: FlGridData(
+                      show: true,
+                      drawHorizontalLine: true,
+                      drawVerticalLine: false,
+                      getDrawingHorizontalLine: (value) {
+                        if (value == widget.dottedLineIndicatorValue!) {
+                          return FlLine(
+                            color: Colors.blue, // Color of the grid line at y=70
+                            strokeWidth: 1, // Thickness of the grid line
+                            dashArray: [5, 5], // Optional: Make it dashed, remove if we want solid line
+                          );
+                        }
+                        return FlLine(
+                          color: Colors.transparent, // Hiding other lines by making them transparent
+                          strokeWidth: 0,
+                        );
+                      },
+                    ),
+                    titlesData: FlTitlesData(
+                      show: true,
+                      topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                      rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                      leftTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                            reservedSize: 60,
+                            showTitles: true,
+                            getTitlesWidget: (value, meta) {
+                              return Text(
+                                value.toString(),
+                                style: TextStyle(color: ThemeConfig.primaryTextColor),
+                              );
+                            }),
+                      ),
+                      bottomTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          reservedSize: 60,
+                          interval: 1,
+                          showTitles: true,
+                          getTitlesWidget: (value, meta) {
+                            int index = _currentPage * _pageSize + value.toInt();
+                            print(value.toInt());
+                            if (index >= widget.usersExamScoresScatterData.length) {
+                              return Text('');
+                            }
+                            return Transform.rotate(
+                              angle: -45 * (pi / 180),
+                              alignment: Alignment.bottomCenter,
+                              child: Container(
+                                padding: EdgeInsets.only(top: 20),
+                                child: Text(
+                                  widget.usersExamScoresScatterData[index].x,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: ThemeConfig.primaryTextColor,
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    scatterTouchData: ScatterTouchData(enabled: false),
+                  ),
+                  swapAnimationDuration: const Duration(milliseconds: 600),
+                  swapAnimationCurve: Curves.fastOutSlowIn,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          if (_totalPages > 1) _buildPaginationControls(),
+        ]),
+      ],
+    );
   }
 }

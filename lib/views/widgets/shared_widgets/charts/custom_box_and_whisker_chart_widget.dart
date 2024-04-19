@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:isms/controllers/testing/test_data.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart';
 import 'package:isms/controllers/theme_management/theme_config.dart';
-import 'package:isms/models/charts/box_and_whisker_charts/custom_box_and_whisker_chart_data.dart';
+import 'package:isms/models/charts/box_and_whisker_charts/custom_scores_variation_data.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class CustomBoxAndWhiskerChartWidget extends StatefulWidget {

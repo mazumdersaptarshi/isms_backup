@@ -1,7 +1,7 @@
 import 'package:isms/models/admin_models/user_summary.dart';
 import 'package:isms/models/admin_models/users_summary_data.dart';
 import 'package:isms/models/charts/bar_charts/custom_bar_chart_data.dart';
-import 'package:isms/models/charts/box_and_whisker_charts/custom_box_and_whisker_chart_data.dart';
+import 'package:isms/models/charts/box_and_whisker_charts/custom_scores_variation_data.dart';
 import 'package:isms/models/charts/line_charts/custom_line_chart_data_point.dart';
 import 'package:isms/models/user_progress/user_course_progress.dart';
 import 'package:isms/models/user_progress/user_exam_attempt.dart';

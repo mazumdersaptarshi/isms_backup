@@ -10,7 +10,7 @@
 // import 'package:isms/controllers/user_management/logged_in_state.dart';
 // import 'package:isms/models/admin_models/users_summary_data.dart';
 // import 'package:isms/models/charts/bar_charts/custom_bar_chart_data.dart';
-// import 'package:isms/models/charts/box_and_whisker_charts/custom_box_and_whisker_chart_data.dart';
+// import 'package:isms/models/charts/box_and_whisker_charts/custom_scores_variation_data.dart';
 // import 'package:isms/models/charts/pie_charts/custom_pie_chart_data.dart';
 // import 'package:isms/models/course/course_exam_relationship.dart';
 // import 'package:isms/sql/queries/query1.dart';
