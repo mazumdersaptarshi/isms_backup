@@ -40,7 +40,7 @@ class _UsersScoresVariationByAttemptsState extends State<UsersScoresVariationByA
   SelectableItem? _selectedCourse;
   SelectableItem? _selectedExam;
   List<SelectableItem> _examsBWChartData = [];
-  List<CustomBoxAndWhiskerChartData> _bwChartData = [];
+  List<CustomScoresVariationData> _bwChartData = [];
 
   Future<void> _fetchExamsBW(String courseId) async {
     var exams = await adminState.getExamsListForCourse(courseId: courseId);

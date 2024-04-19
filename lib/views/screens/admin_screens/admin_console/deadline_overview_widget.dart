@@ -3,18 +3,18 @@ import 'package:isms/controllers/theme_management/theme_config.dart';
 import 'package:isms/views/widgets/shared_widgets/hoverable_section_container.dart';
 
 class DeadlineOverviewWidget extends StatelessWidget {
-  DeadlineOverviewWidget({
-    super.key,
-    required this.day,
-    required this.year,
-    required this.month,
-    required this.courseTitle,
-  });
+  DeadlineOverviewWidget(
+      {super.key,
+      required this.day,
+      required this.year,
+      required this.month,
+      required this.courseTitle,
+      required this.usersCompliance});
 
   String day;
   String year;
   String month;
-
+  String usersCompliance;
   String courseTitle;
 
   @override
@@ -78,10 +78,12 @@ class DeadlineOverviewWidget extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      '15/20 users are in compliance',
+                      '${usersCompliance} ',
+                      style: TextStyle(color: ThemeConfig.primaryColor),
                     ),
+                    Text('users are in compliance'),
                     Icon(
-                      Icons.warning_amber_outlined,
+                      Icons.warning_amber_rounded,
                       color: Colors.orange,
                     )
                   ],

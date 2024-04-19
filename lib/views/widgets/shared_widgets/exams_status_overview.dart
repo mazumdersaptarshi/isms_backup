@@ -220,7 +220,7 @@ class _ExamsStatusOverviewState extends State<ExamsStatusOverview> {
                           children: [
                             Text('${_passedValue.toString()}%',
                                 style: TextStyle(
-                                  fontSize: 30,
+                                  fontSize: 40,
                                   fontWeight: FontWeight.bold,
                                 )),
                             SizedBox(

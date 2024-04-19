@@ -10,6 +10,7 @@ class ExamAttemptOverviewWidget extends StatelessWidget {
     required this.examName,
     required this.value,
     required this.score,
+    required this.passed,
   });
 
   String startDate;
@@ -17,6 +18,7 @@ class ExamAttemptOverviewWidget extends StatelessWidget {
   String examName;
   double value;
   String score;
+  bool passed;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,7 @@ class ExamAttemptOverviewWidget extends StatelessWidget {
           Expanded(
             child: Text(
               '$startDate',
-              style: TextStyle(color: ThemeConfig.primaryTextColor),
+              style: TextStyle(color: ThemeConfig.tertiaryTextColor2),
             ),
           ),
           Expanded(
@@ -56,7 +58,18 @@ class ExamAttemptOverviewWidget extends StatelessWidget {
           SizedBox(
             width: 14,
           ),
-          Expanded(child: Text('$score')),
+          Expanded(
+              child: Row(
+            children: [
+              Text('$score'),
+              SizedBox(
+                width: 4,
+              ),
+              (passed)
+                  ? Icon(Icons.check_circle_outline, color: ThemeConfig.primaryColor)
+                  : Icon(Icons.warning_amber_rounded, color: Colors.orange)
+            ],
+          )),
         ],
       ),
     );

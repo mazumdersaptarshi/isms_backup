@@ -11,6 +11,8 @@ import 'package:isms/controllers/storage/postgres_client_service/postgres_client
 import 'package:isms/controllers/theme_management/theme_config.dart';
 import 'package:isms/controllers/user_management/user_progress_analytics.dart';
 import 'package:http/http.dart' as http;
+import 'package:isms/models/admin_models/exam_attempt_overview.dart';
+import 'package:isms/models/admin_models/exam_deadline.dart';
 import 'package:isms/models/admin_models/user_summary.dart';
 import 'package:isms/models/admin_models/users_summary_data.dart';
 import 'package:isms/models/charts/bar_charts/custom_bar_chart_data.dart';
@@ -146,6 +148,30 @@ class AdminState {
     // for (var userData in _allUsersSummaryData) {
     // }
     return usersSummary;
+  }
+
+  Future<dynamic> getDeadlines() async {
+    http.Response response = await http.get(Uri.parse(remoteGetURL3 + 'deadlines'));
+    List<ExamDeadline> examsDeadlines = [];
+    if (response.statusCode == 200) {
+      List<dynamic> jsonResponse = jsonDecode(response.body);
+      jsonResponse.forEach((element) {
+        examsDeadlines.add(ExamDeadline.fromJson(element[0]));
+      });
+    }
+    return examsDeadlines;
+  }
+
+  Future<dynamic> getRecentExamAttempts() async {
+    http.Response response = await http.get(Uri.parse(remoteGetURL3 + 'recent_exam_attempts'));
+    List<ExamAttemptOverview> recentExamAttempts = [];
+    if (response.statusCode == 200) {
+      List<dynamic> jsonResponse = jsonDecode(response.body);
+      jsonResponse.forEach((element) {
+        recentExamAttempts.add(ExamAttemptOverview.fromJson(element[0]));
+      });
+    }
+    return recentExamAttempts;
   }
 
   Future<dynamic> getUserSummary(String uid) async {
@@ -354,7 +380,7 @@ class AdminState {
     http.Response response = await http.get(
         Uri.parse(remoteGetURL3 + 'users_scores_variation' + '&param1=$examId' + '&params=$encodedJsonStringParams'));
 
-    List<CustomBoxAndWhiskerChartData> usersExamDataBW = [];
+    List<CustomScoresVariationData> usersExamDataBW = [];
     if (response.statusCode == 200) {
       List<dynamic> jsonResponse = jsonDecode(response.body);
       jsonResponse.forEach((element) {
@@ -365,13 +391,46 @@ class AdminState {
         while (scoresList.length < 5) {
           scoresList.add(0.0);
         }
-        usersExamDataBW.add(CustomBoxAndWhiskerChartData(
+        usersExamDataBW.add(CustomScoresVariationData(
           x: '${element[0]['givenName']} ${element[0]['familyName']}',
           y: scoresList,
         ));
       });
     }
     return usersExamDataBW;
+  }
+
+  Future<dynamic> getAllUsersExamScores({required String examId}) async {
+    String sqlQuery = QueryBuilder.buildSqlQuery(query10, [examId]);
+    // http.Response response = await http.get(Uri.parse(url + '${sqlQuery}'));
+    // http.Response response = await http.get(Uri.parse(localGetURL + 'users_scores_variation' '&param1=$examId'));
+    Map<String, dynamic> params = {
+      "examID": examId,
+    };
+    String jsonStringParams = jsonEncode(params);
+    String encodedJsonStringParams = Uri.encodeComponent(jsonStringParams);
+
+    http.Response response = await http.get(
+        Uri.parse(remoteGetURL3 + 'users_scores_variation' + '&param1=$examId' + '&params=$encodedJsonStringParams'));
+
+    List<CustomScoresVariationData> usersExamScoresScatterData = [];
+    if (response.statusCode == 200) {
+      List<dynamic> jsonResponse = jsonDecode(response.body);
+      jsonResponse.forEach((element) {
+        List<double> scoresList = [];
+        element[0]['scores'].forEach((e) {
+          scoresList.add(e.toDouble());
+        });
+        while (scoresList.length < 5) {
+          scoresList.add(0.0);
+        }
+        usersExamScoresScatterData.add(CustomScoresVariationData(
+          x: '${element[0]['familyName']}. ${element[0]['givenName'][0]}',
+          y: scoresList,
+        ));
+      });
+    }
+    return usersExamScoresScatterData;
   }
 
   Future<dynamic> getCoursesList() async {

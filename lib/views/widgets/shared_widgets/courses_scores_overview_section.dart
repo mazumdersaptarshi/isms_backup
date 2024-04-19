@@ -252,9 +252,9 @@ class _CoursesScoresOverviewState extends State<CoursesScoresOverview> {
                       key: ValueKey(_selectedUsersList),
                       label: 'Selected Users',
                       selectedItemsList: _selectedUsersList),
-                SizedBox(
-                  height: 20,
-                ),
+                // SizedBox(
+                //   height: 20,
+                // ),
                 if (_selectedExamBarChart != null)
                   Column(
                     children: [
@@ -269,6 +269,7 @@ class _CoursesScoresOverviewState extends State<CoursesScoresOverview> {
                             barChartValuesData: _filteredBarChartData,
                             scoreLimit: _scoreLimit,
                             totalPages: _totalPages,
+                            dottedLineIndicatorValue: 70,
                           ),
                           Spacer(),
                           Column(

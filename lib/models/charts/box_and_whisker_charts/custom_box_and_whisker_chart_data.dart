@@ -1,6 +1,6 @@
-class CustomBoxAndWhiskerChartData {
+class CustomScoresVariationData {
   final String x;
   final List<double> y;
 
-  CustomBoxAndWhiskerChartData({required this.x, required this.y});
+  CustomScoresVariationData({required this.x, required this.y});
 }

@@ -16,7 +16,7 @@ Map<String, List<CustomBarChartData>> _usersDataDifferentMetricsMap = {
   'minScore': usersDataMinScores,
 };
 
-Map<String, List<CustomBoxAndWhiskerChartData>> _usersDataDifferentExamsMapBoxWhisker = {
+Map<String, List<CustomScoresVariationData>> _usersDataDifferentExamsMapBoxWhisker = {
   'py102ex': usersData501,
   'cv101ex': usersData502,
   'py103ds': usersData501,
@@ -24,14 +24,14 @@ Map<String, List<CustomBoxAndWhiskerChartData>> _usersDataDifferentExamsMapBoxWh
 };
 
 List<CustomBarChartData> _usersData = [];
-List<CustomBoxAndWhiskerChartData> _usersData2 = [];
+List<CustomScoresVariationData> _usersData2 = [];
 
 List<CustomBarChartData> updateUsersDataOnDifferentCourseExamSelectionBarChart(String? examKey) {
   _usersData = (examKey != null ? _usersDataDifferentExamsMap[examKey] : [])!;
   return _usersData;
 }
 
-List<CustomBoxAndWhiskerChartData> updateUsersDataOnDifferentCourseExamSelectionBoxAndWhiskerChart(String? examKey) {
+List<CustomScoresVariationData> updateUsersDataOnDifferentCourseExamSelectionBoxAndWhiskerChart(String? examKey) {
   _usersData2 = (examKey != null ? _usersDataDifferentExamsMapBoxWhisker[examKey] : [])!;
   return _usersData2;
 }

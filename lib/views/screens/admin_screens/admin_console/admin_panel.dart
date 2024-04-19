@@ -3,6 +3,8 @@ import 'package:isms/controllers/admin_management/admin_state.dart';
 import 'package:isms/controllers/auth_token_management/csrf_token_provider.dart';
 import 'package:isms/controllers/theme_management/theme_config.dart';
 import 'package:isms/controllers/user_management/logged_in_state.dart';
+import 'package:isms/models/admin_models/exam_attempt_overview.dart';
+import 'package:isms/models/admin_models/exam_deadline.dart';
 import 'package:isms/models/admin_models/users_summary_data.dart';
 import 'package:isms/models/course/course_info.dart';
 import 'package:isms/utilities/platform_check.dart';
@@ -35,6 +37,8 @@ class _AdminPanelState extends State<AdminPanel> {
     adminState = AdminState();
     _fetchAllDomainCourses();
     _fetchAllDomainUsers();
+    _fetchExamDeadlines();
+    _fetchRecentExamAttempts();
     // Default data is set for initial display
     // _usersDataBarChart = updateUsersDataOnDifferentCourseExamSelectionBarChart('py102ex');
   }
@@ -75,8 +79,28 @@ class _AdminPanelState extends State<AdminPanel> {
   List<CourseInfo> _courses = [CourseInfo(courseId: 'none', courseTitle: 'none')];
 
   List<UsersSummaryData> _allDomainUsersSummary = [];
+  List<ExamDeadline> _examDeadlines = [];
 
+  List<ExamAttemptOverview> _recentExamAttempts = [];
   bool _coursesLoaded = false;
+  bool _examsDeadlinesLoaded = false;
+  bool _recentExamAttemptsLoaded = false;
+
+  Future<dynamic> _fetchExamDeadlines() async {
+    var deadlines = await adminState.getDeadlines();
+    setState(() {
+      _examDeadlines = deadlines;
+      _examsDeadlinesLoaded = true;
+    });
+  }
+
+  Future<dynamic> _fetchRecentExamAttempts() async {
+    var recentExamAttempts = await adminState.getRecentExamAttempts();
+    setState(() {
+      _recentExamAttempts = recentExamAttempts;
+      _recentExamAttemptsLoaded = true;
+    });
+  }
 
   Future<dynamic> _fetchAllDomainCourses() async {
     var courses = await adminState.getCoursesList();
@@ -114,12 +138,20 @@ class _AdminPanelState extends State<AdminPanel> {
                 // SizedBox(
                 //   height: 10,
                 // ),
-                OverviewSection(),
+                _examsDeadlinesLoaded && _recentExamAttemptsLoaded
+                    ? OverviewSection(
+                        examDeadlines: _examDeadlines,
+                        recentExamAttempts: _recentExamAttempts,
+                      )
+                    : CircularProgressIndicator(),
                 SizedBox(
                   height: 20,
                 ),
 
                 buildSectionHeader(title: 'Performance Drilldown'),
+                SizedBox(
+                  height: 20,
+                ),
                 _coursesLoaded
                     ? UsersPerformanceOverviewSection(
                         courses: _courses,
@@ -127,7 +159,9 @@ class _AdminPanelState extends State<AdminPanel> {
                       )
                     : CircularProgressIndicator(),
                 buildSectionHeader(title: 'Admin Actions'),
-
+                SizedBox(
+                  height: 20,
+                ),
                 _coursesLoaded
                     ? AdminActions(
                         courses: _courses,

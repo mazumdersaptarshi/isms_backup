@@ -10,14 +10,14 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 class CustomBoxAndWhiskerChartWidget extends StatefulWidget {
   // ignore: prefer_const_constructors_in_immutables
   CustomBoxAndWhiskerChartWidget({Key? key, required this.allData}) : super(key: key);
-  final List<CustomBoxAndWhiskerChartData> allData;
+  final List<CustomScoresVariationData> allData;
 
   @override
   _CustomBoxAndWhiskerChartWidgetState createState() => _CustomBoxAndWhiskerChartWidgetState();
 }
 
 class _CustomBoxAndWhiskerChartWidgetState extends State<CustomBoxAndWhiskerChartWidget> {
-  late List<CustomBoxAndWhiskerChartData> data; // Data for current page
+  late List<CustomScoresVariationData> data; // Data for current page
   late TooltipBehavior _tooltip;
   int currentPage = 0;
   static const int pageSize = 5;
@@ -47,19 +47,20 @@ class _CustomBoxAndWhiskerChartWidgetState extends State<CustomBoxAndWhiskerChar
               primaryXAxis: CategoryAxis(),
               primaryYAxis: NumericAxis(minimum: 0, maximum: 100, interval: 10),
               tooltipBehavior: _tooltip,
-              series: <CartesianSeries<CustomBoxAndWhiskerChartData, String>>[
-                BoxAndWhiskerSeries<CustomBoxAndWhiskerChartData, String>(
+              series: <CartesianSeries<CustomScoresVariationData, String>>[
+                BoxAndWhiskerSeries<CustomScoresVariationData, String>(
                   dataSource: data,
-                  xValueMapper: (CustomBoxAndWhiskerChartData data, _) => data.x,
-                  yValueMapper: (CustomBoxAndWhiskerChartData data, _) => data.y,
+                  xValueMapper: (CustomScoresVariationData data, _) => data.x,
+                  yValueMapper: (CustomScoresVariationData data, _) => data.y,
                   name: 'Users Scores',
                   color: ThemeConfig.getPrimaryColorShade(400),
                   borderWidth: 1,
                   borderColor: Colors.black,
-                  gradient: LinearGradient(
-                      colors: [Colors.redAccent, Colors.orange, Colors.lightGreen],
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter),
+                  gradient: LinearGradient(colors: [
+                    ThemeConfig.getPrimaryColorShade(200)!,
+                    ThemeConfig.getPrimaryColorShade(400)!,
+                    ThemeConfig.getPrimaryColorShade(700)!,
+                  ], begin: Alignment.bottomCenter, end: Alignment.topCenter),
                 ),
               ]),
           Row(

@@ -17,11 +17,13 @@ class CustomBarChart extends StatefulWidget {
     required this.barChartValuesData,
     required this.scoreLimit,
     required this.totalPages,
+    this.dottedLineIndicatorValue,
   });
 
   final List<dynamic> barChartValuesData;
   int scoreLimit;
   int totalPages;
+  int? dottedLineIndicatorValue = 0;
 
   @override
   State<CustomBarChart> createState() => _CustomBarChartState();
@@ -75,7 +77,6 @@ class _CustomBarChartState extends State<CustomBarChart> {
     //   _scoreLimit = maxValue;
     // }
     _calculateTotalPages();
-    print('bnr: ${_scoreLimit}');
   }
 
   void _calculateTotalPages() {
@@ -169,11 +170,30 @@ class _CustomBarChartState extends State<CustomBarChart> {
                 minY: 0,
                 gridData: FlGridData(
                   show: true,
-                  drawHorizontalLine: false,
+                  drawHorizontalLine: true,
                   drawVerticalLine: false,
+                  getDrawingHorizontalLine: (value) {
+                    if (value == widget.dottedLineIndicatorValue!) {
+                      return FlLine(
+                        color: Colors.blue, // Color of the grid line at y=70
+                        strokeWidth: 1, // Thickness of the grid line
+                        dashArray: [5, 5], // Optional: Make it dashed, remove if we want solid line
+                      );
+                    }
+                    return FlLine(
+                      color: Colors.transparent, // Hiding other lines by making them transparent
+                      strokeWidth: 0,
+                    );
+                  },
                 ),
                 borderData: FlBorderData(
                   show: false,
+                  border: Border(
+                    bottom: BorderSide(color: Colors.grey.shade200, width: 1),
+                    top: BorderSide.none,
+                    left: BorderSide.none,
+                    right: BorderSide.none,
+                  ),
                 ),
                 barTouchData: BarTouchData(
                   touchTooltipData: BarTouchTooltipData(
@@ -221,19 +241,20 @@ class _CustomBarChartState extends State<CustomBarChart> {
                     )),
                     bottomTitles: AxisTitles(
                         sideTitles: SideTitles(
+                            reservedSize: 60,
                             showTitles: true,
                             getTitlesWidget: (value, meta) {
                               return Transform.rotate(
                                 angle: -45 * (pi / 180),
                                 alignment: Alignment.bottomCenter,
                                 child: Padding(
-                                  padding: EdgeInsets.only(top: 10),
+                                  padding: EdgeInsets.only(top: 20),
                                   child: Text(
                                     '${widget.barChartValuesData[value.toInt()].x} ',
                                     style: TextStyle(
                                       fontSize: 12,
                                       color: ThemeConfig.primaryTextColor!,
-                                      fontWeight: FontWeight.bold,
+                                      // fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ),

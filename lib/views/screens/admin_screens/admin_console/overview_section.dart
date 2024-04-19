@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:isms/controllers/theme_management/theme_config.dart';
+import 'package:isms/models/admin_models/exam_attempt_overview.dart';
+import 'package:isms/models/admin_models/exam_deadline.dart';
 import 'package:isms/views/screens/admin_screens/admin_console/deadline_overview_widget.dart';
 import 'package:isms/views/screens/admin_screens/admin_console/exam_attempt_overview_widget.dart';
 import 'package:isms/views/widgets/shared_widgets/hoverable_section_container.dart';
 
 class OverviewSection extends StatelessWidget {
-  const OverviewSection({
+  OverviewSection({
     super.key,
+    required this.examDeadlines,
+    required this.recentExamAttempts,
   });
+
+  List<ExamDeadline> examDeadlines;
+  List<ExamAttemptOverview> recentExamAttempts = [];
 
   @override
   Widget build(BuildContext context) {
@@ -36,25 +44,33 @@ class OverviewSection extends StatelessWidget {
                     SizedBox(
                       height: 20,
                     ),
-                    Column(
-                      children: [
-                        DeadlineOverviewWidget(
-                          day: '03',
-                          month: 'April',
-                          year: '2024',
-                          courseTitle: 'Advanced Javascript Fundamentals',
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        DeadlineOverviewWidget(
-                          day: '05',
-                          month: 'June',
-                          year: '2024',
-                          courseTitle: 'Python Fundamentals',
-                        ),
-                      ],
-                    )
+                    ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: 2,
+                        itemBuilder: (context, index) {
+                          // print(examDeadlines[index].nearestCompletionDeadline);
+                          DateTime dateTime = DateTime.parse(examDeadlines[index].nearestCompletionDeadline);
+                          int day = dateTime.day;
+                          String monthName = DateFormat('MMMM').format(dateTime);
+                          int year = dateTime.year;
+                          String passed = examDeadlines[index].usersPassed.toString();
+                          String totalUsers = examDeadlines[index].allUsersCount.toString();
+                          String usersCompliance = '${passed}/${totalUsers}';
+                          return Column(
+                            children: [
+                              DeadlineOverviewWidget(
+                                day: day.toString(),
+                                month: monthName,
+                                year: year.toString(),
+                                courseTitle: examDeadlines[index].examTitle,
+                                usersCompliance: usersCompliance,
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                            ],
+                          );
+                        }),
                   ],
                 ),
               ),
@@ -83,27 +99,24 @@ class OverviewSection extends StatelessWidget {
                     ),
                     Container(
                       child: Column(children: [
-                        ExamAttemptOverviewWidget(
-                          startDate: '2024-04-17 14:13:11',
-                          userName: 'Julia Cancio',
-                          examName: 'Advanced Javascript Fundamentals Exam 1',
-                          value: 0.88,
-                          score: '88/100',
-                        ),
-                        ExamAttemptOverviewWidget(
-                          startDate: '2024-03-15 12:12:11',
-                          userName: 'Aidan Pope',
-                          examName: 'Advanced Javascript Fundamentals Exam 1',
-                          value: 0.76,
-                          score: '76/100',
-                        ),
-                        ExamAttemptOverviewWidget(
-                          startDate: '2024-03-11 13:42:58',
-                          userName: 'Shigeru Kyotani',
-                          examName: 'Python Fundamentaals Exam 1',
-                          value: 0.80,
-                          score: '80/100',
-                        ),
+                        ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: recentExamAttempts.length,
+                            itemBuilder: (context, index) {
+                              print(recentExamAttempts[index].date);
+                              DateTime parsedDateTime = DateTime.parse(recentExamAttempts[index].date);
+                              String formattedDateTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(parsedDateTime);
+
+                              return ExamAttemptOverviewWidget(
+                                startDate: '${formattedDateTime}',
+                                userName:
+                                    '${recentExamAttempts[index].givenName} ${recentExamAttempts[index].familyName}',
+                                examName: '${recentExamAttempts[index].examTitle}',
+                                value: (recentExamAttempts[index].score) / 100,
+                                score: '${(recentExamAttempts[index].score)}/100',
+                                passed: recentExamAttempts[index].passed,
+                              );
+                            }),
                         SizedBox(
                           height: 16,
                         ),
