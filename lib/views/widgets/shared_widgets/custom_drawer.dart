@@ -2,35 +2,38 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-
-// Assuming these imports are correct and the files exist
 import 'package:isms/controllers/theme_management/app_theme.dart';
 import 'package:isms/controllers/user_management/logged_in_state.dart';
 import 'package:isms/utilities/navigation.dart';
 
-class IsmsDrawer extends StatelessWidget {
-  final BuildContext? context;
+class IsmsDrawer extends StatefulWidget {
+  final BuildContext context;
 
-  const IsmsDrawer({super.key, required this.context});
+  const IsmsDrawer({required this.context, Key? key}) : super(key: key);
+
+  @override
+  _IsmsDrawerState createState() => _IsmsDrawerState();
+}
+
+class _IsmsDrawerState extends State<IsmsDrawer> {
+  String? _hoveredRoute;
 
   @override
   Widget build(BuildContext context) {
-    // Use a theme color from your app's theme or define custom ones
-    Color backgroundColor = Colors.grey.shade200;
-    Color iconColor = Colors.grey.shade700!;
-    Color textColor = Colors.grey.shade700!;
-    double _fontSize = 16;
-
     return Drawer(
+      shape: const Border(),
+      width: 120,
       child: Container(
-        color: backgroundColor,
+        color: Color.fromRGBO(24, 118, 210, 1),
         child: Padding(
-          padding: const EdgeInsets.only(top: 60.0, bottom: 60, right: 20, left: 20),
+          padding: const EdgeInsets.only(top: 80.0, bottom: 10, right: 0, left: 0),
           child: Column(
             children: [
-              ..._getDrawerItems(context, iconColor, textColor, _fontSize),
+              ..._getDrawerItems(widget.context),
               Expanded(child: Container()),
-              _getLogoutItem(context, iconColor, textColor, _fontSize),
+              _getProfileImage(widget.context),
+              // SizedBox(height: 20),
+              _getLogoutItem(widget.context),
             ],
           ),
         ),
@@ -38,110 +41,149 @@ class IsmsDrawer extends StatelessWidget {
     );
   }
 
-  List<Widget> _getDrawerItems(BuildContext context, Color iconColor, Color textColor, double fontSize) {
+  List<Widget> _getDrawerItems(BuildContext context) {
     final LoggedInState loggedInState = context.watch<LoggedInState>();
     final List<Widget> drawerItemWidgets = [];
 
-    // Custom drawer header with gradient and improved typography
-    // drawerItemWidgets.add(
-    //   Container(
-    //     padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-    //     decoration: BoxDecoration(
-    //       gradient: LinearGradient(
-    //         begin: Alignment.topLeft,
-    //         end: Alignment.bottomRight,
-    //         colors: [Theme.of(context).primaryColor, getPrimaryColorShade(50)!],
-    //       ),
-    //     ),
-    //     child: DrawerHeader(
-    //       margin: EdgeInsets.zero,
-    //       padding: EdgeInsets.all(16),
-    //       child: Text(
-    //         "General",
-    //         style: TextStyle(
-    //             fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
-    //       ),
-    //     ),
-    //   ),
-    // );
-    // drawerItemWidgets.add(
-    //   Container(
-    //     padding: const EdgeInsets.all(18),
-    //     child: Text(
-    //       "General",
-    //       textAlign: TextAlign.left,
-    //       style: TextStyle(
-    //           fontSize: 16, fontWeight: FontWeight.bold, color: textColor),
-    //     ),
-    //   ),
-    // );
-    drawerItemWidgets.add(_getDrawerItem(context, Icons.home, AppLocalizations.of(context)!.buttonHome,
-        NamedRoutes.home.name, iconColor, textColor, fontSize));
-    drawerItemWidgets.add(_getDrawerItem(context, Icons.list, AppLocalizations.of(context)!.buttonCourseList,
-        NamedRoutes.assignments.name, iconColor, textColor, fontSize));
-    // drawerItemWidgets.add(Divider());
+    drawerItemWidgets.add(
+        _getDrawerItem(context, Icons.home_outlined, AppLocalizations.of(context)!.buttonHome, NamedRoutes.home.name));
+    drawerItemWidgets.add(_getDrawerItem(
+        context, Icons.list_outlined, AppLocalizations.of(context)!.buttonCourseList, NamedRoutes.assignments.name));
     if (loggedInState.currentUserRole == 'admin') {
-      // Admin actions are grouped under a visually distinct header
-      // drawerItemWidgets.add(
-      //   Container(
-      //     padding: const EdgeInsets.all(18),
-      //     child: Text(
-      //       "Admin Actions",
-      //       textAlign: TextAlign.left,
-      //       style: TextStyle(
-      //           fontSize: 16, fontWeight: FontWeight.bold, color: textColor),
-      //     ),
-      //   ),
-      // );
-      drawerItemWidgets.add(_getDrawerItem(context, Icons.admin_panel_settings_rounded,
-          AppLocalizations.of(context)!.buttonAdminPanel, NamedRoutes.adminPanel.name, iconColor, textColor, fontSize));
-      drawerItemWidgets.add(_getDrawerItem(
-          context, Icons.people_rounded, 'All Users', NamedRoutes.adminPanel.name, iconColor, textColor, fontSize));
-
-      // drawerItemWidgets.add(_getDrawerItem(
-      //     context,
-      //     Icons.notifications,
-      //     AppLocalizations.of(context)!.buttonNotificationPage,
-      //     NamedRoutes.notifications.name,
-      //     iconColor,
-      //     textColor,
-      //     fontSize));
+      drawerItemWidgets.add(_getDrawerItem(context, Icons.admin_panel_settings_outlined,
+          AppLocalizations.of(context)!.buttonAdminPanel, NamedRoutes.adminPanel.name));
     }
-    drawerItemWidgets.add(_getDrawerItem(context, Icons.settings, AppLocalizations.of(context)!.buttonSettings,
-        NamedRoutes.settings.name, iconColor, textColor, fontSize));
-    // drawerItemWidgets.add(_getDrawerItem(
-    //     context,
-    //     Icons.add_to_queue,
-    //     'NavigationRail',
-    //     NamedRoutes.navigationRail.name,
-    //     iconColor,
-    //     textColor,
-    //     fontSize));
-
+    drawerItemWidgets.add(_getDrawerItem(
+        context, Icons.settings_outlined, AppLocalizations.of(context)!.buttonSettings, NamedRoutes.settings.name));
     return drawerItemWidgets;
   }
 
-  Widget _getDrawerItem(BuildContext context, IconData icon, String label, String route, Color iconColor,
-      Color textColor, double fontSize) {
-    return ListTile(
-      leading: Icon(icon, color: iconColor),
-      title: Text(label, style: TextStyle(color: textColor, fontSize: fontSize)),
-      onTap: () {
-        context.goNamed(route);
-        Navigator.pop(context); // Then close the drawer
+  Widget _getDrawerItem(BuildContext context, IconData icon, String label, String route) {
+    final bool isHovered = route == _hoveredRoute;
+    return MouseRegion(
+      onEnter: (_) {
+        setState(() {
+          _hoveredRoute = route;
+        });
       },
+      onExit: (_) {
+        setState(() {
+          _hoveredRoute = null;
+        });
+      },
+      child: InkWell(
+        onTap: () {
+          context.goNamed(route);
+          Navigator.pop(context);
+        },
+        child: Container(
+          width: 120,
+          padding: EdgeInsets.only(top: 15, bottom: 15),
+          decoration: BoxDecoration(
+            color: isHovered ? Colors.white.withOpacity(0.1) : Colors.transparent,
+            borderRadius: BorderRadius.circular(6),
+          ),
+          child: Expanded(
+            // Wrap InkWell with Expanded
+            child: Column(
+              children: [
+                Icon(icon, color: Colors.white, size: 30),
+                SizedBox(height: 0), // Adjust the spacing between icon and text
+                Text(label, style: TextStyle(color: Colors.white, fontSize: 16)),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 
-  Widget _getLogoutItem(BuildContext context, Color iconColor, Color textColor, double fontSize) {
-    return ListTile(
-      leading: Icon(Icons.logout, color: iconColor),
-      title: Text(AppLocalizations.of(context)!.buttonLogout, style: TextStyle(color: textColor, fontSize: fontSize)),
-      onTap: () async {
-        await LoggedInState.logout().then((value) {
-          context.goNamed(NamedRoutes.login.name);
+  Widget _getLogoutItem(BuildContext context) {
+    final bool isHovered = _hoveredRoute == 'logout';
+    return MouseRegion(
+      onEnter: (_) {
+        setState(() {
+          _hoveredRoute = 'logout';
         });
       },
+      onExit: (_) {
+        setState(() {
+          _hoveredRoute = null;
+        });
+      },
+      child: InkWell(
+        onTap: () async {
+          await LoggedInState.logout().then((value) {
+            context.goNamed(NamedRoutes.login.name);
+          });
+        },
+        child: Container(
+          width: 120,
+          padding: EdgeInsets.only(top: 15, bottom: 15),
+          decoration: BoxDecoration(
+            color: isHovered ? Colors.white.withOpacity(0.1) : Colors.transparent,
+            borderRadius: BorderRadius.circular(6),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.logout_outlined, color: Colors.white, size: 30),
+              SizedBox(height: 0),
+              Text(AppLocalizations.of(context)!.buttonLogout, style: TextStyle(color: Colors.white, fontSize: 16)),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _getProfileImage(BuildContext context) {
+    final bool isHovered = _hoveredRoute == 'profile';
+    return MouseRegion(
+      onEnter: (_) {
+        setState(() {
+          _hoveredRoute = 'profile';
+        });
+      },
+      onExit: (_) {
+        setState(() {
+          _hoveredRoute = null;
+        });
+      },
+      child: InkWell(
+        onTap: () {
+          // Navigate to SettingsPage
+          context.goNamed(NamedRoutes.settings.name);
+        },
+        child: Container(
+          width: 120,
+          height: 120,
+          padding: EdgeInsets.only(top: 15, bottom: 15),
+          decoration: BoxDecoration(
+            color: isHovered ? Colors.white.withOpacity(0.1) : Colors.transparent,
+            borderRadius: BorderRadius.circular(6),
+          ),
+          child: Center(
+            child: Container(
+              width: 60.0,
+              height: 60.0,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: Colors.white,
+                  width: 3.0,
+                ),
+              ),
+              child: ClipOval(
+                child: Image.asset(
+                  'assets/images/Mona_Lisa_mini.jpg',
+                  fit: BoxFit.cover, // Resize image to fit inside the circle container
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
