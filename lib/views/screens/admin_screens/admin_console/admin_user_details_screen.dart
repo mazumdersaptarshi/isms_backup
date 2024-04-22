@@ -11,6 +11,7 @@ import 'package:isms/controllers/testing/testing_admin_graphs.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart';
 import 'package:isms/controllers/theme_management/theme_config.dart';
 import 'package:isms/controllers/user_management/logged_in_state.dart';
+import 'package:isms/models/admin_models/summary_section_item_widget.dart';
 import 'package:isms/models/charts/bar_charts/custom_bar_chart_data.dart';
 import 'package:isms/models/user_progress/user_course_progress.dart';
 import 'package:isms/models/user_progress/user_exam_attempt.dart';
@@ -64,7 +65,7 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
     setState(() {
       _pieChartExamsData = userExamResults;
     });
-    print(_pieChartExamsData);
+    // print(_pieChartExamsData);
   }
 
   @override
@@ -227,7 +228,7 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
             examStatus == ExamStatus.completed
                 ? Icon(
                     Icons.check_circle_outline_rounded,
-                    color: Colors.green,
+                    color: ThemeConfig.primaryColor,
                   )
                 : Icon(
                     Icons.hourglass_top_rounded,
@@ -288,7 +289,7 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
         );
 
         expansionTiles.add(Container(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: CustomExpansionTile(titleWidget: titleWidget, contentWidget: contentWidget)));
       }
 
@@ -327,10 +328,10 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
               children: [
                 Icon(
                   userCourseProgress.courseLearningCompleted == true
-                      ? Icons.check_circle_rounded // Icon for 'completed' status
+                      ? Icons.check_circle_outline_rounded // Icon for 'completed' status
                       : Icons.pending, // Icon for other statuses
                   color: userCourseProgress.courseLearningCompleted == true
-                      ? Colors.green // Color for 'completed' status
+                      ? ThemeConfig.primaryColor // Color for 'completed' status
                       : Colors.amber, // Color for other statuses
                 ),
                 SizedBox(width: 20),
@@ -456,7 +457,8 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
               } else if (snapshot.hasData) {
                 // Data is fetched successfully, display the user's name
                 snapshot.data.forEach((element) {});
-                return _buildSummarySection(snapshot.data);
+                // return _buildSummarySection(snapshot.data);
+                return _buildSummaryItemWidgets(snapshot.data);
               } else {
                 // Handle the case when there's no data
                 return Text('No data available');
@@ -481,10 +483,6 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
                 } else {
                   return Container(
                     margin: EdgeInsets.fromLTRB(80, 10, 80, 30),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: ThemeConfig.borderColor1!, width: 2),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
                     child: ListView.builder(
                       shrinkWrap: true,
                       // itemCount: adminState.getAllCoursesDataForCurrentUser(uid)['coursesDetails'].length,
@@ -492,65 +490,75 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
                       itemCount: snapshot.data.length,
 
                       itemBuilder: (context, index) {
-                        return CustomExpansionTile(
-                          titleWidget: _courseDetailsTitleWidget(
-                            userCourseProgress: snapshot.data[index],
+                        return Container(
+                          margin: EdgeInsets.symmetric(vertical: 10),
+                          child: CustomExpansionTile(
+                            titleWidget: _courseDetailsTitleWidget(
+                              userCourseProgress: snapshot.data[index],
+                              index: index,
+                            ),
+                            contentWidget: _getCourseExamsListOfWidgets(
+                                examsProgressList: snapshot.data[index].examsProgressList!),
                             index: index,
+                            length: userCourseDetailsList.length,
+                            hasHoverBorder: true,
                           ),
-                          contentWidget:
-                              _getCourseExamsListOfWidgets(examsProgressList: snapshot.data[index].examsProgressList!),
-                          index: index,
-                          length: userCourseDetailsList.length,
-                          hasHoverBorder: true,
                         );
                       },
                     ),
                   );
                 }
               }),
-          buildSectionHeader(title: 'Activity'),
-          Container(
-            width: MediaQuery.of(context).size.width * 0.95,
-            margin: EdgeInsets.fromLTRB(80, 10, 80, 30),
-            decoration: BoxDecoration(
-              border: Border.all(color: ThemeConfig.borderColor1!, width: 2),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Container(
-              margin: EdgeInsets.all(20),
-              child: Wrap(
-                alignment: WrapAlignment.spaceBetween,
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: 800),
-                    child: HoverableSectionContainer(
-                      onHover: (bool) {},
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'User activity over time',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: ThemeConfig.primaryTextColor,
-                            ),
-                          ),
-                          Divider(),
-                          SizedBox(
-                            height: 40,
-                          ),
-                          CustomLineChartUserWidget(),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          )
+          // buildSectionHeader(title: 'Activity'),
+          // Container(
+          //   margin: EdgeInsets.fromLTRB(80, 10, 80, 30),
+          //   child: HoverableSectionContainer(
+          //     onHover: (bool) {},
+          //     child: Column(
+          //       crossAxisAlignment: CrossAxisAlignment.start,
+          //       children: [
+          //         Text(
+          //           'User activity over time',
+          //           style: TextStyle(
+          //             fontSize: 14,
+          //             color: ThemeConfig.primaryTextColor,
+          //           ),
+          //         ),
+          //         Divider(),
+          //         SizedBox(
+          //           height: 40,
+          //         ),
+          //         CustomLineChartUserWidget(),
+          //       ],
+          //     ),
+          //   ),
+          // )
         ],
+      ),
+    );
+  }
+
+  Widget _buildSummaryItemWidgets(snapshotData) {
+    print(snapshotData);
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.9,
+      margin: const EdgeInsets.fromLTRB(80, 30, 100, 0), // Margin for the whole container
+      child: Row(
+        children: snapshotData.asMap().entries.map<Widget>((entry) {
+          int index = entry.key;
+          return Expanded(
+            child: Container(
+              margin: EdgeInsets.all(10),
+              child: HoverableSectionContainer(
+                  onHover: (bool) {},
+                  child: SummarySectionItemWidget(
+                    title: entry.value.summaryTitle,
+                    value: entry.value.value.toString(),
+                    icon: entry.value.icon ?? null,
+                  )),
+            ),
+          );
+        }).toList(),
       ),
     );
   }

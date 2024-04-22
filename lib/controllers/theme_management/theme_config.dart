@@ -112,4 +112,28 @@ class ThemeConfig {
         borderRadius: BorderRadius.circular(5),
         border: Border.all(color: primaryColor!, width: 3), // Blue border added for flipped state
       );
+
+  static ButtonStyle get elevatedButtonStyle => ElevatedButton.styleFrom(
+        elevation: 0,
+        backgroundColor: primaryCardColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(4),
+          side: BorderSide(
+            color: borderColor1,
+            width: 2.0,
+          ),
+        ),
+      );
+
+  static ButtonStyle get elevatedButtonStyleDisabled => ElevatedButton.styleFrom(
+        elevation: 0,
+        backgroundColor: primaryCardColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(4),
+          side: BorderSide(
+            color: borderColor2,
+            width: 2.0,
+          ),
+        ),
+      );
 }

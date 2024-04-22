@@ -6,7 +6,7 @@ import 'package:isms/controllers/user_management/logged_in_state.dart';
 import 'package:isms/views/screens/admin_screens/notification_page.dart';
 import 'package:isms/views/screens/admin_screens/settings_page.dart';
 import 'package:isms/views/widgets/shared_widgets/custom_app_bar.dart';
-import '../course_list.dart';
+import '../course_list_page.dart';
 import '../home_screen.dart';
 
 void main() => runApp(NavigationRailPage());
@@ -161,7 +161,7 @@ class _NavigationRailWidgetState extends State<NavigationRailWidget> {
       case 0:
         return HomePage();
       case 1:
-        return CourseList();
+        return CourseListPage();
       case 2:
         return SettingsPage();
       case 3:

@@ -161,7 +161,7 @@ class _ExamAttemptsAnalysisState extends State<ExamAttemptsAnalysis> {
               ),
               if (_scatterChartData.isNotEmpty)
                 Container(
-                    padding: EdgeInsets.fromLTRB(20, 20, 20, 40),
+                    padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
                     height: 700,
                     child: CustomScatterChartWidget(
                       key: ValueKey(_scatterChartData),

@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 enum ValueType { percentage, string, number }
 
 class UserSummary {
@@ -5,6 +7,7 @@ class UserSummary {
 
   dynamic value;
   String? type;
+  Icon? icon;
 
-  UserSummary({required this.summaryTitle, this.value, this.type});
+  UserSummary({required this.summaryTitle, this.value, this.type, this.icon});
 }

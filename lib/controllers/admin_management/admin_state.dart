@@ -195,18 +195,44 @@ class AdminState {
 
       jsonResponse.forEach((element) {
         userSummaryList.add(UserSummary(
-            summaryTitle: 'Courses Assigned', value: element[0]['assignedCourses'], type: ValueType.number.name));
+            summaryTitle: 'Courses Assigned',
+            value: element[0]['assignedCourses'],
+            type: ValueType.number.name,
+            icon: Icon(
+              Icons.local_library_outlined,
+              size: 30,
+            )));
         userSummaryList.add(
-            UserSummary(summaryTitle: 'Exams Passed', value: element[0]['examsPassed'], type: ValueType.number.name));
-        userSummaryList.add(UserSummary(
-            summaryTitle: 'Average Score', value: element[0]['averageScore'], type: ValueType.percentage.name));
+          UserSummary(
+              summaryTitle: 'Exams Passed',
+              value: element[0]['examsPassed'],
+              type: ValueType.number.name,
+              icon: Icon(
+                Icons.task_outlined,
+                size: 30,
+              )),
+        );
+        userSummaryList.add(
+          UserSummary(
+              summaryTitle: 'Average Score',
+              value: double.parse(element[0]['averageScore'].toStringAsFixed(2)),
+              type: ValueType.percentage.name,
+              icon: Icon(
+                Icons.score_outlined,
+                size: 30,
+              )),
+        );
         userSummaryList.add(UserSummary(
             summaryTitle: 'Pending Tasks',
             value: element[0]['assignedCourses'] -
                 element[0]['coursesLearningCompleted'] +
                 element[0]['assignedExams'] -
                 element[0]['examsPassed'],
-            type: ValueType.number.name));
+            type: ValueType.number.name,
+            icon: Icon(
+              Icons.hourglass_empty_rounded,
+              size: 30,
+            )));
       });
     }
     return userSummaryList;

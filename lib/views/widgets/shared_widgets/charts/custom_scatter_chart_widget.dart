@@ -22,7 +22,7 @@ class CustomScatterChartWidget extends StatefulWidget {
 
 class _CustomScatterChartWidgetState extends State<CustomScatterChartWidget> {
   final maxY = 100.0;
-  final int _pageSize = 10;
+  final int _pageSize = 15;
   int _currentPage = 0;
   int _totalPages = 0;
   int _endIndex = 0;
@@ -97,101 +97,95 @@ class _CustomScatterChartWidgetState extends State<CustomScatterChartWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          GestureDetector(
-            onTap: () {},
-            child: Container(
-              width: MediaQuery.of(context).size.width * 0.5,
-              height: 500,
-              child: AspectRatio(
-                aspectRatio: 2,
-                child: ScatterChart(
-                  ScatterChartData(
-                    scatterSpots: _buildScatterSpotsData(),
-                    minX: 0,
-                    maxX: _pageSize - 1,
-                    // Adjusted to local page index
-                    minY: 0,
-                    maxY: maxY,
-                    borderData: FlBorderData(show: false),
-                    gridData: FlGridData(
-                      show: true,
-                      drawHorizontalLine: true,
-                      drawVerticalLine: false,
-                      getDrawingHorizontalLine: (value) {
-                        if (value == widget.dottedLineIndicatorValue!) {
-                          return FlLine(
-                            color: Colors.blue, // Color of the grid line at y=70
-                            strokeWidth: 1, // Thickness of the grid line
-                            dashArray: [5, 5], // Optional: Make it dashed, remove if we want solid line
-                          );
-                        }
-                        return FlLine(
-                          color: Colors.transparent, // Hiding other lines by making them transparent
-                          strokeWidth: 0,
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Container(
+        // color: Colors.green,
+        width: MediaQuery.of(context).size.width * 0.5,
+        // height: 500,
+        child: AspectRatio(
+          aspectRatio: 2,
+          child: ScatterChart(
+            ScatterChartData(
+              scatterSpots: _buildScatterSpotsData(),
+              minX: 0,
+              maxX: _pageSize - 1,
+              // Adjusted to local page index
+              minY: 0,
+              maxY: maxY,
+              borderData: FlBorderData(show: false),
+              gridData: FlGridData(
+                show: true,
+                drawHorizontalLine: true,
+                drawVerticalLine: false,
+                getDrawingHorizontalLine: (value) {
+                  if (value == widget.dottedLineIndicatorValue!) {
+                    return FlLine(
+                      color: Colors.blue, // Color of the grid line at y=70
+                      strokeWidth: 1, // Thickness of the grid line
+                      dashArray: [5, 5], // Optional: Make it dashed, remove if we want solid line
+                    );
+                  }
+                  return FlLine(
+                    color: Colors.transparent, // Hiding other lines by making them transparent
+                    strokeWidth: 0,
+                  );
+                },
+              ),
+              titlesData: FlTitlesData(
+                show: true,
+                topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                leftTitles: AxisTitles(
+                  sideTitles: SideTitles(
+                      reservedSize: 60,
+                      showTitles: true,
+                      getTitlesWidget: (value, meta) {
+                        return Text(
+                          value.toString(),
+                          style: TextStyle(color: ThemeConfig.primaryTextColor),
                         );
-                      },
-                    ),
-                    titlesData: FlTitlesData(
-                      show: true,
-                      topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                      rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                      leftTitles: AxisTitles(
-                        sideTitles: SideTitles(
-                            reservedSize: 60,
-                            showTitles: true,
-                            getTitlesWidget: (value, meta) {
-                              return Text(
-                                value.toString(),
-                                style: TextStyle(color: ThemeConfig.primaryTextColor),
-                              );
-                            }),
-                      ),
-                      bottomTitles: AxisTitles(
-                        sideTitles: SideTitles(
-                          reservedSize: 60,
-                          interval: 1,
-                          showTitles: true,
-                          getTitlesWidget: (value, meta) {
-                            int index = _currentPage * _pageSize + value.toInt();
-                            print(value.toInt());
-                            if (index >= widget.usersExamScoresScatterData.length) {
-                              return Text('');
-                            }
-                            return Transform.rotate(
-                              angle: -45 * (pi / 180),
-                              alignment: Alignment.bottomCenter,
-                              child: Container(
-                                padding: EdgeInsets.only(top: 20),
-                                child: Text(
-                                  widget.usersExamScoresScatterData[index].x,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: ThemeConfig.primaryTextColor,
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
+                      }),
+                ),
+                bottomTitles: AxisTitles(
+                  sideTitles: SideTitles(
+                    reservedSize: 60,
+                    interval: 1,
+                    showTitles: true,
+                    getTitlesWidget: (value, meta) {
+                      int index = _currentPage * _pageSize + value.toInt();
+                      print(value.toInt());
+                      if (index >= widget.usersExamScoresScatterData.length) {
+                        return Text('');
+                      }
+                      return Transform.rotate(
+                        angle: -45 * (pi / 180),
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                          padding: EdgeInsets.only(top: 20),
+                          child: Text(
+                            widget.usersExamScoresScatterData[index].x,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: ThemeConfig.primaryTextColor,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    scatterTouchData: ScatterTouchData(enabled: false),
+                      );
+                    },
                   ),
-                  swapAnimationDuration: const Duration(milliseconds: 600),
-                  swapAnimationCurve: Curves.fastOutSlowIn,
                 ),
               ),
+              scatterTouchData: ScatterTouchData(enabled: false),
             ),
+            swapAnimationDuration: const Duration(milliseconds: 600),
+            swapAnimationCurve: Curves.fastOutSlowIn,
           ),
-          SizedBox(
-            height: 20,
-          ),
-          if (_totalPages > 1) _buildPaginationControls(),
-        ]),
-      ],
-    );
+        ),
+      ),
+      SizedBox(
+        height: 20,
+      ),
+      if (_totalPages > 1) _buildPaginationControls(),
+    ]);
   }
 }

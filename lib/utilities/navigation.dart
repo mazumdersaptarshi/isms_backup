@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:isms/controllers/user_management/logged_in_state.dart';
 import 'package:isms/views/screens/admin_screens/admin_console/admin_user_details_screen.dart';
 import 'package:isms/views/screens/authentication/login_screen.dart';
-import 'package:isms/views/screens/course_list.dart';
+import 'package:isms/views/screens/course_list_page.dart';
 import 'package:isms/views/screens/course_page.dart';
 import 'package:isms/views/screens/home_screen.dart';
 
@@ -62,7 +62,7 @@ final GoRouter ismsRouter = GoRouter(
       // builder: (BuildContext context, GoRouterState state) => const CourseList(),
       pageBuilder: (context, state) {
         // Return a new page with a unique key to allow URL bar navigation to a sibling route with different path/query parameters
-        return MaterialPage(key: UniqueKey(), child: const CourseList());
+        return MaterialPage(key: UniqueKey(), child: const CourseListPage());
       },
       routes: [
         GoRoute(

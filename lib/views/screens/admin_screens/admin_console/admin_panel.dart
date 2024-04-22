@@ -143,7 +143,7 @@ class _AdminPanelState extends State<AdminPanel> {
                         examDeadlines: _examDeadlines,
                         recentExamAttempts: _recentExamAttempts,
                       )
-                    : CircularProgressIndicator(),
+                    : Center(child: CircularProgressIndicator()),
                 SizedBox(
                   height: 20,
                 ),
@@ -157,7 +157,7 @@ class _AdminPanelState extends State<AdminPanel> {
                         courses: _courses,
                         domainUsers: _allDomainUsersSummary,
                       )
-                    : CircularProgressIndicator(),
+                    : Center(child: CircularProgressIndicator()),
                 buildSectionHeader(title: 'Admin Actions'),
                 SizedBox(
                   height: 20,
@@ -169,7 +169,7 @@ class _AdminPanelState extends State<AdminPanel> {
                         CSRFToken: _CSRF_TOKEN,
                         JWT: _JWT,
                       )
-                    : CircularProgressIndicator(),
+                    : Center(child: CircularProgressIndicator()),
                 UsersSummaryTable(key: ValueKey(_allDomainUsersSummary), usersList: _allDomainUsersSummary),
               ],
             ),
