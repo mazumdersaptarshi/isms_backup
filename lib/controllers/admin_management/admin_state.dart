@@ -67,8 +67,8 @@ class AdminState {
   AdminState._internal() {
     // retrieveAllDataFromDatabase();
 
-    // getURL = remoteGetURL;
-    // getURL = localGetURL;
+    getURL = remoteGetURL3;
+    // getURL = localGetURL3;
   }
 
   factory AdminState() {
@@ -99,7 +99,7 @@ class AdminState {
 
     // http.Response response = await http.get(Uri.parse(localGetURL + 'user_profile_details' + '&param1=$uid'));
     http.Response response = await http
-        .get(Uri.parse(remoteGetURL3 + 'user_profile_details' + '&param1=$uid' + '&params=$encodedJsonStringParams'));
+        .get(Uri.parse(getURL + 'user_profile_details' + '&param1=$uid' + '&params=$encodedJsonStringParams'));
 
     List<dynamic> jsonResponse = [];
     if (response.statusCode == 200) {
@@ -115,7 +115,7 @@ class AdminState {
     // await Future.delayed(Duration(seconds: 10));
     // http.Response response = await http.get(Uri.parse(url + '${query4}'));
     // http.Response response = await http.get(Uri.parse(localGetURL + 'summary'));
-    http.Response response = await http.get(Uri.parse(remoteGetURL3 + 'summary'));
+    http.Response response = await http.get(Uri.parse(getURL + 'summary'));
 
     if (response.statusCode == 200) {
       // Check if the request was successful
@@ -151,7 +151,7 @@ class AdminState {
   }
 
   Future<dynamic> getDeadlines() async {
-    http.Response response = await http.get(Uri.parse(remoteGetURL3 + 'deadlines'));
+    http.Response response = await http.get(Uri.parse(getURL + 'deadlines'));
     List<ExamDeadline> examsDeadlines = [];
     if (response.statusCode == 200) {
       List<dynamic> jsonResponse = jsonDecode(response.body);
@@ -163,7 +163,7 @@ class AdminState {
   }
 
   Future<dynamic> getRecentExamAttempts() async {
-    http.Response response = await http.get(Uri.parse(remoteGetURL3 + 'recent_exam_attempts'));
+    http.Response response = await http.get(Uri.parse(getURL + 'recent_exam_attempts'));
     List<ExamAttemptOverview> recentExamAttempts = [];
     if (response.statusCode == 200) {
       List<dynamic> jsonResponse = jsonDecode(response.body);
@@ -184,8 +184,8 @@ class AdminState {
     String encodedJsonStringParams = Uri.encodeComponent(jsonStringParams);
 
     // http.Response response = await http.get(Uri.parse(getURL + 'user_summary' + '&param1=$uid' + '&params=${params}'));
-    http.Response response = await http
-        .get(Uri.parse(remoteGetURL3 + 'user_summary' + '&param1=$uid' + '&params=${encodedJsonStringParams}'));
+    http.Response response =
+        await http.get(Uri.parse(getURL + 'user_summary' + '&param1=$uid' + '&params=${encodedJsonStringParams}'));
 
     List<UserSummary> userSummaryList = [];
     if (response.statusCode == 200) {
@@ -200,6 +200,7 @@ class AdminState {
             type: ValueType.number.name,
             icon: Icon(
               Icons.local_library_outlined,
+              color: ThemeConfig.primaryTextColor,
               size: 30,
             )));
         userSummaryList.add(
@@ -209,6 +210,7 @@ class AdminState {
               type: ValueType.number.name,
               icon: Icon(
                 Icons.task_outlined,
+                color: ThemeConfig.primaryTextColor,
                 size: 30,
               )),
         );
@@ -219,6 +221,7 @@ class AdminState {
               type: ValueType.percentage.name,
               icon: Icon(
                 Icons.score_outlined,
+                color: ThemeConfig.primaryTextColor,
                 size: 30,
               )),
         );
@@ -231,6 +234,7 @@ class AdminState {
             type: ValueType.number.name,
             icon: Icon(
               Icons.hourglass_empty_rounded,
+              color: ThemeConfig.primaryTextColor,
               size: 30,
             )));
       });
@@ -246,8 +250,8 @@ class AdminState {
     };
     String jsonStringParams = jsonEncode(params);
     String encodedJsonStringParams = Uri.encodeComponent(jsonStringParams);
-    http.Response response = await http
-        .get(Uri.parse(localGetURL3 + 'exam_content' + '&param1=$examId' + '&params=$encodedJsonStringParams'));
+    http.Response response =
+        await http.get(Uri.parse(getURL + 'exam_content' + '&param1=$examId' + '&params=$encodedJsonStringParams'));
     print(response.body);
   }
 
@@ -262,7 +266,7 @@ class AdminState {
     String jsonStringParams = jsonEncode(params);
     String encodedJsonStringParams = Uri.encodeComponent(jsonStringParams);
 
-    http.Response response = await http.get(Uri.parse(remoteGetURL3 +
+    http.Response response = await http.get(Uri.parse(getURL +
         'get_exam_attempts' +
         '&param1=$userId&param2=$courseId&param3=$examId' +
         '&params=$encodedJsonStringParams'));
@@ -300,7 +304,7 @@ class AdminState {
     String encodedJsonStringParams = Uri.encodeComponent(jsonStringParams);
 
     http.Response response = await http
-        .get(Uri.parse(remoteGetURL3 + 'user_course_progress' + '&param1=$uid' + '&params=$encodedJsonStringParams'));
+        .get(Uri.parse(getURL + 'user_course_progress' + '&param1=$uid' + '&params=$encodedJsonStringParams'));
 
     List<UserCourseProgress> userCourseProgressList = [];
     if (response.statusCode == 200) {
@@ -348,8 +352,8 @@ class AdminState {
     String jsonStringParams = jsonEncode(params);
     String encodedJsonStringParams = Uri.encodeComponent(jsonStringParams);
 
-    http.Response response = await http.get(
-        Uri.parse(remoteGetURL3 + 'exams_scores_overview' + '&param1=$examId' + '&params=$encodedJsonStringParams'));
+    http.Response response = await http
+        .get(Uri.parse(getURL + 'exams_scores_overview' + '&param1=$examId' + '&params=$encodedJsonStringParams'));
 
     List<CustomBarChartData> usersExamData = [];
     metric = (metric == '')
@@ -403,8 +407,8 @@ class AdminState {
     String jsonStringParams = jsonEncode(params);
     String encodedJsonStringParams = Uri.encodeComponent(jsonStringParams);
 
-    http.Response response = await http.get(
-        Uri.parse(remoteGetURL3 + 'users_scores_variation' + '&param1=$examId' + '&params=$encodedJsonStringParams'));
+    http.Response response = await http
+        .get(Uri.parse(getURL + 'users_scores_variation' + '&param1=$examId' + '&params=$encodedJsonStringParams'));
 
     List<CustomScoresVariationData> usersExamDataBW = [];
     if (response.statusCode == 200) {
@@ -436,8 +440,8 @@ class AdminState {
     String jsonStringParams = jsonEncode(params);
     String encodedJsonStringParams = Uri.encodeComponent(jsonStringParams);
 
-    http.Response response = await http.get(
-        Uri.parse(remoteGetURL3 + 'users_scores_variation' + '&param1=$examId' + '&params=$encodedJsonStringParams'));
+    http.Response response = await http
+        .get(Uri.parse(getURL + 'users_scores_variation' + '&param1=$examId' + '&params=$encodedJsonStringParams'));
 
     List<CustomScoresVariationData> usersExamScoresScatterData = [];
     if (response.statusCode == 200) {
@@ -463,7 +467,7 @@ class AdminState {
     String sqlQuery = QueryBuilder.buildSqlQuery(query8, []);
     // http.Response response = await http.get(Uri.parse(url + '${sqlQuery}'));
     // http.Response response = await http.get(Uri.parse(localGetURL + 'all_courses'));
-    http.Response response = await http.get(Uri.parse(remoteGetURL3 + 'all_courses'));
+    http.Response response = await http.get(Uri.parse(getURL + 'all_courses'));
 
     List<CourseInfo> coursesList = [];
     if (response.statusCode == 200) {
@@ -485,8 +489,8 @@ class AdminState {
     String jsonStringParams = jsonEncode(params);
     String encodedJsonStringParams = Uri.encodeComponent(jsonStringParams);
     print('Fetching');
-    http.Response response = await http.get(Uri.parse(
-        remoteGetURL3 + 'user_courses_assignments' + '&param1=${user.uid}' + '&params=$encodedJsonStringParams'));
+    http.Response response = await http.get(
+        Uri.parse(getURL + 'user_courses_assignments' + '&param1=${user.uid}' + '&params=$encodedJsonStringParams'));
     UserCoursesAssignment userCoursesAssignment =
         UserCoursesAssignment(userId: user.uid, coursesAssigned: [], name: user.name!, email: user.emailId!);
     if (response.statusCode == 200) {
@@ -509,7 +513,7 @@ class AdminState {
     String sqlQuery = QueryBuilder.buildSqlQuery(query12, [uid]);
     // http.Response response = await http.get(Uri.parse(url + '${sqlQuery}'));
     // http.Response response = await http.get(Uri.parse(localGetURL + 'courses_list_for_user' + '&param1=$uid'));
-    http.Response response = await http.get(Uri.parse(remoteGetURL3 + 'courses_list_for_user' + '&param1=$uid'));
+    http.Response response = await http.get(Uri.parse(getURL + 'courses_list_for_user' + '&param1=$uid'));
 
     if (response.statusCode == 200) {
       List<dynamic> jsonResponse = jsonDecode(response.body);
@@ -526,8 +530,8 @@ class AdminState {
     String jsonStringParams = jsonEncode(params);
     String encodedJsonStringParams = Uri.encodeComponent(jsonStringParams);
 
-    http.Response response = await http.get(
-        Uri.parse(remoteGetURL3 + 'exams_list_for_course' + '&param1=$courseId' + '&params=$encodedJsonStringParams'));
+    http.Response response = await http
+        .get(Uri.parse(getURL + 'exams_list_for_course' + '&param1=$courseId' + '&params=$encodedJsonStringParams'));
 
     List<ExamInfo> examsListForCourse = [];
     if (response.statusCode == 200) {
@@ -549,8 +553,8 @@ class AdminState {
     String jsonStringParams = jsonEncode(params);
     String encodedJsonStringParams = Uri.encodeComponent(jsonStringParams);
 
-    http.Response response = await http.get(
-        Uri.parse(remoteGetURL3 + 'exams_overall_results' + '&param1=$examId' + '&params=$encodedJsonStringParams'));
+    http.Response response = await http
+        .get(Uri.parse(getURL + 'exams_overall_results' + '&param1=$examId' + '&params=$encodedJsonStringParams'));
 
     List<CustomPieChartData> pieChartData = [];
     if (response.statusCode == 200) {
@@ -576,8 +580,8 @@ class AdminState {
     String jsonStringParams = jsonEncode(params);
     String encodedJsonStringParams = Uri.encodeComponent(jsonStringParams);
 
-    http.Response response = await http.get(
-        Uri.parse(remoteGetURL3 + 'user_exams_overall_results' + '&param1=$uid' + '&params=$encodedJsonStringParams'));
+    http.Response response = await http
+        .get(Uri.parse(getURL + 'user_exams_overall_results' + '&param1=$uid' + '&params=$encodedJsonStringParams'));
     // http.Response response = await http.get(Uri.parse(remoteGetURL + 'user_exams_overall_results' + '&param1=$uid'));
     //
     List<CustomPieChartData> pieChartData = [];
@@ -598,7 +602,7 @@ class AdminState {
     String sqlQuery = QueryBuilder.buildSqlQuery(query15, []);
     // http.Response response = await http.get(Uri.parse(url + '${sqlQuery}'));
     // http.Response response = await http.get(Uri.parse(localGetURL + 'domain_users'));
-    http.Response response = await http.get(Uri.parse(remoteGetURL3 + 'domain_users'));
+    http.Response response = await http.get(Uri.parse(getURL + 'domain_users'));
 
     if (response.statusCode == 200) {}
   }

@@ -44,8 +44,21 @@ class _CustomBoxAndWhiskerChartWidgetState extends State<CustomBoxAndWhiskerChar
       child: Column(
         children: [
           SfCartesianChart(
-              primaryXAxis: CategoryAxis(),
-              primaryYAxis: NumericAxis(minimum: 0, maximum: 100, interval: 10),
+              primaryXAxis: CategoryAxis(
+                labelStyle: TextStyle(
+                  color: ThemeConfig.primaryTextColor,
+                  fontSize: 12,
+                ),
+              ),
+              primaryYAxis: NumericAxis(
+                minimum: 0,
+                maximum: 100,
+                interval: 10,
+                labelStyle: TextStyle(
+                  color: ThemeConfig.primaryTextColor,
+                  fontSize: 12,
+                ),
+              ),
               tooltipBehavior: _tooltip,
               series: <CartesianSeries<CustomScoresVariationData, String>>[
                 BoxAndWhiskerSeries<CustomScoresVariationData, String>(
@@ -55,7 +68,7 @@ class _CustomBoxAndWhiskerChartWidgetState extends State<CustomBoxAndWhiskerChar
                   name: 'Users Scores',
                   color: ThemeConfig.getPrimaryColorShade(400),
                   borderWidth: 1,
-                  borderColor: Colors.black,
+                  borderColor: ThemeConfig.primaryTextColor,
                   gradient: LinearGradient(colors: [
                     ThemeConfig.getPrimaryColorShade(200)!,
                     ThemeConfig.getPrimaryColorShade(400)!,
@@ -83,7 +96,10 @@ class _CustomBoxAndWhiskerChartWidgetState extends State<CustomBoxAndWhiskerChar
                 padding: EdgeInsets.all(8),
                 child: Text(
                   'Showing ${currentPage + 1} of ${(widget.allData.length / pageSize).ceil()}',
-                  style: TextStyle(fontSize: 14),
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: ThemeConfig.primaryTextColor,
+                  ),
                 ),
               ),
               ElevatedButton(

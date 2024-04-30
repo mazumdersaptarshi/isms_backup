@@ -20,6 +20,7 @@ import 'package:postgres/postgres.dart';
 import 'package:provider/provider.dart';
 
 import 'controllers/auth_token_management/csrf_token_provider.dart';
+import 'controllers/theme_management/theme_manager.dart';
 
 void main() async {
   // logging setup
@@ -78,6 +79,7 @@ class IsmsApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('triggered rebuild');
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<CsrfTokenProvider>(create: (context) {
@@ -97,10 +99,13 @@ class IsmsApp extends StatelessWidget {
         ChangeNotifierProvider<ExamProvider>(create: (context) {
           return ExamProvider();
         }),
+        ChangeNotifierProvider<ThemeManager>(create: (context) {
+          return ThemeManager();
+        }),
       ],
       child: MaterialApp.router(
         title: 'ISMS',
-        theme: ThemeConfig.ismsTheme,
+        // theme: ThemeConfig.dynamicISMSTheme(),
         scrollBehavior: CustomScrollBehavior(),
         debugShowCheckedModeBanner: false,
         // Required for localisation functionality

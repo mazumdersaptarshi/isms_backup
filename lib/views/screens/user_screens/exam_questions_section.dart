@@ -70,44 +70,64 @@ class _ExamQuestionsSectionState extends State<ExamQuestionsSection> {
 
                   // Check if the question is of type 'singleSelection' for Radio buttons
                   if (question.questionType == 'singleSelectionQuestion') {
-                    return RadioListTile<String>(
-                      controlAffinity: ListTileControlAffinity.leading,
-                      title: Text(answer.answerText),
-                      value: answer.answerId,
-                      groupValue: widget.userResponses[question.questionId]?.isNotEmpty == true
-                          ? widget.userResponses[question.questionId]!.first
-                          : '',
-                      onChanged: (String? value) {
-                        if (value != null) {
-                          setState(() {
-                            // Clear existing and add the new one for single-select
-                            widget.userResponses[question.questionId] = [value];
-                            print(widget.userResponses);
-                          });
-                        }
-                      },
+                    return Theme(
+                      data: ThemeData(
+                        unselectedWidgetColor: ThemeConfig.tertiaryTextColor1, // Color for the radio when not selected
+                      ),
+                      child: RadioListTile<String>(
+                        controlAffinity: ListTileControlAffinity.leading,
+                        title: Text(
+                          answer.answerText,
+                          style: TextStyle(
+                            color: ThemeConfig.primaryTextColor,
+                          ),
+                        ),
+                        value: answer.answerId,
+                        groupValue: widget.userResponses[question.questionId]?.isNotEmpty == true
+                            ? widget.userResponses[question.questionId]!.first
+                            : '',
+                        onChanged: (String? value) {
+                          if (value != null) {
+                            setState(() {
+                              // Clear existing and add the new one for single-select
+                              widget.userResponses[question.questionId] = [value];
+                              print(widget.userResponses);
+                            });
+                          }
+                        },
+                      ),
                     );
                   } else {
                     // Use CheckboxListTile for 'multipleSelection'
-                    return CheckboxListTile(
-                      controlAffinity: ListTileControlAffinity.leading,
-                      title: Text(answer.answerText),
-                      value: isSelected,
-                      onChanged: (bool? checked) {
-                        setState(() {
-                          widget.userResponses[question.questionId] ??= [];
-                          if (checked == true) {
-                            // Add answer ID to the list if checked
-                            if (!widget.userResponses[question.questionId]!.contains(answer.answerId)) {
-                              widget.userResponses[question.questionId]!.add(answer.answerId);
+                    return Theme(
+                      data: ThemeData(
+                        unselectedWidgetColor: ThemeConfig.tertiaryTextColor1, // Color for the radio when not selected
+                      ),
+                      child: CheckboxListTile(
+                        controlAffinity: ListTileControlAffinity.leading,
+                        title: Text(
+                          answer.answerText,
+                          style: TextStyle(
+                            color: ThemeConfig.primaryTextColor,
+                          ),
+                        ),
+                        value: isSelected,
+                        onChanged: (bool? checked) {
+                          setState(() {
+                            widget.userResponses[question.questionId] ??= [];
+                            if (checked == true) {
+                              // Add answer ID to the list if checked
+                              if (!widget.userResponses[question.questionId]!.contains(answer.answerId)) {
+                                widget.userResponses[question.questionId]!.add(answer.answerId);
+                              }
+                            } else {
+                              // Remove answer ID from the list if unchecked
+                              widget.userResponses[question.questionId]!.remove(answer.answerId);
                             }
-                          } else {
-                            // Remove answer ID from the list if unchecked
-                            widget.userResponses[question.questionId]!.remove(answer.answerId);
-                          }
-                          print(widget.userResponses);
-                        });
-                      },
+                            print(widget.userResponses);
+                          });
+                        },
+                      ),
                     );
                   }
                 }).toList(),

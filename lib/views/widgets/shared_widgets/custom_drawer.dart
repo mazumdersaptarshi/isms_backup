@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:isms/controllers/theme_management/theme_config.dart';
 import 'package:provider/provider.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart';
 import 'package:isms/controllers/user_management/logged_in_state.dart';
@@ -24,7 +25,8 @@ class _IsmsDrawerState extends State<IsmsDrawer> {
       shape: const Border(),
       width: 120,
       child: Container(
-        color: Color.fromRGBO(24, 118, 210, 1),
+        // color: Color.fromRGBO(24, 118, 210, 1),
+        color: ThemeConfig.drawerColor,
         child: Padding(
           padding: const EdgeInsets.only(top: 80.0, bottom: 10, right: 0, left: 0),
           child: Column(
@@ -47,8 +49,8 @@ class _IsmsDrawerState extends State<IsmsDrawer> {
 
     drawerItemWidgets.add(
         _getDrawerItem(context, Icons.home_outlined, AppLocalizations.of(context)!.buttonHome, NamedRoutes.home.name));
-    drawerItemWidgets.add(_getDrawerItem(
-        context, Icons.list_outlined, AppLocalizations.of(context)!.buttonCourseList, NamedRoutes.assignments.name));
+    drawerItemWidgets.add(_getDrawerItem(context, Icons.menu_book_outlined,
+        AppLocalizations.of(context)!.buttonCourseList, NamedRoutes.assignments.name));
     if (loggedInState.currentUserRole == 'admin') {
       drawerItemWidgets.add(_getDrawerItem(context, Icons.admin_panel_settings_outlined,
           AppLocalizations.of(context)!.buttonAdminPanel, NamedRoutes.adminPanel.name));

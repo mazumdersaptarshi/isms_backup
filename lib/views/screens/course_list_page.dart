@@ -70,6 +70,7 @@ class _CourseListPageState extends State<CourseListPage> {
       // Decode the JSON string into a Dart object (in this case, a List)
       jsonResponse = jsonDecode(response.body);
     }
+    print('lop: ${jsonResponse}');
     return jsonResponse;
   }
 
@@ -77,6 +78,7 @@ class _CourseListPageState extends State<CourseListPage> {
   Widget build(BuildContext context) {
     final LoggedInState loggedInState = context.watch<LoggedInState>();
     return Scaffold(
+      backgroundColor: ThemeConfig.scaffoldBackgroundColor,
       bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
       appBar: IsmsAppBar(context: context),
       drawer: IsmsDrawer(context: context),
@@ -147,9 +149,11 @@ class _CourseListPageState extends State<CourseListPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(course.courseSummary, style: TextStyle(fontSize: 14, color: Colors.grey.shade700)),
+                            Text(course.courseSummary,
+                                style: TextStyle(fontSize: 14, color: ThemeConfig.primaryTextColor)),
                             _separator,
-                            Text(course.courseDescription, style: TextStyle(fontSize: 14, color: Colors.grey.shade700)),
+                            Text(course.courseDescription,
+                                style: TextStyle(fontSize: 14, color: ThemeConfig.primaryTextColor)),
                           ],
                         ),
                       ),
@@ -172,9 +176,9 @@ class _CourseListPageState extends State<CourseListPage> {
                               child: Container(
                                 padding: EdgeInsets.symmetric(vertical: 13),
                                 child: Text(AppLocalizations.of(context)!.buttonResumeCourse,
-                                    style: TextStyle(color: ThemeConfig.primaryColor)),
+                                    style: TextStyle(color: ThemeConfig.secondaryTextColor)),
                               ),
-                              style: ThemeConfig.elevatedButtonStyle),
+                              style: ThemeConfig.elevatedBoxButtonStyle()),
                         )
                       : Container(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -185,10 +189,10 @@ class _CourseListPageState extends State<CourseListPage> {
                                 padding: EdgeInsets.symmetric(vertical: 13),
                                 child: Text(
                                   AppLocalizations.of(context)!.buttonStartCourse,
-                                  style: TextStyle(color: ThemeConfig.primaryColor),
+                                  style: TextStyle(color: ThemeConfig.secondaryTextColor),
                                 ),
                               ),
-                              style: ThemeConfig.elevatedButtonStyle),
+                              style: ThemeConfig.elevatedBoxButtonStyle(backgroundColor: ThemeConfig.primaryCardColor)),
                         )),
               _separator,
               Container(
@@ -196,6 +200,7 @@ class _CourseListPageState extends State<CourseListPage> {
                 child: Column(
                   children: [
                     CustomExpansionTile(
+                        expansionTileCardColor: ThemeConfig.secondaryCardColor,
                         titleWidget: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -218,6 +223,7 @@ class _CourseListPageState extends State<CourseListPage> {
                         ]),
                     _separator,
                     CustomExpansionTile(
+                        expansionTileCardColor: ThemeConfig.secondaryCardColor,
                         titleWidget: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -256,6 +262,7 @@ class _CourseListPageState extends State<CourseListPage> {
 
     for (int i = 0; i < sections.length; i++) {
       contentWidgets.add(Container(
+        // color: ThemeConfig.secondaryCardColor,
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Row(children: [
           sections[i].sectionCompleted
@@ -291,11 +298,15 @@ class _CourseListPageState extends State<CourseListPage> {
                     sections[i].sectionTitle,
                     style: TextStyle(
                       fontSize: 14,
+                      color: ThemeConfig.primaryTextColor,
                     ),
                   ),
                   subtitle: Text(
                     sections[i].sectionSummary,
-                    style: TextStyle(fontSize: 12),
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: ThemeConfig.tertiaryTextColor1,
+                    ),
                   ),
                   onTap: sections[i].sectionCompleted || i == completedSectionTotal
                       ? () => context.goNamed(NamedRoutes.course.name,
@@ -304,7 +315,7 @@ class _CourseListPageState extends State<CourseListPage> {
                       : null,
                 ),
                 Divider(
-                  color: Colors.grey.shade200,
+                  color: ThemeConfig.borderColor2,
                   thickness: 1,
                 ),
               ],
@@ -330,7 +341,7 @@ class _CourseListPageState extends State<CourseListPage> {
             SizedBox(height: 10.0),
             Text(
               exam.examTitle,
-              style: TextStyle(fontSize: 14),
+              style: TextStyle(fontSize: 14, color: ThemeConfig.primaryTextColor),
             ),
             SizedBox(height: 10.0), // Add spacing between title and summary
             Column(
@@ -338,7 +349,7 @@ class _CourseListPageState extends State<CourseListPage> {
               children: [
                 Text(
                   exam.examSummary,
-                  style: TextStyle(fontSize: 13, color: Colors.grey.shade700),
+                  style: TextStyle(fontSize: 13, color: ThemeConfig.tertiaryTextColor2),
                 ),
                 SizedBox(height: 5.0), // Add spacing between summary and icons
                 Row(
@@ -349,7 +360,7 @@ class _CourseListPageState extends State<CourseListPage> {
                     ), // Timer icon
                     SizedBox(width: 16),
                     Text(AppLocalizations.of(context)!.examEstimatedCompletionTime(exam.examEstimatedCompletionTime),
-                        style: TextStyle(fontSize: 13, color: Colors.grey.shade700)),
+                        style: TextStyle(fontSize: 13, color: ThemeConfig.tertiaryTextColor1)),
                   ],
                 ),
                 Row(
@@ -360,13 +371,13 @@ class _CourseListPageState extends State<CourseListPage> {
                     ), // Score icon
                     SizedBox(width: 16),
                     Text(AppLocalizations.of(context)!.examPassMark(exam.examPassMark),
-                        style: TextStyle(fontSize: 13, color: Colors.grey.shade700)),
+                        style: TextStyle(fontSize: 13, color: ThemeConfig.tertiaryTextColor1)),
                   ],
                 ),
               ],
             ),
             SizedBox(height: 15.0), // Add spacing before description
-            Text(exam.examDescription, style: TextStyle(fontSize: 13, color: Colors.grey.shade700)),
+            Text(exam.examDescription, style: TextStyle(fontSize: 13, color: ThemeConfig.tertiaryTextColor2)),
             _separator,
             Align(
               alignment: Alignment.centerLeft,
@@ -382,11 +393,11 @@ class _CourseListPageState extends State<CourseListPage> {
                         child: Text(
                           AppLocalizations.of(context)!.buttonStartExam,
                           style: TextStyle(
-                            color: ThemeConfig.primaryColor,
+                            color: ThemeConfig.secondaryTextColor,
                           ),
                         ),
                       ),
-                      style: ThemeConfig.elevatedButtonStyle,
+                      style: ThemeConfig.elevatedBoxButtonStyle(backgroundColor: ThemeConfig.secondaryCardColor),
                     )
                   : ElevatedButton(
                       onPressed: () {},
@@ -397,7 +408,7 @@ class _CourseListPageState extends State<CourseListPage> {
                           style: TextStyle(color: Colors.grey),
                         ),
                       ),
-                      style: ThemeConfig.elevatedButtonStyleDisabled,
+                      style: ThemeConfig.elevatedBoxButtonStyleDisabled(),
                     ),
             ),
             Divider(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:isms/controllers/theme_management/theme_config.dart';
 import '../../screens/course_page.dart';
 import '../shared_widgets/custom_linear_progress_indicator.dart';
 
@@ -19,8 +20,8 @@ class Carousel extends StatefulWidget {
 class _CarouselState extends State<Carousel> {
   ScrollController _scrollController = ScrollController();
 
-  Color _leftHoverColor = Colors.grey.withOpacity(0.5);
-  Color _rightHoverColor = Colors.grey.withOpacity(0.5);
+  Color _leftHoverColor = ThemeConfig.primaryCardColor!;
+  Color _rightHoverColor = ThemeConfig.primaryCardColor!;
 
   int _hoveredCardIndex = -1;
 
@@ -32,6 +33,7 @@ class _CarouselState extends State<Carousel> {
     return Stack(
       children: [
         Container(
+          color: ThemeConfig.primaryCardColor,
           width: MediaQuery.of(context).size.width * 0.9,
           margin: const EdgeInsets.symmetric(horizontal: 10.0),
           height: 200.0,
@@ -112,8 +114,8 @@ class _CarouselState extends State<Carousel> {
   }
 
   Widget _buildCarouselItem(String title, double width, int cardIndex) {
-    final defaultCardColor = Colors.grey.shade100; // Very light grey, close to white
-    final hoverCardColor = Colors.grey.shade50;
+    final defaultCardColor = ThemeConfig.primaryCardColor!; // Very light grey, close to white
+    final hoverCardColor = ThemeConfig.primaryCardColor!;
 
     Color cardColor = _hoveredCardIndex == cardIndex ? hoverCardColor : defaultCardColor;
     return MouseRegion(
@@ -153,10 +155,10 @@ class _CarouselState extends State<Carousel> {
                     Expanded(
                       child: Text(
                         title ?? "No Title",
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black54,
+                          color: ThemeConfig.primaryTextColor!,
                         ),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 4,

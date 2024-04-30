@@ -20,6 +20,7 @@ class DeadlineOverviewWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return HoverableSectionContainer(
+      cardColor: ThemeConfig.secondaryCardColor,
       onHover: (bool) {},
       child: Row(
         children: [
@@ -79,9 +80,14 @@ class DeadlineOverviewWidget extends StatelessWidget {
                   children: [
                     Text(
                       '${usersCompliance} ',
-                      style: TextStyle(color: ThemeConfig.primaryColor),
+                      style: TextStyle(color: ThemeConfig.secondaryTextColor),
                     ),
-                    Text('users are in compliance'),
+                    Text(
+                      'users are in compliance',
+                      style: TextStyle(
+                        color: ThemeConfig.primaryTextColor,
+                      ),
+                    ),
                     Icon(
                       Icons.warning_amber_rounded,
                       color: Colors.orange,
@@ -101,7 +107,7 @@ class DeadlineOverviewWidget extends StatelessWidget {
                       Text(
                         'See who still needs to complete the requirements',
                         style: TextStyle(
-                          color: ThemeConfig.getPrimaryColorShade(600),
+                          color: ThemeConfig.secondaryTextColor,
                         ),
                       ),
                       SizedBox(
@@ -109,7 +115,7 @@ class DeadlineOverviewWidget extends StatelessWidget {
                       ),
                       Icon(
                         Icons.arrow_forward,
-                        color: ThemeConfig.getPrimaryColorShade(600),
+                        color: ThemeConfig.secondaryTextColor,
                         size: 16,
                       )
                     ],

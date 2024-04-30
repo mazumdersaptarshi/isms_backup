@@ -33,7 +33,7 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
               widget.selectedItemLabel != null ? widget.selectedItemLabel! : widget.label!,
               style: TextStyle(
                 fontSize: 12,
-                color: ThemeConfig.tertiaryTextColor1!, // Adjust this to use your actual color from theme.
+                color: ThemeConfig.tertiaryTextColor1!,
               ),
             ),
           ),
@@ -65,7 +65,7 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
                   children: [
                     Text(
                       widget.buttonText,
-                      style: TextStyle(color: ThemeConfig.primaryColor),
+                      style: TextStyle(color: ThemeConfig.secondaryTextColor),
                     ),
                     Icon(
                       Icons.arrow_drop_down_rounded,

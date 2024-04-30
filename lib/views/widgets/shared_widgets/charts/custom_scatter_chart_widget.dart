@@ -73,10 +73,16 @@ class _CustomScatterChartWidgetState extends State<CustomScatterChartWidget> {
           child: Icon(
             Icons.arrow_back_ios_rounded,
             size: 18,
-            color: Colors.white,
+            color: ThemeConfig.primaryTextColor,
           ),
+          style: ThemeConfig.elevatedRoundedButtonStyle,
         ),
-        Container(padding: EdgeInsets.all(8), child: Text('Showing ${_currentPage + 1} of $_totalPages')),
+        Container(
+            padding: EdgeInsets.all(8),
+            child: Text('Showing ${_currentPage + 1} of $_totalPages',
+                style: TextStyle(
+                  color: ThemeConfig.primaryTextColor,
+                ))),
         ElevatedButton(
           onPressed: _currentPage < _totalPages - 1
               ? () {
@@ -88,8 +94,9 @@ class _CustomScatterChartWidgetState extends State<CustomScatterChartWidget> {
           child: Icon(
             Icons.arrow_forward_ios_rounded,
             size: 18,
-            color: Colors.white,
+            color: ThemeConfig.primaryTextColor,
           ),
+          style: ThemeConfig.elevatedRoundedButtonStyle,
         ),
       ],
     );

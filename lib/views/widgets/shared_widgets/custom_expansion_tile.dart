@@ -8,10 +8,10 @@ class CustomExpansionTile extends StatefulWidget {
   final int? index;
   final int? length;
   final bool? hasHoverBorder;
-
+  final Color? expansionTileCardColor;
   final Future<void> Function()? onDataFetch;
 
-  const CustomExpansionTile({
+  CustomExpansionTile({
     Key? key,
     required this.titleWidget,
     required this.contentWidget,
@@ -19,6 +19,7 @@ class CustomExpansionTile extends StatefulWidget {
     this.length,
     this.hasHoverBorder,
     this.onDataFetch,
+    this.expansionTileCardColor,
   }) : super(key: key);
 
   @override
@@ -62,9 +63,9 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
   Widget _buildExpansionTile() {
     return Container(
       decoration: BoxDecoration(
-        color: ThemeConfig.primaryCardColor,
+        color: widget.expansionTileCardColor ?? ThemeConfig.primaryCardColor,
         border: Border.all(
-          color: _isHovered ? ThemeConfig.hoverBorderColor! : Colors.transparent, // Blue border on hover
+          color: _isHovered ? ThemeConfig.hoverBorderColor1! : Colors.transparent, // Blue border on hover
           width: 2, // Border width
         ),
         borderRadius: BorderRadius.circular(6),
@@ -84,7 +85,7 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
         child: ExpansionTile(
           title: AnimatedDefaultTextStyle(
             style: TextStyle(
-              color: _isHovered || _isExpanded ? ThemeConfig.primaryColor : Colors.black,
+              color: _isHovered || _isExpanded ? ThemeConfig.secondaryTextColor : ThemeConfig.primaryTextColor,
               fontFamily: fontFamily,
             ),
             duration: const Duration(milliseconds: 300),

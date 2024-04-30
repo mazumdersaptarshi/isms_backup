@@ -261,6 +261,7 @@ class _ExamPageState extends State<ExamPage> with AutomaticKeepAliveClientMixin<
     super.build(context);
 
     return Scaffold(
+      backgroundColor: ThemeConfig.scaffoldBackgroundColor,
       // appBar: IsmsAppBar(context: context),
       // drawer: IsmsDrawer(context: context),
       body: Container(
@@ -338,7 +339,7 @@ class _ExamPageState extends State<ExamPage> with AutomaticKeepAliveClientMixin<
               height: 10,
             ),
             SimpleCircularProgressBar(
-              backColor: ThemeConfig.secondaryColor,
+              backColor: ThemeConfig.percentageIconBackgroundFillColor!,
               progressStrokeWidth: 10,
               backStrokeWidth: 8,
               size: 80,
@@ -358,10 +359,13 @@ class _ExamPageState extends State<ExamPage> with AutomaticKeepAliveClientMixin<
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () => _calculateScore(),
-              child: Text('Save and Submit'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: ThemeConfig.primaryColor,
-              ),
+              child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 13),
+                  child: Text(
+                    'Save and Submit',
+                    style: TextStyle(color: ThemeConfig.secondaryTextColor),
+                  )),
+              style: ThemeConfig.elevatedRoundedButtonStyle,
             ),
           ],
         ),

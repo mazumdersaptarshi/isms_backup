@@ -235,7 +235,7 @@ class _CustomBarChartState extends State<CustomBarChart> {
                       getTitlesWidget: (value, meta) {
                         return Text(
                           value.toString(),
-                          style: TextStyle(fontSize: 12),
+                          style: TextStyle(fontSize: 12, color: ThemeConfig.primaryTextColor),
                         );
                       },
                     )),
@@ -315,14 +315,18 @@ class _CustomBarChartState extends State<CustomBarChart> {
             child: Icon(
               Icons.arrow_back_ios_rounded,
               size: 18,
-              color: Colors.white,
+              color: ThemeConfig.primaryTextColor,
             ),
+            style: ThemeConfig.elevatedRoundedButtonStyle,
           ),
           Container(
             padding: EdgeInsets.all(8),
             child: Text(
               'Showing ${_currentPage + 1} of $_totalPages',
-              style: TextStyle(fontSize: 14),
+              style: TextStyle(
+                fontSize: 14,
+                color: ThemeConfig.primaryTextColor,
+              ),
             ),
           ),
           ElevatedButton(
@@ -330,8 +334,9 @@ class _CustomBarChartState extends State<CustomBarChart> {
             child: Icon(
               Icons.arrow_forward_ios_rounded,
               size: 18,
-              color: Colors.white,
+              color: ThemeConfig.primaryTextColor,
             ),
+            style: ThemeConfig.elevatedRoundedButtonStyle,
           ),
         ],
       ),

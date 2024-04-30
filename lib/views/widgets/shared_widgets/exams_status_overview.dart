@@ -133,7 +133,13 @@ class _ExamsStatusOverviewState extends State<ExamsStatusOverview> {
                 ),
               ),
               SizedBox(width: 8),
-              Text(item.label, style: TextStyle(fontSize: 14)),
+              Text(
+                item.label,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: ThemeConfig.primaryTextColor,
+                ),
+              ),
             ],
           ),
         );
@@ -222,13 +228,17 @@ class _ExamsStatusOverviewState extends State<ExamsStatusOverview> {
                                 style: TextStyle(
                                   fontSize: 40,
                                   fontWeight: FontWeight.bold,
+                                  color: ThemeConfig.primaryTextColor,
                                 )),
                             SizedBox(
                               height: 10,
                             ),
                             Text(
                               'Passed',
-                              style: TextStyle(fontSize: 20),
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: ThemeConfig.primaryTextColor,
+                              ),
                             ),
                           ],
                         )),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:isms/controllers/theme_management/theme_config.dart';
+import 'package:isms/controllers/theme_management/theme_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:isms/controllers/user_management/logged_in_state.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -14,16 +16,24 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  ThemeMode _selectedTheme = ThemeMode.light; // Initialize with a default theme
+  // ThemeMode _selectedTheme = ThemeMode.light; // Initialize with a default theme
+  ThemeModes _selectedThemeMode = ThemeModes.light;
   String _selectedLanguage = 'en'; // Initialize with a default language
+
+  void _changeTheme(ThemeModes mode) {
+    Provider.of<ThemeManager>(context, listen: false).changeTheme(mode, context);
+  }
 
   @override
   Widget build(BuildContext context) {
     final loggedInState = context.watch<LoggedInState>();
     return Scaffold(
-      appBar: IsmsAppBar(context: context), // Actual implementation
+      backgroundColor: ThemeConfig.scaffoldBackgroundColor,
+      appBar: IsmsAppBar(context: context),
+      // Actual implementation
       // drawer: IsmsDrawer(context: context),
-      bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState, context: context), // Assuming PlatformCheck is accessible
+      bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
+      // Assuming PlatformCheck is accessible
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.only(
@@ -55,70 +65,42 @@ class _SettingsPageState extends State<SettingsPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(AppLocalizations.of(context)!.themes,
-            style: TextStyle(fontSize: 18, color: Colors.grey.shade700)),
+            style: TextStyle(
+              fontSize: 18,
+              color: ThemeConfig.primaryTextColor,
+            )),
         Column(
           children: [
-            Row(
-              children: [
-                SizedBox(width: 20),
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      _selectedTheme = ThemeMode.light;
-                      // Apply the selected theme here
-                    });
-                  },
-                  child: Row(
-                    children: [
-                      Radio<ThemeMode>(
-                        value: ThemeMode.light,
-                        groupValue: _selectedTheme,
-                        onChanged: (ThemeMode? value) {
-                          setState(() {
-                            _selectedTheme = value!;
-                            // Apply the selected theme here
-                          });
-                        },
-                      ),
-                      Text(AppLocalizations.of(context)!.lightTheme,
-                          style: TextStyle(fontSize: 16, color: Colors.grey.shade700)),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                SizedBox(width: 20),
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      _selectedTheme = ThemeMode.dark;
-                      // Apply the selected theme here
-                    });
-                  },
-                  child: Row(
-                    children: [
-                      Radio<ThemeMode>(
-                        value: ThemeMode.dark,
-                        groupValue: _selectedTheme,
-                        onChanged: (ThemeMode? value) {
-                          setState(() {
-                            _selectedTheme = value!;
-                            // Apply the selected theme here
-                          });
-                        },
-                      ),
-                      Text(AppLocalizations.of(context)!.darkTheme,
-                          style: TextStyle(fontSize: 16, color: Colors.grey.shade700)),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+            _themeOption(ThemeModes.light),
+            _themeOption(ThemeModes.dark),
           ],
         ),
       ],
+    );
+  }
+
+  Widget _themeOption(ThemeModes mode) {
+    return InkWell(
+      onTap: () => _changeTheme(mode),
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 8),
+        child: Row(
+          children: [
+            Radio<ThemeModes>(
+              value: mode,
+              groupValue: Provider.of<ThemeManager>(context).selectedTheme,
+              onChanged: (ThemeModes? value) {
+                if (value != null) _changeTheme(value);
+              },
+            ),
+            Text(mode.name,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: ThemeConfig.primaryTextColor,
+                )),
+          ],
+        ),
+      ),
     );
   }
 

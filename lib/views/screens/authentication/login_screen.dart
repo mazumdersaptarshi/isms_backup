@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ import 'package:isms/controllers/user_management/logged_in_state.dart';
 import 'package:isms/views/screens/home_screen.dart';
 import 'package:isms/views/widgets/shared_widgets/loading_screen_widget.dart';
 import 'package:isms/views/screens/user_screens/navigation_rail.dart';
+import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -24,6 +26,19 @@ class LoginPage extends StatefulWidget {
 class LoginPageState extends State<LoginPage> {
   bool _isLoading = false;
 
+  Future<dynamic> _fetchJWTandCSRFToken() async {
+    // String url =
+    //     'http://127.0.0.1:5000/api/auth?uid=${Provider.of<LoggedInState>(context, listen: false).currentUser!.uid}';
+    String localURL =
+        'http://127.0.0.1:5000/api/auth?uid=${Provider.of<LoggedInState>(context, listen: false).currentUser!.uid}';
+
+    String remoteURL =
+        'https://asia-northeast1-isms-billing-resources-dev.cloudfunctions.net/cf_isms_db_endpoint_noauth/api/auth?uid=${Provider.of<LoggedInState>(context, listen: false).currentUser!.uid}';
+    var response = await http.get(Uri.parse(remoteURL));
+    var jsonResponse = jsonDecode(response.body);
+    Provider.of<CsrfTokenProvider>(context, listen: false).setTokens(jsonResponse['jwt'], jsonResponse['csrf_token']);
+  }
+
   @override
   Widget build(BuildContext context) {
     LoggedInState loggedInState = context.watch<LoggedInState>();
@@ -32,6 +47,8 @@ class LoginPageState extends State<LoginPage> {
       InitLinkHandler.initLinks(context: context);
       html.window.history.pushState({}, '', '');
       // Replace HomePage with NavigationRailWidget
+      _fetchJWTandCSRFToken();
+
       return HomePage();
     }
     // Provider.of<CsrfTokenProvider>(context, listen: false).setCsrfToken(_newToken);

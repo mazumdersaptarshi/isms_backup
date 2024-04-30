@@ -5,8 +5,9 @@ import 'package:isms/controllers/theme_management/theme_config.dart';
 class HoverableSectionContainer extends StatefulWidget {
   final Widget child;
   final Function(bool) onHover;
+  Color? cardColor;
 
-  const HoverableSectionContainer({Key? key, required this.child, required this.onHover}) : super(key: key);
+  HoverableSectionContainer({Key? key, required this.child, required this.onHover, this.cardColor}) : super(key: key);
 
   @override
   _HoverableSectionContainerState createState() => _HoverableSectionContainerState();
@@ -37,11 +38,11 @@ class _HoverableSectionContainerState extends State<HoverableSectionContainer> {
       child: Container(
         padding: EdgeInsets.fromLTRB(20, 15, 20, 10), // EdgeInsets.all(10),
         decoration: BoxDecoration(
-          border: Border.all(color: _isHovered ? ThemeConfig.hoverBorderColor! : Colors.transparent, width: 2
+          border: Border.all(color: _isHovered ? ThemeConfig.hoverBorderColor1! : Colors.transparent, width: 2
               // isHoveringMap[index] == true ? primary! : Colors.grey.shade200,
               ),
           borderRadius: BorderRadius.circular(6),
-          color: ThemeConfig.primaryCardColor,
+          color: widget.cardColor ?? ThemeConfig.primaryCardColor,
           boxShadow: [
             BoxShadow(
               color: ThemeConfig.hoverShadowColor!.withOpacity(0.4),

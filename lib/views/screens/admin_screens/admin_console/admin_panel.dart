@@ -125,6 +125,7 @@ class _AdminPanelState extends State<AdminPanel> {
     final loggedInState = context.watch<LoggedInState>();
 
     return Scaffold(
+      backgroundColor: ThemeConfig.scaffoldBackgroundColor,
       bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
       appBar: IsmsAppBar(context: context),
       drawer: IsmsDrawer(context: context),

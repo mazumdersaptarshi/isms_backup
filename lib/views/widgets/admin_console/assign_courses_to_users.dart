@@ -91,6 +91,7 @@ class _AssignCoursesToUserSectionState extends State<AssignCoursesToUserSection>
         return Dialog(
           child: MultiSelectSearch(
             items: courses.sublist(1),
+            selectedItemsList: _selectedCoursesList,
           ),
         );
       },
@@ -124,6 +125,7 @@ class _AssignCoursesToUserSectionState extends State<AssignCoursesToUserSection>
         return Dialog(
           child: MultiSelectSearch(
             items: users,
+            selectedItemsList: _selectedUsersList,
           ),
         );
       },
@@ -239,7 +241,7 @@ class _AssignCoursesToUserSectionState extends State<AssignCoursesToUserSection>
                       style: TextStyle(
                         fontSize: 12,
                         // fontWeight: FontWeight.bold,
-                        color: ThemeConfig.tertiaryTextColor1!, // Adjust the color to match your theme
+                        color: ThemeConfig.primaryTextColor!,
                       ),
                     ),
                   ),
@@ -257,12 +259,12 @@ class _AssignCoursesToUserSectionState extends State<AssignCoursesToUserSection>
                         children: [
                           Text(
                             _deadlineDateController.text.isEmpty ? 'Select Deadline' : _deadlineDateController.text,
-                            style: TextStyle(fontSize: 14, color: ThemeConfig.primaryColor),
+                            style: TextStyle(fontSize: 14, color: ThemeConfig.secondaryTextColor),
                           ),
                           Icon(
                             Icons.calendar_today,
                             size: 18,
-                            color: ThemeConfig.primaryColor,
+                            color: ThemeConfig.secondaryTextColor,
                           ),
                         ],
                       ),
@@ -310,17 +312,7 @@ class _AssignCoursesToUserSectionState extends State<AssignCoursesToUserSection>
           ),
           Center(
             child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                  // foregroundColor: Theme.of(context).primaryColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25.0),
-                    side: BorderSide(
-                      width: 2,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  ),
-                ),
+                style: ThemeConfig.elevatedRoundedButtonStyle,
                 onPressed: () async {
                   var message = await _createOrUpdateUserCourseAssignments(
                     courses: _selectedCoursesList,
@@ -379,14 +371,14 @@ class _AssignCoursesToUserSectionState extends State<AssignCoursesToUserSection>
                       children: [
                         Icon(
                           Icons.save,
-                          color: ThemeConfig.primaryColor,
+                          color: ThemeConfig.secondaryTextColor,
                         ),
                         SizedBox(
                           width: 10,
                         ),
                         Text(
                           'Save',
-                          style: TextStyle(color: ThemeConfig.primaryColor),
+                          style: TextStyle(color: ThemeConfig.secondaryTextColor),
                         ),
                       ],
                     ))),

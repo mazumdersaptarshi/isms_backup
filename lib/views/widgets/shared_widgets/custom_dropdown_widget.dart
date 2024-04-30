@@ -60,7 +60,7 @@ class CustomDropdownWidget<T> extends StatelessWidget {
                     hint: Text(
                       hintText ?? '',
                       style: TextStyle(
-                        color: ThemeConfig.primaryColor!,
+                        color: ThemeConfig.secondaryTextColor!,
                         fontSize: 14,
                       ),
                     ),
@@ -74,7 +74,7 @@ class CustomDropdownWidget<T> extends StatelessWidget {
                           child: Text(
                             item.key, // Displaying 'key' instead of 'value.toString()'
                             style: TextStyle(
-                                color: ThemeConfig.primaryColor!, fontSize: 14), // Text color inside the dropdown
+                                color: ThemeConfig.secondaryTextColor!, fontSize: 14), // Text color inside the dropdown
                           ),
                         ),
                       );

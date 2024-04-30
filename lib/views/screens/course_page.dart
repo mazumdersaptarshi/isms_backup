@@ -731,7 +731,7 @@ class _CourseState extends State<CoursePage> {
     String encodedJsonString = Uri.encodeComponent(jsonString);
     try {
       final response = await http.get(
-        Uri.parse('$remoteInsertUrl?params=$encodedJsonString'),
+        Uri.parse('$localInsertUrl?params=$encodedJsonString'),
       );
       final responseBody = json.decode(response.body);
       // _logger.info(' ${responseBody}');

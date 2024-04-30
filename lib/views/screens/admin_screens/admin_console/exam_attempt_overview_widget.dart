@@ -35,10 +35,15 @@ class ExamAttemptOverviewWidget extends StatelessWidget {
           Expanded(
             child: Text(
               '$userName',
-              style: TextStyle(color: ThemeConfig.primaryColor),
+              style: TextStyle(color: ThemeConfig.secondaryTextColor),
             ),
           ),
-          Expanded(child: Text('$examName')),
+          Expanded(
+            child: Text(
+              '$examName',
+              style: TextStyle(color: ThemeConfig.primaryTextColor),
+            ),
+          ),
           SizedBox(
             width: 10,
           ),
@@ -61,7 +66,10 @@ class ExamAttemptOverviewWidget extends StatelessWidget {
           Expanded(
               child: Row(
             children: [
-              Text('$score'),
+              Text(
+                '$score',
+                style: TextStyle(color: ThemeConfig.primaryTextColor),
+              ),
               SizedBox(
                 width: 4,
               ),

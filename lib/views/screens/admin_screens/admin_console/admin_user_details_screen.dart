@@ -159,7 +159,7 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
               Duration duration = attempt.endTime.difference(attempt.startTime);
 
               String formattedDuration = '${duration.inHours}h ${duration.inMinutes.remainder(60)}m';
-              Color bgColor = index % 2 == 1 ? Colors.transparent : ThemeConfig.secondaryColor;
+              Color bgColor = index % 2 == 1 ? Colors.transparent : ThemeConfig.tableRowColor!;
 
               return MapEntry(
                   index,
@@ -217,7 +217,7 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
     ///   - 'examTitle': The Title of the exam.
 
     Widget _getCourseExamTitleWidget({required String examTitle, ExamStatus? examStatus}) {
-      Widget examDescription = Padding(
+      Widget examDescription = Container(
         padding: const EdgeInsets.all(8.0),
         child: Row(
           children: [
@@ -290,7 +290,11 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
 
         expansionTiles.add(Container(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: CustomExpansionTile(titleWidget: titleWidget, contentWidget: contentWidget)));
+            child: CustomExpansionTile(
+              titleWidget: titleWidget,
+              contentWidget: contentWidget,
+              expansionTileCardColor: ThemeConfig.secondaryCardColor,
+            )));
       }
 
       return expansionTiles;
@@ -392,6 +396,7 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
     }
 
     return Scaffold(
+      backgroundColor: ThemeConfig.scaffoldBackgroundColor,
       bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
       appBar: IsmsAppBar(
         context: context,
@@ -641,7 +646,7 @@ class _SummaryItemWidgetState extends State<SummaryItemWidget> {
           decoration: BoxDecoration(
             color: _isHovered ? ThemeConfig.hoverFillColor1 : Colors.transparent, // Change color on hover
             borderRadius: _getBorderRadius(), // Set the border radius based on index
-            border: _isHovered ? Border.all(color: ThemeConfig.hoverBorderColor!) : null,
+            border: _isHovered ? Border.all(color: ThemeConfig.hoverBorderColor1!) : null,
           ),
           child: Padding(
             padding: const EdgeInsets.all(10.0),

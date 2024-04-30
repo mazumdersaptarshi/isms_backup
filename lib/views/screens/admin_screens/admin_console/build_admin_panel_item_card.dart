@@ -49,7 +49,7 @@ class _AdminPanelItemCardState extends State<AdminPanelItemCard> {
           child: Container(
             decoration: BoxDecoration(
               color: ThemeConfig.primaryCardColor,
-              border: Border.all(color: _isHovered ? ThemeConfig.hoverBorderColor! : Colors.transparent, width: 2
+              border: Border.all(color: _isHovered ? ThemeConfig.hoverBorderColor1! : Colors.transparent, width: 2
                   // isHoveringMap[index] == true ? primary! : Colors.grey.shade200,
                   ),
               borderRadius: BorderRadius.all(Radius.circular(6)),

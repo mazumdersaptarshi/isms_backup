@@ -20,6 +20,7 @@ class _SingleSelectSearchState extends State<SingleSelectSearch> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: ThemeConfig.primaryCardColor,
       padding: EdgeInsets.all(16.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -28,12 +29,23 @@ class _SingleSelectSearchState extends State<SingleSelectSearch> {
             padding: const EdgeInsets.only(bottom: 16.0),
             child: TextField(
               controller: _controller,
+              style: TextStyle(
+                color: ThemeConfig.primaryTextColor,
+              ),
               decoration: InputDecoration(
                 labelText: 'Search',
-                suffixIcon: Icon(Icons.search),
+                labelStyle: TextStyle(color: ThemeConfig.tertiaryTextColor1),
+                suffixIcon: Icon(
+                  Icons.search,
+                  color: ThemeConfig.tertiaryTextColor1,
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30.0),
                   borderSide: BorderSide(color: ThemeConfig.primaryColor!), // Use theme primary color
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                  borderSide: BorderSide(color: ThemeConfig.tertiaryTextColor1), // Color when not focused
                 ),
                 filled: false,
               ),
@@ -60,7 +72,7 @@ class _SingleSelectSearchState extends State<SingleSelectSearch> {
                       decoration: BoxDecoration(
                         // Change border color based on hover state
                         border: Border.all(
-                          color: hoverStates[index] ?? false ? ThemeConfig.hoverBorderColor! : Colors.transparent,
+                          color: hoverStates[index] ?? false ? ThemeConfig.hoverBorderColor1! : Colors.transparent,
                           width: 1, // Adjust the width as needed
                         ),
                         borderRadius: BorderRadius.circular(8), // Optional: if you want rounded corners
@@ -77,17 +89,28 @@ class _SingleSelectSearchState extends State<SingleSelectSearch> {
                         title: Text(
                           item.itemName,
                         ),
-                        subtitle: Text('ID: ${item.itemId}'),
-                        leading: Radio<SelectableItem>(
-                          hoverColor: ThemeConfig.getPrimaryColorShade(50),
-                          value: item,
-                          groupValue: _selectedItem,
-                          onChanged: (SelectableItem? value) {
-                            setState(() {
-                              _selectedItem = value;
-                            });
-                          },
-                          activeColor: ThemeConfig.primaryColor, // Use theme primary color
+                        subtitle: Text(
+                          'ID: ${item.itemId}',
+                          style: TextStyle(
+                            color: ThemeConfig.tertiaryTextColor1,
+                          ),
+                        ),
+                        leading: Theme(
+                          data: ThemeData(
+                            unselectedWidgetColor:
+                                ThemeConfig.tertiaryTextColor1, // Color for the radio when not selected
+                          ),
+                          child: Radio<SelectableItem>(
+                            hoverColor: ThemeConfig.getPrimaryColorShade(50),
+                            value: item,
+                            groupValue: _selectedItem,
+                            onChanged: (SelectableItem? value) {
+                              setState(() {
+                                _selectedItem = value;
+                              });
+                            },
+                            activeColor: ThemeConfig.primaryColor, // Use theme primary color
+                          ),
                         ),
                         onTap: () => setState(() {
                           _selectedItem = item;
@@ -101,9 +124,7 @@ class _SingleSelectSearchState extends State<SingleSelectSearch> {
           ),
           SizedBox(height: 16),
           ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: ThemeConfig.primaryColor,
-            ),
+            style: ThemeConfig.elevatedRoundedButtonStyle,
             onPressed: () {
               Navigator.of(context).pop(_selectedItem);
             },
@@ -113,6 +134,7 @@ class _SingleSelectSearchState extends State<SingleSelectSearch> {
               child: Text(
                 'Submit',
                 textAlign: TextAlign.center,
+                style: TextStyle(color: ThemeConfig.secondaryTextColor),
               ),
             ),
           ),

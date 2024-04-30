@@ -24,7 +24,7 @@ class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       elevation: 0,
       iconTheme: IconThemeData(color: ThemeConfig.primaryTextColor),
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: ThemeConfig.scaffoldBackgroundColor,
       title: _buildTitleWithSearch(context),
       centerTitle: true,
       actions: [..._getActionWidgets(context)],

@@ -8,6 +8,8 @@ import 'package:isms/views/screens/admin_screens/admin_console/admin_user_detail
 import 'package:isms/views/screens/testing/test_ui_type1/user_test_responses.dart';
 import 'package:isms/views/widgets/shared_widgets/build_section_header.dart';
 import 'package:isms/views/widgets/shared_widgets/search_bar_widget.dart';
+import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 
 class UsersSummaryTable extends StatefulWidget {
   UsersSummaryTable({Key? key, required this.usersList}) : super(key: key);
@@ -34,7 +36,7 @@ class _UsersSummaryTableState extends State<UsersSummaryTable> {
       children: [
         buildSectionHeader(
           title: 'All Users',
-          actionWidget1: SearchBarWidget(),
+          // actionWidget1: SearchBarWidget(),
           actionWidget2: _buildToggleExpandButton(),
         ),
         Container(
@@ -61,37 +63,33 @@ class _UsersSummaryTableState extends State<UsersSummaryTable> {
   }
 
   Widget _buildToggleExpandButton() {
-    return TextButton(
+    return ElevatedButton(
       onPressed: () {
         setState(() {
           _isExpanded = !_isExpanded; // Toggle the state
         });
       },
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: EdgeInsets.symmetric(vertical: 13),
         child: Row(
           children: [
             Icon(
-              _isExpanded
-                  ? CupertinoIcons.arrow_down_right_arrow_up_left
-                  : CupertinoIcons.arrow_up_left_arrow_down_right,
-              size: 18,
-            ),
+                _isExpanded
+                    ? CupertinoIcons.arrow_down_right_arrow_up_left
+                    : CupertinoIcons.arrow_up_left_arrow_down_right,
+                size: 18,
+                color: ThemeConfig.secondaryTextColor),
             SizedBox(
               width: 14,
             ),
             Text(
               _isExpanded ? "Less details" : "More details",
+              style: TextStyle(color: ThemeConfig.secondaryTextColor),
             ),
           ],
         ),
       ),
-      style: TextButton.styleFrom(
-        side: BorderSide(color: Colors.blue, width: 2), // Blue border of width 2
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(6), // Rounded corners with a radius of 6
-        ),
-      ),
+      style: ThemeConfig.elevatedBoxButtonStyle(),
     );
   }
 
@@ -190,7 +188,7 @@ class _UsersSummaryTableState extends State<UsersSummaryTable> {
         // padding: EdgeInsets.all(2.0),
         decoration: BoxDecoration(
           border: Border.all(
-            color: isHoveringMap[index ?? 0] == true ? ThemeConfig.hoverBorderColor! : Colors.transparent,
+            color: isHoveringMap[index ?? 0] == true ? ThemeConfig.hoverBorderColor1! : Colors.transparent,
             width: 2,
             // isHoveringMap[index] == true ? primary! : Colors.grey.shade200,
           ),
@@ -430,28 +428,40 @@ class _UsersSummaryTableState extends State<UsersSummaryTable> {
             children: [
               Container(
                 padding: EdgeInsets.all(4),
-                child: SizedBox(
-                  width: 45,
-                  height: 45,
-                  child: CircularProgressIndicator(
-                    value: double.parse(text) / 100.0,
-                    valueColor: double.parse(text) > 70
-                        ? AlwaysStoppedAnimation<Color>(Colors.lightGreen!)
-                        : double.parse(text) > 45
-                            ? AlwaysStoppedAnimation<Color>(Colors.orangeAccent!)
-                            : AlwaysStoppedAnimation<Color>(Colors.red!),
-                    backgroundColor: ThemeConfig.percentageIconBackgroundFillColor,
-                    strokeWidth: 6.0,
-                  ),
+                child:
+
+                    // CircularProgressIndicator(
+                    //   value: double.parse(text) / 100.0,
+                    //   valueColor: double.parse(text) > 70
+                    //       ? AlwaysStoppedAnimation<Color>(Colors.lightGreen!)
+                    //       : double.parse(text) > 45
+                    //           ? AlwaysStoppedAnimation<Color>(Colors.orangeAccent!)
+                    //           : AlwaysStoppedAnimation<Color>(Colors.red!),
+                    //   backgroundColor: ThemeConfig.percentageIconBackgroundFillColor,
+                    //   strokeWidth: 6.0,
+                    // ),
+                    CircularPercentIndicator(
+                  radius: 30.0,
+                  lineWidth: 8.0,
+                  percent: double.parse(text) / 100.0,
+                  center: Text('${double.parse(text)}%',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: ThemeConfig.primaryTextColor,
+                      )),
+                  progressColor: ThemeConfig.primaryColor,
+                  backgroundWidth: 5,
+                  backgroundColor: ThemeConfig.percentageIconBackgroundFillColor!,
+                  circularStrokeCap: CircularStrokeCap.round,
                 ),
               ),
-              Text(
-                '${text}%',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: ThemeConfig.primaryTextColor,
-                ),
-              ),
+              // Text(
+              //   '${text}%',
+              //   style: TextStyle(
+              //     fontSize: 12,
+              //     color: ThemeConfig.primaryTextColor,
+              //   ),
+              // ),
             ],
           )
       ],
@@ -541,15 +551,23 @@ class _UsersSummaryTableState extends State<UsersSummaryTable> {
                   SizedBox(
                     width: 45,
                     height: 45,
-                    child: CircularProgressIndicator(
-                      value: double.parse(text) / 100.0,
-                      valueColor: double.parse(text) > 70
-                          ? AlwaysStoppedAnimation<Color>(Colors.lightGreen!)
-                          : double.parse(text) > 45
-                              ? AlwaysStoppedAnimation<Color>(Colors.orangeAccent!)
-                              : AlwaysStoppedAnimation<Color>(Colors.red!),
-                      backgroundColor: Colors.grey.shade200,
-                      strokeWidth: 5.0,
+                    child:
+                        // CircularProgressIndicator(
+                        //   value: double.parse(text) / 100.0,
+                        //   valueColor: double.parse(text) > 70
+                        //       ? AlwaysStoppedAnimation<Color>(Colors.lightGreen!)
+                        //       : double.parse(text) > 45
+                        //           ? AlwaysStoppedAnimation<Color>(Colors.orangeAccent!)
+                        //           : AlwaysStoppedAnimation<Color>(Colors.red!),
+                        //   backgroundColor: Colors.grey.shade200,
+                        //   strokeWidth: 5.0,
+                        // ),
+                        CircularPercentIndicator(
+                      radius: 60.0,
+                      lineWidth: 5.0,
+                      percent: 1.0,
+                      center: new Text("100%"),
+                      progressColor: Colors.green,
                     ),
                   ),
                   Text(

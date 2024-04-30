@@ -132,7 +132,7 @@ class OverviewSection extends StatelessWidget {
                                         Text(
                                           'See More',
                                           style: TextStyle(
-                                            color: ThemeConfig.getPrimaryColorShade(600),
+                                            color: ThemeConfig.secondaryTextColor,
                                           ),
                                         ),
                                         SizedBox(
@@ -140,7 +140,7 @@ class OverviewSection extends StatelessWidget {
                                         ),
                                         Icon(
                                           Icons.arrow_forward,
-                                          color: ThemeConfig.getPrimaryColorShade(600),
+                                          color: ThemeConfig.secondaryTextColor,
                                           size: 16,
                                         ),
                                       ],
