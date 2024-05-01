@@ -9,8 +9,8 @@ import 'package:isms/models/course/section_full.dart';
 import 'package:isms/models/course/element.dart' as ExamElement;
 
 class ExamProvider extends ChangeNotifier {
-  String localGetURL3 = 'http://127.0.0.1:5000/get3?flag=';
-  String localPostURL = 'http://127.0.0.1:5000/insert-update-request';
+  // String localGetURL3 = 'http://127.0.0.1:5000/get3?flag=';
+  // String localPostURL = 'http://127.0.0.1:5000/insert-update-request';
   String remoteGetURL3 =
       'https://asia-northeast1-isms-billing-resources-dev.cloudfunctions.net/cf_isms_db_endpoint_noauth/get3?flag=';
   String remotePostURL =

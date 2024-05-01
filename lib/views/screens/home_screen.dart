@@ -35,54 +35,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    // _fetchNewCSRFToken();
-    // _fetchJWTandCSRFToken();
   }
-
-  String _csrfToken = '';
-  String _jwt = '';
-
-  // String? getCookie(String name) {
-  //   // Access all cookies from the document
-  //   String cookies = html.document.cookie!;
-  //   List<String> listValues = cookies.isNotEmpty ? cookies.split(";") : [];
-  //   for (String cookie in listValues) {
-  //     // Trim leading space.
-  //     final String cookieTrimmed = cookie.trim();
-  //     // Check if the current cookie string contains the cookie name we're looking for.
-  //     if (cookieTrimmed.startsWith("$name=")) {
-  //       print('cookieTrimmed: $cookieTrimmed');
-  //
-  //       return cookieTrimmed.substring(name.length + 1);
-  //     }
-  //   }
-  //   return null;
-  // }
-
-  // Future<dynamic> _fetchNewCSRFToken() async {
-  //   String url = 'http://127.0.0.1:5000/api/init';
-  //   var response = await http.get(Uri.parse(url));
-  //
-  //   _csrfToken = response.body;
-  //   Provider.of<CsrfTokenProvider>(context, listen: false).setCsrfToken(_csrfToken);
-  //
-  //   // if (response.statusCode == 200) {
-  //   //   setState(() {
-  //   //     _newToken = response.body;
-  //   //     Provider.of<CsrfTokenProvider>(context, listen: false).setCsrfToken(_newToken);
-  //   //   });
-  //   // }
-  // }
-  //
-  // Future<dynamic> _fetchJWTandCSRFToken() async {
-  //   // String url =
-  //   //     'http://127.0.0.1:5000/api/auth?uid=${Provider.of<LoggedInState>(context, listen: false).currentUser!.uid}';
-  //   String remoteURL =
-  //       'https://asia-northeast1-isms-billing-resources-dev.cloudfunctions.net/cf_isms_db_endpoint_noauth/api/auth?uid=${Provider.of<LoggedInState>(context, listen: false).currentUser!.uid}';
-  //   var response = await http.get(Uri.parse(remoteURL));
-  //   var jsonResponse = jsonDecode(response.body);
-  //   Provider.of<CsrfTokenProvider>(context, listen: false).setTokens(jsonResponse['jwt'], jsonResponse['csrf_token']);
-  // }
 
   // Utility function to check and potentially create the admin document
   Future<void> checkAndCreateUserDocument(

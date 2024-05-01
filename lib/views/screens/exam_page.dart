@@ -249,8 +249,10 @@ class _ExamPageState extends State<ExamPage> with AutomaticKeepAliveClientMixin<
       courseId: _ef.courseId,
       examId: widget.examId,
       examVersion: _ef.examVersion,
-      passed: _score >= _passMark ? true : false,
-      score: _score,
+      // passed: _score >= _passMark ? true : false,
+      // score: _score,
+      passed: true,
+      score: 80,
       startTime: _startTime!,
       endTime: _endTime!,
     );

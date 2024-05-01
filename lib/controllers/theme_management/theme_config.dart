@@ -81,7 +81,7 @@ class ThemeConfig {
 
   static Color? get activeIconColor => isDarkMode ? Colors.grey.shade300 : primaryColor;
 
-  static Color? get percentageIconBackgroundFillColor => isDarkMode ? Color(0xFF1B283B) : getPrimaryColorShade(50);
+  static Color? get percentageIconBackgroundFillColor => isDarkMode ? Color(0xFF23344d) : getPrimaryColorShade(50);
 
   static Color? get iconFillColor1 => isDarkMode ? getPrimaryColorShade(400) : primaryColor;
 
