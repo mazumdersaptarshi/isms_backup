@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:http/http.dart' as http;
+import 'package:isms/controllers/course_management/course_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'package:isms/controllers/user_management/logged_in_state.dart';
@@ -739,6 +740,7 @@ class _CourseState extends State<CoursePage> {
         return '''Error :( 
 Please select all the appropriate fields properly!''';
       } else {
+        CourseProvider.courseStatusChanged = true;
         return responseBody;
       }
     } catch (error) {

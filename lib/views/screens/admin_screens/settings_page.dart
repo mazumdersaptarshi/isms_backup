@@ -64,16 +64,34 @@ class _SettingsPageState extends State<SettingsPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(AppLocalizations.of(context)!.themes,
-            style: TextStyle(
-              fontSize: 18,
-              color: ThemeConfig.primaryTextColor,
-            )),
-        Column(
-          children: [
-            _themeOption(ThemeModes.light),
-            _themeOption(ThemeModes.dark),
-          ],
+        Text(
+          AppLocalizations.of(context)!.themes,
+          style: TextStyle(color: ThemeConfig.primaryTextColor),
+        ),
+        ListTile(
+          title: Text(ThemeModes.light.name, style: TextStyle(color: ThemeConfig.primaryTextColor)),
+          leading: Radio<ThemeModes>(
+            value: ThemeModes.light,
+            groupValue: Provider.of<ThemeManager>(context).selectedTheme,
+            onChanged: (ThemeModes? value) {
+              if (value != null) _changeTheme(value);
+            },
+          ),
+          onTap: () => _changeTheme(ThemeModes.light),
+        ),
+        ListTile(
+          title: Text(
+            ThemeModes.dark.name,
+            style: TextStyle(color: ThemeConfig.primaryTextColor),
+          ),
+          leading: Radio<ThemeModes>(
+            value: ThemeModes.dark,
+            groupValue: Provider.of<ThemeManager>(context).selectedTheme,
+            onChanged: (ThemeModes? value) {
+              if (value != null) _changeTheme(value);
+            },
+          ),
+          onTap: () => _changeTheme(ThemeModes.dark),
         ),
       ],
     );

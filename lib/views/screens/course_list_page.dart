@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
+import 'package:isms/controllers/course_management/course_provider.dart';
 import 'package:isms/controllers/theme_management/theme_config.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:provider/provider.dart';
@@ -43,7 +44,7 @@ class _CourseListPageState extends State<CourseListPage> {
   late String _loggedInUserUid;
 
   final List<UserAssignedCourseOverview> _courses = [];
-  final List<UserAssignedCourseOverview> _assignedCourses = [];
+  List<UserAssignedCourseOverview> _assignedCourses = [];
   Map<String, List<ExamOverview>> _courseExamsMap = {};
 
   @override
@@ -51,33 +52,32 @@ class _CourseListPageState extends State<CourseListPage> {
     super.initState();
 
     _loggedInUserUid = Provider.of<LoggedInState>(context, listen: false).currentUserUid!;
-    _fetchAssignedCoursesOverviewData();
-    _fetchCourseOverviewData().then((List<dynamic> responseData) {
-      for (List<dynamic> jsonCourse in responseData) {
-        Map<String, dynamic> courseMap = jsonCourse.first as Map<String, dynamic>;
-        UserAssignedCourseOverview course = UserAssignedCourseOverview.fromJson(courseMap);
+    _fetchAssignedCourses();
+    // _fetchAssignedCoursesOverviewData();
+  }
 
-        setState(() {
-          _courses.add(course);
-        });
-      }
+  Future<void> _fetchAssignedCourses() async {
+    var fetchedAssignedCourses =
+        await CourseProvider.fetchAssignedCoursesOverviewData(loggedInUserId: _loggedInUserUid);
+    setState(() {
+      _assignedCourses = fetchedAssignedCourses;
     });
   }
 
-  Future<List<dynamic>> _fetchCourseOverviewData() async {
-    Map<String, dynamic> requestParams = {'user_id': _loggedInUserUid};
-    String jsonString = jsonEncode(requestParams);
-    String encodedJsonString = Uri.encodeComponent(jsonString);
-    http.Response response = await http
-        .get(Uri.parse('$remoteFetchUrl?flag=get_course_and_exam_overview_for_user&params=$encodedJsonString'));
-    List<dynamic> jsonResponse = [];
-    if (response.statusCode == 200) {
-      // Check if the request was successful
-      // Decode the JSON string into a Dart object (in this case, a List)
-      jsonResponse = jsonDecode(response.body);
-    }
-    return jsonResponse;
-  }
+  // Future<List<dynamic>> _fetchCourseOverviewData() async {
+  //   Map<String, dynamic> requestParams = {'user_id': _loggedInUserUid};
+  //   String jsonString = jsonEncode(requestParams);
+  //   String encodedJsonString = Uri.encodeComponent(jsonString);
+  //   http.Response response = await http
+  //       .get(Uri.parse('$remoteFetchUrl?flag=get_course_and_exam_overview_for_user&params=$encodedJsonString'));
+  //   List<dynamic> jsonResponse = [];
+  //   if (response.statusCode == 200) {
+  //     // Check if the request was successful
+  //     // Decode the JSON string into a Dart object (in this case, a List)
+  //     jsonResponse = jsonDecode(response.body);
+  //   }
+  //   return jsonResponse;
+  // }
 
   Future<List<UserAssignedCourseOverview>> _fetchAssignedCoursesOverviewData() async {
     Map<String, dynamic> requestParams = {'userID': _loggedInUserUid};
@@ -155,9 +155,7 @@ class _CourseListPageState extends State<CourseListPage> {
         _courseExamsMap[courseId] = [exam];
       }
     }
-    setState(() {
-      // Update your state with fetched data here
-    });
+    setState(() {});
 
     print('courseExamMap: ${_courseExamsMap}');
   }
@@ -174,7 +172,7 @@ class _CourseListPageState extends State<CourseListPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            buildSectionHeader(title: AppLocalizations.of(context)!.courses),
+            buildSectionHeader(title: 'Assigned Courses'),
             Container(
               width: MediaQuery.of(context).size.width * 1,
               margin: EdgeInsets.fromLTRB(
