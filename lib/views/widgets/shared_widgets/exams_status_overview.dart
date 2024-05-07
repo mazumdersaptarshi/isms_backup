@@ -13,6 +13,7 @@ import 'package:easy_pie_chart/easy_pie_chart.dart';
 import 'charts/custom_pie_chart_widget.dart';
 import 'custom_dropdown_button_widget.dart';
 import 'hoverable_section_container.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ExamsStatusOverview extends StatefulWidget {
   ExamsStatusOverview({
@@ -156,7 +157,7 @@ class _ExamsStatusOverviewState extends State<ExamsStatusOverview> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Exams status overview',
+            AppLocalizations.of(context)!.examStatusOverview,
             style: TextStyle(
               fontSize: 16,
               color: ThemeConfig.primaryTextColor!,
@@ -173,7 +174,8 @@ class _ExamsStatusOverviewState extends State<ExamsStatusOverview> {
             children: [
               CustomDropdownButton(
                 // label: 'Course',
-                buttonText: _selectedCourse != null ? _selectedCourse!.itemName : 'Select Course',
+                buttonText:
+                    _selectedCourse != null ? _selectedCourse!.itemName : AppLocalizations.of(context)!.selectCourse,
                 onButtonPressed: () => _showCourseSingleSelectModalForPieChart(context, items: widget.courses),
               ),
               if (_examsPieChartData.isNotEmpty)

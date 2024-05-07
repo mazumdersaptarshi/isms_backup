@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:isms/controllers/theme_management/theme_config.dart';
 import 'package:isms/views/widgets/shared_widgets/hoverable_section_container.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DeadlineOverviewWidget extends StatelessWidget {
   DeadlineOverviewWidget(
@@ -83,7 +84,7 @@ class DeadlineOverviewWidget extends StatelessWidget {
                       style: TextStyle(color: ThemeConfig.secondaryTextColor),
                     ),
                     Text(
-                      'users are in compliance',
+                      AppLocalizations.of(context)!.usersInCompliance,
                       style: TextStyle(
                         color: ThemeConfig.primaryTextColor,
                       ),
@@ -105,7 +106,7 @@ class DeadlineOverviewWidget extends StatelessWidget {
                   child: Row(
                     children: [
                       Text(
-                        'See who still needs to complete the requirements',
+                        AppLocalizations.of(context)!.seeWhoNeedsToCompleteRequirements,
                         style: TextStyle(
                           color: ThemeConfig.secondaryTextColor,
                         ),

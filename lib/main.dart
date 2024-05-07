@@ -7,6 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:isms/controllers/exam_management/exam_provider.dart';
+import 'package:isms/controllers/language_management/language_manager.dart';
 import 'package:isms/controllers/reminders_management/reminders_provider.dart';
 import 'package:isms/controllers/storage/hive_service/hive_service.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart';
@@ -71,11 +72,13 @@ void main() async {
   //     .execute('SELECT * FROM public.courses ORDER BY course_id ASC ;');
   // print(result0[0]); // first row, first column
 
-  runApp(const IsmsApp());
+  runApp(IsmsApp());
 }
 
 class IsmsApp extends StatelessWidget {
-  const IsmsApp({super.key});
+  IsmsApp({super.key});
+
+  Locale _locale = Locale('en');
 
   @override
   Widget build(BuildContext context) {
@@ -102,28 +105,34 @@ class IsmsApp extends StatelessWidget {
         ChangeNotifierProvider<ThemeManager>(create: (context) {
           return ThemeManager();
         }),
+        ChangeNotifierProvider<LocaleManager>(create: (context) {
+          return LocaleManager();
+        }),
       ],
-      child: MaterialApp.router(
-        title: 'ISMS',
-        // theme: ThemeConfig.dynamicISMSTheme(),
-        scrollBehavior: CustomScrollBehavior(),
-        debugShowCheckedModeBanner: false,
-        // Required for localisation functionality
-        localizationsDelegates: const [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        // Supported locales for localisation
-        supportedLocales: const [
-          Locale('en'),
-          Locale('ja'),
-        ],
-        // Configuration for direct URL linking and access
-        routerConfig: ismsRouter,
-        // home: const LoginPage(),
-      ),
+      child: Builder(builder: (context) {
+        return MaterialApp.router(
+          locale: Provider.of<LocaleManager>(context).locale,
+          title: 'ISMS',
+          // theme: ThemeConfig.dynamicISMSTheme(),
+          scrollBehavior: CustomScrollBehavior(),
+          debugShowCheckedModeBanner: false,
+          // Required for localisation functionality
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          // Supported locales for localisation
+          supportedLocales: const [
+            Locale('en'),
+            Locale('ja'),
+          ],
+          // Configuration for direct URL linking and access
+          routerConfig: ismsRouter,
+          // home: const LoginPage(),
+        );
+      }),
     );
   }
 }

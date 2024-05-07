@@ -6,6 +6,7 @@ import 'package:isms/models/admin_models/exam_deadline.dart';
 import 'package:isms/views/screens/admin_screens/admin_console/deadline_overview_widget.dart';
 import 'package:isms/views/screens/admin_screens/admin_console/exam_attempt_overview_widget.dart';
 import 'package:isms/views/widgets/shared_widgets/hoverable_section_container.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OverviewSection extends StatelessWidget {
   OverviewSection({
@@ -35,7 +36,7 @@ class OverviewSection extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Upcoming Deadlines',
+                      AppLocalizations.of(context)!.upcomingDeadlines,
                       style: TextStyle(
                         fontSize: 16,
                         color: ThemeConfig.primaryTextColor,
@@ -88,7 +89,7 @@ class OverviewSection extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Recent Exam Attempts',
+                      AppLocalizations.of(context)!.recentAttempts,
                       style: TextStyle(
                         fontSize: 16,
                         color: ThemeConfig.primaryTextColor,
@@ -130,7 +131,7 @@ class OverviewSection extends StatelessWidget {
                                     child: Row(
                                       children: [
                                         Text(
-                                          'See More',
+                                          AppLocalizations.of(context)!.seeMore,
                                           style: TextStyle(
                                             color: ThemeConfig.secondaryTextColor,
                                           ),

@@ -12,6 +12,7 @@ import 'package:isms/views/widgets/shared_widgets/single_select_search_widget.da
 import 'charts/custom_box_and_whisker_chart_widget.dart';
 import 'custom_dropdown_button_widget.dart';
 import 'hoverable_section_container.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UsersScoresVariationByAttempts extends StatefulWidget {
   UsersScoresVariationByAttempts({super.key, required this.courses});
@@ -108,7 +109,7 @@ class _UsersScoresVariationByAttemptsState extends State<UsersScoresVariationByA
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Users score variation by attempts',
+              AppLocalizations.of(context)!.usersScoreVariation,
               style: TextStyle(
                 fontSize: 16,
                 color: ThemeConfig.primaryTextColor,
@@ -124,7 +125,8 @@ class _UsersScoresVariationByAttemptsState extends State<UsersScoresVariationByA
               children: [
                 CustomDropdownButton(
                   // label: 'Course',
-                  buttonText: _selectedCourse != null ? _selectedCourse!.itemName : 'Select Course',
+                  buttonText:
+                      _selectedCourse != null ? _selectedCourse!.itemName : AppLocalizations.of(context)!.selectCourse,
                   onButtonPressed: () => _showCourseSingleSelectModalForBWChart(context, items: widget.courses),
                 ),
                 if (_examsBWChartData.isNotEmpty)

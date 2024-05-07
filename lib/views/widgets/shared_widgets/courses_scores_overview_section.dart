@@ -16,6 +16,7 @@ import 'custom_dropdown_widget.dart';
 import 'hoverable_section_container.dart';
 import 'multi_select_search_widget.dart';
 import 'selected_items_display_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CoursesScoresOverview extends StatefulWidget {
   CoursesScoresOverview({
@@ -201,7 +202,7 @@ class _CoursesScoresOverviewState extends State<CoursesScoresOverview> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Scores Drilldown',
+                  AppLocalizations.of(context)!.scoresDrilldown,
                   style: TextStyle(
                     fontSize: 16,
                     color: ThemeConfig.primaryTextColor,
@@ -218,7 +219,9 @@ class _CoursesScoresOverviewState extends State<CoursesScoresOverview> {
                   children: [
                     CustomDropdownButton(
                       // label: 'Course',
-                      buttonText: _selectedCourse != null ? _selectedCourse!.itemName : 'Select Course',
+                      buttonText: _selectedCourse != null
+                          ? _selectedCourse!.itemName
+                          : AppLocalizations.of(context)!.selectCourse,
                       onButtonPressed: () => _showCourseSingleSelectModalForBarChart(context, items: widget.courses),
                     ),
                     if (_examsBarChartData.isNotEmpty)

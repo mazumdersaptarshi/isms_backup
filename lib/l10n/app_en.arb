@@ -302,10 +302,36 @@
         "@searchHint": {
             "type": "text",
             "description": "Search Hint text on search box on AppBar"
-        }
-
-
+    },
+    "lightMode": "Light Mode",
+    "@lightMode": {
+            "type": "text",
+            "description": "Light theme on Settings page"
+    },
+    "darkMode": "Dark Mode",
+    "@darkMode": {
+        "type": "text",
+        "description": "Dark theme on Settings page"
+    },
+    "myCourses": "My Courses",
+    "assignedCourses" : "Assigned Courses",
+    "completeAllSections": "Complete all sections to start the exam",
+    "overview" : "Overview",
+    "upcomingDeadlines": "Upcoming Deadlines",
+    "recentAttempts": "Recent Exam Attempts",
+    "seeMore": "See More",
+    "seeWhoNeedsToCompleteRequirements": "See who still needs to complete the requirements",
+    "usersInCompliance": "users are in compliance",
+    "performanceDrilldown": "Performance Drilldown",
+    "examStatusOverview": "Exam status overview",
+    "usersScoreVariation": "Users score variation by attempts",
+    "selectCourse": "Select Course",
+    "scoresDrilldown": "Scores Drilldown",
+    "examAttemptsAnalysis": "Exam Attempts Analysis"
 
 
 
 }
+
+
+

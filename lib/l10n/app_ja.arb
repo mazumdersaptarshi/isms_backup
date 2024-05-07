@@ -46,5 +46,22 @@
     "lightTheme": "ライトテーマ",
     "darkTheme": "ダークテーマ",
     "languageSetting": "言語",
-    "searchHint": "検索"
+    "searchHint": "検索",
+    "lightMode": "明るい",
+    "darkMode": "暗い",
+    "myCourses": "コースの概要",
+    "assignedCourses" : "アサイン済みのコース",
+    "completeAllSections": "試験を開始するためにはすべてのセクションを完了してください",
+    "overview": "概要",
+    "upcomingDeadlines": "今後の締め切り",
+    "recentAttempts": "最近受けた試験",
+    "seeMore": "もっと表示",
+    "seeWhoNeedsToCompleteRequirements": "要件を満たす必要がある人を確認する",
+    "usersInCompliance": "のユーザーが準拠しています",
+    "performanceDrilldown": "成績の詳細",
+    "examStatusOverview": "試験状況の概要",
+    "usersScoreVariation": "試行ごとのユーザースコアの変動",
+    "selectCourse": "スコアの詳細",
+    "scoresDrilldown": "スコアの詳細",
+    "examAttemptsAnalysis": "試験試行分析"
 }

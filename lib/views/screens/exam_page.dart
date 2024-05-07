@@ -1,24 +1,14 @@
 import 'dart:async';
-import 'dart:html';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:isms/controllers/auth_token_management/csrf_token_provider.dart';
 import 'package:isms/controllers/exam_management/exam_provider.dart';
 import 'package:isms/controllers/theme_management/theme_config.dart';
 import 'package:isms/controllers/user_management/logged_in_state.dart';
-import 'package:isms/models/course/enums.dart';
-import 'package:isms/models/course/exam_full.dart';
-import 'package:isms/models/course/section_full.dart';
-import 'package:isms/utilities/navigation.dart';
-import 'package:isms/views/screens/user_screens/exam_questions_section.dart';
-import 'package:isms/views/widgets/course_widgets/checkbox_list.dart';
-import 'package:isms/views/widgets/course_widgets/radio_list.dart';
-import 'package:isms/views/widgets/shared_widgets/custom_app_bar.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:isms/models/course/element.dart' as ExamElement;
+import 'package:isms/models/course/exam_full.dart';
+import 'package:isms/views/screens/user_screens/exam_questions_section.dart';
+import 'package:provider/provider.dart';
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 
 import '../../models/course/answer.dart';
@@ -36,7 +26,8 @@ class ExamPage extends StatefulWidget {
   State<ExamPage> createState() => _ExamPageState();
 }
 
-class _ExamPageState extends State<ExamPage> with AutomaticKeepAliveClientMixin<ExamPage> {
+class _ExamPageState extends State<ExamPage>
+    with AutomaticKeepAliveClientMixin<ExamPage> {
   late String _loggedInUserUid;
   late ExamFull _ef;
 
@@ -66,7 +57,8 @@ class _ExamPageState extends State<ExamPage> with AutomaticKeepAliveClientMixin<
   void initState() {
     super.initState();
 
-    _loggedInUserUid = Provider.of<LoggedInState>(context, listen: false).currentUserUid!;
+    _loggedInUserUid =
+        Provider.of<LoggedInState>(context, listen: false).currentUserUid!;
 
     _getExamContent();
   }
@@ -115,7 +107,8 @@ class _ExamPageState extends State<ExamPage> with AutomaticKeepAliveClientMixin<
       context: context,
       builder: (context) => AlertDialog(
         title: Text("Time's up!"),
-        content: Text("The allowed time has expired. Your exam will be submitted automatically."),
+        content: Text(
+            "The allowed time has expired. Your exam will be submitted automatically."),
         actions: [
           TextButton(
             onPressed: () {
@@ -130,7 +123,8 @@ class _ExamPageState extends State<ExamPage> with AutomaticKeepAliveClientMixin<
   }
 
   Future<dynamic> _getExamContent() async {
-    ExamFull ef = await Provider.of<ExamProvider>(context, listen: false).getExamContent(examId: widget.examId);
+    ExamFull ef = await Provider.of<ExamProvider>(context, listen: false)
+        .getExamContent(examId: widget.examId);
     Provider.of<ExamProvider>(context, listen: false).examInProgress = true;
     setState(() {
       _ef = ef;
@@ -150,14 +144,17 @@ class _ExamPageState extends State<ExamPage> with AutomaticKeepAliveClientMixin<
     int counter = 0;
     _ef.examSections?.forEach((section) {
       print(section.sectionId);
-      List<Question> sectionQuestions = _buildSectionQuestions(sectionElements: section.sectionElements!);
+      List<Question> sectionQuestions =
+          _buildSectionQuestions(sectionElements: section.sectionElements!);
       counter += sectionQuestions.length;
-      _sectionQuestionCounter[section.sectionId] = counter - sectionQuestions.length;
+      _sectionQuestionCounter[section.sectionId] =
+          counter - sectionQuestions.length;
       _sectionQuestionsMap[section.sectionId] = sectionQuestions;
     });
   }
 
-  List<Question> _buildSectionQuestions({required List<ExamElement.Element> sectionElements}) {
+  List<Question> _buildSectionQuestions(
+      {required List<ExamElement.Element> sectionElements}) {
     List<Question> questions = [];
     sectionElements.forEach((ExamElement.Element element) {
       List<Answer> answers = [];
@@ -186,8 +183,10 @@ class _ExamPageState extends State<ExamPage> with AutomaticKeepAliveClientMixin<
 
   Map<String, List<String>> _getCorrectAnswersMap(List<Question> questions) {
     for (Question question in questions) {
-      List<String> correctIds =
-          question.questionAnswers.where((answer) => answer.answerCorrect).map((answer) => answer.answerId).toList();
+      List<String> correctIds = question.questionAnswers
+          .where((answer) => answer.answerCorrect)
+          .map((answer) => answer.answerId)
+          .toList();
       _correctAnswersMap[question.questionId] = correctIds;
     }
     print('Correwct answers: $_correctAnswersMap');
@@ -210,7 +209,8 @@ class _ExamPageState extends State<ExamPage> with AutomaticKeepAliveClientMixin<
         // Multi-selection
         Set<String> correctSet = Set.from(correctAnswerIds);
         Set<String> userSet = Set.from(userAnswerIds);
-        if (correctSet.difference(userSet).isEmpty && userSet.difference(correctSet).isEmpty) {
+        if (correctSet.difference(userSet).isEmpty &&
+            userSet.difference(correctSet).isEmpty) {
           score += 1;
         }
       }
@@ -223,7 +223,8 @@ class _ExamPageState extends State<ExamPage> with AutomaticKeepAliveClientMixin<
         context: context,
         builder: (context) => AlertDialog(
               title: Text("Score"),
-              content: Text("Your total score is: $score out of ${_questions.length}"),
+              content: Text(
+                  "Your total score is: $score out of ${_questions.length}"),
               actions: [
                 TextButton(
                     onPressed: () {
@@ -239,7 +240,8 @@ class _ExamPageState extends State<ExamPage> with AutomaticKeepAliveClientMixin<
   }
 
   void _storeExamAttemptResult() {
-    _CSRF_TOKEN = Provider.of<CsrfTokenProvider>(context, listen: false).csrfToken;
+    _CSRF_TOKEN =
+        Provider.of<CsrfTokenProvider>(context, listen: false).csrfToken;
     _JWT = Provider.of<CsrfTokenProvider>(context, listen: false).jwt;
 
     Provider.of<ExamProvider>(context, listen: false).insertUserExamAttempt(
@@ -273,35 +275,44 @@ class _ExamPageState extends State<ExamPage> with AutomaticKeepAliveClientMixin<
         ),
         child: (_ef != null)
             ? _ef.examSections != null
-                ? Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    SizedBox(
-                      height: 20,
-                    ),
-                    buildExamHeader(),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    _ef.examSections!.length != 0
-                        ? Container(
-                            height: MediaQuery.of(context).size.height * 0.75,
-                            // width: MediaQuery.of(context).size.width * 0.8,
-                            child: ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: _ef.examSections!.length,
-                                itemBuilder: (context, index) {
-                                  // int currentSectionStartIndex = _questionCounter;
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                        SizedBox(
+                          height: 20,
+                        ),
+                        buildExamHeader(),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        _ef.examSections!.length != 0
+                            ? Container(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.75,
+                                // width: MediaQuery.of(context).size.width * 0.8,
+                                child: ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: _ef.examSections!.length,
+                                    itemBuilder: (context, index) {
+                                      // int currentSectionStartIndex = _questionCounter;
 
-                                  if (_ef.examSections![index].sectionElements != null) {
-                                    return ExamQuestionsSection(
-                                      questions: _sectionQuestionsMap[_ef.examSections![index].sectionId],
-                                      userResponses: _userResponses,
-                                      startIndex: _sectionQuestionCounter[_ef.examSections![index].sectionId] ?? 0,
-                                    );
-                                  }
-                                }),
-                          )
-                        : Text('No exam sections found'),
-                  ])
+                                      if (_ef.examSections![index]
+                                              .sectionElements !=
+                                          null) {
+                                        return ExamQuestionsSection(
+                                          questions: _sectionQuestionsMap[_ef
+                                              .examSections![index].sectionId],
+                                          userResponses: _userResponses,
+                                          startIndex: _sectionQuestionCounter[
+                                                  _ef.examSections![index]
+                                                      .sectionId] ??
+                                              0,
+                                        );
+                                      }
+                                    }),
+                              )
+                            : Text('No exam sections found'),
+                      ])
                 : Text('No exam found')
             : CircularProgressIndicator(),
       ),
@@ -326,7 +337,8 @@ class _ExamPageState extends State<ExamPage> with AutomaticKeepAliveClientMixin<
             ),
             Text(
               _ef.examDescription,
-              style: TextStyle(color: ThemeConfig.tertiaryTextColor1, fontSize: 16),
+              style: TextStyle(
+                  color: ThemeConfig.tertiaryTextColor1, fontSize: 16),
             ),
           ],
         ),
@@ -335,7 +347,8 @@ class _ExamPageState extends State<ExamPage> with AutomaticKeepAliveClientMixin<
           children: [
             Text(
               'Time remaining:',
-              style: TextStyle(fontSize: 16, color: ThemeConfig.primaryTextColor),
+              style:
+                  TextStyle(fontSize: 16, color: ThemeConfig.primaryTextColor),
             ),
             SizedBox(
               height: 10,
@@ -347,7 +360,11 @@ class _ExamPageState extends State<ExamPage> with AutomaticKeepAliveClientMixin<
               size: 80,
               animationDuration: _durationInSeconds,
               fullProgressColor: Colors.red,
-              progressColors: [ThemeConfig.getPrimaryColorShade(400)!, ThemeConfig.primaryColor!, Colors.red],
+              progressColors: [
+                ThemeConfig.getPrimaryColorShade(400)!,
+                ThemeConfig.primaryColor!,
+                Colors.red
+              ],
               mergeMode: true,
               onGetText: (double value) {
                 return Text(

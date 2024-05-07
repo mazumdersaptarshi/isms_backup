@@ -16,6 +16,7 @@ import 'package:isms/views/widgets/shared_widgets/build_section_header.dart';
 import 'package:isms/views/widgets/shared_widgets/custom_app_bar.dart';
 import 'package:isms/views/widgets/shared_widgets/custom_drawer.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AdminPanel extends StatefulWidget {
   const AdminPanel({super.key});
@@ -135,7 +136,7 @@ class _AdminPanelState extends State<AdminPanel> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                buildSectionHeader(title: 'Overview'),
+                buildSectionHeader(title: AppLocalizations.of(context)!.overview),
                 // SizedBox(
                 //   height: 10,
                 // ),
@@ -149,7 +150,7 @@ class _AdminPanelState extends State<AdminPanel> {
                   height: 20,
                 ),
 
-                buildSectionHeader(title: 'Performance Drilldown'),
+                buildSectionHeader(title: AppLocalizations.of(context)!.performanceDrilldown),
                 SizedBox(
                   height: 20,
                 ),

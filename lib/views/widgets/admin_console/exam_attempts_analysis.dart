@@ -11,6 +11,7 @@ import 'package:isms/views/widgets/shared_widgets/custom_dropdown_button_widget.
 import 'package:isms/views/widgets/shared_widgets/hoverable_section_container.dart';
 import 'package:isms/views/widgets/shared_widgets/selectable_item.dart';
 import 'package:isms/views/widgets/shared_widgets/single_select_search_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ExamAttemptsAnalysis extends StatefulWidget {
   ExamAttemptsAnalysis({
@@ -131,7 +132,7 @@ class _ExamAttemptsAnalysisState extends State<ExamAttemptsAnalysis> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Exam Attempts Analysis',
+                AppLocalizations.of(context)!.examAttemptsAnalysis,
                 style: TextStyle(
                   fontSize: 16,
                   color: ThemeConfig.primaryTextColor,

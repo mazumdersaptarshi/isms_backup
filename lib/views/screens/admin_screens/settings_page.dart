@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:isms/controllers/language_management/language_manager.dart';
 import 'package:isms/controllers/theme_management/theme_config.dart';
 import 'package:isms/controllers/theme_management/theme_manager.dart';
 import 'package:provider/provider.dart';
@@ -69,7 +70,7 @@ class _SettingsPageState extends State<SettingsPage> {
           style: TextStyle(color: ThemeConfig.primaryTextColor),
         ),
         ListTile(
-          title: Text(ThemeModes.light.name, style: TextStyle(color: ThemeConfig.primaryTextColor)),
+          title: Text(AppLocalizations.of(context)!.lightMode, style: TextStyle(color: ThemeConfig.primaryTextColor)),
           leading: Radio<ThemeModes>(
             value: ThemeModes.light,
             groupValue: Provider.of<ThemeManager>(context).selectedTheme,
@@ -81,7 +82,7 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
         ListTile(
           title: Text(
-            ThemeModes.dark.name,
+            AppLocalizations.of(context)!.darkMode,
             style: TextStyle(color: ThemeConfig.primaryTextColor),
           ),
           leading: Radio<ThemeModes>(
@@ -97,32 +98,13 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  Widget _themeOption(ThemeModes mode) {
-    return InkWell(
-      onTap: () => _changeTheme(mode),
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 8),
-        child: Row(
-          children: [
-            Radio<ThemeModes>(
-              value: mode,
-              groupValue: Provider.of<ThemeManager>(context).selectedTheme,
-              onChanged: (ThemeModes? value) {
-                if (value != null) _changeTheme(value);
-              },
-            ),
-            Text(mode.name,
-                style: TextStyle(
-                  fontSize: 16,
-                  color: ThemeConfig.primaryTextColor,
-                )),
-          ],
-        ),
-      ),
-    );
+  void _changeLanguage(Locale locale) {
+    Provider.of<LocaleManager>(context, listen: false).setLocale(locale);
   }
 
   Widget _buildLanguageOptions() {
+    LocaleManager localeProvider = Provider.of<LocaleManager>(context, listen: false);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -130,67 +112,64 @@ class _SettingsPageState extends State<SettingsPage> {
             style: TextStyle(fontSize: 18, color: Colors.grey.shade700)),
         Column(
           children: [
-            Row(
-              children: [
-                SizedBox(width: 20),
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      _selectedLanguage = 'en';
-                      // Apply the selected language here
-                    });
-                  },
-                  child: Row(
-                    children: [
-                      Radio<String>(
-                        value: 'en',
-                        groupValue: _selectedLanguage,
-                        onChanged: (String? value) {
-                          setState(() {
-                            _selectedLanguage = value!;
-                            // Apply the selected language here
-                          });
-                        },
-                      ),
-                      Text(AppLocalizations.of(context)!.localeEnglish,
-                          style: TextStyle(fontSize: 16, color: Colors.grey.shade700)),
-                    ],
-                  ),
-                ),
-              ],
+            ListTile(
+              title: Text(
+                AppLocalizations.of(context)!.localeEnglish,
+                style: TextStyle(color: ThemeConfig.primaryTextColor),
+              ),
+              leading: Radio<Locale>(
+                value: Locale('en'),
+                groupValue: Provider.of<LocaleManager>(context).locale,
+                onChanged: (Locale? value) {
+                  print("Changing locale to $value");
+                  _changeLanguage(Locale('en')); // Make sure this triggers provider update
+                },
+              ),
+              onTap: () {
+                print("ListTile tap registered for en");
+                _changeLanguage(Locale('en')); // This should also work as expected
+              },
             ),
-            Row(
-              children: [
-                SizedBox(width: 20),
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      _selectedLanguage = 'ja';
-                      // Apply the selected language here
-                    });
-                  },
-                  child: Row(
-                    children: [
-                      Radio<String>(
-                        value: 'ja',
-                        groupValue: _selectedLanguage,
-                        onChanged: (String? value) {
-                          setState(() {
-                            _selectedLanguage = value!;
-                            // Apply the selected language here
-                          });
-                        },
-                      ),
-                      Text(AppLocalizations.of(context)!.localeJapanese,
-                          style: TextStyle(fontSize: 16, color: Colors.grey.shade700)),
-                    ],
-                  ),
-                ),
-              ],
+            ListTile(
+              title: Text(
+                AppLocalizations.of(context)!.localeJapanese,
+                style: TextStyle(color: ThemeConfig.primaryTextColor),
+              ),
+              leading: Radio<Locale>(
+                value: Locale('ja'),
+                groupValue: Provider.of<LocaleManager>(context).locale,
+                onChanged: (Locale? value) {
+                  print("Changing locale to $value");
+                  _changeLanguage(Locale('ja')); // Make sure this triggers provider update
+                },
+              ),
+              onTap: () {
+                print("ListTile tap registered for ja");
+                _changeLanguage(Locale('ja')); // This should also work as expected
+              },
             ),
           ],
         ),
       ],
     );
   }
+
+// Widget _buildLanguageOption(
+//     LocaleManager localeProvider, String languageCode, String languageText, BuildContext context) {
+//   return ListTile(
+//     title: Text(languageText),
+//     leading: Radio<String>(
+//       value: languageCode,
+//       groupValue: localeProvider.locale.languageCode,
+//       onChanged: (String? value) {
+//         print("Changing locale to $value");
+//         localeProvider.setLocale(Locale(value!)); // Make sure this triggers provider update
+//       },
+//     ),
+//     onTap: () {
+//       print("ListTile tap registered for $languageCode");
+//       localeProvider.setLocale(Locale(languageCode)); // This should also work as expected
+//     },
+//   );
+// }
 }

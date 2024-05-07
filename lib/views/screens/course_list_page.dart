@@ -172,7 +172,7 @@ class _CourseListPageState extends State<CourseListPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            buildSectionHeader(title: 'Assigned Courses'),
+            buildSectionHeader(title: AppLocalizations.of(context)!.assignedCourses),
             Container(
               width: MediaQuery.of(context).size.width * 1,
               margin: EdgeInsets.fromLTRB(
@@ -531,7 +531,7 @@ class _CourseListPageState extends State<CourseListPage> {
                       child: Container(
                         padding: const EdgeInsets.all(13),
                         child: Text(
-                          'Complete all sections to start the exam',
+                          AppLocalizations.of(context)!.completeAllSections,
                           style: TextStyle(color: Colors.grey),
                         ),
                       ),
