@@ -15,6 +15,8 @@ import 'package:isms/views/screens/course_list_page.dart';
 import 'package:isms/views/screens/course_page.dart';
 import 'package:isms/views/screens/home_screen.dart';
 
+import '../views/screens/admin_screens/settings_page.dart';
+
 /// All named routes defined in the [GoRouter] configuration below
 enum NamedRoutes { home, login, adminConsole, assignments, course, exam, adminPanel, notifications, settings }
 
@@ -95,6 +97,10 @@ final GoRouter ismsRouter = GoRouter(
             }),
       ],
     ),
+    GoRoute(
+        name: NamedRoutes.settings.name,
+        path: '/settings',
+        builder: (BuildContext context, GoRouterState state) => const SettingsPage()),
   ],
 );
 

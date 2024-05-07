@@ -32,7 +32,7 @@ class _SettingsPageState extends State<SettingsPage> {
       backgroundColor: ThemeConfig.scaffoldBackgroundColor,
       appBar: IsmsAppBar(context: context),
       // Actual implementation
-      // drawer: IsmsDrawer(context: context),
+      drawer: IsmsDrawer(context: context),
       bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
       // Assuming PlatformCheck is accessible
       body: SingleChildScrollView(
