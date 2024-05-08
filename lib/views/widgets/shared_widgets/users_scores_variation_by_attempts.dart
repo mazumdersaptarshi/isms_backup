@@ -132,7 +132,8 @@ class _UsersScoresVariationByAttemptsState extends State<UsersScoresVariationByA
                 if (_examsBWChartData.isNotEmpty)
                   CustomDropdownButton(
                     // label: 'Exam',
-                    buttonText: _selectedExam != null ? _selectedExam!.itemName : 'Select Exam',
+                    buttonText:
+                        _selectedExam != null ? _selectedExam!.itemName : '${AppLocalizations.of(context)!.selectExam}',
                     onButtonPressed: () => _showExamSingleSelectModalForBWChart(context, items: _examsBWChartData),
                   ),
               ],

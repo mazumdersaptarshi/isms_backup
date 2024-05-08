@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+
 // import 'package:isms/views/screens/testing/test_ui/themes.dart';
 import 'package:isms/views/screens/testing/test_ui_type1/themes.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class QuizCard extends StatefulWidget {
   @override
@@ -31,8 +33,7 @@ class _QuizCardState extends State<QuizCard> {
               ),
               SizedBox(height: 20),
               Divider(),
-              _buildChoiceTile(
-                  'Engineering, Manufacturing, and Construction', 0),
+              _buildChoiceTile('Engineering, Manufacturing, and Construction', 0),
               SizedBox(height: 20),
               _buildChoiceTile('Supply Chain', 1),
               SizedBox(height: 20),
@@ -47,8 +48,7 @@ class _QuizCardState extends State<QuizCard> {
                   onPressed: () {
                     // TODO: Add submit action
                   },
-                  child: Text('Submit',
-                      style: TextStyle(fontSize: 16)), // Button size
+                  child: Text('${AppLocalizations.of(context)?.submit}', style: TextStyle(fontSize: 16)), // Button size
                 ),
               ),
               SizedBox(height: 20), // Spacing after the submit button

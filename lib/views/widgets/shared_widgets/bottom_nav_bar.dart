@@ -44,10 +44,10 @@ class BottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void navigateToUserProfilePage() {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const UserProfilePage()),
-      );
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(builder: (context) => const UserProfilePage()),
+      // );
     }
 
     void navigateToHomePage() {

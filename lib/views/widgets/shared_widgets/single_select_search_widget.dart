@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart'; // Import your theme
 import 'package:isms/controllers/theme_management/theme_config.dart';
 import 'package:isms/views/widgets/shared_widgets/selectable_item.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SingleSelectSearch extends StatefulWidget {
   final List<SelectableItem> items;
@@ -33,7 +34,7 @@ class _SingleSelectSearchState extends State<SingleSelectSearch> {
                 color: ThemeConfig.primaryTextColor,
               ),
               decoration: InputDecoration(
-                labelText: 'Search',
+                labelText: '${AppLocalizations.of(context)?.search}',
                 labelStyle: TextStyle(color: ThemeConfig.tertiaryTextColor1),
                 suffixIcon: Icon(
                   Icons.search,
@@ -132,7 +133,7 @@ class _SingleSelectSearchState extends State<SingleSelectSearch> {
               width: 150,
               padding: EdgeInsets.symmetric(vertical: 13),
               child: Text(
-                'Submit',
+                '${AppLocalizations.of(context)?.submit}',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: ThemeConfig.secondaryTextColor),
               ),

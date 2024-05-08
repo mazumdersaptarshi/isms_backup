@@ -18,6 +18,7 @@ import 'package:isms/models/user_progress/user_exam_attempt.dart';
 import 'package:isms/models/user_progress/user_exam_progress.dart';
 import 'package:isms/sql/queries/query6.dart';
 import 'package:isms/utilities/platform_check.dart';
+import 'package:isms/views/screens/admin_screens/settings_page.dart';
 import 'package:isms/views/widgets/shared_widgets/app_footer.dart';
 import 'package:isms/views/widgets/shared_widgets/build_section_header.dart';
 import 'package:isms/views/widgets/shared_widgets/chart_metric_select_widget_dropdown.dart';
@@ -29,8 +30,10 @@ import 'package:isms/views/widgets/shared_widgets/custom_drawer.dart';
 import 'package:isms/views/widgets/shared_widgets/custom_expansion_tile.dart';
 import 'package:isms/views/widgets/shared_widgets/custom_linear_progress_indicator.dart';
 import 'package:isms/views/widgets/shared_widgets/hoverable_section_container.dart';
+import 'package:isms/views/widgets/shared_widgets/settings_section.dart';
 import 'package:isms/views/widgets/shared_widgets/user_profile_banner.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AdminUserDetailsScreen extends StatefulWidget {
   final String uid;
@@ -90,13 +93,13 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
       return DataTable(
         columns: [
           DataColumn(
-              tooltip: 'Exam ID',
+              tooltip: '${AppLocalizations.of(context)!.examId}',
               label: Text(
-                'Exam ID',
+                '${AppLocalizations.of(context)!.examId}',
                 style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey.shade500),
               )),
           DataColumn(
-              tooltip: 'Start Time',
+              tooltip: '${AppLocalizations.of(context)!.startTime}',
               label: Row(
                 children: [
                   Icon(
@@ -108,13 +111,13 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
                     width: 4,
                   ),
                   Text(
-                    'Start Time',
+                    '${AppLocalizations.of(context)!.startTime}',
                     style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey.shade500),
                   ),
                 ],
               )),
           DataColumn(
-              tooltip: 'End Time',
+              tooltip: '${AppLocalizations.of(context)!.endTime}',
               label: Row(
                 children: [
                   Icon(
@@ -126,27 +129,27 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
                     width: 4,
                   ),
                   Text(
-                    'End Time',
+                    '${AppLocalizations.of(context)!.endTime}',
                     style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey.shade500),
                   ),
                 ],
               )),
           DataColumn(
-              tooltip: 'Result',
+              tooltip: '${AppLocalizations.of(context)!.result}',
               label: Text(
-                'Result',
+                '${AppLocalizations.of(context)!.result}',
                 style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey.shade500),
               )),
           DataColumn(
-              tooltip: 'Score',
+              tooltip: '${AppLocalizations.of(context)!.score}',
               label: Text(
-                'Score',
+                '${AppLocalizations.of(context)!.score}',
                 style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey.shade500),
               )),
           DataColumn(
-              tooltip: 'Duration',
+              tooltip: '${AppLocalizations.of(context)!.duration}',
               label: Text(
-                'Duration',
+                '${AppLocalizations.of(context)!.duration}',
                 style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey.shade500),
               )),
         ],
@@ -158,7 +161,8 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
               String formattedEndTime = DateFormat('yyyy-MM-dd – kk:mm').format(attempt.endTime);
               Duration duration = attempt.endTime.difference(attempt.startTime);
 
-              String formattedDuration = '${duration.inHours}h ${duration.inMinutes.remainder(60)}m';
+              String formattedDuration =
+                  '${duration.inHours}${AppLocalizations.of(context)?.hours} ${duration.inMinutes.remainder(60)}${AppLocalizations.of(context)?.minutes}';
               Color bgColor = index % 2 == 1 ? Colors.transparent : ThemeConfig.tableRowColor!;
 
               return MapEntry(
@@ -188,7 +192,9 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
                                   attempt.result.name == ExamAttemptResult.pass.name ? Colors.lightGreen : Colors.red,
                             ),
                             child: Text(
-                              attempt.result.name == ExamAttemptResult.pass.name ? 'Pass' : 'Fail',
+                              attempt.result.name == ExamAttemptResult.pass.name
+                                  ? '${AppLocalizations.of(context)!.pass}'
+                                  : '${AppLocalizations.of(context)!.fail}',
 
                               // Assuming 'passed' is a boolean
                               style: TextStyle(color: Colors.white),
@@ -444,10 +450,10 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
             },
           ),
           // FutureBuilder to asynchronously fetch course data for the user.
-          buildSectionHeader(title: 'Summary'),
+          buildSectionHeader(title: '${AppLocalizations.of(context)?.summary}'),
           FutureBuilder<dynamic>(
             // future: adminState.retrieveAllDataFromDatabase(), // The async function call
-            future: adminState.getUserSummary(widget.uid),
+            future: adminState.getUserSummary(widget.uid, context),
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 // Display a loading indicator while waiting for the data
@@ -470,7 +476,7 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
               }
             },
           ),
-          buildSectionHeader(title: 'Progress Overview'),
+          buildSectionHeader(title: '${AppLocalizations.of(context)?.progressOverview}'),
 
           FutureBuilder<dynamic>(
               future: adminState.getUserProgressOverview(widget.uid),
@@ -514,6 +520,7 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
                   );
                 }
               }),
+          // SettingsPage(),
           // buildSectionHeader(title: 'Activity'),
           // Container(
           //   margin: EdgeInsets.fromLTRB(80, 10, 80, 30),

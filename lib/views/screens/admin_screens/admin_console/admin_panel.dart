@@ -160,7 +160,7 @@ class _AdminPanelState extends State<AdminPanel> {
                         domainUsers: _allDomainUsersSummary,
                       )
                     : Center(child: CircularProgressIndicator()),
-                buildSectionHeader(title: 'Admin Actions'),
+                buildSectionHeader(title: AppLocalizations.of(context)!.adminActions),
                 SizedBox(
                   height: 20,
                 ),

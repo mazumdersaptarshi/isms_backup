@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:isms/controllers/exam_management/exam_provider.dart';
 import 'package:isms/views/screens/admin_screens/admin_console/admin_panel.dart';
 import 'package:isms/views/screens/exam_page.dart';
+import 'package:isms/views/screens/user_screens/user_profile_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'package:isms/controllers/user_management/logged_in_state.dart';
@@ -18,7 +19,18 @@ import 'package:isms/views/screens/home_screen.dart';
 import '../views/screens/admin_screens/settings_page.dart';
 
 /// All named routes defined in the [GoRouter] configuration below
-enum NamedRoutes { home, login, adminConsole, assignments, course, exam, adminPanel, notifications, settings }
+enum NamedRoutes {
+  home,
+  login,
+  adminConsole,
+  assignments,
+  course,
+  exam,
+  adminPanel,
+  notifications,
+  settings,
+  userProfile
+}
 
 /// All parameter names used in child named routes defined in the [GoRouter] configuration below
 enum NamedRoutePathParameters { courseId, examId, uid }
@@ -50,6 +62,14 @@ final GoRouter ismsRouter = GoRouter(
           AdminUserDetailsScreen(uid: state.pathParameters[NamedRoutePathParameters.uid.name]!),
       redirect: (BuildContext context, GoRouterState state) =>
           Provider.of<LoggedInState>(context, listen: false).currentUserRole != 'admin' ? '/' : null,
+    ),
+    GoRoute(
+      name: NamedRoutes.userProfile.name,
+      path: '/user_profile/:uid',
+      builder: (BuildContext context, GoRouterState state) =>
+          UserProfileScreen(uid: state.pathParameters[NamedRoutePathParameters.uid.name]!),
+      redirect: (BuildContext context, GoRouterState state) =>
+          Provider.of<LoggedInState>(context, listen: false).currentUser == null ? '/' : null,
     ),
     GoRoute(
       name: NamedRoutes.adminPanel.name,

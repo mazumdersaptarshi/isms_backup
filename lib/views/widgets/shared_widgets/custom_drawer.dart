@@ -141,42 +141,76 @@ class _IsmsDrawerState extends State<IsmsDrawer> {
 
   Widget _getProfileImage(BuildContext context) {
     final bool isHovered = _hoveredRoute == 'profile';
+    var loggedInUser = Provider.of<LoggedInState>(context, listen: false);
     return MouseRegion(
-      onEnter: (_) {
-        setState(() {
-          _hoveredRoute = 'profile';
-        });
-      },
-      onExit: (_) {
-        setState(() {
-          _hoveredRoute = null;
-        });
-      },
-      child: InkWell(
-        onTap: () {
-          // Navigate to SettingsPage
-          context.goNamed(NamedRoutes.settings.name);
+        onEnter: (_) {
+          setState(() {
+            _hoveredRoute = 'profile';
+          });
         },
-        child: Container(
-          width: 120,
-          height: 120,
-          // padding: EdgeInsets.only(top: 15, bottom: 15),
-          decoration: BoxDecoration(
-            color: isHovered ? Colors.white.withOpacity(0.1) : Colors.transparent,
-            borderRadius: BorderRadius.circular(6),
-          ),
-          child: IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.account_circle_outlined,
-              color: Colors.white,
-              weight: 0.1,
-              fill: 1,
-              size: 40,
+        onExit: (_) {
+          setState(() {
+            _hoveredRoute = null;
+          });
+        },
+        child:
+            // Container(
+            //   // width: 120,
+            //   // height: 120,
+            //   // padding: EdgeInsets.only(top: 15, bottom: 15),
+            //   decoration: BoxDecoration(
+            //     color: isHovered ? Colors.white.withOpacity(0.1) : Colors.transparent,
+            //     borderRadius: BorderRadius.circular(6),
+            //   ),
+            //   child: Column(
+            //     // mainAxisAlignment: MainAxisAlignment.end,
+            //     // crossAxisAlignment: CrossAxisAlignment.center,
+            //     children: [
+            //       IconButton(
+            //         alignment: Alignment.centerRight,
+            //         onPressed: () => {
+            //           context.goNamed(NamedRoutes.adminConsole.name, pathParameters: {'uid': loggedInUser.currentUserUid!})
+            //         },
+            //         icon: Icon(
+            //           Icons.account_circle_outlined,
+            //           color: Colors.white,
+            //           // weight: 0.1,
+            //           // fill: 1,
+            //           size: 40,
+            //         ),
+            //       ),
+            //       Text(
+            //         '${loggedInUser.currentUserName}',
+            //         style: TextStyle(color: ThemeConfig.primaryTextColor, fontSize: 14),
+            //         textAlign: TextAlign.center,
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            InkWell(
+          onTap: () async {
+            context.goNamed(NamedRoutes.userProfile.name, pathParameters: {'uid': loggedInUser.currentUserUid!});
+          },
+          child: Container(
+            width: 120,
+            padding: EdgeInsets.only(top: 15, bottom: 15),
+            decoration: BoxDecoration(
+              color: isHovered ? Colors.white.withOpacity(0.1) : Colors.transparent,
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.account_circle_outlined, color: Colors.white, size: 40),
+                SizedBox(height: 10),
+                Text(
+                  loggedInUser.currentUserName!,
+                  style: TextStyle(color: Colors.white, fontSize: 14),
+                  textAlign: TextAlign.center,
+                ),
+              ],
             ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }

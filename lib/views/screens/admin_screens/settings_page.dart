@@ -31,29 +31,41 @@ class _SettingsPageState extends State<SettingsPage> {
     return Scaffold(
       backgroundColor: ThemeConfig.scaffoldBackgroundColor,
       appBar: IsmsAppBar(context: context),
-      drawer: IsmsDrawer(context: context),
+      // Actual implementation
+      // drawer: IsmsDrawer(context: context),
       bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.only(
-            top: 20.0,
-            bottom: 20.0,
-            left: MediaQuery.of(context).size.width * 0.03,
-            right: MediaQuery.of(context).size.width * 0.05,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                AppLocalizations.of(context)!.buttonSettings, // Replace with actual property name
-                style: TextStyle(fontSize: 30, color: Colors.grey.shade600),
-              ),
-              SizedBox(height: 20.0),
-              _buildThemeOptions(),
-              SizedBox(height: 20),
-              _buildLanguageOptions(),
-            ],
-          ),
+      // Assuming PlatformCheck is accessible
+      body: buildSettingsSection(context),
+    );
+  }
+
+  Widget buildSettingsSection(BuildContext context) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.only(
+          top: 20.0,
+          bottom: 20.0,
+          left: MediaQuery
+              .of(context)
+              .size
+              .width * 0.03,
+          right: MediaQuery
+              .of(context)
+              .size
+              .width * 0.05,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              AppLocalizations.of(context)!.buttonSettings, // Replace with actual property name
+              style: TextStyle(fontSize: 30, color: ThemeConfig.primaryTextColor),
+            ),
+            SizedBox(height: 20.0), // Add spacing between title and options
+            _buildThemeOptions(),
+            SizedBox(height: 20),
+            _buildLanguageOptions(),
+          ],
         ),
       ),
     );
@@ -65,14 +77,15 @@ class _SettingsPageState extends State<SettingsPage> {
       children: [
         Text(
           AppLocalizations.of(context)!.themes,
-          style: TextStyle(color: ThemeConfig.primaryTextColor),
+          style: TextStyle(color: ThemeConfig.primaryTextColor, fontSize: 18,),
         ),
         ListTile(
           title: Text(AppLocalizations.of(context)!.lightMode, style: TextStyle(color: ThemeConfig.primaryTextColor)),
           leading: Radio<ThemeModes>(
             value: ThemeModes.light,
-            fillColor: MaterialStateProperty.all<Color>(ThemeConfig.primaryTextColor),
-            groupValue: Provider.of<ThemeManager>(context).selectedTheme,
+            groupValue: Provider
+                .of<ThemeManager>(context)
+                .selectedTheme,
             onChanged: (ThemeModes? value) {
               if (value != null) _changeTheme(value);
             },
@@ -86,8 +99,9 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           leading: Radio<ThemeModes>(
             value: ThemeModes.dark,
-            fillColor: MaterialStateProperty.all<Color>(ThemeConfig.primaryTextColor),
-            groupValue: Provider.of<ThemeManager>(context).selectedTheme,
+            groupValue: Provider
+                .of<ThemeManager>(context)
+                .selectedTheme,
             onChanged: (ThemeModes? value) {
               if (value != null) _changeTheme(value);
             },
@@ -109,7 +123,7 @@ class _SettingsPageState extends State<SettingsPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(AppLocalizations.of(context)!.languageSetting,
-            style: TextStyle(fontSize: 18, color: Colors.grey.shade700)),
+            style: TextStyle(fontSize: 18, color: ThemeConfig.primaryTextColor)),
         Column(
           children: [
             ListTile(
@@ -119,16 +133,17 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               leading: Radio<Locale>(
                 value: Locale('en'),
-                fillColor: MaterialStateProperty.all<Color>(ThemeConfig.primaryTextColor),
-                groupValue: Provider.of<LocaleManager>(context).locale,
+                groupValue: Provider
+                    .of<LocaleManager>(context)
+                    .locale,
                 onChanged: (Locale? value) {
                   print("Changing locale to $value");
-                  _changeLanguage(Locale('en'));
+                  _changeLanguage(Locale('en')); // Make sure this triggers provider update
                 },
               ),
               onTap: () {
                 print("ListTile tap registered for en");
-                _changeLanguage(Locale('en'));
+                _changeLanguage(Locale('en')); // This should also work as expected
               },
             ),
             ListTile(
@@ -138,16 +153,17 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               leading: Radio<Locale>(
                 value: Locale('ja'),
-                fillColor: MaterialStateProperty.all<Color>(ThemeConfig.primaryTextColor),
-                groupValue: Provider.of<LocaleManager>(context).locale,
+                groupValue: Provider
+                    .of<LocaleManager>(context)
+                    .locale,
                 onChanged: (Locale? value) {
                   print("Changing locale to $value");
-                  _changeLanguage(Locale('ja'));
+                  _changeLanguage(Locale('ja')); // Make sure this triggers provider update
                 },
               ),
               onTap: () {
                 print("ListTile tap registered for ja");
-                _changeLanguage(Locale('ja'));
+                _changeLanguage(Locale('ja')); // This should also work as expected
               },
             ),
           ],
@@ -155,4 +171,23 @@ class _SettingsPageState extends State<SettingsPage> {
       ],
     );
   }
+
+// Widget _buildLanguageOption(
+//     LocaleManager localeProvider, String languageCode, String languageText, BuildContext context) {
+//   return ListTile(
+//     title: Text(languageText),
+//     leading: Radio<String>(
+//       value: languageCode,
+//       groupValue: localeProvider.locale.languageCode,
+//       onChanged: (String? value) {
+//         print("Changing locale to $value");
+//         localeProvider.setLocale(Locale(value!)); // Make sure this triggers provider update
+//       },
+//     ),
+//     onTap: () {
+//       print("ListTile tap registered for $languageCode");
+//       localeProvider.setLocale(Locale(languageCode)); // This should also work as expected
+//     },
+//   );
+// }
 }

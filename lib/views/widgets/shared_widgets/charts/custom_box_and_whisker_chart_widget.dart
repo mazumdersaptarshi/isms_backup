@@ -6,6 +6,7 @@ import 'package:isms/controllers/theme_management/app_theme.dart';
 import 'package:isms/controllers/theme_management/theme_config.dart';
 import 'package:isms/models/charts/box_and_whisker_charts/custom_scores_variation_data.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomBoxAndWhiskerChartWidget extends StatefulWidget {
   // ignore: prefer_const_constructors_in_immutables
@@ -95,7 +96,9 @@ class _CustomBoxAndWhiskerChartWidgetState extends State<CustomBoxAndWhiskerChar
               Container(
                 padding: EdgeInsets.all(8),
                 child: Text(
-                  'Showing ${currentPage + 1} of ${(widget.allData.length / pageSize).ceil()}',
+                  // 'Showing ${currentPage + 1} of ${(widget.allData.length / pageSize).ceil()}',
+                  '${AppLocalizations.of(context)?.showingPages(currentPage + 1, (widget.allData.length / pageSize).ceil())}',
+
                   style: TextStyle(
                     fontSize: 14,
                     color: ThemeConfig.primaryTextColor,

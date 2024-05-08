@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:isms/controllers/language_management/app_localization_extension.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart';
 import 'package:isms/controllers/theme_management/theme_config.dart';
 import 'package:isms/models/shared_widgets/custom_dropdown_item.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // 'T' here will allow the dropdown to hold any type of value,
 // but now within the structured format of CustomDropdownItem.
-class CustomDropdownWidget<T> extends StatelessWidget {
+class CustomDropdownWidget<T> extends StatefulWidget {
   final String? hintText;
   final CustomDropdownItem<T>? value; // Changed to CustomDropdownItem<T>
   final List<CustomDropdownItem<T>>? items; // Changed to List<CustomDropdownItem<T>>
@@ -22,15 +24,20 @@ class CustomDropdownWidget<T> extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<CustomDropdownWidget<T>> createState() => _CustomDropdownWidgetState<T>();
+}
+
+class _CustomDropdownWidgetState<T> extends State<CustomDropdownWidget<T>> {
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (label != null) ...[
+        if (widget.label != null) ...[
           Padding(
             padding: const EdgeInsets.only(left: 10, bottom: 8),
             child: Text(
-              label!,
+              widget.label!,
               style: TextStyle(
                 fontSize: 12,
                 color: ThemeConfig.tertiaryTextColor1!, // Adjust the color to match your theme
@@ -58,21 +65,22 @@ class CustomDropdownWidget<T> extends StatelessWidget {
                     dropdownColor: ThemeConfig.primaryCardColor,
                     borderRadius: BorderRadius.circular(5),
                     hint: Text(
-                      hintText ?? '',
+                      widget.hintText ?? '',
                       style: TextStyle(
                         color: ThemeConfig.secondaryTextColor!,
                         fontSize: 14,
                       ),
                     ),
-                    value: value,
-                    onChanged: onChanged,
-                    items: items?.map((CustomDropdownItem<T> item) {
+                    value: widget.value,
+                    onChanged: widget.onChanged,
+                    items: widget.items?.map((CustomDropdownItem<T> item) {
                       return DropdownMenuItem<CustomDropdownItem<T>>(
                         value: item,
                         child: Container(
                           padding: EdgeInsets.all(4),
                           child: Text(
-                            item.key, // Displaying 'key' instead of 'value.toString()'
+                            // item.label ?? item.key, // Displaying 'key' instead of 'value.toString()'
+                            AppLocalizations.of(context)!.getLocalizedString(item.value.toString()) ?? item.key,
                             style: TextStyle(
                                 color: ThemeConfig.secondaryTextColor!, fontSize: 14), // Text color inside the dropdown
                           ),

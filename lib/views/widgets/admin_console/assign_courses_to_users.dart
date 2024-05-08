@@ -13,6 +13,7 @@ import 'package:isms/views/widgets/shared_widgets/hoverable_section_container.da
 import 'package:isms/views/widgets/shared_widgets/multi_select_search_widget.dart';
 import 'package:isms/views/widgets/shared_widgets/selectable_item.dart';
 import 'package:isms/views/widgets/shared_widgets/selected_items_display_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AssignCoursesToUserSection extends StatefulWidget {
   const AssignCoursesToUserSection({
@@ -37,6 +38,8 @@ class _AssignCoursesToUserSectionState extends State<AssignCoursesToUserSection>
   @override
   void initState() {
     super.initState();
+    // _buildEnableDisableDropdown(context);
+
     adminState = AdminState();
   }
 
@@ -47,10 +50,23 @@ class _AssignCoursesToUserSectionState extends State<AssignCoursesToUserSection>
   String? _selectedCourseEnableDisableValue = 'disable';
   CustomDropdownItem<String>? _selectedCourseEnableDisable;
 
-  List<CustomDropdownItem<String>> enableDisableDropdownItems = [
+  // late List<CustomDropdownItem<String>> _enableDisableDropdownItems;
+
+  List<CustomDropdownItem<String>> _enableDisableDropdownItems = [
     CustomDropdownItem(key: 'Enable', value: 'enable'),
     CustomDropdownItem(key: 'Disable', value: 'disable'),
   ];
+
+  void _buildEnableDisableDropdown(BuildContext context) {
+    print('Came here');
+    List<CustomDropdownItem<String>> enableDisableDropdownItems = [
+      CustomDropdownItem(key: 'Enable', value: 'enable', label: '${AppLocalizations.of(context)?.enable}'),
+      CustomDropdownItem(key: 'Disable', value: 'disable', label: '${AppLocalizations.of(context)?.disable}'),
+    ];
+    _enableDisableDropdownItems = enableDisableDropdownItems;
+    // return enableDisableDropdownItems;
+  }
+
   List<CustomDropdownItem<int>> _years = [
     CustomDropdownItem(key: '1', value: 1),
     CustomDropdownItem(key: '2', value: 2),
@@ -179,12 +195,16 @@ class _AssignCoursesToUserSectionState extends State<AssignCoursesToUserSection>
 
   @override
   Widget build(BuildContext context) {
+    List<CustomDropdownItem<String>> enableDisableDropdownItems = [
+      CustomDropdownItem(key: 'Enable', value: 'enable', label: '${AppLocalizations.of(context)?.enable}'),
+      CustomDropdownItem(key: 'Disable', value: 'disable', label: '${AppLocalizations.of(context)?.disable}'),
+    ];
     return HoverableSectionContainer(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Assign course to users',
+            '${AppLocalizations.of(context)?.assignCoursesToUsers}',
             style: TextStyle(
               fontSize: 16,
               color: ThemeConfig.primaryTextColor,
@@ -211,37 +231,38 @@ class _AssignCoursesToUserSectionState extends State<AssignCoursesToUserSection>
             alignment: WrapAlignment.start,
             children: [
               CustomDropdownButton(
-                  label: 'Courses',
-                  buttonText: 'Select Courses',
+                  label: '${AppLocalizations.of(context)?.courses}',
+                  buttonText: '${AppLocalizations.of(context)?.selectCourses}',
                   onButtonPressed: () => _showMultiSelectCoursesModal(widget.courses)),
               CustomDropdownButton(
-                label: 'Users',
-                buttonText: 'Select Users',
+                label: '${AppLocalizations.of(context)?.users}',
+                buttonText: '${AppLocalizations.of(context)?.selectUsers}',
                 onButtonPressed: () => _showMultiSelectUsersModal(widget.allDomainUsersSummary),
               ),
-              CustomDropdownWidget<String>(
-                label: 'Status',
-                hintText: 'Status',
-                value: _selectedCourseEnableDisable,
-                items: enableDisableDropdownItems,
-                onChanged: (CustomDropdownItem<String>? value) {
-                  setState(() {
-                    _selectedCourseEnableDisable = value!;
-                    _selectedCourseEnableDisableValue = _selectedCourseEnableDisable?.value;
-                  });
-                },
-              ),
+              if (_enableDisableDropdownItems.isNotEmpty)
+                CustomDropdownWidget<String>(
+                  label: '${AppLocalizations.of(context)?.status}',
+                  hintText: '${AppLocalizations.of(context)?.selectStatus}',
+                  value: _selectedCourseEnableDisable,
+                  items: _enableDisableDropdownItems,
+                  onChanged: (CustomDropdownItem<String>? value) {
+                    setState(() {
+                      _selectedCourseEnableDisable = value!;
+                      _selectedCourseEnableDisableValue = _selectedCourseEnableDisable?.value;
+                    });
+                  },
+                ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(left: 10, bottom: 8),
                     child: Text(
-                      'Deadline',
+                      '${AppLocalizations.of(context)?.deadline}',
                       style: TextStyle(
                         fontSize: 12,
                         // fontWeight: FontWeight.bold,
-                        color: ThemeConfig.primaryTextColor!,
+                        color: ThemeConfig.tertiaryTextColor1!,
                       ),
                     ),
                   ),
@@ -258,7 +279,9 @@ class _AssignCoursesToUserSectionState extends State<AssignCoursesToUserSection>
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            _deadlineDateController.text.isEmpty ? 'Select Deadline' : _deadlineDateController.text,
+                            _deadlineDateController.text.isEmpty
+                                ? '${AppLocalizations.of(context)?.selectDeadline}'
+                                : _deadlineDateController.text,
                             style: TextStyle(fontSize: 14, color: ThemeConfig.secondaryTextColor),
                           ),
                           Icon(
@@ -273,8 +296,8 @@ class _AssignCoursesToUserSectionState extends State<AssignCoursesToUserSection>
                 ],
               ),
               CustomDropdownWidget<int>(
-                label: 'Rec Interval',
-                hintText: 'Years',
+                label: '${AppLocalizations.of(context)?.recurringInterval}',
+                hintText: '${AppLocalizations.of(context)?.years}',
                 value: _selectedYearsItem,
                 items: _years,
                 onChanged: (CustomDropdownItem<int>? value) {
@@ -285,7 +308,7 @@ class _AssignCoursesToUserSectionState extends State<AssignCoursesToUserSection>
               ),
               CustomDropdownWidget<int>(
                 label: '',
-                hintText: 'Months',
+                hintText: '${AppLocalizations.of(context)?.months}',
                 value: _selectedMonthsItem,
                 items: _months,
                 onChanged: (CustomDropdownItem<int>? value) {
@@ -377,7 +400,7 @@ class _AssignCoursesToUserSectionState extends State<AssignCoursesToUserSection>
                           width: 10,
                         ),
                         Text(
-                          'Save',
+                          '${AppLocalizations.of(context)?.save}',
                           style: TextStyle(color: ThemeConfig.secondaryTextColor),
                         ),
                       ],
