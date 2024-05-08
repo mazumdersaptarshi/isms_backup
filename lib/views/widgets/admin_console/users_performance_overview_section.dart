@@ -48,13 +48,6 @@ class _UsersPerformanceOverviewSectionState extends State<UsersPerformanceOvervi
     Colors.orangeAccent,
   ];
 
-  List<CustomDropdownItem<String>> barChartMetrics = [
-    CustomDropdownItem(key: 'avgScore', value: 'Average Score'),
-    CustomDropdownItem(key: 'maxScore', value: 'Max Score'),
-    CustomDropdownItem(key: 'minScore', value: 'Min Score'),
-    CustomDropdownItem(key: 'numberOfAttempts', value: 'Number of Attempts'),
-  ];
-
   late AdminState adminState;
 
   @override

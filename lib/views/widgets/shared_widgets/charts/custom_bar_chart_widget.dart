@@ -10,6 +10,7 @@ import 'package:isms/models/charts/bar_charts/custom_bar_chart_data.dart';
 import 'package:isms/models/charts/bar_charts/individual_bar.dart';
 import 'package:isms/models/shared_widgets/custom_dropdown_item.dart';
 import 'package:isms/views/widgets/shared_widgets/custom_dropdown_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomBarChart extends StatefulWidget {
   CustomBarChart({
@@ -322,7 +323,7 @@ class _CustomBarChartState extends State<CustomBarChart> {
           Container(
             padding: EdgeInsets.all(8),
             child: Text(
-              'Showing ${_currentPage + 1} of $_totalPages',
+              '${AppLocalizations.of(context)?.showingPages(_currentPage + 1, _totalPages)}',
               style: TextStyle(
                 fontSize: 14,
                 color: ThemeConfig.primaryTextColor,

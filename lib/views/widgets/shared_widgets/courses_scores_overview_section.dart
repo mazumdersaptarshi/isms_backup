@@ -227,7 +227,9 @@ class _CoursesScoresOverviewState extends State<CoursesScoresOverview> {
                     if (_examsBarChartData.isNotEmpty)
                       CustomDropdownButton(
                         // label: 'Exam',
-                        buttonText: _selectedExam != null ? _selectedExam!.itemName : 'Select Exam',
+                        buttonText: _selectedExam != null
+                            ? _selectedExam!.itemName
+                            : '${AppLocalizations.of(context)!.selectExam}',
                         onButtonPressed: () =>
                             _showExamSingleSelectModalForBarChart(context, items: _examsBarChartData),
                       ),
@@ -278,13 +280,13 @@ class _CoursesScoresOverviewState extends State<CoursesScoresOverview> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              Text('Refine Data'),
+                              Text('${AppLocalizations.of(context)?.refineData}'),
                               SizedBox(
                                 height: 10,
                               ),
                               CustomDropdownWidget<int>(
                                 // label: 'Filter',
-                                hintText: 'Filter Score Range',
+                                hintText: '${AppLocalizations.of(context)?.filterScoreRange}',
                                 value: scoreLimit,
                                 items: scoreFilterList,
                                 onChanged: (value) {
@@ -302,7 +304,7 @@ class _CoursesScoresOverviewState extends State<CoursesScoresOverview> {
                               ),
                               CustomDropdownWidget(
                                 // label: 'Metrics',
-                                hintText: 'Select Metrics',
+                                hintText: '${AppLocalizations.of(context)?.selectMetrics}',
                                 value: _selectedMetricForBarChart,
                                 items: barChartMetrics,
                                 onChanged: (newValue) {
@@ -317,7 +319,7 @@ class _CoursesScoresOverviewState extends State<CoursesScoresOverview> {
                               ),
                               CustomDropdownButton(
                                 // label: 'View and Select Users',
-                                buttonText: 'View and Select Users',
+                                buttonText: '${AppLocalizations.of(context)?.viewSelectUsers}',
                                 onButtonPressed: () => _showMultiSelectUsersModal(widget.domainUsers),
                               ),
                               SizedBox(

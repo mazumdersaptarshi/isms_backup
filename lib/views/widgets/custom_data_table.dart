@@ -10,6 +10,7 @@ import 'package:isms/views/widgets/shared_widgets/build_section_header.dart';
 import 'package:isms/views/widgets/shared_widgets/search_bar_widget.dart';
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UsersSummaryTable extends StatefulWidget {
   UsersSummaryTable({Key? key, required this.usersList}) : super(key: key);
@@ -35,7 +36,7 @@ class _UsersSummaryTableState extends State<UsersSummaryTable> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         buildSectionHeader(
-          title: 'All Users',
+          title: '${AppLocalizations.of(context)?.allUsers}',
           // actionWidget1: SearchBarWidget(),
           actionWidget2: _buildToggleExpandButton(),
         ),
@@ -83,7 +84,9 @@ class _UsersSummaryTableState extends State<UsersSummaryTable> {
               width: 14,
             ),
             Text(
-              _isExpanded ? "Less details" : "More details",
+              _isExpanded
+                  ? '${AppLocalizations.of(context)?.moreDetails}'
+                  : '${AppLocalizations.of(context)?.lessDetails}',
               style: TextStyle(color: ThemeConfig.secondaryTextColor),
             ),
           ],
@@ -111,45 +114,45 @@ class _UsersSummaryTableState extends State<UsersSummaryTable> {
             //   // icon: Icon(Icons.check_box_outline_blank_rounded),
             // ),
             _buildHeaderCell(
-              text: 'Username',
+              text: '${AppLocalizations.of(context)?.username}',
               type: 'text',
             ),
             _buildHeaderCell(
-              text: 'Email',
+              text: '${AppLocalizations.of(context)?.email}',
               type: 'text',
             ),
             _buildHeaderCell(
-              text: 'Role',
+              text: '${AppLocalizations.of(context)?.role}',
               type: 'text',
             ),
             if (_isExpanded)
               _buildHeaderCell(
-                text: 'Courses Learning Completed (%)',
+                text: '${AppLocalizations.of(context)?.coursesLearningCompleted} (%)',
                 type: 'text',
               ),
             if (_isExpanded)
               _buildHeaderCell(
-                text: 'Courses Assigned',
+                text: '${AppLocalizations.of(context)?.coursesAssigned}',
                 type: 'text',
               ),
             if (_isExpanded)
               _buildHeaderCell(
-                text: 'Average Score (%)',
+                text: '${AppLocalizations.of(context)?.avgScore} (%)',
                 type: 'text',
               ),
             if (_isExpanded)
               _buildHeaderCell(
-                text: 'Exams Taken',
+                text: '${AppLocalizations.of(context)?.examsTaken}',
                 type: 'text',
               ),
             if (_isExpanded)
               _buildHeaderCell(
-                text: 'Exams Pending',
+                text: '${AppLocalizations.of(context)?.examsPending}',
                 type: 'text',
               ),
             if (_isExpanded)
               _buildHeaderCell(
-                text: 'Last Login',
+                text: '${AppLocalizations.of(context)?.lastLogin}',
                 type: 'text',
               ),
             // Spacer(),
@@ -402,15 +405,25 @@ class _UsersSummaryTableState extends State<UsersSummaryTable> {
                       //     ? Colors.grey.shade200
                       : Colors.transparent,
                   borderRadius: BorderRadius.circular(20)),
-              child: Text(
-                text,
-                overflow: TextOverflow.clip,
-                softWrap: true,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: isHovering! ? ThemeConfig.hoverTextColor : ThemeConfig.primaryTextColor,
-                ),
-              ),
+              child: text == 'admin'
+                  ? Text(
+                      '${AppLocalizations.of(context)?.admin}',
+                      overflow: TextOverflow.clip,
+                      softWrap: true,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: isHovering! ? ThemeConfig.hoverTextColor : ThemeConfig.primaryTextColor,
+                      ),
+                    )
+                  : Text(
+                      text,
+                      overflow: TextOverflow.clip,
+                      softWrap: true,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: isHovering! ? ThemeConfig.hoverTextColor : ThemeConfig.primaryTextColor,
+                      ),
+                    ),
             ),
           ),
         if (iconAlignment != null && iconAlignment == 'right' && icon != null)

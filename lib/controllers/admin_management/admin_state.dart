@@ -47,6 +47,7 @@ import 'package:isms/sql/queries/query9.dart';
 import 'package:isms/views/widgets/shared_widgets/selectable_item.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AdminState {
   static final AdminState _instance = AdminState._internal();
@@ -174,7 +175,7 @@ class AdminState {
     return recentExamAttempts;
   }
 
-  Future<dynamic> getUserSummary(String uid) async {
+  Future<dynamic> getUserSummary(String uid, BuildContext context) async {
     String sqlQuery = QueryBuilder.buildSqlQuery(query2, [uid]);
     // http.Response response = await http.get(Uri.parse(localGetURL + 'user_summary' + '&param1=$uid'));
     Map<String, dynamic> params = {
@@ -195,7 +196,7 @@ class AdminState {
 
       jsonResponse.forEach((element) {
         userSummaryList.add(UserSummary(
-            summaryTitle: 'Courses Assigned',
+            summaryTitle: '${AppLocalizations.of(context)?.coursesAssigned}',
             value: element[0]['assignedCourses'],
             type: ValueType.number.name,
             icon: Icon(
@@ -205,7 +206,7 @@ class AdminState {
             )));
         userSummaryList.add(
           UserSummary(
-              summaryTitle: 'Exams Passed',
+              summaryTitle: '${AppLocalizations.of(context)?.examsPassed}',
               value: element[0]['examsPassed'],
               type: ValueType.number.name,
               icon: Icon(
@@ -216,7 +217,7 @@ class AdminState {
         );
         userSummaryList.add(
           UserSummary(
-              summaryTitle: 'Average Score',
+              summaryTitle: '${AppLocalizations.of(context)?.avgScore}',
               value: double.parse(element[0]['averageScore'].toStringAsFixed(2)),
               type: ValueType.percentage.name,
               icon: Icon(
@@ -226,7 +227,7 @@ class AdminState {
               )),
         );
         userSummaryList.add(UserSummary(
-            summaryTitle: 'Pending Tasks',
+            summaryTitle: '${AppLocalizations.of(context)?.pendingTasks}',
             value: element[0]['assignedCourses'] -
                 element[0]['coursesLearningCompleted'] +
                 element[0]['assignedExams'] -
@@ -543,7 +544,7 @@ class AdminState {
     return examsListForCourse;
   }
 
-  Future<dynamic> getExamOverallResults({required String examId}) async {
+  Future<dynamic> getExamOverallResults({required String examId, required BuildContext context}) async {
     String sqlQuery = QueryBuilder.buildSqlQuery(query11, [examId]);
     // http.Response response = await http.get(Uri.parse(url + '${sqlQuery}'));
     // http.Response response = await http.get(Uri.parse(localGetURL + 'exams_overall_results' + '&param1=$examId'));
@@ -561,11 +562,17 @@ class AdminState {
       List<dynamic> jsonResponse = jsonDecode(response.body);
       jsonResponse.forEach((element) {
         pieChartData.add(CustomPieChartData(
-            label: 'Failed', percent: element[0]['failed'], color: ThemeConfig.getPrimaryColorShade(200)));
-        pieChartData
-            .add(CustomPieChartData(label: 'Passed', percent: element[0]['passed'], color: ThemeConfig.primaryColor));
+            label: '${AppLocalizations.of(context)?.failed}',
+            percent: element[0]['failed'],
+            color: ThemeConfig.getPrimaryColorShade(200)));
         pieChartData.add(CustomPieChartData(
-            label: 'Not  Started', percent: element[0]['not_started'], color: ThemeConfig.getPrimaryColorShade(400)));
+            label: '${AppLocalizations.of(context)?.passed}',
+            percent: element[0]['passed'],
+            color: ThemeConfig.primaryColor));
+        pieChartData.add(CustomPieChartData(
+            label: '${AppLocalizations.of(context)?.notStarted}',
+            percent: element[0]['not_started'],
+            color: ThemeConfig.getPrimaryColorShade(400)));
       });
     }
     return pieChartData;

@@ -148,13 +148,17 @@ class _ExamAttemptsAnalysisState extends State<ExamAttemptsAnalysis> {
                 children: [
                   CustomDropdownButton(
                     // label: 'Course',
-                    buttonText: _selectedCourse != null ? _selectedCourse!.itemName : 'Select Course',
+                    buttonText: _selectedCourse != null
+                        ? _selectedCourse!.itemName
+                        : AppLocalizations.of(context)?.selectCourse ?? 'Select Course',
                     onButtonPressed: () => _showCourseSingleSelectModalForScatterChart(context, items: widget.courses),
                   ),
                   if (_examsScatterChartData.isNotEmpty)
                     CustomDropdownButton(
                       // label: 'Exam',
-                      buttonText: _selectedExam != null ? _selectedExam!.itemName : 'Select Exam',
+                      buttonText: _selectedExam != null
+                          ? _selectedExam!.itemName
+                          : '${AppLocalizations.of(context)?.selectExam}',
                       onButtonPressed: () =>
                           _showExamSingleSelectModalForBWChart(context, items: _examsScatterChartData),
                     ),

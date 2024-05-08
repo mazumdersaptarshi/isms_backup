@@ -3,5 +3,7 @@ class CustomDropdownItem<T> {
 
   T value;
 
-  CustomDropdownItem({required this.key, required this.value});
+  String? label;
+
+  CustomDropdownItem({required this.key, required this.value, this.label});
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart';
 import 'package:isms/controllers/theme_management/theme_config.dart';
 import 'package:isms/views/widgets/shared_widgets/selectable_item.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MultiSelectSearch extends StatefulWidget {
   final List<SelectableItem> items;
@@ -75,7 +76,7 @@ class _MultiSelectSearchState extends State<MultiSelectSearch> {
               width: 150,
               padding: EdgeInsets.symmetric(vertical: 13),
               child: Text(
-                'Submit',
+                '${AppLocalizations.of(context)?.submit}',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: ThemeConfig.secondaryTextColor),
               ),
@@ -98,7 +99,7 @@ class _MultiSelectSearchState extends State<MultiSelectSearch> {
               color: ThemeConfig.primaryTextColor,
             ),
             decoration: InputDecoration(
-              labelText: 'Search',
+              labelText: '${AppLocalizations.of(context)?.search}',
               labelStyle: TextStyle(color: ThemeConfig.tertiaryTextColor1),
               suffixIcon: Icon(Icons.search, color: ThemeConfig.tertiaryTextColor1),
               border: OutlineInputBorder(
@@ -129,7 +130,7 @@ class _MultiSelectSearchState extends State<MultiSelectSearch> {
             ),
           ),
           title: Text(
-            'Select All',
+            '${AppLocalizations.of(context)?.selectAll}',
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
@@ -231,7 +232,7 @@ class _MultiSelectSearchState extends State<MultiSelectSearch> {
             height: 80,
           ),
           Text(
-            "Selected(${_selectedItems.length}) :",
+            "${AppLocalizations.of(context)?.selected}(${_selectedItems.length}) :",
             style: TextStyle(
               color: ThemeConfig.primaryTextColor,
               fontWeight: FontWeight.bold,

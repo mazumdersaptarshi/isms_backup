@@ -54,10 +54,10 @@ class _ExamsStatusOverviewState extends State<ExamsStatusOverview> {
   void setPieData(List<CustomPieChartData> pieChartData) {
     _piesData = [];
     pieChartData.forEach((element) {
-      if (element.label == 'Passed') {
+      if (element.label == '${AppLocalizations.of(context)?.passed}') {
         print(element.label);
 
-        _passedValue = element.percent.toString();
+        _passedValue = element.percent.toStringAsFixed(2);
       }
       _piesData.add(PieData(value: element.percent, color: element.color!));
     });
@@ -109,7 +109,7 @@ class _ExamsStatusOverviewState extends State<ExamsStatusOverview> {
   }
 
   Future<void> _fetchPieChartData(String examId) async {
-    var pieChartData = await adminState.getExamOverallResults(examId: examId);
+    var pieChartData = await adminState.getExamOverallResults(examId: examId, context: context);
     setState(() {
       _pieChartData = pieChartData;
       setPieData(_pieChartData);
@@ -181,7 +181,8 @@ class _ExamsStatusOverviewState extends State<ExamsStatusOverview> {
               if (_examsPieChartData.isNotEmpty)
                 CustomDropdownButton(
                   // label: 'Exam',
-                  buttonText: _selectedExam != null ? _selectedExam!.itemName : 'Select Exam',
+                  buttonText:
+                      _selectedExam != null ? _selectedExam!.itemName : '${AppLocalizations.of(context)!.selectExam}',
                   onButtonPressed: () => _showExamSingleSelectModalForPieChart(context, items: _examsPieChartData),
                 ),
             ],
@@ -226,7 +227,7 @@ class _ExamsStatusOverviewState extends State<ExamsStatusOverview> {
                             child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('${_passedValue.toString()}%',
+                            Text('${(_passedValue).toString()}%',
                                 style: TextStyle(
                                   fontSize: 40,
                                   fontWeight: FontWeight.bold,
@@ -236,7 +237,7 @@ class _ExamsStatusOverviewState extends State<ExamsStatusOverview> {
                               height: 10,
                             ),
                             Text(
-                              'Passed',
+                              '${AppLocalizations.of(context)?.passed}',
                               style: TextStyle(
                                 fontSize: 20,
                                 color: ThemeConfig.primaryTextColor,

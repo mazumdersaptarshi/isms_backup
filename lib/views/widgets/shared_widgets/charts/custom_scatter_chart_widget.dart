@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:isms/controllers/theme_management/theme_config.dart';
 import 'package:isms/models/charts/box_and_whisker_charts/custom_scores_variation_data.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomScatterChartWidget extends StatefulWidget {
   final List<CustomScoresVariationData> usersExamScoresScatterData;
@@ -79,7 +80,7 @@ class _CustomScatterChartWidgetState extends State<CustomScatterChartWidget> {
         ),
         Container(
             padding: EdgeInsets.all(8),
-            child: Text('Showing ${_currentPage + 1} of $_totalPages',
+            child: Text('${AppLocalizations.of(context)?.showingPages(_currentPage + 1, _totalPages)}',
                 style: TextStyle(
                   color: ThemeConfig.primaryTextColor,
                 ))),
