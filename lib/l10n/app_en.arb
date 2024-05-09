@@ -385,8 +385,19 @@
     "filterScoreRange": "Filter Score Range",
     "selectMetrics": "Select Metrics",
     "viewSelectUsers": "View and Select Users",
-    "refineData": "Refine Data"
-
+    "refineData": "Refine Data",
+    "january": "January",
+    "february": "February",
+    "march": "March",
+    "april": "April",
+    "may": "May",
+    "june": "June",
+    "july": "July",
+    "august": "August",
+    "september": "September",
+    "october": "October",
+    "november": "November",
+    "december": "December"
 
 
 

@@ -16,9 +16,9 @@ class ThemeManager extends ChangeNotifier {
     ThemeConfig.isDarkMode = _selectedTheme == ThemeModes.dark;
 
     print(_selectedTheme);
-    notifyListeners();
+    // notifyListeners();
     // Restart.restartApp(webOrigin: '${NamedRoutes.login.name}');
-    
+
     context.goNamed(
       NamedRoutes.home.name,
     );

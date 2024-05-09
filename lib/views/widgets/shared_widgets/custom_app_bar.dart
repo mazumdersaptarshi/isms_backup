@@ -63,7 +63,13 @@ class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
           child: Center(
             child: Container(
               height: 40,
-              width: MediaQuery.of(context).size.width * 0.20 < 300 ? MediaQuery.of(context).size.width * 0.20 : 500,
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width * 0.20 < 300 ? MediaQuery
+                  .of(context)
+                  .size
+                  .width * 0.20 : 500,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(6.0),
                 color: ThemeConfig.primaryCardColor,
@@ -126,10 +132,12 @@ class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
         context,
         Icons.notifications,
         AppLocalizations.of(context)!.buttonNotificationPage,
-        () => Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationPage()))));
+            () => Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationPage()))));
 
     actionWidgets.add(_getActionIconButton(context, Icons.settings, AppLocalizations.of(context)!.buttonSettings,
-        () => Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingsPage()))));
+            () => context.goNamed(NamedRoutes.settings.name))
+
+    );
 
     actionWidgets.add(_getVerticalDivider());
     actionWidgets.add(_getLogoutButton(context));
@@ -144,7 +152,10 @@ class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
         icon: Icon(icon),
         tooltip: tooltip,
         onPressed: onPressed,
-        style: Theme.of(context).iconButtonTheme.style,
+        style: Theme
+            .of(context)
+            .iconButtonTheme
+            .style,
       ),
     );
   }
@@ -160,7 +171,10 @@ class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
             context.goNamed(NamedRoutes.login.name);
           });
         },
-        style: Theme.of(context).iconButtonTheme.style,
+        style: Theme
+            .of(context)
+            .iconButtonTheme
+            .style,
       ),
     );
   }

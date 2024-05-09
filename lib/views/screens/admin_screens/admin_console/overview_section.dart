@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:isms/controllers/language_management/app_localization_extension.dart';
 import 'package:isms/controllers/theme_management/theme_config.dart';
 import 'package:isms/models/admin_models/exam_attempt_overview.dart';
 import 'package:isms/models/admin_models/exam_deadline.dart';
@@ -52,7 +53,7 @@ class OverviewSection extends StatelessWidget {
                           // print(examDeadlines[index].nearestCompletionDeadline);
                           DateTime dateTime = DateTime.parse(examDeadlines[index].nearestCompletionDeadline);
                           int day = dateTime.day;
-                          String monthName = DateFormat('MMMM').format(dateTime);
+                          String monthName = DateFormat('MMMM').format(dateTime).toLowerCase();
                           int year = dateTime.year;
                           String passed = examDeadlines[index].usersPassed.toString();
                           String totalUsers = examDeadlines[index].allUsersCount.toString();
@@ -61,7 +62,7 @@ class OverviewSection extends StatelessWidget {
                             children: [
                               DeadlineOverviewWidget(
                                 day: day.toString(),
-                                month: monthName,
+                                month: '${AppLocalizations.of(context)!.getLocalizedString(monthName)}',
                                 year: year.toString(),
                                 courseTitle: examDeadlines[index].examTitle,
                                 usersCompliance: usersCompliance,

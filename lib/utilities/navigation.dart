@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:isms/controllers/exam_management/exam_provider.dart';
 import 'package:isms/views/screens/admin_screens/admin_console/admin_panel.dart';
+import 'package:isms/views/screens/admin_screens/settings_page.dart';
 import 'package:isms/views/screens/exam_page.dart';
 import 'package:isms/views/screens/user_screens/user_profile_screen.dart';
 import 'package:provider/provider.dart';
@@ -46,6 +47,10 @@ final GoRouter ismsRouter = GoRouter(
         name: NamedRoutes.home.name,
         path: '/',
         builder: (BuildContext context, GoRouterState state) => const HomePage()),
+    GoRoute(
+        name: NamedRoutes.settings.name,
+        path: '/settings',
+        builder: (BuildContext context, GoRouterState state) => const SettingsPage()),
     GoRoute(
       name: NamedRoutes.login.name,
       path: '/login',

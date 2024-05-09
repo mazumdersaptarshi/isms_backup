@@ -111,9 +111,12 @@ class IsmsApp extends StatelessWidget {
       ],
       child: Builder(builder: (context) {
         return MaterialApp.router(
-          locale: Provider.of<LocaleManager>(context).locale,
+          locale: Provider
+              .of<LocaleManager>(context)
+              .locale,
           title: 'ISMS',
           // theme: ThemeConfig.dynamicISMSTheme(),
+          // theme: Provider.of<ThemeManager>(context).selectedTheme
           scrollBehavior: CustomScrollBehavior(),
           debugShowCheckedModeBanner: false,
           // Required for localisation functionality
@@ -140,7 +143,8 @@ class IsmsApp extends StatelessWidget {
 class CustomScrollBehavior extends MaterialScrollBehavior {
   // Override behavior methods and getters like dragDevices
   @override
-  Set<PointerDeviceKind> get dragDevices => {
+  Set<PointerDeviceKind> get dragDevices =>
+      {
         PointerDeviceKind.touch,
         PointerDeviceKind.mouse,
       };
