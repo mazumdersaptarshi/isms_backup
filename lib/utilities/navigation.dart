@@ -122,10 +122,6 @@ final GoRouter ismsRouter = GoRouter(
             }),
       ],
     ),
-    GoRoute(
-        name: NamedRoutes.settings.name,
-        path: '/settings',
-        builder: (BuildContext context, GoRouterState state) => const SettingsPage()),
   ],
 );
 
