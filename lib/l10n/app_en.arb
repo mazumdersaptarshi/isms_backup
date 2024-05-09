@@ -397,10 +397,9 @@
     "september": "September",
     "october": "October",
     "november": "November",
-    "december": "December"
-
-
-
+    "december": "December",
+    "selectedCourses": "Selected Courses",
+    "selectedUsers": "Selected Users"
 }
 
 

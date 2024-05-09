@@ -133,8 +133,7 @@
     "september": "9月",
     "october": "10月",
     "november": "11月",
-    "december": "12月"
-
-
-
+    "december": "12月",
+    "selectedCourses": "選択したコース",
+    "selectedUsers": "選択したユーザー"
 }

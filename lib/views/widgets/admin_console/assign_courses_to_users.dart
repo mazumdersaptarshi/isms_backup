@@ -325,11 +325,18 @@ class _AssignCoursesToUserSectionState extends State<AssignCoursesToUserSection>
                 height: 10,
               ),
               if (_selectedCoursesList.length > 0)
-                SelectedItemsWidget(label: 'Selected Courses', selectedItemsList: _selectedCoursesList),
+                SelectedItemsWidget(
+                  label: AppLocalizations.of(context)!.selectedCourses,
+                  selectedItemsList: _selectedCoursesList,
+                ),
               if (_selectedUsersList.length > 0)
-                SelectedItemsWidget(label: 'Selected Users', selectedItemsList: _selectedUsersList)
+                SelectedItemsWidget(
+                  label: AppLocalizations.of(context)!.selectedUsers,
+                  selectedItemsList: _selectedUsersList,
+                ),
             ],
           ),
+
           SizedBox(
             height: 20,
           ),
