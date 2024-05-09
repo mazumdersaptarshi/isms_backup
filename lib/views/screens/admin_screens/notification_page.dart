@@ -111,7 +111,7 @@ class _NotificationPageState extends State<NotificationPage> {
     final loggedInState = context.watch<LoggedInState>();
     return Scaffold(
       appBar: IsmsAppBar(context: context),
-      // drawer: IsmsDrawer(context: context),
+      drawer: IsmsDrawer(context: context),
       bottomNavigationBar: PlatformCheck.bottomNavBarWidget(loggedInState, context: context),
       body: SingleChildScrollView(
         child: Padding(
