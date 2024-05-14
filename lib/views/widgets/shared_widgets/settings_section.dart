@@ -4,11 +4,15 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:isms/controllers/language_management/language_manager.dart';
 import 'package:isms/controllers/theme_management/theme_config.dart';
 import 'package:isms/controllers/theme_management/theme_manager.dart';
+import 'package:isms/controllers/user_management/logged_in_state.dart';
 import 'package:isms/views/widgets/shared_widgets/hoverable_section_container.dart';
 import 'package:provider/provider.dart';
 
 class SettingsSection extends StatefulWidget {
-  const SettingsSection({super.key});
+  SettingsSection({super.key, required this.CSRFToken, required this.JWT});
+
+  final String CSRFToken;
+  final String JWT;
 
   @override
   State<SettingsSection> createState() => _SettingsSectionState();
@@ -17,14 +21,38 @@ class SettingsSection extends StatefulWidget {
 class _SettingsSectionState extends State<SettingsSection> {
   void _changeLanguage(Locale locale) {
     Provider.of<LocaleManager>(context, listen: false).setLocale(locale);
+    saveSettings();
   }
 
   void _changeTheme(ThemeModes mode) {
     Provider.of<ThemeManager>(context, listen: false).changeTheme(mode, context);
+    saveSettings();
+  }
+
+  void saveSettings() {
+    Provider.of<LoggedInState>(context, listen: false).insertUpdateUserSettings(
+      CSRFToken: widget.CSRFToken,
+      JWT: widget.JWT,
+      language: Provider.of<LocaleManager>(context, listen: false).locale.languageCode,
+      appTheme: Provider.of<ThemeManager>(context, listen: false).selectedTheme == ThemeModes.dark ? 'dark' : 'light',
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // saveSettings();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // saveSettings();
   }
 
   @override
   Widget build(BuildContext context) {
+    // print('CSRFTOken: ${widget.CSRFToken}');
     return buildSettingsSection(context);
   }
 
@@ -61,9 +89,7 @@ class _SettingsSectionState extends State<SettingsSection> {
             ),
             child: Radio<ThemeModes>(
               value: ThemeModes.light,
-              groupValue: Provider
-                  .of<ThemeManager>(context)
-                  .selectedTheme,
+              groupValue: Provider.of<ThemeManager>(context).selectedTheme,
               onChanged: (ThemeModes? value) {
                 if (value != null) _changeTheme(value);
               },
@@ -83,9 +109,7 @@ class _SettingsSectionState extends State<SettingsSection> {
             child: Radio<ThemeModes>(
               // fillColor: MaterialStateProperty.all(Colors.red),
               value: ThemeModes.dark,
-              groupValue: Provider
-                  .of<ThemeManager>(context)
-                  .selectedTheme,
+              groupValue: Provider.of<ThemeManager>(context).selectedTheme,
               onChanged: (ThemeModes? value) {
                 if (value != null) _changeTheme(value);
               },
@@ -130,9 +154,7 @@ class _SettingsSectionState extends State<SettingsSection> {
                 ),
                 child: Radio<Locale>(
                   value: Locale('en'),
-                  groupValue: Provider
-                      .of<LocaleManager>(context)
-                      .locale,
+                  groupValue: Provider.of<LocaleManager>(context).locale,
                   onChanged: (Locale? value) {
                     print("Changing locale to $value");
                     _changeLanguage(Locale('en')); // Make sure this triggers provider update
@@ -156,9 +178,7 @@ class _SettingsSectionState extends State<SettingsSection> {
                 ),
                 child: Radio<Locale>(
                   value: Locale('ja'),
-                  groupValue: Provider
-                      .of<LocaleManager>(context)
-                      .locale,
+                  groupValue: Provider.of<LocaleManager>(context).locale,
                   onChanged: (Locale? value) {
                     print("Changing locale to $value");
                     _changeLanguage(Locale('ja')); // Make sure this triggers provider update

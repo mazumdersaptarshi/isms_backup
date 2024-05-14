@@ -8,6 +8,8 @@ class LocaleManager extends ChangeNotifier {
   void setLocale(Locale newLocale) {
     // if (!Locale('en').toString().contains(newLocale.languageCode)) return; // Optionally validate locale
     _locale = newLocale;
+    print('Setting locale to: ${_locale}');
+
     print(_locale);
     notifyListeners();
   }

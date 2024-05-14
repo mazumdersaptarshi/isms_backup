@@ -5,6 +5,7 @@ import 'package:footer/footer.dart';
 import 'package:footer/footer_view.dart';
 import 'package:intl/intl.dart';
 import 'package:isms/controllers/admin_management/admin_state.dart';
+import 'package:isms/controllers/auth_token_management/csrf_token_provider.dart';
 import 'package:isms/controllers/query_builder/query_builder.dart';
 import 'package:isms/controllers/testing/test_data.dart';
 import 'package:isms/controllers/testing/testing_admin_graphs.dart';
@@ -46,6 +47,8 @@ class UserProfileScreen extends StatefulWidget {
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
   late AdminState adminState;
+  late String _CSRFToken;
+  late String _JWT;
 
   @override
   void initState() {
@@ -54,6 +57,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     // _fetchCoursesForUser();
 
     // _usersDataBarChart = updateUserDataOnDifferentMetricSelection('avgScore');
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _CSRFToken = Provider.of<CsrfTokenProvider>(context).csrfToken;
+    _JWT = Provider.of<CsrfTokenProvider>(context).jwt;
   }
 
   @override
@@ -507,7 +517,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               }),
           buildSectionHeader(title: '${AppLocalizations.of(context)?.buttonSettings}'),
 
-          Container(margin: EdgeInsets.fromLTRB(80, 10, 80, 30), child: SettingsSection()),
+          Container(
+              margin: EdgeInsets.fromLTRB(80, 10, 80, 30),
+              child: SettingsSection(
+                CSRFToken: _CSRFToken,
+                JWT: _JWT,
+              )),
         ],
       ),
     );

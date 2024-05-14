@@ -1,5 +1,7 @@
 // ignore_for_file: file_names
 
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -12,6 +14,7 @@ import 'package:logging/logging.dart';
 import '../../models/custom_user.dart';
 import '../admin_management/create_user_reference_for_admin.dart';
 import '../domain_management/domain_provider.dart';
+import 'package:http/http.dart' as http;
 
 /// This class handles user connections
 /// It extends the private class _UserDataGetterMaster so all
@@ -166,6 +169,10 @@ class _UserDataGetterMaster with ChangeNotifier {
 
   String get currentUserRole => _customUserObject != null ? _customUserObject!.role : "";
 
+  // static const String localInsertUrl = 'http://127.0.0.1:5000/';
+  static const String remoteInsertUrl =
+      'https://asia-northeast1-isms-billing-resources-dev.cloudfunctions.net/cf_isms_db_endpoint_noauth/';
+
   ///This function fetch the current user's information from the app and store it in the current user variable accessed with the getter
   ///
   ///input : the user object created by the authentication
@@ -245,5 +252,27 @@ class _UserDataGetterMaster with ChangeNotifier {
   ///return: null
   setUserData() async {
     FirebaseFirestore.instance.collection("users").doc(loggedInUser.uid).set(loggedInUser.toMap());
+  }
+
+  Future<dynamic> insertUpdateUserSettings({
+    required String language,
+    required String appTheme,
+    required String CSRFToken,
+    required String JWT,
+  }) async {
+    Map<String, dynamic> params = {
+      "userID": loggedInUser.uid,
+      "language": language,
+      "appTheme": appTheme,
+    };
+    print('uph: $params');
+    String jsonStringParams = jsonEncode(params);
+    var headers = {
+      'Authorization': 'Bearer $JWT',
+      'Content-Type': 'application/json',
+      'X-CSRF-Token': CSRFToken,
+    };
+    var url = Uri.parse(remoteInsertUrl + '/insert-update-user-settings?flag=insert_update_user_settings');
+    var response = await http.post(url, headers: headers, body: jsonStringParams);
   }
 }

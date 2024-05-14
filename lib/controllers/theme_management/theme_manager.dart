@@ -15,7 +15,7 @@ class ThemeManager extends ChangeNotifier {
     _selectedTheme = mode;
     ThemeConfig.isDarkMode = _selectedTheme == ThemeModes.dark;
 
-    print(_selectedTheme);
+    print('setting theme to: ${_selectedTheme}');
     // notifyListeners();
     // Restart.restartApp(webOrigin: '${NamedRoutes.login.name}');
 

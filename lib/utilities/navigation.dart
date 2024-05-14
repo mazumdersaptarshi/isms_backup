@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:isms/controllers/exam_management/exam_provider.dart';
+import 'package:isms/models/admin_models/exam_deadline.dart';
 import 'package:isms/views/screens/admin_screens/admin_console/admin_panel.dart';
+import 'package:isms/views/screens/admin_screens/admin_console/upcoming_deadlines.dart';
 import 'package:isms/views/screens/admin_screens/settings_page.dart';
 import 'package:isms/views/screens/exam_page.dart';
 import 'package:isms/views/screens/user_screens/user_profile_screen.dart';
@@ -30,13 +32,14 @@ enum NamedRoutes {
   adminPanel,
   notifications,
   settings,
-  userProfile
+  userProfile,
+  upcomingDeadlines,
 }
 
 /// All parameter names used in child named routes defined in the [GoRouter] configuration below
 enum NamedRoutePathParameters { courseId, examId, uid }
 
-enum NamedRouteQueryParameters { section }
+enum NamedRouteQueryParameters { section, examDeadlines }
 
 /// Named [RouterConfig] object used to enable direct linking to and access of pages within the app by URL.
 /// This is returned as [GoRouter] from package `go_router`, which allows more fine-tuned control than base Flutter classes.
@@ -53,6 +56,14 @@ final GoRouter ismsRouter = GoRouter(
         name: NamedRoutes.settings.name,
         path: '/settings',
         builder: (BuildContext context, GoRouterState state) => const SettingsPage()),
+    GoRoute(
+        name: NamedRoutes.upcomingDeadlines.name,
+        path: '/upcoming_deadlines',
+        builder: (BuildContext context, GoRouterState state) {
+          List<ExamDeadline> examDeadline = state.extra as List<ExamDeadline>;
+
+          return UpcomingDeadlines(examDeadlines: examDeadline);
+        }),
     GoRoute(
       name: NamedRoutes.login.name,
       path: '/login',

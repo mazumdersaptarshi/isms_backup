@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:isms/controllers/language_management/app_localization_extension.dart';
 import 'package:isms/controllers/theme_management/theme_config.dart';
 import 'package:isms/models/admin_models/exam_attempt_overview.dart';
 import 'package:isms/models/admin_models/exam_deadline.dart';
+import 'package:isms/utilities/navigation.dart';
 import 'package:isms/views/screens/admin_screens/admin_console/deadline_overview_widget.dart';
 import 'package:isms/views/screens/admin_screens/admin_console/exam_attempt_overview_widget.dart';
 import 'package:isms/views/widgets/shared_widgets/hoverable_section_container.dart';
@@ -31,7 +33,7 @@ class OverviewSection extends StatelessWidget {
           Expanded(
             child: HoverableSectionContainer(
               child: Container(
-                padding: EdgeInsets.only(bottom: 20),
+                // padding: EdgeInsets.only(bottom: 20),
                 // height: 200,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,6 +75,34 @@ class OverviewSection extends StatelessWidget {
                             ],
                           );
                         }),
+                    Row(
+                      children: [
+                        Spacer(),
+                        Container(
+                            // padding: EdgeInsets.all(8),
+                            child: TextButton(
+                                onPressed: () =>
+                                    context.goNamed(NamedRoutes.upcomingDeadlines.name, extra: examDeadlines),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      AppLocalizations.of(context)!.viewAll,
+                                      style: TextStyle(
+                                        color: ThemeConfig.secondaryTextColor,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 4,
+                                    ),
+                                    Icon(
+                                      Icons.arrow_forward,
+                                      color: ThemeConfig.secondaryTextColor,
+                                      size: 16,
+                                    ),
+                                  ],
+                                ))),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -126,7 +156,7 @@ class OverviewSection extends StatelessWidget {
                           children: [
                             Spacer(),
                             Container(
-                                padding: EdgeInsets.all(8),
+                                // padding: EdgeInsets.all(8),
                                 child: TextButton(
                                     onPressed: () {},
                                     child: Row(
