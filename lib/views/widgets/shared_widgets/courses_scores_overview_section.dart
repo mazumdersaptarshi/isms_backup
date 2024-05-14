@@ -280,7 +280,12 @@ class _CoursesScoresOverviewState extends State<CoursesScoresOverview> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              Text('${AppLocalizations.of(context)?.refineData}'),
+                              Text('${AppLocalizations.of(context)?.refineData}',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: ThemeConfig.primaryTextColor,
+                                ),
+                              ),
                               SizedBox(
                                 height: 10,
                               ),

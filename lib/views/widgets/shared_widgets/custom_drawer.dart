@@ -55,8 +55,8 @@ class _IsmsDrawerState extends State<IsmsDrawer> {
       drawerItemWidgets.add(_getDrawerItem(context, Icons.admin_panel_settings_outlined,
           AppLocalizations.of(context)!.buttonAdminPanel, NamedRoutes.adminPanel.name));
     }
-    drawerItemWidgets.add(_getDrawerItem(
-        context, Icons.settings_outlined, AppLocalizations.of(context)!.buttonSettings, NamedRoutes.settings.name));
+    // drawerItemWidgets.add(_getDrawerItem(
+    //     context, Icons.settings_outlined, AppLocalizations.of(context)!.buttonSettings, NamedRoutes.settings.name));
     return drawerItemWidgets;
   }
 

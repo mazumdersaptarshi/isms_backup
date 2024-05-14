@@ -102,15 +102,15 @@
     "enable": "有効",
     "disable": "無効",
     "progressOverview": "進捗状況概要",
-    "summary": "まとめ",
-    "examsPassed": "合格試験の数",
+    "summary": "要約",
+    "examsPassed": "合格した試験の数",
     "pendingTasks": "保留中のタスク",
     "examId": "試験ID",
     "startTime": "開始時間",
     "endTime": "終了時間",
     "result": "結果",
     "score": "スコア",
-    "duration": "間隔",
+    "duration": "試験時間",
     "pass": "合格",
     "fail": "不合格",
     "passed": "合格",
@@ -134,8 +134,7 @@
     "september": "9月",
     "october": "10月",
     "november": "11月",
-    "december": "12月"
-
-
-
+    "december": "12月",
+    "selectedCourses": "選択したコース",
+    "selectedUsers": "選択したユーザー"
 }
