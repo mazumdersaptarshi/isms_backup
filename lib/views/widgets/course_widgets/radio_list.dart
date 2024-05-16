@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:isms/controllers/theme_management/theme_config.dart';
 import 'package:isms/models/course/answer.dart';
 
 class CustomRadioList extends StatefulWidget {
@@ -32,6 +32,7 @@ class _CustomRadioListState extends State<CustomRadioList> {
           maxWidth: 800, // Set a maximum width
           // Add other constraints as needed
         ),
+        color: ThemeConfig.secondaryCardColor,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -54,7 +55,7 @@ class _CustomRadioListState extends State<CustomRadioList> {
               // inherited from the app theme (`Theme.of(context).radioTheme.fillColor`).
               // This cannot be decoupled so override the text colour at this level to standardise the behaviour for
               // text displayed in both `RadioListTile`s and `CheckboxListTile`s.
-              style: const TextStyle(color: Colors.black),
+              style: TextStyle(color: ThemeConfig.primaryTextColor),
             ),
             value: answer,
             groupValue: _groupNewValue,

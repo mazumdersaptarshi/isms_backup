@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flip_card/flip_card.dart';
-
+import 'package:isms/controllers/theme_management/theme_config.dart';
 import 'package:isms/controllers/theme_management/app_theme.dart';
 import 'package:isms/controllers/theme_management/theme_config.dart';
 import 'package:isms/models/course/flip_card.dart' as flip_card_model;
@@ -44,7 +44,7 @@ class CustomFlipCard extends StatelessWidget {
               // const SizedBox(height: 20),
               Text(
                 content.flipCardFront,
-                // style: Format.flipCardText,
+                style: TextStyle(fontSize: 14, color: ThemeConfig.primaryTextColor),
               ),
             ],
           ),
@@ -63,7 +63,7 @@ class CustomFlipCard extends StatelessWidget {
           padding: const EdgeInsets.all(20.0),
           child: Text(
             content.flipCardBack,
-            // style: Format.flipCardText,
+            style: TextStyle(fontSize: 14, color: ThemeConfig.primaryTextColor),
           ),
         ),
       ),

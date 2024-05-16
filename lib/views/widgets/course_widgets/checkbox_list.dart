@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:isms/controllers/theme_management/theme_config.dart';
 import 'package:isms/models/course/answer.dart';
 
 class CustomCheckboxList extends StatefulWidget {
@@ -33,21 +33,26 @@ class _CustomCheckboxListState extends State<CustomCheckboxList> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: _buildList(context),
+    return Container(
+      color: ThemeConfig.secondaryCardColor,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: _buildList(context),
+      ),
     );
   }
 
-  _buildList(BuildContext context) {
+  List<Widget> _buildList(BuildContext context) {
     List<Widget> checkboxes = [];
     for (Answer answer in widget.values) {
       checkboxes.add(
         Flexible(
           fit: FlexFit.loose,
           child: CheckboxListTile(
-            title: Text(answer.answerText),
+            title: Text(answer.answerText,
+              style: TextStyle(fontSize: 14, color: ThemeConfig.primaryTextColor),
+            ),
             value: _checkboxAnswerState[answer.answerId],
             onChanged: (selectedValue) {
               setState(() {

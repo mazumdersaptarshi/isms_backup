@@ -6,6 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:http/http.dart' as http;
 import 'package:isms/controllers/course_management/course_provider.dart';
+import 'package:isms/controllers/theme_management/theme_config.dart';
 import 'package:provider/provider.dart';
 
 import 'package:isms/controllers/user_management/logged_in_state.dart';
@@ -42,7 +43,7 @@ class _CourseState extends State<CoursePage> {
   late EdgeInsets _contentPadding;
 
   final ButtonStyle _buttonStyleSectionNavigation = ElevatedButton.styleFrom(
-    backgroundColor: Colors.grey[200],
+    backgroundColor: ThemeConfig.primaryCardColor,
     elevation: 0,
     minimumSize: Size(double.infinity, 100),
     shape: const RoundedRectangleBorder(
@@ -50,7 +51,7 @@ class _CourseState extends State<CoursePage> {
     ),
   );
 
-  final TextStyle _textStyleButtonSectionNavigation = TextStyle(color: Colors.grey[600]);
+  final TextStyle _textStyleButtonSectionNavigation = TextStyle(color: ThemeConfig.primaryTextColor);
 
   // Data structures containing course content populated in initState() then not changed
 
@@ -206,6 +207,7 @@ class _CourseState extends State<CoursePage> {
             );
           } else if (snapshot.hasError) {
             return Scaffold(
+                backgroundColor: ThemeConfig.scaffoldBackgroundColor,
                 appBar: IsmsAppBar(context: context),
                 drawer: IsmsDrawer(context: context),
                 body: Center(
@@ -217,7 +219,9 @@ class _CourseState extends State<CoursePage> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 16),
-                    child: Text('Error: ${snapshot.error}'),
+                    child: Text('Error: ${snapshot.error}',
+                        style: TextStyle(fontSize: 14, color: ThemeConfig.primaryTextColor),
+                    ),
                   ),
                 ])));
           } else {
@@ -225,6 +229,7 @@ class _CourseState extends State<CoursePage> {
               List<dynamic> jsonResponse = _parseJsonResponse(snapshot);
               if (jsonResponse.isEmpty) {
                 return Scaffold(
+                    backgroundColor: ThemeConfig.scaffoldBackgroundColor,
                     appBar: IsmsAppBar(context: context),
                     drawer: IsmsDrawer(context: context),
                     body: Center(
@@ -235,13 +240,16 @@ class _CourseState extends State<CoursePage> {
                         size: 60,
                       ),
                       Text(
-                          'Error: Course with ID "${widget.courseId}" does not exist or you do not have permission to access it.')
+                          'Error: Course with ID "${widget.courseId}" does not exist or you do not have permission to access it.',
+                          style: TextStyle(fontSize: 14, color: ThemeConfig.primaryTextColor),
+                      )
                     ])));
               } else {
                 _initialiseCourseDataStructures(jsonResponse);
               }
             }
             return Scaffold(
+                backgroundColor: ThemeConfig.scaffoldBackgroundColor,
                 appBar: IsmsAppBar(context: context),
                 drawer: IsmsDrawer(context: context),
                 body: Column(
@@ -353,7 +361,7 @@ class _CourseState extends State<CoursePage> {
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16.0),
-              color: Colors.grey[100],
+              color: ThemeConfig.primaryCardColor,
             ),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -362,7 +370,7 @@ class _CourseState extends State<CoursePage> {
                   SizedBox(height: 20),
                   Text(
                     question.questionText,
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: TextStyle(fontWeight: FontWeight.bold, color: ThemeConfig.primaryTextColor),
                   ),
                   _separator,
                   Divider(
@@ -394,11 +402,15 @@ class _CourseState extends State<CoursePage> {
                               _checkInteractiveElementsCompleted();
                             }
                           },
-                          child: Text(AppLocalizations.of(context)!.buttonCheckAnswer),
+                          child: Text(AppLocalizations.of(context)!.buttonCheckAnswer,
+                              style: TextStyle(fontSize: 14, color: ThemeConfig.primaryTextColor),
+                          ),
                         )
                       : ElevatedButton(
                           onPressed: null,
-                          child: Text(AppLocalizations.of(context)!.buttonSelectAnswer),
+                          child: Text(AppLocalizations.of(context)!.buttonSelectAnswer,
+                              style: TextStyle(fontSize: 14, color: ThemeConfig.primaryTextColor),
+                          ),
                         ),
                 ],
               ),
@@ -415,7 +427,7 @@ class _CourseState extends State<CoursePage> {
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16.0),
-              color: Colors.grey[100],
+              color: ThemeConfig.primaryCardColor,
             ),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -424,7 +436,8 @@ class _CourseState extends State<CoursePage> {
                   SizedBox(height: 20),
                   Text(
                     question.questionText,
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: TextStyle(fontWeight: FontWeight.bold,
+                        color: ThemeConfig.primaryTextColor),
                   ),
                   _separator,
                   Divider(
@@ -462,11 +475,15 @@ class _CourseState extends State<CoursePage> {
                               _checkInteractiveElementsCompleted();
                             }
                           },
-                          child: Text(AppLocalizations.of(context)!.buttonCheckAnswer),
+                          child: Text(AppLocalizations.of(context)!.buttonCheckAnswer,
+                              style: TextStyle(fontSize: 14, color: ThemeConfig.primaryTextColor),
+                          ),
                         )
                       : ElevatedButton(
                           onPressed: null,
-                          child: Text(AppLocalizations.of(context)!.buttonSelectAnswer),
+                          child: Text(AppLocalizations.of(context)!.buttonSelectAnswer,
+                              style: TextStyle(fontSize: 14, color: ThemeConfig.primaryTextColor),
+                          ),
                         ),
                 ],
               ),
@@ -567,20 +584,31 @@ class _CourseState extends State<CoursePage> {
       barrierColor: Colors.black26,
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: ThemeConfig.primaryCardColor,
           title: questionCorrect
-              ? Text(AppLocalizations.of(context)!.dialogAnswerCorrectTitle)
-              : Text(AppLocalizations.of(context)!.dialogAnswerIncorrectTitle),
+              ? Text(AppLocalizations.of(context)!.dialogAnswerCorrectTitle,
+              style: TextStyle(fontSize: 14, color: ThemeConfig.primaryTextColor),
+          )
+              : Text(AppLocalizations.of(context)!.dialogAnswerIncorrectTitle,
+              style: TextStyle(fontSize: 14, color: ThemeConfig.primaryTextColor),
+          ),
           content: !questionCorrect
               ? Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Text(AppLocalizations.of(context)!.dialogAnswerIncorrectContentSelected(
-                      submittedAnswer.answerText, submittedAnswer.answerExplanation)),
+                      submittedAnswer.answerText, submittedAnswer.answerExplanation),
+                      style: TextStyle(fontSize: 14, color: ThemeConfig.primaryTextColor),
+                  ),
                   Text(AppLocalizations.of(context)!
-                      .dialogAnswerIncorrectContentCorrect(correctAnswer.answerText, correctAnswer.answerExplanation))
+                      .dialogAnswerIncorrectContentCorrect(correctAnswer.answerText, correctAnswer.answerExplanation),
+                      style: TextStyle(fontSize: 14, color: ThemeConfig.primaryTextColor),
+                  )
                 ])
               : null,
           actions: [
             TextButton(
-              child: Text(AppLocalizations.of(context)!.dialogAcknowledge),
+              child: Text(AppLocalizations.of(context)!.dialogAcknowledge,
+                  style: TextStyle(fontSize: 14, color: ThemeConfig.primaryTextColor),
+              ),
               onPressed: () => Navigator.of(context).pop(),
             ),
           ],
@@ -611,9 +639,14 @@ class _CourseState extends State<CoursePage> {
       barrierColor: Colors.black26,
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: ThemeConfig.primaryCardColor,
           title: questionCorrect
-              ? Text(AppLocalizations.of(context)!.dialogAnswerCorrectTitle)
-              : Text(AppLocalizations.of(context)!.dialogAnswerIncorrectTitle),
+              ? Text(AppLocalizations.of(context)!.dialogAnswerCorrectTitle,
+            style: TextStyle(fontSize: 14, color: ThemeConfig.primaryTextColor),
+          )
+              : Text(AppLocalizations.of(context)!.dialogAnswerIncorrectTitle,
+            style: TextStyle(fontSize: 14, color: ThemeConfig.primaryTextColor),
+          ),
           content: !questionCorrect
               ? Column(
                   mainAxisSize: MainAxisSize.min,
@@ -622,7 +655,9 @@ class _CourseState extends State<CoursePage> {
               : null,
           actions: [
             TextButton(
-              child: Text(AppLocalizations.of(context)!.dialogAcknowledge),
+              child: Text(AppLocalizations.of(context)!.dialogAcknowledge,
+                style: TextStyle(fontSize: 14, color: ThemeConfig.primaryTextColor),
+              ),
               onPressed: () => Navigator.of(context).pop(),
             ),
           ],
@@ -639,11 +674,15 @@ class _CourseState extends State<CoursePage> {
 
     for (Answer answer in submittedAnswers) {
       contentWidgets.add(Text(AppLocalizations.of(context)!
-          .dialogAnswerIncorrectContentSelected(answer.answerText, answer.answerExplanation)));
+          .dialogAnswerIncorrectContentSelected(answer.answerText, answer.answerExplanation),
+        style: TextStyle(fontSize: 14, color: ThemeConfig.primaryTextColor),
+      ));
     }
     for (Answer answer in correctAnswers) {
       contentWidgets.add(Text(AppLocalizations.of(context)!
-          .dialogAnswerIncorrectContentCorrect(answer.answerText, answer.answerExplanation)));
+          .dialogAnswerIncorrectContentCorrect(answer.answerText, answer.answerExplanation),
+        style: TextStyle(fontSize: 14, color: ThemeConfig.primaryTextColor),
+      ));
     }
 
     return contentWidgets;
