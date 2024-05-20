@@ -229,7 +229,18 @@ class _CourseListPageState extends State<CourseListPage> {
           Padding(
             padding: const EdgeInsets.all(8),
             child: CustomExpansionTile(
-              titleWidget: Text(course.courseTitle),
+              titleWidget: Row(
+                children: [
+                  Icon(
+                    Icons.menu_book_rounded,
+                    color: ThemeConfig.primaryTextColor,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(course.courseTitle),
+                ],
+              ),
               contentWidget: [
                 Align(
                   alignment: Alignment.centerLeft,

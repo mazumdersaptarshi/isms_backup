@@ -368,7 +368,7 @@ class _AdminUserDetailsScreenState extends State<AdminUserDetailsScreen> {
 
                           child: CustomLinearProgressIndicator(
                             value: completionPercentage,
-                            backgroundColor: Colors.grey[300]!,
+                            backgroundColor: ThemeConfig.percentageIconBackgroundFillColor!,
                             valueColor: ThemeConfig.primaryColor!,
                           ),
                         ),

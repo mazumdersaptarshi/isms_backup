@@ -36,7 +36,7 @@ class _HoverableSectionContainerState extends State<HoverableSectionContainer> {
       onHover: _onHover,
       onExit: _onExit,
       child: Container(
-        padding: EdgeInsets.fromLTRB(20, 15, 20, 10), // EdgeInsets.all(10),
+        padding: EdgeInsets.fromLTRB(20, 15, 20, 10),
         decoration: BoxDecoration(
           border: Border.all(color: _isHovered ? ThemeConfig.hoverBorderColor1! : Colors.transparent, width: 2
               // isHoveringMap[index] == true ? primary! : Colors.grey.shade200,

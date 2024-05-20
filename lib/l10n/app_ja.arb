@@ -136,5 +136,6 @@
     "november": "11月",
     "december": "12月",
     "selectedCourses": "選択したコース",
-    "selectedUsers": "選択したユーザー"
+    "selectedUsers": "選択したユーザー",
+    "examAttempts": "受けた試験"
 }

@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:isms/controllers/theme_management/theme_config.dart';
 import 'package:isms/controllers/user_management/logged_in_state.dart';
 import 'package:isms/models/admin_models/exam_deadline.dart';
+import 'package:isms/utilities/date_time_converter.dart';
 import 'package:isms/utilities/platform_check.dart';
 import 'package:isms/views/widgets/shared_widgets/build_section_header.dart';
 import 'package:isms/views/widgets/shared_widgets/custom_app_bar.dart';
@@ -104,9 +105,8 @@ class ExamDeadlinesTable extends StatelessWidget {
   }
 
   Widget buildExamDeadlineRow(BuildContext context, ExamDeadline examDeadline) {
-    DateTime parsedDateTime = DateTime.parse(examDeadline.nearestCompletionDeadline);
-    var r = DateFormat.yMMMMEEEEd('en_US').format(parsedDateTime);
-    String formattedDateTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(parsedDateTime);
+    // String readableDateTime = convertToReadableDateTime(examDeadline.nearestCompletionDeadline);
+    String readableDateTime = DateTimeConverter.convertToReadableDateTime(examDeadline.nearestCompletionDeadline);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: HoverableSectionContainer(
@@ -114,29 +114,58 @@ class ExamDeadlinesTable extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            buildDataCell(title: examDeadline.examTitle, flexValue: 3),
-            buildDataCell(title: examDeadline.courseTitle, flexValue: 3),
-            buildDataCell(title: examDeadline.contentLanguage, flexValue: 2),
+            buildDataCell(cellText: examDeadline.examTitle, flexValue: 3),
+            buildDataCell(cellText: examDeadline.courseTitle, flexValue: 3),
+            buildDataCell(cellText: examDeadline.contentLanguage, flexValue: 2),
             buildDataCell(
-                title:
-                    '${examDeadline.usersPassed.toString()}/${examDeadline.allUsersCount.toString()}  users in compliance',
+                coloredValueText: '${examDeadline.usersPassed.toString()}/${examDeadline.allUsersCount.toString()}',
+                cellText: '  users in compliance',
+                warning: examDeadline.usersPassed <= examDeadline.usersPassed ? true : false,
                 flexValue: 2),
-            buildDataCell(title: examDeadline.nearestCompletionDeadline, flexValue: 2),
+            buildDataCell(cellText: readableDateTime, flexValue: 2),
           ],
         ),
       ),
     );
   }
 
-  Expanded buildDataCell({required String title, required int flexValue}) {
+  Expanded buildDataCell({required String cellText, required int flexValue, String? coloredValueText, bool? warning}) {
     return Expanded(
       flex: flexValue,
-      child: Text(
-        title,
-        style: TextStyle(
-          color: ThemeConfig.primaryTextColor,
-        ),
-      ),
+      child: coloredValueText != null
+          ? Row(
+              children: [
+                Text(
+                  coloredValueText,
+                  style: TextStyle(color: ThemeConfig.secondaryTextColor),
+                ),
+                Text(
+                  cellText,
+                  style: TextStyle(
+                    color: ThemeConfig.primaryTextColor,
+                  ),
+                ),
+                if (warning != null && warning)
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 4,
+                      ),
+                      Icon(
+                        Icons.warning_amber_outlined,
+                        color: Colors.orange,
+                        size: 20,
+                      ),
+                    ],
+                  ),
+              ],
+            )
+          : Text(
+              cellText,
+              style: TextStyle(
+                color: ThemeConfig.primaryTextColor,
+              ),
+            ),
     );
   }
 }

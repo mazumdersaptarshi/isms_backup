@@ -30,23 +30,27 @@ class CourseProvider extends ChangeNotifier {
       }
       for (List<dynamic> jsonCourse in jsonResponse) {
         Map<String, dynamic> courseMap = jsonCourse.first as Map<String, dynamic>;
+        bool courseExists = _assignedCourses.any((course) => course.courseId == courseMap['courseId']);
+
         // UserAssignedCourseOverview course = UserAssignedCourseOverview.fromJson(courseMap);
-        List<SectionOverview> sections = [];
-        for (Map<String, dynamic> section in courseMap['courseSections']) {
-          sections.add(SectionOverview.fromJson(section));
+        if (!courseExists) {
+          List<SectionOverview> sections = [];
+          for (Map<String, dynamic> section in courseMap['courseSections']) {
+            sections.add(SectionOverview.fromJson(section));
+          }
+          UserAssignedCourseOverview course = UserAssignedCourseOverview(
+            courseId: courseMap['courseId'] ?? '',
+            courseVersion: courseMap['contentVersion'] ?? '0',
+            courseTitle: courseMap['courseTitle'] ?? '',
+            courseSummary: courseMap['courseSummary'] ?? '',
+            courseDescription: courseMap['courseDescription'] ?? '',
+            courseSections: sections ?? [],
+            courseExams: [],
+            allSectionIds: courseMap['allSectionIds'] ?? [],
+            completedSections: courseMap['completedSections'] ?? [],
+          );
+          _assignedCourses.add(course);
         }
-        UserAssignedCourseOverview course = UserAssignedCourseOverview(
-          courseId: courseMap['courseId'] ?? '',
-          courseVersion: courseMap['contentVersion'] ?? '0',
-          courseTitle: courseMap['courseTitle'] ?? '',
-          courseSummary: courseMap['courseSummary'] ?? '',
-          courseDescription: courseMap['courseDescription'] ?? '',
-          courseSections: sections ?? [],
-          courseExams: [],
-          allSectionIds: courseMap['allSectionIds'] ?? [],
-          completedSections: courseMap['completedSections'] ?? [],
-        );
-        _assignedCourses.add(course);
       }
       courseStatusChanged = false;
     }

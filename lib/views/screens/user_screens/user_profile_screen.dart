@@ -363,7 +363,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
                           child: CustomLinearProgressIndicator(
                             value: completionPercentage,
-                            backgroundColor: Colors.grey[300]!,
+                            backgroundColor: ThemeConfig.percentageIconBackgroundFillColor!,
                             valueColor: ThemeConfig.primaryColor!,
                           ),
                         ),

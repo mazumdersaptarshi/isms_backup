@@ -61,6 +61,8 @@ class ThemeConfig {
 
   static Color get tertiaryTextColor2 => isDarkMode ? Colors.grey.shade300 : Colors.grey.shade700;
 
+  static Color get tertiaryTextColor3 => isDarkMode ? Colors.grey.shade300 : Colors.grey.shade300;
+
   static Color get secondaryColor => isDarkMode ? Colors.grey.shade800 : Colors.grey.shade200;
 
   static Color? get tertiaryColor1 => isDarkMode ? Color(0xFF202f45) : getPrimaryColorShade(50);
@@ -86,6 +88,8 @@ class ThemeConfig {
   static Color? get iconFillColor1 => isDarkMode ? getPrimaryColorShade(400) : primaryColor;
 
   static Color? get tableRowColor => isDarkMode ? Color(0xFF273752) : Colors.grey.shade200;
+
+  static Color? get sectionNavigationButtonColorActive => isDarkMode ? Color(0xFF24364f) : primaryColor;
 
   static LinearGradient getBarsGradientColor() {
     return LinearGradient(

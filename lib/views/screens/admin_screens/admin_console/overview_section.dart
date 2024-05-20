@@ -133,7 +133,7 @@ class OverviewSection extends StatelessWidget {
                       child: Column(children: [
                         ListView.builder(
                             shrinkWrap: true,
-                            itemCount: recentExamAttempts.length,
+                            itemCount: 3,
                             itemBuilder: (context, index) {
                               print(recentExamAttempts[index].date);
                               DateTime parsedDateTime = DateTime.parse(recentExamAttempts[index].date);
@@ -158,7 +158,9 @@ class OverviewSection extends StatelessWidget {
                             Container(
                                 // padding: EdgeInsets.all(8),
                                 child: TextButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      context.goNamed(NamedRoutes.examAttempts.name, extra: recentExamAttempts);
+                                    },
                                     child: Row(
                                       children: [
                                         Text(

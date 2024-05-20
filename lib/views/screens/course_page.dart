@@ -6,6 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:http/http.dart' as http;
 import 'package:isms/controllers/course_management/course_provider.dart';
+import 'package:isms/controllers/theme_management/theme_config.dart';
 import 'package:provider/provider.dart';
 
 import 'package:isms/controllers/user_management/logged_in_state.dart';
@@ -42,7 +43,15 @@ class _CourseState extends State<CoursePage> {
   late EdgeInsets _contentPadding;
 
   final ButtonStyle _buttonStyleSectionNavigation = ElevatedButton.styleFrom(
-    backgroundColor: Colors.grey[200],
+    backgroundColor: ThemeConfig.sectionNavigationButtonColorActive,
+    elevation: 0,
+    minimumSize: Size(double.infinity, 100),
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.zero,
+    ),
+  );
+  final ButtonStyle _buttonStyleSectionNavigationDisabled = ElevatedButton.styleFrom(
+    backgroundColor: ThemeConfig.primaryCardColor,
     elevation: 0,
     minimumSize: Size(double.infinity, 100),
     shape: const RoundedRectangleBorder(
@@ -50,7 +59,8 @@ class _CourseState extends State<CoursePage> {
     ),
   );
 
-  final TextStyle _textStyleButtonSectionNavigation = TextStyle(color: Colors.grey[600]);
+  final TextStyle _textStyleButtonSectionNavigationDisabled = TextStyle(color: ThemeConfig.primaryTextColor);
+  final TextStyle _textStyleButtonSectionNavigationEnabled = TextStyle(color: ThemeConfig.tertiaryTextColor3);
 
   // Data structures containing course content populated in initState() then not changed
 
@@ -206,6 +216,7 @@ class _CourseState extends State<CoursePage> {
             );
           } else if (snapshot.hasError) {
             return Scaffold(
+                backgroundColor: ThemeConfig.scaffoldBackgroundColor,
                 appBar: IsmsAppBar(context: context),
                 drawer: IsmsDrawer(context: context),
                 body: Center(
@@ -225,6 +236,7 @@ class _CourseState extends State<CoursePage> {
               List<dynamic> jsonResponse = _parseJsonResponse(snapshot);
               if (jsonResponse.isEmpty) {
                 return Scaffold(
+                    backgroundColor: ThemeConfig.scaffoldBackgroundColor,
                     appBar: IsmsAppBar(context: context),
                     drawer: IsmsDrawer(context: context),
                     body: Center(
@@ -242,6 +254,7 @@ class _CourseState extends State<CoursePage> {
               }
             }
             return Scaffold(
+                backgroundColor: ThemeConfig.scaffoldBackgroundColor,
                 appBar: IsmsAppBar(context: context),
                 drawer: IsmsDrawer(context: context),
                 body: Column(
@@ -307,7 +320,14 @@ class _CourseState extends State<CoursePage> {
       if (element.elementType == ElementTypeValues.html.name) {
         contentWidgets.add(Padding(
           padding: _contentPadding,
-          child: Html(data: element.elementContent),
+          child: Html(
+            data: element.elementContent,
+            style: {
+              "body": Style(
+                color: ThemeConfig.primaryTextColor, // Use your theme color
+              ),
+            },
+          ),
         ));
 
         // Questions
@@ -353,7 +373,7 @@ class _CourseState extends State<CoursePage> {
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16.0),
-              color: Colors.grey[100],
+              color: ThemeConfig.primaryCardColor,
             ),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -362,7 +382,7 @@ class _CourseState extends State<CoursePage> {
                   SizedBox(height: 20),
                   Text(
                     question.questionText,
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: TextStyle(fontWeight: FontWeight.bold, color: ThemeConfig.primaryTextColor),
                   ),
                   _separator,
                   Divider(
@@ -398,7 +418,11 @@ class _CourseState extends State<CoursePage> {
                         )
                       : ElevatedButton(
                           onPressed: null,
-                          child: Text(AppLocalizations.of(context)!.buttonSelectAnswer),
+                          style: ThemeConfig.elevatedBoxButtonStyleDisabled(),
+                          child: Text(
+                            AppLocalizations.of(context)!.buttonSelectAnswer,
+                            style: TextStyle(color: Colors.grey),
+                          ),
                         ),
                 ],
               ),
@@ -415,7 +439,7 @@ class _CourseState extends State<CoursePage> {
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16.0),
-              color: Colors.grey[100],
+              color: ThemeConfig.primaryCardColor,
             ),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -424,7 +448,7 @@ class _CourseState extends State<CoursePage> {
                   SizedBox(height: 20),
                   Text(
                     question.questionText,
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: TextStyle(fontWeight: FontWeight.bold, color: ThemeConfig.primaryTextColor),
                   ),
                   _separator,
                   Divider(
@@ -465,8 +489,12 @@ class _CourseState extends State<CoursePage> {
                           child: Text(AppLocalizations.of(context)!.buttonCheckAnswer),
                         )
                       : ElevatedButton(
+                          style: ThemeConfig.elevatedBoxButtonStyleDisabled(),
                           onPressed: null,
-                          child: Text(AppLocalizations.of(context)!.buttonSelectAnswer),
+                          child: Text(
+                            AppLocalizations.of(context)!.buttonSelectAnswer,
+                            style: TextStyle(color: Colors.grey),
+                          ),
                         ),
                 ],
               ),
@@ -512,13 +540,16 @@ class _CourseState extends State<CoursePage> {
                 Navigator.pop(context);
               },
               style: _buttonStyleSectionNavigation,
-              child: Text(AppLocalizations.of(context)!.buttonFinishCourse, style: _textStyleButtonSectionNavigation),
+              child: Text(AppLocalizations.of(context)!.buttonFinishCourse,
+                  style: _textStyleButtonSectionNavigationEnabled),
             )
           : ElevatedButton(
-              onPressed: null,
-              style: _buttonStyleSectionNavigation,
+              onPressed: () {
+                print('nothing to go to');
+              },
+              style: _buttonStyleSectionNavigationDisabled,
               child: Text(AppLocalizations.of(context)!.buttonSectionContentIncomplete,
-                  style: _textStyleButtonSectionNavigation));
+                  style: _textStyleButtonSectionNavigationDisabled));
     } else {
       // Only enable the button once all interactive elements in the section have been interacted with
       button = _currentSectionCompleted
@@ -528,14 +559,16 @@ class _CourseState extends State<CoursePage> {
               child: Text(
                 AppLocalizations.of(context)!
                     .buttonNextSection(_course.courseSections[_currentSectionIndex + 1].sectionTitle),
-                style: _textStyleButtonSectionNavigation,
+                style: _textStyleButtonSectionNavigationEnabled,
               ))
           : ElevatedButton(
-              onPressed: null,
-              style: _buttonStyleSectionNavigation,
+              onPressed: () {
+                print('nothing to go to');
+              },
+              style: _buttonStyleSectionNavigationDisabled,
               child: Text(
                 AppLocalizations.of(context)!.buttonSectionContentIncomplete,
-                style: _textStyleButtonSectionNavigation,
+                style: _textStyleButtonSectionNavigationDisabled,
               ));
     }
 
@@ -550,7 +583,7 @@ class _CourseState extends State<CoursePage> {
       child: Text(
         AppLocalizations.of(context)!
             .buttonPreviousSection(_course.courseSections[_currentSectionIndex - 1].sectionTitle),
-        style: _textStyleButtonSectionNavigation,
+        style: _textStyleButtonSectionNavigationEnabled,
       ),
     );
   }

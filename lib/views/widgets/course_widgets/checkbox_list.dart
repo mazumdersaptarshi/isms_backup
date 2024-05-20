@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:isms/controllers/theme_management/theme_config.dart';
 
 import 'package:isms/models/course/answer.dart';
 
@@ -46,16 +47,26 @@ class _CustomCheckboxListState extends State<CustomCheckboxList> {
       checkboxes.add(
         Flexible(
           fit: FlexFit.loose,
-          child: CheckboxListTile(
-            title: Text(answer.answerText),
-            value: _checkboxAnswerState[answer.answerId],
-            onChanged: (selectedValue) {
-              setState(() {
-                _checkboxAnswerState[answer.answerId] = selectedValue ?? false;
-              });
-              widget.onItemSelected(_checkboxAnswerState);
-            },
-            controlAffinity: ListTileControlAffinity.leading,
+          child: Theme(
+            data: Theme.of(context).copyWith(
+              unselectedWidgetColor: ThemeConfig.primaryTextColor, // Color for unselected state
+            ),
+            child: CheckboxListTile(
+              title: Text(
+                answer.answerText,
+                style: TextStyle(
+                  color: ThemeConfig.primaryTextColor,
+                ),
+              ),
+              value: _checkboxAnswerState[answer.answerId],
+              onChanged: (selectedValue) {
+                setState(() {
+                  _checkboxAnswerState[answer.answerId] = selectedValue ?? false;
+                });
+                widget.onItemSelected(_checkboxAnswerState);
+              },
+              controlAffinity: ListTileControlAffinity.leading,
+            ),
           ),
         ),
       );

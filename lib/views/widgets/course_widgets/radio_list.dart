@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:isms/controllers/theme_management/theme_config.dart';
 
 import 'package:isms/models/course/answer.dart';
 
@@ -6,9 +7,7 @@ class CustomRadioList extends StatefulWidget {
   final List<Answer> values;
   final dynamic Function(dynamic selectedValue) onItemSelected;
 
-  const CustomRadioList(
-      {Key? key, required this.values, required this.onItemSelected})
-      : super(key: key);
+  const CustomRadioList({Key? key, required this.values, required this.onItemSelected}) : super(key: key);
 
   @override
   State<CustomRadioList> createState() => _CustomRadioListState();
@@ -47,24 +46,32 @@ class _CustomRadioListState extends State<CustomRadioList> {
       radioButtons.add(
         Flexible(
           fit: FlexFit.loose,
-          child: RadioListTile<Answer>(
-            title: Text(
-              answer.answerText,
-              // When an answer is selected, text colour is the same as `fillColor` for the radio button,
-              // inherited from the app theme (`Theme.of(context).radioTheme.fillColor`).
-              // This cannot be decoupled so override the text colour at this level to standardise the behaviour for
-              // text displayed in both `RadioListTile`s and `CheckboxListTile`s.
-              style: const TextStyle(color: Colors.black),
+          child: Theme(
+            data: Theme.of(context).copyWith(
+              unselectedWidgetColor: ThemeConfig.primaryTextColor, // Color for unselected state
             ),
-            value: answer,
-            groupValue: _groupNewValue,
-            onChanged: (selectedValue) {
-              setState(() {
-                _groupNewValue = selectedValue;
-              });
-              widget.onItemSelected(selectedValue);
-            },
-            selected: _groupNewValue == answer,
+            child: RadioListTile<Answer>(
+              title: Text(
+                answer.answerText,
+
+                // When an answer is selected, text colour is the same as `fillColor` for the radio button,
+                // inherited from the app theme (`Theme.of(context).radioTheme.fillColor`).
+                // This cannot be decoupled so override the text colour at this level to standardise the behaviour for
+                // text displayed in both `RadioListTile`s and `CheckboxListTile`s.
+                style: TextStyle(
+                  color: ThemeConfig.primaryTextColor,
+                ),
+              ),
+              value: answer,
+              groupValue: _groupNewValue,
+              onChanged: (selectedValue) {
+                setState(() {
+                  _groupNewValue = selectedValue;
+                });
+                widget.onItemSelected(selectedValue);
+              },
+              selected: _groupNewValue == answer,
+            ),
           ),
         ),
       );

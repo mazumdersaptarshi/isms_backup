@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:isms/controllers/exam_management/exam_provider.dart';
+import 'package:isms/models/admin_models/exam_attempt_overview.dart';
 import 'package:isms/models/admin_models/exam_deadline.dart';
 import 'package:isms/views/screens/admin_screens/admin_console/admin_panel.dart';
+import 'package:isms/views/screens/admin_screens/admin_console/exam_attempts.dart';
 import 'package:isms/views/screens/admin_screens/admin_console/upcoming_deadlines.dart';
 import 'package:isms/views/screens/admin_screens/settings_page.dart';
 import 'package:isms/views/screens/exam_page.dart';
@@ -34,6 +36,7 @@ enum NamedRoutes {
   settings,
   userProfile,
   upcomingDeadlines,
+  examAttempts
 }
 
 /// All parameter names used in child named routes defined in the [GoRouter] configuration below
@@ -56,6 +59,16 @@ final GoRouter ismsRouter = GoRouter(
         name: NamedRoutes.settings.name,
         path: '/settings',
         builder: (BuildContext context, GoRouterState state) => const SettingsPage()),
+    GoRoute(
+        name: NamedRoutes.examAttempts.name,
+        path: '/exam_attempts',
+        builder: (BuildContext context, GoRouterState state) {
+          List<ExamAttemptOverview> examAttempts = state.extra as List<ExamAttemptOverview>;
+
+          return ExamAttempts(
+            recentExamAttempts: examAttempts,
+          );
+        }),
     GoRoute(
         name: NamedRoutes.upcomingDeadlines.name,
         path: '/upcoming_deadlines',
