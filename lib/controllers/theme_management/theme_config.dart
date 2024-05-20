@@ -121,7 +121,7 @@ class ThemeConfig {
       );
 
   static BoxDecoration get flipCardBoxDecorationBack => BoxDecoration(
-        color: Colors.grey[200],
+        color: ThemeConfig.secondaryCardColor,
         borderRadius: BorderRadius.circular(5),
         border: Border.all(color: primaryColor!, width: 3), // Blue border added for flipped state
       );
