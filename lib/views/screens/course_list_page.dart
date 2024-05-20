@@ -460,60 +460,73 @@ class _CourseListPageState extends State<CourseListPage> {
               children: [
                 exam.examPassed
                     ? Icon(
-                        Icons.check_circle_outline_rounded,
-                        color: ThemeConfig.primaryColor!,
-                      )
+                  Icons.check_circle_outline_rounded,
+                  color: ThemeConfig.primaryColor!,
+                )
                     : Icon(
-                        Icons.pending_actions_rounded,
-                        color: Colors.orange,
-                      ),
-                SizedBox(
-                  width: 10,
+                  Icons.pending_actions_rounded,
+                  color: Colors.orange,
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 2.0),
-                      child: Text(
-                        '${exam.examTitle}',
-                        style: TextStyle(fontSize: 14, color: ThemeConfig.primaryTextColor),
+                SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 2.0),
+                        child: Text(
+                          '${exam.examTitle}',
+                          style: TextStyle(fontSize: 14, color: ThemeConfig.primaryTextColor),
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Text(
-                      exam.examSummary,
-                      style: TextStyle(fontSize: 13, color: ThemeConfig.tertiaryTextColor2),
-                    ),
-                    SizedBox(height: 5.0), // Add spacing between summary and icons
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.access_time,
-                          color: ThemeConfig.primaryColor!,
-                        ), // Timer icon
-                        SizedBox(width: 16),
-                        Text(
-                            AppLocalizations.of(context)!.examEstimatedCompletionTime(exam.examEstimatedCompletionTime),
-                            style: TextStyle(fontSize: 13, color: ThemeConfig.tertiaryTextColor1)),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.school_outlined,
-                          color: ThemeConfig.primaryColor!,
-                        ), // Score icon
-                        SizedBox(width: 16),
-                        Text(AppLocalizations.of(context)!.examPassMark(exam.examPassMark),
-                            style: TextStyle(fontSize: 13, color: ThemeConfig.tertiaryTextColor1)),
-                      ],
-                    ),
-                    SizedBox(height: 15.0), // Add spacing before description
-                    Text(exam.examDescription, style: TextStyle(fontSize: 13, color: ThemeConfig.tertiaryTextColor2)),
-                  ],
+                      SizedBox(height: 20),
+                      Text(
+                        exam.examSummary,
+                        style: TextStyle(fontSize: 13, color: ThemeConfig.tertiaryTextColor2),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      SizedBox(height: 5.0), // Add spacing between summary and icons
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.access_time,
+                            color: ThemeConfig.primaryColor!,
+                          ), // Timer icon
+                          SizedBox(width: 16),
+                          Expanded(
+                            child: Text(
+                              AppLocalizations.of(context)!.examEstimatedCompletionTime(exam.examEstimatedCompletionTime),
+                              style: TextStyle(fontSize: 13, color: ThemeConfig.tertiaryTextColor1),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.school_outlined,
+                            color: ThemeConfig.primaryColor!,
+                          ), // Score icon
+                          SizedBox(width: 16),
+                          Expanded(
+                            child: Text(
+                              AppLocalizations.of(context)!.examPassMark(exam.examPassMark),
+                              style: TextStyle(fontSize: 13, color: ThemeConfig.tertiaryTextColor1),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 15.0), // Add spacing before description
+                      Text(
+                        exam.examDescription,
+                        style: TextStyle(fontSize: 13, color: ThemeConfig.tertiaryTextColor2),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -522,32 +535,32 @@ class _CourseListPageState extends State<CourseListPage> {
               alignment: Alignment.centerLeft,
               child: sectionTotal == completedSectionTotal
                   ? ElevatedButton(
-                      onPressed: () {
-                        context.goNamed(NamedRoutes.exam.name,
-                            pathParameters: {NamedRoutePathParameters.examId.name: exam.examId});
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.all(13),
-                        child: Text(
-                          AppLocalizations.of(context)!.buttonStartExam,
-                          style: TextStyle(
-                            color: ThemeConfig.secondaryTextColor,
-                          ),
-                        ),
-                      ),
-                      style: ThemeConfig.elevatedBoxButtonStyle(backgroundColor: ThemeConfig.secondaryCardColor),
-                    )
-                  : ElevatedButton(
-                      onPressed: () {},
-                      child: Container(
-                        padding: const EdgeInsets.all(13),
-                        child: Text(
-                          AppLocalizations.of(context)!.completeAllSections,
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                      ),
-                      style: ThemeConfig.elevatedBoxButtonStyleDisabled(),
+                onPressed: () {
+                  context.goNamed(NamedRoutes.exam.name,
+                      pathParameters: {NamedRoutePathParameters.examId.name: exam.examId});
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(13),
+                  child: Text(
+                    AppLocalizations.of(context)!.buttonStartExam,
+                    style: TextStyle(
+                      color: ThemeConfig.secondaryTextColor,
                     ),
+                  ),
+                ),
+                style: ThemeConfig.elevatedBoxButtonStyle(backgroundColor: ThemeConfig.secondaryCardColor),
+              )
+                  : ElevatedButton(
+                onPressed: () {},
+                child: Container(
+                  padding: const EdgeInsets.all(13),
+                  child: Text(
+                    AppLocalizations.of(context)!.completeAllSections,
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                ),
+                style: ThemeConfig.elevatedBoxButtonStyleDisabled(),
+              ),
             ),
             Divider(
               thickness: 1,
@@ -559,7 +572,7 @@ class _CourseListPageState extends State<CourseListPage> {
       contentWidgets.add(_separator);
     }
 
-    // return [Container(width: 100, height: 100, child: Text(''))];
     return contentWidgets;
   }
+
 }

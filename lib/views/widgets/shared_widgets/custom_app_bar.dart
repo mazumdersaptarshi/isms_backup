@@ -41,13 +41,11 @@ class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
           },
           child: Row(
             children: [
-              Icon(
-                Icons.severe_cold_rounded,
-                color: ThemeConfig.primaryTextColor,
-              ),
-              SizedBox(
-                width: 10,
-              ),
+              // Icon(
+              //   Icons.severe_cold_rounded,
+              //   color: ThemeConfig.primaryTextColor,
+              // ),
+              // SizedBox(width: 10),
               Text(
                 'ISMS Manager',
                 style: TextStyle(
@@ -55,6 +53,7 @@ class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
                   fontSize: 24,
                   color: ThemeConfig.primaryTextColor,
                 ),
+                overflow: TextOverflow.ellipsis,
               ),
             ],
           ),
@@ -63,13 +62,9 @@ class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
           child: Center(
             child: Container(
               height: 40,
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width * 0.20 < 300 ? MediaQuery
-                  .of(context)
-                  .size
-                  .width * 0.20 : 500,
+              width: MediaQuery.of(context).size.width * 0.20 < 300
+                  ? MediaQuery.of(context).size.width * 0.20
+                  : 500,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(6.0),
                 color: ThemeConfig.primaryCardColor,
@@ -89,37 +84,36 @@ class IsmsAppBar extends StatelessWidget implements PreferredSizeWidget {
                   hintStyle: TextStyle(color: Colors.grey, fontSize: 16.0),
                   prefixIcon: Icon(Icons.search, color: Colors.grey),
                 ),
-                style: TextStyle(color: Colors.black, fontSize: 16), // Input text color
+                style: TextStyle(color: Colors.black, fontSize: 16),
               ),
             ),
           ),
         ),
         // Placeholder to balance the title position
-        Opacity(
-          opacity: 0,
-          child: GestureDetector(
-            onTap: () {},
-            child: Row(
-              children: [
-                Icon(
-                  Icons.severe_cold_rounded,
-                  color: ThemeConfig.primaryTextColor,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  'ISMS Manager',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                    color: ThemeConfig.primaryTextColor,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+        // Opacity(
+        //   opacity: 0,
+        //   child: GestureDetector(
+        //     onTap: () {},
+        //     child: Row(
+        //       children: [
+        //         Icon(
+        //           Icons.severe_cold_rounded,
+        //           color: ThemeConfig.primaryTextColor,
+        //         ),
+        //         SizedBox(width: 10),
+        //         Text(
+        //           'ISMS Manager',
+        //           style: TextStyle(
+        //             fontWeight: FontWeight.bold,
+        //             fontSize: 18,
+        //             color: ThemeConfig.primaryTextColor,
+        //           ),
+        //           overflow: TextOverflow.ellipsis,
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }

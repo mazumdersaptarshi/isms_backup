@@ -8,7 +8,7 @@ Widget buildSectionHeader({
   Widget? actionWidget2,
 }) {
   return Container(
-    margin: const EdgeInsets.fromLTRB(100, 30, 100, 0),
+    margin: const EdgeInsets.fromLTRB(80, 30, 80, 0),
     child: Row(
       children: [
         Text(

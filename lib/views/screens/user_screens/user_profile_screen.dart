@@ -85,15 +85,18 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         return Text('No attempts data available');
       }
 
-      return DataTable(
-        columns: [
-          DataColumn(
+      return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: DataTable(
+          columns: [
+            DataColumn(
               tooltip: '${AppLocalizations.of(context)!.examId}',
               label: Text(
                 '${AppLocalizations.of(context)!.examId}',
                 style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey.shade500),
-              )),
-          DataColumn(
+              ),
+            ),
+            DataColumn(
               tooltip: '${AppLocalizations.of(context)!.startTime}',
               label: Row(
                 children: [
@@ -105,13 +108,16 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   SizedBox(
                     width: 4,
                   ),
-                  Text(
-                    '${AppLocalizations.of(context)!.startTime}',
-                    style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey.shade500),
+                  Flexible(
+                    child: Text(
+                      '${AppLocalizations.of(context)!.startTime}',
+                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey.shade500, overflow: TextOverflow.ellipsis),
+                    ),
                   ),
                 ],
-              )),
-          DataColumn(
+              ),
+            ),
+            DataColumn(
               tooltip: '${AppLocalizations.of(context)!.endTime}',
               label: Row(
                 children: [
@@ -123,91 +129,100 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   SizedBox(
                     width: 4,
                   ),
-                  Text(
-                    '${AppLocalizations.of(context)!.endTime}',
-                    style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey.shade500),
+                  Flexible(
+                    child: Text(
+                      '${AppLocalizations.of(context)!.endTime}',
+                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey.shade500),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ],
-              )),
-          DataColumn(
+              ),
+            ),
+            DataColumn(
               tooltip: '${AppLocalizations.of(context)!.result}',
               label: Text(
                 '${AppLocalizations.of(context)!.result}',
                 style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey.shade500),
-              )),
-          DataColumn(
+              ),
+            ),
+            DataColumn(
               tooltip: '${AppLocalizations.of(context)!.score}',
               label: Text(
                 '${AppLocalizations.of(context)!.score}',
                 style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey.shade500),
-              )),
-          DataColumn(
+              ),
+            ),
+            DataColumn(
               tooltip: '${AppLocalizations.of(context)!.duration}',
               label: Text(
                 '${AppLocalizations.of(context)!.duration}',
                 style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey.shade500),
-              )),
-        ],
-        rows: attempts
-            .asMap()
-            .map((index, attempt) {
-              // Format dates and duration for display
-              String formattedStartTime = DateFormat('yyyy-MM-dd – kk:mm').format(attempt.startTime);
-              String formattedEndTime = DateFormat('yyyy-MM-dd – kk:mm').format(attempt.endTime);
-              Duration duration = attempt.endTime.difference(attempt.startTime);
+              ),
+            ),
+          ],
+          rows: attempts
+              .asMap()
+              .map((index, attempt) {
+            // Format dates and duration for display
+            String formattedStartTime = DateFormat('yyyy-MM-dd – kk:mm').format(attempt.startTime);
+            String formattedEndTime = DateFormat('yyyy-MM-dd – kk:mm').format(attempt.endTime);
+            Duration duration = attempt.endTime.difference(attempt.startTime);
 
-              String formattedDuration =
-                  '${duration.inHours}${AppLocalizations.of(context)?.hours} ${duration.inMinutes.remainder(60)}${AppLocalizations.of(context)?.minutes}';
-              Color bgColor = index % 2 == 1 ? Colors.transparent : ThemeConfig.tableRowColor!;
+            String formattedDuration =
+                '${duration.inHours}${AppLocalizations.of(context)?.hours} ${duration.inMinutes.remainder(60)}${AppLocalizations.of(context)?.minutes}';
+            Color bgColor = index % 2 == 1 ? Colors.transparent : ThemeConfig.tableRowColor!;
 
-              return MapEntry(
-                  index,
-                  DataRow(
-                      color: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
-                        return bgColor; // Use the bgColor for this row
-                      }),
-                      cells: [
-                        DataCell(Text(
-                          attempt.examId,
-                          style: TextStyle(color: ThemeConfig.primaryTextColor),
-                        )),
-                        DataCell(Text(
-                          formattedStartTime,
-                          style: TextStyle(color: ThemeConfig.primaryTextColor),
-                        )),
-                        DataCell(Text(
-                          formattedEndTime,
-                          style: TextStyle(color: ThemeConfig.primaryTextColor),
-                        )),
-                        DataCell(Container(
-                            padding: EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(4)),
-                              color:
-                                  attempt.result.name == ExamAttemptResult.pass.name ? Colors.lightGreen : Colors.red,
-                            ),
-                            child: Text(
-                              attempt.result.name == ExamAttemptResult.pass.name
-                                  ? '${AppLocalizations.of(context)!.pass}'
-                                  : '${AppLocalizations.of(context)!.fail}',
-
-                              // Assuming 'passed' is a boolean
-                              style: TextStyle(color: Colors.white),
-                              textAlign: TextAlign.right,
-                            ))),
-                        DataCell(Text(
-                          '${attempt.score}',
-                          style: TextStyle(color: ThemeConfig.primaryTextColor),
-                        )),
-                        DataCell(Text(
-                          formattedDuration,
-                          style: TextStyle(color: ThemeConfig.primaryTextColor),
-                        )),
-                      ]));
-            })
-            .values
-            .toList(), // Convert map entries back to a list
+            return MapEntry(
+              index,
+              DataRow(
+                color: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+                  return bgColor; // Use the bgColor for this row
+                }),
+                cells: [
+                  DataCell(Text(
+                    attempt.examId,
+                    style: TextStyle(color: ThemeConfig.primaryTextColor),
+                  )),
+                  DataCell(Text(
+                    formattedStartTime,
+                    style: TextStyle(color: ThemeConfig.primaryTextColor),
+                  )),
+                  DataCell(Text(
+                    formattedEndTime,
+                    style: TextStyle(color: ThemeConfig.primaryTextColor),
+                  )),
+                  DataCell(Container(
+                    padding: EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(4)),
+                      color: attempt.result.name == ExamAttemptResult.pass.name ? Colors.lightGreen : Colors.red,
+                    ),
+                    child: Text(
+                      attempt.result.name == ExamAttemptResult.pass.name
+                          ? '${AppLocalizations.of(context)!.pass}'
+                          : '${AppLocalizations.of(context)!.fail}',
+                      style: TextStyle(color: Colors.white),
+                      textAlign: TextAlign.right,
+                    ),
+                  )),
+                  DataCell(Text(
+                    '${attempt.score}',
+                    style: TextStyle(color: ThemeConfig.primaryTextColor),
+                  )),
+                  DataCell(Text(
+                    formattedDuration,
+                    style: TextStyle(color: ThemeConfig.primaryTextColor),
+                  )),
+                ],
+              ),
+            );
+          })
+              .values
+              .toList(), // Convert map entries back to a list
+        ),
       );
+
     }
 
     /// Returns a Widget displaying details about a specific Exam, taken by the specific User.
@@ -218,31 +233,31 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     ///   - 'examTitle': The Title of the exam.
 
     Widget _getCourseExamTitleWidget({required String examTitle, ExamStatus? examStatus}) {
-      Widget examDescription = Container(
+      return Container(
         padding: const EdgeInsets.all(8.0),
         child: Row(
           children: [
-            // Text('${examData['examId']}'),
-            // SizedBox(
-            //   width: 20,
-            // ),
             examStatus == ExamStatus.completed
                 ? Icon(
-                    Icons.check_circle_outline_rounded,
-                    color: ThemeConfig.primaryColor,
-                  )
+              Icons.check_circle_outline_rounded,
+              color: ThemeConfig.primaryColor,
+            )
                 : Icon(
-                    Icons.hourglass_top_rounded,
-                    color: Colors.orangeAccent,
-                  ),
+              Icons.hourglass_top_rounded,
+              color: Colors.orangeAccent,
+            ),
             SizedBox(
               width: 10,
             ),
-            Text('$examTitle'),
+            Expanded(
+              child: Text(
+                examTitle,
+                style: TextStyle(overflow: TextOverflow.ellipsis),
+              ),
+            ),
           ],
         ),
       );
-      return examDescription;
     }
 
     // void _updateBarDataOnMetricSelection(String? metricKey) {
@@ -290,7 +305,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         );
 
         expansionTiles.add(Container(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             child: CustomExpansionTile(
               titleWidget: titleWidget,
               contentWidget: contentWidget,
@@ -325,7 +340,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start, // Aligns children to the start (left)
-
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -339,59 +353,65 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       ? ThemeConfig.primaryColor // Color for 'completed' status
                       : Colors.amber, // Color for other statuses
                 ),
-                SizedBox(width: 20),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
+                SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Icon(Icons.menu_book_rounded, color: ThemeConfig.primaryTextColor),
+                            SizedBox(width: 10),
+                            Expanded(
+                              child: Text(
+                                userCourseProgress.courseTitle.toString(),
+                                style: TextStyle(
+                                  color: ThemeConfig.primaryTextColor,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Row(
                         children: [
-                          Icon(Icons.menu_book_rounded, color: ThemeConfig.primaryTextColor),
-                          SizedBox(width: 20),
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.20,
+                            child: CustomLinearProgressIndicator(
+                              value: completionPercentage,
+                              backgroundColor: ThemeConfig.percentageIconBackgroundFillColor!,
+                              valueColor: ThemeConfig.primaryColor!,
+                            ),
+                          ),
+                          SizedBox(width: 8),
                           Text(
-                            userCourseProgress.courseTitle.toString(),
+                            '${(completionPercentage * 100).toStringAsFixed(2)}%',
                             style: TextStyle(color: ThemeConfig.primaryTextColor),
+                          ),
+                          SizedBox(width: 4),
+                          Flexible(
+                            child: Text(
+                              '(${(userCourseProgress.completedSectionsCount! + userCourseProgress.passedExamsCount!).toString()}'
+                                  '/${(userCourseProgress.sectionsInCourseCount! + userCourseProgress.examsInCourseCount!).toString()})',
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                                color: ThemeConfig.secondaryTextColor,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                         ],
                       ),
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.3, // 40% of screen width
-
-                          child: CustomLinearProgressIndicator(
-                            value: completionPercentage,
-                            backgroundColor: ThemeConfig.percentageIconBackgroundFillColor!,
-                            valueColor: ThemeConfig.primaryColor!,
-                          ),
-                        ),
-                        SizedBox(width: 8),
-
-                        // Text widget to display the percentage
-                        Text(
-                          '${(completionPercentage * 100).toStringAsFixed(2)}%',
-                          style: TextStyle(color: ThemeConfig.primaryTextColor),
-                        ),
-                        SizedBox(width: 4),
-                        Text(
-                          '(${(userCourseProgress.completedSectionsCount! + userCourseProgress.passedExamsCount!).toString()}'
-                          '/${(userCourseProgress.sectionsInCourseCount! + userCourseProgress.examsInCourseCount!).toString()})',
-                          style: TextStyle(
-                              fontSize: 10, fontWeight: FontWeight.bold, color: ThemeConfig.secondaryTextColor),
-                        )
-                        // Text('${userCourseProgress.completedSectionsCount! + userCourseProgress.passedExamsCount!}'),
-                      ],
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),
           ),
-          // Widget to display the progress information.
-          // It calculates the total number of completed sections and exams and
-          // compares them with the total number of sections and exams in the course.
         ],
       );
     }
@@ -488,7 +508,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   return Text('Error: ${snapshot.error}');
                 } else {
                   return Container(
-                    margin: EdgeInsets.fromLTRB(80, 10, 80, 30),
+                    margin: EdgeInsets.fromLTRB(10, 10, 10, 30),
                     child: ListView.builder(
                       shrinkWrap: true,
                       // itemCount: adminState.getAllCoursesDataForCurrentUser(uid)['coursesDetails'].length,
@@ -518,7 +538,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           buildSectionHeader(title: '${AppLocalizations.of(context)?.buttonSettings}'),
 
           Container(
-              margin: EdgeInsets.fromLTRB(80, 10, 80, 30),
+              margin: EdgeInsets.fromLTRB(10, 10, 10, 30),
               child: SettingsSection(
                 CSRFToken: _CSRFToken,
                 JWT: _JWT,
@@ -530,26 +550,54 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   Widget _buildSummaryItemWidgets(snapshotData) {
     print(snapshotData);
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.9,
-      margin: const EdgeInsets.fromLTRB(80, 30, 100, 0), // Margin for the whole container
-      child: Row(
-        children: snapshotData.asMap().entries.map<Widget>((entry) {
-          int index = entry.key;
-          return Expanded(
-            child: Container(
-              margin: EdgeInsets.all(10),
-              child: HoverableSectionContainer(
-                  onHover: (bool) {},
-                  child: SummarySectionItemWidget(
-                    title: entry.value.summaryTitle,
-                    value: entry.value.value.toString(),
-                    icon: entry.value.icon ?? null,
-                  )),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.maxWidth >= 900) {
+          return Container(
+            width: MediaQuery.of(context).size.width * 0.9,
+            margin: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+            child: Row(
+              children: snapshotData.asMap().entries.map<Widget>((entry) {
+                int index = entry.key;
+                return Expanded(
+                  child: Container(
+                    margin: EdgeInsets.all(10),
+                    child: HoverableSectionContainer(
+                      onHover: (bool) {},
+                      child: SummarySectionItemWidget(
+                        title: entry.value.summaryTitle,
+                        value: entry.value.value.toString(),
+                        icon: entry.value.icon ?? null,
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
             ),
           );
-        }).toList(),
-      ),
+        } else {
+          return Container(
+            height: 350,
+            margin: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+            child: Column(
+              children: snapshotData.asMap().entries.map<Widget>((entry) {
+                int index = entry.key;
+                return Container(
+                  margin: EdgeInsets.all(10),
+                  child: HoverableSectionContainer(
+                    onHover: (bool) {},
+                    child: SummarySectionItemWidget(
+                      title: entry.value.summaryTitle,
+                      value: entry.value.value.toString(),
+                      icon: entry.value.icon ?? null,
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          );
+        }
+      },
     );
   }
 }
