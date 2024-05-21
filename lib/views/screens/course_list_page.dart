@@ -238,7 +238,12 @@ class _CourseListPageState extends State<CourseListPage> {
                   SizedBox(
                     width: 10,
                   ),
-                  Text(course.courseTitle),
+                  Expanded( // Use Expanded here
+                    child: Text(
+                      course.courseTitle,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                 ],
               ),
               contentWidget: [
@@ -275,35 +280,35 @@ class _CourseListPageState extends State<CourseListPage> {
                     alignment: Alignment.centerLeft,
                     child: completedSectionTotal > 0 && completedSectionTotal < course.courseSections.length
                         ? Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: ElevatedButton(
-                                onPressed: () => context.goNamed(NamedRoutes.course.name, pathParameters: {
-                                      NamedRoutePathParameters.courseId.name: course.courseId
-                                    }, queryParameters: {
-                                      NamedRouteQueryParameters.section.name: (completedSectionTotal).toString()
-                                    }),
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(vertical: 13),
-                                  child: Text(AppLocalizations.of(context)!.buttonResumeCourse,
-                                      style: TextStyle(color: ThemeConfig.secondaryTextColor)),
-                                ),
-                                style: ThemeConfig.elevatedBoxButtonStyle()),
-                          )
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: ElevatedButton(
+                          onPressed: () => context.goNamed(NamedRoutes.course.name, pathParameters: {
+                            NamedRoutePathParameters.courseId.name: course.courseId
+                          }, queryParameters: {
+                            NamedRouteQueryParameters.section.name: (completedSectionTotal).toString()
+                          }),
+                          child: Container(
+                            padding: EdgeInsets.symmetric(vertical: 13),
+                            child: Text(AppLocalizations.of(context)!.buttonResumeCourse,
+                                style: TextStyle(color: ThemeConfig.secondaryTextColor)),
+                          ),
+                          style: ThemeConfig.elevatedBoxButtonStyle()),
+                    )
                         : Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: ElevatedButton(
-                                onPressed: () => context.goNamed(NamedRoutes.course.name,
-                                    pathParameters: {NamedRoutePathParameters.courseId.name: course.courseId}),
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(vertical: 13),
-                                  child: Text(
-                                    AppLocalizations.of(context)!.buttonStartCourse,
-                                    style: TextStyle(color: ThemeConfig.secondaryTextColor),
-                                  ),
-                                ),
-                                style:
-                                    ThemeConfig.elevatedBoxButtonStyle(backgroundColor: ThemeConfig.primaryCardColor)),
-                          )),
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: ElevatedButton(
+                          onPressed: () => context.goNamed(NamedRoutes.course.name,
+                              pathParameters: {NamedRoutePathParameters.courseId.name: course.courseId}),
+                          child: Container(
+                            padding: EdgeInsets.symmetric(vertical: 13),
+                            child: Text(
+                              AppLocalizations.of(context)!.buttonStartCourse,
+                              style: TextStyle(color: ThemeConfig.secondaryTextColor),
+                            ),
+                          ),
+                          style: ThemeConfig.elevatedBoxButtonStyle(
+                              backgroundColor: ThemeConfig.primaryCardColor)),
+                    )),
                 _separator,
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20),

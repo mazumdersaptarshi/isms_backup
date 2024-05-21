@@ -32,13 +32,19 @@ class _UsersSummaryTableState extends State<UsersSummaryTable> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    if (screenWidth < 1200) {
+      _isExpanded = false;
+    }
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         buildSectionHeader(
           title: '${AppLocalizations.of(context)?.allUsers}',
           // actionWidget1: SearchBarWidget(),
-          actionWidget2: _buildToggleExpandButton(),
+          actionWidget2: screenWidth >= 1200 ? _buildToggleExpandButton() : null,
         ),
         Container(
           width: MediaQuery.of(context).size.width * 0.9,

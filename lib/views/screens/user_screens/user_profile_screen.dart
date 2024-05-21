@@ -508,7 +508,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   return Text('Error: ${snapshot.error}');
                 } else {
                   return Container(
-                    margin: EdgeInsets.fromLTRB(10, 10, 10, 30),
+                    margin: EdgeInsets.fromLTRB(20, 10, 20, 30),
                     child: ListView.builder(
                       shrinkWrap: true,
                       // itemCount: adminState.getAllCoursesDataForCurrentUser(uid)['coursesDetails'].length,
@@ -538,7 +538,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           buildSectionHeader(title: '${AppLocalizations.of(context)?.buttonSettings}'),
 
           Container(
-              margin: EdgeInsets.fromLTRB(10, 10, 10, 30),
+              margin: EdgeInsets.fromLTRB(20, 10, 20, 30),
               child: SettingsSection(
                 CSRFToken: _CSRFToken,
                 JWT: _JWT,
@@ -555,7 +555,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         if (constraints.maxWidth >= 900) {
           return Container(
             width: MediaQuery.of(context).size.width * 0.9,
-            margin: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+            margin: const EdgeInsets.fromLTRB(20, 30, 20, 0),
             child: Row(
               children: snapshotData.asMap().entries.map<Widget>((entry) {
                 int index = entry.key;
@@ -578,7 +578,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         } else {
           return Container(
             height: 350,
-            margin: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+            margin: const EdgeInsets.fromLTRB(20, 30, 20, 0),
             child: Column(
               children: snapshotData.asMap().entries.map<Widget>((entry) {
                 int index = entry.key;
